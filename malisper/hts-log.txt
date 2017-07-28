@@ -1,0 +1,71 @@
+HTTrack3.48-21 launched on Thu, 01 Sep 2016 13:46:18 at http://malisper.me/
+(httrack http://malisper.me/ )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+13:46:20	Error: 	"Method Not Allowed" (405) at link malisper.me/xmlrpc.php (from malisper.me/)
+13:46:41	Error: 	"Not Found" (404) at link malisper.me/wp-content/uploads/2015/07/ezgif.com-resize.gif (from malisper.me/page/2/)
+13:46:42	Warning: 	Moved Permanently for malisper.me/?p=55
+13:46:42	Warning: 	File has moved from malisper.me/?p=55 to http://malisper.me/about-me/
+13:46:43	Warning: 	Retry after error 500 (Internal Server Error) at link malisper.me/wp-content/plugins/akismet/_inc/form.js?ver=3.1.11 (from malisper.me/about-me/)
+13:46:43	Warning: 	Moved Permanently for malisper.me/?p=44
+13:46:43	Warning: 	File has moved from malisper.me/?p=44 to http://malisper.me/about-this-site-2/
+13:46:49	Warning: 	Moved Permanently for malisper.me/?p=1520
+13:46:49	Warning: 	File has moved from malisper.me/?p=1520 to http://malisper.me/2016/06/11/building-fizzbuzz-fractran-bottom/
+13:46:49	Warning: 	Moved Permanently for malisper.me/?p=1106
+13:46:49	Warning: 	File has moved from malisper.me/?p=1106 to http://malisper.me/2015/11/24/loops-lisp-part-1-goto/
+13:46:53	Warning: 	Moved Permanently for malisper.me/?p=1410
+13:46:53	Warning: 	File has moved from malisper.me/?p=1410 to http://malisper.me/2016/04/20/writing-self-referential-programs/
+13:46:53	Warning: 	Moved Permanently for malisper.me/?p=1366
+13:46:53	Warning: 	File has moved from malisper.me/?p=1366 to http://malisper.me/2016/04/13/loops-in-lisp-part-4-series/
+13:46:55	Warning: 	Moved Permanently for malisper.me/?p=1264
+13:46:55	Warning: 	File has moved from malisper.me/?p=1264 to http://malisper.me/2015/12/15/loops-in-lisp-part-2-loop/
+13:46:55	Warning: 	Moved Permanently for malisper.me/?p=1292
+13:46:55	Warning: 	File has moved from malisper.me/?p=1292 to http://malisper.me/2016/01/12/loops-in-lisp-part-3-iterate/
+13:46:57	Warning: 	Moved Permanently for malisper.me/?p=1048
+13:46:57	Warning: 	File has moved from malisper.me/?p=1048 to http://malisper.me/2015/11/10/defmemo/
+13:46:59	Warning: 	Moved Permanently for malisper.me/?p=1016
+13:46:59	Warning: 	File has moved from malisper.me/?p=1016 to http://malisper.me/2015/10/13/or/
+13:47:01	Warning: 	Moved Permanently for malisper.me/?p=270
+13:47:01	Warning: 	File has moved from malisper.me/?p=270 to http://malisper.me/2015/09/22/getting-places/
+13:47:03	Warning: 	Moved Permanently for malisper.me/?p=988
+13:47:03	Warning: 	File has moved from malisper.me/?p=988 to http://malisper.me/2015/09/29/zap/
+13:47:03	Warning: 	Moved Permanently for malisper.me/?p=370
+13:47:03	Warning: 	File has moved from malisper.me/?p=370 to http://malisper.me/2015/06/30/multiple-value-bind/
+13:47:07	Warning: 	Moved Permanently for malisper.me/?p=111
+13:47:07	Warning: 	File has moved from malisper.me/?p=111 to http://malisper.me/2015/06/06/once-only/
+13:47:08	Warning: 	Moved Permanently for malisper.me/?p=831
+13:47:08	Warning: 	File has moved from malisper.me/?p=831 to http://malisper.me/2015/09/08/defasm/
+13:47:09	Warning: 	Moved Permanently for malisper.me/?p=735
+13:47:09	Warning: 	File has moved from malisper.me/?p=735 to http://malisper.me/2015/08/27/defaddress/
+13:47:10	Warning: 	Moved Permanently for malisper.me/?p=698
+13:47:10	Warning: 	File has moved from malisper.me/?p=698 to http://malisper.me/2015/08/19/debugging-lisp-part-5-miscellaneous/
+13:47:12	Warning: 	Moved Permanently for malisper.me/?p=425
+13:47:12	Warning: 	File has moved from malisper.me/?p=425 to http://malisper.me/2015/07/07/debugging-lisp-part-1-recompilation/
+13:47:25	Warning: 	Moved Permanently for malisper.me/?p=492
+13:47:25	Warning: 	File has moved from malisper.me/?p=492 to http://malisper.me/2015/07/14/debugging-lisp-part-2-inspecting/
+13:47:27	Warning: 	Moved Permanently for malisper.me/?p=530
+13:47:27	Warning: 	File has moved from malisper.me/?p=530 to http://malisper.me/2015/07/22/debugging-lisp-part-3-redefining-classes/
+13:47:28	Warning: 	Moved Permanently for malisper.me/?p=401
+13:47:28	Warning: 	File has moved from malisper.me/?p=401 to http://malisper.me/2015/08/05/debugging-lisp-part-4-restarts/
+13:47:30	Warning: 	Moved Permanently for malisper.me/?p=241
+13:47:30	Warning: 	File has moved from malisper.me/?p=241 to http://malisper.me/2015/06/17/hofeach/
+13:47:34	Warning: 	Moved Permanently for malisper.me/?p=210
+13:47:34	Warning: 	File has moved from malisper.me/?p=210 to http://malisper.me/2015/06/14/mapeach/
+13:47:36	Warning: 	File not parsed, looks like binary: malisper.me/wp-content/themes/scrawl-wpcom/fonts/genericons/Genericons.ttf
+13:47:36	Warning: 	Retry after error 500 (Internal Server Error) at link malisper.me/wp-content/plugins/akismet/_inc/form.js?ver=3.1.11 (from malisper.me/about-me/)
+13:47:36	Warning: 	Moved Permanently for malisper.me/?p=173
+13:47:36	Warning: 	File has moved from malisper.me/?p=173 to http://malisper.me/2015/06/10/cl-who/
+13:47:36	Warning: 	Moved Permanently for malisper.me/?p=102
+13:47:36	Warning: 	File has moved from malisper.me/?p=102 to http://malisper.me/2015/06/02/automatically-binding-gensyms/
+13:47:37	Warning: 	Moved Permanently for malisper.me/?p=61
+13:47:37	Warning: 	File has moved from malisper.me/?p=61 to http://malisper.me/2015/05/31/efficiently-building-lists/
+13:47:38	Warning: 	Moved Permanently for malisper.me/?p=8
+13:47:38	Warning: 	File has moved from malisper.me/?p=8 to http://malisper.me/2015/05/30/the-ret-macro/
+13:47:39	Error: 	"Internal Server Error" (500) after 2 retries at link malisper.me/wp-content/plugins/akismet/_inc/form.js?ver=3.1.11 (from malisper.me/about-me/)
+
+HTTrack Website Copier/3.48-21 mirror complete in 1 minutes 21 seconds : 324 links scanned, 291 files written (37243925 bytes overall), 266 files updated [2055952 bytes received at 25382 bytes/sec], 7266257 bytes transferred using HTTP compression in 239 files, ratio 25%, 32.4 requests per connection
+(3 errors, 57 warnings, 0 messages)

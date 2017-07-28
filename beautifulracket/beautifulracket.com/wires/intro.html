@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/wires/intro.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:46:41 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Imagine a language: wires</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;imagine-a-language-wires&quot;)"></div><h1 anchor="imagine-a-language-wires" id="imagine-a-language-wires" hyphens="none">Imagine a language: <span class="my-code" decode="exclude">wires</span></h1></div><ul class="siblinks"><li><a class="here" href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-reader.html">3&emsp;the reader</a></li><li><a href="the-expander.html">4&emsp;the expander</a></li><li><a href="testing-the-language.html">5&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">6&emsp;recap</a></li><li><a href="source-listing.html">7&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_WVGoO&quot;)"></div><p id="a_WVGoO">In <a href="../jsonic/index.html"><span class="my-code" decode="exclude">jsonic</span></a>, we saw how we could make a sim­ple but use­ful DSL in <a href="../jsonic/source-listing.html">under 50 lines</a> of code. If any­one thought that cre­at­ing a DSL was auto­mat­i­cally a giant under­tak­ing—Racket makes it easy.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_tk4EX&quot;)"></div><p id="a_tk4EX">In turn, when DSLs are easy to make, they become a prac­ti­cal option for solv­ing a larger set of pro­gram­ming prob­lems—even small ones. In this tuto­r­ial, we’ll take that prin­ci­ple to its extreme. We’ll make a lan­guage called <span class="my-code" decode="exclude">wires</span> that’s designed to be used once and dis­carded.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_U3XwT&quot;)"></div><p id="a_U3XwT">And let’s cleanse the rice-cake fla­vor of JSON from our palate with some­thing more enter­tain­ing.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;the-puzzle&quot;)"></div><h3 anchor="the-puzzle" class="subhead" id="the-puzzle"><a href="#the-puzzle">The puz­zle</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_XpBd5&quot;)"></div><div class="author-note" id="a_XpBd5"><p anchorize="false">In 2015, pro­gram­mer <a class=" ext" href="http://was.tl/">Eric Wastl</a> cre­ated a ter­rific series of pro­gram­ming puz­zles called <a class=" ext" href="http://adventofcode.com/2015">Advent of Code</a>. Though I rec­om­mend the whole set—and I’m look­ing for­ward to <a class=" ext" href="http://adventofcode.com/">this year’s</a> edi­tion—Eric let me build this tuto­r­ial around my favorite puz­zle from 2015, <a class=" ext" href="http://adventofcode.com/2015/day/7">Some Assem­bly Required</a>. The descrip­tion below is by Eric.</p></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_nQe3L&quot;)"></div><p id="a_nQe3L">This year, lit­tle Bobby Tables got a set of wires and <a class=" ext" href="https://en.wikipedia.org/wiki/Bitwise_operation">bit­wise logic gates</a>! Unfor­tu­nately, lit­tle Bobby is under the rec­om­mended age range, and he needs help assem­bling the cir­cuit.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Uh86M&quot;)"></div><p id="a_Uh86M">Each wire has an iden­ti­fier (some low­er­case let­ters) and can carry a <a class=" ext" href="https://en.wikipedia.org/wiki/16-bit">16-bit sig­nal</a> (a num­ber from 0 to 65535). A sig­nal is pro­vided to each wire by a gate, another wire, or some spe­cific value. Each wire can only get a sig­nal from one source, but can pro­vide its sig­nal to mul­ti­ple des­ti­na­tions. A gate pro­vides no sig­nal until all of its inputs have a sig­nal.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_hrFPg&quot;)"></div><p id="a_hrFPg">The included instruc­tions book­let describes how to con­nect the parts together: <span class="my-code" decode="exclude">x AND y -&gt; z</span> means to con­nect wires <span class="my-code" decode="exclude">x</span> and <span class="my-code" decode="exclude">y</span> to an <span class="my-code" decode="exclude">AND</span> gate, and then con­nect its out­put to wire <span class="my-code" decode="exclude">z</span>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_FvpnV&quot;)"></div><p id="a_FvpnV">For exam­ple:</p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_fPJyT&quot;)"></div><p id="a_fPJyT"><span class="my-code" decode="exclude">123 -&gt; x</span> means that the sig­nal <span class="my-code" decode="exclude">123</span> is pro­vided to wire <span class="my-code" decode="exclude">x</span>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rQBVm&quot;)"></div><p id="a_rQBVm"><span class="my-code" decode="exclude">x AND y -&gt; z</span> means that the <a class=" ext" href="https://en.wikipedia.org/wiki/Bitwise_operation#AND">bit­wise <span class="my-code" decode="exclude">AND</span></a> of wire <span class="my-code" decode="exclude">x</span> and wire <span class="my-code" decode="exclude">y</span> is pro­vided to wire <span class="my-code" decode="exclude">z</span>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Mrgt5&quot;)"></div><p id="a_Mrgt5"><span class="my-code" decode="exclude">p LSHIFT 2 -&gt; q</span> means that the value from wire <span class="my-code" decode="exclude">p</span> is <a class=" ext" href="https://en.wikipedia.org/wiki/Logical_shift">left-shifted</a> by <span class="my-code" decode="exclude">2</span> and then pro­vided to wire <span class="my-code" decode="exclude">q</span>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_9s6HX&quot;)"></div><p id="a_9s6HX"><span class="my-code" decode="exclude">NOT e -&gt; f</span> means that the <a class=" ext" href="https://en.wikipedia.org/wiki/Bitwise_operation#NOT">bit­wise com­ple­ment</a> of the value from wire <span class="my-code" decode="exclude">e</span> is pro­vided to wire <span class="my-code" decode="exclude">f</span>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_tRFHf&quot;)"></div><p id="a_tRFHf">Other pos­si­ble gates include <span class="my-code" decode="exclude">OR</span> (<a class=" ext" href="https://en.wikipedia.org/wiki/Bitwise_operation#OR">bit­wise <span class="my-code" decode="exclude">OR</span></a>) and RSHIFT (<a class=" ext" href="https://en.wikipedia.org/wiki/Logical_shift">right-shift</a>).</p></div></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_WhK1Y&quot;)"></div><p id="a_WhK1Y">For exam­ple, here’s a sim­ple cir­cuit:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_dIUBA&quot;)"></div><div class="highlight-container" id="a_dIUBA"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">x AND y -&gt; d<br/>x OR y -&gt; e<br/>x LSHIFT 2 -&gt; f<br/>y RSHIFT 2 -&gt; g<br/>NOT x -&gt; h<br/>NOT y -&gt; i<br/>123 -&gt; x<br/>456 -&gt; y</div><div class="highlight" form="false" id="a_2RRoo"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="source"><pre>x AND y -&gt; d
+x OR y -&gt; e
+x LSHIFT 2 -&gt; f
+y RSHIFT 2 -&gt; g
+NOT x -&gt; h
+NOT y -&gt; i
+123 -&gt; x
+456 -&gt; y
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_J4MUq&quot;)"></div><p id="a_J4MUq">After it’s run, these are the sig­nals on the wires:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Gwhcp&quot;)"></div><div class="highlight-container" id="a_Gwhcp"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">d: 72<br/>e: 507<br/>f: 492<br/>g: 114<br/>h: 65412<br/>i: 65079<br/>x: 123<br/>y: 456</div><div class="highlight" form="false" id="a_FoTP0"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="source"><pre>d: 72
+e: 507
+f: 492
+g: 114
+h: 65412
+i: 65079
+x: 123
+y: 456
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;the-question&quot;)"></div><h3 anchor="the-question" class="subhead" id="the-question"><a href="#the-question">The ques­tion</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_KGVni&quot;)"></div><p id="a_KGVni">The instruc­tion book­let for the cir­cuit kit pro­vides a <a href="input.txt">descrip­tion of a cir­cuit</a> (which will be our puz­zle input).</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_57Rbr&quot;)"></div><p id="a_57Rbr">We have to deter­mine: <strong>What sig­nal ends up on wire <span class="my-code" decode="exclude">a</span>?</strong></p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_LCUEB&quot;)"></div><p id="a_LCUEB">Of course, we’re going to answer this ques­tion by mak­ing a DSL called <span class="my-code" decode="exclude">wires</span>.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a class="here" href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-reader.html">3&emsp;the reader</a></li><li><a href="the-expander.html">4&emsp;the expander</a></li><li><a href="testing-the-language.html">5&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">6&emsp;recap</a></li><li><a href="source-listing.html">7&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="../jsonic-3/source-listing.html">← prev</a>
+    <a class="nav-right" href="specification-and-setup.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

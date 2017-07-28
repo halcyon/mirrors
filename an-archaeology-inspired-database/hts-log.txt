@@ -1,0 +1,13 @@
+HTTrack3.48-21 launched on Tue, 04 Oct 2016 10:21:37 at http://aosabook.org/en/500L/an-archaeology-inspired-database.html
+(httrack http://aosabook.org/en/500L/an-archaeology-inspired-database.html )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+10:21:44	Error: 	"Not Found" (404) at link aosabook.org/en/500L/theme/img/glyphicons-halflings.png (from aosabook.org/en/500L/theme/css/bootstrap.css)
+10:21:44	Error: 	"Not Found" (404) at link aosabook.org/en/500L/theme/img/glyphicons-halflings-white.png (from aosabook.org/en/500L/theme/css/bootstrap.css)
+
+HTTrack Website Copier/3.48-21 mirror complete in 7 seconds : 11 links scanned, 8 files written (308500 bytes overall) [164569 bytes received at 23509 bytes/sec], 187799 bytes transferred using HTTP compression in 8 files, ratio 21%, 2.7 requests per connection
+(2 errors, 0 warnings, 0 messages)

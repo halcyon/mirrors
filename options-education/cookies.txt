@@ -1,0 +1,4 @@
+# HTTrack Website Copier Cookie File
+# This file format is compatible with Netscape cookies
+www.optionseducation.org	TRUE	/	FALSE	1999999999	MYSESSION	!66aDCj2gxabgBngX3ZoYmCaomGKJS//O2bj6aoQplQ3yqYtX9SHn/1Nucokpaq2WqcqdtMBgDNDavhHMQRQck6BqbZx57JHJOPM8qdDtSSVDSa/ioTYYUsscNtvDUBCP54gUuCQFIBe+tyIre0h4dYH7pM5UcYA=
+

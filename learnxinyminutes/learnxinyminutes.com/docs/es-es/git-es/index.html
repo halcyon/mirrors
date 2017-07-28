@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/es-es/git-es/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:36:14 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn X in Y Minutes: Scenic Programming Language Tours</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../../css/normalize.css">
+        <link rel="stylesheet" href="../../../css/main.css">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fes-es%2Fgit-es%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3Dgit">
+        Comparte esta página
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">Aprende X en Y minutos</a></h2>
+  <h2>Donde X=git</h2>
+  
+    <p class="filelink">
+    Descarga el código:
+    <a href="../../files/LearnGit.txt">LearnGit.txt</a>
+    </p>
+  
+  <div id="doc">
+    <p>Git es un sistema de control de versiones distribuido diseñado para manejar
+cualquier tipo de proyecto, ya sea grande o pequeño, con velocidad y eficiencia.</p>
+
+<p>Git realiza esto haciendo &ldquo;snapshots&rdquo; del proyecto, con ello permite
+versionar y administrar nuestro código fuente.</p>
+
+<h2>Versionamiento, conceptos.</h2>
+
+<h3>¿Qué es el control de versiones?</h3>
+
+<p>El control de versiones es un sistema que guarda todos los cambios realizados en
+uno o varios archivos, a lo largo del tiempo.</p>
+
+<h3>Versionamiento centralizado vs versionamiento distribuido.</h3>
+
+<ul>
+<li>El versionamiento centralizado se enfoca en sincronizar, rastrear, y respaldar
+archivos.</li>
+<li>El versionamiento distribuido se enfoca en compartir los cambios realizados.
+Cada cambio tiene un único identificador.</li>
+<li>El versionamiento distribuido no tiene una estructura definida, incluso se
+puede mantener el estilo de los repositorios SVN con git.</li>
+</ul>
+
+<p><a href="http://git-scm.com/book/es/Empezando-Acerca-del-control-de-versiones">Información adicional</a></p>
+
+<h3>¿Por qué usar Git?</h3>
+
+<ul>
+<li>Se puede trabajar sin conexión.</li>
+<li>¡Colaborar con otros es sencillo!.</li>
+<li>Derivar, crear ramas del proyecto (aka: Branching) es fácil.</li>
+<li>Combinar (aka: Merging)</li>
+<li>Git es rápido.</li>
+<li>Git es flexible.</li>
+</ul>
+
+<h2>Arquitectura de Git.</h2>
+
+<h3>Repositorio</h3>
+
+<p>Un repositorio es un conjunto de archivos, directorios, registros, cambios (aka:
+commits), y encabezados (aka: heads). Imagina que un repositorio es una clase,
+y que sus atributos otorgan acceso al historial del elemento, además de otras
+cosas.</p>
+
+<p>Un repositorio esta compuesto por la carpeta .git y un &ldquo;árbol de trabajo&rdquo;.</p>
+
+<h3>Directorio .git (componentes del repositorio)</h3>
+
+<p>El directorio .git contiene todas las configuraciones, registros, branches, HEAD
+y mas.</p>
+
+<p><a href="http://es.gitready.com/advanced/2009/03/23/whats-inside-your-git-directory.html">Lista detallada.</a></p>
+
+<h3>Directorio de trabajo (componentes del repositorio)</h3>
+
+<p>Es básicamente los directorios y archivos dentro del repositorio. La mayoría de
+las veces se le llama &ldquo;directorio de trabajo&rdquo;.</p>
+
+<h3>Índice (componentes del directorio .git)</h3>
+
+<p>El índice es el área de inicio en git. Es básicamente la capa que separa el
+directorio de trabajo del repositorio en git. Esto otorga a los desarrolladores
+más poder sobre lo que se envía y se recibe del repositorio.</p>
+
+<h3>Commit (aka: cambios)</h3>
+
+<p>Un commit es una captura de un conjunto de cambios, o modificaciones hechas en
+el directorio de trabajo. Por ejemplo, si se añaden 5 archivos, se eliminan 2,
+estos cambios se almacenarán en un commit (aka: captura). Este commit puede ser o
+no ser enviado (aka: &ldquo;pusheado&rdquo;) hacia un repositorio.</p>
+
+<h3>Branch (rama)</h3>
+
+<p>Un &ldquo;branch&rdquo;, es escencialmente un apuntador hacia el último commit (cambio
+registrado) que se ha realizado. A medida que se realizan más commits, este
+apuntador se actualizará automaticamente hacia el ultimo commit.</p>
+
+<h3>&ldquo;HEAD&rdquo; y &ldquo;head&rdquo; (componentes del directorio .git)</h3>
+
+<p>&ldquo;HEAD&rdquo; es un apuntador hacia la rama (branch) que se esta utilizando. Un
+repositorio solo puede tener un HEAD activo. En cambio &ldquo;head&rdquo;, es un apuntador a
+cualquier commit realizado, un repositorio puede tener cualquier número de
+&ldquo;heads&rdquo;.</p>
+
+<h3>conceptos - recursos.</h3>
+
+<ul>
+<li><a href="http://eagain.net/articles/git-for-computer-scientists/">Git para informáticos</a></li>
+<li><a href="http://hoth.entp.com/output/git_for_designers.html">Git para diseñadores</a></li>
+</ul>
+
+<h2>Comandos.</h2>
+
+<h3>init</h3>
+
+<p>Crear un repositorio de git vacio. Las configuraciones, información almacenada y
+demás son almacenadas en el directorio &ldquo;.git&rdquo;.</p>
+<pre class="highlight shell"><code><span class="gp">$ </span>git init
+</code></pre>
+
+<h3>config</h3>
+
+<p>Se utiliza para configurar las opciones ya sea globalmente, o solamente en el
+repositorio.</p>
+<pre class="highlight shell"><code><span class="c"># Imprime y guarda algunas variables de configuracion básicas. (Globalmente)</span>
+<span class="gp">$ </span>git config --global user.email
+<span class="gp">$ </span>git config --global user.name
+
+<span class="gp">$ </span>git config --global user.email <span class="s2">"corre@gmail.com"</span>
+<span class="gp">$ </span>git config --global user.name <span class="s2">"nombre"</span>
+</code></pre>
+
+<p><a href="http://git-scm.com/book/es/Personalizando-Git-Configuración-de-Git">Más sobre git config.</a></p>
+
+<h3>help</h3>
+
+<p>Otorga un accceso rápido a una guía extremadamente detallada de cada comando en
+git. O puede ser usada simplemente como un recordatorio de estos.</p>
+<pre class="highlight shell"><code><span class="c"># Una vista rápida de los comandos disponibles.</span>
+<span class="gp">$ </span>git <span class="nb">help</span>
+
+<span class="c"># Chequear todos los comandos disponibles</span>
+<span class="gp">$ </span>git <span class="nb">help</span> -a
+
+<span class="c"># Obtener ayuda especifica de un comando - manual de usuario</span>
+<span class="c"># git help &lt;comando&gt;</span>
+<span class="gp">$ </span>git <span class="nb">help </span>add
+<span class="gp">$ </span>git <span class="nb">help </span>commit
+<span class="gp">$ </span>git <span class="nb">help </span>init
+</code></pre>
+
+<h3>status</h3>
+
+<p>Muestra las diferencias entre el archivo índice y el commit al cual apunta el
+HEAD actualmente.</p>
+<pre class="highlight shell"><code><span class="c"># Mostrará el "branch", archivos sin añadir al repo, cambios y otras</span>
+<span class="c"># diferencias</span>
+<span class="gp">$ </span>git status
+
+<span class="c"># Devuelve ayuda sobre el comando status.</span>
+<span class="gp">$ </span>git <span class="nb">help </span>status
+</code></pre>
+
+<h3>add</h3>
+
+<p>Para añadir archivos al árbol (directorio, repositorio) de trabajo. Si no se
+utiliza <code>git add</code>, los nuevos archivos no se añadirán al arbol de trabajo, por
+lo que no se incluirán en los commits (cambios).</p>
+<pre class="highlight shell"><code><span class="c"># Añade un archivo en el directorio de trabajo actual.</span>
+<span class="gp">$ </span>git add FooBar.java
+
+<span class="c"># Añade un archivo que se encuentra bajo un directorio.</span>
+<span class="gp">$ </span>git add /directorio/del/archivo/Foo.c
+
+<span class="c"># Soporte para expresiones regulares!</span>
+<span class="gp">$ </span>git add ./<span class="k">*</span>.py
+</code></pre>
+
+<h3>branch</h3>
+
+<p>Administra las ramas del repositorio (&ldquo;branches&rdquo;). Puedes ver, editar, crear y
+borrar ramas (&ldquo;branches&rdquo;), usando este comando.</p>
+<pre class="highlight shell"><code><span class="c"># lista todas las ramas (remotas y locales)</span>
+<span class="gp">$ </span>git branch -a
+
+<span class="c"># Añadir una nueva rama ("branch").</span>
+<span class="gp">$ </span>git branch branchNueva
+
+<span class="c"># Eliminar una rama.</span>
+<span class="gp">$ </span>git branch -d branchFoo
+
+<span class="c"># Renombrar una rama.</span>
+<span class="c"># git branch -m &lt;anterior&gt; &lt;nuevo&gt;</span>
+<span class="gp">$ </span>git branch -m youngling padawan
+
+<span class="c"># Editar la descripcion de la rama.</span>
+<span class="gp">$ </span>git branch master --edit-description
+</code></pre>
+
+<h3>checkout</h3>
+
+<p>Actualiza todos los archivos en el directorio de trabajo para que sean igual que
+las versiones almacenadas en el índice, o en un árbol de trabajo especificado.</p>
+<pre class="highlight shell"><code><span class="c"># Despachar un repositorio. - Por defecto la master branch. (la rama principal llamada 'master')</span>
+<span class="gp">$ </span>git checkout
+<span class="c"># Despacha una rama especifica.</span>
+<span class="gp">$ </span>git checkout padawan
+<span class="c"># Crea una nueva rama y cambia hacia ella, es igual a utilizar: "git brach jedi; git checkout jedi"</span>
+<span class="gp">$ </span>git checkout -b jdei
+</code></pre>
+
+<h3>clone</h3>
+
+<p>Clona, o copia, un repositorio existente en un nuevo directorio. También añade el
+seguimiento hacia las ramas existentes del repositorio que ha sido clonado, lo que
+permite subir (push) los archivos hacia una rama remota.</p>
+<pre class="highlight shell"><code><span class="c"># Clonar la repo de jquery.</span>
+<span class="gp">$ </span>git clone https://github.com/jquery/jquery.git
+</code></pre>
+
+<h3>commit</h3>
+
+<p>Almacena el contenido actual del índice en un nuevo &ldquo;commit&rdquo;. Este
+commit contiene los cambios hechos más un resumen proporcionado por el desarrollador.</p>
+<pre class="highlight shell"><code><span class="c"># realizar un commit y añadirle un mensaje.</span>
+<span class="gp">$ </span>git commit -m <span class="s2">"jedi anakin wil be - jedis.list"</span>
+</code></pre>
+
+<h3>diff</h3>
+
+<p>Muestra las diferencias entre un archivo en el directorio de trabajo, el índice
+y los commits.</p>
+<pre class="highlight shell"><code><span class="c"># Muestra la diferencia entre un directorio de trabajo y el índice.</span>
+<span class="gp">$ </span>git diff
+
+<span class="c"># Muestra la diferencia entre el índice y los commits más recientes.</span>
+<span class="gp">$ </span>git diff --cached
+
+<span class="c"># Muestra la diferencia entre el directorio de trabajo y el commit más reciente.</span>
+<span class="gp">$ </span>git diff HEAD
+</code></pre>
+
+<h3>grep</h3>
+
+<p>Permite realizar una busqueda rápida en un repositorio.</p>
+
+<p>Configuraciones opcionales:</p>
+<pre class="highlight shell"><code><span class="c"># Gracias a Travis Jeffery por compartir lo siguiente.</span>
+<span class="c"># Permite mostrar numeros de lineas en la salida de grep.</span>
+<span class="gp">$ </span>git config --global grep.lineNumber <span class="nb">true</span>
+
+<span class="c"># Realiza una búsqueda mas legible, incluyendo agrupación.</span>
+<span class="gp">$ </span>git config --global alias.g <span class="s2">"grep --break --heading --line-number"</span>
+</code></pre>
+<pre class="highlight shell"><code><span class="c"># Busca por "unaVariable" en todos los archivos .java</span>
+<span class="gp">$ </span>git grep <span class="s1">'unaVariable'</span> -- <span class="s1">'*.java'</span>
+
+<span class="c"># Busca por una línea que contenga "nombreArreglo" y "agregar" o "remover"</span>
+<span class="gp">$ </span>git grep -e <span class="s1">'nombreArreglo'</span> --and <span class="se">\(</span> -e agregar -e remover <span class="se">\)</span>
+</code></pre>
+
+<p>Más ejemplos:</p>
+
+<ul>
+<li><a href="http://travisjeffery.com/b/2012/02/search-a-git-repo-like-a-ninja">Git Grep Ninja</a></li>
+</ul>
+
+<h3>log</h3>
+
+<p>Muestra los commits (cambios) registrados en el repositorio.</p>
+<pre class="highlight shell"><code><span class="c"># Muestra todos los commits.</span>
+<span class="gp">$ </span>git log
+
+<span class="c"># Muestra un numero x de commits.</span>
+<span class="gp">$ </span>git log -n 10
+
+<span class="c"># Muestra solo los commits que se han combinado en el historial.</span>
+<span class="gp">$ </span>git log --merges
+</code></pre>
+
+<h3>merge</h3>
+
+<p>Combina los cambios de commits realizados externamente dentro de la rama en la
+que se trabaja.</p>
+<pre class="highlight shell"><code><span class="c"># Combina la rama especificada en la rama actual.</span>
+<span class="gp">$ </span>git merge jediMaster
+
+<span class="c"># Siempre genere un solo merge commit cuando se utiliza merge.</span>
+<span class="gp">$ </span>git merge --no-ff jediMaster
+</code></pre>
+
+<h3>mv</h3>
+
+<p>Renombra o mueve un archivo</p>
+<pre class="highlight shell"><code><span class="c"># Renombrando un archivo.</span>
+<span class="gp">$ </span>git mv HolaMundo.c AdiosMundo.c
+
+<span class="c"># Moviendo un archivo.</span>
+<span class="gp">$ </span>git mv HolaOtraVezMundo.c ./nuevo/directorio/NuevoArchivo.c
+
+<span class="c"># Sustituye un archivo.</span>
+<span class="gp">$ </span>git mv -f archivoA archivoB
+</code></pre>
+
+<h3>pull</h3>
+
+<p>Trae los cambios de un repositorio y los combina en otro en una rama diferente.</p>
+<pre class="highlight shell"><code><span class="c"># Actualiza el repositorio local, combinando los nuevos cambios</span>
+<span class="c"># de las ramas remotas "origin" y "master".</span>
+<span class="c"># git pull &lt;remota&gt; &lt;rama&gt;</span>
+<span class="gp">$ </span>git pull origin master
+</code></pre>
+
+<h3>push</h3>
+
+<p>Envía y combina los cambios de un repositorio local a un repositorio y rama remotos.</p>
+<pre class="highlight shell"><code><span class="c"># Envía y combina cambios de un repositorio local hacia un repositorio remoto</span>
+<span class="c"># llamados "origin" y "master", respectivamente.</span>
+<span class="c"># git push &lt;remota&gt; &lt;rama&gt;</span>
+<span class="c"># git push =&gt; por defecto es lo mismo que poner =&gt;  git push origin master</span>
+<span class="gp">$ </span>git push origin master
+</code></pre>
+
+<h3>rebase</h3>
+
+<p>Toma todos los cambios que fueron registrados en una rama, y los repite dentro
+de otra rama. <em>No reescribe los commits que se han empujado antes a un repositorio público.</em></p>
+<pre class="highlight shell"><code><span class="c"># Integrar ramaExperimento dentro de la rama "master"</span>
+<span class="c"># git rebase &lt;basebranch&gt; &lt;topicbranch&gt;</span>
+<span class="gp">$ </span>git rebase master experimentBranch
+</code></pre>
+
+<p><a href="http://git-scm.com/book/es/Ramificaciones-en-Git-Procedimientos-básicos-para-ramificar-y-fusionar">Información adicional.</a></p>
+
+<h3>reset (precaución)</h3>
+
+<p>Reinicia el HEAD actual hacia un estado especificado. Esto permite deshacer
+combinaciones (merges), pulls, commits, adds y más. Es un comando útil, pero
+tambien peligroso si no se sabe lo que se hace.</p>
+<pre class="highlight shell"><code><span class="c"># Reinicia el área principal, con el último cambio registrado. (deja los</span>
+<span class="c"># directorios sin cambios)</span>
+<span class="gp">$ </span>git reset
+
+<span class="c"># Reinicia el área principal, con el último cambio registrado, y reescribe el</span>
+<span class="c"># directorio de trabajo.</span>
+<span class="gp">$ </span>git reset --hard
+
+<span class="c"># Mueve la rama actual hacia el commit especificado (no realiza cambios a los</span>
+<span class="c"># directorios), todos los cambios aún existen el directorio.</span>
+<span class="gp">$ </span>git reset 31f2bb1
+
+<span class="c"># Mueve la rama actual devuelta a un commit especificado, así como el</span>
+<span class="c"># directorio (borra todos los cambios que no fueron registrados y todos los</span>
+<span class="c"># cambios realizados después del commit especificado).</span>
+<span class="gp">$ </span>git reset --hard 31f2bb1
+</code></pre>
+
+<h3>rm</h3>
+
+<p>Lo contrario de git add, git rm elimina los archivos del directorio de trabajo
+actual.</p>
+<pre class="highlight shell"><code><span class="c"># Elimina FooBar.c</span>
+<span class="gp">$ </span>git rm FooBar.c
+
+<span class="c"># Elimina un archivo de un directorio.</span>
+<span class="gp">$ </span>git rm /directorio/del/archivo/FooBar.c
+</code></pre>
+
+<h2>Información Adicional</h2>
+
+<ul>
+<li><p><a href="http://try.github.io/levels/1/challenges/1">tryGit - Una forma entretenida y rapida de aprender Git.</a></p></li>
+<li><p><a href="https://blog.udemy.com/git-tutorial-a-comprehensive-guide/">Udemy tutorial de Git: Una guía completa</a></p></li>
+<li><p><a href="http://gitimmersion.com/">Inmersión Git - Una visita guiada caminando a través de los fundamentos de git</a></p></li>
+<li><p><a href="http://git-scm.com/videos">git-scm - Video-tutoriales</a></p></li>
+<li><p><a href="http://git-scm.com/book/es">git-scm - Documentacion</a></p></li>
+<li><p><a href="https://www.atlassian.com/git/">Atlassian Git - Tutoriales y Flujos de trabajo</a></p></li>
+<li><p><a href="https://na1.salesforce.com/help/doc/en/salesforce_git_developer_cheatsheet.pdf">SalesForce Chuleta</a></p></li>
+<li><p><a href="http://www.gitguys.com/">GitGuys</a></p></li>
+<li><p><a href="http://rogerdudler.github.io/git-guide/index.html">Git - La guía simple</a></p></li>
+<li><p><a href="http://www.git-scm.com/book/en/v2">Pro Git</a></p></li>
+<li><p><a href="http://product.hubspot.com/blog/git-and-github-tutorial-for-beginners">Una introducción a Git y Github para principiantes (Tutorial)</a></p></li>
+</ul>
+
+    <hr>
+    <p>¿Tienes una sugerencia o rectificación? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Abre un issue</a> en el repositorio de Github, o haz un pull request tu mismo
+    </p>
+    <p class="contributed">
+    Originalmente contribuido por Jake Prather, y actualizado por <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/es-es/git-es.html.markdown">0 colaborador(es)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://github.com/JakeHP">Jake Prather</a>
+      
+    
+    </p>
+
+    <p>
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/es-es/git-es/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:36:14 GMT -->
+</html>

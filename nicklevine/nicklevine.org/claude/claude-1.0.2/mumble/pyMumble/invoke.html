@@ -1,0 +1,160 @@
+# $Id: //info.ravenbrook.com/user/ndl/lisp/claude/claude-1.0.2/mumble/pyMumble/invoke.py#1 $
+#
+#                              INVOKE.PY
+#             Nick Levine, Ravenbrook Limited, 2013-03-26
+#
+# 1.  INTRODUCTION
+#
+
+"""
+
+This module extracts results from, and performs basic error checks on, calls into the Mumble library.
+
+The module checks whether addresses to be passed into the Mumble
+library are potentially valid, and whether calls into the library have
+signalled errors. It creates pointers so that the library can return
+results by reference; these pointers are prepended to function
+argument lists, the library is invoked and the results are extracted.
+
+The function check examines the return value of a function call into
+the library. If this value is not SUCCESS (0) then a MumbleError is
+raised.
+
+The MumbleError exception calls mumble_last_error() and reports the
+result. As corner cases, it checks whether (a) there was any error in
+the first place, (b) it was possible to report the error and (c) it
+was possible to mumble_free() the error report. In the last case a
+warning note is tacked onto the head of the report.
+
+The backtraces reported by mumble_last_error() may be longer and less
+edifying than you care for. Control whether you want to see them at
+all by setting the configuration variable show_backtrace in config.py.
+
+See last_error in lib.py for a full description of mumble_last_error().
+"""
+
+import ctypes
+
+from connect import dll
+import config
+
+
+# 2.  CHECK RETURN VALUES FOR ERRORS
+
+OK = 0
+
+# Calls into the library
+
+def check(func, *args):
+    """
+    Apply func to its args, checking the result code.
+    """
+    result = func(*args)
+    if result != OK:
+        raise MumbleError()
+
+def val(func):
+    """
+    Return a function which calls func with an additional pointer argument,
+    checks the result, and dereferences the pointer.
+    """
+    def invoker(*args):
+        pointer = ctypes.c_void_p()
+        check(func, ctypes.byref(pointer), *args)
+        return pointer.value
+    return invoker
+
+def void(func):
+    """
+    Return a function which calls func, checking the result.
+    """
+    def invoker(*args):
+        check(func, *args)
+    return invoker
+
+
+# The MumbleError exception
+
+class MumbleError(Exception):
+    def __init__(self):
+        string = ctypes.c_char_p(None)
+        error = dll.mumble_last_error(ctypes.byref(string))
+        if error != OK:
+            self.string = 'Mumble reports an error, ' \
+                          + 'and an error reporting the error.'
+        else:
+            value = string.value
+            if value:
+                self.string = value.decode('utf-8')
+                if not config.show_backtrace:
+                    self.string = self.string.splitlines()[0]
+                if dll.mumble_free(string) != OK:
+                    # Today isn't turning out very well. (Not that I
+                    # was seriously expecting to end up on this branch.)
+                    warning = '*** Warning: Mumble was unable to free ' \
+                              + 'the mumble_last_error string. ***'
+                    self.string = warning + '\n\n' + self.string
+            else:
+                self.string = 'How did this happen? There was no error in Mumble.'
+
+    def __str__(self):
+        return self.string
+
+
+# 3.  SANITY CHECK POINTER ARGUMENTS
+
+def plausible_address(address):
+    """
+    Return the address, checking that it refers to valid memory.
+
+    This is only the most basic of checks. The address of a compound
+    structure might pass this test but what it points to might be
+    rubbish, and we can't check for that without going into a
+    description of structure layout.
+
+    The test works by loading one byte from the given address. If
+    there's anything wrong with the address, Python will handle the
+    error and raise one of its own Exceptions.
+    """
+    ctypes.string_at(address, 1)
+    return address
+
+
+
+# A. REFERENCES
+#
+#
+# B. DOCUMENT HISTORY
+#
+# 2013-03-26 NDL Created.
+#
+#
+# C. COPYRIGHT AND LICENSE
+#
+# Copyright (c) 2013, Ravenbrook Limited.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in
+#    the documentation and/or other materials provided with the
+#    distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.

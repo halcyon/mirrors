@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Maven&#8217;s Not So Bad: Further Thoughts on Clojure Package Management</title>
+	<atom:link href="https://stuartsierra.com/2009/09/03/mavens-not-so-bad/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2009/09/03/mavens-not-so-bad</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Brian</title>
+		<link>https://stuartsierra.com/2009/09/03/mavens-not-so-bad/comment-page-1#comment-42939</link>
+		<dc:creator><![CDATA[Brian]]></dc:creator>
+		<pubDate>Wed, 16 Dec 2009 16:17:20 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=275#comment-42939</guid>
+		<description><![CDATA[Sonatype has been experimenting with alternatives to a xml based pom.  They demonstrate a yaml based pom in this blog post: http://www.sonatype.com/people/2009/11/maven-3x-paving-the-desire-lines-part-two/  From my understanding, extending maven to read its pom from a different representation should not be too hard to do.
+
+Then again, the m2eclipse project has a great pom editor, which for a large number of projects eliminates the need to look at the xml underneath.]]></description>
+		<content:encoded><![CDATA[<p>Sonatype has been experimenting with alternatives to a xml based pom.  They demonstrate a yaml based pom in this blog post: <a href="http://www.sonatype.com/people/2009/11/maven-3x-paving-the-desire-lines-part-two/" rel="nofollow">http://www.sonatype.com/people/2009/11/maven-3x-paving-the-desire-lines-part-two/</a>  From my understanding, extending maven to read its pom from a different representation should not be too hard to do.</p>
+<p>Then again, the m2eclipse project has a great pom editor, which for a large number of projects eliminates the need to look at the xml underneath.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Thoughts on Clojure Package Management - Digital Digressions by Stuart Sierra</title>
+		<link>https://stuartsierra.com/2009/09/03/mavens-not-so-bad/comment-page-1#comment-42701</link>
+		<dc:creator><![CDATA[Thoughts on Clojure Package Management - Digital Digressions by Stuart Sierra]]></dc:creator>
+		<pubDate>Sat, 05 Sep 2009 04:01:38 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=275#comment-42701</guid>
+		<description><![CDATA[[...] AltLaw Interview Maven&#8217;s Not So Bad: Further Thoughts on Clojure Package Management&#160;&#187;      Aug 31 [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] AltLaw Interview Maven&#8217;s Not So Bad: Further Thoughts on Clojure Package Management&nbsp;&raquo;      Aug 31 [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Phil</title>
+		<link>https://stuartsierra.com/2009/09/03/mavens-not-so-bad/comment-page-1#comment-42699</link>
+		<dc:creator><![CDATA[Phil]]></dc:creator>
+		<pubDate>Fri, 04 Sep 2009 03:08:20 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=275#comment-42699</guid>
+		<description><![CDATA[Andy: my corkscrew project uses clojure.xml to do this; you get most of the useful bits of Maven exposed, but you only ever have to write s-expressions. I&#039;ve found it quite convenient for my projects.]]></description>
+		<content:encoded><![CDATA[<p>Andy: my corkscrew project uses clojure.xml to do this; you get most of the useful bits of Maven exposed, but you only ever have to write s-expressions. I&#8217;ve found it quite convenient for my projects.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Mark Derricutt</title>
+		<link>https://stuartsierra.com/2009/09/03/mavens-not-so-bad/comment-page-1#comment-42698</link>
+		<dc:creator><![CDATA[Mark Derricutt]]></dc:creator>
+		<pubDate>Fri, 04 Sep 2009 01:29:37 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=275#comment-42698</guid>
+		<description><![CDATA[Excellent post - I&#039;ve been rather buzy lately and havn&#039;t had a chance to blog my own plugin yet!]]></description>
+		<content:encoded><![CDATA[<p>Excellent post &#8211; I&#8217;ve been rather buzy lately and havn&#8217;t had a chance to blog my own plugin yet!</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2009/09/03/mavens-not-so-bad/comment-page-1#comment-42697</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Fri, 04 Sep 2009 00:40:59 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=275#comment-42697</guid>
+		<description><![CDATA[Andy B. wrote: &lt;em&gt;&quot;using an xml templating engine like Haml might make editing the pom files even more palatable.&quot;&lt;/em&gt;
+
+Yes, you could use any XML generator. Clojure has several, including an &lt;a href=&quot;http://github.com/antoniogarrote/clj-haml/tree/master&quot; rel=&quot;nofollow&quot;&gt;implementation of Haml&lt;/a&gt; and my own &lt;a href=&quot;http://github.com/richhickey/clojure-contrib/blob/master/src/clojure/contrib/prxml.clj#L142&quot; rel=&quot;nofollow&quot;&gt;prxml&lt;/a&gt;.]]></description>
+		<content:encoded><![CDATA[<p>Andy B. wrote: <em>&#8220;using an xml templating engine like Haml might make editing the pom files even more palatable.&#8221;</em></p>
+<p>Yes, you could use any XML generator. Clojure has several, including an <a href="http://github.com/antoniogarrote/clj-haml/tree/master" rel="nofollow">implementation of Haml</a> and my own <a href="http://github.com/richhickey/clojure-contrib/blob/master/src/clojure/contrib/prxml.clj#L142" rel="nofollow">prxml</a>.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Andy B</title>
+		<link>https://stuartsierra.com/2009/09/03/mavens-not-so-bad/comment-page-1#comment-42696</link>
+		<dc:creator><![CDATA[Andy B]]></dc:creator>
+		<pubDate>Thu, 03 Sep 2009 23:29:32 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=275#comment-42696</guid>
+		<description><![CDATA[Very enlightening post!
+I&#039;d always been turned off by maven but now I&#039;m going to give it a closer look.
+As an aside, using an xml templating engine like Haml might make editing the pom files
+even more palatable.
+for eg. in jruby,
+%foo
+  %bars
+     %bar &#039;baz&#039;
+Is much more pleasant to work with if you have an xml allergy as I do.]]></description>
+		<content:encoded><![CDATA[<p>Very enlightening post!<br />
+I&#8217;d always been turned off by maven but now I&#8217;m going to give it a closer look.<br />
+As an aside, using an xml templating engine like Haml might make editing the pom files<br />
+even more palatable.<br />
+for eg. in jruby,<br />
+%foo<br />
+  %bars<br />
+     %bar &#8216;baz&#8217;<br />
+Is much more pleasant to work with if you have an xml allergy as I do.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Phil</title>
+		<link>https://stuartsierra.com/2009/09/03/mavens-not-so-bad/comment-page-1#comment-42695</link>
+		<dc:creator><![CDATA[Phil]]></dc:creator>
+		<pubDate>Thu, 03 Sep 2009 23:14:05 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=275#comment-42695</guid>
+		<description><![CDATA[Thanks for posting this! I&#039;m glad to see such a clear explanation; I think a lot of people have preconceived notions about Maven that lead them to discount it without really understanding it. I&#039;ve had a lot of luck depending on the clojure-pom parent mentioned above for my projects; it lets you end up with about a third as much XML as your sample. But it&#039;s good to start at the basics.]]></description>
+		<content:encoded><![CDATA[<p>Thanks for posting this! I&#8217;m glad to see such a clear explanation; I think a lot of people have preconceived notions about Maven that lead them to discount it without really understanding it. I&#8217;ve had a lot of luck depending on the clojure-pom parent mentioned above for my projects; it lets you end up with about a third as much XML as your sample. But it&#8217;s good to start at the basics.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2009/09/03/mavens-not-so-bad/comment-page-1#comment-42694</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Thu, 03 Sep 2009 22:51:51 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=275#comment-42694</guid>
+		<description><![CDATA[Tim D. wrote &lt;em&gt;&quot;I have an alternate pom setup on github...&quot;&lt;/em&gt;
+
+Yes, I want to talk about that setup in a future post.  Here I was aiming for the simplest, least-intimidating pom.xml I could manage.]]></description>
+		<content:encoded><![CDATA[<p>Tim D. wrote <em>&#8220;I have an alternate pom setup on github&#8230;&#8221;</em></p>
+<p>Yes, I want to talk about that setup in a future post.  Here I was aiming for the simplest, least-intimidating pom.xml I could manage.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Tim Dysinger</title>
+		<link>https://stuartsierra.com/2009/09/03/mavens-not-so-bad/comment-page-1#comment-42693</link>
+		<dc:creator><![CDATA[Tim Dysinger]]></dc:creator>
+		<pubDate>Thu, 03 Sep 2009 22:49:12 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=275#comment-42693</guid>
+		<description><![CDATA[Sorry I meant to say the &quot;versions&quot; plugin in my 1st post.  &quot;versions&quot; and &quot;dependency&quot; plugins are very nice.]]></description>
+		<content:encoded><![CDATA[<p>Sorry I meant to say the &#8220;versions&#8221; plugin in my 1st post.  &#8220;versions&#8221; and &#8220;dependency&#8221; plugins are very nice.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Tim Dysinger</title>
+		<link>https://stuartsierra.com/2009/09/03/mavens-not-so-bad/comment-page-1#comment-42692</link>
+		<dc:creator><![CDATA[Tim Dysinger]]></dc:creator>
+		<pubDate>Thu, 03 Sep 2009 22:47:39 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=275#comment-42692</guid>
+		<description><![CDATA[I have an alternate pom setup on github that does AOT compile and test-is (clojure) testing.  If you install this pom and extend from it for your projects (or setup a project that extends from it and then turn it into an archetype pattern).
+
+http://github.com/dysinger/clojure-pom]]></description>
+		<content:encoded><![CDATA[<p>I have an alternate pom setup on github that does AOT compile and test-is (clojure) testing.  If you install this pom and extend from it for your projects (or setup a project that extends from it and then turn it into an archetype pattern).</p>
+<p><a href="http://github.com/dysinger/clojure-pom" rel="nofollow">http://github.com/dysinger/clojure-pom</a></p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.297 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:01:18 -->
+
+<!-- Compression = gzip -->

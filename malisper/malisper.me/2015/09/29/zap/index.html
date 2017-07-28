@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns#">
+
+<!-- Mirrored from malisper.me/2015/09/29/zap/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:46:36 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zap - Macrology</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="../../../../xmlrpc.php">
+
+
+<!-- This site is optimized with the Yoast SEO plugin v3.4.2 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="index.html" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Zap - Macrology" />
+<meta property="og:description" content="This post makes use of places. If you are unfamiliar with how places work, see my post Getting Places. Many languages provide syntactic sugar for evaluating an expression involving a variable and assigning the result of that expression to the variable at the same time. In these languages you can do something such as the &hellip;" />
+<meta property="og:url" content="index.html" />
+<meta property="og:site_name" content="Macrology" />
+<meta property="article:section" content="Basic Macros" />
+<meta property="article:published_time" content="2015-09-29T11:38:35-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:description" content="This post makes use of places. If you are unfamiliar with how places work, see my post Getting Places. Many languages provide syntactic sugar for evaluating an expression involving a variable and assigning the result of that expression to the variable at the same time. In these languages you can do something such as the [&hellip;]" />
+<meta name="twitter:title" content="Zap - Macrology" />
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Feed" href="../../../../feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Comments Feed" href="../../../../comments/feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Zap Comments Feed" href="feed/index.html" />
+<link rel='stylesheet' id='scrawl-style-css'  href='../../../../wp-content/themes/scrawl-wpcom/style167b.css?ver=4.6' type='text/css' media='all' />
+<link rel='stylesheet' id='scrawl-fonts-css'  href='https://fonts.googleapis.com/css?family=Lora:400,700|Merriweather:400italic,400,700,700italic&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../../../wp-content/themes/scrawl-wpcom/fonts/genericons6de8.css?ver=3.3' type='text/css' media='all' />
+<script type='text/javascript' src='../../../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<link rel='https://api.w.org/' href='../../../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../../../wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+<link rel='shortlink' href='../../../../indexf4ce.html?p=988' />
+<link rel="alternate" type="application/json+oembed" href="../../../../wp-json/oembed/1.0/embed6f91.json?url=http%3A%2F%2Fmalisper.me%2F2015%2F09%2F29%2Fzap%2F" />
+<link rel="alternate" type="text/xml+oembed" href="../../../../wp-json/oembed/1.0/embed79b5?url=http%3A%2F%2Fmalisper.me%2F2015%2F09%2F29%2Fzap%2F&amp;format=xml" />
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-63547056-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<style type="text/css" id="syntaxhighlighteranchor"></style>
+
+<script type="text/javascript">
+  window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var n=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(n?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var o=document.getElementsByTagName("script")[0];o.parentNode.insertBefore(a,o);for(var r=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["clearEventProperties","identify","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=r(p[c])};
+    heap.load("931515525");
+</script>
+</head>
+
+<body class="single single-post postid-988 single-format-standard">
+	<button class="menu-toggle x">
+		<span class="lines"></span>
+		<span class="screen-reader-text">Primary Menu</span>
+	</button>
+	<div class="slide-menu">
+				
+		<h1 class="site-title"><a href="../../../../index.html" rel="home">Macrology</a></h1>
+		<h2 class="site-description">Case Studies in Lisp Macros</h2>
+		
+				
+				
+			<div id="secondary" class="widget-area" role="complementary">
+		<aside id="search-2" class="widget widget_search"><form role="search" method="get" class="search-form" action="http://malisper.me/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form></aside><aside id="pages-3" class="widget widget_pages"><h1 class="widget-title">Pages</h1>		<ul>
+			<li class="page_item page-item-55"><a href="../../../../about-me/index.html">About Michael Malis</a></li>
+<li class="page_item page-item-44"><a href="../../../../about-this-site-2/index.html">About This Site</a></li>
+		</ul>
+		</aside><aside id="nav_menu-3" class="widget widget_nav_menu"><h1 class="widget-title">Contact Me</h1><div class="menu-contact-me-container"><ul id="menu-contact-me" class="menu"><li id="menu-item-60" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-60"><a href="mailto:michaelmalis2@gmail.com">Email</a></li>
+<li id="menu-item-58" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-58"><a href="https://github.com/malisper">Github</a></li>
+<li id="menu-item-59" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-59"><a href="https://news.ycombinator.com/user?id=malisper">Hacker News</a></li>
+</ul></div></aside><aside id="archives-2" class="widget widget_archive"><h1 class="widget-title">Archives</h1>		<ul>
+			<li><a href='../../../../2016/06/index.html'>June 2016</a></li>
+	<li><a href='../../../../2016/04/index.html'>April 2016</a></li>
+	<li><a href='../../../../2016/01/index.html'>January 2016</a></li>
+	<li><a href='../../../12/index.html'>December 2015</a></li>
+	<li><a href='../../../11/index.html'>November 2015</a></li>
+	<li><a href='../../../10/index.html'>October 2015</a></li>
+	<li><a href='../../index.html'>September 2015</a></li>
+	<li><a href='../../../08/index.html'>August 2015</a></li>
+	<li><a href='../../../07/index.html'>July 2015</a></li>
+	<li><a href='../../../06/index.html'>June 2015</a></li>
+	<li><a href='../../../05/index.html'>May 2015</a></li>
+		</ul>
+		</aside><aside id="categories-2" class="widget widget_categories"><h1 class="widget-title">Categories</h1>		<ul>
+	<li class="cat-item cat-item-2"><a href="../../../../category/basics/index.html" title="These are basic Lisp macros that should be trivial to understand.">Basic Macros</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="../../../../category/intermediate-macros/index.html" >Intermediate Macros</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="../../../../category/advanced-macros/index.html" >Advanced Macros</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="../../../../category/debugging-common-lisp/index.html" >Debugging Lisp</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="../../../../category/loops-in-lisp/index.html" >Loops in Lisp</a>
+</li>
+		</ul>
+</aside>	</div><!-- #secondary -->
+	</div><!-- .slide-menu -->
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<header id="masthead" class="site-header" role="banner">
+
+		<div class="site-branding">
+						<h1 class="site-title"><a href="../../../../index.html" rel="home">Macrology</a></h1>
+		</div>
+
+	</header><!-- #masthead -->
+
+	
+	
+	<div id="content" class="site-content">
+
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			<article id="post-988" class="post-988 post type-post status-publish format-standard hentry category-basics">
+			<header class="entry-header">
+			<h1 class="entry-title">Zap</h1>		</header><!-- .entry-header -->
+		<div class="entry-content">
+		<p><em>This post makes use of places. If you are unfamiliar with how places work, see my post <a href="../../22/getting-places/index.html">Getting Places</a>.</em></p>
+<p>Many languages provide syntactic sugar for evaluating an expression involving a variable and assigning the result of that expression to the variable at the same time. In these languages you can do something such as the following:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+x += 5
+</pre>
+<p>The above expression both adds five to the value of <em>x</em> and writes that new value back to <em>x</em>. In this post, I&#8217;m going to show you how you can write a macro <b>zap</b> that is a generalized version of this technique. With <strong>zap</strong> the above example would look like the following:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(zap #'+ x 5)
+</pre>
+<p>There are a couple things that make <strong>zap</strong> really cool. First of all, it can be used with any function. For example, if you wanted to cube the value in <em>x</em>, you could use the following:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(zap #'expt x 3)
+</pre>
+<p>The other thing that makes <strong>zap</strong> so awesome is that it can be used on any place. If you want to use <strong>zap</strong> on the value stored in a hash table with key 5, you can do that:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(zap #'+ (gethash 5 table) 5)
+</pre>
+<p>Now that you&#8217;ve seen how <strong>zap</strong> is used, here is how it can be implemented:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defmacro zap (fn place &amp;rest args)
+  (multiple-value-bind 
+        (temps exprs stores store-expr access-expr) 
+      (get-setf-expansion place)
+    `(let* (,@(mapcar #'list temps exprs)
+            (,(car stores) 
+              (funcall ,fn ,access-expr ,@args)))
+       ,store-expr)))
+</pre>
+<p>You should be able to see that the code for <strong>zap</strong> is eerily similar to that of <strong>incf</strong> (from <a href="../../22/getting-places/index.html">Getting Places</a>). They are the exact same except instead of binding the gensym that will hold the new value to one plus the value already in the place:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(,(car stores) (+ 1 ,access-expr))
+</pre>
+<p>The gensym is bound to the result of calling the function with the value in the place and all of the other arguments passed to <strong>zap</strong>:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(,(car stores) (funcall ,fn ,access-expr ,@args))
+</pre>
+<p>Although <strong>zap</strong> is just a nice syntactic shortcut, it is a great example of the crazy things you can do with places.</p>
+			</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="index.html" rel="bookmark"><time class="entry-date published" datetime="2015-09-29T11:38:35+00:00">September 29, 2015</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../../../author/malisper/index.html">malisper</a></span></span><span class="category-links"> in <a href="../../../../category/basics/index.html" rel="category tag">Basic Macros</a></span>			<span class="secondary-entry-meta">
+								<span class="comments-link"><a href="index.html#respond">0</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+			
+	<nav class="navigation post-navigation" role="navigation">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="../../22/getting-places/index.html" rel="prev"><span class="title">Previous post</span>Getting Places</a></div><div class="nav-next"><a href="../../../10/13/or/index.html" rel="next"><span class="title">Next post</span>Or=</a></div></div>
+	</nav>
+			
+<div id="comments" class="comments-area">
+
+	
+	
+	
+					<div id="respond" class="comment-respond">
+			<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" title="Cancel reply" href="index.html#respond" style="display:none;"><span class="screen-reader-text">Cancel reply</span></a></small></h3>				<form action="http://malisper.me/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
+					<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" aria-required="true" required="required"></textarea></p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" aria-required='true' required='required' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" aria-required='true' required='required' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='988' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="fcaa4fcfe2" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="141"/></p>				</form>
+					</div><!-- #respond -->
+		
+</div><!-- #comments -->
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="site-info">
+			<a href="http://wordpress.org/">Proudly powered by WordPress</a>
+			<span class="sep"> ~ </span>
+			Theme: Scrawl by <a href="https://wordpress.com/themes/" rel="designer">WordPress.com</a>.		</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type='text/javascript' src='../../../../wp-content/plugins/akismet/_inc/form2d73.html?ver=3.1.11'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushPlain09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore09b1.css?ver=3.0.9b";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeEclipse09b1.css?ver=3.0.9b";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+<script type='text/javascript' src='../../../../wp-content/themes/scrawl-wpcom/js/scrawld56c.js?ver=20150309'></script>
+<script type='text/javascript' src='../../../../wp-content/themes/scrawl-wpcom/js/skip-link-focus-fix08e0.js?ver=20130115'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/comment-reply.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+
+</body>
+
+<!-- Mirrored from malisper.me/2015/09/29/zap/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:46:36 GMT -->
+</html>
+<!-- Dynamic page generated in 0.090 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:22:45 -->
+
+<!-- super cache -->

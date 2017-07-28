@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+
+<!-- Mirrored from stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 17:01:10 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+		<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+<title>Thrift vs. Protocol Buffers &#8211; Digital Digressions by Stuart Sierra</title>
+<link rel='dns-prefetch' href='http://s0.wp.com/'>
+<link rel='dns-prefetch' href='http://secure.gravatar.com/'>
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel='dns-prefetch' href='http://s.w.org/'>
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Comments Feed" href="../../../comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Thrift vs. Protocol Buffers Comments Feed" href="thrift-vs-protocol-buffers/feed" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/stuartsierra.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.6"}};
+			!function(a,b,c){function d(a){var c,d,e,f,g,h=b.createElement("canvas"),i=h.getContext&&h.getContext("2d"),j=String.fromCharCode;if(!i||!i.fillText)return!1;switch(i.textBaseline="top",i.font="600 32px Arial",a){case"flag":return i.fillText(j(55356,56806,55356,56826),0,0),!(h.toDataURL().length<3e3)&&(i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,65039,8205,55356,57096),0,0),c=h.toDataURL(),i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,55356,57096),0,0),d=h.toDataURL(),c!==d);case"diversity":return i.fillText(j(55356,57221),0,0),e=i.getImageData(16,16,1,1).data,f=e[0]+","+e[1]+","+e[2]+","+e[3],i.fillText(j(55356,57221,55356,57343),0,0),e=i.getImageData(16,16,1,1).data,g=e[0]+","+e[1]+","+e[2]+","+e[3],f!==g;case"simple":return i.fillText(j(55357,56835),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode8":return i.fillText(j(55356,57135),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode9":return i.fillText(j(55358,56631),0,0),0!==i.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity","unicode9"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='twentysixteen-jetpack-css'  href='../../../wp-content/plugins/jetpack/modules/theme-tools/compat/twentysixteen3a05.css?ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-fonts-css'  href='https://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%2C900%2C400italic%2C700italic%2C900italic%7CMontserrat%3A400%2C700%7CInconsolata%3A400&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../../wp-content/plugins/jetpack/_inc/genericons/genericons/genericons128b.css?ver=3.1' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-style-css'  href='../../../wp-content/themes/twentysixteen/style167b.css?ver=4.6' type='text/css' media='all' />
+<!--[if lt IE 10]>
+<link rel='stylesheet' id='twentysixteen-ie-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentysixteen-ie8-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie8.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='twentysixteen-ie7-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie7.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='../../../wp-content/plugins/jetpack/css/jetpack3a05.css?ver=4.2.2' type='text/css' media='all' />
+<script type='text/javascript' src='../../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://stuartsierra.com/wp-content/themes/twentysixteen/js/html5.js?ver=3.7.3'></script>
+<![endif]-->
+<link rel='https://api.w.org/' href='../../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../../wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Moving the &#8216;C&#8217; in MVC' href='../07/moving-the-c-in-mvc.html' />
+<link rel='next' title='The Document-Blob Model' href='../17/the-document-blob-model.html' />
+<meta name="generator" content="WordPress 4.6" />
+<link rel="canonical" href="thrift-vs-protocol-buffers.html" />
+<link rel='shortlink' href='https://wp.me/pbl3J-2K' />
+<link rel="alternate" type="application/json+oembed" href="../../../wp-json/oembed/1.0/embedbd1d.json?url=https%3A%2F%2Fstuartsierra.com%2F2008%2F07%2F10%2Fthrift-vs-protocol-buffers" />
+<link rel="alternate" type="text/xml+oembed" href="../../../wp-json/oembed/1.0/embedd5e2?url=https%3A%2F%2Fstuartsierra.com%2F2008%2F07%2F10%2Fthrift-vs-protocol-buffers&amp;format=xml" />
+
+<link rel='dns-prefetch' href='http://v0.wordpress.com/'>
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Thrift vs. Protocol Buffers" />
+<meta property="og:url" content="https://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers" />
+<meta property="og:description" content="Google recently released its Protocol Buffers as open source. About a year ago, Facebook released a similar product called Thrift. I&#8217;ve been comparing them; here&#8217;s what I&#8217;ve found…" />
+<meta property="article:published_time" content="2008-07-10T17:05:40+00:00" />
+<meta property="article:modified_time" content="2009-04-06T20:29:33+00:00" />
+<meta property="og:site_name" content="Digital Digressions by Stuart Sierra" />
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary" />
+</head>
+
+<body class="single single-post postid-170 single-format-standard">
+<div id="page" class="site">
+	<div class="site-inner">
+		<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+		<header id="masthead" class="site-header" role="banner">
+			<div class="site-header-main">
+				<div class="site-branding">
+					
+											<p class="site-title"><a href="../../../index.html" rel="home">Digital Digressions by Stuart Sierra</a></p>
+											<p class="site-description">From programming to everything else</p>
+									</div><!-- .site-branding -->
+
+									<button id="menu-toggle" class="menu-toggle">Menu</button>
+
+					<div id="site-header-menu" class="site-header-menu">
+													<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Primary Menu">
+								<div class="menu-main-menu-container"><ul id="menu-main-menu" class="primary-menu"><li id="menu-item-635" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../../../about-me.html">About Me</a></li>
+<li id="menu-item-633" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../../../writing.html">Writing</a></li>
+<li id="menu-item-634" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../../../presentations.html">Presentations</a></li>
+<li id="menu-item-636" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../../../software.html">Software</a></li>
+<li id="menu-item-637" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../../../contact.html">Contact</a></li>
+</ul></div>							</nav><!-- .main-navigation -->
+						
+											</div><!-- .site-header-menu -->
+							</div><!-- .site-header-main -->
+
+											<div class="header-image">
+					<a href="../../../index.html" rel="home">
+						<img src="../../../wp-content/uploads/2015/12/header.jpg" srcset="https://stuartsierra.com/wp-content/uploads/2015/12/header-300x70.jpg 300w, https://stuartsierra.com/wp-content/uploads/2015/12/header-768x179.jpg 768w, https://stuartsierra.com/wp-content/uploads/2015/12/header-1024x239.jpg 1024w, https://stuartsierra.com/wp-content/uploads/2015/12/header.jpg 1200w" sizes="(max-width: 709px) 85vw, (max-width: 909px) 81vw, (max-width: 1362px) 88vw, 1200px" width="1200" height="280" alt="Digital Digressions by Stuart Sierra">
+					</a>
+				</div><!-- .header-image -->
+					</header><!-- .site-header -->
+
+		<div id="content" class="site-content">
+
+<div id="primary" class="content-area">
+	<main id="main" class="site-main" role="main">
+		
+<article id="post-170" class="post-170 post type-post status-publish format-standard hentry category-programming tag-protocol-buffers tag-thrift">
+	<header class="entry-header">
+		<h1 class="entry-title">Thrift vs. Protocol Buffers</h1>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p><!-- table#comparison { background:white; border: 1px solid black; width: 75%; } #comparison .first { background: lightblue; } #comparison .alt { background: #eee; } #comparison td, #comparison th { padding: 3px; vertical-align: top; text-align: left; } --></p>
+<p>Google recently released its <a href="http://code.google.com/p/protobuf/">Protocol Buffers</a> as open source. About a year ago, Facebook released a similar product called <a href="http://developers.facebook.com/thrift/">Thrift</a>. I&#8217;ve been comparing them; here&#8217;s what I&#8217;ve found:</p>
+<table id="comparison" border="0">
+<tbody>
+<tr class="first">
+<th width="20%"></th>
+<th width="40%">Thrift</th>
+<th width="40%">Protocol Buffers</th>
+</tr>
+<tr>
+<th>Backers</th>
+<td>Facebook, <a href="http://wiki.apache.org/incubator/ThriftProposal">Apache (accepted for incubation)</a></td>
+<td>Google</td>
+</tr>
+<tr class="alt">
+<th>Bindings</th>
+<td>C++, Java, Python, PHP, XSD, Ruby, C#, Perl, Objective C, Erlang, Smalltalk, OCaml, and Haskell</td>
+<td>C++, Java, Python<br />
+(Perl, Ruby, and C# under discussion)</td>
+</tr>
+<tr>
+<th>Output Formats</th>
+<td>Binary, JSON</td>
+<td>Binary</td>
+</tr>
+<tr class="alt">
+<th>Primitive Types</th>
+<td>bool<br />
+byte<br />
+16/32/64-bit integers</p>
+<p>double<br />
+string<br />
+byte sequence<br />
+map&lt;t1,t2&gt;<br />
+list&lt;t&gt;<br />
+set&lt;t&gt;</td>
+<td>bool</p>
+<p>32/64-bit integers<br />
+float<br />
+double<br />
+string<br />
+byte sequence</p>
+<p>&#8220;repeated&#8221; properties act like lists</td>
+</tr>
+<tr>
+<th>Enumerations</th>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr class="alt">
+<th>Constants</th>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<th>Composite Type</th>
+<td>struct</td>
+<td>message</td>
+</tr>
+<tr class="alt">
+<th>Exception Type</th>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<th>Documentation</th>
+<td>So-so</td>
+<td>Good</td>
+</tr>
+<tr class="alt">
+<th>License</th>
+<td>Apache</td>
+<td>BSD-style</td>
+</tr>
+<tr>
+<th>Compiler Language</th>
+<td>C++</td>
+<td>C++</td>
+</tr>
+<tr class="alt">
+<th>RPC Interfaces</th>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<th>RPC Implementation</th>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr class="alt">
+<th>Composite Type Extensions</th>
+<td>No</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<p>Overall, I think Thrift wins on features and Protocol Buffers win on<br />
+documentation.  Implementation-wise, they&#8217;re quite similar.  Both use<br />
+integer tags to identify fields, so you can add and remove fields<br />
+without breaking existing code.  Protocol Buffers support<br />
+variable-width encoding of integers, which saves a few bytes.  (Thrift<br />
+has an experimental output format with variable-width ints.)</p>
+<p>The major difference is that Thrift provides a full client/server RPC<br />
+implementation, whereas Protocol Buffers only generate stubs to use in<br />
+your own RPC system.</p>
+<p><strong>Update July 12, 2008:</strong> I haven&#8217;t tested for speed, but from a cursory examination it seems that, at the binary level, Thrift and Protocol Buffers are very similar.  I think Thrift will develop a more coherent community now that it&#8217;s under Apache incubation.  It just moved to a new <a href="http://incubator.apache.org/thrift/">web site</a> and <a href="http://incubator.apache.org/thrift/mailing_lists.html">mailing list</a>, and the <a href="http://issues.apache.org/jira/browse/THRIFT">issue tracker</a> is active.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="thrift-vs-protocol-buffers.html" rel="bookmark"><time class="entry-date published" datetime="2008-07-10T13:05:40+00:00">July 10, 2008</time><time class="updated" datetime="2009-04-06T16:29:33+00:00">April 6, 2009</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../../tag/protocol-buffers.html" rel="tag">Protocol Buffers</a>, <a href="../../../tag/thrift.html" rel="tag">Thrift</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<div id="comments" class="comments-area">
+
+			<h2 class="comments-title">
+			31 thoughts on &ldquo;Thrift vs. Protocol Buffers&rdquo;		</h2>
+
+		
+		<ol class="comment-list">
+					<li id="comment-32024" class="comment even thread-even depth-1">
+			<article id="div-comment-32024" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/048bee2c6fd3db0c86df1c3609651875?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/048bee2c6fd3db0c86df1c3609651875?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Density</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-32024">
+							<time datetime="2008-07-12T16:25:24+00:00">
+								July 12, 2008 at 4:25 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thrift was written by engineers at Facebook who&#8217;d worked at Google and missed using Protocol Buffers, hence the expanded feature set.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-32026" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-32026" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/c091c9beada6745e3117135c5ac42011?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/c091c9beada6745e3117135c5ac42011?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Olivier</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-32026">
+							<time datetime="2008-07-12T17:07:18+00:00">
+								July 12, 2008 at 5:07 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Helpful comparison !</p>
+<p>I was trying to get more information on Protocol Buffers, and Wikipedia linked me to Thrift. </p>
+<p>I found Protocol Buffers pretty well documented, while on the other hand Thrift looks like an alpha project from the documentation point of view&#8230;It is a pity because Thrift seems to have quite a few interesting features. Considering that  Thrift has been published like one year ago,  I wonder if there is really a community backing it up and any enthusiasm around it ..</p>
+<p>It is quite an important point, because if you start using any of these libraries to communicate between different servers/services, you will probably have to stick to it for a few years &#8230; </p>
+<p>In addition, it would be interesting to see if these libraries could be used to store hierarchical information in a database and see what would be the performances/limitations compared with storing XML or JSON. They should work better for a basic load/save strategy but what if you just want a subset of  the data, do you still need to read the whole message ?  The same applied if you want to redirect a message depending on one particular field without reading the whole message &#8230;</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-32027" class="comment even thread-even depth-1">
+			<article id="div-comment-32027" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/3c2ce5e843cef58cf546b403c6233597?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/3c2ce5e843cef58cf546b403c6233597?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://mcherm.com/' rel='external nofollow' class='url'>Michael Chermside</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-32027">
+							<time datetime="2008-07-12T17:17:58+00:00">
+								July 12, 2008 at 5:17 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I have not compared them in detail myself, but if you believe Google&#8217;s description of Protocol Buffers, it&#8217;s primary feature is one you have not included in your consideration. They claim that their binary format is (1) especially small and (2) especially quick to serialize and deserialize. I am not particularly familiar with Thrift, but I never had the impression that these particular optimizations were of great importance to that project. The Google version is optimized for the case where you are dealing with truly massive amounts of data (the RARE case where efficiency trumps readability).</p>
+<p>&#8212; Michael Chermside</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-32032" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-32032" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/820b05c70b3d752c753ec4a2c0d2650b?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/820b05c70b3d752c753ec4a2c0d2650b?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">markus</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-32032">
+							<time datetime="2008-07-12T17:45:33+00:00">
+								July 12, 2008 at 5:45 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>nice and short summary</p>
+<p>i like that a lot, thanks for the effort!</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-32034" class="comment even thread-even depth-1">
+			<article id="div-comment-32034" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/6f7c7ffaf9f8107f7033e17918a32ee7?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/6f7c7ffaf9f8107f7033e17918a32ee7?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">speed</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-32034">
+							<time datetime="2008-07-12T18:26:54+00:00">
+								July 12, 2008 at 6:26 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>How do they compare in speed?</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-32037" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-32037" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/da26ea91f5a6f34cd19cc65a9a0625fc?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/da26ea91f5a6f34cd19cc65a9a0625fc?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://dynamictyping.org/' rel='external nofollow' class='url'>mattrepl</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-32037">
+							<time datetime="2008-07-12T19:51:07+00:00">
+								July 12, 2008 at 7:51 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Density: What makes you say that Thrift is directly a Protocol Buffers clone?  According to the Thrift whitepaper (see acknowledgment section) it is the successor to a project called Pillar, written by a fB employee while in college.</p>
+<p>Link to paper:<br />
+<a href="http://developers.facebook.com/thrift/thrift-20070401.pdf" rel="nofollow">http://developers.facebook.com/thrift/thrift-20070401.pdf</a></p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-32039" class="comment even thread-even depth-1">
+			<article id="div-comment-32039" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/eaa5275b7c8df78c4d4216169c3add10?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/eaa5275b7c8df78c4d4216169c3add10?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Borf</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-32039">
+							<time datetime="2008-07-12T20:43:34+00:00">
+								July 12, 2008 at 8:43 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Mark Slee interned at Google, and the paper specifically cites Protocol Buffers after Pillar.</p>
+<p><a href="http://www.cricketschirping.com/weblog/?p=1210" rel="nofollow">http://www.cricketschirping.com/weblog/?p=1210</a></p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-32040" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-32040" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/ddbbd83688970204daf834c01f13e677?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/ddbbd83688970204daf834c01f13e677?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">RogerWan</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-32040">
+							<time datetime="2008-07-12T20:44:53+00:00">
+								July 12, 2008 at 8:44 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>mattrepl: The Facebook employee in question was an intern at Google while in college ;)</p>
+<p>That&#8217;s not to say Thrift is a copy of protocol buffers&#8211;but given the similarities it&#8217;s likely it was inspired by it.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-32047" class="comment even thread-even depth-1">
+			<article id="div-comment-32047" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/f21827076a1d0725c4f4bd5a640102e9?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/f21827076a1d0725c4f4bd5a640102e9?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Don Stewart</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-32047">
+							<time datetime="2008-07-12T23:02:12+00:00">
+								July 12, 2008 at 11:02 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>There&#8217;s currently two Haskell implementations of protocol buffers, one of which you can find here. <a href="http://hackage.haskell.org/cgi-bin/hackage-scripts/package/protocol-buffers-0.0.5" rel="nofollow">http://hackage.haskell.org/cgi-bin/hackage-scripts/package/protocol-buffers-0.0.5</a>  the other is under development.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-32050" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-32050" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/213159dfe63d3cbff3e80fbf17d2fc66?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/213159dfe63d3cbff3e80fbf17d2fc66?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://incubator.apache.org/thrift/' rel='external nofollow' class='url'>Mark Slee</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-32050">
+							<time datetime="2008-07-12T23:45:14+00:00">
+								July 12, 2008 at 11:45 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>A few quick comments:</p>
+<p>1/ Data size and serialization performance are definitely of great importance to Thrift. Huge data sets are definitely one case where this matters, but don&#8217;t forget about high-throughput low-latency services (at Facebook, like Google, every millisecond counts). Thrift is much quicker than typical XML/RESTful service implementations, even with relatively small data sizes. This is one of the primary use cases. When you&#8217;re dealing with millions of users and thousands of servers, efficiency really starts to matter.</p>
+<p>2/ We do have to admit Thrift isn&#8217;t yet as fully-featured in the documentation department as it could (and probably should) be, but we do have an active and enthusiastic community. Thrift is currently being used and contributed to by Powerset, Rapleaf, iMeem, AmieStreet, the reCaptcha project, as well as a number of independent developers.</p>
+<p>3/ Both Thrift and Protocol Buffers are great candidates for serializing data into databases &#8212; both are more compact and quicker to read/write than XML/JSON. Another common persistent use case is the storage of replayable logfiles.</p>
+<p>4/ Last point, though Thrift currently only has implementations for binary/JSON, it&#8217;s designed so that the encoding format is extensible. Thrift could easily support XML or human-readable ASCII &#8212; so the trade-off of efficiency vs. readability is left up to the developer.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-32052" class="pingback even thread-even depth-1">
+			<div class="comment-body">
+				Pingback: <a href='http://sahuguet.wordpress.com/2008/07/12/thrift-vs-protocol-buffers-digital-digressions-by-stuart-sierra/' rel='external nofollow' class='url'>Thrift vs. Protocol Buffers - Digital Digressions by Stuart Sierra &laquo; The other side of the firewall</a> 			</div>
+</li><!-- #comment-## -->
+		<li id="comment-32118" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-32118" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/ea5036994d8e3d00fe4c9ede36c2d05a?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/ea5036994d8e3d00fe4c9ede36c2d05a?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">software user</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-32118">
+							<time datetime="2008-07-14T01:51:50+00:00">
+								July 14, 2008 at 1:51 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>&gt; We do have to admit Thrift isn’t yet as fully-featured in the documentation department as it could</p>
+<p>Please don&#8217;t release code without decent documentation. If you are making effort then do it right. Code of this complexity needs good doc or it&#8217;s just a complete waste of time and totally frustrating.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-32131" class="pingback even thread-even depth-1">
+			<div class="comment-body">
+				Pingback: <a href='http://breyten.wordpress.com/2008/07/14/links-for-2008-07-14/' rel='external nofollow' class='url'>links for 2008-07-14 &laquo; Breyten&#8217;s Dev Blog</a> 			</div>
+</li><!-- #comment-## -->
+		<li id="comment-32808" class="pingback odd alt thread-odd thread-alt depth-1">
+			<div class="comment-body">
+				Pingback: <a href='http://www.programmersparadox.com/2008/07/22/thrift/' rel='external nofollow' class='url'>Thrift | Programmer&#8217;s Paradox</a> 			</div>
+</li><!-- #comment-## -->
+		<li id="comment-32858" class="pingback even thread-even depth-1">
+			<div class="comment-body">
+				Pingback: <a href='http://newsmavens.wordpress.com/2008/07/23/links-for-2008-07-23/' rel='external nofollow' class='url'>links for 2008-07-23 &laquo; Brent Sordyl&#8217;s Blog</a> 			</div>
+</li><!-- #comment-## -->
+		<li id="comment-33485" class="pingback odd alt thread-odd thread-alt depth-1">
+			<div class="comment-body">
+				Pingback: <a href='http://www.gnuband.org/2008/07/29/the_consequences_of_opensourcing_facebook_code/' rel='external nofollow' class='url'>Paolo blog: Ramblings on Web2.0, Trust, Reputation, Recommender Systems, Social Software, Free Software, ICT4D and much more &raquo; Blog Archive &raquo; The consequences of opensourcing Facebook code</a> 			</div>
+</li><!-- #comment-## -->
+		<li id="comment-39301" class="pingback even thread-even depth-1">
+			<div class="comment-body">
+				Pingback: <a href='http://dewpoint.snagdata.com/2008/10/21/google-protocol-buffers/' rel='external nofollow' class='url'>Google Protocol Buffers | Approaching the Dewpoint</a> 			</div>
+</li><!-- #comment-## -->
+		<li id="comment-42129" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-42129" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/80a09b04fe15c6aff61349ca60d522e4?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/80a09b04fe15c6aff61349ca60d522e4?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Mark V</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-42129">
+							<time datetime="2009-02-04T02:46:01+00:00">
+								February 4, 2009 at 2:46 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Less mature perhaps than protcol buffers, but seems superior in important respects:</p>
+<p><a href="http://eigenclass.org/R2/writings/extprot-extensible-protocols-intro" rel="nofollow">http://eigenclass.org/R2/writings/extprot-extensible-protocols-intro</a></p>
+<p>HTH?</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42142" class="comment even thread-even depth-1">
+			<article id="div-comment-42142" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/d269542d2ca92525a801a772399af349?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/d269542d2ca92525a801a772399af349?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://www.jobstick.com/' rel='external nofollow' class='url'>David Marcus</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-42142">
+							<time datetime="2009-02-19T17:42:31+00:00">
+								February 19, 2009 at 5:42 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I would offer that the Thrift community is lacking an official site where a newcomer (to Thrift) can download a running Thrift compiler for their system. </p>
+<p>I very much want to try Thrift. I&#8217;ve been looking for a ready-to-run binary of the compiler and C# generators (on Windows/XP) but cannot find them anywhere. The &#8216;make&#8217; scripts (as documented) are pretty useless in the Windows world.</p>
+<p>I dare say that the barrier to entry is having to build the compiler on one&#8217;s own machine before anything else can be done. I bet most people give up and go elsewhere.</p>
+<p>-David</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42151" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-42151" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/b7be346288a9fa6e0890a5218f2c91d1?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/b7be346288a9fa6e0890a5218f2c91d1?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://michaelgreene.org/' rel='external nofollow' class='url'>Michael Greene</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-42151">
+							<time datetime="2009-02-25T23:49:40+00:00">
+								February 25, 2009 at 11:49 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>David: Unfortunately, since Thrift has not made an Apache release yet and is in incubation at Apache, the project members are unable to provide official binaries that get distributed.  If you had said something on the mailing list, I could have sent you binaries if you&#8217;re having difficulty getting up and running.  Otherwise, <a href="http://wiki.apache.org/thrift/ThriftInstallationWin32" rel="nofollow">http://wiki.apache.org/thrift/ThriftInstallationWin32</a> does a decent job of describing how to get going, but could probably be improved.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42202" class="comment even thread-even depth-1">
+			<article id="div-comment-42202" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo avatar-default' height='42' width='42' />						<b class="fn">Jacob Grydholt</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-42202">
+							<time datetime="2009-04-06T16:25:30+00:00">
+								April 6, 2009 at 4:25 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>The license information is swapped in the table. Thrift is Apache while protobuffers are BSD.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42203" class="comment byuser comment-author-stuart bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-42203" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='../../../index.html' rel='external nofollow' class='url'>Stuart</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-42203">
+							<time datetime="2009-04-06T16:31:31+00:00">
+								April 6, 2009 at 4:31 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p><em>&#8220;The license information is swapped in the table.&#8221;</em></p>
+<p>Fixed. Thanks, Jacob.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42217" class="comment even thread-even depth-1">
+			<article id="div-comment-42217" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/da6ac9b2e62781a50a3c8697e5928513?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/da6ac9b2e62781a50a3c8697e5928513?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://timyang.net/' rel='external nofollow' class='url'>timyang</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-42217">
+							<time datetime="2009-04-14T04:03:35+00:00">
+								April 14, 2009 at 4:03 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I have compared thrift and protobuf serialization performance in Java, thrift is 1.2-2 times faster than protobuf.</p>
+<p><a href="http://timyang.net/programming/thrift-protocol-buffers-performance-java/" rel="nofollow">http://timyang.net/programming/thrift-protocol-buffers-performance-java/</a></p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42501" class="pingback odd alt thread-odd thread-alt depth-1">
+			<div class="comment-body">
+				Pingback: <a href='http://blog.mirthlab.com/2009/06/01/thrift-vs-protocol-bufffers-vs-json/' rel='external nofollow' class='url'>Thrift vs Protocol Bufffers vs JSON | MirthLab</a> 			</div>
+</li><!-- #comment-## -->
+		<li id="comment-42920" class="comment even thread-even depth-1">
+			<article id="div-comment-42920" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo avatar-default' height='42' width='42' />						<b class="fn">Anonymous</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-42920">
+							<time datetime="2009-12-06T08:51:05+00:00">
+								December 6, 2009 at 8:51 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Check this out: <a href="http://code.google.com/p/thrift-protobuf-compare/wiki/Benchmarking" rel="nofollow">http://code.google.com/p/thrift-protobuf-compare/wiki/Benchmarking</a></p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42967" class="pingback odd alt thread-odd thread-alt depth-1">
+			<div class="comment-body">
+				Pingback: <a href='http://timyang.net/programming/thrift-protocol-buffers-performance-java/' rel='external nofollow' class='url'>Thrift and Protocol Buffers performance in Java &#8211; Tim[后端技术]</a> 			</div>
+</li><!-- #comment-## -->
+		<li id="comment-42994" class="pingback even thread-even depth-1">
+			<div class="comment-body">
+				Pingback: <a href='http://mattmueller.me/blog/installing-thrift-on-snow-leopard' rel='external nofollow' class='url'>Installing Thrift on Snow Leopard</a> 			</div>
+</li><!-- #comment-## -->
+		<li id="comment-43088" class="pingback odd alt thread-odd thread-alt depth-1">
+			<div class="comment-body">
+				Pingback: <a href='http://johnsofteng.wordpress.com/2010/03/20/google-protocol-buffers-and-other-data-interchange-formats/' rel='external nofollow' class='url'>Google Protocol Buffers and other data interchange formats &laquo; John&#39;s Blog</a> 			</div>
+</li><!-- #comment-## -->
+		<li id="comment-43101" class="comment even thread-even depth-1">
+			<article id="div-comment-43101" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/a8b854aaeb55611f5eaeb03eb3b882da?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/a8b854aaeb55611f5eaeb03eb3b882da?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Jim</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-43101">
+							<time datetime="2010-04-18T20:52:12+00:00">
+								April 18, 2010 at 8:52 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>It looks like a great library, but not much good if your dev environment is Visual Studio. Probably you&#8217;d need something more Posix and cross-platform (perhaps MinGW). The library relies heavily on Posix threads, which are not available in win32 unless you&#8217;re prepared to incorporate a GPL or LGPL library, and I&#8217;m not. The protocol buffer library is cross-platform, but then again it doesn&#8217;t include a transport mechanism and is therefore less powerful.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-44176" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-44176" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/937e8a80469c61544787d1b186cceb81?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/937e8a80469c61544787d1b186cceb81?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://floatingsun.net/' rel='external nofollow' class='url'>Diwaker</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="thrift-vs-protocol-buffers.html#comment-44176">
+							<time datetime="2011-03-15T01:48:39+00:00">
+								March 15, 2011 at 1:48 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>For the sake of completeness, I wanted to point folks to my attempts at improving the Thrift documentation:<br />
+<a href="http://diwakergupta.github.com/thrift-missing-guide/" rel="nofollow">http://diwakergupta.github.com/thrift-missing-guide/</a></p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-44470" class="pingback even thread-even depth-1">
+			<div class="comment-body">
+				Pingback: <a href='http://fshamsiwp.wordpress.com/2012/04/29/facebook-apache-thrift/' rel='external nofollow' class='url'>Facebook / Apache Thrift &laquo; My Blog</a> 			</div>
+</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+		
+	
+			<p class="no-comments">Comments are closed.</p>
+	
+	
+</div><!-- .comments-area -->
+
+	<nav class="navigation post-navigation" role="navigation">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="../07/moving-the-c-in-mvc.html" rel="prev"><span class="meta-nav" aria-hidden="true">Previous</span> <span class="screen-reader-text">Previous post:</span> <span class="post-title">Moving the &#8216;C&#8217; in MVC</span></a></div><div class="nav-next"><a href="../17/the-document-blob-model.html" rel="next"><span class="meta-nav" aria-hidden="true">Next</span> <span class="screen-reader-text">Next post:</span> <span class="post-title">The Document-Blob Model</span></a></div></div>
+	</nav>
+	</main><!-- .site-main -->
+
+	
+</div><!-- .content-area -->
+
+
+	<aside id="secondary" class="sidebar widget-area" role="complementary">
+		<section id="search-3" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://stuartsierra.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+	</label>
+	<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</section><section id="text-4" class="widget widget_text">			<div class="textwidget"><ul>
+<li><a href="http://feeds2.feedburner.com/StuartSierra" title="Syndicate this site using RSS 2.0">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="../../../comments/feed" title="The latest comments to all posts in RSS">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+</ul>
+<ul>
+<li><a href="https://twitter.com/stuartsierra">Twitter</a></li>
+<li><a href="https://github.com/stuartsierra">GitHub</a></li>
+</ul></div>
+		</section><section id="tag-widget-2" class="widget TagWidget"><h2 class="widget-title">Clojure Do’s and Don’ts</h2><ul class = "posts-by-tag-list"><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-883"><a class = "posts-by-tag-item-title" href="../../../2015/08/25/clojure-donts-lazy-effects.html">Clojure Don’ts: Lazy Effects</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-877"><a class = "posts-by-tag-item-title" href="../../../2015/08/10/clojure-donts-redundant-map.html">Clojure Don’ts: Redundant map</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-870"><a class = "posts-by-tag-item-title" href="../../../2015/06/16/clojure-donts-single-branch-if.html">Clojure Don’ts: Single-branch if</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-854"><a class = "posts-by-tag-item-title" href="../../../2015/06/10/clojure-donts-heisenparameter.html">Clojure Don’ts: The Heisenparameter</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-849"><a class = "posts-by-tag-item-title" href="../../../2015/06/01/clojure-donts-optional-arguments-with-varargs.html">Clojure Don’ts: Optional Arguments with Varargs</a></li><li class="posts-by-tag-item Clojure do's and don'ts errors" id="posts-by-tag-item-836"><a class = "posts-by-tag-item-title" href="../../../2015/05/27/clojure-uncaught-exceptions.html">Clojure Do’s: Uncaught Exceptions</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-831"><a class = "posts-by-tag-item-title" href="../../../2015/05/17/clojure-record-constructors.html">Record Constructors</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-826"><a class = "posts-by-tag-item-title" href="../../../2015/05/10/clojure-namespace-aliases.html">Clojure Do’s: Namespace Aliases</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-820"><a class = "posts-by-tag-item-title" href="../../../2015/05/02/clojure-donts-isa.html">Clojure Don’ts: isa?</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-812"><a class = "posts-by-tag-item-title" href="../../../2015/04/26/clojure-donts-concat.html">Clojure Don’ts: Concat</a></li></ul></section>	</aside><!-- .sidebar .widget-area -->
+
+		</div><!-- .site-content -->
+
+		<footer id="colophon" class="site-footer" role="contentinfo">
+							<nav class="main-navigation" role="navigation" aria-label="Footer Primary Menu">
+					<div class="menu-main-menu-container"><ul id="menu-main-menu-1" class="primary-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../../../about-me.html">About Me</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../../../writing.html">Writing</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../../../presentations.html">Presentations</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../../../software.html">Software</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../../../contact.html">Contact</a></li>
+</ul></div>				</nav><!-- .main-navigation -->
+			
+			
+			<div class="site-info">
+								<span class="site-title"><a href="../../../index.html" rel="home">Digital Digressions by Stuart Sierra</a></span>
+				<a href="https://wordpress.org/">Proudly powered by WordPress</a>
+			</div><!-- .site-info -->
+		</footer><!-- .site-footer -->
+	</div><!-- .site-inner -->
+</div><!-- .site -->
+
+	<div style="display:none">
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	<div class="grofile-hash-map-048bee2c6fd3db0c86df1c3609651875">
+	</div>
+	<div class="grofile-hash-map-c091c9beada6745e3117135c5ac42011">
+	</div>
+	<div class="grofile-hash-map-3c2ce5e843cef58cf546b403c6233597">
+	</div>
+	<div class="grofile-hash-map-820b05c70b3d752c753ec4a2c0d2650b">
+	</div>
+	<div class="grofile-hash-map-6f7c7ffaf9f8107f7033e17918a32ee7">
+	</div>
+	<div class="grofile-hash-map-da26ea91f5a6f34cd19cc65a9a0625fc">
+	</div>
+	<div class="grofile-hash-map-eaa5275b7c8df78c4d4216169c3add10">
+	</div>
+	<div class="grofile-hash-map-ddbbd83688970204daf834c01f13e677">
+	</div>
+	<div class="grofile-hash-map-f21827076a1d0725c4f4bd5a640102e9">
+	</div>
+	<div class="grofile-hash-map-213159dfe63d3cbff3e80fbf17d2fc66">
+	</div>
+	<div class="grofile-hash-map-ea5036994d8e3d00fe4c9ede36c2d05a">
+	</div>
+	<div class="grofile-hash-map-80a09b04fe15c6aff61349ca60d522e4">
+	</div>
+	<div class="grofile-hash-map-d269542d2ca92525a801a772399af349">
+	</div>
+	<div class="grofile-hash-map-b7be346288a9fa6e0890a5218f2c91d1">
+	</div>
+	<div class="grofile-hash-map-d41d8cd98f00b204e9800998ecf8427e">
+	</div>
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	<div class="grofile-hash-map-da6ac9b2e62781a50a3c8697e5928513">
+	</div>
+	<div class="grofile-hash-map-a8b854aaeb55611f5eaeb03eb3b882da">
+	</div>
+	<div class="grofile-hash-map-937e8a80469c61544787d1b186cceb81">
+	</div>
+	</div>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201635'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2016Sepaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../../../wp-content/plugins/jetpack/modules/wpgroho167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../wp-content/themes/twentysixteen/js/skip-link-focus-fix8de4.js?ver=20160816'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var screenReaderText = {"expand":"expand child menu","collapse":"collapse child menu"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../../../wp-content/themes/twentysixteen/js/functions8de4.js?ver=20160816'></script>
+<script type='text/javascript' src='../../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='https://stats.wp.com/e-201635.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.2.2',blog:'2702563',post:'170',tz:'-4',srv:'stuartsierra.com'} ]);
+	_stq.push([ 'clickTrackerInit', '2702563', '170' ]);
+</script>
+</body>
+
+<!-- Mirrored from stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 17:01:11 GMT -->
+</html>
+
+<!-- Dynamic page generated in 1.261 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 23:35:39 -->
+
+<!-- Compression = gzip -->

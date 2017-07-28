@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/zh-cn/julia-cn/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:34:26 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn Julia in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../../css/normalize.css">
+        <link rel="stylesheet" href="../../../css/main.css">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fzh-cn%2Fjulia-cn%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3DJulia">
+        分享此页
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">X分钟速成Y</a></h2>
+  <h2>其中 Y=Julia</h2>
+  
+    <p class="filelink">
+    源代码下载：
+    <a href="../../files/learn-julia-zh.jl">learn-julia-zh.jl</a>
+    </p>
+  
+  <div id="doc">
+    <pre class="highlight ruby"><code><span class="c1"># 单行注释只需要一个井号</span>
+<span class="c1">#= 多行注释</span>
+   <span class="err">只需要以</span> <span class="s1">'#='</span> <span class="err">开始</span> <span class="s1">'=#'</span> <span class="err">结束</span>
+   <span class="err">还可以嵌套</span><span class="p">.</span>
+<span class="nf">=</span><span class="c1">#</span>
+
+<span class="c1">####################################################</span>
+<span class="c1">## 1. 原始类型与操作符</span>
+<span class="c1">####################################################</span>
+
+<span class="c1"># Julia 中一切皆是表达式。</span>
+
+<span class="c1"># 这是一些基本数字类型.</span>
+<span class="mi">3</span> <span class="c1"># =&gt; 3 (Int64)</span>
+<span class="mi">3</span><span class="o">.</span><span class="mi">2</span> <span class="c1"># =&gt; 3.2 (Float64)</span>
+<span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="n">im</span> <span class="c1"># =&gt; 2 + 1im (Complex{Int64})</span>
+<span class="mi">2</span><span class="o">/</span><span class="sr">/3 # =&gt; 2/</span><span class="o">/</span><span class="mi">3</span> <span class="p">(</span><span class="no">Rational</span><span class="p">{</span><span class="no">Int64</span><span class="p">})</span>
+
+<span class="c1"># 支持所有的普通中缀操作符。</span>
+<span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span> <span class="c1"># =&gt; 2</span>
+<span class="mi">8</span> <span class="o">-</span> <span class="mi">1</span> <span class="c1"># =&gt; 7</span>
+<span class="mi">10</span> <span class="o">*</span> <span class="mi">2</span> <span class="c1"># =&gt; 20</span>
+<span class="mi">35</span> <span class="o">/</span> <span class="mi">5</span> <span class="c1"># =&gt; 7.0</span>
+<span class="mi">5</span> <span class="o">/</span> <span class="mi">2</span> <span class="c1"># =&gt; 2.5 # 用 Int 除 Int 永远返回 Float</span>
+<span class="n">div</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># =&gt; 2 # 使用 div 截断小数点</span>
+<span class="mi">5</span> <span class="p">\</span> <span class="mi">35</span> <span class="c1"># =&gt; 7.0</span>
+<span class="mi">2</span> <span class="o">^</span> <span class="mi">2</span> <span class="c1"># =&gt; 4 # 次方, 不是二进制 xor</span>
+<span class="mi">12</span> <span class="o">%</span> <span class="mi">10</span> <span class="c1"># =&gt; 2</span>
+
+<span class="c1"># 用括号提高优先级</span>
+<span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="c1"># =&gt; 8</span>
+
+<span class="c1"># 二进制操作符</span>
+<span class="o">~</span><span class="mi">2</span> <span class="c1"># =&gt; -3   # 非</span>
+<span class="mi">3</span> <span class="o">&amp;</span> <span class="mi">5</span> <span class="c1"># =&gt; 1 # 与</span>
+<span class="mi">2</span> <span class="o">|</span> <span class="mi">4</span> <span class="c1"># =&gt; 6 # 或</span>
+<span class="mi">2</span> <span class="err">$</span> <span class="mi">4</span> <span class="c1"># =&gt; 6 # 异或</span>
+<span class="mi">2</span> <span class="o">&gt;&gt;&gt;</span> <span class="mi">1</span> <span class="c1"># =&gt; 1 # 逻辑右移</span>
+<span class="mi">2</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span>  <span class="c1"># =&gt; 1 # 算术右移</span>
+<span class="mi">2</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>  <span class="c1"># =&gt; 4 # 逻辑/算术 右移</span>
+
+<span class="c1"># 可以用函数 bits 查看二进制数。</span>
+<span class="n">bits</span><span class="p">(</span><span class="mi">12345</span><span class="p">)</span>
+<span class="c1"># =&gt; "0000000000000000000000000000000000000000000000000011000000111001"</span>
+<span class="n">bits</span><span class="p">(</span><span class="mi">12345</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span>
+<span class="c1"># =&gt; "0100000011001000000111001000000000000000000000000000000000000000"</span>
+
+<span class="c1"># 布尔值是原始类型</span>
+<span class="kp">true</span>
+<span class="kp">false</span>
+
+<span class="c1"># 布尔操作符</span>
+<span class="o">!</span><span class="kp">true</span> <span class="c1"># =&gt; false</span>
+<span class="o">!</span><span class="kp">false</span> <span class="c1"># =&gt; true</span>
+<span class="mi">1</span> <span class="o">==</span> <span class="mi">1</span> <span class="c1"># =&gt; true</span>
+<span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span> <span class="c1"># =&gt; false</span>
+<span class="mi">1</span> <span class="o">!=</span> <span class="mi">1</span> <span class="c1"># =&gt; false</span>
+<span class="mi">2</span> <span class="o">!=</span> <span class="mi">1</span> <span class="c1"># =&gt; true</span>
+<span class="mi">1</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="c1"># =&gt; true</span>
+<span class="mi">1</span> <span class="o">&gt;</span> <span class="mi">10</span> <span class="c1"># =&gt; false</span>
+<span class="mi">2</span> <span class="o">&lt;=</span> <span class="mi">2</span> <span class="c1"># =&gt; true</span>
+<span class="mi">2</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="c1"># =&gt; true</span>
+<span class="c1"># 比较可以串联</span>
+<span class="mi">1</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="c1"># =&gt; true</span>
+<span class="mi">2</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="c1"># =&gt; false</span>
+
+<span class="c1"># 字符串可以由 " 创建</span>
+<span class="s2">"This is a string."</span>
+
+<span class="c1"># 字符字面量可用 ' 创建</span>
+<span class="s1">'a'</span>
+
+<span class="c1"># 可以像取数组取值一样用 index 取出对应字符</span>
+<span class="s2">"This is a string"</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># =&gt; 'T' # Julia 的 index 从 1 开始 :(</span>
+<span class="c1"># 但是对 UTF-8 无效,</span>
+<span class="c1"># 因此建议使用遍历器 (map, for loops, 等).</span>
+
+<span class="c1"># $ 可用于字符插值:</span>
+<span class="s2">"2 + 2 = $(2 + 2)"</span> <span class="c1"># =&gt; "2 + 2 = 4"</span>
+<span class="c1"># 可以将任何 Julia 表达式放入括号。</span>
+
+<span class="c1"># 另一种格式化字符串的方式是 printf 宏.</span>
+<span class="vi">@printf</span> <span class="s2">"%d is less than %f"</span> <span class="mi">4</span><span class="o">.</span><span class="mi">5</span> <span class="mi">5</span><span class="o">.</span><span class="mi">3</span> <span class="c1"># 5 is less than 5.300000</span>
+
+<span class="c1"># 打印字符串很容易</span>
+<span class="n">println</span><span class="p">(</span><span class="s2">"I'm Julia. Nice to meet you!"</span><span class="p">)</span>
+
+<span class="c1">####################################################</span>
+<span class="c1">## 2. 变量与集合</span>
+<span class="c1">####################################################</span>
+
+<span class="c1"># 给变量赋值就是声明变量</span>
+<span class="n">some_var</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1"># =&gt; 5</span>
+<span class="n">some_var</span> <span class="c1"># =&gt; 5</span>
+
+<span class="c1"># 访问未声明变量会抛出异常</span>
+<span class="n">try</span>
+    <span class="n">some_other_var</span> <span class="c1"># =&gt; ERROR: some_other_var not defined</span>
+<span class="kp">catch</span> <span class="n">e</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="c1"># 变量名需要以字母开头.</span>
+<span class="c1"># 之后任何字母，数字，下划线，叹号都是合法的。</span>
+<span class="no">SomeOtherVar123</span><span class="o">!</span> <span class="o">=</span> <span class="mi">6</span> <span class="c1"># =&gt; 6</span>
+
+<span class="c1"># 甚至可以用 unicode 字符</span>
+<span class="err">☃</span> <span class="o">=</span> <span class="mi">8</span> <span class="c1"># =&gt; 8</span>
+<span class="c1"># 用数学符号非常方便</span>
+<span class="mi">2</span> <span class="o">*</span> <span class="err">π</span> <span class="c1"># =&gt; 6.283185307179586</span>
+
+<span class="c1"># 注意 Julia 的命名规约:</span>
+<span class="c1">#</span>
+<span class="c1"># * 变量名为小写，单词之间以下划线连接('\_')。</span>
+<span class="c1">#</span>
+<span class="c1"># * 类型名以大写字母开头，单词以 CamelCase 方式连接。</span>
+<span class="c1">#</span>
+<span class="c1"># * 函数与宏的名字小写，无下划线。</span>
+<span class="c1">#</span>
+<span class="c1"># * 会改变输入的函数名末位为 !。</span>
+<span class="c1">#   这类函数有时被称为 mutating functions 或 in-place functions.</span>
+
+<span class="c1"># 数组存储一列值，index 从 1 开始。</span>
+<span class="n">a</span> <span class="o">=</span> <span class="no">Int64</span><span class="p">[]</span> <span class="c1"># =&gt; 0-element Int64 Array</span>
+
+<span class="c1"># 一维数组可以以逗号分隔值的方式声明。</span>
+<span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span> <span class="c1"># =&gt; 包含 3 个 Int64 类型元素的数组: [4, 5, 6]</span>
+<span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># =&gt; 4</span>
+<span class="n">b</span><span class="p">[</span><span class="k">end</span><span class="p">]</span> <span class="c1"># =&gt; 6</span>
+
+<span class="c1"># 二维数组以分号分隔维度。</span>
+<span class="n">matrix</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="mi">2</span><span class="p">;</span> <span class="mi">3</span> <span class="mi">4</span><span class="p">]</span> <span class="c1"># =&gt; 2x2 Int64 数组: [1 2; 3 4]</span>
+
+<span class="c1"># 使用 push! 和 append! 往数组末尾添加元素</span>
+<span class="n">push!</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>     <span class="c1"># =&gt; [1]</span>
+<span class="n">push!</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>     <span class="c1"># =&gt; [1,2]</span>
+<span class="n">push!</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>     <span class="c1"># =&gt; [1,2,4]</span>
+<span class="n">push!</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>     <span class="c1"># =&gt; [1,2,4,3]</span>
+<span class="n">append!</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="c1"># =&gt; [1,2,4,3,4,5,6]</span>
+
+<span class="c1"># 用 pop 弹出末尾元素</span>
+<span class="n">pop!</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>        <span class="c1"># =&gt; 6 and b is now [4,5]</span>
+
+<span class="c1"># 可以再放回去</span>
+<span class="n">push!</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>   <span class="c1"># b 又变成了 [4,5,6].</span>
+
+<span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># =&gt; 1 #  永远记住 Julia 的 index 从 1 开始!</span>
+
+<span class="c1"># 用 end 可以直接取到最后索引. 可用作任何索引表达式</span>
+<span class="n">a</span><span class="p">[</span><span class="k">end</span><span class="p">]</span> <span class="c1"># =&gt; 6</span>
+
+<span class="c1"># 还支持 shift 和 unshift</span>
+<span class="n">shift!</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="c1"># =&gt; 返回 1，而 a 现在时 [2,4,3,4,5,6]</span>
+<span class="n">unshift!</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="mi">7</span><span class="p">)</span> <span class="c1"># =&gt; [7,2,4,3,4,5,6]</span>
+
+<span class="c1"># 以叹号结尾的函数名表示它会改变参数的值</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">6</span><span class="p">]</span> <span class="c1"># =&gt; 包含三个 Int64 元素的数组: [5,4,6]</span>
+<span class="n">sort</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="c1"># =&gt; [4,5,6]; arr 还是 [5,4,6]</span>
+<span class="n">sort!</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="c1"># =&gt; [4,5,6]; arr 现在是 [4,5,6]</span>
+
+<span class="c1"># 越界会抛出 BoundsError 异常</span>
+<span class="n">try</span>
+    <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># =&gt; ERROR: BoundsError() in getindex at array.jl:270</span>
+    <span class="n">a</span><span class="p">[</span><span class="k">end</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># =&gt; ERROR: BoundsError() in getindex at array.jl:270</span>
+<span class="kp">catch</span> <span class="n">e</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="c1"># 错误会指出发生的行号，包括标准库</span>
+<span class="c1"># 如果你有 Julia 源代码，你可以找到这些地方</span>
+
+<span class="c1"># 可以用 range 初始化数组</span>
+<span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span> <span class="c1"># =&gt; 5-element Int64 Array: [1,2,3,4,5]</span>
+
+<span class="c1"># 可以切割数组</span>
+<span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="c1"># =&gt; [1, 2, 3]</span>
+<span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="ss">:end</span><span class="p">]</span> <span class="c1"># =&gt; [2, 3, 4, 5]</span>
+
+<span class="c1"># 用 splice! 切割原数组</span>
+<span class="n">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="n">splice!</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># =&gt; 4 ; arr 变成了 [3,5]</span>
+
+<span class="c1"># 用 append! 连接数组</span>
+<span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">append!</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="c1"># a 变成了 [1, 2, 3, 4, 5, 1, 2, 3]</span>
+
+<span class="c1"># 检查元素是否在数组中</span>
+<span class="k">in</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">a</span><span class="p">)</span> <span class="c1"># =&gt; true</span>
+
+<span class="c1"># 用 length 获得数组长度</span>
+<span class="n">length</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="c1"># =&gt; 8</span>
+
+<span class="c1"># Tuples 是 immutable 的</span>
+<span class="n">tup</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># =&gt; (1,2,3) # an (Int64,Int64,Int64) tuple.</span>
+<span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># =&gt; 1</span>
+<span class="ss">try:
+    </span><span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1"># =&gt; ERROR: no method setindex!((Int64,Int64,Int64),Int64,Int64)</span>
+<span class="kp">catch</span> <span class="n">e</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="c1"># 大多数组的函数同样支持 tuples</span>
+<span class="n">length</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span> <span class="c1"># =&gt; 3</span>
+<span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="c1"># =&gt; (1,2)</span>
+<span class="k">in</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">tup</span><span class="p">)</span> <span class="c1"># =&gt; true</span>
+
+<span class="c1"># 可以将 tuples 元素分别赋给变量</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># =&gt; (1,2,3)  # a is now 1, b is now 2 and c is now 3</span>
+
+<span class="c1"># 不用括号也可以</span>
+<span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span> <span class="c1"># =&gt; (4,5,6)</span>
+
+<span class="c1"># 单元素 tuple 不等于其元素值</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,)</span> <span class="o">==</span> <span class="mi">1</span> <span class="c1"># =&gt; false</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="c1"># =&gt; true</span>
+
+<span class="c1"># 交换值</span>
+<span class="n">e</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span>  <span class="c1"># =&gt; (5,4) # d is now 5 and e is now 4</span>
+
+
+<span class="c1"># 字典Dictionaries store mappings</span>
+<span class="n">empty_dict</span> <span class="o">=</span> <span class="no">Dict</span><span class="p">()</span> <span class="c1"># =&gt; Dict{Any,Any}()</span>
+
+<span class="c1"># 也可以用字面量创建字典</span>
+<span class="n">filled_dict</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"one"</span><span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">"two"</span><span class="o">=&gt;</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">"three"</span><span class="o">=&gt;</span> <span class="mi">3</span><span class="p">]</span>
+<span class="c1"># =&gt; Dict{ASCIIString,Int64}</span>
+
+<span class="c1"># 用 [] 获得键值</span>
+<span class="n">filled_dict</span><span class="p">[</span><span class="s2">"one"</span><span class="p">]</span> <span class="c1"># =&gt; 1</span>
+
+<span class="c1"># 获得所有键</span>
+<span class="n">keys</span><span class="p">(</span><span class="n">filled_dict</span><span class="p">)</span>
+<span class="c1"># =&gt; KeyIterator{Dict{ASCIIString,Int64}}(["three"=&gt;3,"one"=&gt;1,"two"=&gt;2])</span>
+<span class="c1"># 注意，键的顺序不是插入时的顺序</span>
+
+<span class="c1"># 获得所有值</span>
+<span class="n">values</span><span class="p">(</span><span class="n">filled_dict</span><span class="p">)</span>
+<span class="c1"># =&gt; ValueIterator{Dict{ASCIIString,Int64}}(["three"=&gt;3,"one"=&gt;1,"two"=&gt;2])</span>
+<span class="c1"># 注意，值的顺序也一样</span>
+
+<span class="c1"># 用 in 检查键值是否已存在，用 haskey 检查键是否存在</span>
+<span class="k">in</span><span class="p">((</span><span class="s2">"one"</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">filled_dict</span><span class="p">)</span> <span class="c1"># =&gt; true</span>
+<span class="k">in</span><span class="p">((</span><span class="s2">"two"</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">filled_dict</span><span class="p">)</span> <span class="c1"># =&gt; false</span>
+<span class="n">haskey</span><span class="p">(</span><span class="n">filled_dict</span><span class="p">,</span> <span class="s2">"one"</span><span class="p">)</span> <span class="c1"># =&gt; true</span>
+<span class="n">haskey</span><span class="p">(</span><span class="n">filled_dict</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># =&gt; false</span>
+
+<span class="c1"># 获取不存在的键的值会抛出异常</span>
+<span class="n">try</span>
+    <span class="n">filled_dict</span><span class="p">[</span><span class="s2">"four"</span><span class="p">]</span> <span class="c1"># =&gt; ERROR: key not found: four in getindex at dict.jl:489</span>
+<span class="kp">catch</span> <span class="n">e</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="c1"># 使用 get 可以提供默认值来避免异常</span>
+<span class="c1"># get(dictionary,key,default_value)</span>
+<span class="n">get</span><span class="p">(</span><span class="n">filled_dict</span><span class="p">,</span><span class="s2">"one"</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span> <span class="c1"># =&gt; 1</span>
+<span class="n">get</span><span class="p">(</span><span class="n">filled_dict</span><span class="p">,</span><span class="s2">"four"</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span> <span class="c1"># =&gt; 4</span>
+
+<span class="c1"># 用 Sets 表示无序不可重复的值的集合</span>
+<span class="n">empty_set</span> <span class="o">=</span> <span class="no">Set</span><span class="p">()</span> <span class="c1"># =&gt; Set{Any}()</span>
+<span class="c1"># 初始化一个 Set 并定义其值</span>
+<span class="n">filled_set</span> <span class="o">=</span> <span class="no">Set</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span> <span class="c1"># =&gt; Set{Int64}(1,2,3,4)</span>
+
+<span class="c1"># 添加值</span>
+<span class="n">push!</span><span class="p">(</span><span class="n">filled_set</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># =&gt; Set{Int64}(5,4,2,3,1)</span>
+
+<span class="c1"># 检查是否存在某值</span>
+<span class="k">in</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">filled_set</span><span class="p">)</span> <span class="c1"># =&gt; true</span>
+<span class="k">in</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">filled_set</span><span class="p">)</span> <span class="c1"># =&gt; false</span>
+
+<span class="c1"># 交集，并集，差集</span>
+<span class="n">other_set</span> <span class="o">=</span> <span class="no">Set</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="c1"># =&gt; Set{Int64}(6,4,5,3)</span>
+<span class="n">intersect</span><span class="p">(</span><span class="n">filled_set</span><span class="p">,</span> <span class="n">other_set</span><span class="p">)</span> <span class="c1"># =&gt; Set{Int64}(3,4,5)</span>
+<span class="n">union</span><span class="p">(</span><span class="n">filled_set</span><span class="p">,</span> <span class="n">other_set</span><span class="p">)</span> <span class="c1"># =&gt; Set{Int64}(1,2,3,4,5,6)</span>
+<span class="n">setdiff</span><span class="p">(</span><span class="no">Set</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="no">Set</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span> <span class="c1"># =&gt; Set{Int64}(1,4)</span>
+
+
+<span class="c1">####################################################</span>
+<span class="c1">## 3. 控制流</span>
+<span class="c1">####################################################</span>
+
+<span class="c1"># 声明一个变量</span>
+<span class="n">some_var</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="c1"># 这是一个 if 语句，缩进不是必要的</span>
+<span class="k">if</span> <span class="n">some_var</span> <span class="o">&gt;</span> <span class="mi">10</span>
+    <span class="n">println</span><span class="p">(</span><span class="s2">"some_var is totally bigger than 10."</span><span class="p">)</span>
+<span class="n">elseif</span> <span class="n">some_var</span> <span class="o">&lt;</span> <span class="mi">10</span>    <span class="c1"># elseif 是可选的.</span>
+    <span class="n">println</span><span class="p">(</span><span class="s2">"some_var is smaller than 10."</span><span class="p">)</span>
+<span class="k">else</span>                    <span class="c1"># else 也是可选的.</span>
+    <span class="n">println</span><span class="p">(</span><span class="s2">"some_var is indeed 10."</span><span class="p">)</span>
+<span class="k">end</span>
+<span class="c1"># =&gt; prints "some var is smaller than 10"</span>
+
+
+<span class="c1"># For 循环遍历</span>
+<span class="c1"># Iterable 类型包括 Range, Array, Set, Dict, 以及 String.</span>
+<span class="k">for</span> <span class="n">animal</span><span class="o">=</span><span class="p">[</span><span class="s2">"dog"</span><span class="p">,</span> <span class="s2">"cat"</span><span class="p">,</span> <span class="s2">"mouse"</span><span class="p">]</span>
+    <span class="n">println</span><span class="p">(</span><span class="s2">"$animal is a mammal"</span><span class="p">)</span>
+    <span class="c1"># 可用 $ 将 variables 或 expression 转换为字符串into strings</span>
+<span class="k">end</span>
+<span class="c1"># prints:</span>
+<span class="c1">#    dog is a mammal</span>
+<span class="c1">#    cat is a mammal</span>
+<span class="c1">#    mouse is a mammal</span>
+
+<span class="c1"># You can use 'in' instead of '='.</span>
+<span class="k">for</span> <span class="n">animal</span> <span class="k">in</span> <span class="p">[</span><span class="s2">"dog"</span><span class="p">,</span> <span class="s2">"cat"</span><span class="p">,</span> <span class="s2">"mouse"</span><span class="p">]</span>
+    <span class="n">println</span><span class="p">(</span><span class="s2">"$animal is a mammal"</span><span class="p">)</span>
+<span class="k">end</span>
+<span class="c1"># prints:</span>
+<span class="c1">#    dog is a mammal</span>
+<span class="c1">#    cat is a mammal</span>
+<span class="c1">#    mouse is a mammal</span>
+
+<span class="k">for</span> <span class="n">a</span> <span class="k">in</span> <span class="p">[</span><span class="s2">"dog"</span><span class="o">=&gt;</span><span class="s2">"mammal"</span><span class="p">,</span><span class="s2">"cat"</span><span class="o">=&gt;</span><span class="s2">"mammal"</span><span class="p">,</span><span class="s2">"mouse"</span><span class="o">=&gt;</span><span class="s2">"mammal"</span><span class="p">]</span>
+    <span class="n">println</span><span class="p">(</span><span class="s2">"$(a[1]) is a $(a[2])"</span><span class="p">)</span>
+<span class="k">end</span>
+<span class="c1"># prints:</span>
+<span class="c1">#    dog is a mammal</span>
+<span class="c1">#    cat is a mammal</span>
+<span class="c1">#    mouse is a mammal</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="k">in</span> <span class="p">[</span><span class="s2">"dog"</span><span class="o">=&gt;</span><span class="s2">"mammal"</span><span class="p">,</span><span class="s2">"cat"</span><span class="o">=&gt;</span><span class="s2">"mammal"</span><span class="p">,</span><span class="s2">"mouse"</span><span class="o">=&gt;</span><span class="s2">"mammal"</span><span class="p">]</span>
+    <span class="n">println</span><span class="p">(</span><span class="s2">"$k is a $v"</span><span class="p">)</span>
+<span class="k">end</span>
+<span class="c1"># prints:</span>
+<span class="c1">#    dog is a mammal</span>
+<span class="c1">#    cat is a mammal</span>
+<span class="c1">#    mouse is a mammal</span>
+
+<span class="c1"># While 循环</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">4</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># x = x + 1</span>
+<span class="k">end</span>
+<span class="c1"># prints:</span>
+<span class="c1">#   0</span>
+<span class="c1">#   1</span>
+<span class="c1">#   2</span>
+<span class="c1">#   3</span>
+
+<span class="c1"># 用 try/catch 处理异常</span>
+<span class="n">try</span>
+   <span class="n">error</span><span class="p">(</span><span class="s2">"help"</span><span class="p">)</span>
+<span class="kp">catch</span> <span class="n">e</span>
+   <span class="n">println</span><span class="p">(</span><span class="s2">"caught it $e"</span><span class="p">)</span>
+<span class="k">end</span>
+<span class="c1"># =&gt; caught it ErrorException("help")</span>
+
+
+<span class="c1">####################################################</span>
+<span class="c1">## 4. 函数</span>
+<span class="c1">####################################################</span>
+
+<span class="c1"># 用关键字 'function' 可创建一个新函数</span>
+<span class="c1">#function name(arglist)</span>
+<span class="c1">#  body...</span>
+<span class="c1">#end</span>
+<span class="n">function</span> <span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s2">"x is $x and y is $y"</span><span class="p">)</span>
+
+    <span class="c1"># 最后一行语句的值为返回</span>
+    <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+<span class="k">end</span>
+
+<span class="n">add</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="c1"># =&gt; 在 "x is 5 and y is 6" 后会打印 11</span>
+
+<span class="c1"># 还可以定义接收可变长参数的函数</span>
+<span class="n">function</span> <span class="n">varargs</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="nf">.</span><span class="o">.</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">args</span>
+    <span class="c1"># 关键字 return 可在函数内部任何地方返回</span>
+<span class="k">end</span>
+<span class="c1"># =&gt; varargs (generic function with 1 method)</span>
+
+<span class="n">varargs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># =&gt; (1,2,3)</span>
+
+<span class="c1"># 省略号 ... 被称为 splat.</span>
+<span class="c1"># 刚刚用在了函数定义中</span>
+<span class="c1"># 还可以用在函数的调用</span>
+<span class="c1"># Array 或者 Tuple 的内容会变成参数列表</span>
+<span class="no">Set</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>    <span class="c1"># =&gt; Set{Array{Int64,1}}([1,2,3]) # 获得一个 Array 的 Set</span>
+<span class="no">Set</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">].</span><span class="nf">.</span><span class="o">.</span><span class="p">)</span> <span class="c1"># =&gt; Set{Int64}(1,2,3) # 相当于 Set(1,2,3)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>     <span class="c1"># =&gt; (1,2,3)</span>
+<span class="no">Set</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>          <span class="c1"># =&gt; Set{(Int64,Int64,Int64)}((1,2,3)) # 一个 Tuple 的 Set</span>
+<span class="no">Set</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="nf">.</span><span class="o">.</span><span class="p">)</span>       <span class="c1"># =&gt; Set{Int64}(2,3,1)</span>
+
+
+<span class="c1"># 可定义可选参数的函数</span>
+<span class="n">function</span> <span class="n">defaults</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">"$a $b and $x $y"</span>
+<span class="k">end</span>
+
+<span class="n">defaults</span><span class="p">(</span><span class="s1">'h'</span><span class="p">,</span><span class="s1">'g'</span><span class="p">)</span> <span class="c1"># =&gt; "h g and 5 6"</span>
+<span class="n">defaults</span><span class="p">(</span><span class="s1">'h'</span><span class="p">,</span><span class="s1">'g'</span><span class="p">,</span><span class="s1">'j'</span><span class="p">)</span> <span class="c1"># =&gt; "h g and j 6"</span>
+<span class="n">defaults</span><span class="p">(</span><span class="s1">'h'</span><span class="p">,</span><span class="s1">'g'</span><span class="p">,</span><span class="s1">'j'</span><span class="p">,</span><span class="s1">'k'</span><span class="p">)</span> <span class="c1"># =&gt; "h g and j k"</span>
+<span class="n">try</span>
+    <span class="n">defaults</span><span class="p">(</span><span class="s1">'h'</span><span class="p">)</span> <span class="c1"># =&gt; ERROR: no method defaults(Char,)</span>
+    <span class="n">defaults</span><span class="p">()</span> <span class="c1"># =&gt; ERROR: no methods defaults()</span>
+<span class="kp">catch</span> <span class="n">e</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="c1"># 还可以定义键值对的参数</span>
+<span class="n">function</span> <span class="n">keyword_args</span><span class="p">(;</span><span class="n">k1</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">name2</span><span class="o">=</span><span class="s2">"hello"</span><span class="p">)</span> <span class="c1"># note the ;</span>
+    <span class="k">return</span> <span class="p">[</span><span class="s2">"k1"</span><span class="o">=&gt;</span><span class="n">k1</span><span class="p">,</span><span class="s2">"name2"</span><span class="o">=&gt;</span><span class="n">name2</span><span class="p">]</span>
+<span class="k">end</span>
+
+<span class="n">keyword_args</span><span class="p">(</span><span class="n">name2</span><span class="o">=</span><span class="s2">"ness"</span><span class="p">)</span> <span class="c1"># =&gt; ["name2"=&gt;"ness","k1"=&gt;4]</span>
+<span class="n">keyword_args</span><span class="p">(</span><span class="n">k1</span><span class="o">=</span><span class="s2">"mine"</span><span class="p">)</span> <span class="c1"># =&gt; ["k1"=&gt;"mine","name2"=&gt;"hello"]</span>
+<span class="n">keyword_args</span><span class="p">()</span> <span class="c1"># =&gt; ["name2"=&gt;"hello","k1"=&gt;4]</span>
+
+<span class="c1"># 可以组合各种类型的参数在同一个函数的参数列表中</span>
+<span class="n">function</span> <span class="n">all_the_args</span><span class="p">(</span><span class="n">normal_arg</span><span class="p">,</span> <span class="n">optional_positional_arg</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span> <span class="n">keyword_arg</span><span class="o">=</span><span class="s2">"foo"</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s2">"normal arg: $normal_arg"</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s2">"optional arg: $optional_positional_arg"</span><span class="p">)</span>
+    <span class="n">println</span><span class="p">(</span><span class="s2">"keyword arg: $keyword_arg"</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="n">all_the_args</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">keyword_arg</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="c1"># prints:</span>
+<span class="c1">#   normal arg: 1</span>
+<span class="c1">#   optional arg: 3</span>
+<span class="c1">#   keyword arg: 4</span>
+
+<span class="c1"># Julia 有一等函数</span>
+<span class="n">function</span> <span class="n">create_adder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">adder</span> <span class="o">=</span> <span class="n">function</span> <span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+    <span class="k">end</span>
+    <span class="k">return</span> <span class="n">adder</span>
+<span class="k">end</span>
+
+<span class="c1"># 这是用 "stabby lambda syntax" 创建的匿名函数</span>
+<span class="p">(</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># =&gt; true</span>
+
+<span class="c1"># 这个函数和上面的 create_adder 一模一样</span>
+<span class="n">function</span> <span class="n">create_adder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+<span class="k">end</span>
+
+<span class="c1"># 你也可以给内部函数起个名字</span>
+<span class="n">function</span> <span class="n">create_adder</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">function</span> <span class="n">adder</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+    <span class="k">end</span>
+    <span class="n">adder</span>
+<span class="k">end</span>
+
+<span class="n">add_10</span> <span class="o">=</span> <span class="n">create_adder</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">add_10</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># =&gt; 13</span>
+
+
+<span class="c1"># 内置的高阶函数有</span>
+<span class="n">map</span><span class="p">(</span><span class="n">add_10</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span> <span class="c1"># =&gt; [11, 12, 13]</span>
+<span class="n">filter</span><span class="p">(</span><span class="n">x</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span> <span class="c1"># =&gt; [6, 7]</span>
+
+<span class="c1"># 还可以使用 list comprehensions 替代 map</span>
+<span class="p">[</span><span class="n">add_10</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span> <span class="c1"># =&gt; [11, 12, 13]</span>
+<span class="p">[</span><span class="n">add_10</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span> <span class="c1"># =&gt; [11, 12, 13]</span>
+
+<span class="c1">####################################################</span>
+<span class="c1">## 5.  类型</span>
+<span class="c1">####################################################</span>
+
+<span class="c1"># Julia 有类型系统</span>
+<span class="c1"># 所有的值都有类型；但变量本身没有类型</span>
+<span class="c1"># 你可以用 `typeof` 函数获得值的类型</span>
+<span class="n">typeof</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># =&gt; Int64</span>
+
+<span class="c1"># 类型是一等值</span>
+<span class="n">typeof</span><span class="p">(</span><span class="no">Int64</span><span class="p">)</span> <span class="c1"># =&gt; DataType</span>
+<span class="n">typeof</span><span class="p">(</span><span class="no">DataType</span><span class="p">)</span> <span class="c1"># =&gt; DataType</span>
+<span class="c1"># DataType 是代表类型的类型，也代表他自己的类型</span>
+
+<span class="c1"># 类型可用作文档化，优化，以及调度</span>
+<span class="c1"># 并不是静态检查类型</span>
+
+<span class="c1"># 用户还可以自定义类型</span>
+<span class="c1"># 跟其他语言的 records 或 structs 一样</span>
+<span class="c1"># 用 `type` 关键字定义新的类型</span>
+
+<span class="c1"># type Name</span>
+<span class="c1">#   field::OptionalType</span>
+<span class="c1">#   ...</span>
+<span class="c1"># end</span>
+<span class="n">type</span> <span class="no">Tiger</span>
+  <span class="n">taillength</span><span class="o">::</span><span class="no">Float64</span>
+  <span class="n">coatcolor</span> <span class="c1"># 不附带类型标注的相当于 `::Any`</span>
+<span class="k">end</span>
+
+<span class="c1"># 构造函数参数是类型的属性</span>
+<span class="n">tigger</span> <span class="o">=</span> <span class="no">Tiger</span><span class="p">(</span><span class="mi">3</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="s2">"orange"</span><span class="p">)</span> <span class="c1"># =&gt; Tiger(3.5,"orange")</span>
+
+<span class="c1"># 用新类型作为构造函数还会创建一个类型</span>
+<span class="n">sherekhan</span> <span class="o">=</span> <span class="n">typeof</span><span class="p">(</span><span class="n">tigger</span><span class="p">)(</span><span class="mi">5</span><span class="o">.</span><span class="mi">6</span><span class="p">,</span><span class="s2">"fire"</span><span class="p">)</span> <span class="c1"># =&gt; Tiger(5.6,"fire")</span>
+
+<span class="c1"># struct 类似的类型被称为具体类型</span>
+<span class="c1"># 他们可被实例化但不能有子类型</span>
+<span class="c1"># 另一种类型是抽象类型</span>
+
+<span class="c1"># abstract Name</span>
+<span class="n">abstract</span> <span class="no">Cat</span> <span class="c1"># just a name and point in the type hierarchy</span>
+
+<span class="c1"># 抽象类型不能被实例化，但是可以有子类型</span>
+<span class="c1"># 例如，Number 就是抽象类型</span>
+<span class="n">subtypes</span><span class="p">(</span><span class="no">Number</span><span class="p">)</span> <span class="c1"># =&gt; 6-element Array{Any,1}:</span>
+                 <span class="c1">#     Complex{Float16}</span>
+                 <span class="c1">#     Complex{Float32}</span>
+                 <span class="c1">#     Complex{Float64}</span>
+                 <span class="c1">#     Complex{T&lt;:Real}</span>
+                 <span class="c1">#     ImaginaryUnit</span>
+                 <span class="c1">#     Real</span>
+<span class="n">subtypes</span><span class="p">(</span><span class="no">Cat</span><span class="p">)</span> <span class="c1"># =&gt; 0-element Array{Any,1}</span>
+
+<span class="c1"># 所有的类型都有父类型; 可以用函数 `super` 得到父类型.</span>
+<span class="n">typeof</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># =&gt; Int64</span>
+<span class="k">super</span><span class="p">(</span><span class="no">Int64</span><span class="p">)</span> <span class="c1"># =&gt; Signed</span>
+<span class="k">super</span><span class="p">(</span><span class="no">Signed</span><span class="p">)</span> <span class="c1"># =&gt; Real</span>
+<span class="k">super</span><span class="p">(</span><span class="no">Real</span><span class="p">)</span> <span class="c1"># =&gt; Number</span>
+<span class="k">super</span><span class="p">(</span><span class="no">Number</span><span class="p">)</span> <span class="c1"># =&gt; Any</span>
+<span class="k">super</span><span class="p">(</span><span class="k">super</span><span class="p">(</span><span class="no">Signed</span><span class="p">))</span> <span class="c1"># =&gt; Number</span>
+<span class="k">super</span><span class="p">(</span><span class="no">Any</span><span class="p">)</span> <span class="c1"># =&gt; Any</span>
+<span class="c1"># 所有这些类型，除了 Int64, 都是抽象类型.</span>
+
+<span class="c1"># &lt;: 是类型集成操作符</span>
+<span class="n">type</span> <span class="no">Lion</span> <span class="o">&lt;</span><span class="p">:</span> <span class="no">Cat</span> <span class="c1"># Lion 是 Cat 的子类型</span>
+  <span class="n">mane_color</span>
+  <span class="n">roar</span><span class="o">::</span><span class="no">String</span>
+<span class="k">end</span>
+
+<span class="c1"># 可以继续为你的类型定义构造函数</span>
+<span class="c1"># 只需要定义一个同名的函数</span>
+<span class="c1"># 并调用已有的构造函数设置一个固定参数</span>
+<span class="no">Lion</span><span class="p">(</span><span class="n">roar</span><span class="o">::</span><span class="no">String</span><span class="p">)</span> <span class="o">=</span> <span class="no">Lion</span><span class="p">(</span><span class="s2">"green"</span><span class="p">,</span><span class="n">roar</span><span class="p">)</span>
+<span class="c1"># 这是一个外部构造函数，因为他再类型定义之外</span>
+
+<span class="n">type</span> <span class="no">Panther</span> <span class="o">&lt;</span><span class="p">:</span> <span class="no">Cat</span> <span class="c1"># Panther 也是 Cat 的子类型</span>
+  <span class="n">eye_color</span>
+  <span class="no">Panther</span><span class="p">()</span> <span class="o">=</span> <span class="kp">new</span><span class="p">(</span><span class="s2">"green"</span><span class="p">)</span>
+  <span class="c1"># Panthers 只有这个构造函数，没有默认构造函数</span>
+<span class="k">end</span>
+<span class="c1"># 使用内置构造函数，如 Panther，可以让你控制</span>
+<span class="c1"># 如何构造类型的值</span>
+<span class="c1"># 应该尽可能使用外部构造函数而不是内部构造函数</span>
+
+<span class="c1">####################################################</span>
+<span class="c1">## 6. 多分派</span>
+<span class="c1">####################################################</span>
+
+<span class="c1"># 在Julia中, 所有的具名函数都是类属函数</span>
+<span class="c1"># 这意味着他们都是有很大小方法组成的</span>
+<span class="c1"># 每个 Lion 的构造函数都是类属函数 Lion 的方法</span>
+
+<span class="c1"># 我们来看一个非构造函数的例子</span>
+
+<span class="c1"># Lion, Panther, Tiger 的 meow 定义为</span>
+<span class="n">function</span> <span class="n">meow</span><span class="p">(</span><span class="n">animal</span><span class="o">::</span><span class="no">Lion</span><span class="p">)</span>
+  <span class="n">animal</span><span class="p">.</span><span class="nf">roar</span> <span class="c1"># 使用点符号访问属性</span>
+<span class="k">end</span>
+
+<span class="n">function</span> <span class="n">meow</span><span class="p">(</span><span class="n">animal</span><span class="o">::</span><span class="no">Panther</span><span class="p">)</span>
+  <span class="s2">"grrr"</span>
+<span class="k">end</span>
+
+<span class="n">function</span> <span class="n">meow</span><span class="p">(</span><span class="n">animal</span><span class="o">::</span><span class="no">Tiger</span><span class="p">)</span>
+  <span class="s2">"rawwwr"</span>
+<span class="k">end</span>
+
+<span class="c1"># 试试 meow 函数</span>
+<span class="n">meow</span><span class="p">(</span><span class="n">tigger</span><span class="p">)</span> <span class="c1"># =&gt; "rawwr"</span>
+<span class="n">meow</span><span class="p">(</span><span class="no">Lion</span><span class="p">(</span><span class="s2">"brown"</span><span class="p">,</span><span class="s2">"ROAAR"</span><span class="p">))</span> <span class="c1"># =&gt; "ROAAR"</span>
+<span class="n">meow</span><span class="p">(</span><span class="no">Panther</span><span class="p">())</span> <span class="c1"># =&gt; "grrr"</span>
+
+<span class="c1"># 再看看层次结构</span>
+<span class="n">issubtype</span><span class="p">(</span><span class="no">Tiger</span><span class="p">,</span><span class="no">Cat</span><span class="p">)</span> <span class="c1"># =&gt; false</span>
+<span class="n">issubtype</span><span class="p">(</span><span class="no">Lion</span><span class="p">,</span><span class="no">Cat</span><span class="p">)</span> <span class="c1"># =&gt; true</span>
+<span class="n">issubtype</span><span class="p">(</span><span class="no">Panther</span><span class="p">,</span><span class="no">Cat</span><span class="p">)</span> <span class="c1"># =&gt; true</span>
+
+<span class="c1"># 定义一个接收 Cats 的函数</span>
+<span class="n">function</span> <span class="n">pet_cat</span><span class="p">(</span><span class="n">cat</span><span class="o">::</span><span class="no">Cat</span><span class="p">)</span>
+  <span class="n">println</span><span class="p">(</span><span class="s2">"The cat says $(meow(cat))"</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="n">pet_cat</span><span class="p">(</span><span class="no">Lion</span><span class="p">(</span><span class="s2">"42"</span><span class="p">))</span> <span class="c1"># =&gt; prints "The cat says 42"</span>
+<span class="n">try</span>
+    <span class="n">pet_cat</span><span class="p">(</span><span class="n">tigger</span><span class="p">)</span> <span class="c1"># =&gt; ERROR: no method pet_cat(Tiger,)</span>
+<span class="kp">catch</span> <span class="n">e</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+<span class="k">end</span>
+
+<span class="c1"># 在面向对象语言中，通常都是单分派</span>
+<span class="c1"># 这意味着分派方法是通过第一个参数的类型决定的</span>
+<span class="c1"># 在Julia中, 所有参数类型都会被考虑到</span>
+
+<span class="c1"># 让我们定义有多个参数的函数，好看看区别</span>
+<span class="n">function</span> <span class="n">fight</span><span class="p">(</span><span class="n">t</span><span class="o">::</span><span class="no">Tiger</span><span class="p">,</span><span class="n">c</span><span class="o">::</span><span class="no">Cat</span><span class="p">)</span>
+  <span class="n">println</span><span class="p">(</span><span class="s2">"The $(t.coatcolor) tiger wins!"</span><span class="p">)</span>
+<span class="k">end</span>
+<span class="c1"># =&gt; fight (generic function with 1 method)</span>
+
+<span class="n">fight</span><span class="p">(</span><span class="n">tigger</span><span class="p">,</span><span class="no">Panther</span><span class="p">())</span> <span class="c1"># =&gt; prints The orange tiger wins!</span>
+<span class="n">fight</span><span class="p">(</span><span class="n">tigger</span><span class="p">,</span><span class="no">Lion</span><span class="p">(</span><span class="s2">"ROAR"</span><span class="p">))</span> <span class="c1"># =&gt; prints The orange tiger wins!</span>
+
+<span class="c1"># 让我们修改一下传入具体为 Lion 类型时的行为</span>
+<span class="n">fight</span><span class="p">(</span><span class="n">t</span><span class="o">::</span><span class="no">Tiger</span><span class="p">,</span><span class="n">l</span><span class="o">::</span><span class="no">Lion</span><span class="p">)</span> <span class="o">=</span> <span class="n">println</span><span class="p">(</span><span class="s2">"The $(l.mane_color)-maned lion wins!"</span><span class="p">)</span>
+<span class="c1"># =&gt; fight (generic function with 2 methods)</span>
+
+<span class="n">fight</span><span class="p">(</span><span class="n">tigger</span><span class="p">,</span><span class="no">Panther</span><span class="p">())</span> <span class="c1"># =&gt; prints The orange tiger wins!</span>
+<span class="n">fight</span><span class="p">(</span><span class="n">tigger</span><span class="p">,</span><span class="no">Lion</span><span class="p">(</span><span class="s2">"ROAR"</span><span class="p">))</span> <span class="c1"># =&gt; prints The green-maned lion wins!</span>
+
+<span class="c1"># 把 Tiger 去掉</span>
+<span class="n">fight</span><span class="p">(</span><span class="n">l</span><span class="o">::</span><span class="no">Lion</span><span class="p">,</span><span class="n">c</span><span class="o">::</span><span class="no">Cat</span><span class="p">)</span> <span class="o">=</span> <span class="n">println</span><span class="p">(</span><span class="s2">"The victorious cat says $(meow(c))"</span><span class="p">)</span>
+<span class="c1"># =&gt; fight (generic function with 3 methods)</span>
+
+<span class="n">fight</span><span class="p">(</span><span class="no">Lion</span><span class="p">(</span><span class="s2">"balooga!"</span><span class="p">),</span><span class="no">Panther</span><span class="p">())</span> <span class="c1"># =&gt; prints The victorious cat says grrr</span>
+<span class="n">try</span>
+  <span class="n">fight</span><span class="p">(</span><span class="no">Panther</span><span class="p">(),</span><span class="no">Lion</span><span class="p">(</span><span class="s2">"RAWR"</span><span class="p">))</span> <span class="c1"># =&gt; ERROR: no method fight(Panther,Lion)</span>
+<span class="kp">catch</span>
+<span class="k">end</span>
+
+<span class="c1"># 在试试让 Cat 在前面</span>
+<span class="n">fight</span><span class="p">(</span><span class="n">c</span><span class="o">::</span><span class="no">Cat</span><span class="p">,</span><span class="n">l</span><span class="o">::</span><span class="no">Lion</span><span class="p">)</span> <span class="o">=</span> <span class="n">println</span><span class="p">(</span><span class="s2">"The cat beats the Lion"</span><span class="p">)</span>
+<span class="c1"># =&gt; Warning: New definition</span>
+<span class="c1">#    fight(Cat,Lion) at none:1</span>
+<span class="c1"># is ambiguous with</span>
+<span class="c1">#    fight(Lion,Cat) at none:2.</span>
+<span class="c1"># Make sure</span>
+<span class="c1">#    fight(Lion,Lion)</span>
+<span class="c1"># is defined first.</span>
+<span class="c1">#fight (generic function with 4 methods)</span>
+
+<span class="c1"># 警告说明了无法判断使用哪个 fight 方法</span>
+<span class="n">fight</span><span class="p">(</span><span class="no">Lion</span><span class="p">(</span><span class="s2">"RAR"</span><span class="p">),</span><span class="no">Lion</span><span class="p">(</span><span class="s2">"brown"</span><span class="p">,</span><span class="s2">"rarrr"</span><span class="p">))</span> <span class="c1"># =&gt; prints The victorious cat says rarrr</span>
+<span class="c1"># 结果在老版本 Julia 中可能会不一样</span>
+
+<span class="n">fight</span><span class="p">(</span><span class="n">l</span><span class="o">::</span><span class="no">Lion</span><span class="p">,</span><span class="n">l2</span><span class="o">::</span><span class="no">Lion</span><span class="p">)</span> <span class="o">=</span> <span class="n">println</span><span class="p">(</span><span class="s2">"The lions come to a tie"</span><span class="p">)</span>
+<span class="n">fight</span><span class="p">(</span><span class="no">Lion</span><span class="p">(</span><span class="s2">"RAR"</span><span class="p">),</span><span class="no">Lion</span><span class="p">(</span><span class="s2">"brown"</span><span class="p">,</span><span class="s2">"rarrr"</span><span class="p">))</span> <span class="c1"># =&gt; prints The lions come to a tie</span>
+
+
+<span class="c1"># Under the hood</span>
+<span class="c1"># 你还可以看看 llvm 以及生成的汇编代码</span>
+
+<span class="n">square_area</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">=</span> <span class="n">l</span> <span class="o">*</span> <span class="n">l</span>      <span class="c1"># square_area (generic function with 1 method)</span>
+
+<span class="n">square_area</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="c1">#25</span>
+
+<span class="c1"># 给 square_area 一个整形时发生什么</span>
+<span class="n">code_native</span><span class="p">(</span><span class="n">square_area</span><span class="p">,</span> <span class="p">(</span><span class="no">Int32</span><span class="p">,))</span>
+    <span class="c1">#       .section    __TEXT,__text,regular,pure_instructions</span>
+    <span class="c1">#   Filename: none</span>
+    <span class="c1">#   Source line: 1              # Prologue</span>
+    <span class="c1">#       push    RBP</span>
+    <span class="c1">#       mov RBP, RSP</span>
+    <span class="c1">#   Source line: 1</span>
+    <span class="c1">#       movsxd  RAX, EDI        # Fetch l from memory?</span>
+    <span class="c1">#       imul    RAX, RAX        # Square l and store the result in RAX</span>
+    <span class="c1">#       pop RBP                 # Restore old base pointer</span>
+    <span class="c1">#       ret                     # Result will still be in RAX</span>
+
+<span class="n">code_native</span><span class="p">(</span><span class="n">square_area</span><span class="p">,</span> <span class="p">(</span><span class="no">Float32</span><span class="p">,))</span>
+    <span class="c1">#       .section    __TEXT,__text,regular,pure_instructions</span>
+    <span class="c1">#   Filename: none</span>
+    <span class="c1">#   Source line: 1</span>
+    <span class="c1">#       push    RBP</span>
+    <span class="c1">#       mov RBP, RSP</span>
+    <span class="c1">#   Source line: 1</span>
+    <span class="c1">#       vmulss  XMM0, XMM0, XMM0  # Scalar single precision multiply (AVX)</span>
+    <span class="c1">#       pop RBP</span>
+    <span class="c1">#       ret</span>
+
+<span class="n">code_native</span><span class="p">(</span><span class="n">square_area</span><span class="p">,</span> <span class="p">(</span><span class="no">Float64</span><span class="p">,))</span>
+    <span class="c1">#       .section    __TEXT,__text,regular,pure_instructions</span>
+    <span class="c1">#   Filename: none</span>
+    <span class="c1">#   Source line: 1</span>
+    <span class="c1">#       push    RBP</span>
+    <span class="c1">#       mov RBP, RSP</span>
+    <span class="c1">#   Source line: 1</span>
+    <span class="c1">#       vmulsd  XMM0, XMM0, XMM0 # Scalar double precision multiply (AVX)</span>
+    <span class="c1">#       pop RBP</span>
+    <span class="c1">#       ret</span>
+    <span class="c1">#</span>
+<span class="c1"># 注意 只要参数中又浮点类型，Julia 就使用浮点指令</span>
+<span class="c1"># 让我们计算一下圆的面积</span>
+<span class="n">circle_area</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="o">=</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">r</span> <span class="o">*</span> <span class="n">r</span>     <span class="c1"># circle_area (generic function with 1 method)</span>
+<span class="n">circle_area</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>                  <span class="c1"># 78.53981633974483</span>
+
+<span class="n">code_native</span><span class="p">(</span><span class="n">circle_area</span><span class="p">,</span> <span class="p">(</span><span class="no">Int32</span><span class="p">,))</span>
+    <span class="c1">#       .section    __TEXT,__text,regular,pure_instructions</span>
+    <span class="c1">#   Filename: none</span>
+    <span class="c1">#   Source line: 1</span>
+    <span class="c1">#       push    RBP</span>
+    <span class="c1">#       mov RBP, RSP</span>
+    <span class="c1">#   Source line: 1</span>
+    <span class="c1">#       vcvtsi2sd   XMM0, XMM0, EDI          # Load integer (r) from memory</span>
+    <span class="c1">#       movabs  RAX, 4593140240              # Load pi</span>
+    <span class="c1">#       vmulsd  XMM1, XMM0, QWORD PTR [RAX]  # pi * r</span>
+    <span class="c1">#       vmulsd  XMM0, XMM0, XMM1             # (pi * r) * r</span>
+    <span class="c1">#       pop RBP</span>
+    <span class="c1">#       ret</span>
+    <span class="c1">#</span>
+
+<span class="n">code_native</span><span class="p">(</span><span class="n">circle_area</span><span class="p">,</span> <span class="p">(</span><span class="no">Float64</span><span class="p">,))</span>
+    <span class="c1">#       .section    __TEXT,__text,regular,pure_instructions</span>
+    <span class="c1">#   Filename: none</span>
+    <span class="c1">#   Source line: 1</span>
+    <span class="c1">#       push    RBP</span>
+    <span class="c1">#       mov RBP, RSP</span>
+    <span class="c1">#       movabs  RAX, 4593140496</span>
+    <span class="c1">#   Source line: 1</span>
+    <span class="c1">#       vmulsd  XMM1, XMM0, QWORD PTR [RAX]</span>
+    <span class="c1">#       vmulsd  XMM0, XMM1, XMM0</span>
+    <span class="c1">#       pop RBP</span>
+    <span class="c1">#       ret</span>
+    <span class="c1">#</span>
+</code></pre>
+
+    <hr>
+    <p>有建议？或者发现什么错误？在Github上<a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">开一个issue</a>，或者你自己也可以写一个pull request！
+    </p>
+    <p class="contributed">
+    原著Jichao Ouyang，并由<a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/zh-cn/julia-cn.html.markdown">0个好心人</a>修改。
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://oyanglul.us/">Jichao Ouyang</a>
+      
+    
+    </p>
+
+    <p>
+    
+      Translated by:
+      
+        <a href="http://oyanglul.us/">Jichao Ouyang</a>
+      
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/zh-cn/julia-cn/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:34:27 GMT -->
+</html>

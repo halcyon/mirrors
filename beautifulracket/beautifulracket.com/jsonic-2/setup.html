@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/jsonic-2/setup.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:18 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Level up: jsonic revisited</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;level-up-jsonic-revisited&quot;)"></div><h1 anchor="level-up-jsonic-revisited" id="level-up-jsonic-revisited" hyphens="none">Level up: <span class="my-code" decode="exclude">jsonic</span> revisited</h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a class="here" href="setup.html">2&emsp;setup</a></li><li><a href="contracts.html">3&emsp;con­tracts</a></li><li><a href="unit-tests.html">4&emsp;unit tests</a></li><li><a href="source-locations.html">5&emsp;source loca­tions</a></li><li><a href="drracket-integration.html">6&emsp;drracket inte­gra­tion</a></li><li><a href="syntax-coloring.html">7&emsp;syn­tax col­or­ing</a></li><li><a href="indenting.html">8&emsp;indent­ing</a></li><li><a href="toolbar-buttons.html">9&emsp;tool­bar but­tons</a></li><li><a href="recap.html">10&emsp;recap</a></li><li><a href="source-listing.html">11&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_0XWDZ&quot;)"></div><p id="a_0XWDZ">Those who just fin­ished the <a href="../jsonic/index.html"><span class="my-code" decode="exclude">jsonic</span></a> tuto­r­ial are ready to go. We’ll reuse the files that were already cre­ated.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_yHQqc&quot;)"></div><p id="a_yHQqc">Every­one else: <a href="../jsonic/source-listing.html">down­load the source files</a> from the first <span class="my-code" decode="exclude">jsonic</span> tuto­r­ial and put the enclos­ing <span class="my-code" decode="exclude">jsonic</span> direc­tory in a con­ve­nient loca­tion. Install this direc­tory as a pack­age with this ter­mi­nal com­mand:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_iTswZ&quot;)"></div><div class="highlight-container" id="a_iTswZ"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; raco pkg install /path/to/jsonic</div><div class="highlight" form="false" id="a_Cwx9I"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>&gt; raco pkg install /path/to/jsonic
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;testing-the-setup&quot;)"></div><h3 anchor="testing-the-setup" class="subhead" id="testing-the-setup"><a href="#testing-the-setup">Test­ing the setup</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_DAtgV&quot;)"></div><p id="a_DAtgV">Once these source files are in place, we should be able to use <span class="my-code" decode="exclude">jsonic</span> as a lan­guage in DrRacket. For instance, if we run this source file:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic-test.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_TDp6P&quot;)"></div><div class="highlight-container" id="a_TDp6P"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang jsonic<br/>// a line comment<br/>[<br/>  @$ 'null $@,<br/>  @$ (* 6 7) $@,<br/>  @$ (= 2 (+ 1 1)) $@,<br/>  @$ (list "array" "of" "strings") $@,<br/>  @$ (hash 'key-1 'null<br/>           'key-2 (even? 3)<br/>           'key-3 (hash 'subkey 21)) $@<br/>]</div><div class="highlight" form="false" id="a_Fzdix"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="source"><pre>#lang jsonic
+// a line comment
+[
+  @$ &#39;null $@,
+  @$ (* 6 7) $@,
+  @$ (= 2 (+ 1 1)) $@,
+  @$ (list "array" "of" "strings") $@,
+  @$ (hash &#39;key-1 &#39;null
+           &#39;key-2 (even? 3)
+           &#39;key-3 (hash &#39;subkey 21)) $@
+]
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_A3QZs&quot;)"></div><p id="a_A3QZs">We should get this result:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_7b04N&quot;)"></div><div class="highlight-container" id="a_7b04N"><div id="code_45" form="false" decode="exclude" style="font-size:0;width:0;height:0">[<br/>  null,<br/>  42,<br/>  true,<br/>  ["array","of","strings"],<br/>  {"key-1":null,"key-3":{"subkey":21},"key-2":false}<br/>]</div><div class="highlight" form="false" id="a_I67vR"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="source"><pre>[
+  null,
+  42,
+  true,
+  ["array","of","strings"],
+  {"key-1":null,"key-3":{"subkey":21},"key-2":false}
+]
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk2" data-clipboard-target="#code_45" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_HIX9x&quot;)"></div><p id="a_HIX9x">If so, the lan­guage is set up cor­rectly. We can con­tinue.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a class="here" href="setup.html">2&emsp;setup</a></li><li><a href="contracts.html">3&emsp;con­tracts</a></li><li><a href="unit-tests.html">4&emsp;unit tests</a></li><li><a href="source-locations.html">5&emsp;source loca­tions</a></li><li><a href="drracket-integration.html">6&emsp;drracket inte­gra­tion</a></li><li><a href="syntax-coloring.html">7&emsp;syn­tax col­or­ing</a></li><li><a href="indenting.html">8&emsp;indent­ing</a></li><li><a href="toolbar-buttons.html">9&emsp;tool­bar but­tons</a></li><li><a href="recap.html">10&emsp;recap</a></li><li><a href="source-listing.html">11&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="intro.html">← prev</a>
+    <a class="nav-right" href="contracts.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

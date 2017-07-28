@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Disk is the New Tape</title>
+	<atom:link href="https://stuartsierra.com/2008/04/17/disk-is-the-new-tape/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2008/04/17/disk-is-the-new-tape</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Functional Relational Programming with Cascalog &#171; Another Word For It</title>
+		<link>https://stuartsierra.com/2008/04/17/disk-is-the-new-tape/comment-page-1#comment-44403</link>
+		<dc:creator><![CDATA[Functional Relational Programming with Cascalog &#171; Another Word For It]]></dc:creator>
+		<pubDate>Sat, 04 Feb 2012 20:39:31 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=146#comment-44403</guid>
+		<description><![CDATA[[...] In the early aughts, Jeffrey Dean and Sanjay Ghemawat developed the MapReduce programming model at Google to optimize the process of ranking web pages. MapReduce works well for I/O-bound problems where the computation on each record is small but the number of records is large. It specifically addresses the performance characteristics of modern commodity hardware, especially &#8220;disk is the new tape.&#8221; [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] In the early aughts, Jeffrey Dean and Sanjay Ghemawat developed the MapReduce programming model at Google to optimize the process of ranking web pages. MapReduce works well for I/O-bound problems where the computation on each record is small but the number of records is large. It specifically addresses the performance characteristics of modern commodity hardware, especially &#8220;disk is the new tape.&#8221; [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Disk is the new disk &#124; /dev/rant</title>
+		<link>https://stuartsierra.com/2008/04/17/disk-is-the-new-tape/comment-page-1#comment-42128</link>
+		<dc:creator><![CDATA[Disk is the new disk &#124; /dev/rant]]></dc:creator>
+		<pubDate>Wed, 04 Feb 2009 06:43:16 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=146#comment-42128</guid>
+		<description><![CDATA[[...] &#8220;Disk is the new tape&#8221; [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] &#8220;Disk is the new tape&#8221; [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Dare Obasanjo aka Carnage4Life - Project Cassandra: Facebook's Open Source Alternative to Google BigTable</title>
+		<link>https://stuartsierra.com/2008/04/17/disk-is-the-new-tape/comment-page-1#comment-32132</link>
+		<dc:creator><![CDATA[Dare Obasanjo aka Carnage4Life - Project Cassandra: Facebook's Open Source Alternative to Google BigTable]]></dc:creator>
+		<pubDate>Mon, 14 Jul 2008 11:41:16 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=146#comment-32132</guid>
+		<description><![CDATA[[...] to the system. How important is improving seek time when accessing data on a hard drive? It can make the difference between taking hours versus days to flush a hundred gigabytes of writes to a disk. Disk is the new [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] to the system. How important is improving seek time when accessing data on a hard drive? It can make the difference between taking hours versus days to flush a hundred gigabytes of writes to a disk. Disk is the new [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Dare Obasanjo aka Carnage4Life - Network Attached Memory: Terracota as an Alternative to Memcached</title>
+		<link>https://stuartsierra.com/2008/04/17/disk-is-the-new-tape/comment-page-1#comment-31913</link>
+		<dc:creator><![CDATA[Dare Obasanjo aka Carnage4Life - Network Attached Memory: Terracota as an Alternative to Memcached]]></dc:creator>
+		<pubDate>Thu, 10 Jul 2008 14:24:02 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=146#comment-31913</guid>
+		<description><![CDATA[[...] it comes to scaling Web applications, every experienced Web architect eventually realizes that Disk is the New Tape. Getting data from off of the hard drive disk is slow compared to getting it from memory or from [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] it comes to scaling Web applications, every experienced Web architect eventually realizes that Disk is the New Tape. Getting data from off of the hard drive disk is slow compared to getting it from memory or from [&#8230;]</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.263 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:58:15 -->
+
+<!-- Compression = gzip -->

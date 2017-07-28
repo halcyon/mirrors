@@ -1,0 +1,353 @@
+# $Id: //info.ravenbrook.com/user/ndl/lisp/claude/claude-1.0.2/mumble/pyMumble/objects.py#1 $
+#
+#                               OBJECTS.PY
+#             Nick Levine, Ravenbrook Limited, 2013-03-22
+#
+# 1.  INTRODUCTION
+#
+
+"""
+This module implements the objects that Mumble uses.
+
+It covers: the MumbleObject class along with boxing, unboxing and
+removal; construction and deconstruction of records; packing and
+unpacking of arrays.
+"""
+
+import ctypes
+import numbers
+
+import lib
+
+
+# 2.  GLOBAL TABLE OF OBJECTS
+#
+# Each object is keyed by its handle.
+
+try:
+    _objects
+except NameError:
+    _objects = {0:None}
+
+
+# 3.  OBJECTS
+
+class MumbleObject(object):
+    "Superclass for all classes of Mumble object."
+
+    def __init__(self, handle):
+        self.init(handle)
+
+    def init(self, handle):
+        """
+        Establish correspondence between an instance and its Mumble handle.
+
+        Each MumbleObject knows its handle, and we can use unbox() to
+        retrieve an object given its handle.
+        """
+
+        assert handle != 0
+        _objects[handle] = self
+        self.handle = handle
+
+    def box(self):
+        "Return the Mumble handle associated with this object."
+        return self.handle
+
+    def _discard(self):
+        """
+        Discard instance: handles which reference it can no longer be unboxed.
+
+        The Mumble library already knows that this object is no longer
+        wanted. Removing it from our objects table allows Python
+        memory to be reclaimed.
+        """
+        handle = self.handle
+        del _objects[handle]
+        self.handle = None
+
+    def __repr__(self):
+        name = self.__class__.__name__
+        handle = self.handle
+        if handle:
+            return "<Mumble %s handle=0x%08x>" % (name, handle)
+        else:
+            return "<Mumble discarded %s>" % (name ,)
+
+
+def remove_objects(objects):
+    """
+    Update Mumble's object structures and permit memory to be recycled.
+
+    Pass the objects' handles to mumble_remove_objects(). The result of
+    this call is an array of handles which are no longer valid; we
+    discard the corresponding Python objects by calling their _discard
+    methods.
+
+    The reason for looking at the result of mumble_remove_objects
+    (rather than just discarding the objects we started with) is that
+    removing one object might imply that others must be removed as
+    well. For example, removing a node means that its edges must be
+    discarded too.
+    """
+    box = lambda(x): x.box()
+    invalids = unpack(lib.remove_objects(pack(objects, box)), unbox)
+    for invalid in invalids:
+        invalid._discard()
+
+
+# 3.1. Utilities for passing arguments and results.
+
+def unbox(handle):
+    """
+    Return the MumbleObject with the given handle.
+
+    All objects are passed to us from the Mumble DLL as handles. We
+    choose to build instances of Python classes for each object, and
+    this function allows us to look up an instance given its handle.
+
+    If no object can be passed (for example, if we call displayGraph()
+    when drawGraph() hasn't yet been called) then Mumble returns 0
+    instead, and unbox returns None.
+    """
+    return _objects[handle]
+
+
+def dereference_address(address):
+    """
+    Dereference address, as if it were the memory address of a ctypes.c_uint.
+
+    Dereferencing 0 returns None.
+
+    Caution: the quickest way to crash Python is to dereference an
+    "address" which doesn't refer to memory you own. Hence the call to
+    plausible_address; this calls ctypes.string_at, which Python guards.
+    """
+    if address == 0:
+        return None
+    else:
+        lib.invoke.plausible_address(address)
+        Uint = ctypes.POINTER(ctypes.c_uint)
+        as_Uint = ctypes.cast(address, Uint)
+        return as_Uint.contents.value
+
+
+def address_of(instance):
+    """
+    Return the address of a ctypes instance's underlying data.
+
+    We have to double-indirect (although not clearly documented,
+    that's how ctypes instances work).
+    """
+    address = ctypes.addressof(instance)
+    return dereference_address(address)
+
+
+# 4.  RECORDS
+
+def construct(values):
+    """
+    Return a ctypes pointer to a record of objects.
+
+    The argument is an iterable whose members can be a mix of
+    ctypes instances and integer values. Integers go into the
+    record as-is; for instances the address of their underlying
+    data goes in.
+    """
+    if values:
+        def asInt(object):
+            if isinstance(object, numbers.Integral):
+                return object
+            else:
+                # ctypes made this
+                return address_of(object)
+        return ctypes.pointer((ctypes.c_uint * len(values)) (*(map(asInt, values))))
+
+
+def deconstruct(address, length, start = 0, unwrapfun = None, free = False):
+    """
+    Return a tuple of the objects corresponding to a record.
+
+    The first argument is the memory address of the record. If this
+    is 0 then deconstruct returns None.
+
+    By default, record members are taken to be of type
+    ctypes.c_uint. If you want them interpreted differently, pass an
+    unwrapfun which will be applied to each member of the
+    record. (This is equivalent to not specifying unwrapfun, but
+    instead mapping your function over the result of
+    deconstruct. Which style you adopt is a matter of convenience.)
+
+    By default, the record will be not passed to mumble_free after
+    its members have been extracted (doing so would allow the Mumble
+    DLL to reclaim the memory pointed to by the record and by any
+    aggregate values which it contains). You may override this
+    behaviour by setting free=True, but doing this is unlikely to be
+    useful to you. That's because the only records currently
+    returned by this version of Mumble are members of arrays; and
+    arrays are by default freed in a single operation which
+    automatically frees all their aggregate contents.
+    """
+    if address:
+        objects = ()
+        int_size = ctypes.sizeof(ctypes.c_uint)
+        for index in range(start, length + start):
+            thing = dereference_address(address + (int_size * index))
+            if unwrapfun:
+                object = unwrapfun(thing)
+            else:
+                object = thing
+            objects = objects + (object,)
+        if free:
+            lib.free(address)
+        return objects
+
+
+# 5.  ARRAYS
+
+def pack(objects, wrapfun = None):
+    """
+    Return a ctypes pointer to an array of objects.
+
+    The first argument is an iterable either of ctypes instances, or
+    of integers, or of Python objects which can be converted to the
+    above types by application of the wrapfun. (Equivalently: do not
+    specify wrapfun, but instead map your function over the objects
+    before calling pack. Which style you adopt is a matter of
+    convenience.)
+    """
+    if wrapfun:
+        return construct((len(objects),) + tuple(map(wrapfun, objects)))
+    else:
+        return construct((len(objects),) + tuple(objects))
+
+
+def unpack(address, unwrapfun = None, free = True):
+    """
+    Return a list of the objects corresponding to an array.
+
+    The first argument is the memory address of the array. The first
+    element in the array is the number of objects which follow.
+
+    By default, array members are taken to be of type
+    ctypes.c_uint. If you want them interpreted differently, pass an
+    unwrapfun which will be applied to each member of the array.
+    (Equivalently do not specify unwrapfun, but instead map your
+    function over the result of unpack. Which style you adopt is a
+    matter of convenience.)
+
+    By default, the array will be passed to mumble_free after its
+    members have been extracted, to allow the Mumble DLL to reclaim the
+    memory pointed to by the array (and by any aggregate values which
+    it contains). You may override this behaviour by setting
+    free=False, but doing this is unlikely to be useful to you; once
+    you've unpacked an array there is no further use for it.
+    """
+    length = dereference_address(address)
+    return list(deconstruct(address, length, start = 1, unwrapfun = unwrapfun, free = free))
+
+
+# 6.  CALLBACKS
+
+def c_string(string):
+    "Return a ctypes string constructed from string (UTF-8 encoded)."
+    if string is not None:
+        string = string.encode('utf-8')
+    return ctypes.c_char_p(string)
+
+def set_callbacks(object, callbacks):
+    """
+    Establish callbacks and associate them with this object.
+
+    If the object is None, callbacks will appy to any object in
+    which they haven't been set explicitly.
+
+    Any callback which is None is unset.
+    """
+    c_tuples = map(lambda((name, function)): (c_string(name), function or 0),
+                   callbacks)
+    records = map(construct, c_tuples)
+    array = pack(records)
+    lib.set_callbacks(object.box() if object else None, array)
+
+# Wrapper for callback function.
+VOID_UINT_UINT_FUNC = ctypes.WINFUNCTYPE(ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint)
+
+@VOID_UINT_UINT_FUNC
+def advise_condition(foreignRef, report):
+    """
+    Immediately raise this error.
+
+    This could be somewhat unsatisfactory in a real application: if
+    two threads raise conditions more or less simultaneously then the
+    two Python exception reports will be interleaved.
+    """
+    lib.raise_error(report)
+
+# Set mumble_advise_condition callback, not associated with any specific object
+set_callbacks(None, (("mumble_advise_condition", advise_condition),))
+
+
+# 7.  COMMUNICATIONS TEST
+
+@ctypes.WINFUNCTYPE(ctypes.c_uint, ctypes.c_uint)
+def returnObject(handle):
+    return (unbox(handle)).box()
+
+def communications_test (object_class = MumbleObject):
+    "Communications tests."
+    obj_1 = object_class(lib.new_object())
+    obj_2 = object_class(lib.new_object())
+    objs = [obj_1,obj_2]
+    # Send an object into the library and get it back.
+    assert obj_1 == unbox(lib.return_object(obj_1.box()))
+    # Get the library to send us an object, which we send back.
+    assert ctypes.c_bool(lib.invoke_return_object(returnObject, obj_1.box()))
+    # Send an array of objects into the library and get them back.
+    assert objs == unpack(lib.return_array(pack(objs, lambda(x): x.box())), unbox)
+    # Tell the library we no longer want the objects.
+    remove_objects(objs)
+    # Have they actually gone away?
+    assert not obj_1.box()
+    return True
+
+
+
+# A. REFERENCES
+#
+#
+# B. DOCUMENT HISTORY
+#
+# 2013-03-22 NDL Created.
+#
+#
+# C. COPYRIGHT AND LICENSE
+#
+# Copyright (c) 2013, Ravenbrook Limited.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in
+#    the documentation and/or other materials provided with the
+#    distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+

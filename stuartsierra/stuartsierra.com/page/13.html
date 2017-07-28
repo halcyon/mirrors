@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+
+<!-- Mirrored from stuartsierra.com/page/13 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 17:06:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+		<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+<title>Digital Digressions by Stuart Sierra &#8211; Page 13 &#8211; From programming to everything else</title>
+<link rel='dns-prefetch' href='http://s0.wp.com/'>
+<link rel='dns-prefetch' href='http://secure.gravatar.com/'>
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel='dns-prefetch' href='http://s.w.org/'>
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Comments Feed" href="../comments/feed" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/stuartsierra.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.6"}};
+			!function(a,b,c){function d(a){var c,d,e,f,g,h=b.createElement("canvas"),i=h.getContext&&h.getContext("2d"),j=String.fromCharCode;if(!i||!i.fillText)return!1;switch(i.textBaseline="top",i.font="600 32px Arial",a){case"flag":return i.fillText(j(55356,56806,55356,56826),0,0),!(h.toDataURL().length<3e3)&&(i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,65039,8205,55356,57096),0,0),c=h.toDataURL(),i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,55356,57096),0,0),d=h.toDataURL(),c!==d);case"diversity":return i.fillText(j(55356,57221),0,0),e=i.getImageData(16,16,1,1).data,f=e[0]+","+e[1]+","+e[2]+","+e[3],i.fillText(j(55356,57221,55356,57343),0,0),e=i.getImageData(16,16,1,1).data,g=e[0]+","+e[1]+","+e[2]+","+e[3],f!==g;case"simple":return i.fillText(j(55357,56835),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode8":return i.fillText(j(55356,57135),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode9":return i.fillText(j(55358,56631),0,0),0!==i.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity","unicode9"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='twentysixteen-jetpack-css'  href='../wp-content/plugins/jetpack/modules/theme-tools/compat/twentysixteen3a05.css?ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-fonts-css'  href='https://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%2C900%2C400italic%2C700italic%2C900italic%7CMontserrat%3A400%2C700%7CInconsolata%3A400&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../wp-content/plugins/jetpack/_inc/genericons/genericons/genericons128b.css?ver=3.1' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-style-css'  href='../wp-content/themes/twentysixteen/style167b.css?ver=4.6' type='text/css' media='all' />
+<!--[if lt IE 10]>
+<link rel='stylesheet' id='twentysixteen-ie-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentysixteen-ie8-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie8.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='twentysixteen-ie7-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie7.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='../wp-content/plugins/jetpack/css/jetpack3a05.css?ver=4.2.2' type='text/css' media='all' />
+<script type='text/javascript' src='../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://stuartsierra.com/wp-content/themes/twentysixteen/js/html5.js?ver=3.7.3'></script>
+<![endif]-->
+<link rel='https://api.w.org/' href='../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+<link rel='shortlink' href='https://wp.me/bl3J' />
+
+<link rel='dns-prefetch' href='http://v0.wordpress.com/'>
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Digital Digressions by Stuart Sierra" />
+<meta property="og:description" content="From programming to everything else" />
+<meta property="og:url" content="https://stuartsierra.com/" />
+<meta property="og:site_name" content="Digital Digressions by Stuart Sierra" />
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />
+<meta property="og:locale" content="en_US" />
+</head>
+
+<body class="home blog paged paged-13 hfeed">
+<div id="page" class="site">
+	<div class="site-inner">
+		<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+		<header id="masthead" class="site-header" role="banner">
+			<div class="site-header-main">
+				<div class="site-branding">
+					
+											<h1 class="site-title"><a href="../index.html" rel="home">Digital Digressions by Stuart Sierra</a></h1>
+											<p class="site-description">From programming to everything else</p>
+									</div><!-- .site-branding -->
+
+									<button id="menu-toggle" class="menu-toggle">Menu</button>
+
+					<div id="site-header-menu" class="site-header-menu">
+													<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Primary Menu">
+								<div class="menu-main-menu-container"><ul id="menu-main-menu" class="primary-menu"><li id="menu-item-635" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../about-me.html">About Me</a></li>
+<li id="menu-item-633" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../writing.html">Writing</a></li>
+<li id="menu-item-634" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../presentations.html">Presentations</a></li>
+<li id="menu-item-636" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../software.html">Software</a></li>
+<li id="menu-item-637" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../contact.html">Contact</a></li>
+</ul></div>							</nav><!-- .main-navigation -->
+						
+											</div><!-- .site-header-menu -->
+							</div><!-- .site-header-main -->
+
+											<div class="header-image">
+					<a href="../index.html" rel="home">
+						<img src="../wp-content/uploads/2015/12/header.jpg" srcset="https://stuartsierra.com/wp-content/uploads/2015/12/header-300x70.jpg 300w, https://stuartsierra.com/wp-content/uploads/2015/12/header-768x179.jpg 768w, https://stuartsierra.com/wp-content/uploads/2015/12/header-1024x239.jpg 1024w, https://stuartsierra.com/wp-content/uploads/2015/12/header.jpg 1200w" sizes="(max-width: 709px) 85vw, (max-width: 909px) 81vw, (max-width: 1362px) 88vw, 1200px" width="1200" height="280" alt="Digital Digressions by Stuart Sierra">
+					</a>
+				</div><!-- .header-image -->
+					</header><!-- .site-header -->
+
+		<div id="content" class="site-content">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			
+			
+<article id="post-145" class="post-145 post type-post status-publish format-standard hentry category-programming tag-altlaw tag-cascading tag-hadoop">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2008/04/17/continuous-integration-for-data.html" rel="bookmark">Continuous Integration for Data</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>As I told a friend recently, I&#8217;m pretty happy with the front-end code of <a href="http://altlaw.org/">AltLaw</a>.  It&#8217;s just a simple Ruby on Rails app that uses Solr for search and storage.  The code is small and easy to maintain.</p>
+<p>What I&#8217;m <em>not</em> happy with is the back-end code, the data extraction, formatting, and indexing.  It&#8217;s a hodge-podge of Ruby, Perl, <a href="http://clojure.sourceforge.net/">Clojure</a>, C, shell scripts, SQL, XML, RDF, and text files that could make the most dedicated Unix hacker blanch.  It works, but just barely, and I panic every time I think about implementing a new feature.</p>
+<p>This is a software engineering problem rather than a pure computer science problem, and I never pretended to be a software engineer.  (I never pretended to be a computer scientist, either.)  It might also be a problem for a larger team than an army of one (plus a few volunteers).</p>
+<p>But given that I can get more processing power (via Amazon) more easily than I can get more programmers, how can I make use of the resources I have to enhance my own productivity?</p>
+<p>I&#8217;m studying <a href="http://hadoop.apache.org/core/">Hadoop</a> and <a href="http://www.cascading.org/">Cascading</a> in the hopes that they will help.  But those systems are inherently batch-oriented.  I&#8217;d like to move away from a batch processing model if I can.  Given that AltLaw acquires 50 to 100 new cases per day, adding to a growing database of over half a million, what I would really like to have is a kind of &#8220;continuous integration&#8221; process for data.  I want a server that runs continuously, accepting new data and new code and automatically re-running processes as needed to keep up with dependencies.  Perhaps given a year of free time I could invent this myself, but I&#8217;m too busy debugging my shell scripts.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2008/04/17/continuous-integration-for-data.html" rel="bookmark"><time class="entry-date published updated" datetime="2008-04-17T10:57:02+00:00">April 17, 2008</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../tag/altlaw.html" rel="tag">AltLaw</a>, <a href="../tag/cascading.html" rel="tag">Cascading</a>, <a href="../tag/hadoop.html" rel="tag">Hadoop</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-144" class="post-144 post type-post status-publish format-standard hentry category-uncategorized tag-altlaw tag-law tag-privacy">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2008/04/15/privacy-open-access-law.html" rel="bookmark">Privacy, Open Access, and the Law</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Since <a href="http://columbialawtech.org/">we</a> started putting court cases on the interwebs, first with <a href="http://projectposner.org/">Project Posner</a> and then with <a href="http://altlaw.org/">AltLaw</a>, we&#8217;ve had the occasional angry email from someone who Googles himself/herself and finds a court case from 20 years ago that reveals embarrassing and career-damaging facts.  They usually want the page taken down.</p>
+<p>Now, sometimes I&#8217;m sympathetic with the people making these requests &#8212; sexual harassment plaintiffs, asylum-seekers, and so on.  Other times, I&#8217;m not &#8212; usually when the person writing to us was convicted of sexual harassment, fraud, etc.</p>
+<p>We&#8217;ve canvassed for opinions on what we should do.  The responses generally fall into 3 categories:</p>
+<ol>
+<li>Lawyers say: Tough, it&#8217;s public record.  Without public case law the American legal system would cease to function.  Only the courts can (and do) decide to anonymize a case.</li>
+<li>Techies say: Tough, information wants to be free.  If you don&#8217;t like what the web says about you, make your own web site to tell your side of the story.</li>
+<li>Others say: I don&#8217;t know.  It&#8217;s wrong to censor public records, but it&#8217;s also wrong to make people suffer for something that happened 20 years ago.</li>
+</ol>
+<p>There are also suggested solutions:</p>
+<ol>
+<li>Refuse to take anything down.  Don&#8217;t answer the phone.</li>
+<li>Anonymize names in &#8220;sensitive&#8221; cases.  Provide a protected link to a non-censored version.  The problem is, cases are routinely identified by the names of the parties.  If you take out the names, you don&#8217;t know what case it is anymore.</li>
+<li>Block search engines from the entire site, either with robots.txt or free registration.  And say goodbye to 50% of our traffic.</li>
+<li>Refuse to modify or take down cases, but block individual cases in robots.txt on request.</li>
+</ol>
+<p>Our current policy is #4.  But is that good enough?  For the appeals and supreme court cases we currently host, probably.  But we hope to expand AltLaw to every U.S. court, down to the state level.  What happens when we start hosting, say, bankruptcy court decisions?</p>
+<p>This gets into bigger questions of open access versus individual privacy.  We&#8217;re not the only ones struggling with the issue &#8212; our friends at <a href="http://justia.com/">Justia</a> and <a href="http://public.resource.org/">public.resource.org</a> have similar problems.  Ultimately, it&#8217;s a question for society at large.  Perhaps, as legal research on the web expands, courts will develop stricter standards for how they publish cases containing sensitive information.  But legal institutions are extremely resistant &#8212; and slow &#8212; to change.  The web of free legal information is growing fast &#8212; in the eight months since AltLaw launched, at least three commercial competitors have appeared.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2008/04/15/privacy-open-access-law.html" rel="bookmark"><time class="entry-date published updated" datetime="2008-04-15T17:21:43+00:00">April 15, 2008</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/uncategorized.html" rel="category tag">Uncategorized</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../tag/altlaw.html" rel="tag">AltLaw</a>, <a href="../tag/law.html" rel="tag">law</a>, <a href="../tag/privacy.html" rel="tag">privacy</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-142" class="post-142 post type-post status-publish format-standard hentry category-programming">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2008/04/14/going-non-linear.html" rel="bookmark">Going Non-Linear</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>I recently read the expression &#8220;going non-linear&#8221; describing a person, where most people would say something like &#8220;going nuts.&#8221;  Incredibly geeky; I like it.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2008/04/14/going-non-linear.html" rel="bookmark"><time class="entry-date published updated" datetime="2008-04-14T09:04:24+00:00">April 14, 2008</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-141" class="post-141 post type-post status-publish format-standard hentry category-programming">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2008/04/11/useful-reminders.html" rel="bookmark">Useful Reminders</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p><a href="http://www-pu.informatik.uni-tuebingen.de/users/klaeren/epigrams.html">Epigrams on Programming</a></p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2008/04/11/useful-reminders.html" rel="bookmark"><time class="entry-date published updated" datetime="2008-04-11T13:42:28+00:00">April 11, 2008</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-140" class="post-140 post type-post status-publish format-standard hentry category-programming tag-common-lisp tag-gui tag-libraries tag-lisp tag-open-source">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2008/04/04/the-problem-with-common-lisp.html" rel="bookmark">The Problem With Common Lisp</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>&#8230; as explained by Sir Kenny,</p>
+<p>From: Ken Tilton<br />
+Newsgroups: comp.lang.lisp<br />
+Date: Tue, 01 Apr 2008 14:53:07 -0400<br />
+Subject: Re: Newbie FAQ #2: Where&#8217;s the GUI?</p>
+<p>Jonathan Gardner wrote:<br />
+> I know this is a FAQ, but I still don&#8217;t have any answers, at least answers that I like.</p>
+<p>That&#8217;s because you missed FAQ #1 (&#8220;Where are the damn libraries?&#8221;) and the answer (&#8220;The Open Source Fairy has left the building. Do them your own damn self.&#8221;)</p>
+<p>&#8230; message truncated &#8230;</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2008/04/04/the-problem-with-common-lisp.html" rel="bookmark"><time class="entry-date published updated" datetime="2008-04-04T16:10:16+00:00">April 4, 2008</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../tag/common-lisp.html" rel="tag">Common Lisp</a>, <a href="../tag/gui.html" rel="tag">GUI</a>, <a href="../tag/libraries.html" rel="tag">libraries</a>, <a href="../tag/lisp.html" rel="tag">Lisp</a>, <a href="../tag/open-source.html" rel="tag">open-source</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-139" class="post-139 post type-post status-publish format-standard hentry category-uncategorized tag-altlaw tag-rdf tag-uri-templates tag-uris">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2008/04/04/uri-templates-for-rdf.html" rel="bookmark">URI Templates for RDF</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>There&#8217;s a school of thought that URIs should be opaque identifiers with no inherent meaning or structure.  I think this is clearly a bad idea on the human-facing web, but it is more reasonable for computer-facing web services.</p>
+<p>However, I&#8217;ve been generating a lot of RDF lately, trying to organize piles of metadata in <a href="http://altlaw.org/">AltLaw</a>.  I use URIs that have meaning to me, although they aren&#8217;t formally specified anywhere.  I realized that a URI can represent a lot of information &#8212; not just the identity of a resource, but also its type, version, date, etc. &#8212; in a compact form.  I can write code that manipulates URIs to get key information about a resource more quickly than I could by querying the RDF database.</p>
+<p>Unfortunately, RDF query languages like SPARQL assume that URIs themselves are just pointers that do not contain any information.  I could easily generate additional RDF statements containing all the same information encoded in the URI, but that would triple the size of my database and slow down my queries.  (My experience so far with <a href="http://openrdf.org/">Sesame 2.0</a> is that complex queries are slow.)</p>
+<p>What I need is a rule-based language for describing the structure of a URI and what it means.  This would be similar to <a href="http://bitworking.org/projects/URI-Templates/">URI templates</a>, and would map parts of the URI to RDF statements about that URI.</p>
+<p>So if I make a statement about a resource at<br />
+<code>http://altlaw.org/cases/US/1204</code><br />
+(note: not a real URI), the RDF database automatically infers the following (in Turtle syntax):</p>
+<pre>
+&lt;http://altlaw.org/cases/US/2008-02-14/1204&gt;
+        rdf:type        &lt;http://altlaw.org/rdf/Case&gt; ;
+        dc:identifier   "1204" ;
+        dc:jurisdiction "US" ;
+        dc:date         "2008-02-14" .
+</pre>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2008/04/04/uri-templates-for-rdf.html" rel="bookmark"><time class="entry-date published updated" datetime="2008-04-04T12:07:13+00:00">April 4, 2008</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/uncategorized.html" rel="category tag">Uncategorized</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../tag/altlaw.html" rel="tag">AltLaw</a>, <a href="../tag/rdf.html" rel="tag">RDF</a>, <a href="../tag/uri-templates.html" rel="tag">URI Templates</a>, <a href="../tag/uris.html" rel="tag">URIs</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-138" class="post-138 post type-post status-publish format-standard hentry category-programming tag-column-oriented tag-data-models tag-database tag-document-oriented tag-hash tag-rdf tag-relational tag-sql">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2008/03/21/all-your-base.html" rel="bookmark">All Your Base</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Let&#8217;s have the database models strut down the runway:</p>
+<p><strong>Relational (SQL):</strong></p>
+<ul>
+<li>Data consist of rows in tables.</li>
+<li>Each row has multiple columns.</li>
+<li>Each column has a fixed type.</li>
+<li>Queries use filters and joins.</li>
+<li>Fixed schema is defined separately from the data.</li>
+<li>User-defined indexes improve query performance.</li>
+<li>Robust transaction/data-integrity support.</li>
+</ul>
+<p><strong>Graph (RDF):</strong></p>
+<ul>
+<li>Data consist of nodes and labeled links between them.</li>
+<li>Nodes may have type information.</li>
+<li>Optional schema is defined in the same model (e.g. RDFS, OWL).</li>
+<li>Queries use graph-based constraints and filters.</li>
+<li>Indexes are not optimized for specific datasets.</li>
+<li>Limited transaction support.</li>
+</ul>
+<p><strong>Tree (XML, filesystem):</strong></p>
+<ul>
+<li>Data are identified by a name and a position within a hierarchy.</li>
+<li>Queries use hierarchies and filters.</li>
+<li>Data may have type information.</li>
+<li>Optional schema may be defined in the same model (XML-Schema) or outside it (DTD).</li>
+<li>Transaction support varies by implementation.</li>
+</ul>
+<p><strong>Hash (BDB, memcached):</strong></p>
+<ul>
+<li>Data are untyped binary blobs.</li>
+<li>Data are identified by unique keys in a flat namespace.</li>
+<li>Only key-based lookups are possible.</li>
+<li>Limited transaction support.</li>
+</ul>
+<p><strong>Inverted Index (Lucene/Solr):</strong></p>
+<ul>
+<li>Data are text documents.</li>
+<li>Queries are free-form text with some special operators.</li>
+<li>Text queries are fast.</li>
+<li>Query results can be scored/ranked.</li>
+<li>Joins are inefficient; denormalized data are preferred.</li>
+<li>Limited transaction support.</li>
+</ul>
+<p><strong>Document-Oriented (CouchDB):</strong></p>
+<ul>
+<li>Data are identified by unique keys in a flat namespace.</li>
+<li>Data have named fields.</li>
+<li>Optional schema defined by application code.</li>
+<li>Denormalized data are preferred.</li>
+<li>Limited type information.</li>
+</ul>
+<p><strong>Column-Oriented (Hbase, BigTable):</strong></p>
+<ul>
+<li>Data consist of rows in tables.</li>
+<li>Each row has multiple columns, rows are assumed to be sparse.</li>
+<li>Data from a single column are stored contiguously to improve performance.</li>
+<li>Designed for distributed processing environments such as Hadoop and MapReduce.</li>
+</ul>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2008/03/21/all-your-base.html" rel="bookmark"><time class="entry-date published updated" datetime="2008-03-21T15:48:42+00:00">March 21, 2008</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../tag/column-oriented.html" rel="tag">column-oriented</a>, <a href="../tag/data-models.html" rel="tag">data models</a>, <a href="../tag/database.html" rel="tag">database</a>, <a href="../tag/document-oriented.html" rel="tag">document-oriented</a>, <a href="../tag/hash.html" rel="tag">hash</a>, <a href="../tag/rdf.html" rel="tag">RDF</a>, <a href="../tag/relational.html" rel="tag">relational</a>, <a href="../tag/sql.html" rel="tag">SQL</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-137" class="post-137 post type-post status-publish format-standard hentry category-uncategorized tag-adwords tag-gmail tag-google tag-spam">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2008/03/21/when-spam-filters-and-adwords-interact.html" rel="bookmark">When Spam Filters and AdWords Interact</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>See image:<br />
+<a href='../wp-content/uploads/2008/03/spam_quiche.png' title='Spam Quiche'><img src='../wp-content/uploads/2008/03/spam_quiche.thumbnail.png' alt='Spam Quiche' /></a></p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2008/03/21/when-spam-filters-and-adwords-interact.html" rel="bookmark"><time class="entry-date published updated" datetime="2008-03-21T10:51:16+00:00">March 21, 2008</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/uncategorized.html" rel="category tag">Uncategorized</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../tag/adwords.html" rel="tag">AdWords</a>, <a href="../tag/gmail.html" rel="tag">GMail</a>, <a href="../tag/google.html" rel="tag">Google</a>, <a href="../tag/spam.html" rel="tag">spam</a></span><span class="comments-link"><a href="../2008/03/21/when-spam-filters-and-adwords-interact.html#comments">2 Comments<span class="screen-reader-text"> on When Spam Filters and AdWords Interact</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-135" class="post-135 post type-post status-publish format-standard hentry category-programming tag-rest tag-version-control">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2008/02/20/restful-version-control.html" rel="bookmark">Design for a RESTful Version Control System</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>I couldn&#8217;t sleep last night.  So I designed a RESTful interface for version control.  Yeah, that&#8217;s weird.</p>
+<p>We already have a nice model for RESTful document storage in Amazon&#8217;s S3.  But S3 doesn&#8217;t do versioning.  What if it did?</p>
+<p><strong>A PUT to a previously-unused URI creates a new resource with version number 1.</strong></p>
+<p><strong>Any subsequent PUT to that URI overwrites the resource and increments the version number.</strong></p>
+<p><strong>When responding to a GET, the server sends three additional headers:</strong></p>
+<ol>
+<li><code>X-Version-Number</code>: the version number being sent;</li>
+<li><code>X-Version-Time</code>: the timestamp for that version; and</li>
+<li><code>X-Latest-Version</code>: the latest version number available.</li>
+</ol>
+<p><strong>If the client wants the latest version, it uses a normal GET.</strong></p>
+<p><strong>If the client wants a specific version</strong>, it can include either <code>X-Version-Number</code> or <code>X-Version-Time</code> in the request header.  For the former, the server returns the requested version. For the latter, the server returns the latest version recorded <em>at or before</em> the specified time.</p>
+<p>Hey, presto, we&#8217;ve got S3 with versioning!  But it&#8217;s not a real version control system like Subversion.  Every new version overwrites the previous version unconditionally.  There&#8217;s no notion of diffs or conflicts.</p>
+<p>But wait, it&#8217;s time for everybody&#8217;s favorite HTTP verb, POST!</p>
+<p><strong>The client can send a POST with a body containing a diff</strong> from the previous version.  If there&#8217;s a conflict, the server responds with &#8220;HTTP 409 Conflict&#8221; and shows the conflicting lines in the response body.  Otherwise, it&#8217;s &#8220;HTTP 200 OK&#8221; and a new version is created.</p>
+<p>We can make this look more like a traditional source-code version control system by adding some extra headers: <code>X-Version-Comment</code> and <code>X-Version-Author</code> for recording metadata about a revision.  We could also add <code>X-Version-Changeset</code> with a value that identifies this revision as part of a larger set of changes.</p>
+<p><strong>Branching.</strong>  The RESTful version control system can implement branching the same way that Subversion does: each branch goes in its own directory.  Add a couple more headers: <code>X-Branch-From</code> says what resource this resource was branched from, and <code>X-Branch-Version</code> says at which version of the original resource the branch occurred.  Include these headers in a PUT to create a new branch, then the server will always send them in response to GETs.</p>
+<p><strong>Security.</strong>  Meh, if you want security, do it at the server or protocol level.  Adding authentication to this interface would make it much more complicated.</p>
+<p>Honestly, it feels like HTTP was designed for this.  I&#8217;ve deviated slightly from the typical REST definition of POST, but I think my use of POST here is in keeping with the spirit of REST.</p>
+<p>I haven&#8217;t implemented this, maybe I will some time.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2008/02/20/restful-version-control.html" rel="bookmark"><time class="entry-date published updated" datetime="2008-02-20T17:31:14+00:00">February 20, 2008</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../tag/rest.html" rel="tag">REST</a>, <a href="../tag/version-control.html" rel="tag">version control</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-134" class="post-134 post type-post status-publish format-standard hentry category-programming tag-altlaw tag-aws">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2008/02/18/at-the-edge-of-feasibility.html" rel="bookmark">At the Edge of Feasibility</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Well, it happened.  I ran out of space on the 250 GB drive I use to develop <a href="http://altlaw.org/">AltLaw</a>.  Not all that surprising, although it did happen sooner than I expected.  I&#8217;m deleting gigabytes of cached data &#8212; file conversions, mostly &#8212; just so I can get enough space to work again.</p>
+<p>But this makes me wonder: am I operating at the edge of what is feasible (or practical) on a single machine?  The latest batch of case updates, courtesy of <a href="http://public.resource.org/">public.resource.org</a>, took nearly three days to run.  And I had to divide the process up into smaller batches because a memory leak &#8212; traceable, I think, to Ruby&#8217;s HTTP library &#8212; was bogging down the system.  When you&#8217;re dealing with hundreds of thousands of files at a time, even the standard UNIX tools like ls and grep start to feel inadequate.  It&#8217;s damn hard to get a grip on a million files at once.  Just clearing some space with a simple &#8220;rm -rf&#8221; can take hours.</p>
+<p>Maybe it&#8217;s time for <a href="http://www.amazon.com/gp/browse.html?node=3435361">Amazon Web Services</a>.  But that&#8217;s a big, scary, enterprisey world.  I&#8217;m just one little script monkey.  I can barely keep track of data on one machine, how could I keep track of it on a dozen machines?  Then again, AWS would give me more powerful tools for managing data &#8212; a bigger pair of tongs, so to speak.  Decisions, decisions.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2008/02/18/at-the-edge-of-feasibility.html" rel="bookmark"><time class="entry-date published updated" datetime="2008-02-18T12:57:35+00:00">February 18, 2008</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../tag/altlaw.html" rel="tag">AltLaw</a>, <a href="../tag/aws.html" rel="tag">AWS</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+	<nav class="navigation pagination" role="navigation">
+		<h2 class="screen-reader-text">Posts navigation</h2>
+		<div class="nav-links"><a class="prev page-numbers" href="12.html">Previous page</a>
+<a class='page-numbers' href='../index.html'><span class="meta-nav screen-reader-text">Page </span>1</a>
+<span class="page-numbers dots">&hellip;</span>
+<a class='page-numbers' href='12.html'><span class="meta-nav screen-reader-text">Page </span>12</a>
+<span class='page-numbers current'><span class="meta-nav screen-reader-text">Page </span>13</span>
+<a class='page-numbers' href='14.html'><span class="meta-nav screen-reader-text">Page </span>14</a>
+<span class="page-numbers dots">&hellip;</span>
+<a class='page-numbers' href='24.html'><span class="meta-nav screen-reader-text">Page </span>24</a>
+<a class="next page-numbers" href="14.html">Next page</a></div>
+	</nav>
+		</main><!-- .site-main -->
+	</div><!-- .content-area -->
+
+
+	<aside id="secondary" class="sidebar widget-area" role="complementary">
+		<section id="search-3" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://stuartsierra.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+	</label>
+	<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</section><section id="text-4" class="widget widget_text">			<div class="textwidget"><ul>
+<li><a href="http://feeds2.feedburner.com/StuartSierra" title="Syndicate this site using RSS 2.0">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="../comments/feed" title="The latest comments to all posts in RSS">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+</ul>
+<ul>
+<li><a href="https://twitter.com/stuartsierra">Twitter</a></li>
+<li><a href="https://github.com/stuartsierra">GitHub</a></li>
+</ul></div>
+		</section><section id="tag-widget-2" class="widget TagWidget"><h2 class="widget-title">Clojure Do’s and Don’ts</h2><ul class = "posts-by-tag-list"><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-883"><a class = "posts-by-tag-item-title" href="../2015/08/25/clojure-donts-lazy-effects.html">Clojure Don’ts: Lazy Effects</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-877"><a class = "posts-by-tag-item-title" href="../2015/08/10/clojure-donts-redundant-map.html">Clojure Don’ts: Redundant map</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-870"><a class = "posts-by-tag-item-title" href="../2015/06/16/clojure-donts-single-branch-if.html">Clojure Don’ts: Single-branch if</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-854"><a class = "posts-by-tag-item-title" href="../2015/06/10/clojure-donts-heisenparameter.html">Clojure Don’ts: The Heisenparameter</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-849"><a class = "posts-by-tag-item-title" href="../2015/06/01/clojure-donts-optional-arguments-with-varargs.html">Clojure Don’ts: Optional Arguments with Varargs</a></li><li class="posts-by-tag-item Clojure do's and don'ts errors" id="posts-by-tag-item-836"><a class = "posts-by-tag-item-title" href="../2015/05/27/clojure-uncaught-exceptions.html">Clojure Do’s: Uncaught Exceptions</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-831"><a class = "posts-by-tag-item-title" href="../2015/05/17/clojure-record-constructors.html">Record Constructors</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-826"><a class = "posts-by-tag-item-title" href="../2015/05/10/clojure-namespace-aliases.html">Clojure Do’s: Namespace Aliases</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-820"><a class = "posts-by-tag-item-title" href="../2015/05/02/clojure-donts-isa.html">Clojure Don’ts: isa?</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-812"><a class = "posts-by-tag-item-title" href="../2015/04/26/clojure-donts-concat.html">Clojure Don’ts: Concat</a></li></ul></section>	</aside><!-- .sidebar .widget-area -->
+
+		</div><!-- .site-content -->
+
+		<footer id="colophon" class="site-footer" role="contentinfo">
+							<nav class="main-navigation" role="navigation" aria-label="Footer Primary Menu">
+					<div class="menu-main-menu-container"><ul id="menu-main-menu-1" class="primary-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../about-me.html">About Me</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../writing.html">Writing</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../presentations.html">Presentations</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../software.html">Software</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../contact.html">Contact</a></li>
+</ul></div>				</nav><!-- .main-navigation -->
+			
+			
+			<div class="site-info">
+								<span class="site-title"><a href="../index.html" rel="home">Digital Digressions by Stuart Sierra</a></span>
+				<a href="https://wordpress.org/">Proudly powered by WordPress</a>
+			</div><!-- .site-info -->
+		</footer><!-- .site-footer -->
+	</div><!-- .site-inner -->
+</div><!-- .site -->
+
+	<div style="display:none">
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	</div>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201635'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2016Sepaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../wp-content/plugins/jetpack/modules/wpgroho167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../wp-content/themes/twentysixteen/js/skip-link-focus-fix8de4.js?ver=20160816'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var screenReaderText = {"expand":"expand child menu","collapse":"collapse child menu"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../wp-content/themes/twentysixteen/js/functions8de4.js?ver=20160816'></script>
+<script type='text/javascript' src='../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='https://stats.wp.com/e-201635.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.2.2',blog:'2702563',post:'0',tz:'-4',srv:'stuartsierra.com'} ]);
+	_stq.push([ 'clickTrackerInit', '2702563', '0' ]);
+</script>
+</body>
+
+<!-- Mirrored from stuartsierra.com/page/13 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 17:06:46 GMT -->
+</html>
+
+<!-- Dynamic page generated in 0.387 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:06:46 -->
+
+<!-- Compression = gzip -->

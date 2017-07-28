@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/coldfusion/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:33:30 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn coldfusion in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../css/normalize.css">
+        <link rel="stylesheet" href="../../css/main.css">
+        <link href="../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fcoldfusion%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3Dcoldfusion">
+        Share this page
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../index.html">Learn X in Y minutes</a></h2>
+  <h2>Where X=coldfusion</h2>
+  
+    <p class="filelink">
+    Get the code:
+    <a href="../files/learncoldfusion.cfm">learncoldfusion.cfm</a>
+    </p>
+  
+  <div id="doc">
+    <p>ColdFusion is a scripting language for web development.
+<a href="http://www.adobe.com/products/coldfusion-family.html">Read more here.</a></p>
+
+<h3>CFML</h3>
+
+<p><em><strong>C</strong>old<strong>F</strong>usion <strong>M</strong>arkup <strong>L</strong>anguage</em><br>
+ColdFusion started as a tag-based language. Almost all functionality is available using tags.</p>
+<pre class="highlight html"><code><span class="nt">&lt;em&gt;</span>HTML tags have been provided for output readability<span class="nt">&lt;/em&gt;</span>
+
+<span class="c">&lt;!--- Comments start with "&lt;!---" and end with "---&gt;</span>" ---&gt;
+<span class="c">&lt;!---
+    Comments can
+    also
+    span
+    multiple lines
+---&gt;</span>
+
+<span class="c">&lt;!--- CFML tags have a similar format to HTML tags. ---&gt;</span>
+<span class="nt">&lt;h1&gt;</span>Simple Variables<span class="nt">&lt;/h1&gt;</span>
+<span class="c">&lt;!--- Variable Declaration: Variables are loosely typed, similar to javascript ---&gt;</span>
+<span class="nt">&lt;p&gt;</span>Set <span class="nt">&lt;b&gt;</span>myVariable<span class="nt">&lt;/b&gt;</span> to "myValue"<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;cfset</span> <span class="na">myVariable =</span><span class="err"> </span><span class="s">"myValue"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;p&gt;</span>Set <span class="nt">&lt;b&gt;</span>myNumber<span class="nt">&lt;/b&gt;</span> to 3.14<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;cfset</span> <span class="na">myNumber =</span><span class="err"> </span><span class="s">3.14</span> <span class="nt">/&gt;</span>
+
+<span class="c">&lt;!--- Displaying simple data ---&gt;</span>
+<span class="c">&lt;!--- Use &lt;cfoutput&gt; for simple values such as strings, numbers, and expressions ---&gt;</span>
+<span class="nt">&lt;p&gt;</span>Display <span class="nt">&lt;b&gt;</span>myVariable<span class="nt">&lt;/b&gt;</span>: <span class="nt">&lt;cfoutput&gt;</span>#myVariable#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span><span class="c">&lt;!--- myValue ---&gt;</span>
+<span class="nt">&lt;p&gt;</span>Display <span class="nt">&lt;b&gt;</span>myNumber<span class="nt">&lt;/b&gt;</span>: <span class="nt">&lt;cfoutput&gt;</span>#myNumber#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span><span class="c">&lt;!--- 3.14 ---&gt;</span>
+
+<span class="nt">&lt;hr</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;h1&gt;</span>Complex Variables<span class="nt">&lt;/h1&gt;</span>
+<span class="c">&lt;!--- Declaring complex variables ---&gt;</span>
+<span class="c">&lt;!--- Declaring an array of 1 dimension: literal or bracket notation ---&gt;</span>
+<span class="nt">&lt;p&gt;</span>Set <span class="nt">&lt;b&gt;</span>myArray1<span class="nt">&lt;/b&gt;</span> to an array of 1 dimension using literal or bracket notation<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;cfset</span> <span class="na">myArray1 =</span><span class="err"> </span><span class="s">[]</span> <span class="nt">/&gt;</span>
+<span class="c">&lt;!--- Declaring an array of 1 dimension: function notation ---&gt;</span>
+<span class="nt">&lt;p&gt;</span>Set <span class="nt">&lt;b&gt;</span>myArray2<span class="nt">&lt;/b&gt;</span> to an array of 1 dimension using function notation<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;cfset</span> <span class="na">myArray2 =</span><span class="err"> </span><span class="s">ArrayNew(1)</span> <span class="nt">/&gt;</span>
+
+<span class="c">&lt;!--- Outputting complex variables ---&gt;</span>
+<span class="nt">&lt;p&gt;</span>Contents of <span class="nt">&lt;b&gt;</span>myArray1<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;cfdump</span> <span class="na">var=</span><span class="s">"#myArray1#"</span> <span class="nt">/&gt;</span> <span class="c">&lt;!--- An empty array object ---&gt;</span>
+<span class="nt">&lt;p&gt;</span>Contents of <span class="nt">&lt;b&gt;</span>myArray2<span class="nt">&lt;/b&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;cfdump</span> <span class="na">var=</span><span class="s">"#myArray2#"</span> <span class="nt">/&gt;</span> <span class="c">&lt;!--- An empty array object ---&gt;</span>
+
+<span class="c">&lt;!--- Operators ---&gt;</span>
+<span class="c">&lt;!--- Arithmetic ---&gt;</span>
+<span class="nt">&lt;h1&gt;</span>Operators<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;h2&gt;</span>Arithmetic<span class="nt">&lt;/h2&gt;</span>
+<span class="nt">&lt;p&gt;</span>1 + 1 = <span class="nt">&lt;cfoutput&gt;</span>#1 + 1#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>10 - 7 = <span class="nt">&lt;cfoutput&gt;</span>#10 - 7#<span class="nt">&lt;br</span> <span class="nt">/&gt;&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>15 * 10 = <span class="nt">&lt;cfoutput&gt;</span>#15 * 10#<span class="nt">&lt;br</span> <span class="nt">/&gt;&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>100 / 5 = <span class="nt">&lt;cfoutput&gt;</span>#100 / 5#<span class="nt">&lt;br</span> <span class="nt">/&gt;&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>120 % 5 = <span class="nt">&lt;cfoutput&gt;</span>#120 % 5#<span class="nt">&lt;br</span> <span class="nt">/&gt;&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>120 mod 5 = <span class="nt">&lt;cfoutput&gt;</span>#120 mod 5#<span class="nt">&lt;br</span> <span class="nt">/&gt;&lt;/cfoutput&gt;&lt;/p&gt;</span>
+
+<span class="nt">&lt;hr</span> <span class="nt">/&gt;</span>
+
+<span class="c">&lt;!--- Comparison ---&gt;</span>
+<span class="nt">&lt;h2&gt;</span>Comparison<span class="nt">&lt;/h2&gt;</span>
+<span class="nt">&lt;h3&gt;</span>Standard Notation<span class="nt">&lt;/h3&gt;</span>
+<span class="nt">&lt;p&gt;</span>Is 1 eq 1? <span class="nt">&lt;cfoutput&gt;</span>#1 eq 1#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>Is 15 neq 1? <span class="nt">&lt;cfoutput&gt;</span>#15 neq 1#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>Is 10 gt 8? <span class="nt">&lt;cfoutput&gt;</span>#10 gt 8#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>Is 1 lt 2? <span class="nt">&lt;cfoutput&gt;</span>#1 lt 2#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>Is 10 gte 5? <span class="nt">&lt;cfoutput&gt;</span>#10 gte 5#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>Is 1 lte 5? <span class="nt">&lt;cfoutput&gt;</span>#1 lte 5#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span>
+
+<span class="nt">&lt;h3&gt;</span>Alternative Notation<span class="nt">&lt;/h3&gt;</span>
+<span class="nt">&lt;p&gt;</span>Is 1 == 1? <span class="nt">&lt;cfoutput&gt;</span>#1 eq 1#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>Is 15 != 1? <span class="nt">&lt;cfoutput&gt;</span>#15 neq 1#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>Is 10 &gt; 8? <span class="nt">&lt;cfoutput&gt;</span>#10 gt 8#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>Is 1 <span class="nt">&lt; 2</span><span class="err">?</span> <span class="err">&lt;</span><span class="na">cfoutput</span><span class="nt">&gt;</span>#1 lt 2#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>Is 10 &gt;= 5? <span class="nt">&lt;cfoutput&gt;</span>#10 gte 5#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;p&gt;</span>Is 1 <span class="err">&lt;</span>= 5? <span class="nt">&lt;cfoutput&gt;</span>#1 lte 5#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span>
+
+<span class="nt">&lt;hr</span> <span class="nt">/&gt;</span>
+
+<span class="c">&lt;!--- Control Structures ---&gt;</span>
+<span class="nt">&lt;h1&gt;</span>Control Structures<span class="nt">&lt;/h1&gt;</span>
+
+<span class="nt">&lt;cfset</span> <span class="na">myCondition =</span><span class="err"> </span><span class="s">"Test"</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>Condition to test for: "<span class="nt">&lt;cfoutput&gt;</span>#myCondition#<span class="nt">&lt;/cfoutput&gt;</span>"<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;cfif</span> <span class="na">myCondition</span> <span class="na">eq</span> <span class="err">"</span><span class="na">Test</span><span class="err">"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;cfoutput&gt;</span>#myCondition#. We're testing.<span class="nt">&lt;/cfoutput&gt;</span>
+<span class="nt">&lt;cfelseif</span> <span class="na">myCondition</span> <span class="na">eq</span> <span class="err">"</span><span class="na">Production</span><span class="err">"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;cfoutput&gt;</span>#myCondition#. Proceed Carefully!!!<span class="nt">&lt;/cfoutput&gt;</span>
+<span class="nt">&lt;cfelse&gt;</span>
+    myCondition is unknown
+<span class="nt">&lt;/cfif&gt;</span>
+
+<span class="nt">&lt;hr</span> <span class="nt">/&gt;</span>
+
+<span class="c">&lt;!--- Loops ---&gt;</span>
+<span class="nt">&lt;h1&gt;</span>Loops<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;h2&gt;</span>For Loop<span class="nt">&lt;/h2&gt;</span>
+<span class="nt">&lt;cfloop</span> <span class="na">from=</span><span class="s">"0"</span> <span class="na">to=</span><span class="s">"10"</span> <span class="na">index=</span><span class="s">"i"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Index equals <span class="nt">&lt;cfoutput&gt;</span>#i#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;/cfloop&gt;</span>
+
+<span class="nt">&lt;h2&gt;</span>For Each Loop (Complex Variables)<span class="nt">&lt;/h2&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>Set <span class="nt">&lt;b&gt;</span>myArray3<span class="nt">&lt;/b&gt;</span> to [5, 15, 99, 45, 100]<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;cfset</span> <span class="na">myArray3 =</span><span class="err"> </span><span class="s">[5,</span> <span class="na">15</span><span class="err">,</span> <span class="na">99</span><span class="err">,</span> <span class="na">45</span><span class="err">,</span> <span class="na">100</span><span class="err">]</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;cfloop</span> <span class="na">array=</span><span class="s">"#myArray3#"</span> <span class="na">index=</span><span class="s">"i"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Index equals <span class="nt">&lt;cfoutput&gt;</span>#i#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;/cfloop&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>Set <span class="nt">&lt;b&gt;</span>myArray4<span class="nt">&lt;/b&gt;</span> to ["Alpha", "Bravo", "Charlie", "Delta", "Echo"]<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;cfset</span> <span class="na">myArray4 =</span><span class="err"> </span><span class="s">["Alpha",</span> <span class="err">"</span><span class="na">Bravo</span><span class="err">",</span> <span class="err">"</span><span class="na">Charlie</span><span class="err">",</span> <span class="err">"</span><span class="na">Delta</span><span class="err">",</span> <span class="err">"</span><span class="na">Echo</span><span class="err">"]</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;cfloop</span> <span class="na">array=</span><span class="s">"#myArray4#"</span> <span class="na">index=</span><span class="s">"s"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Index equals <span class="nt">&lt;cfoutput&gt;</span>#s#<span class="nt">&lt;/cfoutput&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;/cfloop&gt;</span>
+
+<span class="nt">&lt;h2&gt;</span>Switch Statement<span class="nt">&lt;/h2&gt;</span>
+
+<span class="nt">&lt;p&gt;</span>Set <span class="nt">&lt;b&gt;</span>myArray5<span class="nt">&lt;/b&gt;</span> to [5, 15, 99, 45, 100]<span class="nt">&lt;/p&gt;</span>
+
+<span class="nt">&lt;cfset</span> <span class="na">myArray5 =</span><span class="err"> </span><span class="s">[5,</span> <span class="na">15</span><span class="err">,</span> <span class="na">99</span><span class="err">,</span> <span class="na">45</span><span class="err">,</span> <span class="na">100</span><span class="err">]</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;cfloop</span> <span class="na">array=</span><span class="s">"#myArray5#"</span> <span class="na">index=</span><span class="s">"i"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;cfswitch</span> <span class="na">expression=</span><span class="s">"#i#"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;cfcase</span> <span class="na">value=</span><span class="s">"5,15,45"</span> <span class="na">delimiters=</span><span class="s">","</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;p&gt;&lt;cfoutput&gt;</span>#i#<span class="nt">&lt;/cfoutput&gt;</span> is a multiple of 5.<span class="nt">&lt;/p&gt;</span>
+        <span class="nt">&lt;/cfcase&gt;</span>
+        <span class="nt">&lt;cfcase</span> <span class="na">value=</span><span class="s">"99"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;p&gt;&lt;cfoutput&gt;</span>#i#<span class="nt">&lt;/cfoutput&gt;</span> is ninety-nine.<span class="nt">&lt;/p&gt;</span>
+        <span class="nt">&lt;/cfcase&gt;</span>
+        <span class="nt">&lt;cfdefaultcase&gt;</span>
+            <span class="nt">&lt;p&gt;&lt;cfoutput&gt;</span>#i#<span class="nt">&lt;/cfoutput&gt;</span> is not 5, 15, 45, or 99.<span class="nt">&lt;/p&gt;</span>
+        <span class="nt">&lt;/cfdefaultcase&gt;</span> 
+    <span class="nt">&lt;/cfswitch&gt;</span> 
+<span class="nt">&lt;/cfloop&gt;</span>
+
+<span class="nt">&lt;hr</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;h1&gt;</span>Converting types<span class="nt">&lt;/h1&gt;</span>
+
+<span class="nt">&lt;style&gt;</span>
+    <span class="nt">table</span><span class="nc">.table</span> <span class="nt">th</span><span class="o">,</span> <span class="nt">table</span><span class="nc">.table</span> <span class="nt">td</span> <span class="p">{</span>
+        <span class="nl">border</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="m">#000000</span><span class="p">;</span>
+        <span class="nl">padding</span><span class="p">:</span> <span class="m">2px</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="nt">table</span><span class="nc">.table</span> <span class="nt">th</span> <span class="p">{</span>
+        <span class="nl">background-color</span><span class="p">:</span> <span class="m">#CCCCCC</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="nt">&lt;/style&gt;</span>
+
+<span class="nt">&lt;table</span> <span class="na">class=</span><span class="s">"table"</span> <span class="na">cellspacing=</span><span class="s">"0"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;thead&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;th&gt;</span>Value<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;th&gt;</span>As Boolean<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;th&gt;</span>As number<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;th&gt;</span>As date-time<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;th&gt;</span>As string<span class="nt">&lt;/th&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;/thead&gt;</span>
+    <span class="nt">&lt;tbody&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;th&gt;</span>"Yes"<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;td&gt;</span>TRUE<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>1<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>Error<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>"Yes"<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;th&gt;</span>"No"<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;td&gt;</span>FALSE<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>0<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>Error<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>"No"<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;th&gt;</span>TRUE<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;td&gt;</span>TRUE<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>1<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>Error<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>"Yes"<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;th&gt;</span>FALSE<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;td&gt;</span>FALSE<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>0<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>Error<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>"No"<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;th&gt;</span>Number<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;td&gt;</span>True if Number is not 0; False otherwise.<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>Number<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>See <span class="ni">&amp;#34;</span>Date-time values<span class="ni">&amp;#34;</span> earlier in this chapter.<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>String representation of the number (for example, <span class="ni">&amp;#34;</span>8<span class="ni">&amp;#34;</span>).<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;th&gt;</span>String<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;td&gt;</span>If "Yes", True <span class="nt">&lt;br&gt;</span>If "No", False <span class="nt">&lt;br&gt;</span>If it can be converted to 0, False <span class="nt">&lt;br&gt;</span>If it can be converted to any other number, True<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>If it represents a number (for example, <span class="ni">&amp;#34;</span>1,000<span class="ni">&amp;#34;</span> or <span class="ni">&amp;#34;</span>12.36E-12<span class="ni">&amp;#34;</span>), it is converted to the corresponding number.<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>If it represents a date-time (see next column), it is converted to the numeric value of the corresponding date-time object. <span class="nt">&lt;br&gt;</span>If it is an ODBC date, time, or timestamp (for example <span class="ni">&amp;#34;</span>{ts <span class="ni">&amp;#39;</span>2001-06-14 11:30:13<span class="ni">&amp;#39;</span>}<span class="ni">&amp;#34;</span>, or if it is expressed in a standard U.S. date or time format, including the use of full or abbreviated month names, it is converted to the corresponding date-time value. <span class="nt">&lt;br&gt;</span>Days of the week or unusual punctuation result in an error. <span class="nt">&lt;br&gt;</span>Dashes, forward-slashes, and spaces are generally allowed.<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>String<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;th&gt;</span>Date<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;td&gt;</span>Error<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>The numeric value of the date-time object.<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>Date<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>An ODBC timestamp.<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;/tbody&gt;</span>
+<span class="nt">&lt;/table&gt;</span>
+
+<span class="nt">&lt;hr</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;h1&gt;</span>Components<span class="nt">&lt;/h1&gt;</span>
+
+<span class="nt">&lt;em&gt;</span>Code for reference (Functions must return something to support IE)<span class="nt">&lt;/em&gt;</span>
+
+<span class="nt">&lt;cfcomponent&gt;</span>
+    <span class="nt">&lt;cfset</span> <span class="na">this</span><span class="err">.</span><span class="na">hello =</span><span class="err"> </span><span class="s">"Hello"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;cfset</span> <span class="na">this</span><span class="err">.</span><span class="na">world =</span><span class="err"> </span><span class="s">"world"</span> <span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;cffunction</span> <span class="na">name=</span><span class="s">"sayHello"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;cfreturn</span> <span class="na">this</span><span class="err">.</span><span class="na">hello</span> <span class="err">&amp;</span> <span class="err">",</span> <span class="err">"</span> <span class="err">&amp;</span> <span class="na">this</span><span class="err">.</span><span class="na">world</span> <span class="err">&amp;</span> <span class="err">"!"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/cffunction&gt;</span>
+
+    <span class="nt">&lt;cffunction</span> <span class="na">name=</span><span class="s">"setHello"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;cfargument</span> <span class="na">name=</span><span class="s">"newHello"</span> <span class="na">type=</span><span class="s">"string"</span> <span class="na">required=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;cfset</span> <span class="na">this</span><span class="err">.</span><span class="na">hello =</span><span class="err"> </span><span class="s">arguments.newHello</span> <span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;cfreturn</span> <span class="na">true</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/cffunction&gt;</span>
+
+    <span class="nt">&lt;cffunction</span> <span class="na">name=</span><span class="s">"setWorld"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;cfargument</span> <span class="na">name=</span><span class="s">"newWorld"</span> <span class="na">type=</span><span class="s">"string"</span> <span class="na">required=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;cfset</span> <span class="na">this</span><span class="err">.</span><span class="na">world =</span><span class="err"> </span><span class="s">arguments.newWorld</span> <span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;cfreturn</span> <span class="na">true</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/cffunction&gt;</span>
+
+    <span class="nt">&lt;cffunction</span> <span class="na">name=</span><span class="s">"getHello"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;cfreturn</span> <span class="na">this</span><span class="err">.</span><span class="na">hello</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/cffunction&gt;</span>
+
+    <span class="nt">&lt;cffunction</span> <span class="na">name=</span><span class="s">"getWorld"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;cfreturn</span> <span class="na">this</span><span class="err">.</span><span class="na">world</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/cffunction&gt;</span>
+<span class="nt">&lt;/cfcomponent&gt;</span>
+
+<span class="nt">&lt;cfset</span> <span class="na">this</span><span class="err">.</span><span class="na">hello =</span><span class="err"> </span><span class="s">"Hello"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;cfset</span> <span class="na">this</span><span class="err">.</span><span class="na">world =</span><span class="err"> </span><span class="s">"world"</span> <span class="nt">/&gt;</span>
+
+<span class="nt">&lt;cffunction</span> <span class="na">name=</span><span class="s">"sayHello"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;cfreturn</span> <span class="na">this</span><span class="err">.</span><span class="na">hello</span> <span class="err">&amp;</span> <span class="err">",</span> <span class="err">"</span> <span class="err">&amp;</span> <span class="na">this</span><span class="err">.</span><span class="na">world</span> <span class="err">&amp;</span> <span class="err">"!"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/cffunction&gt;</span>
+
+<span class="nt">&lt;cffunction</span> <span class="na">name=</span><span class="s">"setHello"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;cfargument</span> <span class="na">name=</span><span class="s">"newHello"</span> <span class="na">type=</span><span class="s">"string"</span> <span class="na">required=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;cfset</span> <span class="na">this</span><span class="err">.</span><span class="na">hello =</span><span class="err"> </span><span class="s">arguments.newHello</span> <span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;cfreturn</span> <span class="na">true</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/cffunction&gt;</span>
+
+<span class="nt">&lt;cffunction</span> <span class="na">name=</span><span class="s">"setWorld"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;cfargument</span> <span class="na">name=</span><span class="s">"newWorld"</span> <span class="na">type=</span><span class="s">"string"</span> <span class="na">required=</span><span class="s">"true"</span> <span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;cfset</span> <span class="na">this</span><span class="err">.</span><span class="na">world =</span><span class="err"> </span><span class="s">arguments.newWorld</span> <span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;cfreturn</span> <span class="na">true</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/cffunction&gt;</span>
+
+<span class="nt">&lt;cffunction</span> <span class="na">name=</span><span class="s">"getHello"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;cfreturn</span> <span class="na">this</span><span class="err">.</span><span class="na">hello</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/cffunction&gt;</span>
+
+<span class="nt">&lt;cffunction</span> <span class="na">name=</span><span class="s">"getWorld"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;cfreturn</span> <span class="na">this</span><span class="err">.</span><span class="na">world</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/cffunction&gt;</span>
+
+
+<span class="nt">&lt;b&gt;</span>sayHello()<span class="nt">&lt;/b&gt;</span>
+<span class="nt">&lt;cfoutput&gt;&lt;p&gt;</span>#sayHello()#<span class="nt">&lt;/p&gt;&lt;/cfoutput&gt;</span>
+<span class="nt">&lt;b&gt;</span>getHello()<span class="nt">&lt;/b&gt;</span>
+<span class="nt">&lt;cfoutput&gt;&lt;p&gt;</span>#getHello()#<span class="nt">&lt;/p&gt;&lt;/cfoutput&gt;</span>
+<span class="nt">&lt;b&gt;</span>getWorld()<span class="nt">&lt;/b&gt;</span>
+<span class="nt">&lt;cfoutput&gt;&lt;p&gt;</span>#getWorld()#<span class="nt">&lt;/p&gt;&lt;/cfoutput&gt;</span>
+<span class="nt">&lt;b&gt;</span>setHello("Hola")<span class="nt">&lt;/b&gt;</span>
+<span class="nt">&lt;cfoutput&gt;&lt;p&gt;</span>#setHello("Hola")#<span class="nt">&lt;/p&gt;&lt;/cfoutput&gt;</span>
+<span class="nt">&lt;b&gt;</span>setWorld("mundo")<span class="nt">&lt;/b&gt;</span>
+<span class="nt">&lt;cfoutput&gt;&lt;p&gt;</span>#setWorld("mundo")#<span class="nt">&lt;/p&gt;&lt;/cfoutput&gt;</span>
+<span class="nt">&lt;b&gt;</span>sayHello()<span class="nt">&lt;/b&gt;</span>
+<span class="nt">&lt;cfoutput&gt;&lt;p&gt;</span>#sayHello()#<span class="nt">&lt;/p&gt;&lt;/cfoutput&gt;</span>
+<span class="nt">&lt;b&gt;</span>getHello()<span class="nt">&lt;/b&gt;</span>
+<span class="nt">&lt;cfoutput&gt;&lt;p&gt;</span>#getHello()#<span class="nt">&lt;/p&gt;&lt;/cfoutput&gt;</span>
+<span class="nt">&lt;b&gt;</span>getWorld()<span class="nt">&lt;/b&gt;</span>
+<span class="nt">&lt;cfoutput&gt;&lt;p&gt;</span>#getWorld()#<span class="nt">&lt;/p&gt;&lt;/cfoutput&gt;</span>
+</code></pre>
+
+<h3>CFScript</h3>
+
+<p><em><strong>C</strong>old<strong>F</strong>usion <strong>S</strong>cript</em><br>
+In recent years, the ColdFusion language has added script syntax to mirror tag functionality. When using an up-to-date CF server, almost all functionality is available using scrypt syntax.</p>
+
+<h2>Further Reading</h2>
+
+<p>The links provided here below are just to get an understanding of the topic, feel free to Google and find specific examples.</p>
+
+<ol>
+<li><a href="https://helpx.adobe.com/coldfusion/cfml-reference/topics.html">Coldfusion Reference From Adobe</a></li>
+<li><a href="http://cfdocs.org/">Open Source Documentation</a></li>
+</ol>
+
+    <hr>
+    <p>Got a suggestion? A correction, perhaps? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Open an Issue</a> on the Github Repo, or make a pull request yourself!
+    </p>
+    <p class="contributed">
+    Originally contributed by Wayne Boka, and updated by <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/coldfusion.html.markdown">4 contributor(s)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://wboka.github.io/">Wayne Boka</a>,
+      
+    
+      
+        <a href="https://twitter.com/kevinmorris">Kevin Morris</a>
+      
+    
+    </p>
+
+    <p>
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/coldfusion/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:33:30 GMT -->
+</html>

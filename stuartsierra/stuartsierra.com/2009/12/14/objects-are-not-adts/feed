@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Objects Are Not Abstract Data Types</title>
+	<atom:link href="https://stuartsierra.com/2009/12/14/objects-are-not-adts/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2009/12/14/objects-are-not-adts</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: IL</title>
+		<link>https://stuartsierra.com/2009/12/14/objects-are-not-adts/comment-page-1#comment-43013</link>
+		<dc:creator><![CDATA[IL]]></dc:creator>
+		<pubDate>Fri, 15 Jan 2010 22:28:17 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=336#comment-43013</guid>
+		<description><![CDATA[Sounds like erlang behavior but no dynamic dispatching.]]></description>
+		<content:encoded><![CDATA[<p>Sounds like erlang behavior but no dynamic dispatching.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Yo</title>
+		<link>https://stuartsierra.com/2009/12/14/objects-are-not-adts/comment-page-1#comment-42995</link>
+		<dc:creator><![CDATA[Yo]]></dc:creator>
+		<pubDate>Fri, 15 Jan 2010 02:12:35 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=336#comment-42995</guid>
+		<description><![CDATA[Scala solves all of this via traits.]]></description>
+		<content:encoded><![CDATA[<p>Scala solves all of this via traits.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Rick Minerich's Development Wonderland : F# Discoveries This Week 12/21/2009</title>
+		<link>https://stuartsierra.com/2009/12/14/objects-are-not-adts/comment-page-1#comment-42945</link>
+		<dc:creator><![CDATA[Rick Minerich's Development Wonderland : F# Discoveries This Week 12/21/2009]]></dc:creator>
+		<pubDate>Mon, 21 Dec 2009 17:11:28 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=336#comment-42945</guid>
+		<description><![CDATA[[...] Stuart Sierra on why Objects are not Abstract Data Types [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] Stuart Sierra on why Objects are not Abstract Data Types [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: William Cook</title>
+		<link>https://stuartsierra.com/2009/12/14/objects-are-not-adts/comment-page-1#comment-42941</link>
+		<dc:creator><![CDATA[William Cook]]></dc:creator>
+		<pubDate>Fri, 18 Dec 2009 19:20:23 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=336#comment-42941</guid>
+		<description><![CDATA[I wrote the article “On Understanding Data Abstraction, Revisited” mentioned above. I also responded to Liskov when she presented her talk at OOPSLA a few days before my presentation. In my article I completely refute Liskov&#039;s negative comments about object-oriented programing. I identify a notion of pure OO in which only *interfaces* are used as types. In this approach, there is no conflation of &quot;concrete representation of a type with the interface used to access it&quot;. The problem comes from using classes as types. The overall point of my article is:
+* CLU introduced the idea of user-defined abstract data types (ADT)
+* Objects are NOT abstract data types (they are fundamentally different)
+* Java supports a blend of ADT and object-oriented programming
+   (but the ADT support is weak)
+* Abstract data types and objects both have advantages and disadvantages
+   Adding ADT forms to Java will improve some things, but make other things worse. Be careful!
+* Haskell type classes are a form of abstract data type (but without much information hiding)
+Once you get the pure form of both concepts clear, then the various hybrids are easy to recognize. Unfortunately, most people only know Java, which is a mixed up hash of both forms, so using Java as your foundation leads to confusion. I&#039;m sorry my article is not quite as accessible as I had hoped it would be. Since there seems to be so much interest in the topic, I&#039;m thinking about writing something that is easier to digest.]]></description>
+		<content:encoded><![CDATA[<p>I wrote the article “On Understanding Data Abstraction, Revisited” mentioned above. I also responded to Liskov when she presented her talk at OOPSLA a few days before my presentation. In my article I completely refute Liskov&#8217;s negative comments about object-oriented programing. I identify a notion of pure OO in which only *interfaces* are used as types. In this approach, there is no conflation of &#8220;concrete representation of a type with the interface used to access it&#8221;. The problem comes from using classes as types. The overall point of my article is:<br />
+* CLU introduced the idea of user-defined abstract data types (ADT)<br />
+* Objects are NOT abstract data types (they are fundamentally different)<br />
+* Java supports a blend of ADT and object-oriented programming<br />
+   (but the ADT support is weak)<br />
+* Abstract data types and objects both have advantages and disadvantages<br />
+   Adding ADT forms to Java will improve some things, but make other things worse. Be careful!<br />
+* Haskell type classes are a form of abstract data type (but without much information hiding)<br />
+Once you get the pure form of both concepts clear, then the various hybrids are easy to recognize. Unfortunately, most people only know Java, which is a mixed up hash of both forms, so using Java as your foundation leads to confusion. I&#8217;m sorry my article is not quite as accessible as I had hoped it would be. Since there seems to be so much interest in the topic, I&#8217;m thinking about writing something that is easier to digest.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: banq</title>
+		<link>https://stuartsierra.com/2009/12/14/objects-are-not-adts/comment-page-1#comment-42938</link>
+		<dc:creator><![CDATA[banq]]></dc:creator>
+		<pubDate>Wed, 16 Dec 2009 08:04:48 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=336#comment-42938</guid>
+		<description><![CDATA[just like Mixin  in AOP]]></description>
+		<content:encoded><![CDATA[<p>just like Mixin  in AOP</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2009/12/14/objects-are-not-adts/comment-page-1#comment-42936</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Tue, 15 Dec 2009 18:06:19 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=336#comment-42936</guid>
+		<description><![CDATA[James Swift: Yes, I&#039;ve read that. Rich Hickey mentioned it in connection with his work on datatypes/protocols in Clojure.]]></description>
+		<content:encoded><![CDATA[<p>James Swift: Yes, I&#8217;ve read that. Rich Hickey mentioned it in connection with his work on datatypes/protocols in Clojure.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2009/12/14/objects-are-not-adts/comment-page-1#comment-42935</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Tue, 15 Dec 2009 18:02:15 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=336#comment-42935</guid>
+		<description><![CDATA[Noel Grandin wrote: &lt;em&gt;&quot;So this proposal is basically a restricted Java class and a Java interface?&quot;&lt;/em&gt;
+
+Not really restricted, because you can do all the same things you can do with Java classes/interfaces.  Just a different approach, and more flexible because you can modify datatypes/protocols dynamically.]]></description>
+		<content:encoded><![CDATA[<p>Noel Grandin wrote: <em>&#8220;So this proposal is basically a restricted Java class and a Java interface?&#8221;</em></p>
+<p>Not really restricted, because you can do all the same things you can do with Java classes/interfaces.  Just a different approach, and more flexible because you can modify datatypes/protocols dynamically.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2009/12/14/objects-are-not-adts/comment-page-1#comment-42934</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Tue, 15 Dec 2009 17:58:50 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=336#comment-42934</guid>
+		<description><![CDATA[polypus wrote: &lt;em&gt;&quot;any idea what the ETA is on this?&quot;&lt;/em&gt;
+
+Don&#039;t hold your breath.  I&#039;m guessing it will be 2-3 months from now.]]></description>
+		<content:encoded><![CDATA[<p>polypus wrote: <em>&#8220;any idea what the ETA is on this?&#8221;</em></p>
+<p>Don&#8217;t hold your breath.  I&#8217;m guessing it will be 2-3 months from now.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: polypus</title>
+		<link>https://stuartsierra.com/2009/12/14/objects-are-not-adts/comment-page-1#comment-42933</link>
+		<dc:creator><![CDATA[polypus]]></dc:creator>
+		<pubDate>Tue, 15 Dec 2009 17:55:33 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=336#comment-42933</guid>
+		<description><![CDATA[&quot;Not yet. The implementation of datatypes and protocols is still being developed. I’m sure that once it is finished there will be a raft of articles describing how to use it.&quot;
+
+any idea what the ETA is on this?]]></description>
+		<content:encoded><![CDATA[<p>&#8220;Not yet. The implementation of datatypes and protocols is still being developed. I’m sure that once it is finished there will be a raft of articles describing how to use it.&#8221;</p>
+<p>any idea what the ETA is on this?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Noel Grandin</title>
+		<link>https://stuartsierra.com/2009/12/14/objects-are-not-adts/comment-page-1#comment-42931</link>
+		<dc:creator><![CDATA[Noel Grandin]]></dc:creator>
+		<pubDate>Tue, 15 Dec 2009 07:48:12 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=336#comment-42931</guid>
+		<description><![CDATA[So this proposal is basically a restricted Java class and a Java interface?
+
+Which is not a surprising choice - James Gosling has said that he would have liked to make Java&#039;s original type system interface based, but they ran out of time to do the necessary research.]]></description>
+		<content:encoded><![CDATA[<p>So this proposal is basically a restricted Java class and a Java interface?</p>
+<p>Which is not a surprising choice &#8211; James Gosling has said that he would have liked to make Java&#8217;s original type system interface based, but they ran out of time to do the necessary research.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.310 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:02:40 -->
+
+<!-- Compression = gzip -->

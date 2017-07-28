@@ -1,0 +1,75 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/solutions/solutions-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:53 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Lecture 2 solutions</title>
+</head>
+<body>
+
+<center><b><font size=+3>Solutions to exercises from week 2</font></b></center>
+
+<p><tt>;;; take one argument, guaranteed to be a list of precisely two
+elements,</tt>
+<br><tt>;;; and return a new list which contains both these elements but
+in</tt>
+<br><tt>;;; reverse order</tt>
+<br><tt>(defun reverse-list-of-two (list)</tt>
+<br><tt>&nbsp; (list (second list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (first list)))</tt>
+<p><tt>;;; take two arguments and return them in a list, second argument
+first</tt>
+<br><tt>(defun list-of-args-in-reverse-order (first second)</tt>
+<br><tt>&nbsp; (list second first))</tt>
+<p><tt>;;; average of three arguments</tt>
+<br><tt>(defun average-of-three (one two three)</tt>
+<br><tt>&nbsp; (/ (+ one two three) 3.0))</tt>
+<p><tt>;;; average of three members of list</tt>
+<br><tt>(defun average-of-three-list-members (list)</tt>
+<br><tt>&nbsp; (/ (+ (first list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (second list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (third list))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; 3.0))</tt>
+<p><tt>;;; how many minutes in one year? It's a leap year if leapp is set</tt>
+<br><tt>(defun minutes-in-one-year (leapp)</tt>
+<br><tt>&nbsp; (if leapp</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;; leap case</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (* 366 24 60)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; ;; non-leap case</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (* 365 24 60)))</tt>
+<p><tt>;;; alternative solution</tt>
+<br><tt>(defun alternative-minutes-in-one-year (leapp)</tt>
+<br><tt>&nbsp; (* (if leapp 366 365)&nbsp;&nbsp;&nbsp;&nbsp; ;&nbsp; I
+think this is somewhat more elegant (why?)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; 24</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; 60))</tt>
+<p><tt>;;; give lisp an additional ordinal to play with</tt>
+<br><tt>(defun eleventh (list)</tt>
+<br><tt>&nbsp; (tenth (rest list)))</tt>
+<p>If you have tried the exercises, looked at the solutions and still do
+not understand what's going on, I am available for consultation at the
+times advertised on my office door. Bring your code with you in BOTH the
+following forms:
+<ul>
+<li>
+Logbook containing printout (nothing handwritten please)</li>
+
+<li>
+file on floppy</li>
+</ul>
+&nbsp;
+<div align=right>
+<br><a href="mailto:ndl@ravenbrook.com">Nick Levine</a>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+last modified 2000-10-10
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Copyright (C) Nick Levine 1999. All rights reserved.
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/solutions/solutions-2.html#2 $</div>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/solutions/solutions-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:53 GMT -->
+</html>

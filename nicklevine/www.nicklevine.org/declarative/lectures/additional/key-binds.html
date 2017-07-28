@@ -1,0 +1,417 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/additional/key-binds.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:24:02 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Bob Waixel">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>LispWorks key bindings</title>
+</head>
+<body>
+
+<center><b><font size=+3>Key bindings in the LispWorks Editor</font></b></center>
+
+<p><tt>The tables below will give you</tt>
+<ul>
+<li>
+<tt>some of the most useful LispWorks key bindings</tt></li>
+
+<li>
+<tt>approximate equivalents of common Windows bindings</tt></li>
+</ul>
+<tt>A full description of the editor will be found in the "Editor User
+Guide" in the online documentation. For help from the editor itself press
+Ctrl+H.</tt>
+<p><tt>Note regarding Meta key combinations: you get to these either by
+holding the Alt key down or by pressing Escape first. For example, to enter
+Meta+W, either</tt>
+<ul>
+<li>
+<tt>press "w" while the Alt key is held down, or</tt></li>
+
+<li>
+<tt>press Escape and then press "w"</tt></li>
+</ul>
+
+<div align=right><a href="mailto:ndl@ravenbrook.com">Nick Levine</a></div>
+
+<div align=right>last modified 2000-09-15</div>
+
+<p><br>
+<hr WIDTH="100%">
+<p><b><tt><font size=+1>Some of the most useful LispWorks key bindings</font></tt></b>
+<br>&nbsp;
+<table BORDER CELLSPACING=0 WIDTH="100%" >
+<tr>
+<td><b><tt><font size=+1>Key&nbsp;</font></tt></b></td>
+
+<td><b><tt><font size=+1>LispWorks meaning</font></tt></b></td>
+</tr>
+
+<tr>
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+H</tt></td>
+
+<td><tt>Help</tt></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+Shift+D</tt></td>
+
+<td><tt>Function Documentation</tt></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+L</tt></td>
+
+<td><tt>Refresh Screen</tt></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+T</tt></td>
+
+<td><tt>Transpose Characters</tt></td>
+</tr>
+
+<tr>
+<td><tt>Tab</tt></td>
+
+<td><tt>Indent</tt></td>
+</tr>
+
+<tr>
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+R</tt></td>
+
+<td><tt>Reverse Incremental Search</tt></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+S</tt></td>
+
+<td><tt>Incremental Search</tt></td>
+</tr>
+
+<tr>
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+Space</tt></td>
+
+<td><tt>Set Mark</tt></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+X Ctrl+X</tt></td>
+
+<td><tt>Exchange Point and Mark</tt></td>
+</tr>
+
+<tr>
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+K</tt></td>
+
+<td><tt>Kill Line</tt></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+W</tt></td>
+
+<td><tt>Kill Region</tt></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+Y</tt></td>
+
+<td><tt>Un-Kill</tt></td>
+</tr>
+
+<tr>
+<td><tt>Meta+W</tt></td>
+
+<td><tt>Save Region</tt></td>
+</tr>
+
+<tr>
+<td><tt>Meta+Y</tt></td>
+
+<td><tt>Rotate Kill Ring</tt></td>
+</tr>
+
+<tr>
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+X Ctrl+C</tt></td>
+
+<td><tt>Save All Files And Exit</tt></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+X Ctrl+S</tt></td>
+
+<td><tt>Save File</tt></td>
+</tr>
+
+<tr>
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+_&nbsp;</tt></td>
+
+<td><tt>Undo</tt></td>
+</tr>
+
+<tr>
+<td><tt>Meta+(</tt></td>
+
+<td><tt>Insert ()</tt></td>
+</tr>
+
+<tr>
+<td><tt>Meta+)</tt></td>
+
+<td><tt>Move Over )</tt></td>
+</tr>
+
+<tr>
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>Meta+=</tt></td>
+
+<td><tt>Function Arglist</tt></td>
+</tr>
+
+<tr>
+<td><tt>Meta+Ctrl+I</tt></td>
+
+<td><tt>Complete Symbol</tt></td>
+</tr>
+
+<tr>
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>Meta+X</tt></td>
+
+<td><tt>Extended Command</tt></td>
+</tr>
+
+<tr>
+<td></td>
+
+<td></td>
+</tr>
+</table>
+
+<p><tt>The following bindings are "listener specific"</tt>
+<br>&nbsp;
+<table BORDER CELLSPACING=0 WIDTH="100%" >
+<tr>
+<td><b><tt><font size=+1>Key</font></tt></b></td>
+
+<td><b><tt><font size=+1>LispWorks meaning</font></tt></b></td>
+</tr>
+
+<tr>
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>Meta+N</tt></td>
+
+<td><tt>History Next</tt></td>
+</tr>
+
+<tr>
+<td><tt>Meta+P&nbsp;</tt></td>
+
+<td><tt>History Previous</tt></td>
+</tr>
+
+<tr>
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>Meta+K&nbsp;</tt></td>
+
+<td><tt>Throw To Top Level</tt></td>
+</tr>
+
+<tr>
+<td><tt>Meta+Shift+A&nbsp;</tt></td>
+
+<td><tt>Debugger Abort</tt></td>
+</tr>
+
+<tr>
+<td></td>
+
+<td></td>
+</tr>
+
+<tr>
+<td><tt>Return</tt></td>
+
+<td><tt>Execute or Insert Newline or Yank from Previous Prompt</tt></td>
+</tr>
+
+<tr>
+<td></td>
+
+<td></td>
+</tr>
+</table>
+
+<p>
+<hr WIDTH="100%">
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<br>&nbsp;
+<p><b><tt><font size=+1>Approximate equivalents of common Windows bindings</font></tt></b>
+<br>&nbsp;
+<table BORDER CELLSPACING=0 WIDTH="100%" >
+<tr>
+<td><b><tt><font size=+1>Key</font></tt></b></td>
+
+<td><b><tt><font size=+1>Windows meaning</font></tt></b></td>
+
+<td><b><tt><font size=+1>Closest LispWorks equivalent</font></tt></b></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+A</tt></td>
+
+<td><tt>Select all</tt></td>
+
+<td><tt>no simple equivalent - try Ctrl+Home followed by Ctrl+End</tt></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+C</tt></td>
+
+<td><tt>Copy</tt></td>
+
+<td><tt>Meta+W</tt></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+F</tt></td>
+
+<td><tt>Find</tt></td>
+
+<td><tt>Ctrl+S goes forward, Ctrl+R goes backward</tt></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+N</tt></td>
+
+<td><tt>New</tt></td>
+
+<td><tt>use icon on podium</tt></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+O</tt></td>
+
+<td><tt>Open</tt></td>
+
+<td><tt>either use icon on podium or the sequence Ctrl+X Ctrl+F</tt></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+P</tt></td>
+
+<td><tt>Print</tt></td>
+
+<td><tt>the "extended command" Meta+X Print Buffer</tt></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+S</tt></td>
+
+<td><tt>Save</tt></td>
+
+<td><tt>the sequence Ctrl-X Ctrl+S</tt></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+V</tt></td>
+
+<td><tt>Paste</tt></td>
+
+<td><tt>Ctrl+Y</tt></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+X</tt></td>
+
+<td><tt>Cut</tt></td>
+
+<td><tt>Ctrl+W</tt></td>
+</tr>
+
+<tr>
+<td><tt>Ctrl+Z</tt></td>
+
+<td><tt>Undo</tt></td>
+
+<td><tt>Ctrl+_&nbsp; (ie Control-Shift-Minus)</tt></td>
+</tr>
+
+<tr>
+<td><tt>Alt-f4</tt></td>
+
+<td><tt>Quit</tt></td>
+
+<td><tt>the sequence Ctrl+X Ctrl+C</tt></td>
+</tr>
+</table>
+
+<p>
+<hr WIDTH="100%">
+<div align=right>Copyright (C) Nick Levine 1999. All rights reserved.
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/additional/key-binds.html#2 $</div>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/additional/key-binds.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:24:02 GMT -->
+</html>

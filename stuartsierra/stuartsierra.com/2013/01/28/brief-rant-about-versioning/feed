@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: A Brief Rant About Versioning</title>
+	<atom:link href="https://stuartsierra.com/2013/01/28/brief-rant-about-versioning/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2013/01/28/brief-rant-about-versioning</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Christophe Grand</title>
+		<link>https://stuartsierra.com/2013/01/28/brief-rant-about-versioning/comment-page-1#comment-44955</link>
+		<dc:creator><![CDATA[Christophe Grand]]></dc:creator>
+		<pubDate>Fri, 01 Feb 2013 14:47:09 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=688#comment-44955</guid>
+		<description><![CDATA[@Meikel you may not even need to explicitly test for a new feature: just use it. Testing against a known bug, ok. But still &quot;Bug reports&quot; (w/ failing test cases) may be entities of their own bieng &quot;built&quot; by the CI.
+In such a system you would be able to query for projects you just broke with your last commit. It would allow to quantitatively assess breakage, to test between two options etc. 
+I disagree with the statement that the test suite grow to 3x the project size and metatesting – but you already know that :-)]]></description>
+		<content:encoded><![CDATA[<p>@Meikel you may not even need to explicitly test for a new feature: just use it. Testing against a known bug, ok. But still &#8220;Bug reports&#8221; (w/ failing test cases) may be entities of their own bieng &#8220;built&#8221; by the CI.<br />
+In such a system you would be able to query for projects you just broke with your last commit. It would allow to quantitatively assess breakage, to test between two options etc.<br />
+I disagree with the statement that the test suite grow to 3x the project size and metatesting – but you already know that :-)</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Meikel Brandmeyer</title>
+		<link>https://stuartsierra.com/2013/01/28/brief-rant-about-versioning/comment-page-1#comment-44920</link>
+		<dc:creator><![CDATA[Meikel Brandmeyer]]></dc:creator>
+		<pubDate>Tue, 29 Jan 2013 07:05:35 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=688#comment-44920</guid>
+		<description><![CDATA[Or something more radical:
+
+Get rid of version numbers altogether. Just write some tests, which test for the necessary features in your dependencies. A central integration test server will test your software against new releases of your dependencies and tell you immediately any compatibility problems. Should you need a new feature or want a certain bug fixed (or not fixed) just test for it.
+
+Of course the test suite grows to the triple the size of your project just to declare your dependencies. So you extract certain tests into common test suites. But now you start to test the tests...]]></description>
+		<content:encoded><![CDATA[<p>Or something more radical:</p>
+<p>Get rid of version numbers altogether. Just write some tests, which test for the necessary features in your dependencies. A central integration test server will test your software against new releases of your dependencies and tell you immediately any compatibility problems. Should you need a new feature or want a certain bug fixed (or not fixed) just test for it.</p>
+<p>Of course the test suite grows to the triple the size of your project just to declare your dependencies. So you extract certain tests into common test suites. But now you start to test the tests&#8230;</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Laurent Petit</title>
+		<link>https://stuartsierra.com/2013/01/28/brief-rant-about-versioning/comment-page-1#comment-44914</link>
+		<dc:creator><![CDATA[Laurent Petit]]></dc:creator>
+		<pubDate>Mon, 28 Jan 2013 16:58:39 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=688#comment-44914</guid>
+		<description><![CDATA[There&#039;s already the commit SHA1 which uniquely identifies a specific version of the code.
+
+And repo tags to name them in a more understandable form, if one wants.]]></description>
+		<content:encoded><![CDATA[<p>There&#8217;s already the commit SHA1 which uniquely identifies a specific version of the code.</p>
+<p>And repo tags to name them in a more understandable form, if one wants.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Kurtis Rainbolt-Greene</title>
+		<link>https://stuartsierra.com/2013/01/28/brief-rant-about-versioning/comment-page-1#comment-44913</link>
+		<dc:creator><![CDATA[Kurtis Rainbolt-Greene]]></dc:creator>
+		<pubDate>Mon, 28 Jan 2013 16:29:08 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=688#comment-44913</guid>
+		<description><![CDATA[&#062; basically a metadata, has to be put in the source code repository.
+
+I don&#039;t understand, exactly where would you have it? I mean, it has to be linked to the code somehow.]]></description>
+		<content:encoded><![CDATA[<p>&gt; basically a metadata, has to be put in the source code repository.</p>
+<p>I don&#8217;t understand, exactly where would you have it? I mean, it has to be linked to the code somehow.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Kurtis Rainbolt-Greene</title>
+		<link>https://stuartsierra.com/2013/01/28/brief-rant-about-versioning/comment-page-1#comment-44912</link>
+		<dc:creator><![CDATA[Kurtis Rainbolt-Greene]]></dc:creator>
+		<pubDate>Mon, 28 Jan 2013 15:41:56 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=688#comment-44912</guid>
+		<description><![CDATA[&#062; It’s almost impossible to change software without breaking something. 
+
+Sure, if you don&#039;t bother to understand the difference between public and private API.]]></description>
+		<content:encoded><![CDATA[<p>&gt; It’s almost impossible to change software without breaking something. </p>
+<p>Sure, if you don&#8217;t bother to understand the difference between public and private API.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Laurent Petit</title>
+		<link>https://stuartsierra.com/2013/01/28/brief-rant-about-versioning/comment-page-1#comment-44911</link>
+		<dc:creator><![CDATA[Laurent Petit]]></dc:creator>
+		<pubDate>Mon, 28 Jan 2013 15:41:56 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=688#comment-44911</guid>
+		<description><![CDATA[Continuing your rant: I also don&#039;t understand why the version number, which is basically a metadata, has to be put in the source code repository.
+
+This just complicate things:
+
+ have to &quot;guess&quot; the next version number right after having done a release. And generally change the minor number &quot;just in case&quot; we&#039;re wrong. And have to create a separate commit for this mess
+and this does not play well with branches, either
+]]></description>
+		<content:encoded><![CDATA[<p>Continuing your rant: I also don&#8217;t understand why the version number, which is basically a metadata, has to be put in the source code repository.</p>
+<p>This just complicate things:</p>
+<p> have to &#8220;guess&#8221; the next version number right after having done a release. And generally change the minor number &#8220;just in case&#8221; we&#8217;re wrong. And have to create a separate commit for this mess<br />
+and this does not play well with branches, either</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.279 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:01:15 -->
+
+<!-- Compression = gzip -->

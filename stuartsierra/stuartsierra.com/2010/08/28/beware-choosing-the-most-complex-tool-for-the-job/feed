@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Beware Choosing the Most Complex Tool for the Job</title>
+	<atom:link href="https://stuartsierra.com/2010/08/28/beware-choosing-the-most-complex-tool-for-the-job/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2010/08/28/beware-choosing-the-most-complex-tool-for-the-job</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: jonathan</title>
+		<link>https://stuartsierra.com/2010/08/28/beware-choosing-the-most-complex-tool-for-the-job/comment-page-1#comment-43239</link>
+		<dc:creator><![CDATA[jonathan]]></dc:creator>
+		<pubDate>Fri, 01 Oct 2010 10:29:33 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=490#comment-43239</guid>
+		<description><![CDATA[Hi Stuart,
+
+Using Lazytest and loving it so far :)
+I&#039;ve got a question that I wanted to run by you. 
+
+I want to setup a stateful context (lets say a db connection) and then define constants for some data extracted from the db, that I will use in a collection of tests (to stay dry).
+
+I&#039;ve tried the combination of (with (x) (given [y (z @x]) (it ...)) but it does not work (illegal state exception). examining the source, it seems that givens are evaluated before contexts (at macro expand time) so @x is unknown... is this correct? how should I go about resolving this issue?
+
+Should/can I use nested contexts? Not sure if context local bindings will be available in the test case (in the doc, contexts are illustrated with print statements...), and using another stateful context for a constant does not feel right.
+
+Many thanks for the cool tool you&#039;ve crafted. 
+I apologize if this is not the right place to post.
+
+Best
+
+J]]></description>
+		<content:encoded><![CDATA[<p>Hi Stuart,</p>
+<p>Using Lazytest and loving it so far :)<br />
+I&#8217;ve got a question that I wanted to run by you. </p>
+<p>I want to setup a stateful context (lets say a db connection) and then define constants for some data extracted from the db, that I will use in a collection of tests (to stay dry).</p>
+<p>I&#8217;ve tried the combination of (with (x) (given [y (z @x]) (it &#8230;)) but it does not work (illegal state exception). examining the source, it seems that givens are evaluated before contexts (at macro expand time) so @x is unknown&#8230; is this correct? how should I go about resolving this issue?</p>
+<p>Should/can I use nested contexts? Not sure if context local bindings will be available in the test case (in the doc, contexts are illustrated with print statements&#8230;), and using another stateful context for a constant does not feel right.</p>
+<p>Many thanks for the cool tool you&#8217;ve crafted.<br />
+I apologize if this is not the right place to post.</p>
+<p>Best</p>
+<p>J</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Shantanu Kumar</title>
+		<link>https://stuartsierra.com/2010/08/28/beware-choosing-the-most-complex-tool-for-the-job/comment-page-1#comment-43206</link>
+		<dc:creator><![CDATA[Shantanu Kumar]]></dc:creator>
+		<pubDate>Mon, 30 Aug 2010 05:42:34 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=490#comment-43206</guid>
+		<description><![CDATA[&#062; All of a sudden, complexity started to fall away. My protocols, most of which only had a single method anyway,
+&#062; became ordinary functions. My typed data structures became ordinary maps. The code shrank by many lines,
+&#062; and it was vastly easier to understand. Even better, I discovered new possibilities in the simpler design.
+
+Totally agree. This is exactly what I experienced when re-writing SQLRat: http://bitbucket.org/kumarshantanu/sqlrat/src]]></description>
+		<content:encoded><![CDATA[<p>&gt; All of a sudden, complexity started to fall away. My protocols, most of which only had a single method anyway,<br />
+&gt; became ordinary functions. My typed data structures became ordinary maps. The code shrank by many lines,<br />
+&gt; and it was vastly easier to understand. Even better, I discovered new possibilities in the simpler design.</p>
+<p>Totally agree. This is exactly what I experienced when re-writing SQLRat: <a href="http://bitbucket.org/kumarshantanu/sqlrat/src" rel="nofollow">http://bitbucket.org/kumarshantanu/sqlrat/src</a></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: semperos</title>
+		<link>https://stuartsierra.com/2010/08/28/beware-choosing-the-most-complex-tool-for-the-job/comment-page-1#comment-43205</link>
+		<dc:creator><![CDATA[semperos]]></dc:creator>
+		<pubDate>Sun, 29 Aug 2010 00:13:05 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=490#comment-43205</guid>
+		<description><![CDATA[A superb maxim that cannot be understated. I feel that, in any new endeavor I&#039;ve ever started, that the obviously novice mistakes everyone made (including me) were to make things more complex than necessary. Never truer than in programming, especially in functional styles.
+
+Thanks for an interesting post and all your work on Lazytest.]]></description>
+		<content:encoded><![CDATA[<p>A superb maxim that cannot be understated. I feel that, in any new endeavor I&#8217;ve ever started, that the obviously novice mistakes everyone made (including me) were to make things more complex than necessary. Never truer than in programming, especially in functional styles.</p>
+<p>Thanks for an interesting post and all your work on Lazytest.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.271 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:00:36 -->
+
+<!-- Compression = gzip -->

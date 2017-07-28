@@ -1,0 +1,37 @@
+HTTrack3.48-21 launched on Fri, 02 Sep 2016 12:54:57 at https://stuartsierra.com/
+(httrack https://stuartsierra.com/ )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+12:54:59	Warning: 	Note: due to https://stuartsierra.com remote robots.txt rules, links beginning with these path will be forbidden: /wp-admin/ (see in the options to disable this)
+12:56:59	Warning: 	Moved Permanently for https://stuartsierra.com/2014/
+12:56:59	Warning: 	File has moved from https://stuartsierra.com/2014/ to https://stuartsierra.com/2014
+12:57:00	Warning: 	Moved Permanently for https://stuartsierra.com/2013/
+12:57:00	Warning: 	File has moved from https://stuartsierra.com/2013/ to https://stuartsierra.com/2013
+12:57:00	Warning: 	Moved Permanently for https://stuartsierra.com/2012/
+12:57:00	Warning: 	File has moved from https://stuartsierra.com/2012/ to https://stuartsierra.com/2012
+12:57:01	Warning: 	Moved Permanently for https://stuartsierra.com/2011/
+12:57:01	Warning: 	File has moved from https://stuartsierra.com/2011/ to https://stuartsierra.com/2011
+12:57:01	Warning: 	Moved Permanently for https://stuartsierra.com/2010/
+12:57:01	Warning: 	File has moved from https://stuartsierra.com/2010/ to https://stuartsierra.com/2010
+12:57:02	Warning: 	Moved Permanently for https://stuartsierra.com/2009/
+12:57:02	Warning: 	File has moved from https://stuartsierra.com/2009/ to https://stuartsierra.com/2009
+12:57:02	Warning: 	Moved Permanently for https://stuartsierra.com/2008/
+12:57:02	Warning: 	File has moved from https://stuartsierra.com/2008/ to https://stuartsierra.com/2008
+12:57:03	Warning: 	Moved Permanently for https://stuartsierra.com/2007/
+12:57:03	Warning: 	File has moved from https://stuartsierra.com/2007/ to https://stuartsierra.com/2007
+13:01:03	Error: 	"Not Found" (404) at link https://stuartsierra.com/tag/feed (from https://stuartsierra.com/tag/rdf)
+13:03:30	Warning: 	Moved Permanently for stuartsierra.com/?p=31
+13:03:30	Warning: 	Redirected link is identical because of 'URL Hack' option: stuartsierra.com/?p=31 and https://stuartsierra.com/?p=31
+13:03:30	Warning: 	File has moved from stuartsierra.com/?p=31 to https://stuartsierra.com/?p=31
+13:04:22	Warning: 	file not stored in cache due to bogus state (incomplete type with OK (200), size 32): https://stuartsierra.com/maven2/com/stuartsierra/lazytest/1.1.2/lazytest-1.1.2.jar.md5
+13:04:46	Warning: 	file not stored in cache due to bogus state (incomplete type with OK (200), size 32): https://stuartsierra.com/m2snapshots/com/stuartsierra/clojure-hadoop/1.1.0-SNAPSHOT/clojure-hadoop-1.1.0-20100111.213910-2.jar.md5
+13:04:48	Warning: 	file not stored in cache due to bogus state (incomplete type with OK (200), size 32): https://stuartsierra.com/m2snapshots/com/stuartsierra/clojure-hadoop/1.1.0-SNAPSHOT/clojure-hadoop-1.1.0-20100112.162009-3.jar.md5
+13:05:13	Warning: 	file not stored in cache due to bogus state (incomplete type with OK (200), size 32): https://stuartsierra.com/m2snapshots/com/stuartsierra/lazytest/1.0.0-SNAPSHOT/lazytest-1.0.0-20100415.155221-6.jar.md5
+13:05:23	Warning: 	file not stored in cache due to bogus state (incomplete type with OK (200), size 32): https://stuartsierra.com/m2snapshots/com/stuartsierra/lazytest/1.0.0-SNAPSHOT/lazytest-1.0.0-20100730.223707-13.jar.md5
+
+HTTrack Website Copier/3.48-21 mirror complete in 11 minutes 49 seconds : 2202 links scanned, 2190 files written (59760667 bytes overall) [47368021 bytes received at 66809 bytes/sec], 18379242 bytes transferred using HTTP compression in 899 files, ratio 28%, 10.4 requests per connection
+(1 errors, 25 warnings, 0 messages)

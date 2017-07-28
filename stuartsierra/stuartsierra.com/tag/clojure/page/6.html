@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+
+<!-- Mirrored from stuartsierra.com/tag/clojure/page/6 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 17:00:30 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+		<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+<title>Clojure &#8211; Page 6 &#8211; Digital Digressions by Stuart Sierra</title>
+<link rel='dns-prefetch' href='http://s0.wp.com/'>
+<link rel='dns-prefetch' href='http://secure.gravatar.com/'>
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel='dns-prefetch' href='http://s.w.org/'>
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Comments Feed" href="../../../comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Clojure Tag Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/stuartsierra.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.6"}};
+			!function(a,b,c){function d(a){var c,d,e,f,g,h=b.createElement("canvas"),i=h.getContext&&h.getContext("2d"),j=String.fromCharCode;if(!i||!i.fillText)return!1;switch(i.textBaseline="top",i.font="600 32px Arial",a){case"flag":return i.fillText(j(55356,56806,55356,56826),0,0),!(h.toDataURL().length<3e3)&&(i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,65039,8205,55356,57096),0,0),c=h.toDataURL(),i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,55356,57096),0,0),d=h.toDataURL(),c!==d);case"diversity":return i.fillText(j(55356,57221),0,0),e=i.getImageData(16,16,1,1).data,f=e[0]+","+e[1]+","+e[2]+","+e[3],i.fillText(j(55356,57221,55356,57343),0,0),e=i.getImageData(16,16,1,1).data,g=e[0]+","+e[1]+","+e[2]+","+e[3],f!==g;case"simple":return i.fillText(j(55357,56835),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode8":return i.fillText(j(55356,57135),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode9":return i.fillText(j(55358,56631),0,0),0!==i.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity","unicode9"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='twentysixteen-jetpack-css'  href='../../../wp-content/plugins/jetpack/modules/theme-tools/compat/twentysixteen3a05.css?ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-fonts-css'  href='https://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%2C900%2C400italic%2C700italic%2C900italic%7CMontserrat%3A400%2C700%7CInconsolata%3A400&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../../wp-content/plugins/jetpack/_inc/genericons/genericons/genericons128b.css?ver=3.1' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-style-css'  href='../../../wp-content/themes/twentysixteen/style167b.css?ver=4.6' type='text/css' media='all' />
+<!--[if lt IE 10]>
+<link rel='stylesheet' id='twentysixteen-ie-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentysixteen-ie8-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie8.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='twentysixteen-ie7-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie7.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='../../../wp-content/plugins/jetpack/css/jetpack3a05.css?ver=4.2.2' type='text/css' media='all' />
+<script type='text/javascript' src='../../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://stuartsierra.com/wp-content/themes/twentysixteen/js/html5.js?ver=3.7.3'></script>
+<![endif]-->
+<link rel='https://api.w.org/' href='../../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../../wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+
+<link rel='dns-prefetch' href='http://v0.wordpress.com/'>
+</head>
+
+<body class="archive paged tag tag-clojure tag-47 paged-6 tag-paged-6 hfeed">
+<div id="page" class="site">
+	<div class="site-inner">
+		<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+		<header id="masthead" class="site-header" role="banner">
+			<div class="site-header-main">
+				<div class="site-branding">
+					
+											<p class="site-title"><a href="../../../index.html" rel="home">Digital Digressions by Stuart Sierra</a></p>
+											<p class="site-description">From programming to everything else</p>
+									</div><!-- .site-branding -->
+
+									<button id="menu-toggle" class="menu-toggle">Menu</button>
+
+					<div id="site-header-menu" class="site-header-menu">
+													<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Primary Menu">
+								<div class="menu-main-menu-container"><ul id="menu-main-menu" class="primary-menu"><li id="menu-item-635" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../../../about-me.html">About Me</a></li>
+<li id="menu-item-633" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../../../writing.html">Writing</a></li>
+<li id="menu-item-634" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../../../presentations.html">Presentations</a></li>
+<li id="menu-item-636" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../../../software.html">Software</a></li>
+<li id="menu-item-637" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../../../contact.html">Contact</a></li>
+</ul></div>							</nav><!-- .main-navigation -->
+						
+											</div><!-- .site-header-menu -->
+							</div><!-- .site-header-main -->
+
+											<div class="header-image">
+					<a href="../../../index.html" rel="home">
+						<img src="../../../wp-content/uploads/2015/12/header.jpg" srcset="https://stuartsierra.com/wp-content/uploads/2015/12/header-300x70.jpg 300w, https://stuartsierra.com/wp-content/uploads/2015/12/header-768x179.jpg 768w, https://stuartsierra.com/wp-content/uploads/2015/12/header-1024x239.jpg 1024w, https://stuartsierra.com/wp-content/uploads/2015/12/header.jpg 1200w" sizes="(max-width: 709px) 85vw, (max-width: 909px) 81vw, (max-width: 1362px) 88vw, 1200px" width="1200" height="280" alt="Digital Digressions by Stuart Sierra">
+					</a>
+				</div><!-- .header-image -->
+					</header><!-- .site-header -->
+
+		<div id="content" class="site-content">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			<header class="page-header">
+				<h1 class="page-title">Tag: Clojure</h1>			</header><!-- .page-header -->
+
+			
+<article id="post-374" class="post-374 post type-post status-publish format-standard hentry category-programming tag-clojure tag-swing">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2010/01/05/taming-the-gridbaglayout.html" rel="bookmark">Taming the GridBagLayout</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>GUI layout is hard.  You&#8217;d be crazy to do it without a GUI designer like Netbeans.</p>
+<p>Well, I&#8217;m pretty crazy.  So I&#8217;m going to do some GUI layout in <a href="http://clojure.org/">Clojure</a>.  And I&#8217;m going to use the most intimidating of Java&#8217;s GUI layout classes, the <a title="GridBagLayout API docs" href="http://java.sun.com/javase/6/docs/api/java/awt/GridBagLayout.html">GridBagLayout</a>.</p>
+<p>Conceptually, GridBagLayout is pretty straightforward.  It places components on a flexible grid, in which each column and row is automatically sized to fit the largest component.  A set of constraints placed on each component determines its exact placement, size, and alignment.</p>
+<p>The devil, as usual, is in the details.  <a title="GridBagConstraints API docs" href="http://java.sun.com/javase/6/docs/api/java/awt/GridBagConstraints.html">GridBagConstraints</a> has 11 fields and 32 constants to control the layout of each component.  I won&#8217;t try to explain how it works; <a title="GridBagLayout tutorial" href="http://java.sun.com/docs/books/tutorial/uiswing/layout/gridbag.html">read the tutorial</a> a few times instead.</p>
+<p>The problem with GridBagConstraints, from a Clojure point of view, is that it&#8217;s a mutable object with public instance fields.  This isn&#8217;t a problem for concurrency, because the object is used in only one place, but the syntax is awkward:</p>
+<pre>(import 'java.awt.GridBagConstraints)
+(def c (GridBagConstraints.))
+(set! (. c gridx) 1)
+(set! (. c gridy) GridBagConstraints/RELATIVE)</pre>
+<p>Since I will have to do a lot of set!s, I can try to pare it down a bit with a macro:</p>
+<pre>(defmacro set-grid! [constraints field value]
+  `(set! (. ~constraints ~(symbol (name field)))
+         ~(if (keyword? value)
+            `(. java.awt.GridBagConstraints
+                ~(symbol (name value)))
+            value)))</pre>
+<p>This macro takes a field name as a keyword and sets the value of that field.  I used keywords instead of bare symbols because they tend to signal names or constants in Clojure code.</p>
+<p>The macro has one other trick up its sleeve: if the <em>value</em> of a field is a keyword, it gets used as the name of a static field (constant) in GridBagConstraints.</p>
+<p>With this macro, the set!s in the previous example become:</p>
+<pre>(set-grid! c :gridx 1)
+(set-grid! c :gridy :RELATIVE)</pre>
+<p>So far, so good.  But we&#8217;ve only replaced a bunch of set!s with a bunch of set-grid!s.</p>
+<p>What we really want is a terse syntax for specifying constraints.  There are many ways to do this.  I could write a macro that creates a new GridBagConstraints for each component.  But that would require a lot of repetition.</p>
+<p>Often one wants to reuse the same constraint for several components in a row.  The tutorial examples achieve this by using a single instance of GridBagConstraints and modifying its fields for each component.  (The definition of GridBagLayout explicitly permits this.)</p>
+<p>So what I want is a macro that allows me to add components to a container, in any order, specifying only the constraints that need to change for each component.  Here&#8217;s what it will look like:</p>
+<pre>(grid-bag-layout container
+  :gridx 0, :gridy 0
+  component-one
+  :gridx :RELATIVE, :gridwidth 2
+  component-two
+  ;; ... more components &amp; constraints ...
+  )</pre>
+<p>The first argument to the macro is a container with a GridBagLayout as its layout manager.  What follows is a mixture of components and constraints. Each component is added to the layout with the current set of constraints.  A keyword signals a change to a constraint field, and is immediately followed by its value.  Once a field is set, it retains its value until it is set again.</p>
+<p>The line breaks and commas are just whitespace; what matters is the order.</p>
+<p>Here&#8217;s the macro:</p>
+<pre>(defmacro grid-bag-layout [container & body]
+  (let [c (gensym "c")
+        cntr (gensym "cntr")]
+    `(let [~c (new java.awt.GridBagConstraints)
+           ~cntr ~container]
+       ~@(loop [result '() body body]
+           (if (empty? body)
+             (reverse result)
+             (let [expr (first body)]
+               (if (keyword? expr)
+                 (recur (cons `(set-grid! ~c ~expr
+                                          ~(second body))
+                              result)
+                        (next (next body)))
+                 (recur (cons `(.add ~cntr ~expr ~c)
+                              result)
+                        (next body)))))))))</pre>
+<p>You&#8217;ll have to take my word for it that this macro was not especially difficult to write.  As for what it does, it loops through the body and recursively constructs code for the result.  When it encounters a keyword, it uses the set-grid! macro I defined earlier.  Otherwise, it assumes the expression is a component, and adds it to the container.  (The manual gensyms are necessary because of the nested backquotes.)</p>
+<p>Here&#8217;s an example that creates a layout with three buttons, as in this screenshot:</p>
+<p><a href="../../../wp-content/uploads/2010/01/gridbag-demo1.png"><img title="gridbag-demo1" src="../../../wp-content/uploads/2010/01/gridbag-demo1.png" alt="GridBagLayout example" width="150" height="70" /></a></p>
+<pre>(import '(javax.swing JFrame JPanel JButton)
+        '(java.awt GridBagLayout Insets))
+
+(def panel
+     (doto (JPanel. (GridBagLayout.))
+       (grid-bag-layout
+        :fill :BOTH, :insets (Insets. 5 5 5 5)
+        :gridx 0, :gridy 0
+        (JButton. "One")
+        :gridy 1
+        (JButton. "Two")
+        :gridx 1, :gridy 0, :gridheight 2
+        (JButton. "Three"))))
+
+(def frame
+     (doto (JFrame. "GridBagLayout Test")
+       (.setContentPane panel)
+       (.pack)
+       (.setVisible true)))</pre>
+<p>Admittedly, this is not all that much shorter than the equivalent Java code.   But it&#8217;s still shorter, without diminishing the power or flexibility of the original API.</p>
+<p>This is the kind of mini-language for which Lisp is famous.  And it&#8217;s only the beginning.  We could go on to define a more complete, expressive, and functional language for designing GUIs.  But that will have to wait for another post.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2010/01/05/taming-the-gridbaglayout.html" rel="bookmark"><time class="entry-date published" datetime="2010-01-05T16:20:20+00:00">January 5, 2010</time><time class="updated" datetime="2010-01-05T16:24:40+00:00">January 5, 2010</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../clojure.html" rel="tag">Clojure</a>, <a href="../../swing.html" rel="tag">Swing</a></span><span class="comments-link"><a href="../../../2010/01/05/taming-the-gridbaglayout.html#comments">7 Comments<span class="screen-reader-text"> on Taming the GridBagLayout</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-366" class="post-366 post type-post status-publish format-standard hentry category-programming tag-clojure tag-swing">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2010/01/03/doto-swing-with-clojure.html" rel="bookmark">doto Swing with Clojure</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>One of the great things about <a href="http://clojure.org/">Clojure</a> is how it can make Java programming easier and less verbose.</p>
+<p>Take Swing.  It takes a ton of code to render even a simple GUI.  Most tutorials don&#8217;t even tackle it without an IDE like NetBeans.</p>
+<p>But we&#8217;ve got something Java lacks: macros!</p>
+<p>In this post, I&#8217;ll build a simple counter application, using Clojure macros to make the code shorter and simpler.</p>
+<p>Our app has two components: a label showing the current value of the counter, and a button to increment the counter.  Here&#8217;s the basic structure:</p>
+<pre>(import '(javax.swing JLabel JButton JPanel JFrame))
+
+(defn counter-app []
+  (let [label (JLabel. "Counter: 0")
+        button (JButton. "Add 1")
+        panel (JPanel.)
+        frame (JFrame. "Counter App")]
+    (.setOpaque panel true)
+    (.add panel label)
+    (.add panel button)
+    (.setContentPane frame panel)
+    (.setSize frame 300 100)
+    (.setVisible frame true)))
+</pre>
+<p>You can run <strong>counter-app</strong> at the REPL and see the resulting GUI layout, although the button doesn&#8217;t do anything yet.</p>
+<p>The annoying thing about this code is the imperative style Swing forces on us: construct local variables and hammer at them with method calls.</p>
+<p>Fortunately, Clojure has a handy built-in macro for just this kind of situation: <a title="doto API doc" href="http://richhickey.github.com/clojure/clojure.core-api.html#clojure.core/doto">doto</a>.  The <strong>doto</strong> macro takes a body of expressions.  It evaluates the first expression and saves it in a temporary variable, and then inserts that variable as the first argument in each of the following expressions.  Finally, doto returns the value of the temporary variable.  An example will make more sense:</p>
+<pre>;; This code:
+(doto (make-thing)
+ (foo 1 2)
+ (bar 3 4))
+
+;; Expands to this:
+(let [x (make-thing)]
+ (foo x 1 2)
+ (bar x 3 4)
+ x)
+</pre>
+<p>The object created on the first line gets <em>threaded through</em> each of the following expressions and returned at the end.</p>
+<p>We can use this to clean up our counter-app code:</p>
+<pre>(defn counter-app []
+  (let [label (JLabel. "Counter: 0")
+        button (JButton. "Add 1")
+        panel (doto (JPanel.)
+                (.setOpaque true)
+                (.add label)
+                (.add button))]
+    (doto (JFrame. "Counter App")
+      (.setContentPane panel)
+      (.setSize 300 100)
+      (.setVisible true))))
+</pre>
+<p>Notice that we have eliminated one local variable (frame) entirely.  Furthermore, all the expressions dealing with the JPanel are neatly grouped together.</p>
+<p>For this to work out neatly, the order of definitions is important.  We start at the inner-most components, JLabel and JButton, and move outward to the containing window.</p>
+<p>Moving on!  In my <a href="../../../2010/01/02/swing-into-actions-with-clojure.html">last post</a>, I showed you how to proxy ActionListener to handle events like button clicks.  Rather than typing out the proxy code each time, let&#8217;s make a macro:</p>
+<pre>(defmacro on-action [component event &amp; body]
+  `(. ~component addActionListener
+      (proxy [java.awt.event.ActionListener] []
+        (actionPerformed [~event] ~@body))))</pre>
+<p>The <strong>on-action</strong> macro&#8217;s first argument is any component (such as <a title="JButton API docs" href="http://java.sun.com/j2se/1.5.0/docs/api/javax/swing/JButton.html">JButton</a>) that has an addActionListener method.  The <strong>body</strong> of the macro is the code that will be executed when the <a title="ActionListener API docs" href="http://java.sun.com/j2se/1.5.0/docs/api/java/awt/event/ActionListener.html">ActionListener</a> is triggered.  The <strong>event</strong> argument is just a symbol; it will be bound to the <a title="ActionEvent API docs" href="http://java.sun.com/j2se/1.5.0/docs/api/java/awt/event/ActionEvent.html">ActionEvent</a> that triggered the listener.  (We could have used a fixed symbol like &#8220;this&#8221;, but that would be bad macro design.)</p>
+<p>With this macro, the definition of our JButton can look like this:</p>
+<pre>(doto (JButton. "Add 1")
+  (on-action event
+    ;; ... code to run when button is clicked ...
+  ))</pre>
+<p>We&#8217;re almost done!  We just need a place to store the current value of the counter.  Since we&#8217;re not worried about synchronization at this point, we can use an atom:</p>
+<pre>;; Initialize the counter
+(let [counter (atom 0)]
+  ;; ... later on ...
+  ;; Update the counter:
+  (swap! counter inc))
+</pre>
+<p>Bringing it all together, our final app looks like this:</p>
+<pre>(defn counter-app []
+  (let [counter (atom 0)
+        label (JLabel. "Counter: 0")
+        button (doto (JButton. "Add 1")
+                 (on-action evnt  ;; evnt is not used
+                   (.setText label
+                      (str "Counter: " (swap! counter inc)))))
+        panel (doto (JPanel.)
+                (.setOpaque true)
+                (.add label)
+                (.add button))]
+    (doto (JFrame. "Counter App")
+      (.setContentPane panel)
+      (.setSize 300 100)
+      (.setVisible true))))</pre>
+<p>Run <strong>counter-app</strong> at the REPL and you have a working GUI application.  Not bad for about 50 lines!</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2010/01/03/doto-swing-with-clojure.html" rel="bookmark"><time class="entry-date published updated" datetime="2010-01-03T13:34:33+00:00">January 3, 2010</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../clojure.html" rel="tag">Clojure</a>, <a href="../../swing.html" rel="tag">Swing</a></span><span class="comments-link"><a href="../../../2010/01/03/doto-swing-with-clojure.html#comments">5 Comments<span class="screen-reader-text"> on doto Swing with Clojure</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-356" class="post-356 post type-post status-publish format-standard hentry category-programming tag-clojure tag-swing">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2010/01/02/swing-into-actions-with-clojure.html" rel="bookmark">Swing Into Actions with Clojure</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>My <a href="../../../2010/01/02/first-steps-with-clojure-swing.html">previous post</a> left you with a Clojure/Swing GUI consisting of one window and one button.  Boring!  Let&#8217;s make it do something.</p>
+<p>To catch up, start a Clojure REPL and type:</p>
+<pre>(import '(javax.swing JFrame JPanel JButton))
+(def button (JButton. "Click Me!"))
+(def panel (doto (JPanel.)
+             (.add button)))
+(def frame (doto (JFrame. "Hello Frame")
+             (.setSize 200 200)
+             (.setContentPane panel)
+             (.setVisible true)))
+</pre>
+<p>Boom, one window-and-button on the screen.</p>
+<p>Let&#8217;s make our button do something.  First, we&#8217;ll define a function for what we want to do:</p>
+<pre>(import 'javax.swing.JOptionPane)
+(defn say-hello []
+  (JOptionPane/showMessageDialog
+    nil "Hello, World!" "Greeting"
+    JOptionPane/INFORMATION_MESSAGE))</pre>
+<p>You can call the say-hello function directly; it pops up a dialog box, using the utilities in <a title="JOptionPane API docs" href="http://java.sun.com/j2se/1.5.0/docs/api/javax/swing/JOptionPane.html">JOptionPane</a>.</p>
+<p>To connect this function to our button, we have to provide a class implementing the <a title="ActionListener API docs" href="http://java.sun.com/j2se/1.5.0/docs/api/java/awt/event/ActionListener.html">ActionListener</a> interface.  Clojure&#8217;s <strong>proxy</strong> feature is the easiest way to do this:</p>
+<pre>(import 'java.awt.event.ActionListener)
+(def act (proxy [ActionListener] []
+           (actionPerformed [event] (say-hello))))
+</pre>
+<p>Now <strong>act</strong> is an instance of an anonymous class implementing the <strong>actionPerformed</strong> method.  We can attach this class as a <em>listener</em> of our button:</p>
+<pre>(.addActionListener button act)
+</pre>
+<p>And we&#8217;re done!  Click the button, and a dialog box pops up.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2010/01/02/swing-into-actions-with-clojure.html" rel="bookmark"><time class="entry-date published" datetime="2010-01-02T17:47:04+00:00">January 2, 2010</time><time class="updated" datetime="2010-01-03T11:33:42+00:00">January 3, 2010</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../clojure.html" rel="tag">Clojure</a>, <a href="../../swing.html" rel="tag">Swing</a></span><span class="comments-link"><a href="../../../2010/01/02/swing-into-actions-with-clojure.html#comments">4 Comments<span class="screen-reader-text"> on Swing Into Actions with Clojure</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-348" class="post-348 post type-post status-publish format-standard hentry category-programming tag-clojure tag-swing">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2010/01/02/first-steps-with-clojure-swing.html" rel="bookmark">First Steps With Clojure &#038; Swing</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p><a title="The Java Swing Tutorial" href="http://java.sun.com/docs/books/tutorial/uiswing/">Swing</a> is the GUI standard for Java.  <a href="http://clojure.org/">Clojure</a> is the awesomeness standard for Java.  Let&#8217;s make an awesome GUI.</p>
+<h1>Make a Window</h1>
+<p>Interactive development is fun.  Fire up a Clojure REPL, and type this:</p>
+<pre>(import 'javax.swing.JFrame)
+(def frame (JFrame. "Hello Frame"))
+(.setSize frame 200 200)
+(.setVisible frame true)
+</pre>
+<p>Hey Presto, there&#8217;s a window!  (It might not pop to the front, so check your task bar.)</p>
+<p><a title="JFrame API docs" href="http://java.sun.com/j2se/1.5.0/docs/api/javax/swing/JFrame.html">JFrame</a> is Swing&#8217;s all-purpose window class.  This example created a frame, set its dimensions to 200&#215;200 pixels, and &#8220;turned it on&#8221; by calling setVisible.</p>
+<h1>Containers and Frames</h1>
+<p>Our new frame doesn&#8217;t look like much; let&#8217;s give it some content.  More specifically, let&#8217;s give it a <em>container</em>.  Swing GUIs are laid out as a nested hierarchy of containers.  All containers &#8212; <strong>except</strong> the top-level window &#8212; are sub-classes of <a title="JComponent API docs" href="http://java.sun.com/j2se/1.5.0/docs/api/javax/swing/JComponent.html">JComponent</a>.  This is called the <a title="Container hierarchy tutorial" href="http://java.sun.com/docs/books/tutorial/uiswing/components/toplevel.html#general">containment hierarchy</a>.</p>
+<p>Although it&#8217;s technically possible to add GUI elements directly to a top-level container like JFrame, it&#8217;s more correct to use a <a title="Content pane tutorial" href="http://java.sun.com/docs/books/tutorial/uiswing/components/toplevel.html#contentpane">content pane</a>.  We&#8217;ll use JPanel, a general-purpose container:</p>
+<pre>(import 'javax.swing.JPanel)
+(def panel (JPanel.))
+(.setContentPane frame panel)</pre>
+<p>A panel by itself doesn&#8217;t show anything, so lets make a button and add it to the panel.</p>
+<pre>(import 'javax.swing.JButton)
+(def button (JButton. "Click Me!"))
+(.add panel button)
+</pre>
+<p>Hey, it&#8217;s not there!  That&#8217;s because Swing wasn&#8217;t designed with interactive development in mind.  To make your button visible, call:</p>
+<pre>(.revalidate button)
+</pre>
+<p>The <a href="http://java.sun.com/j2se/1.5.0/docs/api/javax/swing/JComponent.html#revalidate%28%29">revalidate method</a> is not something you&#8217;ll read about in most Swing tutorials, because in pre-compiled Java it&#8217;s rarely necessary.  Basically, it tells Swing, &#8220;I just changed the layout, you need to redraw stuff.&#8221;  Starting at our JButton, Swing searches up the containment hierarchy to the top-level container, and redraws it.</p>
+<p>Next step: Action!  My <a href="../../../2010/01/02/swing-into-actions-with-clojure.html">next post</a> will talk about enabling GUI events with ActionListener.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2010/01/02/first-steps-with-clojure-swing.html" rel="bookmark"><time class="entry-date published" datetime="2010-01-02T16:52:32+00:00">January 2, 2010</time><time class="updated" datetime="2010-01-02T17:49:14+00:00">January 2, 2010</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../clojure.html" rel="tag">Clojure</a>, <a href="../../swing.html" rel="tag">Swing</a></span><span class="comments-link"><a href="../../../2010/01/02/first-steps-with-clojure-swing.html#comments">4 Comments<span class="screen-reader-text"> on First Steps With Clojure &#038; Swing</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-336" class="post-336 post type-post status-publish format-standard hentry category-programming tag-clojure tag-oop">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2009/12/14/objects-are-not-adts.html" rel="bookmark">Objects Are Not Abstract Data Types</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>I was lucky enough to see a talk by Barbara Liskov, the grande dame of computer science.  The talk was titled &#8220;The Power of Abstraction,&#8221; and it covered Liskov&#8217;s work on programming languages in the 1970s and 1980s, primarily a language called CLU.</p>
+<p><strong>Update 1/14/2010:</strong> Video of the same talk is available here: <a href="http://www.infoq.com/presentations/liskov-power-of-abstraction">OOPSLA Keynote: The Power Of Abstraction</a></p>
+<p>CLU had a number of interesting features that were ahead of its time &#8212; heap-based garbage collection, typed exceptions, and iterators.  Many of these features made their way into object-oriented languages such as Java.  But CLU itself is not object-oriented.</p>
+<p>Object-oriented languages, Liskov said, tend to conflate the concrete representation of a type with the interface used to access it.  Think of a classic Java class in an introductory OOP text.  The class contains both instance fields and methods to manipulate them.  Even though the fields are private, the interface is tied to a specific implementation.  You can&#8217;t substitute a different implementation, not even by subclassing.</p>
+<p>CLU provides separate structures for fields and methods.  Fields are defined in <em>types</em>, which are more or less like C structs.  Methods are defined in <em>clusters</em>, from which the name CLU derives.  A cluster is a named set of method implementations, associated with one particular type.  Users only work with clusters, not types.  A cluster may be substituted by a another cluster that implements the same methods.</p>
+<p>Why is this interesting now?  Because we&#8217;re just catching up to where Liskov was in the seventies.  Modern Java designs often favor interface-based APIs with no concrete inheritance and no public constructors.</p>
+<p>This is even more interesting to me, because <a href="http://clojure.org/">my favorite programming language</a> will soon have features very similar to CLU&#8217;s types and clusters.  The &#8220;new&#8221; branch of Clojure defines two new abstractions: <a href="http://www.assembla.com/wiki/show/clojure/Datatypes">datatypes</a> and <a href="http://www.assembla.com/wiki/show/clojure/Protocols">protocols</a>.</p>
+<p>A <em>protocol</em> is a set of function signatures, with no implementation.  Conceptually, it&#8217;s similar to a Java interface.  You could use a protocol to define an API to model some real-world object, such as Employee, Department, etc.</p>
+<p>A <em>datatype</em> is a set of named fields, with optional type declarations.  Conceptually, it&#8217;s similar to a C struct.  However, a datatype can also declare support for any number of protocols, and supply methods to implement those protocols.  For example, Clojure will probably have a <em>Countable</em> protocol with a single method <em>count</em>.  Clojure datatypes like Lists and Vectors can provide their own implementations of <em>count</em>.  At that level, the datatype is like a concrete class implementing several interfaces.</p>
+<p>What&#8217;s really cool is that you can <em>extend</em> protocols for existing types, even Java classes.  So, for example, we could implement <em>Countable</em> for java.lang.String by writing a <em>count</em> method that calls String.length().  This means you can create new protocols for Java classes that you do not control.  This is like <em>interface injection</em>, a proposed but as-yet unimplemented feature for Java.</p>
+<p>Protocol method calls are dispatched dynamically based on the type of their first argument, very similar to (and at the same speed as) Java method calls.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2009/12/14/objects-are-not-adts.html" rel="bookmark"><time class="entry-date published" datetime="2009-12-14T15:39:18+00:00">December 14, 2009</time><time class="updated" datetime="2010-01-14T17:02:50+00:00">January 14, 2010</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../clojure.html" rel="tag">Clojure</a>, <a href="../../oop.html" rel="tag">OOP</a></span><span class="comments-link"><a href="../../../2009/12/14/objects-are-not-adts.html#comments">18 Comments<span class="screen-reader-text"> on Objects Are Not Abstract Data Types</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-322" class="post-322 post type-post status-publish format-standard hentry category-programming tag-clojure tag-java tag-owl tag-rdf">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2009/10/08/generating-clojure-from-an-ontology.html" rel="bookmark">Generating Clojure from an Ontology</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>I&#8217;ve been fascinated with RDF for years, but I always end up frustrated when I try to use it.  How do you read/write/manipulate RDF data in code?  Sure, there are lots of libraries, but they all represent RDF data as its primitive structures: statements, resources, literals, etc.  Working with data through these APIs feels like using a <a href="http://en.wikipedia.org/wiki/Glovebox">glovebox</a>.  To get anything useful done, you have to define mappings between RDF properties/classes and normal data structures in your programming language &#8212; classes, maps, lists, whatever.  In effect, you have to define everything twice.</p>
+<p>Some Java APIs allow one to <a href="http://www.semanticuniverse.com/articles-binding-java-objects-rdf.html">add annotation properties</a> to classes and methods, with the annotations defining the mapping between Java objects and RDF triples.  It&#8217;s convenient, and familiar if you&#8217;ve used Java persistence frameworks like Hibernate, but you still have to define everything twice &#8212; once in your RDF schema, once in Java code.</p>
+<p>Other libraries generate Java source code from RDFS or OWL ontologies.  This means you don&#8217;t have to define everything twice, but adds another step to the write-compile-run cycle, and limits you to the semantics that the code generator can understand.  In particular, certain features of RDFS/OWL &#8212; multiple inheritance, sub-properties &#8212; do not map well into Java.</p>
+<p>What I really wanted was a way to create and work with RDF data in <a href="http://clojure.org/">Clojure</a>, using the same map/set/sequence APIs that I use for any other Clojure data structure.  I flirted with <a href="http://github.com/stuartsierra/clojure-rdf">implementing RDF in Clojure</a> but lost interest when I realized that 1) there&#8217;s a lot more to implementing RDF than datatype conversions; and 2) my Clojure library suffered from the same glovebox problem as the Java RDF libraries.</p>
+<p>The solution, however, was staring me in the face all along.  Clojure is a Lisp.  I can generate functions directly, without any intermediate &#8220;source&#8221; representation.  I can use my own customized validation and type-checking functions.  Furthermore, I can extend the definitions in my RDF schema with new Clojure functions.</p>
+<p>Here&#8217;s what I ended up with: I designed a <a href="http://github.com/stuartsierra/altlaw-vocab">simple OWL ontology</a> using <a href="http://protege.stanford.edu/">Protege 4</a> and saved it as RDF/XML.  Then I used the <a href="http://www.openrdf.org/">Sesame 2</a> library to find all the RDF classes and properties defined in my ontology, and create the appropriate getter, setter, and constructor functions in Clojure.  It looks something like this:</p>
+<pre>
+(defn intern-classes [] 
+  (doseq [cls (find-all-classes *ontology*)]
+    (let [name (resource-to-symbol cls)]
+      (intern *ns* name (fn [] {:type name})))))
+</pre>
+<p>The <code>resource-to-symbol</code> function creates a symbol named for the local name of the RDF class, with the full URI of its XML namespace in the symbol&#8217;s metadata.  The call to <code>intern</code> defines a new function that takes no arguments and returns a Clojure map with the symbol as its <code>:type</code>.</p>
+<p>Suppose I have a class named <code>Document</code> in my ontology.  I now have a Clojure function named <code>Document</code> that creates a new instance of that class, represented as a Clojure map.  Furthermore, using <a href="http://clojure.org/multimethods">Clojure hierarchies</a> and the <code>isa?</code> function, I can generate Clojure code that implements the subclass relationships defined in the ontology.  Whee!</p>
+<p>I don&#8217;t entirely know where I&#8217;m headed with this, but I like the way it&#8217;s going.  I can define my own data types, decide how they map to Clojure data structures, and have code that&#8217;s always up-to-date with my RDF vocabulary.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2009/10/08/generating-clojure-from-an-ontology.html" rel="bookmark"><time class="entry-date published" datetime="2009-10-08T14:48:59+00:00">October 8, 2009</time><time class="updated" datetime="2015-08-28T10:55:33+00:00">August 28, 2015</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../clojure.html" rel="tag">Clojure</a>, <a href="../../java.html" rel="tag">Java</a>, <a href="../../owl.html" rel="tag">OWL</a>, <a href="../../rdf.html" rel="tag">RDF</a></span><span class="comments-link"><a href="../../../2009/10/08/generating-clojure-from-an-ontology.html#comments">4 Comments<span class="screen-reader-text"> on Generating Clojure from an Ontology</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-314" class="post-314 post type-post status-publish format-standard hentry category-programming tag-clojure tag-java tag-lisp">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2009/09/22/its-about-the-platform.html" rel="bookmark">It&#8217;s About the Platform</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>I&#8217;ve said <a href="../../../2009/02/22/its-about-the-libraries.html">It&#8217;s About the Libraries</a>, and indeed, one of the major selling points of <a title="Clojure home page" href="http://clojure.org/">Clojure</a> is that it can call Java libraries directly.</p>
+<p>But there&#8217;s more to it than that.  Libraries are just one benefit to building Clojure on top of Java, or, more accurately, on top of <em>Java the platform</em>.</p>
+<p>Look around you, and you&#8217;ll see that 99% of all the software in the world runs on just three platforms:</p>
+<ol>
+<li>Unix/C</li>
+<li>Java Virtual Machine</li>
+<li>.NET Common Language Runtime</li>
+</ol>
+<p>Where did these platforms come from?  Let&#8217;s see:</p>
+<ol>
+<li>AT&amp;T</li>
+<li>Sun</li>
+<li>Microsoft</li>
+</ol>
+<p>Notice something?  All three were all developed by huge corporations.</p>
+<p>Building a new platform isn&#8217;t just about writing the code.  In fact, very little of it is about code.  You need books, articles, conferences, workshops, and university courses.  You need multinational corporations to trust their entire business to your platform.  It takes millions of dollars and tens of thousands of hours of labor to create a new platform.  Think of the massive ad campaigns Sun ran for Java.  Can you do that?  Of course not.</p>
+<p>So when you&#8217;re designing a new language, you have to build on an existing platform.  Most of the so-called &#8220;scripting&#8221; languages grew up on Unix, so they&#8217;re written in C.  Now, Unix/C is a great platform, still going strong after 40 years.  It provides powerful tools and standardized interfaces such as files, sockets, and pipes.</p>
+<p>The problem is that each of the &#8220;scripting&#8221; languages has developed into its own mini-platform.  Perl, Python, and Ruby each define their own set of data structures for fundamental types like strings, lists, and maps.  The only &#8220;types&#8221; that Unix recognizes are text and binary.  You can&#8217;t exchange data between two languages without serializing everything to some agreed-upon format.  And you can&#8217;t do callbacks between languages below the level of a whole process.</p>
+<p>The other problem with languages written in C is, well, C.  Pointers are hard.  Memory management is hard.  I know from bitter experience that Ruby libraries can have segfaults or memory leaks.  That just doesn&#8217;t happen in Java.</p>
+<p>Clojure was created to leverage capabilities of Java-the-platform &#8212; garbage collection, dynamic code generation, JIT compilation, threads, locks &#8212; some of which are difficult to use effectively in Java-the-language.  To implement Clojure in C, for example, you would first have to build your own platform with these features.  That&#8217;s effectively what most Common Lisp implementations do, and they suffer because the Common Lisp world is too small to sustain its own platform.</p>
+<p>The brilliant thing about Java-the-platform is that it allows many languages to coexist.  I can mix code written in Java, Clojure, JRuby, Jython, etc. and it&#8217;s pretty easy, because they all implement the same fundamental interfaces like java.util.List and  java.lang.Runnable.  For example, right now I have Hadoop (Java code) calling Clojure code calling JRuby code.  It all just works.</p>
+<p>(The .NET CLR provides similar capabilities, and there is a Clojure CLR port.)</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2009/09/22/its-about-the-platform.html" rel="bookmark"><time class="entry-date published updated" datetime="2009-09-22T17:55:37+00:00">September 22, 2009</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../clojure.html" rel="tag">Clojure</a>, <a href="../../java.html" rel="tag">Java</a>, <a href="../../lisp.html" rel="tag">Lisp</a></span><span class="comments-link"><a href="../../../2009/09/22/its-about-the-platform.html#comments">1 Comment<span class="screen-reader-text"> on It&#8217;s About the Platform</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-295" class="post-295 post type-post status-publish format-standard hentry category-programming tag-clojure tag-lisp tag-maven">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2009/09/04/cutting-edge-clojure-development-with-maven.html" rel="bookmark">Cutting-Edge Clojure Development with Maven</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>I promised, in my previous post, that I would show you how to use the latest-and-greatest versions of <a title="Clojure home page" href="http://clojure.org/">Clojure</a> and <a title="clojure-contrib home page" href="http://richhickey.github.com/clojure-contrib/">clojure-contrib</a> in your Maven projects.  Here&#8217;s that post.</p>
+<p>Formos Software maintains a Maven server with nightly builds of Clojure and contrib at <a href="http://tapestry.formos.com/maven-snapshot-repository/">http://tapestry.formos.com/maven-snapshot-repository/</a></p>
+<p>Here&#8217;s a complete <em>pom.xml</em> file with dependencies on both Clojure and clojure-contrib:</p>
+<pre>&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;YOUR.GROUP.ID&lt;/groupId&gt;
+  &lt;artifactId&gt;YOUR-PROJECT-NAME&lt;/artifactId&gt;
+  &lt;packaging&gt;jar&lt;/packaging&gt;
+  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+  &lt;name&gt;YOUR-PROJECT-NAME&lt;/name&gt;
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.clojure&lt;/groupId&gt;
+      &lt;artifactId&gt;clojure-lang&lt;/artifactId&gt;
+      &lt;version&gt;1.1.0-alpha-SNAPSHOT&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.clojure&lt;/groupId&gt;
+      &lt;artifactId&gt;clojure-contrib&lt;/artifactId&gt;
+      &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+  &lt;repositories&gt;
+    &lt;repository&gt;
+      &lt;id&gt;tapestry.formos.com&lt;/id&gt;
+      &lt;name&gt;Formos Software snapshot repository&lt;/name&gt;
+      &lt;url&gt;http://tapestry.formos.com/maven-snapshot-repository&lt;/url&gt;
+    &lt;/repository&gt;
+  &lt;/repositories&gt;
+&lt;/project&gt;</pre>
+<p>Yes, that&#8217;s a pile of XML. But it&#8217;s not that complicated once you break it down.  Here&#8217;s what&#8217;s going on:</p>
+<h2>Dependencies</h2>
+<p>The &lt;dependencies&gt; section lists the libraries our project depends on.  We have one &lt;dependency&gt; for Clojure (called <em>clojure-lang</em> in the Formos repository) and one for clojure-contrib.  We&#8217;re depending on <em>SNAPSHOT</em> versions, which tells Maven to follow the most recent version on a particular branch.</p>
+<p>The current development branch of clojure-lang is called <em>1.1.0-alpha-SNAPSHOT</em>. The development branch of contrib, which has never had a formal release, is just <em>1.0-SNAPSHOT</em>.</p>
+<p>How did I find these version numbers?  I just looked at the repository in a web browser.  In the <a title="clojure-lang directory on Formos Maven repository" href="http://tapestry.formos.com/maven-snapshot-repository/org/clojure/clojure-lang/">org/clojure/clojure-lang</a> directory I found directories named for each development branch, <em>1.0-SNAPSHOT</em>, <em>1.0.0-RC1-SNAPSHOT</em>, and <em>1.1.0-alpha-SNAPSHOT</em>.  I chose the latest one, <em>1.1.0-alpha-SNAPSHOT</em>.  Then I did the same with <a title="clojure-contrib directory on Formos Maven repository" href="http://tapestry.formos.com/maven-snapshot-repository/org/clojure/clojure-contrib/">clojure-contrib</a>.</p>
+<p>If you look inside a branch directory like <a title="clojure-lang branch directory on Formos repository" href="http://tapestry.formos.com/maven-snapshot-repository/org/clojure/clojure-lang/1.1.0-alpha-SNAPSHOT/">1.1.0-alpha-SNAPSHOT</a>, you&#8217;ll find hundreds of files, one for each daily snapshot, named with timestamps.</p>
+<h2>Repositories</h2>
+<p>The &lt;repositories&gt; section tells Maven where to look for JAR files to download.  We added the Formos repository by specifying its URL.</p>
+<p>The &lt;id&gt; and &lt;name&gt; tags inside &lt;repository&gt; are purely for our own reference.  Maven only cares about the URL. We could have used any id and name to describe the Formos repository; those names will be used in Maven&#8217;s console logging.</p>
+<h2>Managing Dependency Versions</h2>
+<p>The problem with tracking the latest snapshot is that sometimes there&#8217;s a release that breaks your code.  It might be a bug, or it might just be a change in behavior that makes the library incompatible with previous versions.</p>
+<p>The <a title="Versions Maven Plugin home page" href="http://mojo.codehaus.org/versions-maven-plugin/">Versions Maven Plugin</a> can help to alleviate this problem by &#8220;locking&#8221; dependencies to specific releases and updating them in a controlled way.</p>
+<p>First, we have to make the Versions plugin available to our project.  Do this by adding the following lines just before the final &lt;/project&gt; in your pom.xml:</p>
+<pre>  &lt;pluginRepositories&gt;
+    &lt;pluginRepository&gt;
+      &lt;id&gt;Codehaus&lt;/id&gt;
+      &lt;name&gt;Codehaus Maven Plugin Repository&lt;/name&gt;
+      &lt;url&gt;http://repository.codehaus.org/org/codehaus/mojo&lt;/url&gt;
+    &lt;/pluginRepository&gt;
+  &lt;/pluginRepositories&gt;</pre>
+<p>We&#8217;ve added a &#8220;plugin repository,&#8221; which is just a Maven repository that happens to contain Maven plugins.  (Technically, you don&#8217;t need to add this if your local Maven cache already has a copy of the Versions plugin, but putting it in <em>pom.xml</em> ensures that other developers coming to your project have access to all the same plugins.)</p>
+<p>Now we can use the following mvn command:</p>
+<pre>mvn versions:lock-snapshots</pre>
+<p>This modifies your <em>pom.xml</em> file, setting the version string of every SNAPSHOT dependency to the current snapshot timestamp.  For example, when I run this command, I end up with the following:</p>
+<pre>  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.clojure&lt;/groupId&gt;
+      &lt;artifactId&gt;clojure-lang&lt;/artifactId&gt;
+      &lt;version&gt;1.1.0-alpha-20090904.093041-38&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.clojure&lt;/groupId&gt;
+      &lt;artifactId&gt;clojure-contrib&lt;/artifactId&gt;
+      &lt;version&gt;1.0-20090904.093531-59&lt;/version&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;</pre>
+<p>Now, whenever you build the project, you know exactly which Clojure release you&#8217;re getting.</p>
+<p>So you work with a particular release for a while, then you want to upgrade to the latest one.  No problem!  Just run:</p>
+<pre>mvn versions:unlock-snapshots
+mvn -U install</pre>
+<p>The first command modifies <em>pom.xml</em>, replacing all the timestamped version numbers with <em>SNAPSHOT</em> versions.</p>
+<p>The <em>-U</em> option on the second command forces Maven to check for updated versions of all the snapshot dependencies.</p>
+<p><strong>Note:</strong> Both lock-snapshots and unlock-snapshots create a backup file called <em>pom.xml.versionsBackup</em>.  To remove this file (and accept the Version Plugin&#8217;s changes to your <em>pom.xml</em>) run:</p>
+<pre>mvn versions:commit</pre>
+<p>Likewise, to go back to the <em>pom.xml</em> file you had before the Versions Plugin messed with it, run:</p>
+<pre>mvn versions:revert</pre>
+<h2>Explore</h2>
+<p>There&#8217;s a lot more to the Versions plugin, and to Maven dependency management in general.  Check the <a href="http://mojo.codehaus.org/versions-maven-plugin/">documentation</a> for details.</p>
+<p>Of course, the example here can be combined with the clojure-maven-plugin demonstrated in my previous post.  The syntax of the combined <em>pom.xml</em> file is left as an exercise for the reader.</p>
+<p>One other thing: if you really want the absolute latest, up-to-the-second, still-hot-from-the-github version of something, there&#8217;s nothing for it but to use Git submodules.  I&#8217;ll demonstrate that in another post.</p>
+<div id="_mcePaste" style="overflow: hidden; position: absolute; left: -10000px; top: 0px; width: 1px; height: 1px;">&lt;dependencies&gt;<br />
+&lt;dependency&gt;<br />
+&lt;groupId&gt;org.clojure&lt;/groupId&gt;<br />
+&lt;artifactId&gt;clojure-lang&lt;/artifactId&gt;<br />
+&lt;version&gt;1.1.0-alpha-SNAPSHOT&lt;/version&gt;<br />
+&lt;/dependency&gt;<br />
+&lt;dependency&gt;<br />
+&lt;groupId&gt;org.clojure&lt;/groupId&gt;<br />
+&lt;artifactId&gt;clojure-contrib&lt;/artifactId&gt;<br />
+&lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;<br />
+&lt;/dependency&gt;<br />
+&lt;/dependencies&gt;<br />
+&lt;pluginRepositories&gt;<br />
+&lt;pluginRepository&gt;<br />
+&lt;id&gt;Codehaus&lt;/id&gt;<br />
+&lt;name&gt;Codehaus Maven Plugin Repository&lt;/name&gt;<br />
+&lt;url&gt;http://repository.codehaus.org/org/codehaus/mojo/&lt;/url&gt;<br />
+&lt;/pluginRepository&gt;<br />
+&lt;/pluginRepositories&gt;</div>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2009/09/04/cutting-edge-clojure-development-with-maven.html" rel="bookmark"><time class="entry-date published updated" datetime="2009-09-04T15:13:46+00:00">September 4, 2009</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../clojure.html" rel="tag">Clojure</a>, <a href="../../lisp.html" rel="tag">Lisp</a>, <a href="../../maven.html" rel="tag">Maven</a></span><span class="comments-link"><a href="../../../2009/09/04/cutting-edge-clojure-development-with-maven.html#comments">3 Comments<span class="screen-reader-text"> on Cutting-Edge Clojure Development with Maven</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-275" class="post-275 post type-post status-publish format-standard hentry category-programming tag-clojure tag-lisp tag-maven">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2009/09/03/mavens-not-so-bad.html" rel="bookmark">Maven&#8217;s Not So Bad: Further Thoughts on Clojure Package Management</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Update Sept. 4: <a href="../../../2009/09/04/cutting-edge-clojure-development-with-maven.html">How to get the latest builds of Clojure &amp; Contrib</a></p>
+<p><a title="Maven home page" href="http://maven.apache.org/">Maven</a> is a touchy subject.  People tend to have strong opinions about it.  But like it or not, it&#8217;s the de-facto standard for dependency management in the Java world.  <a title="Clojure home page" href="http://clojure.org/">Clojure</a> lives in the Java world, so that means we have to live with Maven.</p>
+<p>Here are some good things about Maven:</p>
+<ul>
+<li>&#8220;Convention over configuration.&#8221;</li>
+<li>Plugins are downloaded &amp; installed automatically.</li>
+<li>Handles dependencies of dependencies.</li>
+<li>Declarative configuration, not imperative like Ant.</li>
+<li>Only stores one copy of each JAR, shared by all projects.</li>
+</ul>
+<p>Here are some bad things about Maven:</p>
+<ul>
+<li>XML configuration file.</li>
+<li>Verbose command line options.</li>
+<li><del datetime="2009-09-03T22:46:35+00:00">Doesn&#8217;t track latest source code of projects.</del> It does; see comments (Thanks, Tim!)</li>
+<li>First run takes forever to download all the plugins.</li>
+<li>Verbose console output.</li>
+</ul>
+<p>In my estimation, the good outweigh the bad.  And nothing outweighs the huge fact that <em>Maven is already there</em>.</p>
+<p>So let&#8217;s develop a Clojure app using Maven.</p>
+<h2>Step 1: Install Maven.</h2>
+<p>If you don&#8217;t already have it, that is.  This is pretty easy, just visit <a title="Apache Maven home page" href="http://maven.apache.org/">maven.apache.org</a> and follow the instructions.</p>
+<h2>Step 2: Create a new project.</h2>
+<p>Type the following at the command line:</p>
+<pre>mvn archetype:generate</pre>
+<p>Maven will ask a series of questions:</p>
+<ol>
+<li><strong>archetype:</strong> At the <em>&#8220;Choose a number&#8221;</em> prompt, press enter to accept the default project type, <em>maven-archetype-quickstart</em>.</li>
+<li><strong>groupId:</strong> Enter a name to identify yourself in the global Maven namespace.  All your Maven projects will use the same groupId.  This is typically a reverse domain name in the style of Java package names.  For example, I could use the groupId <em>com.stuartsierra</em></li>
+<li><strong>artifactId:</strong> Enter a name to identify this specific project in the Maven repository.  For example, <em>my-great-clojure-library<br />
+</em></li>
+<li><strong>version:</strong> Press enter to accept the default, <em>1.0-SNAPSHOT</em></li>
+<li><strong>package:</strong> Press enter to accept the default, which is the same as your groupId.</li>
+<li><strong>Confirmation: </strong>Press enter.</li>
+</ol>
+<p>Now you have a directory named <em>my-great-clojure-library</em> containing the skeleton of a new Java project.</p>
+<h2>Step 3: Configure your pom.xml.</h2>
+<p>Go into your new project directory and edit the <em>pom.xml</em> file.  The basic information will already be filled out.</p>
+<p>We can remove the dependency on JUnit, so delete these lines:</p>
+<pre>    &lt;dependency&gt;
+      &lt;groupId&gt;junit&lt;/groupId&gt;
+      &lt;artifactId&gt;junit&lt;/artifactId&gt;
+      &lt;version&gt;3.8.1&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;</pre>
+<p>Then we need to add the Clojure Maven plugin, which tells Maven how to compile Clojure source code.  Before the final &lt;/project&gt; tag, add these lines:</p>
+<pre>  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;com.theoryinpractise&lt;/groupId&gt;
+        &lt;artifactId&gt;clojure-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;1.0&lt;/version&gt;
+        &lt;executions&gt;
+          &lt;execution&gt;
+            &lt;id&gt;compile-clojure&lt;/id&gt;
+            &lt;phase&gt;compile&lt;/phase&gt;
+            &lt;goals&gt;
+              &lt;goal&gt;compile&lt;/goal&gt;
+            &lt;/goals&gt;
+          &lt;/execution&gt;
+        &lt;/executions&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;</pre>
+<p>We also need to add Clojure itself as a dependency of our project (the Clojure Maven plugin does not do this automatically).  Inside the &lt;dependencies&gt; tag, add the following lines:</p>
+<pre>    &lt;dependency&gt;
+      &lt;groupId&gt;org.clojure&lt;/groupId&gt;
+      &lt;artifactId&gt;clojure&lt;/artifactId&gt;
+      &lt;version&gt;1.0.0&lt;/version&gt;
+    &lt;/dependency&gt;</pre>
+<p>That&#8217;s if you want the official Clojure 1.0.0 release.  If you want a cutting-edge version, I&#8217;ll explain how in a later post.</p>
+<h2>Step 4: Delete Java sources.</h2>
+<p>Your project directory comes pre-equipped with two Java source directories at <em>src/main/java</em> and <em>src/test/java</em>.  You can delete both of them, unless, of course, you&#8217;re developing a mixed Clojure-Java project.</p>
+<h2>Step 5: Add dependencies.</h2>
+<p>If your project does anything interesting, chances are it&#8217;s going to depend on some external Java libraries.  You can find libraries in the public Maven repositories at <a title="Maven Repository search" href="http://www.mvnrepository.com/">mvnrepository.com</a>.  Search for a library name, and it will show you the code to put in your <em>pom.xml</em> file.</p>
+<p>For example, say we want to use the Apache Commons IO library.  At mvnrepository.com, we find the dependency code for this library:</p>
+<pre>  &lt;dependency&gt;
+    &lt;groupId&gt;commons-io&lt;/groupId&gt;
+    &lt;artifactId&gt;commons-io&lt;/artifactId&gt;
+    &lt;version&gt;1.4&lt;/version&gt;
+  &lt;/dependency&gt;</pre>
+<p>And we can add that inside the &lt;dependencies&gt; section of <em>pom.xml</em>.</p>
+<h2>Step 6: Start coding!</h2>
+<p>Create the directory <em>src/main/clojure</em>.  This is where all your .clj source files will go.</p>
+<p>Follow the standard Clojure/Java convention for file names. That is, if you have a Clojure namespace called <em>my.great.library</em>, it should be in a file named <em>src/main/clojure/my/great/library.clj</em></p>
+<h2>Step 7: Compile and install.</h2>
+<p>Run the following command:</p>
+<pre>mvn install</pre>
+<p>That will compile all your .clj source files into Java .class files, package them into a JAR, and install that JAR in your local Maven cache.  On Unix-like systems, the cache should be at <em>~/.m2/repository/</em></p>
+<h2>Step 8: Live and learn.</h2>
+<p>There&#8217;s a whole lot more to learn about Maven.  It&#8217;s a very flexible tool, and it can do almost anything.  Yes, you will have to write some XML, but it&#8217;s really not that much.</p>
+<p>Things I hope to cover in future posts:</p>
+<ol>
+<li>Using git submodules to track development versions of Clojure libraries.</li>
+<li>Running tests written in Clojure.</li>
+<li>Including .clj source files in your JAR.</li>
+<li>Creating a stand-alone JAR including all dependencies.</li>
+<li>Setting up a private Maven repository.</li>
+</ol>
+<p>I hope this was a reasonable introduction to developing with Maven and Clojure, and that I have shown that Maven isn&#8217;t nearly as scary as people make it out to be.  I think Maven suffered for a long time from poor documentation, but that&#8217;s changing rapidly.  I found the (free) book <a title="Maven Definitive Guide home page" href="http://www.sonatype.com/products/maven/documentation/book-defguide">Maven: The Definitive Guide</a> extremely helpful.</p>
+<h2>Appendix: Complete pom.xml</h2>
+<p>Here&#8217;s the complete pom.xml file for the project I developed in this post:</p>
+<pre>&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;com.stuartsierra&lt;/groupId&gt;
+  &lt;artifactId&gt;my-great-clojure-library&lt;/artifactId&gt;
+  &lt;packaging&gt;jar&lt;/packaging&gt;
+  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+  &lt;name&gt;my-great-clojure-library&lt;/name&gt;
+  &lt;url&gt;http://maven.apache.org&lt;/url&gt;
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.clojure&lt;/groupId&gt;
+      &lt;artifactId&gt;clojure&lt;/artifactId&gt;
+      &lt;version&gt;1.0.0&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;commons-io&lt;/groupId&gt;
+      &lt;artifactId&gt;commons-io&lt;/artifactId&gt;
+      &lt;version&gt;1.4&lt;/version&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;com.theoryinpractise&lt;/groupId&gt;
+        &lt;artifactId&gt;clojure-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;1.0&lt;/version&gt;
+        &lt;executions&gt;
+          &lt;execution&gt;
+            &lt;id&gt;compile-clojure&lt;/id&gt;
+            &lt;phase&gt;compile&lt;/phase&gt;
+            &lt;goals&gt;
+              &lt;goal&gt;compile&lt;/goal&gt;
+            &lt;/goals&gt;
+          &lt;/execution&gt;
+        &lt;/executions&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+&lt;/project&gt;</pre>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2009/09/03/mavens-not-so-bad.html" rel="bookmark"><time class="entry-date published" datetime="2009-09-03T18:38:29+00:00">September 3, 2009</time><time class="updated" datetime="2009-09-05T00:00:00+00:00">September 5, 2009</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../clojure.html" rel="tag">Clojure</a>, <a href="../../lisp.html" rel="tag">Lisp</a>, <a href="../../maven.html" rel="tag">Maven</a></span><span class="comments-link"><a href="../../../2009/09/03/mavens-not-so-bad.html#comments">11 Comments<span class="screen-reader-text"> on Maven&#8217;s Not So Bad: Further Thoughts on Clojure Package Management</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-269" class="post-269 post type-post status-publish format-standard hentry category-programming tag-clojure tag-lisp">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2009/08/31/thoughts-on-clojure-package-management.html" rel="bookmark">Thoughts on Clojure Package Management</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Update Sept. 3: <a href="../../../2009/09/03/mavens-not-so-bad.html">Maven&#8217;s Not So Bad</a>.</p>
+<p>A lot of Ruby types come to <a href="http://clojure.org/">Clojure</a> and ask, &#8220;Where&#8217;s the package manager?&#8221;  The answer is usually, &#8220;Maven or Ivy,&#8221; which isn&#8217;t really an answer.</p>
+<p>I discussed this in the latter half of my Philly Lambda talk (<a href="../../../download/clojure_slides_philly_2009-07-21.pdf">PDF slides</a>).  The problem is that Clojure is built on Java, and any Clojure library that does something interesting is going to need some Java libraries beyond what the JDK provides.</p>
+<p>Java has only one established dependency management system, Maven.  (Ivy is an alternative, but it uses the Maven repositories.)  Maven works, but it&#8217;s a big, complicated beast, built in the best giant-XML-configuration-file Java tradition.  It&#8217;s also slow to accept new libraries into the public repositories.  The <a href="http://repo1.maven.org/maven2/">central Maven 2 repository</a> contains fewer than 700 libraries.  <a href="http://rubyforge.org/">Rubyforge</a>, by contrast, lists over 8,000.</p>
+<p>Maven seems to work well for large organizations that can benefit from setting up their own, private repositories, but it&#8217;s kind of a headache for the independent developer.</p>
+<p>There&#8217;s a <a href="http://github.com/talios/clojure-maven-plugin">Clojure Maven plugin</a>, some shell-based hacks like <a href="http://github.com/technomancy/corkscrew">Corkscrew</a>, and some Ivy-related code floating around, but none really provides what people want: one simple command to download and install all the dependencies for a project, without needing any XML.</p>
+<p>What everyone wants, of course, is <a href="http://cpan.org/">CPAN</a>.  Thousands of documented, tested modules for just about any task you could imagine, and quite a few you couldn&#8217;t (e.g., <a href="http://search.cpan.org/~lbrocard/Acme-Buffy-1.5/lib/Acme/Buffy.pm">Acme::Buffy</a>).</p>
+<p>But CPAN was not created in a day.  Most of its imitators (<a href="http://rubygems.org/">Rubygems</a>, <a href="http://pear.php.net/">PEAR</a>, <a href="http://pypi.python.org/pypi">Python Eggs</a>) have failed to reach the same level of quality.  Perl is also much older, and therefore more stable, than Python or Ruby.  10-year-old Perl code probably still works.</p>
+<p>Part of this CPAN&#8217;s success, I think, has to do with the environment in it evolved.  When Perl was the hot new language, running a web server was an expensive proposition.  Even domain names weren&#8217;t cheap.  If you were going to publish code on the web, there was a cost to doing so, either in time or money, so you wanted to make sure that it was worth publishing.</p>
+<p>These days, when everyone has a blog and a <a href="http://github.com/">Github</a> account, sharing code is easy.  Doing &#8220;git push&#8221; requires almost no thought, no investment of time.  Why not release everything, even when it&#8217;s untested, undocumented, or unfinished?</p>
+<p>So this weekend I started working on a package repository for Clojure.  It was modeled it after CPAN, but designed to support anything that could be packaged in a JAR file, including compiled Java libraries and Clojure source code.</p>
+<p>I got started.  Then I thought, who would actually use this?  Of the few dozen Clojure libraries that have been published on Github, only a handful are &#8220;production-ready.&#8221;  Most aren&#8217;t even finished.  Very few have been thoroughly tested.  (I&#8217;m equally guilty in this regard.)</p>
+<p>I concluded that it&#8217;s just too early.  Clojure is a scarcely two years old.  It just released &#8220;1.0&#8221; this year, and is still developing rapidly.  The libraries are evolving equally rapidly.  If you want to build a project using, say, <a href="http://github.com/weavejester/compojure">Compojure</a>, the best way to do it is with <a href="http://gaarai.com/2009/04/20/git-submodules-adding-using-removing-and-updating/">Git submodules</a>.</p>
+<p>The one place a package manager would really be useful is in downloading and installing the standard Java packages that get used in almost every project, like the Apache Commons libraries.  For this, Maven/Ivy works, if not brilliantly.</p>
+<p>Update: another Maven helper: <a href="http://github.com/dysinger/clojure-pom">Clojure-POM</a></p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2009/08/31/thoughts-on-clojure-package-management.html" rel="bookmark"><time class="entry-date published" datetime="2009-08-31T12:13:49+00:00">August 31, 2009</time><time class="updated" datetime="2009-09-05T00:01:32+00:00">September 5, 2009</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../clojure.html" rel="tag">Clojure</a>, <a href="../../lisp.html" rel="tag">Lisp</a></span><span class="comments-link"><a href="../../../2009/08/31/thoughts-on-clojure-package-management.html#comments">11 Comments<span class="screen-reader-text"> on Thoughts on Clojure Package Management</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+	<nav class="navigation pagination" role="navigation">
+		<h2 class="screen-reader-text">Posts navigation</h2>
+		<div class="nav-links"><a class="prev page-numbers" href="5.html">Previous page</a>
+<a class='page-numbers' href='../index.html'><span class="meta-nav screen-reader-text">Page </span>1</a>
+<span class="page-numbers dots">&hellip;</span>
+<a class='page-numbers' href='5.html'><span class="meta-nav screen-reader-text">Page </span>5</a>
+<span class='page-numbers current'><span class="meta-nav screen-reader-text">Page </span>6</span>
+<a class='page-numbers' href='7.html'><span class="meta-nav screen-reader-text">Page </span>7</a>
+<a class="next page-numbers" href="7.html">Next page</a></div>
+	</nav>
+		</main><!-- .site-main -->
+	</div><!-- .content-area -->
+
+
+	<aside id="secondary" class="sidebar widget-area" role="complementary">
+		<section id="search-3" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://stuartsierra.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+	</label>
+	<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</section><section id="text-4" class="widget widget_text">			<div class="textwidget"><ul>
+<li><a href="http://feeds2.feedburner.com/StuartSierra" title="Syndicate this site using RSS 2.0">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="../../../comments/feed" title="The latest comments to all posts in RSS">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+</ul>
+<ul>
+<li><a href="https://twitter.com/stuartsierra">Twitter</a></li>
+<li><a href="https://github.com/stuartsierra">GitHub</a></li>
+</ul></div>
+		</section><section id="tag-widget-2" class="widget TagWidget"><h2 class="widget-title">Clojure Do’s and Don’ts</h2><ul class = "posts-by-tag-list"><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-883"><a class = "posts-by-tag-item-title" href="../../../2015/08/25/clojure-donts-lazy-effects.html">Clojure Don’ts: Lazy Effects</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-877"><a class = "posts-by-tag-item-title" href="../../../2015/08/10/clojure-donts-redundant-map.html">Clojure Don’ts: Redundant map</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-870"><a class = "posts-by-tag-item-title" href="../../../2015/06/16/clojure-donts-single-branch-if.html">Clojure Don’ts: Single-branch if</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-854"><a class = "posts-by-tag-item-title" href="../../../2015/06/10/clojure-donts-heisenparameter.html">Clojure Don’ts: The Heisenparameter</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-849"><a class = "posts-by-tag-item-title" href="../../../2015/06/01/clojure-donts-optional-arguments-with-varargs.html">Clojure Don’ts: Optional Arguments with Varargs</a></li><li class="posts-by-tag-item Clojure do's and don'ts errors" id="posts-by-tag-item-836"><a class = "posts-by-tag-item-title" href="../../../2015/05/27/clojure-uncaught-exceptions.html">Clojure Do’s: Uncaught Exceptions</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-831"><a class = "posts-by-tag-item-title" href="../../../2015/05/17/clojure-record-constructors.html">Record Constructors</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-826"><a class = "posts-by-tag-item-title" href="../../../2015/05/10/clojure-namespace-aliases.html">Clojure Do’s: Namespace Aliases</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-820"><a class = "posts-by-tag-item-title" href="../../../2015/05/02/clojure-donts-isa.html">Clojure Don’ts: isa?</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-812"><a class = "posts-by-tag-item-title" href="../../../2015/04/26/clojure-donts-concat.html">Clojure Don’ts: Concat</a></li></ul></section>	</aside><!-- .sidebar .widget-area -->
+
+		</div><!-- .site-content -->
+
+		<footer id="colophon" class="site-footer" role="contentinfo">
+							<nav class="main-navigation" role="navigation" aria-label="Footer Primary Menu">
+					<div class="menu-main-menu-container"><ul id="menu-main-menu-1" class="primary-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../../../about-me.html">About Me</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../../../writing.html">Writing</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../../../presentations.html">Presentations</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../../../software.html">Software</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../../../contact.html">Contact</a></li>
+</ul></div>				</nav><!-- .main-navigation -->
+			
+			
+			<div class="site-info">
+								<span class="site-title"><a href="../../../index.html" rel="home">Digital Digressions by Stuart Sierra</a></span>
+				<a href="https://wordpress.org/">Proudly powered by WordPress</a>
+			</div><!-- .site-info -->
+		</footer><!-- .site-footer -->
+	</div><!-- .site-inner -->
+</div><!-- .site -->
+
+	<div style="display:none">
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	</div>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201635'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2016Sepaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../../../wp-content/plugins/jetpack/modules/wpgroho167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../wp-content/themes/twentysixteen/js/skip-link-focus-fix8de4.js?ver=20160816'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var screenReaderText = {"expand":"expand child menu","collapse":"collapse child menu"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../../../wp-content/themes/twentysixteen/js/functions8de4.js?ver=20160816'></script>
+<script type='text/javascript' src='../../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='https://stats.wp.com/e-201635.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.2.2',blog:'2702563',post:'0',tz:'-4',srv:'stuartsierra.com'} ]);
+	_stq.push([ 'clickTrackerInit', '2702563', '0' ]);
+</script>
+</body>
+
+<!-- Mirrored from stuartsierra.com/tag/clojure/page/6 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 17:00:34 GMT -->
+</html>
+
+<!-- Dynamic page generated in 0.431 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:57:31 -->
+
+<!-- Compression = gzip -->

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/making-decisions-under-pressure by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:53 GMT -->
+<head>
+    <title> Making decisions under pressure </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="making-decisions-under-pressure.html">
+    <meta property="og:title" content="Making decisions under pressure">
+    <meta property="og:description" content="Imagine that you're working on an application that help peoples find nearby yard sales.">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Making decisions under pressure" />
+	<meta name="twitter:description" content="Imagine that you're working on an application that help peoples find nearby yard sales" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> April 14, 2016 </div>
+            <h1 class="subject"> Making decisions under pressure </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> Imagine that you&#39;re working on an application that help peoples find nearby yard sales.<br>
+<br>
+The home page for your site is a giant map with pins identifying each yard sale, and it uses a combination of IP and browser based&nbsp;geolocation to automatically select a location to display.<br>
+<br>
+The code that&#39;s being used for geolocation just produces a lat/long coordinate, and so to fill out the search field on the home page with a useful place name, it needs to be reverse geocoded. This process is currently being done server-side, and we&#39;ll soon see how that can lead to big headaches.<br>
+<br>
+The reverse-geocoding API is fairly slow to respond, and a few weeks ago as your site started to get more traffic, requests started queueing up leading to a very slow load time for the homepage. So you did what any good engineer would do: You doubled the number of server instances to field more requests simultaneously.<br>
+<br>
+That worked, for a little while. Then today, some super famous incredibly important yard salin&#39; newsletter linked to your site, and traffic spiked like crazy. You again, did what the responsible engineer might do and doubled the number of server instances again. For about ten minutes, this seemed to stabilize things.<br>
+<br>
+Then the alert emails starting coming in. The home page is responding with a 500 error! The exception reports are showing that the library you&#39;re using for the reverse geocoding API is raising an exception. This means that all visitors are seeing a generic &quot;We&#39;re sorry, something went wrong&quot; page instead of enjoying your amazing website.<br>
+<br>
+Those emails keep coming and coming. Now you have two problems: A broken home page, and a soon-to-be-broken and clearly misconfigured exception monitoring system.<br>
+<br>
+It&#39;s time to put this fire out, and your smoke detector is also on fire. So where do you begin? Are there questions you need answered first? Or are there simple actions you can take that will end the state of emergency so that you can think properly?<br>
+<br>
+-greg<br>
+<br>
+PS: I read and respond to all replies to these emails. Please share your thoughts! </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="graceful-degradation-as-a-first-response-in-emergencies.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="building-a-better-timeclock-with-event-modeling.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/making-decisions-under-pressure by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:53 GMT -->
+</html>

@@ -1,0 +1,107 @@
+(in-package "LW-P4")
+
+(defun p4-configs (here)
+  (when-let (p4-config (or (environment-variable "P4CONFIG")
+			   #+win32 #+win32
+                           (win32:registry-value "Software\\perforce\\environment" "P4CONFIG"
+                                                 :expected-type :string :errorp nil :root :local-machine)
+                           (win32:registry-value "Software\\perforce\\environment" "P4CONFIG"
+                                                 :expected-type :string :errorp nil)))
+    (let ((directory (pathname-directory here)))
+      (loop (let ((config-file (make-pathname :directory directory
+                                              :name (pathname-name p4-config)
+                                              :type (pathname-type p4-config)
+                                              :defaults here)))
+              (when (probe-file config-file)
+                (return
+                 (with-open-file (in config-file)
+                   (loop for line = (read-line in nil)
+                         while line
+                         for equals = (position #\= line)
+                         collect (intern (subseq line 0 equals) :keyword)
+                         collect (subseq line (1+ equals)))))))
+            (unless (setf directory (butlast directory))
+              (return))))))
+
+(defvar *last-command* nil)
+
+(defun p4-run (command &key form)
+  (let* ((current-location (truename (pathname-location (or (editor:buffer-pathname (editor:current-buffer))
+                                                            (sys:current-directory)))))
+         (configs (p4-configs current-location))
+         (input (when form (namestring (make-temp-file))))
+         (output (namestring (make-temp-file)))
+         (full-command (format nil "p4 -G ~{~a ~}~a~@[ < ~a~] > ~a"
+                               (reverse (loop for (key . arg) in '((:p4port . "-p")
+                                                                   (:p4user . "-u")
+                                                                   (:p4client . "-c"))
+                                              when (getf configs key) collect it and collect arg))
+                               command input output)))
+    (unwind-protect
+        (progn
+          (when form
+            (with-open-file (ostream input :direction :output :element-type '(unsigned-byte 8) :if-exists :supersede)
+              (marshal form ostream)))
+          (sys:call-system-showing-output full-command)
+          (let ((result (with-open-file (istream output :element-type '(unsigned-byte 8))
+                          (unmarshal istream))))
+            (setf *last-command* (cons form result))
+            result))
+      (when input (delete-file input))
+      (delete-file output))))
+
+(defun p4-info ()
+  (p4-run "info"))
+
+(defun p4-edit (file)
+  (p4-run (format nil "edit \"~a\""
+                  (namestring (truename file)))))
+
+(defun p4-opened (all-p)
+  (let ((opened (p4-run (if all-p
+                            "opened"
+                          "opened -cdefault"))))
+    (format nil "~{~a: ~a~^~%~}"
+            (loop for entry in opened
+                  collect
+                  (gethash "action" entry)
+                  collect
+                  (gethash "depotFile" entry)))))
+
+
+;;;;;;;;;;;;;;;;;
+
+;; COPYRIGHT AND LICENCE
+;;
+;; This file is copyright (c) 2003 - 2011, Nick Levine.  All rights
+;; reserved.
+;;
+;; Redistribution and use in source and binary forms, with or without
+;; modification, are permitted provided that the following conditions are
+;; met:
+;;
+;; 1.  Redistributions of source code must retain the above copyright
+;;     notice, this list of conditions and the following disclaimer.
+;;
+;; 2.  Redistributions in binary form must reproduce the above copyright
+;;     notice, this list of conditions and the following disclaimer in
+;;     the documentation and/or other materials provided with the
+;;     distribution.
+;;
+;; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+;; "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+;; LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+;; A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+;; HOLDERS AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+;; INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+;; BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+;; OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+;; ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+;; TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+;; USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+;; DAMAGE.
+
+;; $Id: //info.ravenbrook.com/user/ndl/lisp/lw-p4/p4.lisp#5 $
+
+
+

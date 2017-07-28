@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns#">
+
+<!-- Mirrored from malisper.me/2015/11/24/loops-lisp-part-1-goto/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:46:33 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loops in Lisp Part 1: Goto - Macrology</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="../../../../xmlrpc.php">
+
+
+<!-- This site is optimized with the Yoast SEO plugin v3.4.2 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="At its core, Common Lisp provides two primitives for performing iteration. One of those primitives is recursion. Recursion is an amazing technique, but the"/>
+<meta name="robots" content="noodp"/>
+<link rel="canonical" href="index.html" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Loops in Lisp Part 1: Goto - Macrology" />
+<meta property="og:description" content="At its core, Common Lisp provides two primitives for performing iteration. One of those primitives is recursion. Recursion is an amazing technique, but the" />
+<meta property="og:url" content="index.html" />
+<meta property="og:site_name" content="Macrology" />
+<meta property="article:section" content="Basic Macros" />
+<meta property="article:published_time" content="2015-11-24T10:00:44-05:00" />
+<meta property="article:modified_time" content="2015-11-22T15:29:38-05:00" />
+<meta property="og:updated_time" content="2015-11-22T15:29:38-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:description" content="At its core, Common Lisp provides two primitives for performing iteration. One of those primitives is recursion. Recursion is an amazing technique, but the" />
+<meta name="twitter:title" content="Loops in Lisp Part 1: Goto - Macrology" />
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Feed" href="../../../../feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Comments Feed" href="../../../../comments/feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Loops in Lisp Part 1: Goto Comments Feed" href="feed/index.html" />
+<link rel='stylesheet' id='scrawl-style-css'  href='../../../../wp-content/themes/scrawl-wpcom/style167b.css?ver=4.6' type='text/css' media='all' />
+<link rel='stylesheet' id='scrawl-fonts-css'  href='https://fonts.googleapis.com/css?family=Lora:400,700|Merriweather:400italic,400,700,700italic&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../../../wp-content/themes/scrawl-wpcom/fonts/genericons6de8.css?ver=3.3' type='text/css' media='all' />
+<script type='text/javascript' src='../../../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<link rel='https://api.w.org/' href='../../../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../../../wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+<link rel='shortlink' href='../../../../index7681.html?p=1106' />
+<link rel="alternate" type="application/json+oembed" href="../../../../wp-json/oembed/1.0/embed75fe.json?url=http%3A%2F%2Fmalisper.me%2F2015%2F11%2F24%2Floops-lisp-part-1-goto%2F" />
+<link rel="alternate" type="text/xml+oembed" href="../../../../wp-json/oembed/1.0/embeddc7f?url=http%3A%2F%2Fmalisper.me%2F2015%2F11%2F24%2Floops-lisp-part-1-goto%2F&amp;format=xml" />
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-63547056-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<style type="text/css" id="syntaxhighlighteranchor"></style>
+
+<script type="text/javascript">
+  window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var n=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(n?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var o=document.getElementsByTagName("script")[0];o.parentNode.insertBefore(a,o);for(var r=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["clearEventProperties","identify","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=r(p[c])};
+    heap.load("931515525");
+</script>
+</head>
+
+<body class="single single-post postid-1106 single-format-standard">
+	<button class="menu-toggle x">
+		<span class="lines"></span>
+		<span class="screen-reader-text">Primary Menu</span>
+	</button>
+	<div class="slide-menu">
+				
+		<h1 class="site-title"><a href="../../../../index.html" rel="home">Macrology</a></h1>
+		<h2 class="site-description">Case Studies in Lisp Macros</h2>
+		
+				
+				
+			<div id="secondary" class="widget-area" role="complementary">
+		<aside id="search-2" class="widget widget_search"><form role="search" method="get" class="search-form" action="http://malisper.me/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form></aside><aside id="pages-3" class="widget widget_pages"><h1 class="widget-title">Pages</h1>		<ul>
+			<li class="page_item page-item-55"><a href="../../../../about-me/index.html">About Michael Malis</a></li>
+<li class="page_item page-item-44"><a href="../../../../about-this-site-2/index.html">About This Site</a></li>
+		</ul>
+		</aside><aside id="nav_menu-3" class="widget widget_nav_menu"><h1 class="widget-title">Contact Me</h1><div class="menu-contact-me-container"><ul id="menu-contact-me" class="menu"><li id="menu-item-60" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-60"><a href="mailto:michaelmalis2@gmail.com">Email</a></li>
+<li id="menu-item-58" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-58"><a href="https://github.com/malisper">Github</a></li>
+<li id="menu-item-59" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-59"><a href="https://news.ycombinator.com/user?id=malisper">Hacker News</a></li>
+</ul></div></aside><aside id="archives-2" class="widget widget_archive"><h1 class="widget-title">Archives</h1>		<ul>
+			<li><a href='../../../../2016/06/index.html'>June 2016</a></li>
+	<li><a href='../../../../2016/04/index.html'>April 2016</a></li>
+	<li><a href='../../../../2016/01/index.html'>January 2016</a></li>
+	<li><a href='../../../12/index.html'>December 2015</a></li>
+	<li><a href='../../index.html'>November 2015</a></li>
+	<li><a href='../../../10/index.html'>October 2015</a></li>
+	<li><a href='../../../09/index.html'>September 2015</a></li>
+	<li><a href='../../../08/index.html'>August 2015</a></li>
+	<li><a href='../../../07/index.html'>July 2015</a></li>
+	<li><a href='../../../06/index.html'>June 2015</a></li>
+	<li><a href='../../../05/index.html'>May 2015</a></li>
+		</ul>
+		</aside><aside id="categories-2" class="widget widget_categories"><h1 class="widget-title">Categories</h1>		<ul>
+	<li class="cat-item cat-item-2"><a href="../../../../category/basics/index.html" title="These are basic Lisp macros that should be trivial to understand.">Basic Macros</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="../../../../category/intermediate-macros/index.html" >Intermediate Macros</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="../../../../category/advanced-macros/index.html" >Advanced Macros</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="../../../../category/debugging-common-lisp/index.html" >Debugging Lisp</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="../../../../category/loops-in-lisp/index.html" >Loops in Lisp</a>
+</li>
+		</ul>
+</aside>	</div><!-- #secondary -->
+	</div><!-- .slide-menu -->
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<header id="masthead" class="site-header" role="banner">
+
+		<div class="site-branding">
+						<h1 class="site-title"><a href="../../../../index.html" rel="home">Macrology</a></h1>
+		</div>
+
+	</header><!-- #masthead -->
+
+	
+	
+	<div id="content" class="site-content">
+
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			<article id="post-1106" class="post-1106 post type-post status-publish format-standard hentry category-basics category-loops-in-lisp">
+			<header class="entry-header">
+			<h1 class="entry-title">Loops in Lisp Part 1: Goto</h1>		</header><!-- .entry-header -->
+		<div class="entry-content">
+		<p>At its core, Common Lisp provides two primitives for performing iteration. The first of those primitives is recursion. Recursion is an amazing technique, but in this post I am going to focus on the other primitive &#8211; goto.</p>
+<p>Goto is extremely powerful. It lets you manipulate the control flow of your program in anyway you can think of. This freedom to do whatever you want is also what makes goto so dangerous. In any given piece of code that uses goto, it is difficult to tell what the purpose of the goto is because it could be used for so many different reasons. Because of this, most languages provide various kinds of builtin loops instead of providing raw goto. Even though loops aren&#8217;t as general as goto, they express the intention of the code much more clearly.</p>
+<p>As an example, let&#8217;s say you want to print all of the characters in a file. If your language provided while loops, you could do this by printing characters from the file one at a time while there are more characters left. If Common Lisp had while loops,<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='#easy-footnote-bottom-1' title='Common Lisp does provide the do macro, which can be used as a while loop. I&#8217;m not mentioning it for pedagogical reasons.'><sup>1</sup></a></span> the code for this procedure would look like this:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(while (peek-char file nil nil)
+  (write-char (read-char file)))
+</pre>
+<p>If your language only had goto, it becomes much more difficult to implement the procedure. In the end, you have to, in some way, simulate a while loop. One way to code the procedure with just goto is the following. First check if there are any characters left in the file. If there aren&#8217;t any, goto the end. Otherwise print the next character and go back to the start. Here is Common Lisp code that implements this:<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='#easy-footnote-bottom-2' title='In Common Lisp, you need to use tagbody when creating labels because otherwise the labels would be interpreted as variables to be evaluated.'><sup>2</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(tagbody
+  start
+  (if (not (peek-char file nil nil))
+      (go end))
+  (write-char (read-char file))
+  (go start)
+  end)
+</pre>
+<p>Not only is the version with goto much more verbose, it is also much harder to understand. The code lacks clarity because goto is so general. It gives you no context into how it is being used. The reader of the code will have to think about the positioning of all of the gotos before they can think about the overall flow of the program. On the other hand, in the version with the while loop, merely the fact that a while loop is being used gives whoever is reading the code a decent idea of the control flow.</p>
+<p>In reality all loops are eventually compiled down to gotos. Whenever the compiler for a language that provides loops sees a loop, it generates code that simulates the loop through goto. You can do the same thing with Lisp macros!</p>
+<p>If you don&#8217;t know, Lisp macros are compile time functions which take code as their input and return code as their output. When Lisp code is being compiled, all of the macros in the code are called and each one is replaced with its result. This means you can write a macro that looks like a while loop when you use it, but at compile time generates code to simulate a while loop through goto. You are in effect adding while loops to the Lisp compiler! Here is code that defines such a macro:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defmacro while (test &amp;body body)
+  (let ((gtop (gensym))
+        (gend (gensym)))
+    `(tagbody
+       ,gtop
+       (if (not ,test)
+           (go ,gend))
+       ,@body
+       (go ,gtop)
+       ,gend)))
+</pre>
+<p>With this macro, the first code example is now valid lisp code! The <strong>while </strong>macro takes as arguments a test and a body. It then generates code that uses the method used in the second example to simulate a while loop with goto. You can actually see what the first example looks like after expanding the macro by using the function <strong>macroexpand</strong>. Here is what the generated code looks like:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(tagbody
+  #:g729
+  (if (not (peek-char file nil nil))
+      (go #:g730))
+  (write-char (read-char file))
+  (go #:g729)
+  #:g730)
+</pre>
+<p>The generated code is the exact same as the code in the second example except for the names of the labels. This means the two examples are the same functionally! The only real difference between them is that the first one is expressed in terms of loops, and the second one is expressed in terms of goto. Since it is so much easier to think in terms of loops than goto, there is no reason why you wouldn&#8217;t use the first example over the second.</p>
+<p>Macros allow you to build any feature you want as long as it is possible to simulate that feature through lower level features. With respect to goto, this means you can build any kind of control flow construct you want by simulating it with goto and then putting a macro on top. In Common Lisp, all of the looping constructs (<strong>do</strong>, <strong>do*</strong>, <strong>dotimes</strong>, <strong>dolist</strong>, <strong>loop</strong>) are really just macros that expand into goto. This is what Alan Kay meant when he said &#8220;Lisp isn&#8217;t a language, it&#8217;s a building material&#8221;. It bears repeating. In Lisp, you can build any feature you want as long as it is possible to simulate that feature in terms of lower level features.</p>
+<ol class="easy-footnotes-wrapper"><li class="easy-footnote-single"><span id="easy-footnote-bottom-1" class="easy-footnote-margin-adjust"></span>Common Lisp does provide the do macro, which can be used as a while loop. I&#8217;m not mentioning it for pedagogical reasons.<a class="easy-footnote-to-top" href="#easy-footnote-1"></a></li><li class="easy-footnote-single"><span id="easy-footnote-bottom-2" class="easy-footnote-margin-adjust"></span>In Common Lisp, you need to use tagbody when creating labels because otherwise the labels would be interpreted as variables to be evaluated.<a class="easy-footnote-to-top" href="#easy-footnote-2"></a></li></ol>			</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="index.html" rel="bookmark"><time class="entry-date published" datetime="2015-11-24T10:00:44+00:00">November 24, 2015</time><time class="updated" datetime="2015-11-22T15:29:38+00:00">November 22, 2015</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../../../author/malisper/index.html">malisper</a></span></span><span class="category-links"> in <a href="../../../../category/basics/index.html" rel="category tag">Basic Macros</a>, <a href="../../../../category/loops-in-lisp/index.html" rel="category tag">Loops in Lisp</a></span>			<span class="secondary-entry-meta">
+								<span class="comments-link"><a href="index.html#comments">6</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+			
+	<nav class="navigation post-navigation" role="navigation">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="../../10/defmemo/index.html" rel="prev"><span class="title">Previous post</span>Defmemo</a></div><div class="nav-next"><a href="../../../12/15/loops-in-lisp-part-2-loop/index.html" rel="next"><span class="title">Next post</span>Loops in Lisp Part 2: Loop</a></div></div>
+	</nav>
+			
+<div id="comments" class="comments-area">
+
+	
+			<h2 class="comments-title">
+			6 thoughts on &ldquo;<span>Loops in Lisp Part 1: Goto</span>&rdquo;		</h2>
+
+		<ol class="comment-list">
+					<li id="comment-1781" class="comment even thread-even depth-1">
+			<article id="div-comment-1781" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://0.gravatar.com/avatar/0f54d6b36e7d83288a5f02d33bafa014?s=64&amp;d=mm&amp;r=g' srcset='http://0.gravatar.com/avatar/0f54d6b36e7d83288a5f02d33bafa014?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">PuercoPop</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-1781">
+							<time datetime="2015-11-24T11:26:05+00:00">
+								November 24, 2015 at 11:26 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>One may argue that recursion in CL is not a provided primitive as tail call elimination is not guaranteed so it is not encouraged.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='index30f5.html?replytocom=1781#respond' onclick='return addComment.moveForm( "div-comment-1781", "1781", "respond", "1106" )' aria-label='Reply to PuercoPop'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-1784" class="comment odd alt thread-odd thread-alt depth-1 parent">
+			<article id="div-comment-1784" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://0.gravatar.com/avatar/32c5a70ea182604407e536f9f62c516a?s=64&amp;d=mm&amp;r=g' srcset='http://0.gravatar.com/avatar/32c5a70ea182604407e536f9f62c516a?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">Joram</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-1784">
+							<time datetime="2015-11-24T15:01:15+00:00">
+								November 24, 2015 at 3:01 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>One issue with the WHILE macro defined here is that any bare symbols in the body become valid labels to GO to, which you might want to avoid. The body should probably be wrapped in a PROGN.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='index9e05.html?replytocom=1784#respond' onclick='return addComment.moveForm( "div-comment-1784", "1784", "respond", "1106" )' aria-label='Reply to Joram'>Reply</a></div>			</article><!-- .comment-body -->
+<ol class="children">
+		<li id="comment-1814" class="comment byuser comment-author-malisper bypostauthor even depth-2">
+			<article id="div-comment-1814" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://2.gravatar.com/avatar/2587b67431f9cc2a998a25e42e2d172d?s=64&amp;d=mm&amp;r=g' srcset='http://2.gravatar.com/avatar/2587b67431f9cc2a998a25e42e2d172d?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">malisper</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-1814">
+							<time datetime="2015-11-25T22:18:37+00:00">
+								November 25, 2015 at 10:18 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>That is actually standard behavior of the normal looping macros. For example, see the note at the bottom of the CLHS page for <a href="http://clhs.lisp.se/Body/m_dotime.htm#dotimes" rel="nofollow">dotimes</a>.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='indexca54.html?replytocom=1814#respond' onclick='return addComment.moveForm( "div-comment-1814", "1814", "respond", "1106" )' aria-label='Reply to malisper'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+		<li id="comment-1817" class="comment odd alt thread-even depth-1 parent">
+			<article id="div-comment-1817" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://2.gravatar.com/avatar/bff9cb8361f05e1117049c0ba49fba56?s=64&amp;d=mm&amp;r=g' srcset='http://2.gravatar.com/avatar/bff9cb8361f05e1117049c0ba49fba56?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">Drew</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-1817">
+							<time datetime="2015-11-26T12:35:59+00:00">
+								November 26, 2015 at 12:35 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Why not `(loop :while ,test :do ,@body) ? Is that not a &#8220;While Loop&#8221; &#8230; or in CL, a &#8220;Loop While&#8221;?</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='indexf304.html?replytocom=1817#respond' onclick='return addComment.moveForm( "div-comment-1817", "1817", "respond", "1106" )' aria-label='Reply to Drew'>Reply</a></div>			</article><!-- .comment-body -->
+<ol class="children">
+		<li id="comment-2018" class="comment even depth-2 parent">
+			<article id="div-comment-2018" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://1.gravatar.com/avatar/7e7b19a87e5c5cf0be119b12c539a5e1?s=64&amp;d=mm&amp;r=g' srcset='http://1.gravatar.com/avatar/7e7b19a87e5c5cf0be119b12c539a5e1?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">Marco Antoniotti</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-2018">
+							<time datetime="2015-12-07T08:41:56+00:00">
+								December 7, 2015 at 8:41 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Yes.  Common Lisp has WHILE loops (and a ton o other iteration constructs).</p>
+<p>You just write</p>
+<p>(loop while (peek-char nil stream nil nil) do<br />
+           (write-char (read-char stream)))</p>
+<p>No need for yet another WHILE macro.</p>
+<p>Cheers</p>
+<p>Marco</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='indexd6f9.html?replytocom=2018#respond' onclick='return addComment.moveForm( "div-comment-2018", "2018", "respond", "1106" )' aria-label='Reply to Marco Antoniotti'>Reply</a></div>			</article><!-- .comment-body -->
+<ol class="children">
+		<li id="comment-2020" class="comment byuser comment-author-malisper bypostauthor odd alt depth-3">
+			<article id="div-comment-2020" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://2.gravatar.com/avatar/2587b67431f9cc2a998a25e42e2d172d?s=64&amp;d=mm&amp;r=g' srcset='http://2.gravatar.com/avatar/2587b67431f9cc2a998a25e42e2d172d?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">malisper</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-2020">
+							<time datetime="2015-12-07T11:24:02+00:00">
+								December 7, 2015 at 11:24 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>The point of the post was that you can build these really awesome constructs out of just goto and macros. While loops were just an example. You absolutely should not do this when you can use loop or do instead.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='indexcaf2.html?replytocom=2020#respond' onclick='return addComment.moveForm( "div-comment-2020", "2020", "respond", "1106" )' aria-label='Reply to malisper'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+		
+	
+	
+					<div id="respond" class="comment-respond">
+			<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" title="Cancel reply" href="index.html#respond" style="display:none;"><span class="screen-reader-text">Cancel reply</span></a></small></h3>				<form action="http://malisper.me/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
+					<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" aria-required="true" required="required"></textarea></p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" aria-required='true' required='required' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" aria-required='true' required='required' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='1106' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="5911c4e7c7" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="83"/></p>				</form>
+					</div><!-- #respond -->
+		
+</div><!-- #comments -->
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="site-info">
+			<a href="http://wordpress.org/">Proudly powered by WordPress</a>
+			<span class="sep"> ~ </span>
+			Theme: Scrawl by <a href="https://wordpress.com/themes/" rel="designer">WordPress.com</a>.		</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type='text/javascript' src='../../../../wp-content/plugins/akismet/_inc/form2d73.html?ver=3.1.11'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushPlain09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore09b1.css?ver=3.0.9b";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeEclipse09b1.css?ver=3.0.9b";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+<link rel='stylesheet' id='qtipstyles-css'  href='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='easyfootnotescss-css'  href='../../../../wp-content/plugins/easy-footnotes/assets/easy-footnotes167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='dashicons-css'  href='../../../../wp-includes/css/dashicons.min167b.css?ver=4.6' type='text/css' media='all' />
+<script type='text/javascript' src='../../../../wp-content/themes/scrawl-wpcom/js/scrawld56c.js?ver=20150309'></script>
+<script type='text/javascript' src='../../../../wp-content/themes/scrawl-wpcom/js/skip-link-focus-fix08e0.js?ver=20130115'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/comment-reply.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/imagesloaded.min55a0.js?ver=3.2.0'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtipcall167b.js?ver=4.6'></script>
+
+</body>
+
+<!-- Mirrored from malisper.me/2015/11/24/loops-lisp-part-1-goto/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:46:33 GMT -->
+</html>
+<!-- Dynamic page generated in 0.082 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:22:34 -->
+
+<!-- super cache -->

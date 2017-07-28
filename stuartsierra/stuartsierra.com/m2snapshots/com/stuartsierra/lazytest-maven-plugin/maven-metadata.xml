@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.stuartsierra</groupId>
+  <artifactId>lazytest-maven-plugin</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <versioning>
+    <latest>1.0.1-SNAPSHOT</latest>
+    <versions>
+      <version>1.0.0-SNAPSHOT</version>
+      <version>1.0.1-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20101213125331</lastUpdated>
+  </versioning>
+</metadata>

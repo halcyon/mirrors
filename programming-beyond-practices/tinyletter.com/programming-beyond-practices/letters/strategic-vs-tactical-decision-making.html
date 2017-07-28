@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/strategic-vs-tactical-decision-making by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:00 GMT -->
+<head>
+    <title> Strategic vs. tactical decision making </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="strategic-vs-tactical-decision-making.html">
+    <meta property="og:title" content="Strategic vs. tactical decision making">
+    <meta property="og:description" content="Three programmers are standing at a fork in the road.">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Strategic vs. tactical decision making" />
+	<meta name="twitter:description" content="Three programmers are standing at a fork in the road" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> September 22, 2015 </div>
+            <h1 class="subject"> Strategic vs. tactical decision making </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> <blockquote>
+<div>Three programmers are standing at a fork in the road.<br>
+<br>
+The first programmer says &quot;We should head left, that road is well paved, and has lots of shops along the way in case we need some supplies.&quot;<br>
+<br>
+The second programmer says &quot;We should head right, there&#39;s lots of beautiful scenery down that way, and it&#39;s the route my parents always took when they traveled through this area.&quot;<br>
+<br>
+The third programmer, with a furrowed brow, turns to the other two and says &quot;Those are&nbsp;good points, but both those roads go&nbsp;south. Aren&#39;t we trying to get to a place that&#39;s north of here?&quot;</div>
+</blockquote>
+<br>
+If you&#39;ve been a software developer for any amount of time, the little story above should sound familiar to you. Culturally, programmers have the tendency to be obsessed with the details of a path while occasionally losing sight of the destination. Because our job consists of making tons and tons of tiny tactical decisions on a daily basis, it&#39;s not surprising that we tend to get hung up on small details.<br>
+<br>
+That said, this is probably one of the things that gets in our way -- more often that we&#39;d be comfortable admitting. Although we&#39;d all like to think of ourselves as the third programmer in this little parable, there has probably been a time in the last week or month where you&#39;ve had more in common with the first two. I know that&#39;s the case for me, at least!<br>
+<br>
+This is a deep topic, and I only expect we&#39;ll scratch the surface of it today. Let&#39;s start with a handful of examples, to illustrate the differences between strategy and tactics in software development:
+<ul>
+	<li>Adopting a test-driven development workflow is a strategic decision, choosing between MiniTest and RSpec is a tactical decision.</li>
+	<li>Adopting a continuous integration process is a strategic decision, choosing between TravisCI and JenkinsCI is a tactical decision.</li>
+	<li>Choosing between inheritance and composition in object modeling&nbsp;is a strategic decision, choosing between&nbsp;subclasses or module mixins is a tactical decision.</li>
+	<li>Adopting a consistent and clearly defined versioning policy is a strategic decision, choosing to strictly adhere to&nbsp;Semantic Versioning is a tactical decision.</li>
+	<li><a href="http://www.jmock.org/oopsla2004.pdf">Mocking roles rather than objects</a> is a strategic decision, choosing whether to use&nbsp;Mocha or Rspec mocks&nbsp;is a tactical decision.</li>
+</ul>
+Generally speaking, strategic decisions permit you to think about high level goals, while tactical decisions require an understanding of implementation details.<br>
+<br>
+For example, here are a few reasons for adopting a consistent versioning policy:
+<ul>
+	<li>&nbsp;Users of a software package&nbsp;will be able to look at the version number of a new release and get some useful information from it (e.g. whether it&#39;s safe to upgrade, whether the release is minor or major, whether there are new features, etc.)<br>
+	&nbsp;</li>
+	<li>Once the user is familiar with the projects versioning policy, they will be able to reuse this knowledge for all future releases, assuming the policy doesn&#39;t change.<br>
+	&nbsp;</li>
+	<li>Having a consistent versioning policy puts pressure on maintainers to be responsible in how they plan their releases, and to communicate a bit more clearly about what changes are being made.</li>
+</ul>
+Because these goals are general in nature, there are many possible ways to fulfill them. As soon as you solidify them into concrete implementation details, you end up in tactical decision making mode.<br>
+<br>
+To illustrate that idea, contrast the big-picture points above with the reasons why someone may want to adopt <a href="http://semver.org/">Semantic Versioning</a>:
+
+<ul>
+	<li>Using a standard versioning policy that has widespread adoption means that users won&#39;t need to learn your particular release numbering scheme -- they can reuse what they already know from other projects.<br>
+	&nbsp;</li>
+	<li>Having a precisely defined version numbering scheme allows for automated systems to make certain assumptions about your releases. (e.g. RubyGems approximate version matching: &quot;~&gt; 1.0&quot;)<br>
+	&nbsp;</li>
+	<li>Adopting a common standard allows you to take advantage of the lessons learned the hard way by many, who eventually settled on using this particular way of doing things because it was the best general solution they could come up with.</li>
+</ul>
+The difference between these two lists of benefits is subtle, so much so that they appear to almost be saying the same thing. However, it&#39;s important to point out the difference between strategic and tactical decisions is that strategic goals are focused on attaining desirable outcomes for a project, and tactical goals are focused on how to obtain those outcomes (as well as quite a bit more).<br>
+<br>
+Baked into the choice of using Semantic Versioning is the notion that having as many people as possible adopting the same versioning policy would be A Good Thing. This is a stronger statement than &quot;It&#39;d be nice if everyone had a defined release numbering process&quot;, because it says &quot;You will be expected to use<em> this particular process&nbsp;</em>in order to gain these benefits&quot;.<br>
+<br>
+Furthermore, tangential assumptions begin to take center stage as well, such as &quot;consistency and strict adherence to the policy is essential to ensure that automated processes can infer certain things about your releases.&quot; -- nothing is wrong with this goal, but if it&#39;s not important to you strategically, it&#39;s a price you&#39;ll still need to pay when using Semantic versioning.<br>
+<br>
+All of this is still just at the level of goal-setting... when you get down to implementation details, Semantic Versioning will expect you to do a number of things, including explicitly marking every feature in your system as part of a public or private API in its documentation, limiting the range of characters that can be used in labeling pre-releases, forced incrementation of the minor version number for any deprecation warnings, etc.<br>
+<br>
+Many of these implementation details enforce very good practices, but depending on your problem domain, some of them may not matter at all to you. In some cases, adopting the Semantic Versioning policy will be more trouble than it is worth, because you don&#39;t need the tactical benefits it offers. But one thing you can be sure of, if you do not use Semantic Versioning, someone will insist on asking you why not, because that&#39;s just how programmers are.<br>
+<br>
+I haven&#39;t fully sorted out these ideas about strategic vs. tactical thinking and decision making, so I don&#39;t have a neatly packaged up conclusion for you to take away from this article. But here are a few scraps of ideas for you to think on:
+<ul>
+	<li>Whenever you discuss tools, techniques, patterns, or processes with other programmers, check to make sure that you&#39;ve explicitly described your strategic goals before comparing notes on tactics. Just like the parable at the start of this email, it doesn&#39;t matter how wonderful a particular path is if it isn&#39;t headed in the direction you want to go.<br>
+	&nbsp;</li>
+	<li>Understand that at a tactical level, everything needs to be filtered through your specific context. The right solution for many problems may be the wrong solution for your problem, and its completely acceptable to deviate from canon whenever that&#39;s the case.<br>
+	&nbsp;</li>
+	<li>If you agree with someone on a strategic direction&nbsp;but disagree on tactics, you can still learn a lot from one another as long as you continuously relate the tactical costs and benefits to the strategic goals. It&#39;s useful to know how other people prefer to do things, even if you don&#39;t expect to change your mind or theirs.<br>
+	&nbsp;</li>
+	<li>An excellent&nbsp;strategy with mediocre tactics will always beat&nbsp;a mediocre strategy with excellent tactics. (This is an unchecked assertion, you&#39;re meant to question it and/or disagree with it!)</li>
+</ul>
+Think of this as just an introduction to a much deeper conversation. If any thoughts come to mind that you&#39;d like to share, please reply to this email! I&#39;m especially interested in specific stories from your own work.<br>
+<br>
+That&#39;s all for today. Happy Hacking!<br>
+<br>
+-greg
+<blockquote>
+<p>CREDIT: These ideas were inspired by a conversation I had&nbsp;with <a href="https://twitter.com/packetmonkey">Evan Sharp</a>.</p>
+</blockquote> </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="challenges-in-architectural-modularity-part-1.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="thoughts-on-technical-debt-part-iii.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/strategic-vs-tactical-decision-making by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:00 GMT -->
+</html>

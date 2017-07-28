@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/effective-code-reviews-part-1 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:00 GMT -->
+<head>
+    <title> Effective Code Reviews, Part 1 </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="effective-code-reviews-part-1.html">
+    <meta property="og:title" content="Effective Code Reviews, Part 1">
+    <meta property="og:description" content="When done well, code reviews will help you produce better software.">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Effective Code Reviews, Part 1" />
+	<meta name="twitter:description" content="When done well, code reviews will help you produce better software" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> October 04, 2015 </div>
+            <h1 class="subject"> Effective Code Reviews, Part 1 </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> When done well, code reviews will help you produce better software.<br>
+<br>
+That said, it&#39;s only possible to give an effective review if you know what to look for.<br>
+<br>
+For the most part, reviews that focus primarily on coding style, structure, and idioms tend to produce mediocre results at best. They may in some ways lead to better code, but better code on its own does not mean better software.<br>
+<br>
+As an analogy, it&#39;s easy to fall into a trap where code reviews become nothing more than an exercise in technical proofreading. In doing this, you end up focusing on computational equivalent of grammar and punctuation and the particular wording of particular phrases, and you forget that the main goal is to tell an meaningful story. When you cannot see the forest for the trees, bad things happen.<br>
+<br>
+How can we do better than that? It&#39;s a tricky question without a &quot;one size fits all&quot; answer.<br>
+<br>
+To help you identify the kinds of questions that will lead you to focus on substance rather than style in code reviews, I&#39;ll rattle off a few now and see if you can pick up a pattern.<br>
+<br>
+Got your thinking cap on yet? Good. Let&#39;s do this.<br>
+&nbsp;
+<ul>
+	<li>Does this code actually solve the problem it&#39;s meant to solve? Check the bug report or&nbsp;feature request, and any supporting documentation or discussions to make sure.<br>
+	&nbsp;</li>
+	<li>When shipped, will this improvement increase the value of&nbsp;the project as a whole?&nbsp;Sometimes things sound better on paper than they turn out in practice, and so there&#39;s no time like the present to go back to the drawing board if what was built might end up being more trouble than its worth to ship and maintain.</li>
+</ul>
+<br>
+If the answer to either of the above questions is &quot;no&quot;, then stop right here. Don&#39;t even look at the code. If you&#39;re not the one in charge of deciding what features and fixes get worked on and when, get in touch with the person who is, and talk things through. Reviewing code that won&#39;t survive in production is a giant waste of time.<br>
+<br>
+OK, the code being reviewed solves a real problem, and the benefits of solving that problem in this particular way outweigh the costs? Great, we can move on.<br>
+&nbsp;
+<ul>
+	<li>Is the code able to run somewhere other than the original developer&#39;s machine? Running live in production as a developers-only feature is best, but a staging environment, or even another developer&#39;s machine can be a good enough smoke test. If you&#39;re not able to easily verify this, your process is broken, and that needs fixing before you can do effective code reviews.<br>
+	&nbsp;</li>
+	<li>Did you need to ask someone for help in order to get the code running in order to do your review (whether it&#39;s deployed or on your own machine?). If so, either&nbsp;documentation is needed, or whatever setup process you did needs to be automated, or both.<br>
+	&nbsp;</li>
+	<li>Now actually try out&nbsp;the planned improvement from the perspective of the people who use your software&nbsp;(or from the perspective of a developer, if it&#39;s an internal change). Did the fix or feature work the way you&#39;d expect it to? Was anything awkward, missing, or broken? Have a conversation about that, then pause the review until those issues are dealt with. If this is an early stage review, you can choose to focus on certain issues and ignore other details that you know will be sorted out later, but it pays to be&nbsp;explicit here.</li>
+</ul>
+<br>
+If you&#39;ve made it this far, you now have working software that solves a real, worthwhile problem, and it&#39;s running somewhere other than a single developer&#39;s machine. It&#39;s not crashing and burning in weird ways, and it&#39;s not missing any obviously important bits of functionality. You know that anyone else who might want to review this work will be able to do so easily, because the process of getting the code up and running has either been documented or automated, or both.<br>
+<br>
+How much code have you read at this point in the review? In a well organized project, the answer may be &quot;none&quot;. But you&#39;ve done quite a bit to uphold high software quality standards, just by looking at things from the outside in. It may have only costed you a few minutes of time, but it&#39;s a critically important first step to giving a great code review.<br>
+<br>
+In a few days, we&#39;ll talk more about what happens after you&#39;ve reached this point in a review. If you want to share your thoughts with me before then, just reply to this email. My inbox is always open to you!<br>
+<br>
+-greg<br>
+&nbsp;
+<hr><br>
+PS: It&#39;s official, I&#39;ve signed a contract with O&#39;Reilly to publish a <strong>Programming Beyond Practices</strong> book, which will come out in the second half of next year. This will help make sure that I keep writing these essays, and so you can expect a lot more of this sort of stuff in the coming months.<br>
+<br>
+If you like what you see here and want to help me out:<br>
+<br>
+<em>Please tweet a link to<a href="http://tinyletter.com/programming-beyond-practices"> the newsletter archives</a>&nbsp;and use the hashtag <strong>#ProgrammingBeyondPractices</strong>. It&#39;d be nice to keep these discussions going on Twitter, in addition to these emails.</em> </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="effective-code-reviews-part-ii.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="sweeping-complexity-under-the-rug-challenges-in-architectural-modularity-part-ii.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/effective-code-reviews-part-1 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:00 GMT -->
+</html>

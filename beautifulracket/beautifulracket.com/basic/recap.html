@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/basic/recap.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:49 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Go with the flow: basic</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;go-with-the-flow-basic&quot;)"></div><h1 anchor="go-with-the-flow-basic" id="go-with-the-flow-basic" hyphens="none">Go with the flow: <span class="my-code" decode="exclude">basic</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-lexer.html">3&emsp;the lexer</a></li><li><a href="the-tokenizer.html">4&emsp;the tok­enizer</a></li><li><a href="the-parser.html">5&emsp;the parser</a></li><li><a href="the-reader.html">6&emsp;the reader</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a class="here" href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_bfG4T&quot;)"></div><p id="a_bfG4T">Our cut-down ver­sion of BASIC won’t be able to han­dle a pro­gram like <a class=" ext" href="http://www.atariarchives.org/morebasicgames/showpage.php?page=57">Eliza</a>. But it shows how we can apply the same tech­niques we learned in the silly <a href="../bf/index.html"><span class="my-code" decode="exclude">bf</span></a> and the sim­ple <a href="../jsonic/index.html"><span class="my-code" decode="exclude">jsonic</span></a> to build a more sophis­ti­cated lan­guage:</p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_O9pBQ&quot;)"></div><p id="a_O9pBQ">Even though BASIC has a very dif­fer­ent <a class="glossary" href="../appendix/glossary.html#control-flow"><span class="glossary-link-text">con­trol flow</span></a> than Racket—includ­ing the famous <span class="my-code" decode="exclude">goto</span>—we fig­ured out how these ele­ments either cor­re­sponded to exist­ing ele­ments in Racket (e.g., lines becom­ing func­tions) and how oth­ers could be imple­mented in Racket (e.g., a pro­gram loop using <a href="http://docs.racket-lang.org/reference/for.html#(form._((lib._racket/private/base..rkt)._for/fold))" class="docs" hyphens="none">for/fold</a>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_AAUCI&quot;)"></div><p id="a_AAUCI">We saw how to auto­mat­i­cally col­lect <a class="glossary" href="../appendix/glossary.html#source-location"><span class="glossary-link-text">source loca­tions</span></a> in <a href="the-lexer.html">the lexer</a>, so we get more pre­cise error mes­sages, and graph­i­cal error high­light­ing in DrRacket. We also sep­a­rated out our lexer from <a href="the-tokenizer.html">the tok­enizer</a>—later, we can reuse it as the basis of a syn­tax col­orer.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_xeD9E&quot;)"></div><p id="a_xeD9E">We learned about how to make <a href="the-parser.html#cuts-and-splices">cuts and splices</a> in <a href="the-parser.html">the parser</a> to stream­line the parse tree by fil­ter­ing out unnec­es­sary ele­ments.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_FAKb0&quot;)"></div><p id="a_FAKb0">In <a href="the-expander.html">the expander</a>, we learned some new macro tricks, includ­ing fancier match­ing with <a class="explainer" href="../explainer/syntax-patterns.html">syn­tax pat­terns</a>, and gen­er­at­ing new iden­ti­fiers with <a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/syntax..rkt)._prefix-id))" class="docs" hyphens="none">prefix-id</a>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ZqUKZ&quot;)"></div><p id="a_ZqUKZ">We also learned how to use <a class="glossary" href="../appendix/glossary.html#exception"><span class="glossary-link-text">excep­tions</span></a> to send sig­nals within our lan­guage, allow­ing us to rewire the con­trol flow.</p></div></li></ul><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-lexer.html">3&emsp;the lexer</a></li><li><a href="the-tokenizer.html">4&emsp;the tok­enizer</a></li><li><a href="the-parser.html">5&emsp;the parser</a></li><li><a href="the-reader.html">6&emsp;the reader</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a class="here" href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="testing-the-language.html">← prev</a>
+    <a class="nav-right" href="source-listing.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

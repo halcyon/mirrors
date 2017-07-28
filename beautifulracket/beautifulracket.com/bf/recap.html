@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/bf/recap.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:17 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Follow the grammar: bf</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;follow-the-grammar-bf&quot;)"></div><h1 anchor="follow-the-grammar-bf" id="follow-the-grammar-bf" hyphens="none">Follow the grammar: <span class="my-code" decode="exclude">bf</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="grammars-and-parsers.html">2&emsp;gram­mars and parsers</a></li><li><a href="grammar-notation.html">3&emsp;gram­mar nota­tion</a></li><li><a href="the-parser.html">4&emsp;the parser</a></li><li><a href="the-tokenizer-and-reader.html">5&emsp;the tok­enizer and reader</a></li><li><a href="an-imperative-expander.html">6&emsp;an imper­a­tive expander</a></li><li><a href="a-functional-expander.html">7&emsp;a func­tional expander</a></li><li><a href="packaging-our-language.html">8&emsp;pack­ag­ing our lan­guage</a></li><li><a class="here" href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;recap&quot;)"></div><h3 anchor="recap" class="subhead" id="recap"><a href="#recap">Recap</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_TUozM&quot;)"></div><p id="a_TUozM">True, <span class="my-code" decode="exclude">bf</span> is unlike any pro­gram­ming lan­guage we’ll ever need or use. But it’s very sim­ple, and thus a great way to try out some of the clas­sic power tools in build­ing lan­guages.</p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_JHreN&quot;)"></div><p id="a_JHreN">We saw how a <a class="glossary" href="../appendix/glossary.html#grammar"><span class="glossary-link-text">gram­mar</span></a> is the orga­niz­ing prin­ci­ple of a lan­guage—a tool for explain­ing its struc­ture. By fol­low­ing the gram­mar, we can light a path through the imple­men­ta­tion. Our time spent writ­ing out the gram­mar paid off by mak­ing the rest of the lan­guage eas­ier to think about &amp; snap together.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_usc9c&quot;)"></div><p id="a_usc9c">Every Racket lan­guage has a <a class="glossary" href="../appendix/glossary.html#reader"><span class="glossary-link-text">reader</span></a>; every reader has a <span class="my-code" decode="exclude">read-syntax</span> func­tion; and every <span class="my-code" decode="exclude">read-syntax</span> func­tion will con­tain some kind of <a class="glossary" href="../appendix/glossary.html#parser"><span class="glossary-link-text">parser</span></a>. A parser con­verts a source string into a struc­tured rep­re­sen­ta­tion called a <a class="glossary" href="../appendix/glossary.html#parse-tree"><span class="glossary-link-text">parse tree</span></a>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_he3i3&quot;)"></div><p id="a_he3i3">Rather than build a parser by hand, we used the <span class="my-code" decode="exclude">brag</span> lan­guage to con­vert a gram­mar into a <span class="my-code" decode="exclude">parse</span> func­tion.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_9KhmI&quot;)"></div><p id="a_9KhmI">We learned how a <a class="glossary" href="../appendix/glossary.html#tokenizer"><span class="glossary-link-text">tok­enizer</span></a> coop­er­ates with the parser to fil­ter out irrel­e­vant char­ac­ters from the source string, and cat­e­go­rize oth­ers.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_tWtdk&quot;)"></div><p id="a_tWtdk">In our expander, <a class="glossary" href="../appendix/glossary.html#macro"><span class="glossary-link-text">macros</span></a> were the glue that let us con­vert the parse tree pro­duced by our reader into Racket func­tions that imple­mented the logic of the <span class="my-code" decode="exclude">bf</span> lan­guage.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ni9Xa&quot;)"></div><p id="a_ni9Xa">We learned how to turn a folder of Racket mod­ules into a <a class="glossary" href="../appendix/glossary.html#package"><span class="glossary-link-text">pack­age</span></a>, which allowed us to use the neater <span class="my-code" decode="exclude">#lang bf</span> nota­tion at the top of a source file.</p></div></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_nOg8S&quot;)"></div><div class="author-note" id="a_nOg8S"><p anchorize="false">Parts of this tuto­r­ial were adapted from <em><a class=" ext" href="https://github.com/dyoo/brainfudge">Fudg­ing Up a Racket</a></em>, by Danny Yoo. Danny also cre­ated <a href="http://docs.racket-lang.org/ragg/"><span class="my-code" decode="exclude">ragg</span></a>, which is the basis of <a href="http://docs.racket-lang.org/brag/"><span class="my-code" decode="exclude">brag</span></a>. The “fol­low the gram­mar” prin­ci­ple is from Daniel P. Fried­man and Mitchell Wand, <a class=" ext" href="http://www.amazon.com/Essentials-Programming-Languages-MIT-Press/dp/0262062798"><em>Essen­tials of Pro­gram­ming Lan­guages</em></a>. See <a href="../appendix/resources.html">Resources</a>.</p></div></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="grammars-and-parsers.html">2&emsp;gram­mars and parsers</a></li><li><a href="grammar-notation.html">3&emsp;gram­mar nota­tion</a></li><li><a href="the-parser.html">4&emsp;the parser</a></li><li><a href="the-tokenizer-and-reader.html">5&emsp;the tok­enizer and reader</a></li><li><a href="an-imperative-expander.html">6&emsp;an imper­a­tive expander</a></li><li><a href="a-functional-expander.html">7&emsp;a func­tional expander</a></li><li><a href="packaging-our-language.html">8&emsp;pack­ag­ing our lan­guage</a></li><li><a class="here" href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="packaging-our-language.html">← prev</a>
+    <a class="nav-right" href="source-listing.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

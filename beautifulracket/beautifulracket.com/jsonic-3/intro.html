@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/jsonic-3/intro.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:46:39 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Finishing moves: jsonic</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;finishing-moves-jsonic&quot;)"></div><h1 anchor="finishing-moves-jsonic" id="finishing-moves-jsonic" hyphens="none">Finishing moves: <span class="my-code" decode="exclude">jsonic</span></h1></div><ul class="siblinks"><li><a class="here" href="intro.html">1&emsp;intro</a></li><li><a href="documentation.html">2&emsp;doc­u­men­ta­tion</a></li><li><a href="the-info.rkt-file.html">3&emsp;the info.rkt file</a></li><li><a href="the-package-server.html">4&emsp;the pack­age server</a></li><li><a href="recap.html">5&emsp;recap</a></li><li><a href="source-listing.html">6&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_16IKT&quot;)"></div><p id="a_16IKT">In the sec­ond <a href="../jsonic-2/index.html"><span class="my-code" decode="exclude">jsonic</span></a> tuto­r­ial, we made the lan­guage safer to use by adding <a class="explainer" href="../explainer/contracts.html">con­tracts</a> and <a class="explainer" href="../explainer/unit-tests.html">unit tests</a>. We made it eas­ier to use by inte­grat­ing the lan­guage with the DrRacket IDE.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_kFdR2&quot;)"></div><p id="a_kFdR2">Sup­pose we now want to share our <a href="../jsonic/index.html"><span class="my-code" decode="exclude">jsonic</span></a> lan­guage with other JSON enthu­si­asts, who are like­wise eager to be free of JSON drudgery, yet don’t have our lan­guage-mak­ing skills.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_HJ8Gu&quot;)"></div><p id="a_HJ8Gu">In this tuto­r­ial, we’ll learn how to do that. We’ll use a few more Racket tools to accom­plish the fol­low­ing:</p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_xfp5W&quot;)"></div><p id="a_xfp5W">We’ll add <a href="documentation.html">doc­u­men­ta­tion</a> for our lan­guage.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_WNJMq&quot;)"></div><p id="a_WNJMq">We’ll arrange our lan­guage into a dis­trib­utable <a class="glossary" href="../appendix/glossary.html#package"><span class="glossary-link-text">pack­age</span></a>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_dqI4F&quot;)"></div><p id="a_dqI4F">We’ll share our lan­guage using the Racket <a href="the-package-server.html">pack­age server</a>.</p></div></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_pFs6f&quot;)"></div><p id="a_pFs6f">After that, we’ll really be done. Any­one who has a copy of Racket—whether on Mac OS, Linux, or Win­dows—will be able to install and use <span class="my-code" decode="exclude">jsonic</span>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_WxO0M&quot;)"></div><p id="a_WxO0M">As with the sec­ond <a href="../jsonic-2/index.html"><span class="my-code" decode="exclude">jsonic</span></a> tuto­r­ial, the tasks in this tuto­r­ial are optional. They don’t change any­thing about how our lan­guage oper­ates. They just make it eas­ier to use.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;setup&quot;)"></div><h3 anchor="setup" class="subhead" id="setup"><a href="#setup">Setup</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_T4tJr&quot;)"></div><p id="a_T4tJr">We’ll start with the <span class="my-code" decode="exclude">jsonic</span> source as we left it at <a href="../jsonic-2/source-listing.html">the end of the pre­vi­ous</a> <span class="my-code" decode="exclude">jsonic</span> tuto­r­ial.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_dXOO6&quot;)"></div><p id="a_dXOO6">For those who didn’t do it before, the <span class="my-code" decode="exclude">jsonic</span> direc­tory itself needs to be installed as a pack­age as described in the <a href="../appendix/master-recipe.html#setting-up-a-language-project">mas­ter recipe</a>.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a class="here" href="intro.html">1&emsp;intro</a></li><li><a href="documentation.html">2&emsp;doc­u­men­ta­tion</a></li><li><a href="the-info.rkt-file.html">3&emsp;the info.rkt file</a></li><li><a href="the-package-server.html">4&emsp;the pack­age server</a></li><li><a href="recap.html">5&emsp;recap</a></li><li><a href="source-listing.html">6&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="../jsonic-2/source-listing.html">← prev</a>
+    <a class="nav-right" href="documentation.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

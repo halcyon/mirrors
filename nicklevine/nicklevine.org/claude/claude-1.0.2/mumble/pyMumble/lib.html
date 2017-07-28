@@ -1,0 +1,116 @@
+# $Id: //info.ravenbrook.com/user/ndl/lisp/claude/claude-1.0.2/mumble/pyMumble/lib.py#1 $
+#
+#                                LIB.PY
+#             Nick Levine, Ravenbrook Limited, 2013-03-21
+#
+# 1.  INTRODUCTION
+#
+
+"""
+This module provides stubs for calls into the library.
+
+This will keep library invocations in objects.py and mumble.py shorter.
+
+The stubs locate functions exported by the DLL, wrap them in checking
+functions, and also check for plausible_address as appropriate.
+"""
+
+from connect import dll
+import invoke
+
+
+# 2.  STUBS
+#
+# 2.1. Connecting and Disconnecting
+
+def init():
+    invoke.void(dll.mumble_init)()
+
+def close():
+    invoke.void(dll.mumble_close)()
+
+
+# 2.2. Error Handling
+
+def last_error():
+    return invoke.val(dll.mumble_last_error)()
+
+def raise_error(id):
+    return invoke.void(dll.mumble_raise_error)(id)
+
+def request_error(object, error_string):
+    return invoke.void(dll.mumble_request_error)(object, error_string)
+
+
+# 2.3. Mumble Objects and Communication Tests
+
+def invoke_return_object(function, handle):
+    return invoke.val(dll.mumble_invoke_return_object)(function, handle)
+
+def new_object():
+    return invoke.val(dll.mumble_new_object)()
+
+def new_interface():
+    return invoke.val(dll.mumble_new_interface)()
+
+def return_array(array):
+    return invoke.val(dll.mumble_return_array)(invoke.plausible_address(array))
+
+def return_object(handle):
+    return invoke.val(dll.mumble_return_object)(handle)
+
+
+# 2.4. Memory
+
+def free(pointer):
+    invoke.void(dll.mumble_free)(pointer)
+
+def remove_objects(array):
+    return invoke.val(dll.mumble_remove_objects)(invoke.plausible_address(array))
+
+
+# 2.5. Callbacks
+
+def set_callbacks(object, callbacks):
+    invoke.void(dll.mumble_set_callbacks)(object, invoke.plausible_address(callbacks))
+
+
+
+# A. REFERENCES
+#
+#
+# B. DOCUMENT HISTORY
+#
+# 2013-03-21 NDL Created.
+#
+#
+# C. COPYRIGHT AND LICENSE
+#
+# Copyright (c) 2013, Ravenbrook Limited.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in
+#    the documentation and/or other materials provided with the
+#    distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+

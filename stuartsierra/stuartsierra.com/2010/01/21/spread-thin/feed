@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Spread Thin</title>
+	<atom:link href="https://stuartsierra.com/2010/01/21/spread-thin/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2010/01/21/spread-thin</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Bobby Powers</title>
+		<link>https://stuartsierra.com/2010/01/21/spread-thin/comment-page-1#comment-43073</link>
+		<dc:creator><![CDATA[Bobby Powers]]></dc:creator>
+		<pubDate>Mon, 22 Feb 2010 08:38:22 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=444#comment-43073</guid>
+		<description><![CDATA[If you&#039;re not already aware of it, &lt;a href=&quot;http://gitorious.org/&quot; rel=&quot;nofollow&quot;&gt;gitorious&lt;/a&gt; lets you host git-repositories &#038; manage them in a similar way to github (the gitorious code is open, unlike github).  I set it up at a previous job, it seems to work pretty well.]]></description>
+		<content:encoded><![CDATA[<p>If you&#8217;re not already aware of it, <a href="http://gitorious.org/" rel="nofollow">gitorious</a> lets you host git-repositories &amp; manage them in a similar way to github (the gitorious code is open, unlike github).  I set it up at a previous job, it seems to work pretty well.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2010/01/21/spread-thin/comment-page-1#comment-43061</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Mon, 08 Feb 2010 22:46:26 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=444#comment-43061</guid>
+		<description><![CDATA[Joshua-  By hosting, I meant running an instance of Github&#039;s services under a completely different domain, like clojure.org.]]></description>
+		<content:encoded><![CDATA[<p>Joshua-  By hosting, I meant running an instance of Github&#8217;s services under a completely different domain, like clojure.org.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Joshua Choi</title>
+		<link>https://stuartsierra.com/2010/01/21/spread-thin/comment-page-1#comment-43060</link>
+		<dc:creator><![CDATA[Joshua Choi]]></dc:creator>
+		<pubDate>Mon, 08 Feb 2010 22:39:57 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=444#comment-43060</guid>
+		<description><![CDATA[&quot;Better yet, I wish sites like Github offered subdomain hosting, e.g. github.clojure.org.&quot;
+
+Is that a tongue-in-cheek statement? &lt;a href=&quot;http://pages.github.com/&quot; rel=&quot;nofollow&quot;&gt;GitHub does actually provide hosting&lt;/a&gt;, but I&#039;m not sure if it&#039;d help this problem.
+
+I for one am really glad of blogs like Disclojure.org, which neatly summarizes &lt;em&gt;daily&lt;/em&gt; what Clojure people have done on blogs, the Google group, libraries, and events.]]></description>
+		<content:encoded><![CDATA[<p>&#8220;Better yet, I wish sites like Github offered subdomain hosting, e.g. github.clojure.org.&#8221;</p>
+<p>Is that a tongue-in-cheek statement? <a href="http://pages.github.com/" rel="nofollow">GitHub does actually provide hosting</a>, but I&#8217;m not sure if it&#8217;d help this problem.</p>
+<p>I for one am really glad of blogs like Disclojure.org, which neatly summarizes <em>daily</em> what Clojure people have done on blogs, the Google group, libraries, and events.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Joshua Choi</title>
+		<link>https://stuartsierra.com/2010/01/21/spread-thin/comment-page-1#comment-43063</link>
+		<dc:creator><![CDATA[Joshua Choi]]></dc:creator>
+		<pubDate>Mon, 08 Feb 2010 19:25:26 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=444#comment-43063</guid>
+		<description><![CDATA[Wait, no, I misunderstood you. Never mind, I see you meant hosting of *code* under clojure.org. Yeah, that&#039;d be nice too.]]></description>
+		<content:encoded><![CDATA[<p>Wait, no, I misunderstood you. Never mind, I see you meant hosting of *code* under clojure.org. Yeah, that&#8217;d be nice too.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Joshua Choi</title>
+		<link>https://stuartsierra.com/2010/01/21/spread-thin/comment-page-1#comment-43062</link>
+		<dc:creator><![CDATA[Joshua Choi]]></dc:creator>
+		<pubDate>Mon, 08 Feb 2010 19:25:16 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=444#comment-43062</guid>
+		<description><![CDATA[Ah! &lt;a href=&quot;http://github.com/blog/315-cname-support-for-github-pages&quot; rel=&quot;nofollow&quot;&gt;You can do that too.&lt;/a&gt; But you have to sign up for one of GitHub&#039;s non-free payment plans, the lowest starting at $7/month for 600 MB. I myself would immediately use GitHub for my hosting needs otherwise.]]></description>
+		<content:encoded><![CDATA[<p>Ah! <a href="http://github.com/blog/315-cname-support-for-github-pages" rel="nofollow">You can do that too.</a> But you have to sign up for one of GitHub&#8217;s non-free payment plans, the lowest starting at $7/month for 600 MB. I myself would immediately use GitHub for my hosting needs otherwise.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: All-in-one usually does not work &#124; BlogHalt.com (Pre-Launch)</title>
+		<link>https://stuartsierra.com/2010/01/21/spread-thin/comment-page-1#comment-43035</link>
+		<dc:creator><![CDATA[All-in-one usually does not work &#124; BlogHalt.com (Pre-Launch)]]></dc:creator>
+		<pubDate>Wed, 27 Jan 2010 14:22:03 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=444#comment-43035</guid>
+		<description><![CDATA[[...] Sierra poses that question in a blog post where he bemoans the fact that the Clojure community is spread out across a number of places. As a result, being an active member of the community, he needs to pay attention to half a dozen, [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] Sierra poses that question in a blog post where he bemoans the fact that the Clojure community is spread out across a number of places. As a result, being an active member of the community, he needs to pay attention to half a dozen, [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: All-in-one usually does not work</title>
+		<link>https://stuartsierra.com/2010/01/21/spread-thin/comment-page-1#comment-43034</link>
+		<dc:creator><![CDATA[All-in-one usually does not work]]></dc:creator>
+		<pubDate>Wed, 27 Jan 2010 06:42:56 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=444#comment-43034</guid>
+		<description><![CDATA[[...] Sierra poses that question in a blog post where he bemoans the fact that the Clojure community is spread out across a number of places. As a result, being an active member of the community, he needs to pay attention to half a dozen, [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] Sierra poses that question in a blog post where he bemoans the fact that the Clojure community is spread out across a number of places. As a result, being an active member of the community, he needs to pay attention to half a dozen, [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Antoni Batchelli</title>
+		<link>https://stuartsierra.com/2010/01/21/spread-thin/comment-page-1#comment-43027</link>
+		<dc:creator><![CDATA[Antoni Batchelli]]></dc:creator>
+		<pubDate>Thu, 21 Jan 2010 18:31:28 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=444#comment-43027</guid>
+		<description><![CDATA[Hi Stuart,
+
+This is exactly what I am trying to do with disclojure.org, trying to become the go-to website for news on clojure. It is not an aggregator, because that would bury good information amongst less meaningful posts. Instead, the news are filtered and edited so that every day you can get only the most relevant ones (with some context to boot).
+
+Sorry for the shameless plug...]]></description>
+		<content:encoded><![CDATA[<p>Hi Stuart,</p>
+<p>This is exactly what I am trying to do with disclojure.org, trying to become the go-to website for news on clojure. It is not an aggregator, because that would bury good information amongst less meaningful posts. Instead, the news are filtered and edited so that every day you can get only the most relevant ones (with some context to boot).</p>
+<p>Sorry for the shameless plug&#8230;</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.279 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:01:25 -->
+
+<!-- Compression = gzip -->

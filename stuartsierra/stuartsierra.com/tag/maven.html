@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+
+<!-- Mirrored from stuartsierra.com/tag/maven by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:58:32 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+		<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+<title>Maven &#8211; Digital Digressions by Stuart Sierra</title>
+<link rel='dns-prefetch' href='http://s0.wp.com/'>
+<link rel='dns-prefetch' href='http://secure.gravatar.com/'>
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel='dns-prefetch' href='http://s.w.org/'>
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Comments Feed" href="../comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Maven Tag Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/stuartsierra.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.6"}};
+			!function(a,b,c){function d(a){var c,d,e,f,g,h=b.createElement("canvas"),i=h.getContext&&h.getContext("2d"),j=String.fromCharCode;if(!i||!i.fillText)return!1;switch(i.textBaseline="top",i.font="600 32px Arial",a){case"flag":return i.fillText(j(55356,56806,55356,56826),0,0),!(h.toDataURL().length<3e3)&&(i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,65039,8205,55356,57096),0,0),c=h.toDataURL(),i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,55356,57096),0,0),d=h.toDataURL(),c!==d);case"diversity":return i.fillText(j(55356,57221),0,0),e=i.getImageData(16,16,1,1).data,f=e[0]+","+e[1]+","+e[2]+","+e[3],i.fillText(j(55356,57221,55356,57343),0,0),e=i.getImageData(16,16,1,1).data,g=e[0]+","+e[1]+","+e[2]+","+e[3],f!==g;case"simple":return i.fillText(j(55357,56835),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode8":return i.fillText(j(55356,57135),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode9":return i.fillText(j(55358,56631),0,0),0!==i.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity","unicode9"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='twentysixteen-jetpack-css'  href='../wp-content/plugins/jetpack/modules/theme-tools/compat/twentysixteen3a05.css?ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-fonts-css'  href='https://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%2C900%2C400italic%2C700italic%2C900italic%7CMontserrat%3A400%2C700%7CInconsolata%3A400&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../wp-content/plugins/jetpack/_inc/genericons/genericons/genericons128b.css?ver=3.1' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-style-css'  href='../wp-content/themes/twentysixteen/style167b.css?ver=4.6' type='text/css' media='all' />
+<!--[if lt IE 10]>
+<link rel='stylesheet' id='twentysixteen-ie-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentysixteen-ie8-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie8.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='twentysixteen-ie7-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie7.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='../wp-content/plugins/jetpack/css/jetpack3a05.css?ver=4.2.2' type='text/css' media='all' />
+<script type='text/javascript' src='../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://stuartsierra.com/wp-content/themes/twentysixteen/js/html5.js?ver=3.7.3'></script>
+<![endif]-->
+<link rel='https://api.w.org/' href='../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+
+<link rel='dns-prefetch' href='http://v0.wordpress.com/'>
+</head>
+
+<body class="archive tag tag-maven tag-99 hfeed">
+<div id="page" class="site">
+	<div class="site-inner">
+		<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+		<header id="masthead" class="site-header" role="banner">
+			<div class="site-header-main">
+				<div class="site-branding">
+					
+											<p class="site-title"><a href="../index.html" rel="home">Digital Digressions by Stuart Sierra</a></p>
+											<p class="site-description">From programming to everything else</p>
+									</div><!-- .site-branding -->
+
+									<button id="menu-toggle" class="menu-toggle">Menu</button>
+
+					<div id="site-header-menu" class="site-header-menu">
+													<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Primary Menu">
+								<div class="menu-main-menu-container"><ul id="menu-main-menu" class="primary-menu"><li id="menu-item-635" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../about-me.html">About Me</a></li>
+<li id="menu-item-633" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../writing.html">Writing</a></li>
+<li id="menu-item-634" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../presentations.html">Presentations</a></li>
+<li id="menu-item-636" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../software.html">Software</a></li>
+<li id="menu-item-637" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../contact.html">Contact</a></li>
+</ul></div>							</nav><!-- .main-navigation -->
+						
+											</div><!-- .site-header-menu -->
+							</div><!-- .site-header-main -->
+
+											<div class="header-image">
+					<a href="../index.html" rel="home">
+						<img src="../wp-content/uploads/2015/12/header.jpg" srcset="https://stuartsierra.com/wp-content/uploads/2015/12/header-300x70.jpg 300w, https://stuartsierra.com/wp-content/uploads/2015/12/header-768x179.jpg 768w, https://stuartsierra.com/wp-content/uploads/2015/12/header-1024x239.jpg 1024w, https://stuartsierra.com/wp-content/uploads/2015/12/header.jpg 1200w" sizes="(max-width: 709px) 85vw, (max-width: 909px) 81vw, (max-width: 1362px) 88vw, 1200px" width="1200" height="280" alt="Digital Digressions by Stuart Sierra">
+					</a>
+				</div><!-- .header-image -->
+					</header><!-- .site-header -->
+
+		<div id="content" class="site-content">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			<header class="page-header">
+				<h1 class="page-title">Tag: Maven</h1>			</header><!-- .page-header -->
+
+			
+<article id="post-749" class="post-749 post type-post status-publish format-standard hentry category-programming tag-build-tools tag-clojure tag-java tag-lisp tag-maven tag-workflow">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2013/11/04/command-line-intransigence.html" rel="bookmark">Command-Line Intransigence</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p> In the early days of Clojure, I was skeptical of Clojure-specific build tools like <a href="https://github.com/stuarthalloway/lancet">Lancet</a>, <a href="http://leiningen.org/">Leiningen</a>, and <a href="https://github.com/flatland/cake">Cake</a>. Why would Clojure, a part of the Java ecosystem, need its own build tool when there were already so many Java-based tools? </p>
+<p> At the time, I thought <a href="http://maven.apache.org/">Maven</a> was the last word in build tooling. Early Leiningen felt like a thin wrapper around Maven for people with an inconsolable allergy to XML. Maven was the <i>serious</i> build tool, with a rich declarative model for describing dependency relationships among software artifacts. That model was imperfect, but it worked well enough to power one of the largest <a href="http://search.maven.org/">repositories</a> of open-source software on the planet. </p>
+<p> But things change. Leiningen has evolved rapidly. Maven has also evolved, but more slowly, and the promised <a href="http://maven.40175.n5.nabble.com/What-happened-to-Polyglot-Maven-td5715529.html">non-XML POM syntax</a> (&#8220;polyglot Maven&#8221;) has not materialized. </p>
+<p> Meanwhile, I learned <a href="http://nealford.com/memeagora/2013/01/22/why_everyone_eventually_hates_maven.html">why everyone eventually hates Maven</a>, through the experience of crafting custom Maven builds for two large-ish projects: the Clojure language and its contributed libraries. It was a challenge to satisfy the (often conflicting) requirements of developers, continuous integration, source repositories, and the public Maven repository network. Even with the help of <a href="http://www.sonatype.com/resources/books">Maven books</a> from <a href="http://www.sonatype.com/">Sonatype</a>, it took months of trial and error and nearly all my &#8220;open-source&#8221; time to get everything working. </p>
+<p> At the end of this process I discovered, to my dismay, that I was the only one who understood it. As my colleague Stuart Halloway put it, &#8220;Maven breeds heroes.&#8221; For end-users and developers, there&#8217;s a nice interface: Clojure-contrib library authors can literally <a href="http://dev.clojure.org/display/community/How+to+Make+Releases">click a button</a> to make a release. But behind that button are so many steps and moving parts (Git, Hudson, Maven, Nexus, GPG, and all the Maven plugins) that even I can barely remember how it all works. I never wanted to be the XML hero. </p>
+<p> So I have come around to Leiningen, and even incorporate it into my Clojure development <a href="http://thinkrelevance.com/blog/2013/06/04/clojure-workflow-reloaded">workflow</a>. It&#8217;s had some bumps, as one might expect from a fast-moving open-source project with lots of contributors, but most of the time it does what I need and doesn&#8217;t get in the way. </p>
+<p> What puzzles me, however, is the stubbornness of developers who want to do <i>everything</i> via Leiningen. Some days it seems like every new tool or development utility for Clojure comes wrapped up in a Leiningen plugin so it can be invoked at the command line. I don&#8217;t get it. When you have a Clojure REPL, why would you limit yourself to the UNIX shell? </p>
+<p> I think this habit comes partly from scripting languages, which were born at the command line, and still live there to a great extent. But it puzzled me a bit even in Ruby: if it takes 3 seconds to for <code>rake</code> to load your 5000-line Rails app, do you really want to use <code>rake</code> for critical administrative tasks like database migrations? <a href="http://ruby-doc.org/docs/ProgrammingRuby/html/irb.html">IRB</a> <a href="http://stackoverflow.com/a/5673496">is not a REPL</a> in the Lisp sense, but it&#8217;s a pretty good interactive shell. I&#8217;d rather work with a large Ruby app in IRB than via <code>rake</code>. </p>
+<p> <a href="https://github.com/technomancy/leiningen/wiki/Faster">Start-up time</a> remains a major concern for Leiningen, and its contributors have gone to great lengths (sometimes <a href="https://github.com/technomancy/leiningen/pull/1230">too far</a>) to ameliorate it. Why not just avoid the problem altogether? Start Leiningen once and then work at the REPL. Admittedly, this takes some discipline and careful application design, but on my own projects I&#8217;ve gotten to the point where I only need to launch Leiningen once a day. Occasionally I make a mistake and get my application into such a borked state that the only remedy is restarting the JVM, but those occasions are rare. </p>
+<p> I pretty much use Leiningen for just three things: 1) getting dependencies, 2) building JARs, and 3) launching REPLs. Once I have a REPL I can do my real work: running my application, testing, and profiling. The feedback cycles are faster and the debugging options much richer than what I can get on the command-line. </p>
+<p> &#8220;Build plugins,&#8221; for Leiningen or Maven or any other tool, always suffer from running in a different environment from the code they are building. But isn&#8217;t one of the central tenets of Lisp that the compiler is <i>part of</i> your application? There isn&#8217;t really a sharp boundary between &#8220;build&#8221; code and &#8220;application&#8221; code. It&#8217;s all just code. </p>
+<p> I used to write little &#8220;command-line interfaces&#8221; for running tests, builds, deployments, and so on. Now I&#8217;m more likely to just put those functions in a Clojure namespace and call them from the REPL. Sometimes I wonder: why not go further? Use Leiningen (or Maven, or Gradle, or whatever) just to download dependencies and bootstrap a REPL, then execute builds and releases <i>from the REPL</i>. </p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2013/11/04/command-line-intransigence.html" rel="bookmark"><time class="entry-date published" datetime="2013-11-04T08:32:33+00:00">November 4, 2013</time><time class="updated" datetime="2014-01-01T12:05:19+00:00">January 1, 2014</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="build-tools.html" rel="tag">build tools</a>, <a href="clojure.html" rel="tag">Clojure</a>, <a href="java.html" rel="tag">Java</a>, <a href="lisp.html" rel="tag">Lisp</a>, <a href="maven.html" rel="tag">Maven</a>, <a href="workflow.html" rel="tag">workflow</a></span><span class="comments-link"><a href="../2013/11/04/command-line-intransigence.html#comments">7 Comments<span class="screen-reader-text"> on Command-Line Intransigence</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-565" class="post-565 post type-post status-publish format-standard hentry category-programming tag-git tag-maven tag-ruby">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2011/08/30/design-philosophies-of-developer-tools.html" rel="bookmark">Design Philosophies of Developer Tools</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>I&#8217;ve been thinking about some of the tools that I use every day, and about the different design philosophies they reflect.</p>
+<h3>Git</h3>
+<p>First and foremost, Git. <a href="http://thinkrelevance.com/">We</a> use Git on every single project, internal and external. Git is a great example of the Unix design philosophy: many small programs &mdash; 153 of them by my count &mdash; each of which does exactly one thing and does it well. But this is not &#8220;loose coupling.&#8221; The components of Git are tightly integrated: they all depend on the same <a href="http://www.kernel.org/pub/software/scm/git/docs/gitrepository-layout.html">repository structure</a> and file formats. </p>
+<p>One of the nice things about Git is how its internals are both exposed for the world to see and thoroughly documented. We can easily write scripts to automate common tasks or create different workflows. With a bit more effort, we could even write new tools that integrate with the Git suite. These tools can do things that Git&#8217;s authors never intended, as long as they follow the documented repository structure. Git isn&#8217;t so much a version control system as the means to construct one.</p>
+<p>Still, Git is one project with many components, not many separate projects. All 153 executables in Git are governed by a single release cycle, tested and known to work together. We never have to worry about incompatible versions of, say, <code>git-branch</code> and <code>git-merge</code> on the same machine. Older versions of Git can read repositories created with newer versions even if they don&#8217;t provide all the same features.</p>
+<h3>Maven</h3>
+<p>In stark contrast to Git, we have tools from the Java world like <a href="http://ant.apache.org/">Ant</a> and <a href="http://maven.apache.org/">Maven</a>. The <a href="http://blog.headius.com/2009/05/fork-and-exec-on-jvm-jruby-to-rescue.html">JVM cannot fork/exec</a>, so the many-small-programs design is a non-starter. Instead, the Java tools usually favor some sort of plug-in architecture, which is a great idea in theory but hard to get right in practice. </p>
+<p>I&#8217;ve <a href="https://github.com/stuartsierra/new-clojure-maven-plugin">tried writing a Maven plugin</a>. Hacking up a one-off for a single project is not too difficult, but designing a general-purpose plugin that works everywhere is maddeningly complicated. Maven plugins are just Java code, so they can do whatever they want, but the APIs for interacting with the rest of the Maven system are woefully underdocumented. The <strong>contract</strong> of a Maven plugin, what it can and cannot do, is not well-defined. The internals of Maven itself are largely a black box. </p>
+<p>The core Maven plug-ins have independent release cycles, so there is the possibility for unexpected incompatibilities, but I&#8217;ve never encountered such. On the whole, the Maven ecosystem is quite stable. The struggle comes once you venture outside the realm of what the standard plugins provide. Maven plugins are not designed to be composed, so adding new capabilities is rarely as simple as scripting plugins that already exist. You have to start from scratch every time.</p>
+<h3>Ruby / Rubygems / RVM / Bundler</h3>
+<p>Finally, we have tools from the Ruby world, the ever-changing cornucopia of Ruby implementations, libraries, and tools to manage it all. The problem with the Ruby tools is that they are both tightly-coupled and uncoordinated. Despite having separate tools for each task, each tool reaches into at least one of the others: Rubygems modifies the behavior of the Ruby interpreter, Bundler modifies the behavior of Rubygems, RVM modifies the behavior of the <em>shell</em>, and so on. Each one adds another layer of indirection, making debugging harder.</p>
+<p>All of the Ruby development tools have independent release cycles, and they don&#8217;t seem to plan or coordinate with one another in advance of each release. Integration testing is left up to the users.</p>
+<p>I admire the speed and eagerness with which the Ruby community produces new tools. But on almost every Ruby project I&#8217;ve worked on, we&#8217;ve spent hours or days sorting out incompatibilities among some combination of libraries, language implementations, and development tools.  Our internal mailing list is littered with advice like &#8220;Don&#8217;t use Bundler version X with RVM version Y.&#8221; The speed of development comes with its own cost.</p>
+<h3>Thoughts</h3>
+<p>So what do I take from all this? Just a few principles to keep in mind when writing software tools:</p>
+<ol>
+<li>Plan for integration</li>
+<li>Rigorously specify the boundaries and extension points of your system</li>
+<li>Do not depend on unspecified behavior</li>
+</ol>
+<p>And a couple of ideas if you&#8217;re starting a new project from scratch:</p>
+<ol>
+<li>The filesystem is the universal integration point</li>
+<li>Fork/exec is the universal plugin architecture</li>
+</ol>
+<p><strong>Update 8/31:</strong> More comments at <a href="http://news.ycombinator.com/item?id=2943902">Hacker News</a>.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2011/08/30/design-philosophies-of-developer-tools.html" rel="bookmark"><time class="entry-date published" datetime="2011-08-30T19:55:15+00:00">August 30, 2011</time><time class="updated" datetime="2011-08-31T09:21:06+00:00">August 31, 2011</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="git.html" rel="tag">Git</a>, <a href="maven.html" rel="tag">Maven</a>, <a href="ruby.html" rel="tag">Ruby</a></span><span class="comments-link"><a href="../2011/08/30/design-philosophies-of-developer-tools.html#comments">5 Comments<span class="screen-reader-text"> on Design Philosophies of Developer Tools</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-533" class="post-533 post type-post status-publish format-standard hentry category-programming tag-clojure tag-java tag-leiningen tag-maven">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2011/06/01/dependency-management.html" rel="bookmark">Dependency Management First-Aid Kit</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>This article attempts to unravel some of the mysteries of dependency management with <a href="http://maven.apache.org/">Maven</a> and Maven-based tools.</p>
+<h3>Help, something&#8217;s missing!</h3>
+<p>Say you have a project named &#8220;my-new-project&#8221; which declares a dependency on version 3 of the &#8220;awesome-sauce&#8221; library by the Example.com corporation. You add the dependency to your pom.xml, project.clj, or whatever configuration file your build tool uses. You take a deep breath and start a build. And it fails!</p>
+<p>If you&#8217;re using Maven 2, you see something like this:</p>
+<pre>[ERROR] BUILD ERROR
+[INFO] ------------------------------------------------------------------------
+[INFO] Failed to resolve artifact.
+
+Missing:
+----------
+1) com.example:awesome-sauce:jar:3.0.0
+
+  Try downloading the file manually from the project website.
+
+  Then, install it using the command: 
+      mvn install:install-file -DgroupId=com.example -DartifactId=awesome-sauce -Dversion=3.0.0 -Dpackaging=jar -Dfile=/path/to/file
+
+  Alternatively, if you host your own repository you can deploy the file there: 
+      mvn deploy:deploy-file -DgroupId=com.example -DartifactId=awesome-sauce -Dversion=3.0.0 -Dpackaging=jar -Dfile=/path/to/file -Durl=[url] -DrepositoryId=[id]
+
+  Path to dependency: 
+        1) my.group:my-new-project:jar:1.0.0-SNAPSHOT
+        2) com.example:awesome-sauce:jar:3.0.0
+
+----------
+1 required artifact is missing.
+
+for artifact: 
+  my.group:my-new-project:jar:1.0.0-SNAPSHOT
+
+from the specified remote repositories:
+  central (http://repo1.maven.org/maven2),
+  clojars (http://clojars.org/repo/)</pre>
+<p>Leiningen, which uses Maven 2 under the covers, produces similar output, but it mistakenly prints the current project name as <code>org.apache.maven:super-pom:jar:2.0</code>.</p>
+<p>Maven 3 prints a less verbose (and less informative) error message, but the gist is the same.</p>
+<h3>What happened?</h3>
+<p>What is all this verbosity saying? Well, obviously, the build failed because something was missing. <em>What</em> was missing? Maven tells you:</p>
+<pre>Missing:
+----------
+1) com.example:awesome-sauce:jar:3.0.0</pre>
+<p>The JAR file for the project &#8220;awesome-sauce&#8221;, version 3.0.0, published in the &#8220;com.example&#8221; group, is missing. That just means Maven didn&#8217;t find it in any of the places it looked.</p>
+<p>Where did it look? Maven tells you that too:</p>
+<pre>from the specified remote repositories:
+  central (http://repo1.maven.org/maven2),
+  clojars (http://clojars.org/repo/)</pre>
+<p>These are the public repositories where Maven searched for the file. Each repository has an ID (&#8220;central&#8221; and &#8220;clojars&#8221; in this case) and a URL. Both are specified in the configuration of:</p>
+<ol>
+<li>
+<p>Your project, in pom.xml or project.clj</p>
+</li>
+<li>
+<p>Your build tool&#8217;s global configuration file</p>
+<ul>
+<li>settings.xml for Maven</li>
+<li>N/A for Leiningen</li>
+</ul>
+</li>
+<li>
+<p>Your build tool&#8217;s built-in defaults</p>
+<ul>
+<li>The <a href="http://repo1.maven.org/">Maven Central Repository</a> for almost any Maven-based tool</li>
+<li><a href="http://clojars.org/">Clojars</a> for Leiningen</li>
+</ul>
+</li>
+</ol>
+<p>If you visit http://repo1.maven.org/maven2/com/example/awesome-sauce or http://clojars.org/repo/com/example/awesome-sauce in a browser you will see that those directories do not, in fact, exist.</p>
+<p>Although it&#8217;s not listed, the first place Maven checks for a dependency is your <em>local</em> Maven repository. The local repository is just a big cache of everything Maven has downloaded in the past. It&#8217;s typically located at <code>$HOME/.m2/repository</code>.</p>
+<h3>What to do next</h3>
+<p>You have two options at this point:</p>
+<ol>
+<li>Find a public repository containing &#8220;awesome-sauce&#8221;</li>
+<li>Install &#8220;awesome-sauce&#8221; in your local repository</li>
+</ol>
+<p>The first option is generally less work, and more repeatable if you ever build your project on another machine.</p>
+<h3>Finding a repository</h3>
+<p>Odds are, if the library you are looking for is free, open-source, and popular, it will already be in a public Maven repository somewhere. Start with the source: who released the library? Large organizations with a lot of open-source projects often host their own repositories, like <a href="http://code.google.com/p/google-maven-repository/">Google</a>  and <a href="http://repository.codehaus.org/">Codehaus</a>. Failing that, search engines such as <a href="http://mvnbrowser.com/">Mvnbrowser</a> may help you find it.</p>
+<p>Once you&#8217;ve found a repository, you need to add it to your build. For example, to add the Codehaus repository to a Maven project, add these lines to pom.xml inside the <code>&lt;project&gt;</code> tag:</p>
+<pre>&lt;repositories&gt;
+  &lt;repository&gt;
+    &lt;id&gt;codehaus&lt;/id&gt;
+    &lt;name&gt;Codehaus&lt;/name&gt;
+    &lt;url&gt;http://repository.codehaus.org/&lt;/url&gt;
+  &lt;/repository&gt;
+&lt;/repositories&gt;</pre>
+<p>(You can pick your own <code>&lt;id&gt;</code> and <code>&lt;name&gt;</code>.)</p>
+<p>For Leiningen, add the following lines inside the <code>(defproject&nbsp;...)</code> block:</p>
+<pre>  :repositories {"codehaus" "http://repository.codehaus.org/"}</pre>
+<h3>Installing locally</h3>
+<p>If the library you want is not available in any public repository, you&#8217;re not stuck, you just have to do a bit more work. You need to get the JAR file for the library, either by downloading it manually or building from source. Then you need to install that JAR file in your local Maven repository. That&#8217;s easy, because Maven has already told you exactly how to do it:</p>
+<pre>  Then, install it using the command: 
+      mvn install:install-file -DgroupId=com.example -DartifactId=awesome-sauce \
+ -Dversion=3.0.0 -Dpackaging=jar -Dfile=/path/to/file</pre>
+<p>Copy that command verbatim, changing only <code>/path/to/file</code> to the path to the library&#8217;s JAR file. Maven will copy the file to <code>$HOME/.m2/repository/com/example/awesome-sauce/3.0.0/awesome-sauce-3.0.0.jar</code>. The next time you build your project, Maven knows exactly where to find it.</p>
+<h3>Installing remotely</h3>
+<p>If you want others to be able to build your project without having to go through these manual steps, you need your own public Maven repository to which you can upload files. Hosting a Maven repository isn&#8217;t hard: <a href="../2009/09/08/run-your-own-maven-repository.html">all you need is a web server</a>.</p>
+<p>If you work with a team, consider setting up a shared repository for everyone to use. A repository manager such as <a href="http://nexus.sonatype.org/">Nexus</a> can help you take care of user accounts and authentication.</p>
+<p>If you publish open-source libraries, I strongly encourage you to get an account on <a href="http://nexus.sonatype.org/oss-repository-hosting.html">Sonatype OSS</a>, a free service provided by the makers of Nexus. Releasing your projects to Sonatype OSS gives them a path to get added to the Maven Central Repository. While the requirements for projects in Maven Central are more stringent than just tossing code into your own repository, it&#8217;s worth the effort. In Maven Central, your project will have greater visibility and will be easier for anyone in the world to use.</p>
+<h3>But what if I don&#8217;t want that dependency?</h3>
+<p>Maven dependencies are transitive: if your project depends on project X, which depends on projects Y and Z, then your build will try to download X, Y, and Z.</p>
+<p>But sometimes projects declare dependencies that aren&#8217;t strictly necessary. Or they declare dependencies on something you want, but the wrong version. How can you avoid including those extra dependencies in your build?</p>
+<p>Maven supports <em>dependency exclusions</em> for these cases. For example, suppose the &#8220;awesome-sauce&#8221; library declares a dependency on &#8220;com.example:stupidity:0.0.1&#8221;. You know that you don&#8217;t need &#8220;stupidity&#8221; in your project, so you want to prevent the build from including it.  In pom.xml, you write:</p>
+<pre>&lt;dependencies&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;com.example&lt;/groupId&gt;
+    &lt;artifactId&gt;awesome-sauce&lt;/artifactId&gt;
+    &lt;version&gt;3.0.0&lt;/version&gt;
+    &lt;exclusions&gt;
+      &lt;exclusion&gt;
+        &lt;groupId&gt;com.example&lt;/groupId&gt;
+        &lt;artifactId&gt;stupidity&lt;/artifactId&gt;
+      &lt;/exclusion&gt;
+    &lt;/exclusions&gt; 
+  &lt;/dependency&gt;
+&lt;/dependencies&gt;</pre>
+<p>Or in Leiningen&#8217;s project.clj, you write:</p>
+<pre>  :dependencies [[com.example/awesome-sauce "3.0.0"
+                  :exclusions [com.example/stupidity]]]</pre>
+<p>Note that once you start using exclusions, you&#8217;re on your own. It&#8217;s up to you to make sure you still have the correct versions of all the libraries your project needs. </p>
+<p>On rare occasions, a project&#8217;s dependencies cannot be resolved at all. In particular, if you need two different versions of the same library with the same class names but incompatible APIs, you&#8217;re pretty much stuck. Time to refactor, or investigate multiple-Classloader schemes like <a href="http://www.osgi.org/">OSGi</a>. But that&#8217;s a whole &#8216;nother story.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2011/06/01/dependency-management.html" rel="bookmark"><time class="entry-date published" datetime="2011-06-01T14:08:36+00:00">June 1, 2011</time><time class="updated" datetime="2011-06-01T14:09:07+00:00">June 1, 2011</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="clojure.html" rel="tag">Clojure</a>, <a href="java.html" rel="tag">Java</a>, <a href="leiningen.html" rel="tag">Leiningen</a>, <a href="maven.html" rel="tag">Maven</a></span><span class="comments-link"><a href="../2011/06/01/dependency-management.html#comments">2 Comments<span class="screen-reader-text"> on Dependency Management First-Aid Kit</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-306" class="post-306 post type-post status-publish format-standard hentry category-programming tag-maven">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2009/09/08/run-your-own-maven-repository.html" rel="bookmark">Run Your Own Maven Repository With Nothing but an FTP Server</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>I hope I&#8217;ve demonstrated in the last few posts that <a title="Maven home page" href="http://maven.apache.org/">Maven</a> is pretty cool, not so scary. But the public Maven repositories sometimes leave a bit to be desired. They don&#8217;t have entries for every possible library, and occasionally they have incorrect dependencies or other metadata. Also, the process of <a title="Maven Guide to uploading artifacts to the Central Repository" href="http://maven.apache.org/guides/mini/guide-central-repository-upload.html">adding new libraries to the central repositories</a> is somewhat involved.</p>
+<p>Maybe you want to depend on a project that isn&#8217;t in the public repos.  Or maybe you want to publish development snapshots of your own projects. In either case, you need your own Maven repository.</p>
+<p>Fortunately, running your own Maven repository is dirt simple. All you need is a web server where you can upload files. Maven understands FTP, SCP, WebDAV, and more exotic protocols like Subversion. Here I&#8217;m going to describe the simplest one, plain old FTP. If you have a web site on a cheap, shared web host, odds are you can use FTP to manage the files on the server.</p>
+<h2>Step 1: Get Some Web Space</h2>
+<p>I&#8217;m assuming you have a web site somewhere. Lets say it&#8217;s at <a href="http://www.example.net/">http://www.example.net/</a>. Furthermore, let&#8217;s say you can publish files on this web site by uploading them to the FTP server <em>ftp.example.net</em>.  Your FTP user name is <em>samiam</em> with the password <em>greeneggs</em>. You put the files for your web site in the directory <em>/home/samiam/public_html</em> on the server.</p>
+<p>Using your favorite FTP client, create a directory named <em>maven2</em> inside your web site directory (<em>public_html</em> in our example).</p>
+<p>Congratulations, you just created a Maven 2 repository!</p>
+<p>Check that you can visit http://www.example.net/maven2 in a web browser. You should see a directory listing; it&#8217;s empty, because we haven&#8217;t added any files yet.</p>
+<h2>Step 2: Configure Your Project Deployment</h2>
+<p>Now you&#8217;re ready to deploy a project to your Maven repository.  If you&#8217;ve been following along with my Maven blog posts, you know that each Maven project has a project description file named <em>pom.xml</em>.</p>
+<p>Open up your awesome software project and edit the <em>pom.xml</em> file.  You&#8217;re going to add two new sections, ending up with a file that looks like this:</p>
+<pre>&lt;project ...&gt;
+  ...
+  &lt;groupId&gt;net.example&lt;/groupId&gt;
+  &lt;artifactId&gt;awesome&lt;/artifactId&gt;
+  &lt;name&gt;The Awesome Library&lt;/name&gt;
+  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+  ...
+
+  &lt;build&gt;
+    ...
+    &lt;extensions&gt;
+      &lt;extension&gt;
+        &lt;groupId&gt;org.apache.maven.wagon&lt;/groupId&gt;
+        &lt;artifactId&gt;wagon-ftp&lt;/artifactId&gt;
+        &lt;version&gt;1.0-alpha-6&lt;/version&gt;
+      &lt;/extension&gt;
+    &lt;/extensions&gt;
+    ...
+  &lt;/build&gt;
+
+  ...
+  &lt;distributionManagement&gt;
+    &lt;repository&gt;
+      &lt;id&gt;example-ftp&lt;/id&gt;
+      &lt;url&gt;ftp://ftp.example.net/home/samiam/public_html/maven2&lt;/url&gt;
+    &lt;/repository&gt;
+  &lt;/distributionManagement&gt;
+&lt;/project&gt;</pre>
+<p>The &lt;extensions&gt; section loads the Maven plugin that handles FTP uploads. The &lt;distributionManagement&gt; section tells Maven where to publish the project. Here we specified a &lt;url&gt; with the full URL path to our maven2 directory. The &lt;id&gt; tag in the &lt;repository&gt; is a name that you choose &#8212; just remember it for the next step.</p>
+<h2>Step 3: Configure Your Server Credentials</h2>
+<p>Remember that the <em>pom.xml</em> will be part of the public distribution of your project.  It&#8217;s OK to put the name of the FTP server there, but you wouldn&#8217;t want to include private information like your user name and password.  Those go in a special Maven configuration file called <em>settings.xml</em> that you keep private.</p>
+<p>You can find <em>settings.xml</em> in your personal Maven cache directory. On Unix-like systems, it should be at <em>~/.m2/settings.xml</em>. You may have to create the file if it doesn&#8217;t already exist.  Here&#8217;s what it should contain:</p>
+<pre>&lt;settings xmlns="http://maven.apache.org/POM/4.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd"&gt;
+  &lt;servers&gt;
+    &lt;server&gt;
+      &lt;id&gt;example-ftp&lt;/id&gt;
+      &lt;username&gt;samiam&lt;/username&gt;
+      &lt;password&gt;greeneggs&lt;/password&gt;
+    &lt;/server&gt;
+  &lt;/servers&gt;
+&lt;/settings&gt;</pre>
+<p>The &lt;id&gt; is the same as in our <em>pom.xml</em>.  The user name and password are the credentials for your FTP server.</p>
+<h2>Step 4: Deploy!</h2>
+<p>Now all you have to do is run this command in your project directory:</p>
+<pre>mvn deploy</pre>
+<p>Maven builds your project and uploads it to your public repository. That&#8217;s all there is to it!</p>
+<p>Take a look with your web browser at http://www.example.net/maven2/net/example/awesome/1.0-SNAPSHOT and you&#8217;ll see the JAR and POM files there.</p>
+<h2>Step 5: Tell the World</h2>
+<p>Now, anyone who wants to use your awesome library can just add a dependency to their pom.xml, like this:</p>
+<pre>  ...
+  &lt;dependencies&gt;
+    ...
+    &lt;dependency&gt;
+      &lt;groupId&gt;net.example&lt;/groupId&gt;
+      &lt;artifactId&gt;awesome&lt;/artifactId&gt;
+      &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+    &lt;/dependency&gt;
+    ...
+
+  &lt;/dependencies&gt;
+  ...
+
+  &lt;repositories&gt;
+    ...
+    &lt;repository&gt;
+      &lt;id&gt;example-net&lt;/id&gt;
+      &lt;name&gt;The Example Repository&lt;/name&gt;
+      &lt;url&gt;http://www.example.net/maven2&lt;/url&gt;
+    &lt;/repository&gt;
+    ...
+
+  &lt;/repositories&gt;
+  ...</pre>
+<p>The &lt;repository&gt; section is necessary, since your repository is not on the list of &#8220;central&#8221; repositories that Maven searches by default.</p>
+<p>In general, if your project has a stable release that is widely used, then it&#8217;s worth the effort to get it into the central Maven repository. This is easier to do when you already have your own personal repository to point to.  Note that the central repository does not accept SNAPSHOT releases, nor does it allow any changes to a release after it has been uploaded.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2009/09/08/run-your-own-maven-repository.html" rel="bookmark"><time class="entry-date published updated" datetime="2009-09-08T11:49:49+00:00">September 8, 2009</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="maven.html" rel="tag">Maven</a></span><span class="comments-link"><a href="../2009/09/08/run-your-own-maven-repository.html#comments">7 Comments<span class="screen-reader-text"> on Run Your Own Maven Repository With Nothing but an FTP Server</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-295" class="post-295 post type-post status-publish format-standard hentry category-programming tag-clojure tag-lisp tag-maven">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2009/09/04/cutting-edge-clojure-development-with-maven.html" rel="bookmark">Cutting-Edge Clojure Development with Maven</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>I promised, in my previous post, that I would show you how to use the latest-and-greatest versions of <a title="Clojure home page" href="http://clojure.org/">Clojure</a> and <a title="clojure-contrib home page" href="http://richhickey.github.com/clojure-contrib/">clojure-contrib</a> in your Maven projects.  Here&#8217;s that post.</p>
+<p>Formos Software maintains a Maven server with nightly builds of Clojure and contrib at <a href="http://tapestry.formos.com/maven-snapshot-repository/">http://tapestry.formos.com/maven-snapshot-repository/</a></p>
+<p>Here&#8217;s a complete <em>pom.xml</em> file with dependencies on both Clojure and clojure-contrib:</p>
+<pre>&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;YOUR.GROUP.ID&lt;/groupId&gt;
+  &lt;artifactId&gt;YOUR-PROJECT-NAME&lt;/artifactId&gt;
+  &lt;packaging&gt;jar&lt;/packaging&gt;
+  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+  &lt;name&gt;YOUR-PROJECT-NAME&lt;/name&gt;
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.clojure&lt;/groupId&gt;
+      &lt;artifactId&gt;clojure-lang&lt;/artifactId&gt;
+      &lt;version&gt;1.1.0-alpha-SNAPSHOT&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.clojure&lt;/groupId&gt;
+      &lt;artifactId&gt;clojure-contrib&lt;/artifactId&gt;
+      &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+  &lt;repositories&gt;
+    &lt;repository&gt;
+      &lt;id&gt;tapestry.formos.com&lt;/id&gt;
+      &lt;name&gt;Formos Software snapshot repository&lt;/name&gt;
+      &lt;url&gt;http://tapestry.formos.com/maven-snapshot-repository&lt;/url&gt;
+    &lt;/repository&gt;
+  &lt;/repositories&gt;
+&lt;/project&gt;</pre>
+<p>Yes, that&#8217;s a pile of XML. But it&#8217;s not that complicated once you break it down.  Here&#8217;s what&#8217;s going on:</p>
+<h2>Dependencies</h2>
+<p>The &lt;dependencies&gt; section lists the libraries our project depends on.  We have one &lt;dependency&gt; for Clojure (called <em>clojure-lang</em> in the Formos repository) and one for clojure-contrib.  We&#8217;re depending on <em>SNAPSHOT</em> versions, which tells Maven to follow the most recent version on a particular branch.</p>
+<p>The current development branch of clojure-lang is called <em>1.1.0-alpha-SNAPSHOT</em>. The development branch of contrib, which has never had a formal release, is just <em>1.0-SNAPSHOT</em>.</p>
+<p>How did I find these version numbers?  I just looked at the repository in a web browser.  In the <a title="clojure-lang directory on Formos Maven repository" href="http://tapestry.formos.com/maven-snapshot-repository/org/clojure/clojure-lang/">org/clojure/clojure-lang</a> directory I found directories named for each development branch, <em>1.0-SNAPSHOT</em>, <em>1.0.0-RC1-SNAPSHOT</em>, and <em>1.1.0-alpha-SNAPSHOT</em>.  I chose the latest one, <em>1.1.0-alpha-SNAPSHOT</em>.  Then I did the same with <a title="clojure-contrib directory on Formos Maven repository" href="http://tapestry.formos.com/maven-snapshot-repository/org/clojure/clojure-contrib/">clojure-contrib</a>.</p>
+<p>If you look inside a branch directory like <a title="clojure-lang branch directory on Formos repository" href="http://tapestry.formos.com/maven-snapshot-repository/org/clojure/clojure-lang/1.1.0-alpha-SNAPSHOT/">1.1.0-alpha-SNAPSHOT</a>, you&#8217;ll find hundreds of files, one for each daily snapshot, named with timestamps.</p>
+<h2>Repositories</h2>
+<p>The &lt;repositories&gt; section tells Maven where to look for JAR files to download.  We added the Formos repository by specifying its URL.</p>
+<p>The &lt;id&gt; and &lt;name&gt; tags inside &lt;repository&gt; are purely for our own reference.  Maven only cares about the URL. We could have used any id and name to describe the Formos repository; those names will be used in Maven&#8217;s console logging.</p>
+<h2>Managing Dependency Versions</h2>
+<p>The problem with tracking the latest snapshot is that sometimes there&#8217;s a release that breaks your code.  It might be a bug, or it might just be a change in behavior that makes the library incompatible with previous versions.</p>
+<p>The <a title="Versions Maven Plugin home page" href="http://mojo.codehaus.org/versions-maven-plugin/">Versions Maven Plugin</a> can help to alleviate this problem by &#8220;locking&#8221; dependencies to specific releases and updating them in a controlled way.</p>
+<p>First, we have to make the Versions plugin available to our project.  Do this by adding the following lines just before the final &lt;/project&gt; in your pom.xml:</p>
+<pre>  &lt;pluginRepositories&gt;
+    &lt;pluginRepository&gt;
+      &lt;id&gt;Codehaus&lt;/id&gt;
+      &lt;name&gt;Codehaus Maven Plugin Repository&lt;/name&gt;
+      &lt;url&gt;http://repository.codehaus.org/org/codehaus/mojo&lt;/url&gt;
+    &lt;/pluginRepository&gt;
+  &lt;/pluginRepositories&gt;</pre>
+<p>We&#8217;ve added a &#8220;plugin repository,&#8221; which is just a Maven repository that happens to contain Maven plugins.  (Technically, you don&#8217;t need to add this if your local Maven cache already has a copy of the Versions plugin, but putting it in <em>pom.xml</em> ensures that other developers coming to your project have access to all the same plugins.)</p>
+<p>Now we can use the following mvn command:</p>
+<pre>mvn versions:lock-snapshots</pre>
+<p>This modifies your <em>pom.xml</em> file, setting the version string of every SNAPSHOT dependency to the current snapshot timestamp.  For example, when I run this command, I end up with the following:</p>
+<pre>  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.clojure&lt;/groupId&gt;
+      &lt;artifactId&gt;clojure-lang&lt;/artifactId&gt;
+      &lt;version&gt;1.1.0-alpha-20090904.093041-38&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.clojure&lt;/groupId&gt;
+      &lt;artifactId&gt;clojure-contrib&lt;/artifactId&gt;
+      &lt;version&gt;1.0-20090904.093531-59&lt;/version&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;</pre>
+<p>Now, whenever you build the project, you know exactly which Clojure release you&#8217;re getting.</p>
+<p>So you work with a particular release for a while, then you want to upgrade to the latest one.  No problem!  Just run:</p>
+<pre>mvn versions:unlock-snapshots
+mvn -U install</pre>
+<p>The first command modifies <em>pom.xml</em>, replacing all the timestamped version numbers with <em>SNAPSHOT</em> versions.</p>
+<p>The <em>-U</em> option on the second command forces Maven to check for updated versions of all the snapshot dependencies.</p>
+<p><strong>Note:</strong> Both lock-snapshots and unlock-snapshots create a backup file called <em>pom.xml.versionsBackup</em>.  To remove this file (and accept the Version Plugin&#8217;s changes to your <em>pom.xml</em>) run:</p>
+<pre>mvn versions:commit</pre>
+<p>Likewise, to go back to the <em>pom.xml</em> file you had before the Versions Plugin messed with it, run:</p>
+<pre>mvn versions:revert</pre>
+<h2>Explore</h2>
+<p>There&#8217;s a lot more to the Versions plugin, and to Maven dependency management in general.  Check the <a href="http://mojo.codehaus.org/versions-maven-plugin/">documentation</a> for details.</p>
+<p>Of course, the example here can be combined with the clojure-maven-plugin demonstrated in my previous post.  The syntax of the combined <em>pom.xml</em> file is left as an exercise for the reader.</p>
+<p>One other thing: if you really want the absolute latest, up-to-the-second, still-hot-from-the-github version of something, there&#8217;s nothing for it but to use Git submodules.  I&#8217;ll demonstrate that in another post.</p>
+<div id="_mcePaste" style="overflow: hidden; position: absolute; left: -10000px; top: 0px; width: 1px; height: 1px;">&lt;dependencies&gt;<br />
+&lt;dependency&gt;<br />
+&lt;groupId&gt;org.clojure&lt;/groupId&gt;<br />
+&lt;artifactId&gt;clojure-lang&lt;/artifactId&gt;<br />
+&lt;version&gt;1.1.0-alpha-SNAPSHOT&lt;/version&gt;<br />
+&lt;/dependency&gt;<br />
+&lt;dependency&gt;<br />
+&lt;groupId&gt;org.clojure&lt;/groupId&gt;<br />
+&lt;artifactId&gt;clojure-contrib&lt;/artifactId&gt;<br />
+&lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;<br />
+&lt;/dependency&gt;<br />
+&lt;/dependencies&gt;<br />
+&lt;pluginRepositories&gt;<br />
+&lt;pluginRepository&gt;<br />
+&lt;id&gt;Codehaus&lt;/id&gt;<br />
+&lt;name&gt;Codehaus Maven Plugin Repository&lt;/name&gt;<br />
+&lt;url&gt;http://repository.codehaus.org/org/codehaus/mojo/&lt;/url&gt;<br />
+&lt;/pluginRepository&gt;<br />
+&lt;/pluginRepositories&gt;</div>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2009/09/04/cutting-edge-clojure-development-with-maven.html" rel="bookmark"><time class="entry-date published updated" datetime="2009-09-04T15:13:46+00:00">September 4, 2009</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="clojure.html" rel="tag">Clojure</a>, <a href="lisp.html" rel="tag">Lisp</a>, <a href="maven.html" rel="tag">Maven</a></span><span class="comments-link"><a href="../2009/09/04/cutting-edge-clojure-development-with-maven.html#comments">3 Comments<span class="screen-reader-text"> on Cutting-Edge Clojure Development with Maven</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-275" class="post-275 post type-post status-publish format-standard hentry category-programming tag-clojure tag-lisp tag-maven">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2009/09/03/mavens-not-so-bad.html" rel="bookmark">Maven&#8217;s Not So Bad: Further Thoughts on Clojure Package Management</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Update Sept. 4: <a href="../2009/09/04/cutting-edge-clojure-development-with-maven.html">How to get the latest builds of Clojure &amp; Contrib</a></p>
+<p><a title="Maven home page" href="http://maven.apache.org/">Maven</a> is a touchy subject.  People tend to have strong opinions about it.  But like it or not, it&#8217;s the de-facto standard for dependency management in the Java world.  <a title="Clojure home page" href="http://clojure.org/">Clojure</a> lives in the Java world, so that means we have to live with Maven.</p>
+<p>Here are some good things about Maven:</p>
+<ul>
+<li>&#8220;Convention over configuration.&#8221;</li>
+<li>Plugins are downloaded &amp; installed automatically.</li>
+<li>Handles dependencies of dependencies.</li>
+<li>Declarative configuration, not imperative like Ant.</li>
+<li>Only stores one copy of each JAR, shared by all projects.</li>
+</ul>
+<p>Here are some bad things about Maven:</p>
+<ul>
+<li>XML configuration file.</li>
+<li>Verbose command line options.</li>
+<li><del datetime="2009-09-03T22:46:35+00:00">Doesn&#8217;t track latest source code of projects.</del> It does; see comments (Thanks, Tim!)</li>
+<li>First run takes forever to download all the plugins.</li>
+<li>Verbose console output.</li>
+</ul>
+<p>In my estimation, the good outweigh the bad.  And nothing outweighs the huge fact that <em>Maven is already there</em>.</p>
+<p>So let&#8217;s develop a Clojure app using Maven.</p>
+<h2>Step 1: Install Maven.</h2>
+<p>If you don&#8217;t already have it, that is.  This is pretty easy, just visit <a title="Apache Maven home page" href="http://maven.apache.org/">maven.apache.org</a> and follow the instructions.</p>
+<h2>Step 2: Create a new project.</h2>
+<p>Type the following at the command line:</p>
+<pre>mvn archetype:generate</pre>
+<p>Maven will ask a series of questions:</p>
+<ol>
+<li><strong>archetype:</strong> At the <em>&#8220;Choose a number&#8221;</em> prompt, press enter to accept the default project type, <em>maven-archetype-quickstart</em>.</li>
+<li><strong>groupId:</strong> Enter a name to identify yourself in the global Maven namespace.  All your Maven projects will use the same groupId.  This is typically a reverse domain name in the style of Java package names.  For example, I could use the groupId <em>com.stuartsierra</em></li>
+<li><strong>artifactId:</strong> Enter a name to identify this specific project in the Maven repository.  For example, <em>my-great-clojure-library<br />
+</em></li>
+<li><strong>version:</strong> Press enter to accept the default, <em>1.0-SNAPSHOT</em></li>
+<li><strong>package:</strong> Press enter to accept the default, which is the same as your groupId.</li>
+<li><strong>Confirmation: </strong>Press enter.</li>
+</ol>
+<p>Now you have a directory named <em>my-great-clojure-library</em> containing the skeleton of a new Java project.</p>
+<h2>Step 3: Configure your pom.xml.</h2>
+<p>Go into your new project directory and edit the <em>pom.xml</em> file.  The basic information will already be filled out.</p>
+<p>We can remove the dependency on JUnit, so delete these lines:</p>
+<pre>    &lt;dependency&gt;
+      &lt;groupId&gt;junit&lt;/groupId&gt;
+      &lt;artifactId&gt;junit&lt;/artifactId&gt;
+      &lt;version&gt;3.8.1&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;</pre>
+<p>Then we need to add the Clojure Maven plugin, which tells Maven how to compile Clojure source code.  Before the final &lt;/project&gt; tag, add these lines:</p>
+<pre>  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;com.theoryinpractise&lt;/groupId&gt;
+        &lt;artifactId&gt;clojure-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;1.0&lt;/version&gt;
+        &lt;executions&gt;
+          &lt;execution&gt;
+            &lt;id&gt;compile-clojure&lt;/id&gt;
+            &lt;phase&gt;compile&lt;/phase&gt;
+            &lt;goals&gt;
+              &lt;goal&gt;compile&lt;/goal&gt;
+            &lt;/goals&gt;
+          &lt;/execution&gt;
+        &lt;/executions&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;</pre>
+<p>We also need to add Clojure itself as a dependency of our project (the Clojure Maven plugin does not do this automatically).  Inside the &lt;dependencies&gt; tag, add the following lines:</p>
+<pre>    &lt;dependency&gt;
+      &lt;groupId&gt;org.clojure&lt;/groupId&gt;
+      &lt;artifactId&gt;clojure&lt;/artifactId&gt;
+      &lt;version&gt;1.0.0&lt;/version&gt;
+    &lt;/dependency&gt;</pre>
+<p>That&#8217;s if you want the official Clojure 1.0.0 release.  If you want a cutting-edge version, I&#8217;ll explain how in a later post.</p>
+<h2>Step 4: Delete Java sources.</h2>
+<p>Your project directory comes pre-equipped with two Java source directories at <em>src/main/java</em> and <em>src/test/java</em>.  You can delete both of them, unless, of course, you&#8217;re developing a mixed Clojure-Java project.</p>
+<h2>Step 5: Add dependencies.</h2>
+<p>If your project does anything interesting, chances are it&#8217;s going to depend on some external Java libraries.  You can find libraries in the public Maven repositories at <a title="Maven Repository search" href="http://www.mvnrepository.com/">mvnrepository.com</a>.  Search for a library name, and it will show you the code to put in your <em>pom.xml</em> file.</p>
+<p>For example, say we want to use the Apache Commons IO library.  At mvnrepository.com, we find the dependency code for this library:</p>
+<pre>  &lt;dependency&gt;
+    &lt;groupId&gt;commons-io&lt;/groupId&gt;
+    &lt;artifactId&gt;commons-io&lt;/artifactId&gt;
+    &lt;version&gt;1.4&lt;/version&gt;
+  &lt;/dependency&gt;</pre>
+<p>And we can add that inside the &lt;dependencies&gt; section of <em>pom.xml</em>.</p>
+<h2>Step 6: Start coding!</h2>
+<p>Create the directory <em>src/main/clojure</em>.  This is where all your .clj source files will go.</p>
+<p>Follow the standard Clojure/Java convention for file names. That is, if you have a Clojure namespace called <em>my.great.library</em>, it should be in a file named <em>src/main/clojure/my/great/library.clj</em></p>
+<h2>Step 7: Compile and install.</h2>
+<p>Run the following command:</p>
+<pre>mvn install</pre>
+<p>That will compile all your .clj source files into Java .class files, package them into a JAR, and install that JAR in your local Maven cache.  On Unix-like systems, the cache should be at <em>~/.m2/repository/</em></p>
+<h2>Step 8: Live and learn.</h2>
+<p>There&#8217;s a whole lot more to learn about Maven.  It&#8217;s a very flexible tool, and it can do almost anything.  Yes, you will have to write some XML, but it&#8217;s really not that much.</p>
+<p>Things I hope to cover in future posts:</p>
+<ol>
+<li>Using git submodules to track development versions of Clojure libraries.</li>
+<li>Running tests written in Clojure.</li>
+<li>Including .clj source files in your JAR.</li>
+<li>Creating a stand-alone JAR including all dependencies.</li>
+<li>Setting up a private Maven repository.</li>
+</ol>
+<p>I hope this was a reasonable introduction to developing with Maven and Clojure, and that I have shown that Maven isn&#8217;t nearly as scary as people make it out to be.  I think Maven suffered for a long time from poor documentation, but that&#8217;s changing rapidly.  I found the (free) book <a title="Maven Definitive Guide home page" href="http://www.sonatype.com/products/maven/documentation/book-defguide">Maven: The Definitive Guide</a> extremely helpful.</p>
+<h2>Appendix: Complete pom.xml</h2>
+<p>Here&#8217;s the complete pom.xml file for the project I developed in this post:</p>
+<pre>&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;com.stuartsierra&lt;/groupId&gt;
+  &lt;artifactId&gt;my-great-clojure-library&lt;/artifactId&gt;
+  &lt;packaging&gt;jar&lt;/packaging&gt;
+  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+  &lt;name&gt;my-great-clojure-library&lt;/name&gt;
+  &lt;url&gt;http://maven.apache.org&lt;/url&gt;
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.clojure&lt;/groupId&gt;
+      &lt;artifactId&gt;clojure&lt;/artifactId&gt;
+      &lt;version&gt;1.0.0&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;commons-io&lt;/groupId&gt;
+      &lt;artifactId&gt;commons-io&lt;/artifactId&gt;
+      &lt;version&gt;1.4&lt;/version&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;com.theoryinpractise&lt;/groupId&gt;
+        &lt;artifactId&gt;clojure-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;1.0&lt;/version&gt;
+        &lt;executions&gt;
+          &lt;execution&gt;
+            &lt;id&gt;compile-clojure&lt;/id&gt;
+            &lt;phase&gt;compile&lt;/phase&gt;
+            &lt;goals&gt;
+              &lt;goal&gt;compile&lt;/goal&gt;
+            &lt;/goals&gt;
+          &lt;/execution&gt;
+        &lt;/executions&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+&lt;/project&gt;</pre>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2009/09/03/mavens-not-so-bad.html" rel="bookmark"><time class="entry-date published" datetime="2009-09-03T18:38:29+00:00">September 3, 2009</time><time class="updated" datetime="2009-09-05T00:00:00+00:00">September 5, 2009</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="clojure.html" rel="tag">Clojure</a>, <a href="lisp.html" rel="tag">Lisp</a>, <a href="maven.html" rel="tag">Maven</a></span><span class="comments-link"><a href="../2009/09/03/mavens-not-so-bad.html#comments">11 Comments<span class="screen-reader-text"> on Maven&#8217;s Not So Bad: Further Thoughts on Clojure Package Management</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+		</main><!-- .site-main -->
+	</div><!-- .content-area -->
+
+
+	<aside id="secondary" class="sidebar widget-area" role="complementary">
+		<section id="search-3" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://stuartsierra.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+	</label>
+	<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</section><section id="text-4" class="widget widget_text">			<div class="textwidget"><ul>
+<li><a href="http://feeds2.feedburner.com/StuartSierra" title="Syndicate this site using RSS 2.0">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="../comments/feed" title="The latest comments to all posts in RSS">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+</ul>
+<ul>
+<li><a href="https://twitter.com/stuartsierra">Twitter</a></li>
+<li><a href="https://github.com/stuartsierra">GitHub</a></li>
+</ul></div>
+		</section><section id="tag-widget-2" class="widget TagWidget"><h2 class="widget-title">Clojure Do’s and Don’ts</h2><ul class = "posts-by-tag-list"><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-883"><a class = "posts-by-tag-item-title" href="../2015/08/25/clojure-donts-lazy-effects.html">Clojure Don’ts: Lazy Effects</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-877"><a class = "posts-by-tag-item-title" href="../2015/08/10/clojure-donts-redundant-map.html">Clojure Don’ts: Redundant map</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-870"><a class = "posts-by-tag-item-title" href="../2015/06/16/clojure-donts-single-branch-if.html">Clojure Don’ts: Single-branch if</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-854"><a class = "posts-by-tag-item-title" href="../2015/06/10/clojure-donts-heisenparameter.html">Clojure Don’ts: The Heisenparameter</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-849"><a class = "posts-by-tag-item-title" href="../2015/06/01/clojure-donts-optional-arguments-with-varargs.html">Clojure Don’ts: Optional Arguments with Varargs</a></li><li class="posts-by-tag-item Clojure do's and don'ts errors" id="posts-by-tag-item-836"><a class = "posts-by-tag-item-title" href="../2015/05/27/clojure-uncaught-exceptions.html">Clojure Do’s: Uncaught Exceptions</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-831"><a class = "posts-by-tag-item-title" href="../2015/05/17/clojure-record-constructors.html">Record Constructors</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-826"><a class = "posts-by-tag-item-title" href="../2015/05/10/clojure-namespace-aliases.html">Clojure Do’s: Namespace Aliases</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-820"><a class = "posts-by-tag-item-title" href="../2015/05/02/clojure-donts-isa.html">Clojure Don’ts: isa?</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-812"><a class = "posts-by-tag-item-title" href="../2015/04/26/clojure-donts-concat.html">Clojure Don’ts: Concat</a></li></ul></section>	</aside><!-- .sidebar .widget-area -->
+
+		</div><!-- .site-content -->
+
+		<footer id="colophon" class="site-footer" role="contentinfo">
+							<nav class="main-navigation" role="navigation" aria-label="Footer Primary Menu">
+					<div class="menu-main-menu-container"><ul id="menu-main-menu-1" class="primary-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../about-me.html">About Me</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../writing.html">Writing</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../presentations.html">Presentations</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../software.html">Software</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../contact.html">Contact</a></li>
+</ul></div>				</nav><!-- .main-navigation -->
+			
+			
+			<div class="site-info">
+								<span class="site-title"><a href="../index.html" rel="home">Digital Digressions by Stuart Sierra</a></span>
+				<a href="https://wordpress.org/">Proudly powered by WordPress</a>
+			</div><!-- .site-info -->
+		</footer><!-- .site-footer -->
+	</div><!-- .site-inner -->
+</div><!-- .site -->
+
+	<div style="display:none">
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	</div>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201635'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2016Sepaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../wp-content/plugins/jetpack/modules/wpgroho167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../wp-content/themes/twentysixteen/js/skip-link-focus-fix8de4.js?ver=20160816'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var screenReaderText = {"expand":"expand child menu","collapse":"collapse child menu"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../wp-content/themes/twentysixteen/js/functions8de4.js?ver=20160816'></script>
+<script type='text/javascript' src='../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='https://stats.wp.com/e-201635.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.2.2',blog:'2702563',post:'0',tz:'-4',srv:'stuartsierra.com'} ]);
+	_stq.push([ 'clickTrackerInit', '2702563', '0' ]);
+</script>
+</body>
+
+<!-- Mirrored from stuartsierra.com/tag/maven by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:58:33 GMT -->
+</html>
+
+<!-- Dynamic page generated in 0.371 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:56:20 -->
+
+<!-- Compression = gzip -->

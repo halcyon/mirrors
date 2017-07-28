@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/basic-2/recap.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:48:11 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Into the rapids: more basic</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;into-the-rapids-more-basic&quot;)"></div><h1 anchor="into-the-rapids-more-basic" id="into-the-rapids-more-basic" hyphens="none">Into the rapids: more <span class="my-code" decode="exclude">basic</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-syntax-colorer.html">3&emsp;the syn­tax col­orer</a></li><li><a href="better-line-errors.html">4&emsp;bet­ter line errors</a></li><li><a href="variables-and-input.html">5&emsp;vari­ables and input</a></li><li><a href="expressions.html">6&emsp;expres­sions</a></li><li><a href="conditionals.html">7&emsp;con­di­tion­als</a></li><li><a href="subroutines-and-loops.html">8&emsp;sub­rou­tines and loops</a></li><li><a class="here" href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_zKUC3&quot;)"></div><p id="a_zKUC3">Build­ing on the work we did in the first <a href="../basic/index.html"><span class="my-code" decode="exclude">basic</span></a> tuto­r­ial, we con­quered some of the harder parts of BASIC, and learned about some new power tools in Racket itself:</p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_pqNfp&quot;)"></div><p id="a_pqNfp">We learned about the ver­sa­tile <a href="http://docs.racket-lang.org/reference/match.html#(form._((lib._racket/match..rkt)._match))" class="docs" hyphens="none">match</a> and <a href="http://docs.racket-lang.org/reference/match.html#(form._((lib._racket/match..rkt)._match-define))" class="docs" hyphens="none">match-define</a>, and used them to make <a href="the-syntax-colorer.html">the syn­tax col­orer</a>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_7zld6&quot;)"></div><p id="a_7zld6">To make <a href="better-line-errors.html">bet­ter line errors</a>, we got clever about using  <a class="glossary" href="../appendix/glossary.html#exception"><span class="glossary-link-text">excep­tions</span></a> to gen­er­ate our errors by com­bin­ing infor­ma­tion from two places in the pro­gram.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_70DE9&quot;)"></div><p id="a_70DE9">To imple­ment <a href="variables-and-input.html">vari­ables and input</a>, we bit the bul­let and mod­eled our BASIC vari­ables as Racket vari­ables. This made things a lit­tle harder at the out­set, but paid div­i­dends later. We saw how to use <a class="glossary" href="../appendix/glossary.html#syntax-property"><span class="glossary-link-text">syn­tax prop­er­ties</span></a> left behind by splices in the parser to find occur­rences of vari­ables in the parse tree.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_6bG8T&quot;)"></div><p id="a_6bG8T">In <a href="expressions.html">expres­sions</a> and <a href="conditionals.html">con­di­tion­als</a>, we learned how to use parser rules to imple­ment order­ing and prec­dence of oper­a­tions. We also explored some of the con­sid­er­a­tions in choos­ing func­tions or macros to imple­ment cer­tain lan­guage fea­tures.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_qPdnx&quot;)"></div><p id="a_qPdnx">Finally, we learned about how <a class="glossary" href="../appendix/glossary.html#continuation"><span class="glossary-link-text">con­tin­u­a­tions</span></a> can affect <a class="glossary" href="../appendix/glossary.html#control-flow"><span class="glossary-link-text">con­trol flow</span></a>. In par­tic­u­lar, how we could use them to imple­ment <a href="subroutines-and-loops.html">sub­rou­tines and loops</a>, which require us to jump back to pre­vi­ous lines in the pro­gram.</p></div></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;next-steps&quot;)"></div><h3 anchor="next-steps" class="subhead" id="next-steps"><a href="#next-steps">Next steps</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_13Kfn&quot;)"></div><p id="a_13Kfn">We’ll stay with BASIC just a lit­tle longer. But rather than imple­ment­ing new state­ments, we’ll see how we can extend our imple­men­ta­tion to coop­er­ate with other Racket mod­ules—whether writ­ten in BASIC, Racket, or some­thing else. We’ll also see how to bet­ter inte­grate our lan­guage with the REPL and com­mand line.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-syntax-colorer.html">3&emsp;the syn­tax col­orer</a></li><li><a href="better-line-errors.html">4&emsp;bet­ter line errors</a></li><li><a href="variables-and-input.html">5&emsp;vari­ables and input</a></li><li><a href="expressions.html">6&emsp;expres­sions</a></li><li><a href="conditionals.html">7&emsp;con­di­tion­als</a></li><li><a href="subroutines-and-loops.html">8&emsp;sub­rou­tines and loops</a></li><li><a class="here" href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="subroutines-and-loops.html">← prev</a>
+    <a class="nav-right" href="source-listing.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Typed Assertions Tell You What Hurts</title>
+	<atom:link href="https://stuartsierra.com/2010/07/19/typed-assertions/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2010/07/19/typed-assertions</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Slightly Less Typed Assertions - Digital Digressions by Stuart Sierra</title>
+		<link>https://stuartsierra.com/2010/07/19/typed-assertions/comment-page-1#comment-43167</link>
+		<dc:creator><![CDATA[Slightly Less Typed Assertions - Digital Digressions by Stuart Sierra]]></dc:creator>
+		<pubDate>Sat, 31 Jul 2010 20:23:20 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=463#comment-43167</guid>
+		<description><![CDATA[[...] A couple of weeks ago I wrote about typed assertions for Lazytest. [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] A couple of weeks ago I wrote about typed assertions for Lazytest. [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2010/07/19/typed-assertions/comment-page-1#comment-43162</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Fri, 30 Jul 2010 22:38:26 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=463#comment-43162</guid>
+		<description><![CDATA[Rich- you&#039;re right, defining record types for every predicate is too limiting. I&#039;ve reverted to using simple maps, as you suggested.]]></description>
+		<content:encoded><![CDATA[<p>Rich- you&#8217;re right, defining record types for every predicate is too limiting. I&#8217;ve reverted to using simple maps, as you suggested.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Two Steps Forward, One Step Back - Digital Digressions by Stuart Sierra</title>
+		<link>https://stuartsierra.com/2010/07/19/typed-assertions/comment-page-1#comment-43147</link>
+		<dc:creator><![CDATA[Two Steps Forward, One Step Back - Digital Digressions by Stuart Sierra]]></dc:creator>
+		<pubDate>Sat, 24 Jul 2010 23:37:17 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=463#comment-43147</guid>
+		<description><![CDATA[[...] &#171;&#160;Typed Assertions Tell You What Hurts       Jul 24 2010 [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] &laquo;&nbsp;Typed Assertions Tell You What Hurts       Jul 24 2010 [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2010/07/19/typed-assertions/comment-page-1#comment-43142</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Tue, 20 Jul 2010 17:05:58 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=463#comment-43142</guid>
+		<description><![CDATA[Phil- No, didn&#039;t know about that. Will investigate.
+
+Rich- I&#039;m only defining one Exception type, so that I can add a public Object field. The actual &quot;reasons&quot; are just defrecords, which is convenient because I can extend reporting methods on them.
+
+tod- java.lang.AssertionError only has a String field where I want an Object. I could extend it, however.]]></description>
+		<content:encoded><![CDATA[<p>Phil- No, didn&#8217;t know about that. Will investigate.</p>
+<p>Rich- I&#8217;m only defining one Exception type, so that I can add a public Object field. The actual &#8220;reasons&#8221; are just defrecords, which is convenient because I can extend reporting methods on them.</p>
+<p>tod- java.lang.AssertionError only has a String field where I want an Object. I could extend it, however.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: tod</title>
+		<link>https://stuartsierra.com/2010/07/19/typed-assertions/comment-page-1#comment-43141</link>
+		<dc:creator><![CDATA[tod]]></dc:creator>
+		<pubDate>Tue, 20 Jul 2010 15:55:17 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=463#comment-43141</guid>
+		<description><![CDATA[How about the java.lang.AssertionError? You could either throw that or extend it, and achieve &quot;eventual compatibility&quot; with java test/runners. 
+I imagine, eventually i would be able to run the clojure tests together with java tests in an IDE (e.g. eclipse) and see the same style of error reporting for both (the green bar with stack and error info).]]></description>
+		<content:encoded><![CDATA[<p>How about the java.lang.AssertionError? You could either throw that or extend it, and achieve &#8220;eventual compatibility&#8221; with java test/runners.<br />
+I imagine, eventually i would be able to run the clojure tests together with java tests in an IDE (e.g. eclipse) and see the same style of error reporting for both (the green bar with stack and error info).</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Rich Hickey</title>
+		<link>https://stuartsierra.com/2010/07/19/typed-assertions/comment-page-1#comment-43140</link>
+		<dc:creator><![CDATA[Rich Hickey]]></dc:creator>
+		<pubDate>Tue, 20 Jul 2010 14:26:39 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=463#comment-43140</guid>
+		<description><![CDATA[Meh. Typed exceptions are not the only way. Java needs them because they can&#039;t easily represent different shapes of exception data without different types, and they built their exception &#039;switch&#039; mechanism around types. It&#039;s left people thinking exceptions are some strange sort of thing, each value of which needs its own type. That&#039;s not true of most other things. Why aren&#039;t the reasons (exception reports) just (variously shaped) map values? You could then use distinguished fields for more sophisticated handling, like by :severity, :category (or, yes, :class) etc. If you use types you need to force these ideas into a hierarchy.
+
+Every exception gets its own type needs to stop. Now. Please. It completely bloats the system with junk types, and engenders switch-on-type logic.
+
+Thanks,
+
+Rich]]></description>
+		<content:encoded><![CDATA[<p>Meh. Typed exceptions are not the only way. Java needs them because they can&#8217;t easily represent different shapes of exception data without different types, and they built their exception &#8216;switch&#8217; mechanism around types. It&#8217;s left people thinking exceptions are some strange sort of thing, each value of which needs its own type. That&#8217;s not true of most other things. Why aren&#8217;t the reasons (exception reports) just (variously shaped) map values? You could then use distinguished fields for more sophisticated handling, like by :severity, :category (or, yes, :class) etc. If you use types you need to force these ideas into a hierarchy.</p>
+<p>Every exception gets its own type needs to stop. Now. Please. It completely bloats the system with junk types, and engenders switch-on-type logic.</p>
+<p>Thanks,</p>
+<p>Rich</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Phil</title>
+		<link>https://stuartsierra.com/2010/07/19/typed-assertions/comment-page-1#comment-43139</link>
+		<dc:creator><![CDATA[Phil]]></dc:creator>
+		<pubDate>Tue, 20 Jul 2010 03:20:11 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=463#comment-43139</guid>
+		<description><![CDATA[Interesting. Do you know about this? http://github.com/clojure/clojure-contrib/blob/master/src/main/clojure/clojure/contrib/condition/Condition.clj]]></description>
+		<content:encoded><![CDATA[<p>Interesting. Do you know about this? <a href="http://github.com/clojure/clojure-contrib/blob/master/src/main/clojure/clojure/contrib/condition/Condition.clj" rel="nofollow">http://github.com/clojure/clojure-contrib/blob/master/src/main/clojure/clojure/contrib/condition/Condition.clj</a></p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.277 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:58:24 -->
+
+<!-- Compression = gzip -->

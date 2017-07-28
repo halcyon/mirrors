@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/effective-code-reviews-part-iv by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:00 GMT -->
+<head>
+    <title> Effective Code Reviews, Part IV </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="effective-code-reviews-part-iv.html">
+    <meta property="og:title" content="Effective Code Reviews, Part IV">
+    <meta property="og:description" content="Welcome back to this epic series on code reviews. If you're new to *Programming Beyond Practices* or just need to refresh your memory, here's what has been covered so far:">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Effective Code Reviews, Part IV" />
+	<meta name="twitter:description" content="Welcome back to this epic series on code reviews. If you're new to *Programming Beyond Practices* or just need to refresh your memory, here's what has been covered so far:" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> October 13, 2015 </div>
+            <h1 class="subject"> Effective Code Reviews, Part IV </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> Hello Developer Friend!<br>
+<br>
+Welcome back to this epic series on code reviews. If you&#39;re new to&nbsp;<em>Programming Beyond Practices</em>&nbsp;or just need to refresh your memory, here&#39;s what has been covered so far:<br>
+&nbsp;
+<ul>
+	<li><a href="effective-code-reviews-part-1.html">Part I</a>: Code reviews are more than just simple technical proofreading exercises. They should start with the question of overall software quality as perceived by the project&#39;s stakeholders and users, and then only focus on internal quality concerns once the&nbsp;changes have been validated from the outside-in.<br>
+	&nbsp;</li>
+	<li><a href="effective-code-reviews-part-ii.html">Part II</a>: A failing build cannot be trusted, and so before test coverage can even be discussed, you need to make sure that all tests can pass in an environment other than the one machine the code was written on. From there, you need to treat any modifications or deletions to existing tests in a new pull request as a red flag that indicates a need for a very careful review.<br>
+	&nbsp;</li>
+	<li><a href="effective-code-reviews-part-iii.html">Part III</a>: Any bug fix should be accompanied by at least some basic regression tests. Sometimes high level acceptance tests are good enough, other times you should expect to see comprehensive unit tests. Because bug fixes are themselves a form of behavior change, communicating about business requirements&nbsp;is an important part of evaluating any new&nbsp;regression tests.</li>
+</ul>
+<br>
+If you&#39;ve read all three of those essays already, you&#39;re wonderful! If you haven&#39;t, don&#39;t worry... this one is reasonably self contained. That said, do go back and read the other parts when you get a chance -- you&#39;ll get a lot more out of this series that way.<br>
+<br>
+Today, we&#39;re going to build on what we&#39;ve discussed so far by thinking through how to evaluate test coverage in changesets that introduce new functionality to your projects.<br>
+<br>
+Our focus today will not be on how to write high quality, maintainable tests -- that is a super complicated topic that deserves a series of its own. Instead, we&#39;ll be looking at how to assess the relative importance of comprehensive test coverage in different scenarios. The goal is to help you decide just how cautious you need to be in each code review, depending on the circumstances at hand.<br>
+<br>
+We can break the problem space into two broad categories of improvements: brand new features, and enhancements to existing features.<br>
+<br>
+By definition, brand new features do not have active users yet, and so this makes them fundamentally different from even the smallest modifications to functionality that is already in use. Because greenfield feature work is the easier of the two categories to reason about, it&#39;s what we&#39;ll focus on today.<br>
+<br>
+With the right sort of environment, the theoretical minimum acceptable test coverage for a brand new feature could approach zero. Yes, you heard that right: There are certain scenarios where it is acceptable (and even optimal) from an economic perspective to ship new code into production with no automated test coverage at all.<br>
+<br>
+The reason I&#39;ve brought this point up isn&#39;t to encourage you to look for any excuse to avoid writing tests, but instead to get you to think critically about what the actual costs and benefits are around building an automated testing safety net. With that in mind, let&#39;s imagine what the lowest risk scenario might look like for a new feature addition.<br>
+<br>
+Assume you&#39;re reviewing a pull request, and all of the following conditions apply:
+<ul>
+	<li>The change consists almost entirely of new code. The only existing behavior it depends upon is the infrastructure, framework, and library code that is already in use in the project, along with any&nbsp;basic data access objects and generic user interface tools you might be using.<br>
+	&nbsp;</li>
+	<li>The new functionality is isolated to its own area. If you&#39;re building a web application, this means the feature exists on a newly created page, and if you&#39;re building an&nbsp;API, then this new set of endpoints occupies its own namespace.<br>
+	&nbsp;</li>
+	<li>The feature does not introduce new system-wide side effects. In particular, it doesn&#39;t change dependencies, configurations, performance requirements, etc. It also does not generate a major increase in load on any shared resources that might be used by other features in the project.<br>
+	&nbsp;</li>
+	<li>The feature is not planned to be used as a building block to implement other pieces of functionality that are already on the project&#39;s roadmap.<br>
+	&nbsp;</li>
+	<li>The feature is not&nbsp;an intermediate step in a chain of responsibility that ties the behavior of many features together into a single workflow.<br>
+	&nbsp;</li>
+	<li>If the feature fails in any way, those failures will not escape outwards and cause instability elsewhere in the system.<br>
+	&nbsp;</li>
+	<li>Any conceivable failures that could happen due to the introduction of this new feature would be acceptable to the project stakeholders and users, and would not cause significant harm to the system.<br>
+	&nbsp;</li>
+	<li>Any necessary tests to support future development work or sustainable maintenance practices could be written at a later date without incurring unacceptable costs or delays.<br>
+	&nbsp;</li>
+</ul>
+If whatever code you&#39;re reviewing actually does meet all of these conditions, don&#39;t worry about looking for automated test coverage! In fact, suggesting that tests should be added when a patch meets all of the above criteria may be bad advice.<br>
+<br>
+A feature that isn&#39;t especially hard to add tests for later, which is completely isolated from the rest of the system and is allowed to fail isn&#39;t a major risk to any project. In fact, you may learn quite a bit about the feature&#39;s functional requirements and testing needs by simply shipping it and seeing what happens.<br>
+<br>
+If you learn that the feature isn&#39;t going to be worth maintaining, or that it isn&#39;t likely to be used, any tests that have been written and reviewed represent a form of waste. Furthermore, if you need to significantly change a feature to the point where many of its tests need to be modified, that is wasteful too. It&#39;s worth remembering that tests that quickly get deleted do not offer any real protection, nor do they positively influence the overall design of a system.<br>
+<br>
+In certain business domains, well thought out architecture combined with sound development practices and sufficient infrastructure support can make this sort of scenario the norm rather than the exception to the rule. Alas, the world most of us occupy is not so idyllic, and so what I&#39;ve described so far may sound like fairy dust and unicorns to you.<br>
+<br>
+So what was the point of this essay? Well, that will be obvious the moment you go back and flip each of these conditions around, effectively turning them into a list of things to look out for when you review any new feature work. For each potential risk you identify in a new changeset via these criteria, look for test coverage that specifically addresses that risk. If those tests are missing or inadequate, that&#39;s where to focus your feedback.<br>
+<br>
+That&#39;s all I&#39;ve got for today. In a few days, we&#39;ll dig into the even more complicated issue of evaluating test coverage for code that enhances existing functionality in a project.<br>
+<br>
+Until then, happy hacking!<br>
+-greg<br>
+<br>
+<em style="font-size: 16px; outline: none; color: rgb(80, 80, 80); line-height: 22px; max-width: 600px !important;">Your feedback and questions are welcome! Reply directly to this email, or use the&nbsp;<a href="https://twitter.com/search?src=typd&amp;q=%23ProgrammingBeyondPractices" style="font-size: 16px; font-family: inherit; outline: none; color: rgb(52, 102, 204); text-decoration: none; max-width: 600px !important;">#ProgrammingBeyondPractices</a></em><em style="font-size: 16px; outline: none; color: rgb(80, 80, 80); line-height: 22px; max-width: 600px !important;"><font color="#505050" style="max-width: 600px !important;">&nbsp;hashtag on Twitter.&nbsp;</font><br style="max-width: 600px !important;">
+<br style="max-width: 600px !important;">
+<font color="#505050" style="max-width: 600px !important;">If you&#39;re a&nbsp;</font><a href="http://practicingruby.com/" style="font-size: 16px; font-family: inherit; outline: none; color: rgb(52, 102, 204); text-decoration: none; max-width: 600px !important;">Practicing Ruby</a><font color="#505050" style="max-width: 600px !important;">&nbsp;subscriber, you can also discuss these essays with me at any time via Slack or Discourse.</font></em> </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="effective-code-reviews-part-v.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="effective-code-reviews-part-iii.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/effective-code-reviews-part-iv by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:00 GMT -->
+</html>

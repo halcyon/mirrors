@@ -1,0 +1,426 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-7.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:48 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Lecture Seven</title>
+</head>
+<body>
+
+<center><b><font size=+3>Declarative Languages</font></b>
+<br><b><font size=+3>Lecture #7</font></b></center>
+
+<p><b>Purpose: Structures, a word about macros, functions of functions,
+anonymous functions</b>
+<p><b>7.1 Structures</b>
+<p>And so on to user-defined structures. An example:
+<blockquote><tt>(defstruct point</tt>
+<br><tt>&nbsp; x</tt>
+<br><tt>&nbsp; y</tt>
+<br><tt>&nbsp; z)</tt></blockquote>
+This form is equivalent to a struct declaration in C. It defines a new
+type, called point, with three <i>slots</i> (or <i>fields</i> if that's
+a word you're happier with) called <tt>x</tt>, <tt>y</tt> and <tt>z</tt>.
+<p>The <tt>defstruct</tt> macro gives us all of the following:
+<ul>
+<li>
+A function <tt>make-point</tt>, which takes keyword arguments <tt>:x :y</tt>
+and <tt>:z</tt> (all defaulting to <tt>nil</tt> if not supplied). Every
+time you call this function a new <tt>point</tt> is constructed and returned
+to you.</li>
+
+<li>
+Any object returned by <tt>make-point </tt>will be of type <tt>point</tt>,
+and will respond enthusiastically to the predicate <tt>point-p</tt>.</li>
+
+<li>
+Setfable accessors <tt>point-x point-y </tt>and <tt>point-z</tt> can be
+used to read and modify the slots of any <tt>point</tt> object.</li>
+</ul>
+Structures can have any number of slots (from zero up) and - as with lists
+and general vectors - the slots can hold any values. By default (but see
+below) structures print out using the slightly baroque <tt>#s</tt> syntax,
+and can even be read back in that way; in fact what it boils down to is
+that there are a lot of (some wierd, some useful) features in <tt>defstruct</tt>
+but we aren't going to go into them here. [I'll just mention that if you
+want to generate a structure type that inherits from another one, look
+up the <tt>:include</tt> option to <tt>defstruct</tt> to see how it's done.]
+<p>Example:
+<blockquote><tt>CL-USER 53 > (defstruct point</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+x</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+y</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+z)</tt>
+<br><tt>POINT</tt>
+<p><tt>CL-USER 54 > (defun distance-from-origin (point)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(let* ((x (point-x point))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(y (point-y point))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(z (point-z point)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(sqrt (+ (* x x) (* y y) (* z z)))))</tt>
+<br><tt>DISTANCE-FROM-ORIGIN</tt>
+<p><tt>CL-USER 55 > (defun reflect-in-y-axis (point)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(setf (point-y point)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(- (point-y point))))</tt>
+<br><tt>REFLECT-IN-Y-AXIS</tt>
+<p><tt>CL-USER 56 > (setf my-point (make-point :x 3 :y 4 :z 12))</tt>
+<br><tt>#S(POINT X 3 Y 4 Z 12)</tt>
+<p><tt>CL-USER 57 > (type-of my-point)</tt>
+<br><tt>POINT</tt>
+<p><tt>CL-USER 58 > (distance-from-origin my-point)</tt>
+<br><tt>13.0</tt>
+<p><tt>CL-USER 59 > (reflect-in-y-axis my-point)</tt>
+<br><tt>-4</tt>
+<p><tt>CL-USER 60 > my-point</tt>
+<br><tt>#S(POINT X 3 Y -4 Z 12)</tt>
+<p><tt>CL-USER 61 ></tt></blockquote>
+Finally: it quite often happens (when you have structures containing structures
+containing ... etc.) that it all gets a bit much when it is printed out.
+We will touch on this briefly later in the course, but for now note that
+you can control how each type of structure prints. Just be aware that it
+is possible to control this, and that by convention the output is typically
+wrapped in <tt>#&lt;&nbsp; ></tt>. The reason for this is that the lisp
+reader is programmed to signal an error whenever it sees
+<tt>#&lt;</tt>
+and so you can guarantee that once you've abandoned the baroque but re-readable
+<tt>#s</tt>
+syntax, your output can never be inadvertently re-read into the image.
+<blockquote><tt>CL-USER 10 > (make-point :z 2 :x 0 :y 1)</tt>
+<br><tt>#&lt;A point whose x,y,z co-ordinates are 0,1,2></tt>
+<p><tt>CL-USER 11 > #&lt;A point whose x,y,z co-ordinates are 0,1,2></tt>
+<p><tt>Error: </tt>(etc)</blockquote>
+
+<p><br><b>7.2 Defining macros / expanding macros</b>
+<p>You may have noticed that a growing number of the macros we have met:
+<blockquote><tt>defun</tt>
+<br><tt>defparameter</tt>
+<br><tt>defconstant</tt>
+<br><tt>defstruct</tt>
+<br>(and more to come)</blockquote>
+have a something in common. They are known as <i>defining macros</i> (they
+define global functions, global parameters, constants, structure types,
+and so on) and by convention these macros - and no others - start with
+the letters <tt>"def"</tt>.
+<p>You may also have noticed me repeatedly telling you that a macro is
+<u>always</u>
+shorthand for some other, typically longer and nastier, piece of code.
+If curiosity bites, you can see for yourself what a macro call is going
+to expand to by throwing it at the function <tt>macroexpand-1</tt>. An
+example:
+<blockquote><tt>(macroexpand-1 '(and foo bar))) => (if foo (and bar) nil)</tt></blockquote>
+A slightly hairier example, in which we see that many macros expand into
+all sorts of mean nasty things that we never wanted to know about. Note
+the use of the function <tt>pprint</tt> which is like <tt>print</tt> except
+that it attempts (with varying degrees of success) to respect your screen
+width, indentation conventions, etc.
+<blockquote><tt>CL-USER 3 > (pprint (macroexpand-1 '(defun foo (x) x)))</tt>
+<p><tt>(TOP-LEVEL-FORM FOO</tt>
+<br><tt>&nbsp; (DSPEC:DEFUN-AUX 'FOO</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+#'(LAMBDA</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(X)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(DECLARE (LAMBDA-NAME FOO))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(BLOCK FOO X))))</tt>
+<p><tt>CL-USER 4 ></tt></blockquote>
+If you think that's ugly, try macroexpanding a <tt>defstruct</tt> form,
+such as <tt>(defstruct foo bar)</tt>.
+<p>System macros (i.e. macros, such as <tt>defun</tt>, which you didn't
+define yourself) are not obliged to expand into anything you can read or
+understand, or even into standard Common Lisp. The first of the above examples
+did expand into code which is readable, comprehensible and still Common
+Lisp; the second is part-way readable but goes "under the hood" with (e.g.)
+<tt>DSPEC:DEFUN-AUX</tt>
+which we know from nothing; and <tt>defstruct</tt> is always revolting.
+<p>How system macros expand will typically differ between implementations,
+e.g. between Xanalys and Franz, or between Franz on the PC and Franz on
+Sun workstations.
+<br>&nbsp;
+<p><b>7.3 Functions as arguments to other functions</b>
+<p>We saw in lecture 5 how you can pass the name of a function to <tt>mapcar</tt>
+(and to other functions), for instance:
+<blockquote><tt>CL-USER 11 > (mapc 'print '(foo bar baz))</tt>
+<p><tt>FOO</tt>
+<br><tt>BAR</tt>
+<br><tt>BAZ</tt>
+<br><tt>(FOO BAR BAZ)</tt>
+<p><tt>CL-USER 12 ></tt></blockquote>
+Functions which mess with other functions are very much part of the scenery
+in lisp. Let's take look at just a couple of these...
+<br>&nbsp;
+<p><b>7.4 Sorting things</b>
+<p>The function <tt>sort</tt> takes a sequence and sorts it. Into ascending
+numerical order? descending? alphabetical? or what? - Well that depends
+on you: <tt>sort</tt> takes a second argument, a predicate (which we remember
+is a function called to in order to obtain <i>false</i> or <i>true</i>,
+i.e. a <tt>nil</tt> or non-<tt>nil</tt> answer), and this predicate is
+used to determine the ordering. When <tt>sort</tt> has finished, each pair
+of adjacent elements in the result has to satisfy our predicate.
+<p>For instance, suppose we want to sort some list of numbers such as <tt>(14
+40 16 8 35 33)</tt> into ascending order, i.e. into a sequence such that
+<tt>&lt;</tt>
+is true of each pair of adjacent numbers. We already have
+<tt>(&lt; 14
+40)</tt> and so these two numbers are in the right order. But <tt>(&lt;
+40 16)</tt> is false, and so these two numbers need to be swapped around.
+And so on...
+<p>Example:
+<blockquote><tt>CL-USER 36 > (defun lottery-choices-brute-force ()</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(let* ((fourty-nines '(49 49 49 49 49 49))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(randoms-0-to-48 (mapcar 'random fourty-nines))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(randoms-1-to-49 (mapcar '1+ randoms-0-to-48)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(sort randoms-1-to-49 '&lt;)))</tt>
+<br><tt>LOTTERY-CHOICES-BRUTE-FORCE</tt>
+<p><tt>CL-USER 37 > (lottery-choices-brute-force)</tt>
+<br><tt>(8 14 16 33 35 40)</tt>
+<p><tt>CL-USER 38 ></tt></blockquote>
+The function <tt>random</tt> takes one argument - a positive integer or
+float - and returns a pseudo-random number, non-negative but less than
+the argument and of the same type - examples might be:
+<br><tt>&nbsp;&nbsp;&nbsp; (random 2)&nbsp;&nbsp;&nbsp; =>&nbsp; 0</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (random 2)&nbsp;&nbsp;&nbsp; =>&nbsp; 1</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (random 2.0)&nbsp; =>&nbsp; 1.2822167692131117</tt>
+<p>The first call to <tt>mapcar</tt> above results in six random numbers,
+each in the range 0...48. The UK lottery only accepts numbers from 1...49,
+hence the second <tt>mapcar</tt> to adjusts the values. The call to <tt>sort</tt>
+takes our numbers and sorts them into ascending numerical order.
+<p>Another example - sorting words into alphabetical order:
+<blockquote><tt>CL-USER 51 > (pprint (sort (vector "This" "is" "what" "I"
+"typed" "to"</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+"generate" "a" "string" "which"</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+"read-line" "returned.")</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'string-lessp))</tt>
+<p><tt>#("a" "generate" "I" "is" "read-line" "returned." "string" "This"
+"to"</tt>
+<br><tt>&nbsp; "typed" "what" "which")</tt>
+<p><tt>CL-USER 52 ></tt></blockquote>
+[Note the use of <tt>string-lessp</tt> (case-insensitive) here. To get
+case-sensitive ordering, in which the capitalized words would come at the
+head of the result, we can use the predicate <tt>string&lt;</tt>. Don't
+bother to learns all these case-insensitive variations - if you ever need
+to use them for real you can look them up.]
+<p>One further example:
+<blockquote><tt>CL-USER 52 > (sort</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(copy-seq</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+"This is what I typed to generate a string which read-line returned.")</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'char&lt;)</tt>
+<br><tt>"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -.ITaaaacdddeeeeeeeegghhhhiiiiilnnnnoprrrrrsssttttttuwwy"</tt>
+<p><tt>CL-USER 53 ></tt></blockquote>
+Note that in all these cases, <tt>sort</tt> has returned a sequence of
+the same type (list, vector or string) as the original.
+<p><b>WARNING! sort is a destructive function and will almost certainly
+mangle the input sequence beyond recognition. Never ever sort a program
+literal (e.g. anything you </b><tt>quote</tt><b>d, or built with </b><tt>#()</tt><b>
+or with </b><tt>"..."</tt><b>). In each case above, I knew I had a freshly
+created sequence to play with, whether generated by </b><tt>mapcar</tt><b>,
+</b><tt>vector</tt><b>,
+or </b><tt>copy-seq</tt><b> (which will take any sequence and produce a
+fresh copy of it). Look what happens if you destructively modify a literal:</b>
+<blockquote><tt>CL-USER 57 > (symbol-name 'copy-list)</tt>
+<br><tt>"COPY-LIST"</tt>
+<p><tt>CL-USER 58 > (sort (symbol-name 'copy-list) 'char&lt;)</tt>
+<br><tt>"-CILOPSTY"</tt>
+<p><tt>CL-USER 59 > 'copy-list</tt>
+<br><tt>COMMON-LISP::-CILOPSTY</tt>
+<p><tt>CL-USER 60 > ;; oops, probably time to quit this lisp session ;-(</tt></blockquote>
+
+<p><br><b>7.5 Reducing a sequence</b>
+<p>The function <tt>reduce</tt> takes (in the simplest case) a function
+and a sequence. It uses this function first to combine the first two elements
+of the sequence, then to combine the result with the third element, then
+to combine this latest result with the fourth element, and so on until
+the whole sequence has been processed.
+<p><tt>&nbsp;&nbsp;&nbsp; (reduce '+ '(1 2 3 4 5 6 7))&nbsp; =>&nbsp;&nbsp;
+28</tt>
+<p>This works by adding 1 to 2, adding 3 to the result, adding 4 to that,
+etc.
+<blockquote><tt>CL-USER 8 > (defun combine-2-strings (string1 string2)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(format nil "~a ~a" string1 string2))</tt>
+<br><tt>COMBINE-2-STRINGS</tt>
+<p><tt>CL-USER 9 > (defun combine-strings (strings)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(reduce 'combine-2-strings strings))</tt>
+<br><tt>COMBINE-STRINGS</tt>
+<p><tt>CL-USER 10 > (combine-strings #("This" "is" "what" "I" "typed" "to"</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+"generate" "a" "string" "which"</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+"read-line" "returned."))</tt>
+<br><tt>"This is what I typed to generate a string which read-line returned."</tt>
+<p><tt>CL-USER 11 ></tt>
+<br>&nbsp;</blockquote>
+<b>7.6 Throw-away functions</b>
+<p>In the last example, I wrote a two line function (<tt>combine-2-strings</tt>)
+whose sole purpose was to be passed to <tt>reduce</tt>. Now, it often happens
+that you write a quickie like this, which will only be called from one
+place and which belongs to it to such an extent that you would rather not
+see them separately.
+<blockquote><tt>(defun combine-strings (strings)</tt>
+<br><tt>&nbsp; (reduce (lambda (string1 string2)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(format nil "~a ~a" string1 string2))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; strings))</tt></blockquote>
+Please do not panic.
+<ul>
+<li>
+The <tt>lambda</tt> means "build me a function which doesn't have a name"
+[an <i>anonymous</i> function].</li>
+
+<li>
+You then get the argument list and body of the function in the usual way.</li>
+</ul>
+Another example:
+<blockquote><tt>(defun lottery-choices-lambda ()</tt>
+<br><tt>&nbsp; (let* ((fourty-nines '(49 49 49 49 49 49))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (randoms (mapcar
+(lambda (x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(1+ (random x)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+fourty-nines)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (sort randoms '&lt;)))</tt></blockquote>
+... although I have to admit that all these <tt>mapcar</tt>s look a little
+out of place here and quite frankly
+<blockquote><tt>(defun lottery-choices-dotimes ()</tt>
+<br><tt>&nbsp; (let* ((randoms nil))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dotimes (i 6)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (push (1+ (random 49)) randoms))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (sort randoms '&lt;)))</tt></blockquote>
+would have been cleaner.
+<br>&nbsp;
+<p><b>7.7 Hash-quote</b>
+<p>In the literature (and in many people's code) you will find <tt>lambda</tt>
+forms prefixed by the syntax <tt>#'</tt>, for example:
+<p><tt>&nbsp;&nbsp;&nbsp; (mapcar #'(lambda (x) (1+ (random x))) fourty-nines)</tt>
+<p>instead of
+<p><tt>&nbsp;&nbsp;&nbsp; (mapcar (lambda (x) (1+ (random x))) fourty-nines)</tt>
+<p>The simplest suggestion I can make [rather than pinning your ears back
+and making you listen to the full explanation] is that these two forms
+are identical.
+<p>You will also sometimes see <tt>#'</tt> before a symbol, denoting that
+the associated function is wanted, typically when passing an argument to
+<tt>mapcar</tt>,
+<tt>reduce</tt>
+etc. In these cases, you can [for the purposes of this course] replace
+the <tt>#'</tt> with an ordinary <tt>quote</tt> and everything will be
+fine. For example:
+<p><tt>&nbsp;&nbsp;&nbsp; (reduce 'combine-2-strings strings)</tt>
+<p>and
+<p><tt>&nbsp;&nbsp;&nbsp; (reduce #'combine-2-strings strings)</tt>
+<p>are essentially identical.
+<p><tt>#'</tt> always denotes a function.
+<br>&nbsp;
+<p><b>7.8 Practical session / Suggested activity</b>
+<p>Suppose we have structure definition thus:
+<ul><tt>(defstruct student</tt>
+<br><tt>&nbsp; name</tt>
+<br><tt>&nbsp; SID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ; an integer</tt>
+<br><tt>&nbsp; modules)</tt>
+<br>&nbsp;
+<li>
+Start by creating an instance of this structure type "on the fly". Interrogate
+its slot-values. Try setting them. Interrogate the slots again. Have you
+got the hang of it yet?</li>
+</ul>
+
+<ul>
+<li>
+Write a program to ask for and read in student names, and to build structures
+of type <tt>student</tt> (leaving the <tt>modules</tt> field blank for
+now). When the input is finished (you might for example let the user signal
+that by typing in an "empty name"; the <tt>loop</tt> macro might be useful
+to you so do feel free to ask about it), return the list of structures
+you have generated, sorted by students' names into alphabetical order.
+Try to find an excuse to use <tt>lambda</tt> here.</li>
+</ul>
+
+<ul>
+<li>
+Write a function to find the name of the student with a given SID.</li>
+</ul>
+
+<ul>
+<li>
+Now design and define a structure for modules and try enrolling students
+onto a module. You can now write code to ask which modules a named student
+is enrolled for, or which students have enrolled for a named module.</li>
+</ul>
+
+<ul>
+<li>
+If time permits, find some way of recording marks for modules which students
+have already attempted. Use <tt>reduce</tt> to find the total number of
+marks over all modules attempted by each student and hence the total marks
+obtained by the student cohort. Use it agin to count how many modules were
+attempted by the cohort, and hence give the average mark. Name the three
+students who have the highest marks. Spot which lecturer fails most of
+their students. Answer any other questions that might be of interest.</li>
+</ul>
+
+<p><br><b>7.9 Further reading &amp; exercises</b>
+<ul>
+<li>
+Graham sections 2.14, 3.2, 3.3, 4.6, 4.7</li>
+
+<li>
+Graham page 80 questions 2 &amp; 3.</li>
+
+<li>
+Enthusiasts might like to attempt page 57 question 6.</li>
+
+<li>
+The lottery example above will occasionally generate sequences in which
+one or more of the numbers are repeated. Fix this.</li>
+
+<li>
+Rewrite functions <tt>better-maximum</tt> (section 4.11) and <tt>dotty</tt>
+(section 5.7) in the form of a single function definition and an imbeded
+<tt>lambda</tt>,
+i.e. in the style of <tt>lottery-choices-lambda</tt> above.</li>
+
+<li>
+Suppose by some ghastly misunderstanding there was a lisp where the implementers
+had forgotten to include the type <tt>cons</tt> or any operations based
+on it. Use <tt>defstruct</tt> to define a structure of type <tt>my-cons</tt>.
+Implement enough of the basics (<tt>my-first</tt>,&nbsp; <tt>my-rest</tt>
+and <tt>cons</tt> at the very least) to prove that the concept works. How
+would you build lists? Can you use <tt>nil</tt> to terminate them or do
+you need to do something different (eg a <tt>my-nil</tt>)? Have a go at
+<tt>my-length</tt>.</li>
+
+<li>
+Complete section 7.7 if you haven't already done so.</li>
+</ul>
+
+<div align=right>Copyright (C) <a href="mailto:ndl@ravenbrook.com">Nick
+Levine</a> 1999. All rights reserved.
+<br>Last modified&nbsp; 2000-09-14
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/lectures/lecture-7.html#2 $</div>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-7.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:48 GMT -->
+</html>

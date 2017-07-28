@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/jsonic/specification.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:17 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Extend a data format: jsonic</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;extend-a-data-format-jsonic&quot;)"></div><h1 anchor="extend-a-data-format-jsonic" id="extend-a-data-format-jsonic" hyphens="none">Extend a data format: <span class="my-code" decode="exclude">jsonic</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a class="here" href="specification.html">2&emsp;spec­i­fi­ca­tion</a></li><li><a href="setup.html">3&emsp;setup</a></li><li><a href="the-reader.html">4&emsp;the reader</a></li><li><a href="the-tokenizer.html">5&emsp;the tok­enizer</a></li><li><a href="the-parser.html">6&emsp;the parser</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;ground-rules&quot;)"></div><h3 anchor="ground-rules" class="subhead" id="ground-rules"><a href="#ground-rules">Ground rules</a></h3></div><ol><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_3Ltwx&quot;)"></div><p id="a_3Ltwx">Every <span class="my-code" decode="exclude">jsonic</span> pro­gram pro­duces valid JSON. This isn’t a rule we’d impose on a gen­eral-pur­pose pro­gram­ming lan­guage. But for a DSL, it makes per­fect sense. Since our DSL exists to pro­duce JSON, we can treat this as a firm require­ment.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_8T1Xg&quot;)"></div><p id="a_8T1Xg">Every valid JSON file is a valid <span class="my-code" decode="exclude">jsonic</span> pro­gram. This rule isn’t strictly nec­es­sary. But it’s con­sis­tent with the first rule: if we treat a JSON file as a <span class="my-code" decode="exclude">jsonic</span> pro­gram, the result should be itself.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_eNN5l&quot;)"></div><p id="a_eNN5l">Racket expres­sions can be embed­ded any­where within a <span class="my-code" decode="exclude">jsonic</span> pro­gram that a JSON value—i.e., a Boolean, null, num­ber, string, array, or object—would appear.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_0JgKo&quot;)"></div><p id="a_0JgKo">If the char­ac­ters <span class="my-code" decode="exclude">//</span> appear in a line, the rest of the line will be com­mented out. This rule also isn’t strictly nec­es­sary. But JSON doesn’t sup­port com­ments. And every pro­gram­ming lan­guage—even a small one—really should.</p></div></li></ol><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;design&quot;)"></div><h3 anchor="design" class="subhead" id="design"><a href="#design">Design</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_7X14J&quot;)"></div><p id="a_7X14J">Let’s step through each of these ground rules and con­sider what it means for our lan­guage design.</p></div><ol><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ksC2c&quot;)"></div><p id="a_ksC2c"><em>Every valid <span class="my-code" decode="exclude">jsonic</span> pro­gram pro­duces valid JSON.</em><br/>This means we’ll need a way of check­ing the out­put of any pro­gram against the JSON spec­i­fi­ca­tion. If the out­put doesn’t meet the spec­i­fi­ca­tion, we’ll raise an error. For those wor­ried that we’ll have to write a whole JSON checker within <span class="my-code" decode="exclude">jsonic</span>: we won’t.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_jGh3L&quot;)"></div><p id="a_jGh3L"><em>Every valid JSON file is a valid <span class="my-code" decode="exclude">jsonic</span> pro­gram.</em><br/>This means that our <span class="my-code" decode="exclude">jsonic</span> <a class="glossary" href="../appendix/glossary.html#parser"><span class="glossary-link-text">parser</span></a> should process JSON files trans­par­ently. The rest will be han­dled by our JSON out­put checker men­tioned above. Obvi­ously, if the input is valid JSON, it will still be valid JSON at out­put.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_BorPR&quot;)"></div><p id="a_BorPR"><em>Racket expres­sions can be embed­ded in place of any JSON value.</em><br/>Since Racket expres­sions have a dif­fer­ent syn­tax than JSON, this means we’ll need a pair of <em><a class="glossary" href="../appendix/glossary.html#delimiter"><span class="glossary-link-text">delim­iters</span></a></em> to set these expres­sions apart from the sur­round­ing code. The sim­ple delim­iter pairs like <span class="my-code" decode="exclude">()</span> and <span class="my-code" decode="exclude">[]</span> and <span class="my-code" decode="exclude">{}</span> are already used by Racket <a class="glossary" href="../appendix/glossary.html#s-expression"><span class="glossary-link-text">S-expres­sions</span></a>, so we need to avoid those. Instead, let’s use <span class="my-code" decode="exclude">@$</span> and <span class="my-code" decode="exclude">$@</span>. We could choose any­thing, but those delim­iters are easy to type, and won’t con­flict with any­thing in JSON or Racket.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Q2On5&quot;)"></div><p id="a_Q2On5">Since we’re sub­sti­tut­ing Racket expres­sions for JSON val­ues, we’ll also want to enforce a cor­re­spon­dence between the two. JSON sup­ports only six kinds of val­ues—Booleans, nulls, num­bers, strings, arrays, and objects. These nat­u­rally cor­re­spond to Racket Booleans, <span class="my-code" decode="exclude">'null</span> sym­bols, num­bers, strings, <a class="glossary" href="../appendix/glossary.html#list"><span class="glossary-link-text">lists</span></a>, and <a class="glossary" href="../appendix/glossary.html#hash-table"><span class="glossary-link-text">hash tables</span></a>. So if our embed­ded Racket expres­sions don’t pro­duce one of these JSON-com­pat­i­ble val­ues, we’ll treat it as an error.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_siz3I&quot;)"></div><p id="a_siz3I">Fur­ther­more, JSON is a text-based for­mat. There­fore, our Racket expres­sions will ulti­mately need to be con­verted to JSON strings, so they can be com­bined with the sur­round­ing JSON. But rather than mak­ing users deal with that house­keep­ing, we’ll have <span class="my-code" decode="exclude">jsonic</span> take care of these con­ver­sions auto­mat­i­cally.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_jApXE&quot;)"></div><p id="a_jApXE"><em>Line com­ments start with <span class="my-code" decode="exclude">//</span></em>.<br/>As we dis­cov­ered in <a href="../bf/index.html"><span class="my-code" decode="exclude">bf</span></a>, a good place to imple­ment com­ments is in the <a class="glossary" href="../appendix/glossary.html#tokenizer"><span class="glossary-link-text">tok­enizer</span></a>. We’ll do that again in <span class="my-code" decode="exclude">jsonic</span>.</p></div></li></ol><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_WKTjT&quot;)"></div><p id="a_WKTjT">Taken together, we should be able to take our sam­ple JSON and treat it as a <span class="my-code" decode="exclude">jsonic</span> pro­gram that pro­duces equiv­a­lent JSON (we can run this pro­gram in DrRacket—<span class="my-code" decode="exclude">#lang jsonic-demo</span> is a work­ing sam­ple imple­men­ta­tion):</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_bfWol&quot;)"></div><div class="highlight-container" id="a_bfWol"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang jsonic-demo<br/>[<br/>  null,<br/>  42,<br/>  true,<br/>  ["array", "of", "strings"],<br/>  {<br/>    "key-1": null,<br/>    "key-2": false,<br/>    "key-3": {"subkey": 21}<br/>  }<br/>]</div><div class="highlight" form="false" id="a_9UoMV"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="source"><pre>#lang jsonic-demo
+[
+  null,
+  42,
+  true,
+  ["array", "of", "strings"],
+  {
+    "key-1": null,
+    "key-2": false,
+    "key-3": {"subkey": 21}
+  }
+]
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_cuh3X&quot;)"></div><p id="a_cuh3X">We should also be able to replace these JSON val­ues with equiv­a­lent Racket expres­sions:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rmMA9&quot;)"></div><div class="highlight-container" id="a_rmMA9"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang jsonic-demo<br/>// a line comment<br/>[<br/>  @$ 'null $@,<br/>  @$ (* 6 7) $@,<br/>  @$ (= 2 (+ 1 1)) $@,<br/>  @$ (list "array" "of" "strings") $@,<br/>  @$ (hash 'key-1 'null<br/>           'key-2 (even? 3)<br/>           'key-3 (hash 'subkey 21)) $@<br/>]</div><div class="highlight" form="false" id="a_4i3gJ"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="source"><pre>#lang jsonic-demo
+// a line comment
+[
+  @$ &#39;null $@,
+  @$ (* 6 7) $@,
+  @$ (= 2 (+ 1 1)) $@,
+  @$ (list "array" "of" "strings") $@,
+  @$ (hash &#39;key-1 &#39;null
+           &#39;key-2 (even? 3)
+           &#39;key-3 (hash &#39;subkey 21)) $@
+]
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_UKcdf&quot;)"></div><p id="a_UKcdf">When we run this code in DrRacket, the order­ing of <span class="my-code" decode="exclude">key-1</span>, <span class="my-code" decode="exclude">key-2</span>, and <span class="my-code" decode="exclude">key-3</span> in the two sam­ples may be dif­fer­ent. That’s okay, because a JSON object, like a Racket hash table, doesn’t pre­serve key order.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_vIz3T&quot;)"></div><p id="a_vIz3T">This kind of DSL is also known as a <em><a class="glossary" href="../appendix/glossary.html#preprocessor"><span class="glossary-link-text">pre­proces­sor</span></a></em>, because it com­piles down to a some other kind of source code. Pro­gram­ming jocks might be famil­iar with the <a class=" ext" href="http://tigcc.ticalc.org/doc/cpp.html">C pre­proces­sor</a>; web jocks might be famil­iar with <a class=" ext" href="http://sass-lang.com/">SASS</a>, which is a pre­proces­sor for CSS. But unlike a typ­i­cal pre­proces­sor, which usu­ally sup­ports only a lim­ited vocab­u­lary of oper­a­tions, <span class="my-code" decode="exclude">jsonic</span> can use every­thing in the Racket lan­guage (as long as it ulti­mately reduces to one of our six kinds of val­ues).</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;ready-to-roll&quot;)"></div><h3 anchor="ready-to-roll" class="subhead" id="ready-to-roll"><a href="#ready-to-roll">Ready to roll</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_eSs1u&quot;)"></div><p id="a_eSs1u">Beyond that, our lan­guage imple­men­ta­tion will pro­ceed just as it did for <a href="../stacker/index.html"><span class="my-code" decode="exclude">stacker</span></a> and <a href="../bf/index.html"><span class="my-code" decode="exclude">bf</span></a>. Our lan­guage will have two main parts: a <a class="glossary" href="../appendix/glossary.html#reader"><span class="glossary-link-text">reader</span></a> (com­pris­ing a tok­enizer and a parser) and an <a class="glossary" href="../appendix/glossary.html#expander"><span class="glossary-link-text">expander</span></a>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_nlpaE&quot;)"></div><p id="a_nlpaE">But this time, one change. At the end of <a href="../bf/index.html"><span class="my-code" decode="exclude">bf</span></a>, we learned about <a href="../bf/packaging-our-language.html">pack­ag­ing our lan­guage</a>. For <span class="my-code" decode="exclude">jsonic</span>, we’ll set up our project as a pack­age right away, to make our lan­guage eas­ier to work with as we build it.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a class="here" href="specification.html">2&emsp;spec­i­fi­ca­tion</a></li><li><a href="setup.html">3&emsp;setup</a></li><li><a href="the-reader.html">4&emsp;the reader</a></li><li><a href="the-tokenizer.html">5&emsp;the tok­enizer</a></li><li><a href="the-parser.html">6&emsp;the parser</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="intro.html">← prev</a>
+    <a class="nav-right" href="setup.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

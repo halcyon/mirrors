@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: doto Swing with Clojure</title>
+	<atom:link href="https://stuartsierra.com/2010/01/03/doto-swing-with-clojure/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2010/01/03/doto-swing-with-clojure</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2010/01/03/doto-swing-with-clojure/comment-page-1#comment-44407</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Wed, 22 Feb 2012 13:47:01 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=366#comment-44407</guid>
+		<description><![CDATA[Rik: check out the next post, &lt;a href=&quot;http://stuartsierra.com/2010/01/05/taming-the-gridbaglayout&quot; rel=&quot;nofollow&quot;&gt;Taming the GridBagLayout&lt;/a&gt;]]></description>
+		<content:encoded><![CDATA[<p>Rik: check out the next post, <a href="http://stuartsierra.com/2010/01/05/taming-the-gridbaglayout" rel="nofollow">Taming the GridBagLayout</a></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Rik</title>
+		<link>https://stuartsierra.com/2010/01/03/doto-swing-with-clojure/comment-page-1#comment-44406</link>
+		<dc:creator><![CDATA[Rik]]></dc:creator>
+		<pubDate>Tue, 21 Feb 2012 23:14:09 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=366#comment-44406</guid>
+		<description><![CDATA[How do I change size or alignment of the elements in the Panel?]]></description>
+		<content:encoded><![CDATA[<p>How do I change size or alignment of the elements in the Panel?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Colbert Sesanker</title>
+		<link>https://stuartsierra.com/2010/01/03/doto-swing-with-clojure/comment-page-1#comment-44374</link>
+		<dc:creator><![CDATA[Colbert Sesanker]]></dc:creator>
+		<pubDate>Thu, 05 Jan 2012 22:27:30 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=366#comment-44374</guid>
+		<description><![CDATA[This tutorial is very helpful. The function:
+
+    (defn func-action [component event &#038; f]
+      (.addActionListener component 
+        (proxy [java.awt.event.ActionListener] []
+                     (actionPerformed [event] (f))))))
+
+works the same if &quot;event&quot; is passed in as &quot;`event&quot;. The problem is taking multiple functions for f (body in macro version) which works with the macro (save some exceptions). What is the advantage of using a macro, instead of a function, for cases like this?]]></description>
+		<content:encoded><![CDATA[<p>This tutorial is very helpful. The function:</p>
+<p>    (defn func-action [component event &amp; f]<br />
+      (.addActionListener component<br />
+        (proxy [java.awt.event.ActionListener] []<br />
+                     (actionPerformed [event] (f))))))</p>
+<p>works the same if &#8220;event&#8221; is passed in as &#8220;`event&#8221;. The problem is taking multiple functions for f (body in macro version) which works with the macro (save some exceptions). What is the advantage of using a macro, instead of a function, for cases like this?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: LudoTheHUN</title>
+		<link>https://stuartsierra.com/2010/01/03/doto-swing-with-clojure/comment-page-1#comment-44327</link>
+		<dc:creator><![CDATA[LudoTheHUN]]></dc:creator>
+		<pubDate>Sat, 15 Oct 2011 22:55:50 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=366#comment-44327</guid>
+		<description><![CDATA[Hello. Thank you very much for this Stuart. For my understanding, I tried to use the macro expended version of the code.... so:
+
+(def button (doto (JButton. &quot;Add 1&quot;)	  
+                 (on-action evnt  ;; evnt is not used
+				   (.repaint panel) (println &quot;action jbuton click happened&quot;))))
+works fine, yet:
+(def button (doto (JButton. &quot;Add 1&quot;)	
+               (. evnt addActionListener
+		     (proxy [java.awt.event.ActionListener] []
+                     (actionPerformed [(.repaint panel)] (println &quot;action jbuton click happened&quot;))))))
+fails, even though this is just the macroexpanded code of the macro...
+any ideas why?]]></description>
+		<content:encoded><![CDATA[<p>Hello. Thank you very much for this Stuart. For my understanding, I tried to use the macro expended version of the code&#8230;. so:</p>
+<p>(def button (doto (JButton. &#8220;Add 1&#8221;)<br />
+                 (on-action evnt  ;; evnt is not used<br />
+				   (.repaint panel) (println &#8220;action jbuton click happened&#8221;))))<br />
+works fine, yet:<br />
+(def button (doto (JButton. &#8220;Add 1&#8221;)<br />
+               (. evnt addActionListener<br />
+		     (proxy [java.awt.event.ActionListener] []<br />
+                     (actionPerformed [(.repaint panel)] (println &#8220;action jbuton click happened&#8221;))))))<br />
+fails, even though this is just the macroexpanded code of the macro&#8230;<br />
+any ideas why?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Clojure &#8211; Destillat #2 &#124; duetsch.info - Open Source, Wet-, Web-, Software</title>
+		<link>https://stuartsierra.com/2010/01/03/doto-swing-with-clojure/comment-page-1#comment-43045</link>
+		<dc:creator><![CDATA[Clojure &#8211; Destillat #2 &#124; duetsch.info - Open Source, Wet-, Web-, Software]]></dc:creator>
+		<pubDate>Sat, 30 Jan 2010 12:25:40 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=366#comment-43045</guid>
+		<description><![CDATA[[...] doto Swing with Clojure [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] doto Swing with Clojure [&#8230;]</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.281 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:03:06 -->
+
+<!-- Compression = gzip -->

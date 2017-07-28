@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/effective-code-reviews-part-v by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:58 GMT -->
+<head>
+    <title> Effective Code Reviews, Part V </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="effective-code-reviews-part-v.html">
+    <meta property="og:title" content="Effective Code Reviews, Part V">
+    <meta property="og:description" content="We are officially &quot;way out in the weeds&quot; as far as this series is concerned. That said, it has been a lovely journey and I hope you'll stick with it until the end.">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Effective Code Reviews, Part V" />
+	<meta name="twitter:description" content="We are officially &quot;way out in the weeds&quot; as far as this series is concerned. That said, it has been a lovely journey and I hope you'll stick with it until the end" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> October 15, 2015 </div>
+            <h1 class="subject"> Effective Code Reviews, Part V </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> <div>Hello Developer Friend!<br>
+<br>
+We are officially &quot;way out in the weeds&quot; as far as this series&nbsp;is concerned. That said, it has been a lovely journey and I hope you&#39;ll stick with it until the end.<br>
+<br>
+Here&#39;s what we&#39;ve covered so far, in case you missed anything:<br>
+&nbsp;</div>
+
+<ul>
+	<li><a href="effective-code-reviews-part-1.html">Part I:&nbsp;</a>Code reviews are more than just technical proofreading exercises. The first question should always be&nbsp;&quot;Does this code reliably&nbsp;solve a real problem for the people who depend on this software?&quot;<br>
+	&nbsp;</li>
+	<li><a href="effective-code-reviews-part-ii.html">Part II</a>: A broken build cannot be trusted, and a test suite that needs modification in order to get back to green&nbsp;is a sign that a very careful review is needed.<br>
+	&nbsp;</li>
+	<li><a href="effective-code-reviews-part-iii.html">Part III</a>: Every bug fix should be accompanied by regression tests, and each of those tests should be verified to make sure they reflect&nbsp;a product&#39;s functional requirements.<br>
+	&nbsp;</li>
+	<li><a href="effective-code-reviews-part-iv.html">Part IV</a>: To determine what tests are needed for newly developed features, first think through the conditions that would make it safe to deploy code with no automated tests at all. Then for each condition that isn&#39;t met by the code under review, expect to see tests to address that particular concern.</li>
+</ul>
+So far, we have focused on the risks involved in applying bug fixes and shipping new greenfield features -- both of which are relatively low risk activities. Today, we will enter the danger zone: enhancing or modifying functionality that&#39;s already in use.<br>
+<br>
+Within this category, you can break things down into three distinct kinds of changes:<br>
+&nbsp;
+<ul>
+	<li><strong>Add-ons</strong>: Components that introduce new functionality to an existing feature set, but are reasonably self-contained at the code level.<br>
+	&nbsp;</li>
+	<li><strong>Extensions:</strong>&nbsp;Components that add new functionality to a feature set by building on top of existing system behaviors.<br>
+	&nbsp;</li>
+	<li><strong>Refinements:</strong>&nbsp;Improvements to a feature that require modifying or replacing existing system behaviors.</li>
+</ul>
+<br>
+Each of the subcategories form a hierarchy. Where&nbsp;<strong>add-ons</strong>&nbsp;are least risky,&nbsp;<strong>extensions</strong>&nbsp;carry the same risks of add-ons along with other potential gotchas; <strong>refinements</strong>&nbsp;come along with even more risks on top of that.<br>
+<br>
+I&#39;m sure you are more than busy enough, and this series has definitely ended up longer than I expected it would. With that in mind, I will spare you the long-winded philosophical ideas here and go straight to what you should worry about when reviewing tests for each of these kinds of changes.<br>
+<br>
+When dealing with&nbsp;<strong>add-ons</strong>, start by applying all of the basic guidelines that were laid out in <a href="effective-code-reviews-part-iv.html">Part IV</a> of this series. Go back and read those if you haven&#39;t already, but they mostly boil down to two essential questions: Is the effect of this code (in both success and failure conditions) well isolated from the rest of the system? What will happen if this code fails in the worst imaginable way?<br>
+<br>
+In addition to those points, it is important to remember that an&nbsp;<strong>add-on</strong>&nbsp;by definition lives alongside some existing feature set in your product, and in theory is meant to improve upon that work. For that reason, it is especially important to look at failure conditions and edge cases in any newly introduced code.<br>
+<br>
+For example, suppose you are adding a section to a sidebar on a blog that includes some biographical information about its author. If a missing piece of data in that section could cause the entire page to fail to render, that would be a sign of poor isolation, even though the newly added code doesn&#39;t directly depend on any existing functionality. Use your imagination to dream up scenarios like this, and then be sure that there is adequate test coverage for whatever concerns you identify.<br>
+<br>
+When it comes to&nbsp;<strong>extensions</strong>, you will necessarily be reviewing code that reuses some existing application behavior. Is that old code trustworthy? Was it designed with reuse in mind? Is it fit for the purpose that it is being used for in this extension? These are the questions you should be asking.<br>
+<br>
+At a minimum, any code under review which builds upon existing system behavior should trigger a mini-audit of the relevant internal dependencies. It doesn&#39;t matter whether the reused pieces are a shared view template, a service object, or even an entire domain model -- you need to know the building blocks that this new extension depends upon.<br>
+<br>
+Do the reused components have decent tests? Are they documented at the business level and/or the code level? Have they appeared in any recent or unresolved defect reports? How likely is it that these components will change? If they do change, will it break the way this new extension is using them? <em>Interrogate these poor little things until they&#39;re forced to give up their secrets.</em><br>
+<br>
+This process may sound extreme, but it is really meant to be nothing more than a casual thought experiment. You don&#39;t need to spend more than a couple minutes on it in each review, and once you get in the habit of thinking this way it becomes automatic.<br>
+<br>
+Not every problem revealed by this line of reasoning deserves to be dealt with immediately, but filing tickets and explicitly mentioning these concerns during your review is a good idea. After all, a known and calculated risk is always better than one that catches everyone by surprise.<br>
+<br>
+When reviewing&nbsp;<strong>refinements</strong>&nbsp;which modify existing system behavior, you need to start by applying everything that we&#39;ve discussed so far in this essay. From there, you need to take things a step farther and repeat the process for each and every piece of functionality that depends upon the code that is being modified.<br>
+<br>
+To be perfectly safe, simply spot checking the code and tests for each of these dependent features wouldn&#39;t be enough -- you&#39;d need to run them through the entire end-to-end review process that we&#39;ve been discussing in this series. In practice, you&#39;ll almost never have time do that sort of review, and this is part of what makes behavior modification an inherently risky activity.<br>
+<br>
+Are there ways to make code easier and safer to change? Absolutely! But this is a really complicated question deserving of a series of its own.&nbsp;For now, we&#39;ll need to settle with a basic awareness of the risks involved in changing system behaviors, and then drive up our quality standards in code reviews to ensure that tests are added which help mitigate these risks.<br>
+<br>
+There is a whole lot more to this code review story, which is in fact more a story about assessing software quality rather than code quality. That said, this isn&#39;t the only topic I want to cover in&nbsp;<em>Programming Beyond Practices</em>, and I think we&#39;ve reached a decent stopping point for now.<br>
+<br>
+So let&#39;s call this the series finale, and move on to something different in the next few days. I hope you enjoyed the ride!<br>
+<br>
+Thanks,<br>
+-greg<br>
+<br>
+PS: Those who hate cliffhangers are welcome to continue this discussion via any of the communications channels listed below.<br>
+&nbsp;
+<hr><br>
+<em style="font-weight: normal; font-size: 16px; outline: none; color: rgb(80, 80, 80); line-height: 22px; max-width: 600px !important;">Your feedback and questions are welcome! Reply directly to this email, or use the&nbsp;<a href="https://twitter.com/search?src=typd&amp;q=%23ProgrammingBeyondPractices" style="font-size: 16px; font-family: inherit; outline: none; color: rgb(52, 102, 204); text-decoration: none; max-width: 600px !important;">#ProgrammingBeyondPractices</a></em><em style="font-weight: normal; font-size: 16px; outline: none; color: rgb(80, 80, 80); line-height: 22px; max-width: 600px !important;"><font color="#505050" style="max-width: 600px !important;">&nbsp;hashtag on Twitter.&nbsp;</font><br style="max-width: 600px !important;">
+<br style="max-width: 600px !important;">
+<font color="#505050" style="max-width: 600px !important;">If you&#39;re a&nbsp;</font><a href="http://practicingruby.com/" style="font-size: 16px; font-family: inherit; outline: none; color: rgb(52, 102, 204); text-decoration: none; max-width: 600px !important;">Practicing Ruby</a><font color="#505050" style="max-width: 600px !important;">&nbsp;subscriber, you can also discuss these essays with me at any time via Slack or Discourse.</font></em> </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="rapid-prototyping-part-i.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="effective-code-reviews-part-iv.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/effective-code-reviews-part-v by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:58 GMT -->
+</html>

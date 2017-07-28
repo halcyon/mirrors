@@ -1,0 +1,71 @@
+;; $Id: //info.ravenbrook.com/user/ndl/lisp/cl-rabbit/rabbitmq.lisp#2 $
+
+(in-package "JFLI")
+
+;;                            RABBITMQ.LISP
+;;           Nick Levine, Ravenbrook Limited, 2007-09-03
+;; 
+;; 1.  INTRODUCTION
+;;
+;; The purpose of this document is to implement the connection from
+;; LispWorks to the Java libabries for RabbitMQ.
+;;
+;; See Appendix C below for copyright and license.
+
+
+(defparameter *rabbitmq-jars* "../../libs/rabbitmq/*.jar")
+
+(defparameter *here* (pathname-location (current-pathname)))
+
+(defparameter *libjvm* 
+  #+linux "/usr/lib/jvm/java-6-sun-1.6.0.00/jre/lib/i386/client/libjvm.so"
+  #+mswindows "c:/Program Files/Java/jre1.6.0_02/bin/client/jvm.dll")
+
+(defvar *rabbitmq-initialized* nil)
+
+(defun initialize-rabbitmq (&rest option-strings)
+  (unless *rabbitmq-initialized*
+    (let ((libjvm *libjvm*))
+      (unless (probe-file libjvm)
+        (error "Java VM not found: ~a" libjvm))
+      (setf *jni-lib-path* libjvm))
+    (let ((jars-directory (merge-pathnames *rabbitmq-jars* *here*)))
+      (multiple-value-prog1 (connect-jvm (append (or (directory jars-directory)
+                                                     (error "RabbitMQ jar files not found: ~a" jars-directory)))
+					 option-strings)
+        (setf *rabbitmq-initialized* t)
+	))))
+
+
+;; A.  REFERENCES
+;;
+;;
+;; B.  HISTORY
+;;
+;; 2007-09-03 NDL Created.
+;;
+;;
+;; C.  COPYRIGHT
+;;
+;; Copyright (c) 2007 Wiinz Limited. 
+;;
+;; Permission is hereby granted, free of charge, to any person
+;; obtaining a copy of this software and associated documentation
+;; files (the "Software"), to deal in the Software without
+;; restriction, including without limitation the rights to use, copy,
+;; modify, merge, publish, distribute, sublicense, and/or sell copies
+;; of the Software, and to permit persons to whom the Software is
+;; furnished to do so, subject to the following conditions:
+;;
+;; The above copyright notice and this permission notice shall be
+;; included in all copies or substantial portions of the Software.
+;; 
+;; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+;; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+;; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+;; NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+;; HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+;; WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+;; DEALINGS IN THE SOFTWARE.
+

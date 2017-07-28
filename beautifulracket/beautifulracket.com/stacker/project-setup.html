@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: 404</title>
+    <link rel="stylesheet" type="text/css" media="all" href="/styles.css"/>
+    <script type="text/javascript" src="/functions.js"></script>
+    <script type="text/javascript" src="/clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="/">Beau­ti­ful Racket</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;404&quot;)"></div><h1 anchor="404" id="404" hyphens="none">404</h1></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_tsyzH&quot;)"></div><p id="a_tsyzH">Sorry, that page doesn’t exist yet.</p></div></div>
+
+
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

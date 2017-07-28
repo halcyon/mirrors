@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Taming the GridBagLayout</title>
+	<atom:link href="https://stuartsierra.com/2010/01/05/taming-the-gridbaglayout/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2010/01/05/taming-the-gridbaglayout</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Starting a Clojure/Swing Project &#124; To Dream of Magick</title>
+		<link>https://stuartsierra.com/2010/01/05/taming-the-gridbaglayout/comment-page-1#comment-44245</link>
+		<dc:creator><![CDATA[Starting a Clojure/Swing Project &#124; To Dream of Magick]]></dc:creator>
+		<pubDate>Fri, 12 Aug 2011 05:00:42 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=374#comment-44245</guid>
+		<description><![CDATA[[...] potent Clojure/Swing work, check out Stuart Sierra&#8217;s posts on the topic. First, you get Taming the GridBagLayout, and then follow it up with Heating Up Clojure &#038; [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] potent Clojure/Swing work, check out Stuart Sierra&#8217;s posts on the topic. First, you get Taming the GridBagLayout, and then follow it up with Heating Up Clojure &amp; [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Jeff Schwab</title>
+		<link>https://stuartsierra.com/2010/01/05/taming-the-gridbaglayout/comment-page-1#comment-43185</link>
+		<dc:creator><![CDATA[Jeff Schwab]]></dc:creator>
+		<pubDate>Fri, 13 Aug 2010 22:05:27 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=374#comment-43185</guid>
+		<description><![CDATA[Re. JFrame/EXIT_ON_CLOSE:  The right solution is to use JFrame/DISPOSE_ON_CLOSE instead.  I don&#039;t know why so many tutorials (including the Sun Swing trails) use EXIT_ON_CLOSE.]]></description>
+		<content:encoded><![CDATA[<p>Re. JFrame/EXIT_ON_CLOSE:  The right solution is to use JFrame/DISPOSE_ON_CLOSE instead.  I don&#8217;t know why so many tutorials (including the Sun Swing trails) use EXIT_ON_CLOSE.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: SQ</title>
+		<link>https://stuartsierra.com/2010/01/05/taming-the-gridbaglayout/comment-page-1#comment-42986</link>
+		<dc:creator><![CDATA[SQ]]></dc:creator>
+		<pubDate>Sun, 10 Jan 2010 13:00:11 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=374#comment-42986</guid>
+		<description><![CDATA[Really enjoying your postings, I have so much to learn :)
+
+I wondered if you&#039;d seen Snow for ABCL? http://common-lisp.net/project/snow/
+Sadly my Lisp, Clojure and Java skills are not good :p]]></description>
+		<content:encoded><![CDATA[<p>Really enjoying your postings, I have so much to learn :)</p>
+<p>I wondered if you&#8217;d seen Snow for ABCL? <a href="http://common-lisp.net/project/snow/" rel="nofollow">http://common-lisp.net/project/snow/</a><br />
+Sadly my Lisp, Clojure and Java skills are not good :p</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2010/01/05/taming-the-gridbaglayout/comment-page-1#comment-42978</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Thu, 07 Jan 2010 15:40:02 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=374#comment-42978</guid>
+		<description><![CDATA[Joe wrote: &lt;em&gt;&quot;I had to add a (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)&quot;&lt;/em&gt;
+
+Yes, that is necessary if you run the example as a script.  But if you use that in the REPL, closing the window will kill the REPL process.]]></description>
+		<content:encoded><![CDATA[<p>Joe wrote: <em>&#8220;I had to add a (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)&#8221;</em></p>
+<p>Yes, that is necessary if you run the example as a script.  But if you use that in the REPL, closing the window will kill the REPL process.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Joe</title>
+		<link>https://stuartsierra.com/2010/01/05/taming-the-gridbaglayout/comment-page-1#comment-42975</link>
+		<dc:creator><![CDATA[Joe]]></dc:creator>
+		<pubDate>Thu, 07 Jan 2010 14:39:47 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=374#comment-42975</guid>
+		<description><![CDATA[I had to add a
+(.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)
+to make the window close correctly.
+
+Very educational. Thanks.]]></description>
+		<content:encoded><![CDATA[<p>I had to add a<br />
+(.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)<br />
+to make the window close correctly.</p>
+<p>Very educational. Thanks.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Larry</title>
+		<link>https://stuartsierra.com/2010/01/05/taming-the-gridbaglayout/comment-page-1#comment-42971</link>
+		<dc:creator><![CDATA[Larry]]></dc:creator>
+		<pubDate>Wed, 06 Jan 2010 19:21:26 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=374#comment-42971</guid>
+		<description><![CDATA[Really liking this whole Clojure GUI series. Keep it up!]]></description>
+		<content:encoded><![CDATA[<p>Really liking this whole Clojure GUI series. Keep it up!</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: AOL John</title>
+		<link>https://stuartsierra.com/2010/01/05/taming-the-gridbaglayout/comment-page-1#comment-42970</link>
+		<dc:creator><![CDATA[AOL John]]></dc:creator>
+		<pubDate>Wed, 06 Jan 2010 18:52:45 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=374#comment-42970</guid>
+		<description><![CDATA[Every time you post something about Clojure I learn something. Thank you for taking the time to blog.]]></description>
+		<content:encoded><![CDATA[<p>Every time you post something about Clojure I learn something. Thank you for taking the time to blog.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.289 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:03:05 -->
+
+<!-- Compression = gzip -->

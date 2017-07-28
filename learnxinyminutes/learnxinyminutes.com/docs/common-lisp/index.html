@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/common-lisp/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:33:30 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn Common Lisp in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../css/normalize.css">
+        <link rel="stylesheet" href="../../css/main.css">
+        <link href="../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fcommon-lisp%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3DCommon+Lisp">
+        Share this page
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../index.html">Learn X in Y minutes</a></h2>
+  <h2>Where X=Common Lisp</h2>
+  
+    <p class="filelink">
+    Get the code:
+    <a href="../files/commonlisp.lisp">commonlisp.lisp</a>
+    </p>
+  
+  <div id="doc">
+    <p>ANSI Common Lisp is a general purpose, multi-paradigm programming
+language suited for a wide variety of industry applications. It is
+frequently referred to as a programmable programming language.</p>
+
+<p>The classic starting point is <a href="http://www.gigamonkeys.com/book/">Practical Common Lisp and freely available.</a></p>
+
+<p>Another popular and recent book is
+<a href="http://landoflisp.com/">Land of Lisp</a>.</p>
+<pre class="highlight common_lisp"><code>
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">;;; 0. Syntax</span>
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="c1">;;; General form.</span>
+
+<span class="c1">;; Lisp has two fundamental pieces of syntax: the ATOM and the</span>
+<span class="c1">;; S-expression. Typically, grouped S-expressions are called `forms`.</span>
+
+<span class="mi">10</span>  <span class="c1">; an atom; it evaluates to itself</span>
+
+<span class="ss">:THING</span> <span class="c1">;Another atom; evaluating to the symbol :thing.</span>
+
+<span class="no">t</span>  <span class="c1">; another atom, denoting true.</span>
+
+<span class="p">(</span><span class="nb">+</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span><span class="p">)</span> <span class="c1">; an s-expression</span>
+
+<span class="o">'</span><span class="p">(</span><span class="mi">4</span> <span class="ss">:foo</span>  <span class="no">t</span><span class="p">)</span>  <span class="c1">;another one</span>
+
+
+<span class="c1">;;; Comments</span>
+
+<span class="c1">;; Single line comments start with a semicolon; use two for normal</span>
+<span class="c1">;; comments, three for section comments, and four for file-level</span>
+<span class="c1">;; comments.</span>
+
+<span class="cm">#| Block comments
+   can span multiple lines and...
+    #|
+       they can be nested!
+    |#
+|#</span>
+
+<span class="c1">;;; Environment.</span>
+
+<span class="c1">;; A variety of implementations exist; most are</span>
+<span class="c1">;; standard-conformant. CLISP is a good starting one.</span>
+
+<span class="c1">;; Libraries are managed through Quicklisp.org's Quicklisp system.</span>
+
+<span class="c1">;; Common Lisp is usually developed with a text editor and a REPL</span>
+<span class="c1">;; (Read Evaluate Print Loop) running at the same time. The REPL</span>
+<span class="c1">;; allows for interactive exploration of the program as it is "live"</span>
+<span class="c1">;; in the system.</span>
+
+
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">;;; 1. Primitive Datatypes and Operators</span>
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="c1">;;; Symbols</span>
+
+<span class="ss">'foo</span> <span class="c1">; =&gt; FOO  Notice that the symbol is upper-cased automatically.</span>
+
+<span class="c1">;; Intern manually creates a symbol from a string.</span>
+
+<span class="p">(</span><span class="nb">intern</span> <span class="s">"AAAA"</span><span class="p">)</span> <span class="c1">; =&gt; AAAA</span>
+
+<span class="p">(</span><span class="nb">intern</span> <span class="s">"aaa"</span><span class="p">)</span> <span class="c1">; =&gt; |aaa|</span>
+
+<span class="c1">;;; Numbers</span>
+<span class="mi">9999999999999999999999</span> <span class="c1">; integers</span>
+<span class="m">#b111</span>                  <span class="c1">; binary =&gt; 7</span>
+<span class="mo">#o111</span>                  <span class="c1">; octal =&gt; 73</span>
+<span class="m">#x111</span>                  <span class="c1">; hexadecimal =&gt; 273</span>
+<span class="mf">3.14159s0</span>              <span class="c1">; single</span>
+<span class="mf">3.14159d0</span>              <span class="c1">; double</span>
+<span class="mi">1/2</span>                    <span class="c1">; ratios</span>
+<span class="m">#C</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span><span class="p">)</span>                <span class="c1">; complex numbers</span>
+
+
+<span class="c1">;; Function application is written (f x y z ...)</span>
+<span class="c1">;; where f is a function and x, y, z, ... are operands</span>
+<span class="c1">;; If you want to create a literal list of data, use ' to stop it from</span>
+<span class="c1">;; being evaluated - literally, "quote" the data.</span>
+<span class="o">'</span><span class="p">(</span><span class="nb">+</span> <span class="mi">1</span> <span class="mi">2</span><span class="p">)</span> <span class="c1">; =&gt; (+ 1 2)</span>
+<span class="c1">;; You can also call a function manually:</span>
+<span class="p">(</span><span class="nb">funcall</span> <span class="nf">#'</span><span class="nb">+</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">; =&gt; 6</span>
+<span class="c1">;; Some arithmetic operations</span>
+<span class="p">(</span><span class="nb">+</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">)</span>              <span class="c1">; =&gt; 2</span>
+<span class="p">(</span><span class="nb">-</span> <span class="mi">8</span> <span class="mi">1</span><span class="p">)</span>              <span class="c1">; =&gt; 7</span>
+<span class="p">(</span><span class="nb">*</span> <span class="mi">10</span> <span class="mi">2</span><span class="p">)</span>             <span class="c1">; =&gt; 20</span>
+<span class="p">(</span><span class="nb">expt</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">)</span>           <span class="c1">; =&gt; 8</span>
+<span class="p">(</span><span class="nb">mod</span> <span class="mi">5</span> <span class="mi">2</span><span class="p">)</span>            <span class="c1">; =&gt; 1</span>
+<span class="p">(</span><span class="nb">/</span> <span class="mi">35</span> <span class="mi">5</span><span class="p">)</span>             <span class="c1">; =&gt; 7</span>
+<span class="p">(</span><span class="nb">/</span> <span class="mi">1</span> <span class="mi">3</span><span class="p">)</span>              <span class="c1">; =&gt; 1/3</span>
+<span class="p">(</span><span class="nb">+</span> <span class="m">#C</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span><span class="p">)</span> <span class="m">#C</span><span class="p">(</span><span class="mi">6</span> <span class="mi">-4</span><span class="p">))</span> <span class="c1">; =&gt; #C(7 -2)</span>
+
+                     <span class="c1">;;; Booleans</span>
+<span class="no">t</span>                    <span class="c1">; for true (any not-nil value is true)</span>
+<span class="no">nil</span>                  <span class="c1">; for false - and the empty list</span>
+<span class="p">(</span><span class="nb">not</span> <span class="no">nil</span><span class="p">)</span>            <span class="c1">; =&gt; t</span>
+<span class="p">(</span><span class="nb">and</span> <span class="mi">0</span> <span class="no">t</span><span class="p">)</span>            <span class="c1">; =&gt; t</span>
+<span class="p">(</span><span class="nb">or</span> <span class="mi">0</span> <span class="no">nil</span><span class="p">)</span>           <span class="c1">; =&gt; 0</span>
+
+                     <span class="c1">;;; Characters</span>
+<span class="sc">#\A</span>                  <span class="c1">; =&gt; #\A</span>
+<span class="sc">#\λ</span>                  <span class="c1">; =&gt; #\GREEK_SMALL_LETTER_LAMDA</span>
+<span class="sc">#\u03BB</span>              <span class="c1">; =&gt; #\GREEK_SMALL_LETTER_LAMDA</span>
+
+<span class="c1">;;; Strings are fixed-length arrays of characters.</span>
+<span class="s">"Hello, world!"</span>
+<span class="s">"Benjamin \"Bugsy\" Siegel"</span>   <span class="c1">; backslash is an escaping character</span>
+
+<span class="c1">;; Strings can be concatenated too!</span>
+<span class="p">(</span><span class="nb">concatenate</span> <span class="ss">'string</span> <span class="s">"Hello "</span> <span class="s">"world!"</span><span class="p">)</span> <span class="c1">; =&gt; "Hello world!"</span>
+
+<span class="c1">;; A string can be treated like a sequence of characters</span>
+<span class="p">(</span><span class="nb">elt</span> <span class="s">"Apple"</span> <span class="mi">0</span><span class="p">)</span> <span class="c1">; =&gt; #\A</span>
+
+<span class="c1">;; format can be used to format strings:</span>
+<span class="p">(</span><span class="nb">format</span> <span class="no">nil</span> <span class="s">"~a can be ~a"</span> <span class="s">"strings"</span> <span class="s">"formatted"</span><span class="p">)</span>
+
+<span class="c1">;; Printing is pretty easy; ~% is the format specifier for newline.</span>
+<span class="p">(</span><span class="nb">format</span> <span class="no">t</span> <span class="s">"Common Lisp is groovy. Dude.~%"</span><span class="p">)</span>
+
+
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">;; 2. Variables</span>
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">;; You can create a global (dynamically scoped) using defparameter</span>
+<span class="c1">;; a variable name can use any character except: ()",'`;#|\</span>
+
+<span class="c1">;; Dynamically scoped variables should have earmuffs in their name!</span>
+
+<span class="p">(</span><span class="nb">defparameter</span> <span class="vg">*some-var*</span> <span class="mi">5</span><span class="p">)</span>
+<span class="vg">*some-var*</span> <span class="c1">; =&gt; 5</span>
+
+<span class="c1">;; You can also use unicode characters.</span>
+<span class="p">(</span><span class="nb">defparameter</span> <span class="nv">*A</span><span class="err">Λ</span><span class="nv">B*</span> <span class="no">nil</span><span class="p">)</span>
+
+
+<span class="c1">;; Accessing a previously unbound variable is an</span>
+<span class="c1">;; undefined behavior (but possible). Don't do it.</span>
+
+
+<span class="c1">;; Local binding: `me` is bound to "dance with you" only within the</span>
+<span class="c1">;; (let ...). Let always returns the value of the last `form` in the</span>
+<span class="c1">;; let form.</span>
+
+<span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">me</span> <span class="s">"dance with you"</span><span class="p">))</span>
+  <span class="nv">me</span><span class="p">)</span>
+<span class="c1">;; =&gt; "dance with you"</span>
+
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">;; 3. Structs and Collections</span>
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="c1">;; Structs</span>
+<span class="p">(</span><span class="nb">defstruct</span> <span class="nv">dog</span> <span class="nv">name</span> <span class="nv">breed</span> <span class="nv">age</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">defparameter</span> <span class="vg">*rover*</span>
+    <span class="p">(</span><span class="nv">make-dog</span> <span class="ss">:name</span> <span class="s">"rover"</span>
+              <span class="ss">:breed</span> <span class="s">"collie"</span>
+              <span class="ss">:age</span> <span class="mi">5</span><span class="p">))</span>
+<span class="vg">*rover*</span> <span class="c1">; =&gt; #S(DOG :NAME "rover" :BREED "collie" :AGE 5)</span>
+
+<span class="p">(</span><span class="nv">dog-p</span> <span class="vg">*rover*</span><span class="p">)</span> <span class="c1">; =&gt; true  #| -p signifies "predicate". It's used to</span>
+                              <span class="nv">check</span> <span class="k">if</span> <span class="vg">*rover*</span> <span class="nv">is</span> <span class="nv">an</span> <span class="nv">instance</span> <span class="nv">of</span> <span class="nv">dog.</span> <span class="err">|#</span>
+<span class="p">(</span><span class="nv">dog-name</span> <span class="vg">*rover*</span><span class="p">)</span> <span class="c1">; =&gt; "rover"</span>
+
+<span class="c1">;; Dog-p, make-dog, and dog-name are all created by defstruct!</span>
+
+<span class="c1">;;; Pairs</span>
+<span class="c1">;; `cons' constructs pairs, `car' and `cdr' extract the first</span>
+<span class="c1">;; and second elements</span>
+<span class="p">(</span><span class="nb">cons</span> <span class="ss">'SUBJECT</span> <span class="ss">'VERB</span><span class="p">)</span> <span class="c1">; =&gt; '(SUBJECT . VERB)</span>
+<span class="p">(</span><span class="nb">car</span> <span class="p">(</span><span class="nb">cons</span> <span class="ss">'SUBJECT</span> <span class="ss">'VERB</span><span class="p">))</span> <span class="c1">; =&gt; SUBJECT</span>
+<span class="p">(</span><span class="nb">cdr</span> <span class="p">(</span><span class="nb">cons</span> <span class="ss">'SUBJECT</span> <span class="ss">'VERB</span><span class="p">))</span> <span class="c1">; =&gt; VERB</span>
+
+<span class="c1">;;; Lists</span>
+
+<span class="c1">;; Lists are linked-list data structures, made of `cons' pairs and end</span>
+<span class="c1">;; with a `nil' (or '()) to mark the end of the list</span>
+<span class="p">(</span><span class="nb">cons</span> <span class="mi">1</span> <span class="p">(</span><span class="nb">cons</span> <span class="mi">2</span> <span class="p">(</span><span class="nb">cons</span> <span class="mi">3</span> <span class="no">nil</span><span class="p">)))</span> <span class="c1">; =&gt; '(1 2 3)</span>
+<span class="c1">;; `list' is a convenience variadic constructor for lists</span>
+<span class="p">(</span><span class="nb">list</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">; =&gt; '(1 2 3)</span>
+<span class="c1">;; and a quote can also be used for a literal list value</span>
+<span class="o">'</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">; =&gt; '(1 2 3)</span>
+
+<span class="c1">;; Can still use `cons' to add an item to the beginning of a list</span>
+<span class="p">(</span><span class="nb">cons</span> <span class="mi">4</span> <span class="o">'</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">))</span> <span class="c1">; =&gt; '(4 1 2 3)</span>
+
+<span class="c1">;; Use `append' to - surprisingly - append lists together</span>
+<span class="p">(</span><span class="nb">append</span> <span class="o">'</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span><span class="p">)</span> <span class="o">'</span><span class="p">(</span><span class="mi">3</span> <span class="mi">4</span><span class="p">))</span> <span class="c1">; =&gt; '(1 2 3 4)</span>
+
+<span class="c1">;; Or use concatenate -</span>
+
+<span class="p">(</span><span class="nb">concatenate</span> <span class="ss">'list</span> <span class="o">'</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span><span class="p">)</span> <span class="o">'</span><span class="p">(</span><span class="mi">3</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="c1">;; Lists are a very central type, so there is a wide variety of functionality for</span>
+<span class="c1">;; them, a few examples:</span>
+<span class="p">(</span><span class="nb">mapcar</span> <span class="nf">#'</span><span class="nb">1+</span> <span class="o">'</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">))</span>             <span class="c1">; =&gt; '(2 3 4)</span>
+<span class="p">(</span><span class="nb">mapcar</span> <span class="nf">#'</span><span class="nb">+</span> <span class="o">'</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">)</span> <span class="o">'</span><span class="p">(</span><span class="mi">10</span> <span class="mi">20</span> <span class="mi">30</span><span class="p">))</span>  <span class="c1">; =&gt; '(11 22 33)</span>
+<span class="p">(</span><span class="nb">remove-if-not</span> <span class="nf">#'</span><span class="nb">evenp</span> <span class="o">'</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span><span class="p">))</span> <span class="c1">; =&gt; '(2 4)</span>
+<span class="p">(</span><span class="nb">every</span> <span class="nf">#'</span><span class="nb">evenp</span> <span class="o">'</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span><span class="p">))</span>         <span class="c1">; =&gt; nil</span>
+<span class="p">(</span><span class="nb">some</span> <span class="nf">#'</span><span class="nb">oddp</span> <span class="o">'</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span><span class="p">))</span>           <span class="c1">; =&gt; T</span>
+<span class="p">(</span><span class="nb">butlast</span> <span class="o">'</span><span class="p">(</span><span class="nv">subject</span> <span class="nv">verb</span> <span class="nv">object</span><span class="p">))</span>   <span class="c1">; =&gt; (SUBJECT VERB)</span>
+
+
+<span class="c1">;;; Vectors</span>
+
+<span class="c1">;; Vector's literals are fixed-length arrays</span>
+<span class="o">#(</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">; =&gt; #(1 2 3)</span>
+
+<span class="c1">;; Use concatenate to add vectors together</span>
+<span class="p">(</span><span class="nb">concatenate</span> <span class="ss">'vector</span> <span class="o">#(</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">)</span> <span class="o">#(</span><span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span><span class="p">))</span> <span class="c1">; =&gt; #(1 2 3 4 5 6)</span>
+
+<span class="c1">;;; Arrays</span>
+
+<span class="c1">;; Both vectors and strings are special-cases of arrays.</span>
+
+<span class="c1">;; 2D arrays</span>
+
+<span class="p">(</span><span class="nb">make-array</span> <span class="p">(</span><span class="nb">list</span> <span class="mi">2</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="c1">;; (make-array '(2 2)) works as well.</span>
+
+<span class="c1">; =&gt; #2A((0 0) (0 0))</span>
+
+<span class="p">(</span><span class="nb">make-array</span> <span class="p">(</span><span class="nb">list</span> <span class="mi">2</span> <span class="mi">2</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="c1">; =&gt; #3A(((0 0) (0 0)) ((0 0) (0 0)))</span>
+
+<span class="c1">;; Caution- the default initial values are</span>
+<span class="c1">;; implementation-defined. Here's how to define them:</span>
+
+<span class="p">(</span><span class="nb">make-array</span> <span class="o">'</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="ss">:initial-element</span> <span class="ss">'unset</span><span class="p">)</span>
+
+<span class="c1">; =&gt; #(UNSET UNSET)</span>
+
+<span class="c1">;; And, to access the element at 1,1,1 -</span>
+<span class="p">(</span><span class="nb">aref</span> <span class="p">(</span><span class="nb">make-array</span> <span class="p">(</span><span class="nb">list</span> <span class="mi">2</span> <span class="mi">2</span> <span class="mi">2</span><span class="p">))</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">; =&gt; 0</span>
+
+<span class="c1">;;; Adjustable vectors</span>
+
+<span class="c1">;; Adjustable vectors have the same printed representation</span>
+<span class="c1">;; as fixed-length vector's literals.</span>
+
+<span class="p">(</span><span class="nb">defparameter</span> <span class="vg">*adjvec*</span> <span class="p">(</span><span class="nb">make-array</span> <span class="o">'</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="ss">:initial-contents</span> <span class="o">'</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">)</span>
+      <span class="ss">:adjustable</span> <span class="no">t</span> <span class="ss">:fill-pointer</span> <span class="no">t</span><span class="p">))</span>
+
+<span class="vg">*adjvec*</span> <span class="c1">; =&gt; #(1 2 3)</span>
+
+<span class="c1">;; Adding new element:</span>
+<span class="p">(</span><span class="nb">vector-push-extend</span> <span class="mi">4</span> <span class="vg">*adjvec*</span><span class="p">)</span> <span class="c1">; =&gt; 3</span>
+
+<span class="vg">*adjvec*</span> <span class="c1">; =&gt; #(1 2 3 4)</span>
+
+
+
+<span class="c1">;;; Naively, sets are just lists:</span>
+
+<span class="p">(</span><span class="nb">set-difference</span> <span class="o">'</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span><span class="p">)</span> <span class="o">'</span><span class="p">(</span><span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">7</span><span class="p">))</span> <span class="c1">; =&gt; (3 2 1)</span>
+<span class="p">(</span><span class="nb">intersection</span> <span class="o">'</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span><span class="p">)</span> <span class="o">'</span><span class="p">(</span><span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">7</span><span class="p">))</span> <span class="c1">; =&gt; 4</span>
+<span class="p">(</span><span class="nb">union</span> <span class="o">'</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span><span class="p">)</span> <span class="o">'</span><span class="p">(</span><span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">7</span><span class="p">))</span>        <span class="c1">; =&gt; (3 2 1 4 5 6 7)</span>
+<span class="p">(</span><span class="nb">adjoin</span> <span class="mi">4</span> <span class="o">'</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span><span class="p">))</span>     <span class="c1">; =&gt; (1 2 3 4)</span>
+
+<span class="c1">;; But you'll want to use a better data structure than a linked list</span>
+<span class="c1">;; for performant work!</span>
+
+<span class="c1">;;; Dictionaries are implemented as hash tables.</span>
+
+<span class="c1">;; Create a hash table</span>
+<span class="p">(</span><span class="nb">defparameter</span> <span class="vg">*m*</span> <span class="p">(</span><span class="nb">make-hash-table</span><span class="p">))</span>
+
+<span class="c1">;; set a value</span>
+<span class="p">(</span><span class="nb">setf</span> <span class="p">(</span><span class="nb">gethash</span> <span class="ss">'a</span> <span class="vg">*m*</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1">;; Retrieve a value</span>
+<span class="p">(</span><span class="nb">gethash</span> <span class="ss">'a</span> <span class="vg">*m*</span><span class="p">)</span> <span class="c1">; =&gt; 1, t</span>
+
+<span class="c1">;; Detail - Common Lisp has multiple return values possible. gethash</span>
+<span class="c1">;; returns t in the second value if anything was found, and nil if</span>
+<span class="c1">;; not.</span>
+
+<span class="c1">;; Retrieving a non-present value returns nil</span>
+ <span class="p">(</span><span class="nb">gethash</span> <span class="ss">'d</span> <span class="vg">*m*</span><span class="p">)</span> <span class="c1">;=&gt; nil, nil</span>
+
+<span class="c1">;; You can provide a default value for missing keys</span>
+<span class="p">(</span><span class="nb">gethash</span> <span class="ss">'d</span> <span class="vg">*m*</span> <span class="ss">:not-found</span><span class="p">)</span> <span class="c1">; =&gt; :NOT-FOUND</span>
+
+<span class="c1">;; Let's handle the multiple return values here in code.</span>
+
+<span class="p">(</span><span class="nb">multiple-value-bind</span>
+      <span class="p">(</span><span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">gethash</span> <span class="ss">'d</span> <span class="vg">*m*</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">list</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">))</span>
+<span class="c1">; =&gt; (NIL NIL)</span>
+
+<span class="p">(</span><span class="nb">multiple-value-bind</span>
+      <span class="p">(</span><span class="nv">a</span> <span class="nv">b</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">gethash</span> <span class="ss">'a</span> <span class="vg">*m*</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">list</span> <span class="nv">a</span> <span class="nv">b</span><span class="p">))</span>
+<span class="c1">; =&gt; (1 T)</span>
+
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">;; 3. Functions</span>
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="c1">;; Use `lambda' to create anonymous functions.</span>
+<span class="c1">;; A function always returns the value of its last expression.</span>
+<span class="c1">;; The exact printable representation of a function will vary...</span>
+
+<span class="p">(</span><span class="k">lambda</span> <span class="p">()</span> <span class="s">"Hello World"</span><span class="p">)</span> <span class="c1">; =&gt; #&lt;FUNCTION (LAMBDA ()) {1004E7818B}&gt;</span>
+
+<span class="c1">;; Use funcall to call lambda functions</span>
+<span class="p">(</span><span class="nb">funcall</span> <span class="p">(</span><span class="k">lambda</span> <span class="p">()</span> <span class="s">"Hello World"</span><span class="p">))</span> <span class="c1">; =&gt; "Hello World"</span>
+
+<span class="c1">;; Or Apply</span>
+<span class="p">(</span><span class="nb">apply</span> <span class="p">(</span><span class="k">lambda</span> <span class="p">()</span> <span class="s">"Hello World"</span><span class="p">)</span> <span class="no">nil</span><span class="p">)</span> <span class="c1">; =&gt; "Hello World"</span>
+
+<span class="c1">;; De-anonymize the function</span>
+<span class="p">(</span><span class="nb">defun</span> <span class="nv">hello-world</span> <span class="p">()</span>
+   <span class="s">"Hello World"</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">hello-world</span><span class="p">)</span> <span class="c1">; =&gt; "Hello World"</span>
+
+<span class="c1">;; The () in the above is the list of arguments for the function</span>
+<span class="p">(</span><span class="nb">defun</span> <span class="nv">hello</span> <span class="p">(</span><span class="nv">name</span><span class="p">)</span>
+   <span class="p">(</span><span class="nb">format</span> <span class="no">nil</span> <span class="s">"Hello, ~a"</span> <span class="nv">name</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nv">hello</span> <span class="s">"Steve"</span><span class="p">)</span> <span class="c1">; =&gt; "Hello, Steve"</span>
+
+<span class="c1">;; Functions can have optional arguments; they default to nil</span>
+
+<span class="p">(</span><span class="nb">defun</span> <span class="nv">hello</span> <span class="p">(</span><span class="nv">name</span> <span class="k">&amp;optional</span> <span class="nv">from</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">if</span> <span class="nv">from</span>
+        <span class="p">(</span><span class="nb">format</span> <span class="no">t</span> <span class="s">"Hello, ~a, from ~a"</span> <span class="nv">name</span> <span class="nv">from</span><span class="p">)</span>
+        <span class="p">(</span><span class="nb">format</span> <span class="no">t</span> <span class="s">"Hello, ~a"</span> <span class="nv">name</span><span class="p">)))</span>
+
+ <span class="p">(</span><span class="nv">hello</span> <span class="s">"Jim"</span> <span class="s">"Alpacas"</span><span class="p">)</span> <span class="c1">;; =&gt; Hello, Jim, from Alpacas</span>
+
+<span class="c1">;; And the defaults can be set...</span>
+<span class="p">(</span><span class="nb">defun</span> <span class="nv">hello</span> <span class="p">(</span><span class="nv">name</span> <span class="k">&amp;optional</span> <span class="p">(</span><span class="nv">from</span> <span class="s">"The world"</span><span class="p">))</span>
+   <span class="p">(</span><span class="nb">format</span> <span class="no">t</span> <span class="s">"Hello, ~a, from ~a"</span> <span class="nv">name</span> <span class="nv">from</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nv">hello</span> <span class="s">"Steve"</span><span class="p">)</span>
+<span class="c1">; =&gt; Hello, Steve, from The world</span>
+
+<span class="p">(</span><span class="nv">hello</span> <span class="s">"Steve"</span> <span class="s">"the alpacas"</span><span class="p">)</span>
+<span class="c1">; =&gt; Hello, Steve, from the alpacas</span>
+
+
+<span class="c1">;; And of course, keywords are allowed as well... usually more</span>
+<span class="c1">;;   flexible than &amp;optional.</span>
+
+<span class="p">(</span><span class="nb">defun</span> <span class="nv">generalized-greeter</span> <span class="p">(</span><span class="nv">name</span> <span class="k">&amp;key</span> <span class="p">(</span><span class="nv">from</span> <span class="s">"the world"</span><span class="p">)</span> <span class="p">(</span><span class="nv">honorific</span> <span class="s">"Mx"</span><span class="p">))</span>
+    <span class="p">(</span><span class="nb">format</span> <span class="no">t</span> <span class="s">"Hello, ~a ~a, from ~a"</span> <span class="nv">honorific</span> <span class="nv">name</span> <span class="nv">from</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nv">generalized-greeter</span> <span class="s">"Jim"</span><span class="p">)</span>   <span class="c1">; =&gt; Hello, Mx Jim, from the world</span>
+
+<span class="p">(</span><span class="nv">generalized-greeter</span> <span class="s">"Jim"</span> <span class="ss">:from</span> <span class="s">"the alpacas you met last summer"</span> <span class="ss">:honorific</span> <span class="s">"Mr"</span><span class="p">)</span>
+<span class="c1">; =&gt; Hello, Mr Jim, from the alpacas you met last summer</span>
+
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">;; 4. Equality</span>
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="c1">;; Common Lisp has a sophisticated equality system. A couple are covered here.</span>
+
+<span class="c1">;; for numbers use `='</span>
+<span class="p">(</span><span class="nb">=</span> <span class="mi">3</span> <span class="mf">3.0</span><span class="p">)</span> <span class="c1">; =&gt; t</span>
+<span class="p">(</span><span class="nb">=</span> <span class="mi">2</span> <span class="mi">1</span><span class="p">)</span> <span class="c1">; =&gt; nil</span>
+
+<span class="c1">;; for object identity (approximately) use `eql`</span>
+<span class="p">(</span><span class="nb">eql</span> <span class="mi">3</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">; =&gt; t</span>
+<span class="p">(</span><span class="nb">eql</span> <span class="mi">3</span> <span class="mf">3.0</span><span class="p">)</span> <span class="c1">; =&gt; nil</span>
+<span class="p">(</span><span class="nb">eql</span> <span class="p">(</span><span class="nb">list</span> <span class="mi">3</span><span class="p">)</span> <span class="p">(</span><span class="nb">list</span> <span class="mi">3</span><span class="p">))</span> <span class="c1">; =&gt; nil</span>
+
+<span class="c1">;; for lists, strings, and bit-vectors use `equal'</span>
+<span class="p">(</span><span class="nb">equal</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">'a</span> <span class="ss">'b</span><span class="p">)</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">'a</span> <span class="ss">'b</span><span class="p">))</span> <span class="c1">; =&gt; t</span>
+<span class="p">(</span><span class="nb">equal</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">'a</span> <span class="ss">'b</span><span class="p">)</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">'b</span> <span class="ss">'a</span><span class="p">))</span> <span class="c1">; =&gt; nil</span>
+
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">;; 5. Control Flow</span>
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="c1">;;; Conditionals</span>
+
+<span class="p">(</span><span class="k">if</span> <span class="no">t</span>                <span class="c1">; test expression</span>
+    <span class="s">"this is true"</span>   <span class="c1">; then expression</span>
+    <span class="s">"this is false"</span><span class="p">)</span> <span class="c1">; else expression</span>
+<span class="c1">; =&gt; "this is true"</span>
+
+<span class="c1">;; In conditionals, all non-nil values are treated as true</span>
+<span class="p">(</span><span class="nb">member</span> <span class="ss">'Groucho</span> <span class="o">'</span><span class="p">(</span><span class="nv">Harpo</span> <span class="nv">Groucho</span> <span class="nv">Zeppo</span><span class="p">))</span> <span class="c1">; =&gt; '(GROUCHO ZEPPO)</span>
+<span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">member</span> <span class="ss">'Groucho</span> <span class="o">'</span><span class="p">(</span><span class="nv">Harpo</span> <span class="nv">Groucho</span> <span class="nv">Zeppo</span><span class="p">))</span>
+    <span class="ss">'yep</span>
+    <span class="ss">'nope</span><span class="p">)</span>
+<span class="c1">; =&gt; 'YEP</span>
+
+<span class="c1">;; `cond' chains a series of tests to select a result</span>
+<span class="p">(</span><span class="nb">cond</span> <span class="p">((</span><span class="nb">&gt;</span> <span class="mi">2</span> <span class="mi">2</span><span class="p">)</span> <span class="p">(</span><span class="nb">error</span> <span class="s">"wrong!"</span><span class="p">))</span>
+      <span class="p">((</span><span class="nb">&lt;</span> <span class="mi">2</span> <span class="mi">2</span><span class="p">)</span> <span class="p">(</span><span class="nb">error</span> <span class="s">"wrong again!"</span><span class="p">))</span>
+      <span class="p">(</span><span class="no">t</span> <span class="ss">'ok</span><span class="p">))</span> <span class="c1">; =&gt; 'OK</span>
+
+<span class="c1">;; Typecase switches on the type of the value</span>
+<span class="p">(</span><span class="nb">typecase</span> <span class="mi">1</span>
+  <span class="p">(</span><span class="nb">string</span> <span class="ss">:string</span><span class="p">)</span>
+  <span class="p">(</span><span class="nc">integer</span> <span class="ss">:int</span><span class="p">))</span>
+
+<span class="c1">; =&gt; :int</span>
+
+<span class="c1">;;; Iteration</span>
+
+<span class="c1">;; Of course recursion is supported:</span>
+
+<span class="p">(</span><span class="nb">defun</span> <span class="nv">walker</span> <span class="p">(</span><span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">zerop</span> <span class="nv">n</span><span class="p">)</span>
+      <span class="ss">:walked</span>
+      <span class="p">(</span><span class="nv">walker</span> <span class="p">(</span><span class="nb">-</span> <span class="nv">n</span> <span class="mi">1</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="nv">walker</span> <span class="mi">5</span><span class="p">)</span> <span class="c1">; =&gt; :walked</span>
+
+<span class="c1">;; Most of the time, we use DOLIST or LOOP</span>
+
+
+<span class="p">(</span><span class="nb">dolist</span> <span class="p">(</span><span class="nv">i</span> <span class="o">'</span><span class="p">(</span><span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb">format</span> <span class="no">t</span> <span class="s">"~a"</span> <span class="nv">i</span><span class="p">))</span>
+
+<span class="c1">; =&gt; 1234</span>
+
+<span class="p">(</span><span class="nb">loop</span> <span class="nv">for</span> <span class="nv">i</span> <span class="nv">from</span> <span class="mi">0</span> <span class="nv">below</span> <span class="mi">10</span>
+      <span class="nv">collect</span> <span class="nv">i</span><span class="p">)</span>
+
+<span class="c1">; =&gt; (0 1 2 3 4 5 6 7 8 9)</span>
+
+
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">;; 6. Mutation</span>
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="c1">;; Use `setf' to assign a new value to an existing variable. This was</span>
+<span class="c1">;; demonstrated earlier in the hash table example.</span>
+
+<span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">variable</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="p">(</span><span class="nb">setf</span> <span class="nv">variable</span> <span class="mi">2</span><span class="p">))</span>
+ <span class="c1">; =&gt; 2</span>
+
+
+<span class="c1">;; Good Lisp style is to minimize destructive functions and to avoid</span>
+<span class="c1">;; mutation when reasonable.</span>
+
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">;; 7. Classes and Objects</span>
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="c1">;; No more Animal classes, let's have Human-Powered Mechanical</span>
+<span class="c1">;; Conveyances.</span>
+
+<span class="p">(</span><span class="nb">defclass</span> <span class="nv">human-powered-conveyance</span> <span class="p">()</span>
+  <span class="p">((</span><span class="nv">velocity</span>
+    <span class="ss">:accessor</span> <span class="nv">velocity</span>
+    <span class="ss">:initarg</span> <span class="ss">:velocity</span><span class="p">)</span>
+   <span class="p">(</span><span class="nv">average-efficiency</span>
+    <span class="ss">:accessor</span> <span class="nv">average-efficiency</span>
+   <span class="ss">:initarg</span> <span class="ss">:average-efficiency</span><span class="p">))</span>
+  <span class="p">(</span><span class="ss">:documentation</span> <span class="s">"A human powered conveyance"</span><span class="p">))</span>
+
+<span class="c1">;; defclass, followed by name, followed by the superclass list,</span>
+<span class="c1">;; followed by slot list, followed by optional qualities such as</span>
+<span class="c1">;; :documentation.</span>
+
+<span class="c1">;; When no superclass list is set, the empty list defaults to the</span>
+<span class="c1">;; standard-object class. This *can* be changed, but not until you</span>
+<span class="c1">;; know what you're doing. Look up the Art of the Metaobject Protocol</span>
+<span class="c1">;; for more information.</span>
+
+<span class="p">(</span><span class="nb">defclass</span> <span class="nv">bicycle</span> <span class="p">(</span><span class="nv">human-powered-conveyance</span><span class="p">)</span>
+  <span class="p">((</span><span class="nv">wheel-size</span>
+    <span class="ss">:accessor</span> <span class="nv">wheel-size</span>
+    <span class="ss">:initarg</span> <span class="ss">:wheel-size</span>
+    <span class="ss">:documentation</span> <span class="s">"Diameter of the wheel."</span><span class="p">)</span>
+   <span class="p">(</span><span class="nv">height</span>
+    <span class="ss">:accessor</span> <span class="nv">height</span>
+    <span class="ss">:initarg</span> <span class="ss">:height</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nb">defclass</span> <span class="nv">recumbent</span> <span class="p">(</span><span class="nv">bicycle</span><span class="p">)</span>
+  <span class="p">((</span><span class="nv">chain-type</span>
+    <span class="ss">:accessor</span> <span class="nv">chain-type</span>
+    <span class="ss">:initarg</span>  <span class="ss">:chain-type</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nb">defclass</span> <span class="nv">unicycle</span> <span class="p">(</span><span class="nv">human-powered-conveyance</span><span class="p">)</span> <span class="no">nil</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb">defclass</span> <span class="nv">canoe</span> <span class="p">(</span><span class="nv">human-powered-conveyance</span><span class="p">)</span>
+  <span class="p">((</span><span class="nv">number-of-rowers</span>
+    <span class="ss">:accessor</span> <span class="nv">number-of-rowers</span>
+    <span class="ss">:initarg</span> <span class="ss">:number-of-rowers</span><span class="p">)))</span>
+
+
+<span class="c1">;; Calling DESCRIBE on the human-powered-conveyance class in the REPL gives:</span>
+
+<span class="p">(</span><span class="nb">describe</span> <span class="ss">'human-powered-conveyance</span><span class="p">)</span>
+
+<span class="c1">; COMMON-LISP-USER::HUMAN-POWERED-CONVEYANCE</span>
+<span class="c1">;  [symbol]</span>
+<span class="c1">;</span>
+<span class="c1">; HUMAN-POWERED-CONVEYANCE names the standard-class #&lt;STANDARD-CLASS</span>
+<span class="c1">;                                                    HUMAN-POWERED-CONVEYANCE&gt;:</span>
+<span class="c1">;  Documentation:</span>
+<span class="c1">;    A human powered conveyance</span>
+<span class="c1">;  Direct superclasses: STANDARD-OBJECT</span>
+<span class="c1">;  Direct subclasses: UNICYCLE, BICYCLE, CANOE</span>
+<span class="c1">;  Not yet finalized.</span>
+<span class="c1">;  Direct slots:</span>
+<span class="c1">;    VELOCITY</span>
+<span class="c1">;      Readers: VELOCITY</span>
+<span class="c1">;      Writers: (SETF VELOCITY)</span>
+<span class="c1">;    AVERAGE-EFFICIENCY</span>
+<span class="c1">;      Readers: AVERAGE-EFFICIENCY</span>
+<span class="c1">;      Writers: (SETF AVERAGE-EFFICIENCY)</span>
+
+<span class="c1">;; Note the reflective behavior available to you! Common Lisp is</span>
+<span class="c1">;; designed to be an interactive system</span>
+
+<span class="c1">;; To define a method, let's find out what our circumference of the</span>
+<span class="c1">;; bike wheel turns out to be using the equation: C = d * pi</span>
+
+<span class="p">(</span><span class="nb">defmethod</span> <span class="nv">circumference</span> <span class="p">((</span><span class="nv">object</span> <span class="nv">bicycle</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb">*</span> <span class="nv">pi</span> <span class="p">(</span><span class="nv">wheel-size</span> <span class="nv">object</span><span class="p">)))</span>
+
+<span class="c1">;; pi is defined in Lisp already for us!</span>
+
+<span class="c1">;; Let's suppose we find out that the efficiency value of the number</span>
+<span class="c1">;; of rowers in a canoe is roughly logarithmic. This should probably be set</span>
+<span class="c1">;; in the constructor/initializer.</span>
+
+<span class="c1">;; Here's how to initialize your instance after Common Lisp gets done</span>
+<span class="c1">;; constructing it:</span>
+
+<span class="p">(</span><span class="nb">defmethod</span> <span class="nb">initialize-instance</span> <span class="ss">:after</span> <span class="p">((</span><span class="nv">object</span> <span class="nv">canoe</span><span class="p">)</span> <span class="k">&amp;rest</span> <span class="nv">args</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">setf</span> <span class="p">(</span><span class="nv">average-efficiency</span> <span class="nv">object</span><span class="p">)</span>  <span class="p">(</span><span class="nb">log</span> <span class="p">(</span><span class="nb">1+</span> <span class="p">(</span><span class="nv">number-of-rowers</span> <span class="nv">object</span><span class="p">)))))</span>
+
+<span class="c1">;; Then to construct an instance and check the average efficiency...</span>
+
+<span class="p">(</span><span class="nv">average-efficiency</span> <span class="p">(</span><span class="nb">make-instance</span> <span class="ss">'canoe</span> <span class="ss">:number-of-rowers</span> <span class="mi">15</span><span class="p">))</span>
+<span class="c1">; =&gt; 2.7725887</span>
+
+
+
+
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+<span class="c1">;; 8. Macros</span>
+<span class="c1">;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</span>
+
+<span class="c1">;; Macros let you extend the syntax of the language</span>
+
+<span class="c1">;; Common Lisp doesn't come with a WHILE loop- let's add one.</span>
+<span class="c1">;; If we obey our assembler instincts, we wind up with:</span>
+
+<span class="p">(</span><span class="nb">defmacro</span> <span class="nv">while</span> <span class="p">(</span><span class="kt">condition</span> <span class="k">&amp;body</span> <span class="nv">body</span><span class="p">)</span>
+    <span class="s">"While `condition` is true, `body` is executed.
+
+`condition` is tested prior to each execution of `body`"</span>
+    <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">block-name</span> <span class="p">(</span><span class="nb">gensym</span><span class="p">))</span> <span class="p">(</span><span class="nv">done</span> <span class="p">(</span><span class="nb">gensym</span><span class="p">)))</span>
+        <span class="o">`</span><span class="p">(</span><span class="k">tagbody</span>
+           <span class="o">,</span><span class="nv">block-name</span>
+           <span class="p">(</span><span class="nb">unless</span> <span class="o">,</span><span class="kt">condition</span>
+               <span class="p">(</span><span class="k">go</span> <span class="o">,</span><span class="nv">done</span><span class="p">))</span>
+           <span class="p">(</span><span class="k">progn</span>
+           <span class="o">,@</span><span class="nv">body</span><span class="p">)</span>
+           <span class="p">(</span><span class="k">go</span> <span class="o">,</span><span class="nv">block-name</span><span class="p">)</span>
+           <span class="o">,</span><span class="nv">done</span><span class="p">)))</span>
+
+<span class="c1">;; Let's look at the high-level version of this:</span>
+
+
+<span class="p">(</span><span class="nb">defmacro</span> <span class="nv">while</span> <span class="p">(</span><span class="kt">condition</span> <span class="k">&amp;body</span> <span class="nv">body</span><span class="p">)</span>
+    <span class="s">"While `condition` is true, `body` is executed.
+
+`condition` is tested prior to each execution of `body`"</span>
+  <span class="o">`</span><span class="p">(</span><span class="nb">loop</span> <span class="nv">while</span> <span class="o">,</span><span class="kt">condition</span>
+         <span class="nb">do</span>
+         <span class="p">(</span><span class="k">progn</span>
+            <span class="o">,@</span><span class="nv">body</span><span class="p">)))</span>
+
+<span class="c1">;; However, with a modern compiler, this is not required; the LOOP</span>
+<span class="c1">;; form compiles equally well and is easier to read.</span>
+
+<span class="c1">;; Note that ``` is used, as well as `,` and `@`. ``` is a quote-type operator</span>
+<span class="c1">;; known as quasiquote; it allows the use of `,` . `,` allows "unquoting"</span>
+<span class="c1">;; variables. @ interpolates lists.</span>
+
+<span class="c1">;; Gensym creates a unique symbol guaranteed to not exist elsewhere in</span>
+<span class="c1">;; the system. This is because macros are expanded at compile time and</span>
+<span class="c1">;; variables declared in the macro can collide with variables used in</span>
+<span class="c1">;; regular code.</span>
+
+<span class="c1">;; See Practical Common Lisp for more information on macros.</span>
+</code></pre>
+
+<h2>Further Reading</h2>
+
+<ul>
+<li>  <a href="http://www.gigamonkeys.com/book/">Keep moving on to the Practical Common Lisp book.</a></li>
+<li>  <a href="https://www.cs.cmu.edu/~dst/LispBook/book.pdf">A Gentle Introduction to&hellip;</a></li>
+</ul>
+
+<h2>Extra Info</h2>
+
+<ul>
+<li>  <a href="http://www.cliki.net/">CLiki</a></li>
+<li>  <a href="https://common-lisp.net/">common-lisp.net</a></li>
+<li>  <a href="https://github.com/CodyReichert/awesome-cl">Awesome Common Lisp</a></li>
+</ul>
+
+<h2>Credits.</h2>
+
+<p>Lots of thanks to the Scheme people for rolling up a great starting
+point which could be easily moved to Common Lisp.</p>
+
+<ul>
+<li><a href="https://github.com/pkhuong">Paul Khuong</a> for some great reviewing.</li>
+</ul>
+
+    <hr>
+    <p>Got a suggestion? A correction, perhaps? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Open an Issue</a> on the Github Repo, or make a pull request yourself!
+    </p>
+    <p class="contributed">
+    Originally contributed by Paul Nathan, and updated by <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/common-lisp.html.markdown">11 contributor(s)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="https://github.com/pnathan">Paul Nathan</a>
+      
+    
+    </p>
+
+    <p>
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/common-lisp/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:33:31 GMT -->
+</html>

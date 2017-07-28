@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/tr-tr/objective-c-tr/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:18 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn Objective-C in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.html">
+        <link rel="stylesheet" href="css/main.html">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+        <script src="js/vendor/modernizr-2.6.1.min.html"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">Share this page</span>
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">Learn X in Y minutes</a></h2>
+  <h2>Where X=Objective-C</h2>
+  
+    <p class="filelink">
+    Get the code:
+    <a href="../../files/LearnObjectiveC-tr.m">LearnObjectiveC-tr.m</a>
+    </p>
+  
+  <div id="doc">
+    <p>Objective-C Apple tarafından, OSX ve iOS işletim sistemleri ve onların
+kendi çatıları olan Cocoa ve Cocoa Touch için kullanılan bir programlama dilidir.
+Genel açamlı, object-oriented bir yapıya sahip programlama dilidir. C 
+programlama diline Smalltalk stilinde mesajlaşma ekler.  </p>
+<pre><code class="highlight objective_c"><span class="c1">// Tek satır yorum // işaretleri ile başlar
+</span>
+<span class="cm">/*
+Çoklu satır yorum bu şekilde görünür.
+*/</span>
+
+<span class="c1">// #import ile Foundation başlıklarını projeye import edebiliriz. 
+</span><span class="cp">#import &lt;Foundation/Foundation.h&gt;
+#import "MyClass.h"
+</span>
+<span class="c1">// Progarmınızı girişi bir main fonksiyonudur ve bir integer değer döner.
+</span><span class="kt">int</span> <span class="nf">main</span> <span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="c1">// Programdaki bellek kullanımını kontrol etmek için autorelease bir 
+</span>    <span class="c1">// oluşturuyoruz. Autorelease bellekte kullanılmayan değerlerin kendi 
+</span>    <span class="c1">// kendini silmesi demektir.
+</span>    <span class="n">NSAutoreleasePool</span> <span class="o">*</span> <span class="n">pool</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSAutoreleasePool</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+
+    <span class="c1">// NSLog konsola bir satırlık bilgi yazdırmak için kullanılır.
+</span>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Hello World!"</span><span class="p">);</span> <span class="c1">// "Hello World!" değeri yazdırılır.
+</span>
+    <span class="c1">///////////////////////////////////////
+</span>    <span class="c1">// Tipler &amp; Değişkenler
+</span>    <span class="c1">///////////////////////////////////////
+</span>
+    <span class="c1">// Basit Tanımlamalar
+</span>    <span class="kt">int</span> <span class="n">myPrimitive1</span>  <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="n">myPrimitive2</span> <span class="o">=</span> <span class="mi">234554664565</span><span class="p">;</span>
+
+    <span class="c1">// Nesne Tanımlamaları
+</span>    <span class="c1">// strongly-typed nesne tanımlaması için karakter değişken isminin önüne 
+</span>    <span class="c1">// * karakteri konulur.
+</span>    <span class="n">MyClass</span> <span class="o">*</span><span class="n">myObject1</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>  <span class="c1">// Strong typing
+</span>    <span class="n">id</span>       <span class="n">myObject2</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>  <span class="c1">// Weak typing
+</span>    <span class="c1">// %@ bir nesnedir.
+</span>    <span class="c1">// 'description' objelerin değerlerinin gösterilmesi için bir düzendir.
+</span>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%@ and %@"</span><span class="p">,</span> <span class="n">myObject1</span><span class="p">,</span> <span class="p">[</span><span class="n">myObject2</span> <span class="nf">description</span><span class="p">]);</span> 
+            <span class="c1">// "(null) and (null)" yazdırılacaktır.
+</span>
+    <span class="c1">// Karakter Dizisi (String)
+</span>    <span class="n">NSString</span> <span class="o">*</span><span class="n">worldString</span> <span class="o">=</span> <span class="s">@"World"</span><span class="p">;</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Hello %@!"</span><span class="p">,</span> <span class="n">worldString</span><span class="p">);</span> <span class="c1">// "Hello World!" yazdırılacaktır.
+</span>
+    <span class="c1">// Karakterler
+</span>    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">theLetterZNumber</span> <span class="o">=</span> <span class="sc">@'Z'</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">theLetterZ</span>            <span class="o">=</span> <span class="p">[</span><span class="n">theLetterZNumber</span> <span class="nf">charValue</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%c"</span><span class="p">,</span> <span class="n">theLetterZ</span><span class="p">);</span>
+
+    <span class="c1">// Tamsayılar
+</span>    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">fortyTwoNumber</span> <span class="o">=</span> <span class="mi">@42</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">fortyTwo</span>             <span class="o">=</span> <span class="p">[</span><span class="n">fortyTwoNumber</span> <span class="nf">intValue</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%i"</span><span class="p">,</span> <span class="n">fortyTwo</span><span class="p">);</span>
+
+    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">fortyTwoUnsignedNumber</span> <span class="o">=</span> <span class="mi">@42</span><span class="n">U</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">fortyTwoUnsigned</span>    <span class="o">=</span> <span class="p">[</span><span class="n">fortyTwoUnsignedNumber</span> <span class="nf">unsignedIntValue</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%u"</span><span class="p">,</span> <span class="n">fortyTwoUnsigned</span><span class="p">);</span>
+
+    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">fortyTwoShortNumber</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSNumber</span> <span class="nf">numberWithShort</span><span class="p">:</span><span class="mi">42</span><span class="p">];</span>
+    <span class="kt">short</span> <span class="n">fortyTwoShort</span>           <span class="o">=</span> <span class="p">[</span><span class="n">fortyTwoShortNumber</span> <span class="nf">shortValue</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%hi"</span><span class="p">,</span> <span class="n">fortyTwoShort</span><span class="p">);</span>
+
+    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">fortyTwoLongNumber</span> <span class="o">=</span> <span class="mi">@42</span><span class="n">L</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="n">fortyTwoLong</span>            <span class="o">=</span> <span class="p">[</span><span class="n">fortyTwoLongNumber</span> <span class="nf">longValue</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%li"</span><span class="p">,</span> <span class="n">fortyTwoLong</span><span class="p">);</span>
+
+    <span class="c1">// Kayan Noktalı Sayılar (Floats)
+</span>    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">piFloatNumber</span> <span class="o">=</span> <span class="mf">@3.141592654F</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">piFloat</span>           <span class="o">=</span> <span class="p">[</span><span class="n">piFloatNumber</span> <span class="nf">floatValue</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%f"</span><span class="p">,</span> <span class="n">piFloat</span><span class="p">);</span>
+
+    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">piDoubleNumber</span> <span class="o">=</span> <span class="mf">@3.1415926535</span><span class="p">;</span>
+    <span class="n">piDouble</span>                 <span class="o">=</span> <span class="p">[</span><span class="n">piDoubleNumber</span> <span class="nf">doubleValue</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%f"</span><span class="p">,</span> <span class="n">piDouble</span><span class="p">);</span>
+
+    <span class="c1">// BOOL Değerler
+</span>    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">yesNumber</span> <span class="o">=</span> <span class="nb">@YES</span><span class="p">;</span>
+    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">noNumber</span>  <span class="o">=</span> <span class="nb">@NO</span><span class="p">;</span>
+
+    <span class="c1">// Dizi objeleri
+</span>    <span class="n">NSArray</span> <span class="o">*</span><span class="n">anArray</span>      <span class="o">=</span> <span class="err">@</span><span class="p">[</span><span class="mi">@1</span><span class="p">,</span> <span class="mi">@2</span><span class="p">,</span> <span class="mi">@3</span><span class="p">,</span> <span class="mi">@4</span><span class="p">];</span>
+    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">thirdNumber</span> <span class="o">=</span> <span class="n">anArray</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Third number = %@"</span><span class="p">,</span> <span class="n">thirdNumber</span><span class="p">);</span> <span class="c1">// "Third number = 3" yazdırılır
+</span>
+    <span class="c1">// Dictionary objeleri
+</span>    <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">aDictionary</span> <span class="o">=</span> <span class="err">@</span><span class="p">{</span> <span class="s">@"key1"</span> <span class="o">:</span> <span class="s">@"value1"</span><span class="p">,</span> <span class="s">@"key2"</span> <span class="o">:</span> <span class="s">@"value2"</span> <span class="p">};</span>
+    <span class="n">NSObject</span> <span class="o">*</span><span class="n">valueObject</span>     <span class="o">=</span> <span class="n">aDictionary</span><span class="p">[</span><span class="s">@"A Key"</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Object = %@"</span><span class="p">,</span> <span class="n">valueObject</span><span class="p">);</span> <span class="c1">// "Object = (null)" yazıdılır
+</span>
+    <span class="c1">///////////////////////////////////////
+</span>    <span class="c1">// Operatörler
+</span>    <span class="c1">///////////////////////////////////////
+</span>
+    <span class="c1">// Operatörler C dilindeki gibi çalışır.
+</span>    <span class="c1">// Örneğin:
+</span>    <span class="mi">2</span> <span class="o">+</span> <span class="mi">5</span><span class="p">;</span> <span class="c1">// =&gt; 7
+</span>    <span class="mi">4</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span> <span class="o">+</span> <span class="mi">5</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="p">;</span> <span class="c1">// =&gt; 9.3f
+</span>    <span class="mi">3</span> <span class="o">==</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">// =&gt; 0 (NO)
+</span>    <span class="mi">3</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">// =&gt; 1 (YES)
+</span>    <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// =&gt; 1 (Logical and)
+</span>    <span class="mi">0</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// =&gt; 1 (Logical or)
+</span>    <span class="o">~</span><span class="mh">0x0F</span><span class="p">;</span> <span class="c1">// =&gt; 0xF0 (bitwise negation)
+</span>    <span class="mh">0x0F</span> <span class="o">&amp;</span> <span class="mh">0xF0</span><span class="p">;</span> <span class="c1">// =&gt; 0x00 (bitwise AND)
+</span>    <span class="mh">0x01</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// =&gt; 0x02 (bitwise left shift (by 1))
+</span>
+    <span class="c1">///////////////////////////////////////
+</span>    <span class="c1">// Kontrol Yapıları
+</span>    <span class="c1">///////////////////////////////////////
+</span>
+    <span class="c1">// If-Else ifadesi
+</span>    <span class="k">if</span> <span class="p">(</span><span class="nb">NO</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"I am never run"</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"I am also never run"</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"I print"</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Switch ifadesi
+</span>    <span class="k">switch</span> <span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">case</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="p">{</span>
+            <span class="n">NSLog</span><span class="p">(</span><span class="s">@"I am never run"</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="p">{</span>
+            <span class="n">NSLog</span><span class="p">(</span><span class="s">@"I am also never run"</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+        <span class="nl">default:</span>
+        <span class="p">{</span>
+            <span class="n">NSLog</span><span class="p">(</span><span class="s">@"I print"</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// While döngü ifadesi
+</span>    <span class="kt">int</span> <span class="n">ii</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">ii</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%d,"</span><span class="p">,</span> <span class="n">ii</span><span class="o">++</span><span class="p">);</span> <span class="c1">// ii++, ii değişkenini kullanıldıktan 
+</span>                             <span class="c1">//sonra yerinde artırır.
+</span>    <span class="p">}</span> <span class="c1">// =&gt;        "0," 
+</span>      <span class="c1">//           "1,"
+</span>      <span class="c1">//           "2,"
+</span>      <span class="c1">//           "3," yazdırılır
+</span>
+    <span class="c1">// For döngü ifadesi
+</span>    <span class="kt">int</span> <span class="n">jj</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">jj</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">jj</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">jj</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%d,"</span><span class="p">,</span> <span class="n">jj</span><span class="o">++</span><span class="p">);</span>
+    <span class="p">}</span> <span class="c1">// =&gt;        "0," 
+</span>      <span class="c1">//           "1,"
+</span>      <span class="c1">//           "2,"
+</span>      <span class="c1">//           "3," yazdırılır
+</span>
+    <span class="c1">// Foreach ifadesi             
+</span>    <span class="n">NSArray</span> <span class="o">*</span><span class="n">values</span> <span class="o">=</span> <span class="err">@</span><span class="p">[</span><span class="mi">@0</span><span class="p">,</span> <span class="mi">@1</span><span class="p">,</span> <span class="mi">@2</span><span class="p">,</span> <span class="mi">@3</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">NSNumber</span> <span class="o">*</span><span class="n">value</span> <span class="k">in</span> <span class="n">values</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%@,"</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+    <span class="p">}</span> <span class="c1">// =&gt;        "0," 
+</span>      <span class="c1">//           "1,"
+</span>      <span class="c1">//           "2,"
+</span>      <span class="c1">//           "3," yazdırılır
+</span>
+    <span class="c1">// Try-Catch-Finally ifadesi
+</span>    <span class="k">@try</span>
+    <span class="p">{</span>
+        <span class="c1">// İfadelerinizi buraya yazın
+</span>        <span class="k">@throw</span> <span class="p">[</span><span class="n">NSException</span> <span class="nf">exceptionWithName</span><span class="p">:</span><span class="s">@"FileNotFoundException"</span>
+                            <span class="nf">reason</span><span class="p">:</span><span class="s">@"Sistemde Dosya Bulunamadı"</span> <span class="nf">userInfo</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+    <span class="p">}</span> <span class="k">@catch</span> <span class="p">(</span><span class="n">NSException</span> <span class="o">*</span> <span class="n">e</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Exception: %@"</span><span class="p">,</span> <span class="n">e</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">@finally</span>
+    <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Finally"</span><span class="p">);</span>
+    <span class="p">}</span> <span class="c1">// =&gt;        "Exception: Sistemde Dosya Bulunamadı"
+</span>      <span class="c1">//           "Finally"
+</span>      <span class="c1">// yazdırılacaktır
+</span>
+    <span class="c1">///////////////////////////////////////
+</span>    <span class="c1">// Objeler
+</span>    <span class="c1">///////////////////////////////////////
+</span>
+    <span class="c1">// Bellekten bir alan ayırmak ve objeyi burada oluşturmak bir obje örneği 
+</span>    <span class="c1">// oluşturalım. Bir obje allocate ve init aşamalarını bitirmeden tam olarak
+</span>    <span class="c1">// işlevsel değildir.
+</span>    <span class="n">MyClass</span> <span class="o">*</span><span class="n">myObject</span> <span class="o">=</span> <span class="p">[[</span><span class="n">MyClass</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+
+    <span class="c1">// Objective-C nesne yönelimli programlama modelinin temelinde objelere 
+</span>    <span class="c1">// mesaj gönderme vardır.
+</span>    <span class="c1">// Objective-C'de bir method çağırılmaz, ona bir mesaj gönderilir.
+</span>    <span class="p">[</span><span class="n">myObject</span> <span class="nf">instanceMethodWithParameter</span><span class="p">:</span><span class="s">@"Steve Jobs"</span><span class="p">];</span>
+
+    <span class="c1">// Programda kullanılan bellek temizlenir
+</span>    <span class="p">[</span><span class="n">pool</span> <span class="nf">drain</span><span class="p">];</span>
+
+    <span class="c1">// Program Sonu
+</span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">///////////////////////////////////////
+// Sınıflar ve Fonksiyonlar
+///////////////////////////////////////
+</span>
+<span class="c1">// Sınıfınızı (MyClass.h) header dosyasında tanımlayın:
+</span>
+<span class="c1">// Sınıf tanımlama yapısı:
+// @interface ClassName : ParentClassName &lt;ImplementedProtocols&gt;
+// {
+//    Üye değişken (member variable) tanımlaması;
+// }
+// -/+ (type) Method tanımlaması;
+// @end
+</span><span class="k">@interface</span> <span class="nc">MyClass</span> <span class="p">:</span> <span class="nc">NSObject</span> <span class="o">&lt;</span><span class="n">MyCustomProtocol</span><span class="o">&gt;</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">count</span><span class="p">;</span>
+    <span class="n">id</span> <span class="n">data</span><span class="p">;</span>
+    <span class="n">NSString</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">// getter ve setter için otomatik oluşturulmuş gösterim.
+</span><span class="k">@property</span> <span class="kt">int</span> <span class="n">count</span><span class="p">;</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">copy</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span> <span class="c1">// Copy the object during assignment.
+</span><span class="k">@property</span> <span class="p">(</span><span class="n">readonly</span><span class="p">)</span> <span class="n">id</span> <span class="n">data</span><span class="p">;</span>    <span class="c1">// Declare only a getter method.
+</span>
+<span class="c1">// Metodlar
+</span><span class="o">+/-</span> <span class="p">(</span><span class="k">return</span> <span class="n">type</span><span class="p">)</span><span class="n">methodSignature</span><span class="o">:</span><span class="p">(</span><span class="n">Parameter</span> <span class="n">Type</span> <span class="o">*</span><span class="p">)</span><span class="n">parameterName</span><span class="p">;</span>
+
+<span class="c1">// "+" class metodları içindir
+</span><span class="k">+</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">classMethod</span><span class="p">;</span>
+
+<span class="c1">// "-" instance metodu içindir
+</span><span class="k">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">instanceMethodWithParmeter</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">string</span><span class="p">;</span>
+<span class="k">-</span> <span class="p">(</span><span class="n">NSNumber</span> <span class="o">*</span><span class="p">)</span><span class="nf">methodAParameterAsString</span><span class="p">:(</span><span class="n">NSString</span><span class="o">*</span><span class="p">)</span><span class="nv">string</span> <span class="nf">andAParameterAsNumber</span><span class="p">:(</span><span class="n">NSNumber</span> <span class="o">*</span><span class="p">)</span><span class="nv">number</span><span class="p">;</span>
+
+<span class="k">@end</span>
+
+<span class="c1">// Metodların implementasyonlarını (MyClass.m) dosyasında yapıyoruz:
+</span>
+<span class="k">@implementation</span> <span class="nc">UserObject</span>
+
+<span class="c1">// Obje bellekten silineceği (release) zaman çağırılır
+</span><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">dealloc</span>
+<span class="p">{</span>
+<span class="p">}</span>
+
+<span class="c1">// Constructor'lar sınıf oluşturmanın bir yoludur
+// Bu varsayılan bir constructor'dur ve bir obje oluşturulurken çağrılır.
+</span><span class="o">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="n">init</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">self</span> <span class="o">=</span> <span class="p">[</span><span class="n">super</span> <span class="nf">init</span><span class="p">]))</span>
+    <span class="p">{</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="o">+</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">classMethod</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">[[</span><span class="n">self</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="o">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">instanceMethodWithParmeter</span><span class="o">:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">string</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="s">@"New string"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="o">-</span> <span class="p">(</span><span class="n">NSNumber</span> <span class="o">*</span><span class="p">)</span><span class="n">methodAParameterAsString</span><span class="o">:</span><span class="p">(</span><span class="n">NSString</span><span class="o">*</span><span class="p">)</span><span class="n">string</span> <span class="n">andAParameterAsNumber</span><span class="o">:</span><span class="p">(</span><span class="n">NSNumber</span> <span class="o">*</span><span class="p">)</span><span class="n">number</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="mi">@42</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// MyProtocol içerisinde metod tanımlamaları
+</span><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">myProtocolMethod</span>
+<span class="p">{</span>
+    <span class="c1">// ifadeler
+</span><span class="p">}</span>
+
+<span class="k">@end</span>
+
+<span class="cm">/*
+ * Bir `protocol` herhangi bir sınıf tarafından implement edilen metodları tanımlar 
+ * `Protocol`ler sınıfların kendileri değildir. Onlar basitçe diğer objelerin 
+ * implementasyon için sorumlu oldukları bir arayüz (interface) tanımlarlar. 
+ */</span>
+<span class="k">@protocol</span> <span class="nc">MyProtocol</span>
+    <span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">myProtocolMethod</span><span class="p">;</span>
+<span class="k">@end</span>
+
+
+
+</code></pre>
+
+<h2>Daha Fazla Okuma</h2>
+
+<p><a href="http://tr.wikipedia.org/wiki/Objective-C">Vikipedi Objective-C</a></p>
+
+<p><a href="http://developer.apple.com/library/ios/referencelibrary/GettingStarted/Learning_Objective-C_A_Primer/">Objective-C Öğrenme</a></p>
+
+<p><a href="http://www.raywenderlich.com/5600/ios-for-high-school-students-getting-started">Lise Öğrencileri için iOS: Başlangıç</a></p>
+
+    <hr>
+    <p>Got a suggestion? A correction, perhaps? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Open an Issue</a> on the Github Repo, or make a pull request yourself!
+    </p>
+    <p class="contributed">
+    Originally contributed by Eugene Yagrushkin, and updated by <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/tr-tr/objective-c-tr.html.markdown">0 contributor(s)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2015
+    
+      
+        <a href="www.about.me/yagrushkin.html">Eugene Yagrushkin</a>,
+      
+    
+      
+        <a href="https://github.com/YannickL">Yannick Loriot</a>
+      
+    
+    </p>
+
+    <p>
+    
+      Translated by:
+      
+        <a href="http://scanf.info/">Haydar KULEKCI</a>
+      
+    
+
+    </footer>
+  </div>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-510ed322-cbdc-7d3a-c1d1-8a1a745aa7", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.0.min.html"><\/script>')</script>
+        <script src="js/script.html"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/tr-tr/objective-c-tr/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:20 GMT -->
+</html>

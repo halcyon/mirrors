@@ -1,0 +1,109 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/solutions/solutions-4.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:56 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Solutions to exercies in lecture 4</title>
+</head>
+<body>
+
+<center><b><font size=+3>Solutions to exercises from week 4</font></b></center>
+
+<p><tt>(defun matches-first-p (list number)</tt>
+<br><tt>&nbsp; (= number (first list)))</tt>
+<p><tt>(defun matches-any (list number)</tt>
+<br><tt>&nbsp; (if list</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (matches-first-p list number)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; t</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (matches-first-p (rest
+list) number))))</tt>
+<p><tt>(defun position-for-matches-any (list number)</tt>
+<br><tt>&nbsp; (in-position-for-matches-any list number 0))</tt>
+<p><tt>;; helper function for position-for-matches-any</tt>
+<br><tt>(defun in-position-for-matches-any (list number count)</tt>
+<br><tt>&nbsp; (if list</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (matches-first-p list number)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; count</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (in-position-for-matches-any
+(rest list) number (+ 1 count)))))</tt>
+<p><tt>;; in terms of car and cdr...</tt>
+<br><tt>(defun my-fourth (list)</tt>
+<br><tt>&nbsp; (car (cdr (cdr (cdr list) ))))</tt>
+<p><tt>(defun max-of-two-args (first second)</tt>
+<br><tt>&nbsp; (if (> first second)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; first</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; second))</tt>
+<p><tt>(defun print-n-dots (n)</tt>
+<br><tt>&nbsp; (if (> n 0)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (let* ((new (1- n)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (format t ".")</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (print-n-dots new))))</tt>
+<p><tt>;; You might be correct in thinking this coding style looks a little
+stilted.</tt>
+<br><tt>;; We'll be able to do a cleaner job after this week...</tt>
+<br><tt>(defun count-symbol-a (list)</tt>
+<br><tt>&nbsp; (if list</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (let* ((this (if (equal (first list)
+'a)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+1</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+0)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (+ this</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (count-symbol-a
+(rest list))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; 0))</tt>
+<p><tt>;; needed correcting: there was no termination condition</tt>
+<br><tt>(defun summit (list)</tt>
+<br><tt>&nbsp; (if list</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (let* ((x (car list)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (null x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(summit (cdr list))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (+ x (summit
+(cdr list)))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; 0))</tt>
+<p><tt>(defun better-maximum (list)</tt>
+<br><tt>&nbsp; ;; nick 2000-10-24 check for empty starting list!</tt>
+<br><tt>&nbsp; (if list</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (in-better-maximum (first list)
+(rest list))))</tt>
+<p><tt>;; helper function for better-maximum</tt>
+<br><tt>(defun in-better-maximum (previous-best list)</tt>
+<br><tt>&nbsp; (if list</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (let* ((next (first list))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(rest (rest list)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (in-better-maximum (max-of-two-args
+next previous-best) rest))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; previous-best))</tt>
+<p><tt>(defun final-cons (list)</tt>
+<br><tt>&nbsp; (car (last list)))</tt>
+<br>&nbsp;
+<p>&nbsp;If you have tried the exercises, looked at the solutions and still
+do not understand what's going on, I am available for consultation at the
+times advertised on my office door. Bring your code with you in BOTH the
+following forms:
+<ul>
+<li>
+Logbook containing printout (nothing handwritten please)</li>
+
+<li>
+file on floppy</li>
+</ul>
+&nbsp;
+<div align=right>
+<br><a href="mailto:ndl@ravenbrook.com">Nick Levine</a>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+last modified 2000-10-24
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Copyright (C) Nick Levine 1999. All rights reserved.
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/solutions/solutions-4.html#2 $</div>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/solutions/solutions-4.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:56 GMT -->
+</html>

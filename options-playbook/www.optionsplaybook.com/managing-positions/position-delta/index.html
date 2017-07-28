@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Mirrored from www.optionsplaybook.com/managing-positions/position-delta/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 17 Jan 2017 15:49:53 GMT -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Position Delta | Calculating Position Delta - The Options Playbook</title>
+<meta name="googlebot" content="noarchive">
+<meta name="description" content="Calculating position delta will help understand how your option positions should react to a change in the underlying stock price.">
+<meta name="google-site-verification" content="NsjvPWxMMZVpkiykGK6J97u4cuQ2B9SO5oWLV8BSdRM"/>
+<meta name="keywords" content="position delta, calculating position delta">
+<link media="screen" rel="stylesheet" type="text/css" href="../../media/css/reset.css"/>
+<link media="screen" rel="stylesheet" type="text/css" href="../../media/css/homepage.css"/>
+<link media="screen" rel="stylesheet" type="text/css" href="../../media/css/style.css"/>
+<link media="screen" rel="stylesheet" type="text/css" href="../../media/css/google.feed.css"/>
+<link rel="canonical" href="index.html"/> <!--[if IE]>
+		<link media="screen" rel="stylesheet" type="text/css" href="/media/css/ie.css" />
+	<![endif]-->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAA7Lpovkcjj4DYQUgKG-9PjRSajGErE3tUPAiGpxEjLkYj5HLcuhRNLyKWOmNLu9Mp4VU63O8Q0X4VVw"></script>
+<script type="text/javascript" src="../../media/js/jquery.equalheight.js"></script>
+<script type="text/javascript" src="../../media/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../../media/js/jquery.gfeed.js"></script>
+<script type="text/javascript" src="../../media/js/jquery.app.js"></script>
+<script type="text/javascript" src="../../media/js/cufon-yui.js"></script>
+<script type="text/javascript" src="../../media/js/DINOT-Medium_500.font.js"></script>
+<script type="text/javascript">
+		Cufon.replace('h1%2c%20h2%2c%20.html');
+		Cufon.replace('.nav li a', { hover: true });
+	</script>
+ 
+<script type="text/javascript">
+if(document.location.protocol=='index.html'){
+ var Tynt=Tynt||[];Tynt.push('bfgPem6qSr37B_adbi-bpO');Tynt.i={"ap":"Read more at:"};
+ (function(){var s=document.createElement('script');s.async="async";s.type="text/javascript";s.src='http://tcr.tynt.com/ti.js';var h=document.getElementsByTagName('script')[0];h.parentNode.insertBefore(s,h);})();
+}
+</script>
+ 
+</head>
+<body id="managing-positions" class="position-delta">
+<div id="wrapper">
+<div id="wrapper-in">
+<div class="header">
+<h4><a href="../../index.html">The Options Playbook</a></h4>
+<span class="tagline">Featuring 40 options strategies for bulls, bears, rookies, all-stars and everyone in between</span>
+<a href="http://www.tradeking.com/"><img src="../../media/images/poweredby.png" alt="TradeKing" title="The Options Playbook is powered by TradeKing"/></a>
+</div>
+<ul class="nav clear">
+<li><a href="../../index.html" class="nav-home">Home</a></li>
+<li><a href="../../options-introduction/index.html" class="nav-options-introduction">Options Basics</a></li>
+<li><a href="../../rookies-corner/learn-options-trading/index.html" class="nav-rookies-corner">Rookie's Corner</a></li>
+<li><a href="../../option-strategies/index.html" class="nav-option-strategies">Option Strategies</a></li>
+<li><a href="../index.html" class="nav-managing-positions">Managing Positions</a></li>
+<li><a href="../../glossary/index.html" class="nav-glossary">Glossary</a></li>
+<li><a href="http://community.tradeking.com/" class="nav-tradeking">Trader Network</a></li>
+</ul>
+<div class="inside clear">
+<div class="content">
+<h1>Keeping an Eye on Position Delta</h1>
+<p>In <a href="../../options-introduction/option-greeks/index.html">Meet the Greeks</a> we discussed how delta affects the value of individual options. Now let&rsquo;s have a look at how you can take delta to the next level. &ldquo;Position delta&rdquo; enables you to keep track of the net delta effect on an entire gaggle of options that are based on the same underlying stock.</p>
+<p>Think of position delta this way: options act as a substitute for a certain number of shares of the underlying stock. For any option position on one specific stock, you can add up the deltas of all the option contracts and ﬁgure out how many shares of stock the entire gaggle of securities is acting like. That way, you&rsquo;ll always know off the top of your head how it should react when the stock makes a one-point move in either direction.</p>
+<h2>How Options act as a substitute for shares of Stock</h2>
+<p>A single call contract with a delta of .01 is a substitute for one share of stock. Here&rsquo;s why.</p>
+<p>If the stock price goes up $1, the call should go up by one penny. But generally speaking, an option contract will represent 100 shares of stock. So you need to multiply the delta by 100 shares:<br/>$.01 x 100 = $1.</p>
+<p>That means if the price of the stock increases $1, the value of your call position should also increase $1. So in essence, it&rsquo;s behaving like one share of stock.</p>
+<p>Owning a single call contract with a delta of .50 is similar to owning 50 shares. When the underlying stock goes up $1, the value of the option should increase by $.50. So the value of the overall position will increase by $50. ($.50 x 100 share multiplier = $50.)</p>
+<p>It works the same way with puts, but keep in mind that puts have a negative delta. So if you own a put contract with a delta of -.50, it would act like a short position of 50 shares. If the underlying stock goes down $1, the value of the option position should go up $50.</p>
+<h2>Calculating Position Delta for a single-leg strategy with multiple contracts</h2>
+<div class="insert" style="width:345px;">
+<div class="insert-in">
+<h3>Example 1:</h3>
+<img src="../../media/images/graphics/pos_delta_ex_1.gif" alt="Calculating Position Delta for a single-leg strategy with multiple contracts"/>
+</div>
+</div>
+<p>Here&rsquo;s an example. Say you own 10 contracts of XYZ calls, each with a delta of .75. To calculate position delta, multiply .75 x 100 (assuming each contract represents 100 shares) x 10 contracts. This gives you a result of 750.</p>
+<p>That means your call options are acting as a substitute for 750 shares of the underlying stock. So you can ﬁgure if the stock goes up $1, the position will increase roughly $750. If the underlying stock goes down $1, the position will decrease roughly $750.</p>
+<h2>Calculating Position Delta for multiple legs and multiple strategies</h2>
+<p>Much of the time your option strategies will be more complex than a few call options with the same strike price. You might use multi-leg strategies, and you might even run different strategies on the same underlying stock at the same time.</p>
+<p>Each of those strategies might involve options with different strike prices and expiration dates. For example, you might wind up running an <a href="../../option-strategies/iron-condor/index.html">iron condor</a> and a <a href="../../option-strategies/calendar-call-spread/index.html">long calendar spread with calls</a> simultaneously on the same underlying stock.</p>
+<p>The deltas of some individual options in the complete option position will be positive and some will be negative. But even if the strategies you&rsquo;re running are complex, one glance at position delta can give you a feel for how the value of the position should change if the stock moves one point in either direction.</p>
+<div class="insert" style="width:345px;">
+<div class="insert-in">
+<h3>Example 2:</h3>
+<img src="../../media/images/graphics/pos_delta_ex_2.gif" alt="Calculating Position Delta for multiple legs and multiple strategies"/>
+</div>
+</div>
+<p>We don&rsquo;t want to clutter up this section by doing the math across six or seven different legs among several strategies. So let&rsquo;s look at an easy example of how you calculate position delta for a simple multi-leg strategy. For instance, consider a <a href="../../option-strategies/long-call-spread/index.html">long call spread</a> with two legs.</p>
+<p>Example 2 shows the details of an XYZ long call spread with a long 55-strike and a short 60-strike, both with the same expiration date. Imagine that with the stock trading at $56.55, we bought 15 contracts of 55-strike calls with a delta of .61 and we sold 15 contracts of 60-strike calls with a delta of .29.</p>
+<h3>Calculating Leg 1</h3>
+<p>The delta of the 55-strike call is .61. So to determine the total delta, we multiply .61 x 100 share multiplier x 15 contracts. That equals 915.</p>
+<h3>Calculating Leg 2</h3>
+<p>The delta of the 60-strike call is .29. However, since you&rsquo;re selling the calls, for this part of your position the delta will actually be negative: -0.29. So the short 60 calls&rsquo; total delta is -.29 x 100 share multiplier x 15 contracts. That equals -435.</p>
+<h3>Calculating Total Position Delta</h3>
+<p>Now you simply add the deltas from each leg together to determine your position delta: 915 + (-435) = 480. So the theoretical change in position value based on a $1 move in the underlying stock is $480. Therefore, the total value of this position will behave like 480 shares of stock XYZ.</p>
+<h2>How position delta helps you to manage your risk</h2>
+<p>Your net position delta for options on any underlying stock represents your current risk relative to a change in the stock price. In the long call spread example, you&rsquo;d need to ask yourself if you&rsquo;re comfortable with having the same risk as being long 480 shares of XYZ stock. If not, you may want to attend to that risk. You can do so by closing out part of your position or by adding negative deltas, perhaps by buying puts or selling stock short.</p>
+<p>The same logic applies if you hold a position with a high negative delta. You will have the same risk as a short position in the stock. To adjust your risk, you could dump part of your position, buy calls, or buy the stock.</p>
+<h2>Don't forget about gamma</h2>
+<p>Just as gamma will affect the delta of one option as the stock price changes, it will affect the net delta of your entire position as well. So it&rsquo;s important to keep in mind that your position delta will change with every little movement in the stock. And gamma&rsquo;s effect on position delta can be huge, because we&rsquo;re talking about multiple option contracts.</p>
+<p>The number of shares for which your options act as a substitute will change every time the stock price changes. That&rsquo;s why it&rsquo;s a good idea to keep an eye on your position delta throughout the life of your option position.</p>
+<p>If you have a TradeKing account, keeping an eye on position delta is easy. Just look at the &ldquo;Option View&rdquo; in your &ldquo;Holdings&rdquo; page, or use the Profit + Loss Calculator, and we&rsquo;ll do the math for you.</p>
+<div class="back-to-top">
+<p><a href="#" class="top">Back to the top</a></p>
+</div>
+<script type="text/javascript">
+	$(document).ready(function() { 
+		$('#all-star-feed').gFeed({ url: 'http://community.tradeking.com/members/tk-all-star/blogs.atom', max: 3, title: null });
+		$('#overby-feed').gFeed({ url: 'http://community.tradeking.com/members/optionsguy/blogs.atom', max: 3, title: null });
+	});
+</script>
+<div class="todays-trader-network">
+<h3>Today's Trader Network</h3>
+<div class="todays-trader-network-in">
+<table cellspacing="0">
+<tr>
+<td>
+<p><strong>All-Star Trade Report</strong></p>
+<div id="all-star-feed"></div>
+</td>
+<td>
+<p><strong>Options Guy Blog</strong></p>
+<div id="overby-feed"></div>
+</td>
+<td>
+<p><strong>Videos, webinars and more</strong></p>
+<div class="gf-result"><a href="http://www.tradeking.com/education/videos/stock">Stock trading videos</a></div>
+<div class="gf-result"><a href="http://community.tradeking.com/members/live-events/blogs/13007-tk-all-star-webinar-series">TradeKing All-Star Webinar Series and Live Events</a></div>
+<div class="gf-result"><a href="http://community.tradeking.com/forum">Trader Network Forum</a></div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sidebar">
+<div class="box subnav">
+<ul>
+<li class="subnav-managing-positions"><a href="../index.html">An Introduction to Rolling</a></li>
+<li class="subnav-rolling-covered-calls"><a href="../rolling-covered-calls/index.html">Rolling a Covered Call</a></li>
+<li class="subnav-rolling-cash-secured-puts"><a href="../rolling-cash-secured-puts/index.html">Rolling a Cash-Secured Put</a></li>
+<li class="subnav-rolling-short-spreads"><a href="../rolling-short-spreads/index.html">Rolling a Short Call Spread</a></li>
+<li class="subnav-early-options-exercise"><a href="../early-options-exercise/index.html">What is Early Exercise<br/>and Assignment?</a></li>
+<li class="subnav-position-delta"><a href="index.html">Keeping an Eye on Position Delta</a></li>
+</ul>
+</div>
+<a href="http://theoptionsinsider.com/options-playbook" style="display:block; margin: 0 0 13px;"><img src="../../media/images/graphics/opb_radio_offer.png" style="width:100%"/></a>
+ 
+ 
+<script type="text/javascript" src="http://adfarm.mediaplex.com/ad/js/17113-209952-32166-1?mpt=1484668162&amp;mpvc=">
+</script>
+<noscript>
+<a href="http://adfarm.mediaplex.com/ad/nc/17113-209952-32166-1?mpt=1484668162">
+<img src="http://adfarm.mediaplex.com/ad/nb/17113-209952-32166-1?mpt=1484668162" alt="Click Here" border="0">
+</a>
+</noscript>
+<div class="box intel-report">
+<div class="intel-report-in">
+<h3>Download Free Intelligence Reports</h3>
+<p>Learn trading tips &amp; strategies<br/>from TradeKing&rsquo;s experts</p>
+<img src="../../media/images/intel_report.png"/>
+<ul>
+<li><a href="https://www.tradeking.com/trading-options/top-10-options-trading-mistakes" target="_blank">Top Ten Option Mistakes</a></li>
+<li><a href="https://www.tradeking.com/trading-options/5-tips-for-successful-covered-calls" target="_blank">Five Tips for Successful Covered Calls</a></li>
+<li><a href="https://www.tradeking.com/trading-options/option-trades-for-any-market-outlook" target="_blank">Option Plays for Any Market Condition</a></li>
+<li><a href="https://www.tradeking.com/trading-options/advanced-options-strategies" target="_blank">Advanced Option Plays</a></li>
+<li><a href="https://www.tradeking.com/trading-options/how-to-use-volatility" target="_blank">Top Five Things Stock & Option Traders Should Know About Volatility</a></li>
+</ul>
+</div>
+</div> </div>
+</div>
+<div class="footer">
+<p class="odd">Options involve risk and are not suitable for all investors. For more information, please review the <a href="http://www.tradeking.com/odd">Characteristics and Risks of Standardized Options</a> brochure before you begin trading options. Options investors may lose the entire amount of their investment in a relatively short period of time.</p>
+<p>Multiple leg options strategies involve <a href="http://content.tradeking.com/wiki/display/tkservice/Multi-Leg+Option+Orders">additional risks</a>, and may result in complex tax treatments. Please consult a tax professional prior to implementing these strategies. Implied volatility represents the consensus of the marketplace as to the future level of stock price volatility or the probability of reaching a specific price point. The Greeks represent the consensus of the marketplace as to how the option will react to changes in certain variables associated with the pricing of an option contract. There is no guarantee that the forecasts of implied volatility or the Greeks will be correct.</p>
+<p>System response and access times may vary due to market conditions, system performance, and other factors.</p>
+<p>TradeKing provides self-directed investors with discount brokerage services, and does not make recommendations or offer investment, financial, legal or tax advice. You alone are responsible for evaluating the merits and risks associated with the use of TradeKing's systems, services or products. Content, research, tools, and stock or option symbols are for educational and illustrative purposes only and do not imply a recommendation or solicitation to buy or sell a particular security or to engage in any particular investment strategy. The projections or other information regarding the likelihood of various investment outcomes are hypothetical in nature, are not guaranteed for accuracy or completeness, do not reflect actual investment results and are not guarantees of future results. All investments involve risk, losses may exceed the principal invested, and the past performance of a security, industry, sector, market, or financial product does not guarantee future results or returns.</p>
+<p>Your use of the TradeKing Trader Network is conditioned to your acceptance of all <a href="http://content.tradeking.com/wiki/display/tkservice/Disclosures">TradeKing Disclosures</a> and of the <a href="http://content.tradeking.com/wiki/x/6Ac">Trader Network Terms of Service</a>.</p>
+<p>Anything mentioned is for educational purposes and is not a recommendation or advice. The Options Playbook Radio is brought to you by TradeKing Group, Inc.</p>
+<p>&copy; 2017 TradeKing Group, Inc. All rights reserved. TradeKing Group, Inc. is a wholly owned subsidiary of Ally Financial Inc. Securities offered through TradeKing Securities, LLC. All rights reserved. Member <a href="http://www.finra.org/">FINRA</a> and <a href="http://www.sipc.org/">SIPC</a>.</p>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1068355653;
+var google_conversion_label = "XvlfCPeanxQQxaC3_QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="http://www.googleadservices.com/pagead/conversion.js">;
+</script>
+<noscript>
+<div style="display:inline;">
+<img height="1" width="1" style="border-style:none;" alt="" src="http://googleads.g.doubleclick.net/pagead/viewthroughconversion/1068355653/?value=0&amp;label=XvlfCPeanxQQxaC3_QM&amp;guid=ON&amp;script=0"/>
+</div>
+</noscript>
+ 
+<noscript><iframe src="http://www.googletagmanager.com/ns.html?id=GTM-NMB799" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'http://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NMB799');</script>
+ 
+ 
+<script type='text/javascript'>
+    /* <![CDATA[ */
+    var s_img_src=('https:' == document.location.protocol ? 'https://ci38.actonsoftware.com' : 'http://info.tradeking.com') + '/acton/bn/5302/visitor.gif?ts=' + new Date().getTime() + '&ref='+escape(document.referrer);
+    document.write('<img src=' + s_img_src + ' />');
+    /* ]]> */
+  </script>
+ 
+</body>
+
+<!-- Mirrored from www.optionsplaybook.com/managing-positions/position-delta/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 17 Jan 2017 15:49:54 GMT -->
+</html>

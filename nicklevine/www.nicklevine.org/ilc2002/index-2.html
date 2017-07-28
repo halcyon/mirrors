@@ -1,0 +1,1826 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+
+<!-- Mirrored from www.nicklevine.org/ilc2002/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:24:36 GMT -->
+<head>
+
+<title>Common SQL</title>
+
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" link="#000099" vlink="#660066" alink="#FF0000">
+
+<div align="center">
+
+<p>
+<a href="http://www.ravenbrook.com/">Ravenbrook</a> /
+<a href="http://www.international-lisp-conference.org/">ILC 2002</a>
+</p>
+
+<hr />
+
+
+<h1>Common SQL</h1>
+
+<address>
+<a href="mailto:ndl@ravenbrook.com">Nick Levine</a>,
+<a href="http://www.ravenbrook.com/">Ravenbrook Limited</a>,
+2002-09-13
+</address>
+
+</div>
+
+
+<h2><a id="section-1" name="section-1">1. Table of contents</a></h2>
+
+<ul>
+<li><a href="#section-2">2. Introduction</a>
+  <ul>
+    <li><a href="#section-2.1">2.1. Common SQL</a></li>
+    <li><a href="#section-2.2">2.2. Example database</a></li>
+    <li><a href="#section-2.3">2.3. Getting started</a></li>
+    <li><a href="#section-2.4">2.4. SQL Package</a></li>
+  </ul>
+</li>
+<li><a href="#section-3">3. Elementary interactions</a>
+  <ul>
+    <li><a href="#section-3.1">3.1. Queries</a></li>
+    <li><a href="#section-3.2">3.2. Updates</a></li>
+    <li><a href="#section-3.3">3.3. Meta queries</a></li>
+    <li><a href="#section-3.4">3.4. Monitoring SQL traffic</a></li>
+  </ul>
+</li>
+<li><a href="#section-4">4. Functional interface</a>
+  <ul>
+    <li><a href="#section-4.1">4.1. Select and the [...] syntax</a></li>
+    <li><a href="#section-4.2">4.2. Updates etc</a></li>
+    <li><a href="#section-4.3">4.3. Iteration</a></li>
+    <li><a href="#section-4.4">4.4. Table maintenance</a></li>
+  </ul>
+</li>
+<li><a href="#section-5">5. OO interface</a>
+  <ul>
+    <li><a href="#section-5.1">5.1. Managing view classes</a></li>
+    <li><a href="#section-5.2">5.2. Selecting on view classes</a></li>
+    <li><a href="#section-5.3">5.3. Updating via view classes</a></li>
+  </ul>
+</li>
+<li><a href="#section-6">6. Moving on</a>
+  <ul>
+    <li><a href="#section-6.1">6.1. UncommonSQL</a></li>
+    <li><a href="#section-6.3">6.2. Limitations</a></li>
+  </ul>
+</li>
+</ul>
+
+
+<h2><a id="section-2" name="section-2">2. Introduction</a></h2>
+
+<p>This document was written on behalf of <a
+href="http://www.lispworks.com/">Xanalys LLC</a> for presentation
+during a tutorial session at the <a
+href="http://www.international-lisp-conference.org/">International
+Lisp Conference</a> held in San Fransisco at the end of October
+2002.</p>
+
+<p>The intended audience for the tutorial is anybody with a working
+knowledge of lisp and at least some knowledge of SQL, who is
+interested in seeing how the two can be combined. On the other hand
+most of this material should be accessible to people with little or no
+SQL experience. (The exception is the material on <code>select</code>
+clauses in <a href="#section-4.1">section 4.1</a>, which will probably
+be somewhat daunting for anyone new to SQL.)</p>
+
+<p>The <a href="../../nicklevine.org/index.html">author</a> worked
+on the LispWorks project at Harlequin for ten years. Since then he has
+<a href="http://www.fast-index.com/declarative/lectures/">taught
+lisp</a> to undergraduates, written an <a
+href="http://www.fast-index.com/">open-source search engine</a>, and
+taken up the stress-free existence of a <a
+href="http://www.franz.com/careers/resumes/nlevine.lhtml">software
+consultant</a>.</p>
+
+<p>The examples in this tutorial are available in a separate file <a
+href="examples.html">examples.lisp</a>. I hope to use the code in <a
+href="present.html">present.lisp</a> to squirt them into a lisp
+listener during the tutorial.</p>
+
+<p>This document is not confidential. It is available on the web, at
+<a href="http://www.ravenbrook.com/doc/2002/09/13/common-sql/">http://www.ravenbrook.com/doc/2002/09/13/common-sql/</a>.</p>
+
+
+<h3><a id="section-2.1" name="section-2.1">2.1. Common SQL</a></h3>
+
+<p><cite>Common SQL</cite> is the name of LispWorks' interface to
+relational databases. The interface dates back to the very early
+1990's, when it was written to support <a
+href="http://www.xanalys.com/watson.html">Watson</a>, Harlequin's
+emerging "intelligent database application". The interface ships as
+standard with LispWorks on the "commercial unix" platforms, and in the
+"Enterprise" editions for Windows and Linux.</p>
+
+<p>Common SQL supports database connections via ODBC and - on unix -
+directly to Oracle.</p>
+
+<p>Common SQL is documented in both the LispWorks <a
+href="http://www.lispworks.com/reference/lww42/LWUG-W/html/lwuser-w-147.htm">User
+Guide</a> and the <a
+href="http://www.lispworks.com/reference/lww42/LWRM-W/html/lwref-w-313.htm">Reference
+Manual</a>. I will talk later about <cite>Uncommon SQL</cite>: a free,
+vendor-independent and platform-portable clone of Common SQL. This too
+is documented; in particular it comes with its very own (shorter!) <a
+href="http://alpha.onshored.com/lisp-software/uncommonsql/doc/usql-tutorial.txt">online
+tutorial</a>.</p>
+
+<p>To illustrate this tutorial I will use Xanalys' <a
+href="http://www.lispworks.com/products/lww.html">LispWorks for
+Windows</a> to communicate with a Microsoft(R) Access database via
+ODBC.</p>
+
+<p>All references from this document to the LispWorks manual set are
+pointers into the <a
+href="http://www.lispworks.com/reference/documentation.html#lww">manual
+pages</a> for LispWorks for Windows 4.2, available online at the
+Xanalys website (<a
+href="http://www.lispworks.com/">http://www.lispworks.com/</a>).</p>
+
+<h3><a id="section-2.2" name="section-2.2">2.2. Example database</a></h3>
+
+<p>The database which I have chosen for examples in this tutorial is
+the <cite>Amazonia Agrobiodiversity Database</cite>, freely available
+from:</p>
+
+<blockquote><a
+href="http://www.unu.edu/env/plec/database/4-AmazoniaAgrobiodiversity.mdb">http://www.unu.edu/env/plec/database/4-AmazoniaAgrobiodiversity.mdb</a></blockquote>
+
+<p><cite>UNU</cite> is the United Nations University;
+<cite>PLEC</cite> stands for "People, Land management &amp; Environmental
+Change". This is a Microsoft Access file; the database is around 1.5MB
+in size.</p>
+
+<p>There are five main tables in the database. I've extracted the top
+ten rows of each table into html, as a <a href="tables.html">separate
+document</a>.</p>
+
+<h3><a id="section-2.3" name="section-2.3">2.3. Getting started</a></h3>
+
+<p>Let's look at the steps that you need to take, starting from
+scratch, to connect your lisp to the database.</p>
+
+<ol>
+
+<li><p>Use the ODBC "Control Panel" applet to create a data-source
+corresponding to the file "4-AmazoniaAgrobiodiversity.mdb". I called
+my data-source <cite>Agrobiodiversity</cite>.</p></li>
+
+<li><p>Start LispWorks. Make sure that one of your startup files
+(e.g. "~/.lispworks" or "siteinit.lisp") calls:</p> <blockquote><code>
+(load-all-patches) </code></blockquote> <p>otherwise you may find
+yourself wasting a whole load of time with bugs which were fixed
+months ago. If you're not at version 4.2.7 or above, <a
+href="http://www.lispworks.com/downloads/patch-selection.html">upgrade
+now</a>.</p>
+</li>
+
+<li><p>Load Common SQL into the lisp image:</p>
+<blockquote><code> (require "odbc") </code></blockquote>
+</li>
+
+<li><p>You can now connect to the data-source:</p>
+<blockquote><code> (sql:connect <cite>data-source</cite>) </code></blockquote>
+<p>The required argument to <code>connect</code> is your data-source
+name - whatever you chose in #1 above. For example:</p>
+<pre>
+CL-USER 22 &gt; (sql:connect "Agrobiodiversity")
+#&lt;SQL::ACCESS-ODBC-DATABASE "Agrobiodiversity" 205EE944&gt;
+
+CL-USER 23 &gt;
+</pre>
+<p>If you really need to maintain more than one connection to a single
+data-source, read in the <a
+href="http://www.lispworks.com/reference/lww42/LWRM-W/html/lwref-w-317.htm">documentation</a>
+about the <code>:if-exists</code> keyword argument.</p>
+
+<p><strong>Note:</strong> if the data-source requires a name or
+password then the form of the first argument is:</p>
+<blockquote><code><cite>"data-source/username/password"</cite></code></blockquote>
+</li>
+
+<li><p>This database will now be used, by default, in all sql
+operations.</p></li>
+
+</ol>
+
+<p>There's not a lot else you need to know about
+<code>sql:connect</code>. The opened database is represented by a lisp
+object which is (a) returned and (b) stored into the variable
+<code>sql:*default-database*</code>. Almost every function in Common
+SQL takes a <code>:database</code> argument. The default value of this
+argument is given by the current value of
+<code>sql:*default-database*</code>. So:</p>
+
+<ul>
+<li><p>if you only ever connect to one database at a time, you can
+just make the connection and forget about it;</p></li>
+<li><p>if you connect to more than one database, you'll have to keep
+track of them yourself and either bind
+<code>sql:*default-database*</code> or pass <code>:database</code>
+arguments around.</p></li>
+</ul>
+
+<p>As an example, consider the function <code>sql:disconnect</code>,
+which closes an existing connection to a data-source. To disconnect
+from the current <code>sql:*default-database*</code>, call
+<code>sql:disconnect</code> with no arguments. To disconnect from some
+other data-source, call:</p>
+
+<blockquote><code> (sql:disconnect :database <cite>database</cite>) </code></blockquote>
+
+<p>From now on, you can assume that every function / macro in the
+interface takes a <code>:database</code> keyword, unless I state
+otherwise.</p>
+
+<p>Other functions worth noting in this area are
+<code>sql:connected-databases</code> and
+<code>sql:find-database</code>.</p>
+
+
+<h3><a id="section-2.4" name="section-2.4">2.4. SQL Package</a></h3>
+
+<p>For reasons of brevity, I am going to drop the <code>sql:</code>
+prefix. In the lisp sessions I used for testing the examples for this
+tutorial, I simply used the <code>SQL</code> package:</p>
+
+<blockquote><pre>
+CL-USER 2 &gt; (use-package :SQL)
+T
+
+CL-USER 3 &gt;
+</pre></blockquote>
+
+<p>To make what I'm doing unambiguous, the package of any
+global lisp symbol referenced in this document can be determined by
+selecting the first of the following which is applicable to that
+symbol:</p>
+
+<ol>
+
+<li>the symbol's package is explicitly qualified;</li>
+
+<li>the symbol belongs to one of the packages which are used by
+default, namely: <code>COMMON-LISP</code>, <code>LISPWORKS</code>,
+<code>HARLEQUIN-COMMON-LISP</code>;</li>
+
+<li>if neither of the above applies then the symbol belongs to and is
+exported from the <code>SQL</code> package.</li>
+
+</ol>
+
+
+
+<h2><a id="section-3" name="section-3">3. Elementary interactions</a></h2>
+
+<p>The simplest way to interact with the database is to send it raw
+SQL strings. This approach may not be the most elegant or powerful but
+it's enough to get you started.</p>
+
+<h3><a id="section-3.1" name="section-3.1">3.1. Queries</a></h3>
+
+<p>The function to send SQL queries is <code>query</code>. This
+function takes an SQL string (and the <code>:database</code> keyword
+argument mentioned above) and returns a list of rows matching the
+query. Each row might consist of one or more columns, and so the rows
+themselves come back as lists: the primary return value of
+<code>query</code> is therefore a list of lists.</p>
+
+<blockquote><pre>
+CL-USER 70 &gt; (query "select SampleAreaLocation, LandUseStage
+                     from SampleAreas where SampleAreaNumber = 1")
+(("Mazagao" "Forest"))
+("SampleAreaLocation" "LandUseStage")
+
+CL-USER 71 &gt; (query "select count(*) from SpeciesList
+                     where ScientificName like '%sp.'")
+((16))
+("Expr1000")
+
+CL-USER 72 &gt; (query "select LocalName, ScientificName from SpeciesList
+                     where SpeciesID &lt;= 5")
+(("Abacate" "Persea gratissima Gaertn.")
+ ("Abiu" "Ferdinandusa paraensis")
+ ("abiu do sert&atilde;o" "Pouruma sp.")
+ ("Abiurana" "Pouteria bilocularis (Winkler) Baehni")
+ ("A&ccedil;a&iacute;" "Euterpe Oleraceae Mahrt."))
+("LocalName" "ScientificName")
+
+CL-USER 73 &gt;
+</pre></blockquote>
+
+<p><strong>Note:</strong></p>
+
+<ul>
+
+<li><p> that a list of column names is returned as a second
+value;</p></li>
+
+<li><p>that we do not have to terminate the SQL with its standard
+semicolon - the lisp interface adds one for us;</p></li>
+
+<li><p>that apart from the added semicolon lisp makes no changes to
+our SQL string but sends it literally;</p></li>
+
+<li><p>that we do not have to worry in advance about the types which
+<code>query</code> returns (within its list of lists): the values
+extracted from the database are correctly coerced into lisp objects of
+the appropriate type;</p></li>
+
+<li><p>that dates are returned as universal times:</p>
+<blockquote><pre>
+CL-USER 180 &gt; (multiple-value-list
+               (decode-universal-time
+                (caar (query "select max(Date) from TreeData"))))
+(0 0 1 1 8 2000 1 T 0)
+
+CL-USER 181 &gt;
+</pre></blockquote></li>
+
+</ul>
+
+
+<p>To generate simple reports, use the function
+<code>print-query</code>. This takes the same arguments as
+<code>query</code> plus additional keywords for specifying an output
+<code>:stream</code>, and the <code>:titles</code>,
+<code>:formats</code> and column <code>:sizes</code> to use:</p>
+
+<blockquote><pre>
+CL-USER 81 &gt; (print-query "select LocalName, ScientificName from SpeciesList
+                           where SpeciesID &lt;= 5"
+                          :titles '("LocalName" "ScientificName"))
+LocalName      ScientificName
+Abacate        Persea gratissima Gaertn.
+Abiu           Ferdinandusa paraensis
+abiu do sert&atilde;o Pouruma sp.
+Abiurana       Pouteria bilocularis (Winkler) Baehni
+A&ccedil;a&iacute;           Euterpe Oleraceae Mahrt.
+
+CL-USER 82 &gt;
+</pre></blockquote>
+
+
+<h3><a id="section-3.2" name="section-3.2">3.2. Updates</a></h3>
+
+<p>Updating the database is almost as easy as querying it. The only
+complication is that almost all databases are equipped for
+<cite>transaction handling</cite> these days and so we have to respect
+this, otherwise our updates will never show up in the database.</p>
+
+<p>To send any SQL statement other than a query, use the function
+<code>execute-command</code>:</p>
+
+<blockquote><pre>
+CL-USER 89 &gt; (with-transaction
+               (execute-command "insert into SpeciesList (LocalName)
+                                 values ('Aardvark')")
+               (execute-command "create table foo (bar integer)"))
+NIL
+
+CL-USER 90 &gt;
+</pre></blockquote>
+
+<p><strong>Note</strong> the use of the <code>with-transaction</code>
+macro. This ensures that a transaction is committed if its body
+finishes successfully, otherwise the database is rolled back. (By
+"successful" here, we mean that the body exited without returning,
+aborting or throwing.)</p>
+
+<p>Alternatively you can use the functions <code>commit</code> and
+<code>rollback</code> to exercise control, in a more procedural style,
+over whether and when transactions are written into the database.</p>
+
+<blockquote><pre>
+CL-USER 137 &gt; (execute-command "delete from SpeciesList
+                                where (LocalName = 'Aardvark')")
+
+CL-USER 138 &gt; (query "select * from SpeciesList
+                      where (LocalName = 'Aardvark')")
+NIL
+("LocalName" "ScientificName" "SpeciesID")
+
+CL-USER 139 &gt; (rollback)
+NIL
+
+CL-USER 140 &gt; (query "select * from SpeciesList
+                      where (LocalName = 'Aardvark')")
+(("Aardvark" NIL 228))
+("LocalName" "ScientificName" "SpeciesID")
+
+CL-USER 141 &gt;
+</pre></blockquote>
+
+
+<h3><a id="section-3.3" name="section-3.3">3.3. Meta queries</a></h3>
+
+<p>Common SQL supplies four functions for making simple queries about
+the database schema.</p>
+
+<ul>
+
+<li><p><code> (list-tables) </code> returns a list of strings naming
+every table and view in the database.</p></li>
+
+<li><p><code> (table-exists-p <cite>table</cite>) </code> is a
+predicate for determining whether or not a named table / view
+exists.</p></li>
+
+<li><p><code> (list-attributes <cite>table</cite>) </code> returns a
+list of strings naming every column (<cite>attribute</cite>) in a
+given table / view. </p></li>
+
+<li><p><code> (attribute-type <cite>attribute table</cite>) </code>
+returns the type of a given attribute.</p></li>
+
+</ul>
+
+<p>So, for example:</p>
+
+<blockquote><pre>
+CL-USER 164 &gt; (loop for attr in (list-attributes "TreeData")
+                     collect (attribute-type attr "TreeData"))
+(:INTEGER :INTEGER :INTEGER :REAL :REAL
+ (:VARCHAR 50) :DATETIME (:VARCHAR 50))
+
+CL-USER 165 &gt; (print-query "select * from SpeciesList
+                            where (SpeciesID between 6 and 9)"
+                           :titles (list-attributes "SpeciesList"))
+LocalName ScientificName                SpeciesID
+Acapurana Campsiandra laurifolia Benth. 6
+Acerola   Malpighia glabra              7
+Ajuru     NIL                           8
+Ameixa    Eugenia cuminii               9
+
+CL-USER 166 &gt;
+
+</pre></blockquote>
+
+<p><strong>Note</strong> incidentally how the null ScientificName for
+"Ajuru" is returned as a <code>nil</code>.</p>
+
+
+<h3><a id="section-3.4" name="section-3.4">3.4. Monitoring SQL traffic</a></h3>
+
+<p>When you're debugging an application it's sometimes handy to
+monitor the SQL you've generated and the results which have been
+returned from the database. You can use the function
+<code>start-sql-recording</code> for this. This takes a
+<code>:type</code> argument, which can have one of the following
+values, depending on what you want to record:</p>
+
+<ul>
+<li><code>:commands</code> (default) - the text of SELECT, INSERT, UPDATE
+and DELETE commands</li>
+<li><code>:results</code> - results returned from SELECT commands</li>
+<li><code>:both</code> - both commands and results</li>
+</ul>
+
+<p>Traffic appears on <code>*standard-output*</code>. To redirect
+this output, see <a
+href="http://www.lispworks.com/reference/lww42/LWRM-W/html/lwref-w-314.htm#pgfId-887897">add-sql-stream</a>
+and friends. To halt the flow, call <code>stop-sql-recording</code>
+with the same <code>:type</code> argument.</p>
+
+<h2><a id="section-4" name="section-4">4. Functional interface</a></h2>
+
+
+<p>We now move on to a more elegant and lisp-like way of interacting
+with the database. Let's start with an example of the syntax which
+drives this:</p>
+
+<blockquote><pre>
+CL-USER 194 &gt; (enable-sql-reader-syntax)
+
+CL-USER 195 &gt; (select [Researcher] :from [SampleAreas])
+(("Fernando") ("Fernando") ("Marcio") ("Fernando") ("Marcio") ...)
+("RESEARCHER")
+
+CL-USER 196 &gt;
+</pre></blockquote>
+
+<p>Undoubtedly, <code>select</code> is harder to learn to use than
+<code>query</code>. On the other hand:</p>
+
+<ul>
+
+<li><p>once you know your way about SQL this is a comparatively small
+step to take - the real unpleasantness lies in the SQL;</p></li>
+
+<li><p>the syntax is backend independent;</p></li>
+
+<li><p>the syntax allows a natural and powerful intermixing of lisp
+forms and SQL.</p></li>
+
+</ul>
+
+
+<h3><a id="section-4.1" name="section-4.1">4.1. Select and the [...] syntax</a></h3>
+
+<p>The first thing you have to do with the [...] syntax is switch it
+on, as #\[ does not become a character macro until it has been
+explicitly enabled.</p>
+
+<ul>
+
+<li><p>To enable the syntax, call
+<code>(enable-sql-reader-syntax)</code>. </p></li>
+
+<li><p>When you come to writing applications which use Common SQL, you
+should read the documentation on <a
+href="http://www.lispworks.com/reference/lww42/LWRM-W/html/lwref-w-349.htm#pgfId-889028"><code>locally-enable-sql-reader-syntax</code></a>
+and its relatives. These are a little more subtle than
+<code>(enable-sql-reader-syntax)</code>.</p></li>
+
+<li><p>None of the reader-syntax control functions take a
+<code>:database</code> argument. Their effects are global across the
+lisp image and persist until undone.</p></li>
+
+</ul>
+
+<p>The next thing to know is that all the forms you can construct with
+[...] can also be generated programmatically, if you really want to
+insist on it. For example:</p>
+
+<blockquote><pre>
+CL-USER 27 &gt; (apply (sql-operator 'and)
+                    (loop for table in '(thistime nexttime sometime never)
+                          for count from 42
+                          collect
+                          [between (sql-expression :table table
+                                                   :attribute 'bar)
+                                   (sql-operation '* [hip] [hop])
+                                   count]
+                          collect
+                          [like (sql-expression :table table
+                                                :attribute 'baz)
+                                (sql table)]))
+#&lt;SQL-RELATIONAL-EXP "((THISTIME.BAR BETWEEN (HIP * HOP) AND 42) AND
+(THISTIME.BAZ LIKE 'THISTIME') AND (NEXTTIME.BAR BETWEEN (HIP * HOP)
+AND 43) AND (NEXTTIME.BAZ LIKE 'NEXTTIME') AND (SOMETIME.BAR BETWEEN
+(HIP * HOP) AND 44) AND (SOMETIME.BAZ LIKE 'SOMETIME') AND (NEVER.BAR
+BETWEEN (HIP * HOP) AND 45) AND (NEVER.BAZ LIKE 'NEVER'))"&gt;
+
+CL-USER 28 &gt;
+</pre></blockquote>
+
+<p>The syntax is deliberately overloaded. The interpretation of a
+[...] form depends on the first element of the form. If this element
+is a "reserved operator" (corresponding to one of SQL's reserved
+operators) then that operator is invoked - at run-time - using any
+remaining elements as its parameters. Otherwise, the form is taken to
+represent a database identifier.</p>
+
+<p>We'll meet the reserved operators in the following sections.</p>
+
+<p>The argument list of <code>select</code> is somewhat unusual. You
+pass one or more columns, followed by at least one keyword argument
+(<code>:from</code>) and maybe more. For example:</p>
+
+<blockquote><pre>
+CL-USER 196 &gt; (select [FieldType] [Researcher] :from [SampleAreas])
+(("Levee" "Fernando") ("Levee" "Fernando") ("Levee" "Marcio") ...)
+("FIELDTYPE" "RESEARCHER")
+
+CL-USER 197 &gt;
+</pre></blockquote>
+
+<p>Further examples of the keyword arguments follow. It's natural to
+introduce them alongside the operators they work with.</p>
+
+<h4><a id="section-4.1.1" name="section-4.1.1">4.1.1. Arithmetic operators: <code>+ - * /</code></a></h4>
+
+<p>In the following example, none of the forms
+<code>[PlotNumer]</code>, <code>[SampleAreaNumber]</code> and
+<code>[PlotDescription]</code> start with reserved operators and so
+all three must represent identifiers within the database: naming
+attributes, tables, and so on.</p>
+
+<blockquote><pre>
+CL-USER 81 &gt; (select [+ [PlotNumer] [* 1000 [SampleAreaNumber]]]
+                     :from [PlotDescription] :flatp t)
+(1001 1002 1003 1004 1005 ...)
+("Expr1000")
+
+CL-USER 82 &gt;
+</pre></blockquote>
+
+<p><strong>Note</strong> here the use of the <code>:flatp</code>
+argument to <code>select</code>. This can be used when you generate
+output consisting of a single column. Its effect is to strip off the
+now superfluous inner lists, so that the primary return value becomes
+a straightforward list of values instead of a list of singleton lists
+of values.</p>
+
+<p><strong>Note</strong> also that the <code>[*]</code> operator is
+itself overloaded. As in SQL, it can represent either multiplication
+or the "all columns" identifier:</p>
+
+<blockquote><pre>
+CL-USER 95 &gt; (select [*] :from [SpeciesList])
+(("Abacate" "Persea gratissima Gaertn." 1)
+ ("Abiu" "Ferdinandusa paraensis" 2)
+ ("abiu do sert&atilde;o" "Pouruma sp." 3)
+ ("Abiurana" "Pouteria bilocularis (Winkler) Baehni" 4)
+ ("A&ccedil;a&iacute;" "Euterpe Oleraceae Mahrt." 5)
+ ...)
+("LocalName" "ScientificName" "SpeciesID")
+
+CL-USER 96 &gt;
+</pre></blockquote>
+
+
+<h4><a id="section-4.1.2" name="section-4.1.2">4.1.2. Aggregates: <code>avg count max min sum</code></a></h4>
+
+
+<blockquote><pre>
+CL-USER 82 &gt; (select [max [+ [PlotNumer] [* 1000 [SampleAreaNumber]]]]
+                     :from [PlotDescription] :flatp t)
+(33427)
+("Expr1000")
+
+CL-USER 83 &gt; (select [avg [+ [PlotNumer] [* 1000 [SampleAreaNumber]]]]
+                     :from [PlotDescription] :flatp t)
+(18364.049295774646)
+("Expr1000")
+
+CL-USER 84 &gt; (loop for table in (list-tables) repeat 5   ; exclude views
+                   collect (select table [count [*]] :from table))
+((("PlotDescription" 426))
+ (("SampleAreas" 38))
+ (("SpeciesData" 3440))
+ (("SpeciesList" 205))
+ (("TreeData" 9448)))
+
+CL-USER 85 &gt; (loop for column in '([*] [ScientificName]) collect
+                   (select [count column] :from [SpeciesList] :flatp t))
+((205) (152))
+
+CL-USER 86 &gt;
+</pre></blockquote>
+
+<p><strong>Note</strong> in the last of this set of examples how pure
+lisp and SQL components have been mixed: the variable
+<code>column</code> is bound to an SQL identifier and its value is
+then substituted as the argument to <code>[count]</code>.</p>
+
+<p><strong>Note</strong> also, in the previous example, the two uses I
+made of string values: as an attribute argument the string is simply
+returned (with every row), exactly as in SQL itself; as the
+<code>:from</code> argument it substitutes for one of lisp's SQL
+identifiers without any problems.</p>
+
+
+<h4><a id="section-4.1.3" name="section-4.1.3">4.1.3. Comparisons: <code>&lt; &lt;= = &gt; &gt;= between</code></a></h4>
+
+<p>The comparison operators appear in conjunction with arguments
+<code>:where</code> and (for aggregate values) <code>:having</code> to
+the function <code>select</code>. This is a good place to introduce
+<code>:distinct</code> and <code>:group-by</code>.</p>
+
+<blockquote><pre>
+CL-USER 138 &gt; (select [LandUseStage] :from [Sampleareas] :flatp t)
+("Forest" "Forest" "Forest" "Forest" "Housegarden" ...)
+("LANDUSESTAGE")
+
+CL-USER 139 &gt; (select [LandUseStage] :from [Sampleareas] :flatp t
+                      :where [&gt;= [SampleAreaNumber] 37])
+("Field" "Field" "Field")
+("LANDUSESTAGE")
+
+CL-USER 140 &gt; (select [LandUseStage] :from [Sampleareas] :flatp t
+                      :distinct t)
+("Fallow" "Field" "Forest" "Housegarden")
+("LANDUSESTAGE")
+
+CL-USER 141 &gt; (select [LandUseStage] [count [*]] :from [Sampleareas]
+                      :group-by [LandUseStage])
+(("Fallow" 12) ("Field" 5) ("Forest" 9) ("Housegarden" 12))
+("LANDUSESTAGE" "Expr1001")
+
+CL-USER 142 &gt; (select [LandUseStage] [count [*]] :from [Sampleareas]
+                      :having [between [count [*]] 8 10]
+                      :group-by [LandUseStage])
+(("Forest" 9))
+("LANDUSESTAGE" "Expr1001")
+
+CL-USER 143 &gt; (select [max [Height]] :from [TreeData] :flatp t
+                      :where [= [Researcher] "Fernando"])
+(30.0)
+("Expr1000")
+
+CL-USER 144 &gt;
+</pre></blockquote>
+
+<p>This last query answers the question: how tall was the tallest tree
+that Fernando found?</p>
+
+
+<h4><a id="section-4.1.4" name="section-4.1.4">4.1.4. Strings: <code>like</code></a></h4>
+
+<p>What are the scientific names of species whose common names begin
+with a 'v'?</p>
+
+<blockquote><pre>
+CL-USER 154 &gt; (select [ScientificName] :from [SpeciesList] :flatp t
+                       :where [like [LocalName] "v%"])
+("Hernandia guianensis Aubl." "Virola surinamensis Warb." NIL NIL)
+("SCIENTIFICNAME")
+
+CL-USER 155 &gt;
+</pre></blockquote>
+
+
+<h4><a id="section-4.1.5" name="section-4.1.5">4.1.5. <code>null</code></a></h4>
+
+<p>Which species don't have a scientific name in the database?</p>
+
+<blockquote><pre>
+CL-USER 163 &gt; (select [LocalName] :from [SpeciesList] :flatp t
+                       :where [null [ScientificName]])
+("Ajuru" "acacurana" "Axua" "Biribarana" "cipo" ...)
+("LOCALNAME")
+
+CL-USER 164 &gt;
+</pre></blockquote>
+
+
+<h4><a id="section-4.1.6" name="section-4.1.6">4.1.6. Removing duplicates: <code>distinct</code></a></h4>
+
+<p>Who researched the sample areas?</p>
+
+<blockquote><pre>
+CL-USER 80 &gt; (select [distinct [Researcher]] :from [TreeData] :flatp t)
+("Fernando" "Marcio" "Viles" "Vilis")
+("RESEARCHER")
+
+CL-USER 81 &gt;
+</pre></blockquote>
+
+<p>Actually, the simple example above could have been coded:</p>
+
+<blockquote><pre>(select [Researcher] :distinct t :from [TreeData] :flatp t)</pre></blockquote>
+
+<p>for the same effect.</p>
+
+
+<h4><a id="section-4.1.7" name="section-4.1.7">4.1.7. Logical: <code>and or not</code></a></h4>
+
+<p>Let's introduce a simple join, answering the question: who
+researched species whose common names begin with a 'v'?</p>
+
+<blockquote><pre>
+CL-USER 165 &gt; (select [Researcher] :from '([TreeData] [SpeciesList])
+                      :where [and [= [TreeData SpeciesID]
+                                     [SpeciesList SpeciesID]]
+                                  [like [LocalName] "v%"]]
+                      :distinct t :flatp t)
+("Fernando")
+("RESEARCHER")
+
+CL-USER 166 &gt;
+</pre></blockquote>
+
+
+<p>In this query, identifiers <code>[Researcher]</code> and
+<code>[LocalName]</code> belong unambiguously to one table each, but
+<code>[SpeciesID]</code> would be ambiguous and so must be
+qualified. We do this by prepending the table name, as in
+<code>[TreeData SpeciesID]</code>. <strong>Note</strong> that the
+<code>:from</code> value is now a lisp list. (In fact, when there's
+only one table in a query you are still free to wrap it into a
+list.)</p>
+
+<p>In the next query, in which we locate species with non-unique
+scientific names, the "Species" tables is joined to itself:</p>
+
+<blockquote><pre>
+CL-USER 185 &gt; (select ["table" LocalName] ["table" ScientificName]
+                      :from '([SpeciesList "table"] [SpeciesList "join"])
+                      :where [and [= ["table" ScientificName]
+                                     ["join" ScientificName]]
+                                  [not  [= ["table" SpeciesID]
+                                           ["join" SpeciesID]]]]
+                      :order-by '(["table" ScientificName]))
+(("Limao bravo" "Citrus sp.")
+ ("Limao caiena" "Citrus sp.")
+ ("capitiu do mato" "Siparuna sp.")
+ ("capitiu brabo" "Siparuna sp.")
+ ("Unknown2" "Unknown")
+ ...)
+("LOCALNAME" "SCIENTIFICNAME")
+
+CL-USER 186 &gt;
+</pre></blockquote>
+
+<p>The two tables called "Species" are distinguished by aliases
+<code>"table"</code> and <code>"join"</code> which are established in
+the <code>:from</code> clause. <strong>Note</strong> that - in
+contrast to singleton values for <code>:from</code> - we are always
+obliged to wrap the <code>:order-by</code> argument into a list. Also,
+if we need to reverse the sort order, the argument becomes
+<code>((["table" ScientificName] :desc))</code> - a single sort
+criterion, itself a list comprising a field and a keyword denoting
+direction.</p>
+
+
+
+<!-- <h4><a id="section-4.1.x" name="section-4.1.x">4.1.x. Sets: <code>intersection union</code></a></h4> -->
+
+
+<h4><a id="section-4.1.8" name="section-4.1.8">4.1.8. Subselects: <code>in select all any exists</code></a></h4>
+
+<p>We are near the end of our tour of <code>select</code> and the
+[...] syntax. Let's revisit two queries using subselects: what are the
+scientific names of species whose common names begin with a 'v'?  and
+who researched species whose common names begin with a 'v'?. We build
+the subselect with the <code>[select]</code> operator, which takes
+most of the same arguments as the function <code>select</code>:</p>
+
+<blockquote><pre>
+CL-USER 229 &gt; (select [ScientificName] :from [SpeciesList]
+                      :where [in [LocalName]
+                                 [select [LocalName] :from [SpeciesList]
+                                         :where [like [LocalName ] "v%"]]]
+                      :flatp t)
+("Hernandia guianensis Aubl." "Virola surinamensis Warb." NIL NIL)
+("SCIENTIFICNAME")
+
+CL-USER 230 &gt; (select [Researcher] :from '([TreeData] [SpeciesList])
+                      :where [and [= [TreeData SpeciesID]
+                                     [SpeciesList SpeciesID]]
+                                  [in [LocalName]
+                                      [select [LocalName] :from [SpeciesList]
+                                              :where [like [LocalName]
+                                                           "v%"]]]]
+                      :distinct t :flatp t)
+("Fernando")
+("RESEARCHER")
+
+CL-USER 231 &gt;
+</pre></blockquote>
+
+<p>Operators <code>[in]</code>, <code>[all]</code>, <code>[any]</code>
+and <code>[exists]</code>need a list as their
+argument. <code>[select]</code> returns a list.</p>
+
+<p>Two final examples: which sites were first surveyed "before" any
+species data had been accumulated? Were any species data accumulated
+on days when no sites were surveyed?</p>
+
+<blockquote><pre>
+CL-USER 231 &gt; (select [DemoSite] :from [SampleAreas]
+                      :group-by [DemoSite] :flatp t
+                      :where [&lt;= [Date]
+                                 [all [select [Date] :from [SpeciesData]]]])
+("Macapa")
+("DEMOSITE")
+
+CL-USER 232 &gt; (select [SpeciesID] :from [SpeciesData]
+                      :where [not [exists
+                                   [select [*] :from [SampleAreas]
+                                           :where [= [SpeciesData Date]
+                                                     [SampleAreas Date]]]]])
+((1) (113) (195))
+("SPECIESID")
+
+CL-USER 233 &gt;
+</pre></blockquote>
+
+
+
+<h3><a id="section-4.2" name="section-4.2">4.2. Updates etc</a></h3>
+
+<p>Now that we have the pain of <code>select</code> out of the way,
+the going gets easier.</p>
+
+<blockquote><pre>
+CL-USER 321 &gt; (defvar aardvark  [= [LocalName] "Aardvark"])
+AARDVARK
+
+CL-USER 322 &gt; (values (select [*] :from [SpeciesList] :where aardvark))
+NIL
+
+CL-USER 323 &gt; (with-transaction
+                (insert-records :into [SpeciesList]
+                                :attributes '([LocalName])
+                                :values '("Aardvark")))
+NIL
+
+CL-USER 324 &gt; (values (select [*] :from [SpeciesList] :where aardvark))
+(("Aardvark" NIL 208))
+
+CL-USER 325 &gt; (with-transaction
+                (update-records [SpeciesList] :where aardvark
+                                :av-pairs '(([ScientificName]
+                                             "Orycteropus afer"))))
+NIL
+
+CL-USER 326 &gt; (values (select [*] :from [SpeciesList] :where aardvark))
+(("Aardvark" "Orycteropus afer" 208))
+
+CL-USER 327 &gt; (with-transaction
+                (delete-records :from [SpeciesList] :where aardvark))
+NIL
+
+CL-USER 328 &gt; (values (select [*] :from [SpeciesList] :where aardvark))
+NIL
+
+CL-USER 329 &gt;
+</pre></blockquote>
+
+<p>There are two methods of specifying values and attributes to
+<code>insert-records</code> and <code>update-records</code> and both
+are illustrated in the above examples. If you are supplying values for
+every attribute in the table then specify just the
+<code>:values</code> argument.</p>
+
+<p>The <code>:where</code> clause in <code>update-records</code> can be as
+simple as the above, or as complex as you like.</p>
+
+
+<h3><a id="section-4.3" name="section-4.3">4.3. Iteration</a></h3>
+
+<p>Common SQL prvoides three simple ways to traverse the rows of a
+table: a function corresponding to <code>map</code>, a macro similar
+to <code>dolist</code>, and an extension to the <code>loop</code>
+macro. Let's assume I've restored the aardvark...</p>
+
+<blockquote><pre>
+CL-USER 344 &gt; (map-query 'vector
+			 'print
+			 [select [*] :from [SpeciesList]
+			         :where aardvark])
+
+("Aardvark" "Orycteropus afer" 209)
+#(("Aardvark" "Orycteropus afer" 209))
+
+CL-USER 345 &gt; (do-query ((local scientific id)
+                         [select [*] :from [SpeciesList]
+                                 :where aardvark])
+                        (print (list local scientific id)))
+
+("Aardvark" "Orycteropus afer" 209)
+
+CL-USER 346 &gt; (loop for columns being the records of
+                    [select [*] :from [SpeciesList]
+                            :where aardvark]
+                    do (print columns))
+
+("Aardvark" "Orycteropus afer" 209)
+NIL
+
+CL-USER 347 &gt;
+</pre></blockquote>
+
+<p><strong>Note</strong> by the way that the argument decomposition in
+<code>do-query</code> is like <code>multiple-value-bind</code> and not
+like <code>destructuring-bind</code>.</p>
+
+<h3><a id="section-4.4" name="section-4.4">4.4. Table maintenance</a></h3>
+
+<p>We've seen how to use the functional interface to query, iterate
+over, and update the contents of tables. We now turn to three pairs of
+functions for maintaining those tables.</p>
+
+<p>Actually, one function in each pair is so easy that I'm going to
+break logical order and mention them first. They each take one
+argument (in addition to the usual <code>:database</code> keyword),
+for example: <code>(drop-table [foo])</code>.</p>
+
+<ul>
+<li><p><code>drop-table</code></p></li>
+<li><p><code>drop-index</code></p></li>
+<li><p><code>drop-view</code> -- <strong>but note</strong> that Access
+       doesn't implement DROP VIEW, so you should use
+       <code>drop-table</code> instead.</p></li>
+</ul>
+
+<p>Going the other way involves just a little more detail.</p>
+
+<p>The required arguments for <code>create-table</code> are its name
+and a list describing each of the columns. Regrettably, you'll need to
+use database types rather than lisp types. Also, you're restricted to
+fairly simple table definitions: you can't express such complexities
+as FOREIGN KEY or REFERENCES or CHECK. Use <code> (execute-command
+"create table ...") </code>instead. An example:</p>
+
+<blockquote><pre>
+(create-table [foo]
+              '(([id] number primary key)
+                ([name] (char 255) not null)
+                ([comments] longchar)))
+</pre></blockquote>
+
+<p>Next we have <code>create-index</code>. This only has one required
+argument: a name, but you won't get very far unless you specify the
+<code>:on</code> and <code>:attributes</code> keywords too:</p>
+
+<blockquote><pre>
+(create-index [bar] :on [foo] :attributes '([id] [name]))
+</pre></blockquote>
+
+<p>You can also set <code>:unique</code>, specifying that the columns
+indexed must contain unique values.</p>
+
+<p>Finally, use <code>create-view</code> to add new views to the
+database.</p>
+
+<blockquote><pre>
+(create-view [nullScientificName]
+             :as [select [*] :from [SpeciesList]
+                         :where [null [ScientificName]]])
+</pre></blockquote>
+
+
+
+<h2><a id="section-5" name="section-5">5. OO interface</a></h2>
+
+<p>Common SQL's object-oriented interface allows you to map CLOS
+classes onto database views, class slots onto attributes in those
+views, and instances onto records from the views.</p>
+
+<h3><a id="section-5.1" name="section-5.1">5.1. Managing view classes</a></h3>
+
+<p>We start with the macro <code>def-view-class</code>. This is an
+extended version of <code>defclass</code> - a
+<code>def-view-class</code> form looks like an ordinary class
+definition but with extra keywords. The macro establishes a Lisp view
+of an underlying (<cite>base</cite>) table and is similar in concept
+to SQL VIEWs.</p>
+
+<ul>
+
+<li><p>The default <cite>superclass</cite> is
+<code>standard-db-object</code>. If you mix in other superclasses, you
+should ensure that your view-class does inherit from
+<code>standard-db-object</code>.</p></li>
+
+<li><p>By default the base table has the same name as the class. You
+can instead use the <code>:base-table</code> <cite>class option</cite>
+to set the name of the table corresponding to your class.</p></li>
+
+<li><p>There is no <code>:database</code> argument - the class is not
+tied down to any particular database.</p></li>
+
+<li><p>The <cite>slot options</cite> each take a number of additional
+arguments:</p>
+
+  <ul>
+    <li><p><code>:db-kind</code> - set this to one of the following:</p>
+      <ul>
+	<li><p><code>:base</code> (default value) - the slot corresponds
+	to an ordinary attribute of the database view.</p></li>
+	<li><p><code>:key</code> -  an ordinary attribute of the database
+	view which also corresponds to part of the unique
+	key for this view. Every view-class should have at least one
+	<code>:key</code> attribute.</p></li>
+	<li><p><code>:virtual</code> - the slot is an ordinary CLOS slot,
+	not associated with any database attribute.</p></li>
+	<li><p><code>:join</code> - the slot corresponds to a join. A
+	slot of this type will contain a list of further view-class
+	objects. Use <code>:join</code> slots to link
+	<code>:key</code> attributes between this and other
+	tables.</p></li>
+      </ul>
+    </li>
+
+    <li><p><code>:column</code> - use this for <code>:base</code> and
+    <code>:key</code> slots to name the database attribute. If
+    <code>:column</code> is not given then it defaults to the slot
+    name. <strong>Note:</strong> set <code>:column</code> to the
+    symbol whose name names the attribute - you should not set this
+    option to a string. </p></li>
+
+    <li><p><code>:type</code> - refers to the database type for this
+    attribute:</p>
+
+    <div align="center">
+      <table border="1" cellspacing="0" cellpadding="5">
+	<tr><th><code>def-view-class</code> type</th>
+	    <th>SQL type</th></tr>
+	<tr><td>(STRING n)</td>
+	    <td>CHAR(n)</td></tr>
+	<tr><td>INTEGER</td>
+	    <td>INTEGER</td></tr>
+	<tr><td>(INTEGER n)</td>
+	    <td>INTEGER(n)</td></tr>
+	<tr><td>FLOAT</td>
+	    <td>FLOAT</td></tr>
+	<tr><td>(FLOAT n)</td>
+	    <td>FLOAT(n)</td></tr>
+	<tr><td>UNIVERSAL-TIME</td>
+	    <td>TIMESTAMP</td></tr>
+      </table>
+    </div>
+
+    <p>(Recall that dates are held as universal-times, i.e. passed to
+    you applications as integers.)</p>
+    </li>
+
+    <li><p><code>:db-info</code> - a list of alternating keywords and
+    values, used to specify details for a <code>:join</code> slot:</p>
+      <ul>
+	<li><p><code>:join-class</code> - the name of the class to
+	join on.</p></li>
+
+	<li><p><code>:home-key</code> - the element (or list of
+	elements) in this class to be a subject for the join. If an
+	element is a symbol then it names a slot, which must be a
+	<code>:key</code>. Otherwise it should be given a database
+	value (i.e. null, string or integer).</p></li>
+
+	<li><p><code>:foreign-key</code> - as for
+	<code>:home-key</code> but referring to the foreign class. An
+	object from a join class will only be included in the
+	<code>:join</code> slot only if corresponding values are
+	<code>equal</code>.</p></li>
+      </ul>
+    <p>See the <a
+    href="http://www.lispworks.com/reference/lww42/LWRM-W/html/lwref-w-327.htm#pgfId-888283">documentation</a>
+    for further <code>:db-info</code> keywords.</p>
+    </li>
+
+  </ul>
+
+</li>
+</ul>
+
+<p>For example, suppose I want to investigate the observed heights of
+trees of particular species. I start by defining a view-class on the
+TreeData table. If it happens that I am only interested in some of the
+attributes, then I need only define slots for these:</p>
+
+<blockquote><pre>
+(def-view-class |TreeData| ()
+  ((|TreeTagNumber| :type integer :db-kind :key)
+   (|SpeciesID| :type integer)
+   (|Height| :type float :reader treedata-height)
+   (|Researcher| :type (string 50))))
+</pre></blockquote>
+
+<p>I have chosen to name the class and attributes exactly as they
+appear in the database table. I obtained types using the conversion
+table above and the first of the meta queries examples from earlier on
+(<a href="#section-3.3">section 3.3</a>).</p>
+
+<p>I now define a second view-class, this time on SpeciesList. This
+time, I might want all the slots in the table. Also, I choose to use
+lisp-like names and so have to specify <code>:column</code> and
+<code>:base-table</code> options to provide a mapping onto database
+names. I intend to use instances of this class for updating the
+database, so I ensure that each slot can be initialized with a valid
+value:</p>
+
+<blockquote><pre>
+(def-view-class species-list ()
+  ((local-name :column |LocalName|
+               :type (string 50)
+	       :initarg :local-name)
+   (scientific-name :column |ScientificName|
+                    :type (string 50)
+		    :initform nil)
+   (species-id :db-kind :key
+               :column |SpeciesID|
+               :type integer
+	       :initform 0))
+  (:base-table |SpeciesList|))
+</pre></blockquote>
+
+<p>Finally, I subclass <code>species-list</code> and add a new slot to
+hold join information. The slot-options for <code>heights</code> say
+that this slot will hold a list of instances of
+<code>|TreeData|</code> whose <code>|SpeciesID|</code> match our
+<code>species-id</code>. <strong>Note</strong> that the
+<code>:base-table</code> class option is not inherited from
+<code>species-list</code> and has to be specified again.</p>
+
+<blockquote><pre>
+(def-view-class tree-list (species-list)
+  ((heights :db-kind :join
+            :db-info (:home-key species-id
+                      :foreign-key |SpeciesID|
+                      :join-class |TreeData|)))
+  (:base-table |SpeciesList|))
+</pre></blockquote>
+
+<p>In the next section we'll see how to put these classes to use.</p>
+
+
+<h3><a id="section-5.2" name="section-5.2">5.2. Selecting on view classes</a></h3>
+
+<p>Let's start by querying members of <code>TreeData</code>:</p>
+
+<blockquote><pre>
+CL-USER 227 &gt; (select '|TreeData|)
+((#&lt;db-instance |TreeData| 584735692&gt;)
+ (#&lt;db-instance |TreeData| 584735796&gt;)
+ (#&lt;db-instance |TreeData| 584736052&gt;)
+ (#&lt;db-instance |TreeData| 584736156&gt;)
+ (#&lt;db-instance |TreeData| 584736260&gt;)
+ ...)
+
+CL-USER 228 &gt; (describe (caar *))
+
+#&lt;db-instance |TreeData| 584735692&gt; is a |TreeData|
+TreeTagNumber      1002
+SpeciesID          132
+Height             12.84000015258789
+Researcher         "Fernando"
+DATABASE           #&lt;SQL::ACCESS-ODBC-DATABASE "agrobiodiversity" 22D3C5EC&gt;
+PHYSICAL           NIL
+
+CL-USER 229 &gt;
+</pre></blockquote>
+
+<p>Note that the function <code>select</code> is overloaded: it can be
+called with either:</p>
+
+<ul>
+<li><p>one or more columns, and specifying the keyword argument
+<code>:from</code>, as in <a href="#section-4.1">section 4.1</a>,
+or</p></li>
+
+<li><p>the names of one or more view-classes, in which case the
+<code>:from</code> keyword is unnecessary and should be omitted. In
+this second case, the return values (inside the list of lists) are
+instances of the view-classes. If you name only one class in the call
+you might as well specify <code>:flatp</code>.</p></li>
+
+</ul>
+
+<p>Now let's see how joins work. First, in the more familiar SQL style:</p>
+
+<blockquote><pre>
+CL-USER 398 &gt; (select '|TreeData|  'species-list
+                      :where [= [slot-value '|TreeData| '|SpeciesID|]
+                                [slot-value 'species-list 'species-id]])
+((#&lt;db-instance |TreeData| 580360436&gt; #&lt;db-instance SPECIES-LIST 580362012&gt;)
+ (#&lt;db-instance |TreeData| 577210396&gt; #&lt;db-instance SPECIES-LIST 577210348&gt;)
+ (#&lt;db-instance |TreeData| 577210196&gt; #&lt;db-instance SPECIES-LIST 577210148&gt;)
+ (#&lt;db-instance |TreeData| 577210044&gt; #&lt;db-instance SPECIES-LIST 580362012&gt;)
+ (#&lt;db-instance |TreeData| 577209908&gt; #&lt;db-instance SPECIES-LIST 577209860&gt;)
+ ...)
+
+CL-USER 399 &gt;
+</pre></blockquote>
+
+<p><strong>Note</strong> the <code>[slot-value ...]</code> operator
+inside the <code>:where</code> clause. Its first argument is one of
+the view-class names in this select statement, the second argument
+names a slot.</p>
+
+<p>The alternative approach is to use the <code>:join</code> slot in
+our <code>tree-list</code> view-class:</p>
+
+<blockquote><pre>
+CL-USER 254 &gt; (setf tree-1
+                    (car
+                     (select 'tree-list
+                             :flatp t
+                             ;; equivalent to  [= [|SpeciesID|] 1]...
+                             :where [= [slot-value 'tree-list 'species-id]
+                                       1])))
+#&lt;db-instance TREE-LIST 543123180&gt;
+
+CL-USER 255 &gt; (inspect *)
+
+#&lt;db-instance TREE-LIST 543123180&gt; is a TREE-LIST
+HEIGHTS              #&lt;unbound slot&gt;
+LOCAL-NAME           "Abacate"
+SCIENTIFIC-NAME      "Persea gratissima Gaertn."
+SPECIES-ID           1
+DATABASE             #&lt;SQL::ACCESS-ODBC-DATABASE "agrobiodiversity" 20609C2C&gt;
+PHYSICAL             NIL
+
+CL-USER 256 : Inspect 1 &gt; (slot-value tree-1 'heights)
+(#&lt;db-instance |TreeData| 543227084&gt;
+ #&lt;db-instance |TreeData| 543227220&gt;
+ #&lt;db-instance |TreeData| 543227356&gt;
+ #&lt;db-instance |TreeData| 543227492&gt;
+ #&lt;db-instance |TreeData| 543227628&gt;
+ ...)
+
+CL-USER 257 : Inspect 1 &gt; :d   ; get inspector to redisplay tree-1
+
+#&lt;db-instance TREE-LIST 544048716&gt; is a TREE-LIST
+HEIGHTS              (#&lt;db-instance |TreeData| 543227084&gt;
+                      #&lt;db-instance |TreeData| 543227220&gt;
+                      #&lt;db-instance |TreeData| 543227356&gt;
+                      #&lt;db-instance |TreeData| 543227492&gt;
+                      #&lt;db-instance |TreeData| 543227628&gt;
+                      ...)
+LOCAL-NAME           "Abacate"
+SCIENTIFIC-NAME      "Persea gratissima Gaertn."
+SPECIES-ID           1
+DATABASE             #&lt;SQL::ACCESS-ODBC-DATABASE "agrobiodiversity" 206D99DC&gt;
+PHYSICAL             NIL
+
+CL-USER 258 : Inspect 1 &gt; (mapcar 'treedata-height
+                                  (slot-value tree-1 'heights))
+(12.133333206176758
+ 14.666666984558105
+ 15.600000381469727
+ 9.333333015441895
+ 23.33333396911621
+ ...)
+
+CL-USER 259 : Inspect 1 &gt;
+</pre></blockquote>
+
+<p><strong>Note</strong> here that until we specifically invoke a slot
+reader (in this case, <code>slot-value</code>) on
+<code>heights</code>, the slot is unbound. <strong>Note also</strong>
+that database values associated with join slots are cached in the
+database connection. If you redefine the view-class, or if the
+database is shared and might have been updated by someone else, then
+you must <cite>refresh</cite> the view, either by passing:</p>
+
+<blockquote><pre>:refresh t</pre></blockquote>
+
+<p>to <code>select</code> or by <code>disconnect</code>ing and
+<code>connect</code>ing again. If you do not, then the slot may be
+unbound or contain stale values. For example, suppose we redefine
+view-class <code>|TreeData|</code> by adding the following slot:</p>
+
+<blockquote><pre>(|Date| :type universal-time)</pre></blockquote>
+
+<p>Then:</p>
+
+<blockquote><pre>
+(defun refresh-test (refresh)
+  (let* ((select-461 [= [TreeTagNumber] 461])
+         (tree-461 (car (select '|TreeData|
+                                :flatp t
+                                :where select-461
+                                :refresh refresh))))
+    (when (slot-boundp tree-461 '|Date|)
+      (list (slot-value tree-461 '|Date|)))))
+
+(refresh-test nil) =&amp; nil
+(refresh-test t)   =&amp; (3124137600)
+</pre></blockquote>
+
+<p>Finally, we have at our disposal all the same iteration constructs
+that we had before (<a href="#section-4.3">section 4.3</a>). This time
+the iteration focus is not a record (i.e. a tuple of attributes) but a
+tuple of instances. For example, returning to the iteration examples
+we used before:</p>
+
+<blockquote><pre>
+CL-USER 361 &gt; (do-query ((my-aardvark) [select 'species-list
+                                               :where aardvark])
+                        (print my-aardvark))
+
+#&lt;db-instance SPECIES-LIST 574209404&gt;
+
+CL-USER 362 &gt;
+</pre></blockquote>
+
+
+<h3><a id="section-5.3" name="section-5.3">5.3. Updating via view classes</a></h3>
+
+<p>Four functions are provided for modifying a record from an
+instance:</p>
+
+<ul>
+
+<li><p><code>(update-record-from-slot <cite>instance
+slot</cite>)</code> sets the attribute <code><cite>slot</cite></code>
+of the record corresponding to
+<code><cite>instance</cite></code>;</p></li>
+
+<li><p><code>(update-record-from-slots <cite>instance
+slots</cite>)</code> takes a list of slot names as its second argument;</p></li>
+
+<li><p><code>(update-records-from-instance
+<cite>instance</cite>)</code> sets all the attributes of the
+appropriate record;</p></li>
+
+<li><p><code>(delete-instance-records <cite>instance</cite>)</code>
+removes from the database the record corresponding to
+<code><cite>instance</cite></code>.</p></li>
+
+</ul>
+
+<p>If <code><cite>instance</cite></code> is associated with an
+existing database record, then three <code>update-mumble</code>
+functions will update that record. If
+<code><cite>instance</cite></code> is not associated with a record,
+then a new one is created. Examples:</p>
+
+<blockquote><pre>
+CL-USER 69 &gt; (setf my-aardvark
+                   (make-instance 'species-list :local-name "Aardvark"))
+#&lt;db-instance SPECIES-LIST 543237852&gt;
+
+CL-USER 70 &gt; (update-records-from-instance my-aardvark)
+#&lt;db-instance SPECIES-LIST 543237852&gt;
+
+CL-USER 71 &gt; (select 'species-list :where aardvark)
+((#&lt;db-instance SPECIES-LIST 543237852&gt;))
+
+CL-USER 72 &gt; (setf (slot-value my-Aardvark 'scientific-name)
+                   "Orycteropus Afer")
+"Orycteropus Afer"
+
+CL-USER 73 &gt; (update-record-from-slot my-Aardvark 'scientific-name)
+#&lt;db-instance SPECIES-LIST 543237852&gt;
+
+CL-USER 74 &gt; (slot-value (car (select 'species-list
+                                      :where aardvark
+                                      :flatp t))
+                         'scientific-name)
+"Orycteropus Afer"
+
+CL-USER 75 &gt;
+</pre></blockquote>
+
+<h2><a id="section-6" name="section-6">6. Moving on</a></h2>
+
+
+<h3><a id="section-6.1" name="section-6.1">6.1. UncommonSQL</a></h3>
+
+<p><a href="http://ww.telent.net/cliki/UncommonSQL" >UncommonSQL</a>
+is a database integration <a
+href="http://ww.telent.net/cliki/Library">library</a> for CL, based on
+<a href="http://ww.telent.net/cliki/MaiSQL">MaiSQL</a>, developed and
+maintained primarily by <a
+href="http://ww.telent.net/cliki/onShore Development" >onShore
+Development</a>. It is distributed under an MIT/X like license. A
+package that adds OBDC support for UncommonSQL will be found at <a
+href="http://www.dataheaven.de/">http://www.dataheaven.de/</a>.</p>
+
+<p>The following notes document what I had to do to get UncommonSQL
+working with LispWorks and Access, on my NT machine.</p>
+
+<ol>
+
+<li><p>Download CLOCC (the <cite>Common Lisp Open Code
+Collection</cite>) from <a
+href="http://clocc.sourceforge.net/">http://clocc.sourceforge.net/</a>,
+and the ODBC UncommonSQL Module from <a
+href="http://dataheaven.dnsalias.net/~neonsquare/usql-odbc.html">http://dataheaven.dnsalias.net/~neonsquare/usql-odbc.html</a>.</p></li>
+
+<li><p>Unpack both archives, under the same root directory (I used
+cygwin gunzip and tar, and unpacked under
+"d:/p4/user/ndl/lisp/ilc2002/test/").</p></li>
+
+<li><p>In "clocc/clocc.lisp" change the value of
+<code>*clocc-root*</code> to
+"d:/p4/user/ndl/lisp/ilc2002/test/clocc/"</p></li>
+
+<li><p>Now I can load the mk:defsystem utility:</p>
+<blockquote><pre>
+(load "d:/p4/user/ndl/lisp/ilc2002/test/clocc/clocc.lisp")
+(load "clocc:src;defsystem;defsystem")
+</pre></blockquote>
+</li>
+
+<li><p>Permit LispWorks to redefine the <code>SQL</code>
+package:</p>
+<blockquote><pre>
+(setf *PACKAGES-FOR-WARN-ON-REDEFINITION*
+      (remove "SQL" *PACKAGES-FOR-WARN-ON-REDEFINITION*
+              :test 'equal))
+</pre></blockquote>
+</li>
+
+<li><p>Establish the following logical pathname translations:</p>
+<blockquote><pre>
+(setf
+ (logical-pathname-translations "systems")
+ '(("maisql;**;*.*"
+    "d:p4/user/ndl/lisp/ilc2002/test/uncommonsql/**/*.*"))
+ (logical-pathname-translations "sql")
+ '(("**;*.*"
+    "d:p4/user/ndl/lisp/ilc2002/test/uncommonsql/dbms/odbc/**/*.*")))
+</pre></blockquote>
+</li>
+
+<li><p>In
+"d:/p4/user/ndl/lisp/ilc2002/test/uncommonsql/dbms/odbc/odbc/odbc-ff-interface.lisp"
+add an appropriate <code>:lispworks</code> feature, thus:</p>
+<blockquote><pre>
+#+(and (or :lispworks :allegro) (not :unix))
+(setf *foreign-module* "odbc32.dll")
+</pre></blockquote>
+<p>and move the blanket <code>(setf *foreign-module* "libodbc.so")</code>
+out of the way.</p>
+</li>
+
+<li><blockquote><pre>
+(load "d:/p4/user/ndl/lisp/ilc2002/test/uncommonsql/MaiSQL.system")
+(mk:oos "MaiSQL" :load)
+</pre></blockquote></li>
+
+<li><blockquote><pre>
+(sql:connect '("" "" "agrobiodiversity") :database-type :odbc)
+</pre></blockquote></li>
+
+</ol>
+
+<p><strong>Note</strong> the different form of the connection
+specification!</p>
+
+
+<h3><a id="section-6.3" name="section-6.3">6.2. Limitations</a></h3>
+
+<p>ODBC is large; only the most commonly trodden paths are supported
+by Common SQL. If we are restricted to the simple approaches above, we
+occasionally feel the need to leave these paths, for example to get
+information about the database and the types it supports. Common SQL
+acts as a sort of barrier against such explorations:</p>
+
+<ul>
+<li><p>on the plus side: it protects us from all sorts of
+nastiness;</p></li>
+<li><p>on the minus side: it won't let us play nasty.</p></li>
+</ul>
+
+<p>There is not much point in working alongside a copy of Microsoft's
+ODBC Programmer's Reference, because you won't be able to use most of
+it.</p>
+
+<p>An example of the sort of thing which you can do, if you don't mind
+experimenting with the results of <code>apropos</code>, is to obtain
+the database connection's ODBC version:</p>
+
+<blockquote><pre>
+CL-USER 170 &gt; (odbc-common:sqlgetinfo (sql::hdbc *default-database*)
+                                      odbc-common:sql_odbc_ver)
+0
+"03.52.0000"
+
+CL-USER 171 &gt;
+</pre></blockquote>
+
+<p>An example of the sort of thing which you can't do with Common SQL
+as it stands, although the ODBC Programmer's Reference says it's a
+valid query, is to determine the maximum permitted length of a
+character literal in an SQL statement:</p>
+
+<blockquote><pre>
+CL-USER 171 &gt; (odbc-common:sqlgetinfo (sql::hdbc *default-database*) 108)
+
+Error: unknown SQLGetInfo type 108
+  1 (continue) Return NIL
+  2 (abort) Return to level 0.
+  3 Return to top loop level 0.
+
+Type :b for backtrace, :c &lt;option number&gt; to proceed,
+ or :? for other options
+
+CL-USER 172 : 1 &gt;
+</pre></blockquote>
+
+<p>In contrast, with the Python ODBC interface [<a title="mxODBC - An
+ODBC Interface for Python"
+href="http://www.lemburg.com/files/python/mxODBC.html">eGenix
+2001</a>] we're less insulated from the coalface. We constantly have
+to mess with types in a way that we wouldn't have to in Common
+SQL. But if we wanted to determine the maximum character literal
+length, then we could do so easily:</p>
+
+<blockquote><pre>
+&gt;&gt;&gt; SQL.MAX_CHAR_LITERAL_LEN
+108
+&gt;&gt;&gt; agrobiodiversity.getinfo(SQL.MAX_CHAR_LITERAL_LEN)[0]
+255
+&gt;&gt;&gt;
+</pre></blockquote>
+
+<p>In fact, it turns out that this query is possible from lisp if
+you're prepared to modify the system a little. Given either flagrant
+disregard for the LispWorks license agreement, or residence in the
+European Community plus a claim to have met the conditions of <a
+href="http://europa.eu.int/ISPO/legal/en/ipr/software/text.html#HD_NM_6">Article
+6 of Council Directive 91/250/EEC</a>, creative use of error
+backtraces, <code>apropos</code> and the inspector leads us to the
+variable <code>odbc-common::+finfotype-return-types+</code>.</p>
+
+<blockquote><pre>
+CL-USER 173 &gt; (setf (aref odbc-common::+finfotype-return-types+ 108)
+                    '(:unsigned :short))
+(:UNSIGNED :SHORT)
+
+CL-USER 174 &gt; (odbc-common:sqlgetinfo (sql::hdbc *default-database*) 108)
+0
+255
+
+CL-USER 175 &gt;
+</pre></blockquote>
+
+
+<p>An example of the sort of thing I always used to believe that we
+couldn't do, even with the ODBC Programmer's Reference: find out
+<strong>in advance of getting integrity errors</strong> whether the
+database is case sensitive when comparing character values to
+determine primary-key uniqueness.</p>
+
+<blockquote><pre>
+CL-USER 175 &gt; (with-transaction
+                (when (table-exists-p "foo")
+                  (execute-command "drop table foo"))
+                (execute-command "create table foo (bar varchar (255),
+                                                    primary key (bar))")
+                (execute-command "insert into foo values ('wombat')")
+                (execute-command "insert into foo values ('Wombat')"))
+
+Error: Sql-Database-Data-Error id 23000[-1605] : [Microsoft][ODBC
+Microsoft Access Driver] The changes you requested to the table were
+not successful because they would create duplicate values in the
+index, primary key, or relationship.  Change the data in the field or
+fields that contain duplicate data, remove the index, or redefine the
+index to permit duplicate entries and try again.
+  1 (abort) Return to level 0.
+  2 Return to top loop level 0.
+
+Type :b for backtrace, :c &lt;option number&gt; to proceed,
+ or :? for other options
+
+CL-USER 176 : 1 &gt;
+</pre></blockquote>
+
+<p>When I showed a first draft of this tutorial to Xanalys, their
+support folks came up with the following inside information: in ODBC,
+you can check if a column is case-sensitive by using SQLColAttribute
+with SQL_DESC_CASE_SENSITIVE.</p>
+
+<blockquote><pre>
+(defun column-sensitive-p (column table)
+  (let ((h (nth-value 1 (odbc-common:SQLAllocHandle
+                         odbc-common:SQL_HANDLE_STMT
+                         (sql::hdbc sql:*default-database*)))))
+    (unwind-protect
+        (progn
+          (odbc-common::sqlprepare h
+                                   (format nil "select ~a from ~a"
+                                           column table))
+          (= 1 (nth-value 1
+                          (odbc-common::sqlcolattribute
+                           h 1 odbc-common:sql_desc_case_sensitive))))
+      (odbc-common:sqlfreehandle odbc-common:SQL_HANDLE_STMT h))))
+</pre></blockquote>
+
+<p>I don't think there's much to be learned from the lisp. It was a
+somewhat daft question anyway, because even with supposedly
+backend-independent SQL interfaces you always end up having to tweak
+for the target database, in which case questions such as the above can
+be answered at tweak-time. But there is a (generalised) moral to this
+story: if you're working on any serious lisp application and you find
+you've run aground, <strong>CONTACT YOUR PRODUCT'S SUPPORT
+TEAM</strong>. </p>
+
+<p>A final note on limitations: we cannot use the Common SQL interface
+for database administration (creating the database, creating or
+removing users, granting or revoking privileges, etc). </p>
+
+
+
+<h2><a id="section-A" name="section-A">A. References</a></h2>
+
+
+<table>
+
+<tr valign="top">
+
+  <td>[<a id="ref-eGenix-2001" name="ref-eGenix-2001" href="http://www.lemburg.com/files/python/mxODBC.html">eGenix 2001</a>]</td>
+
+  <td>
+    "mxODBC - An ODBC Interface for Python";
+    eGenix; 2001.
+  </td>
+
+</tr>
+
+<tr valign="top">
+
+  <td>[<a id="ref-PLEC" name="ref-PLEC" href="http://www.unu.edu/env/plec/database/4-AmazoniaAgrobiodiversity.mdb">PLEC</a>]</td>
+
+  <td>
+    "Amazonia Agrobiodiversity Database";
+    <a href="http://www.unu.edu/env/">Environment and Sustainable
+    Development Programme</a>;
+    <a href="http://www.unu.edu/">United Nations University</a>.
+  </td>
+
+</tr>
+
+</table>
+
+
+<h2><a id="section-B" name="section-B">B. Document History</a></h2>
+
+<table>
+
+<tr valign="top">
+
+  <td>2002-09-13</td>
+
+  <td><a href="mailto:ndl@ravenbrook.com">NDL</a></td>
+
+  <td>Created.</td>
+
+</tr>
+
+<tr valign="top">
+
+  <td>2002-09-25</td>
+
+  <td><a href="mailto:ndl@ravenbrook.com">NDL</a></td>
+
+  <td>First draft complete.</td>
+
+</tr>
+
+<tr valign="top">
+
+  <td>2002-09-27</td>
+
+  <td><a href="mailto:ndl@ravenbrook.com">NDL</a></td>
+
+  <td>Updates based on reading first draft.</td>
+
+</tr>
+
+<tr valign="top">
+
+  <td>2002-10-14</td>
+
+  <td><a href="mailto:ndl@ravenbrook.com">NDL</a></td>
+
+  <td>Review complete, ready for distribution.</td>
+
+</tr>
+
+</table>
+
+
+<hr />
+
+<p><small>September 2002<br />
+Copyright &copy; 2002 by Xanalys LLC<br />
+All Rights Reserved.</small></p>
+
+<p><small>You are permitted to view, copy, print and distribute this
+publication, subject to your agreement that: a) your use of the
+information is for informational, personal, and non-commercial
+purposes only, b) you will not modify the documents, publications or
+graphics, c) you will not copy or distribute graphics separate from
+their accompanying text and you will not quote materials out of their
+context, d) you will display the above copyright notice and other
+proprietary notices on every copy you make, and e) you agree that
+Xanalys LLC may revoke this permission at any time and you shall
+immediately stop your activities related to this permission upon
+notice from Xanalys LLC. Use for any other purpose is expressly
+prohibited by law, and may result in severe civil and criminal
+penalties. Violators will be prosecuted to the maximum extent
+possible.</small></p>
+
+<p><small>The information in this publication is provided for
+information only, is subject to change without notice, and should not
+be construed as a commitment by Xanalys Limited or Xanalys
+LLC. Xanalys LLC assumes no responsibility or liability for any errors
+or inaccuracies that may appear in this publication.</small></p>
+
+<p><small>The software described in this publication is furnished
+under license and may only be used or copied in accordance with the
+terms of that license.  LispWorks is a registered trademark of Xanalys
+LLC. Microsoft is a registered trademark of Microsoft
+Corporation. Other brand or product names are the registered
+trademarks or trademarks of their respective holders.</small></p>
+
+<div align="center">
+
+<p><code>$Id: //info.ravenbrook.com/user/ndl/lisp/ilc2002/index.html#26 $</code></p>
+
+<p>
+<a href="http://www.ravenbrook.com/">Ravenbrook</a> /
+<a href="http://www.international-lisp-conference.org/">ILC 2002</a>
+</p>
+
+<p>
+    <a href="http://validator.w3.org/check/referer">
+    <img src="valid-xhtml10.png"
+         alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+</p>
+
+</div>
+
+</body>
+
+
+<!-- Mirrored from www.nicklevine.org/ilc2002/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:24:36 GMT -->
+</html>

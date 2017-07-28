@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/binary-search/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:29:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn X in Y Minutes: Scenic Programming Language Tours</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../css/normalize.css">
+        <link rel="stylesheet" href="../../css/main.css">
+        <link href="../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fbinary-search%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3DBinary+Search">
+        Share this page
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../index.html">Learn X in Y minutes</a></h2>
+  <h2>Where X=Binary Search</h2>
+  
+  <div id="doc">
+    <h1>Binary Search</h1>
+
+<h2>Why Binary Search?</h2>
+
+<p>Searching is one of the prime problems in the domain of Computer Science.Today there are more than 1 trillion searches per year, and we need algorithms that can do that very fastly. Binary search is one of the fundamental algorithms in computer science. In order to explore it, we’ll first build up a theoretical backbone, then use that to implement the algorithm properly.</p>
+
+<h2>Introduction</h2>
+
+<p>A simple approach to implement search is to do a linear search, but this approach takes a lot of time and this time grows linearly with the amount or number of data points. i.e., start from the leftmost element of arr[] and one by one compare x with each element of arr[], if x matches with an element, return the index. If x doesn’t match with any of elements, return -1.</p>
+<pre class="highlight plaintext"><code>Linear Search: O (n)               Linear Time
+
+Binary Search: O ( log(n) )        Logarithmic Time
+
+</code></pre>
+<pre class="highlight plaintext"><code>def search(arr, x):
+
+    for i in range(len(arr)):
+
+        if arr[i] == x:
+            return i
+
+    return -1
+
+</code></pre>
+
+<h2>Binary Search Algorithm</h2>
+
+<p>The basic requirement for binary search to work is that the data to search should be sorted (in any order).</p>
+
+<h3>Algo</h3>
+<pre class="highlight plaintext"><code>The idea of binary search is to use the information that the array is sorted and reduce the time complexity to O(Logn). We basically ignore half of the elements just after one comparison.
+1) Compare x with the middle element.
+2) If x matches with middle element, we return the mid index.
+3) Else If x is greater than the mid element, then x can only lie in right half subarray after the mid element. So we recur for right half.
+4) Else (x is smaller) recur for the left half.
+Following is Recursive implementation of Binary Search.
+
+</code></pre>
+
+<h3>Ending Notes</h3>
+
+<p>There is another form of binary search that is very useful.</p>
+
+<h2>Books</h2>
+
+<ul>
+<li><a href="https://mitpress.mit.edu/books/introduction-algorithms">CLRS</a></li>
+<li><a href="http://www.amazon.com/Algorithms-4th-Robert-Sedgewick/dp/032157351X">Algorithms</a></li>
+<li><a href="http://www.amazon.com/Algorithm-Design-Foundations-Analysis-Internet/dp/0471383651">Algorithm Design</a></li>
+</ul>
+
+<h2>Online Resources</h2>
+
+<ul>
+<li><a href="http://www.geeksforgeeks.org/the-ubiquitous-binary-search-set-1/">GeeksforGeeks</a></li>
+<li><a href="https://www.topcoder.com/community/data-science/data-science-tutorials/binary-search/">Topcoder Tutorial</a></li>
+</ul>
+
+    <hr>
+    <p>Got a suggestion? A correction, perhaps? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Open an Issue</a> on the Github Repo, or make a pull request yourself!
+    </p>
+    <p class="contributed">
+    Originally contributed by Abhishek Jaisingh, and updated by <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/binary-search.html.markdown">1 contributor(s)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://github.com/abhishekjiitr">Abhishek Jaisingh</a>
+      
+    
+    </p>
+
+    <p>
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/binary-search/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:29:46 GMT -->
+</html>

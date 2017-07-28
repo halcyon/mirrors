@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns#">
+
+<!-- Mirrored from malisper.me/2015/09/08/defasm/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:46:39 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Defasm - Macrology</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="../../../../xmlrpc.php">
+
+
+<!-- This site is optimized with the Yoast SEO plugin v3.4.2 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="index.html" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Defasm - Macrology" />
+<meta property="og:description" content="This post is the second part of a two part series exploring the emulator cl-6502. If you haven&#8217;t read the first part exploring the implementation of addressing modes in cl-6502, you can find it here. This post is going to go over how cl-6502 implements the instruction set of the 6502. Most of the work &hellip;" />
+<meta property="og:url" content="index.html" />
+<meta property="og:site_name" content="Macrology" />
+<meta property="article:section" content="Advanced Macros" />
+<meta property="article:published_time" content="2015-09-08T12:48:05-05:00" />
+<meta property="article:modified_time" content="2015-10-11T23:06:33-05:00" />
+<meta property="og:updated_time" content="2015-10-11T23:06:33-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:description" content="This post is the second part of a two part series exploring the emulator cl-6502. If you haven&#8217;t read the first part exploring the implementation of addressing modes in cl-6502, you can find it here. This post is going to go over how cl-6502 implements the instruction set of the 6502. Most of the work [&hellip;]" />
+<meta name="twitter:title" content="Defasm - Macrology" />
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Feed" href="../../../../feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Comments Feed" href="../../../../comments/feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Defasm Comments Feed" href="feed/index.html" />
+<link rel='stylesheet' id='scrawl-style-css'  href='../../../../wp-content/themes/scrawl-wpcom/style167b.css?ver=4.6' type='text/css' media='all' />
+<link rel='stylesheet' id='scrawl-fonts-css'  href='https://fonts.googleapis.com/css?family=Lora:400,700|Merriweather:400italic,400,700,700italic&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../../../wp-content/themes/scrawl-wpcom/fonts/genericons6de8.css?ver=3.3' type='text/css' media='all' />
+<script type='text/javascript' src='../../../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<link rel='https://api.w.org/' href='../../../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../../../wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+<link rel='shortlink' href='../../../../index89f6.html?p=831' />
+<link rel="alternate" type="application/json+oembed" href="../../../../wp-json/oembed/1.0/embed5caf.json?url=http%3A%2F%2Fmalisper.me%2F2015%2F09%2F08%2Fdefasm%2F" />
+<link rel="alternate" type="text/xml+oembed" href="../../../../wp-json/oembed/1.0/embed485d?url=http%3A%2F%2Fmalisper.me%2F2015%2F09%2F08%2Fdefasm%2F&amp;format=xml" />
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-63547056-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<style type="text/css" id="syntaxhighlighteranchor"></style>
+
+<script type="text/javascript">
+  window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var n=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(n?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var o=document.getElementsByTagName("script")[0];o.parentNode.insertBefore(a,o);for(var r=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["clearEventProperties","identify","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=r(p[c])};
+    heap.load("931515525");
+</script>
+</head>
+
+<body class="single single-post postid-831 single-format-standard">
+	<button class="menu-toggle x">
+		<span class="lines"></span>
+		<span class="screen-reader-text">Primary Menu</span>
+	</button>
+	<div class="slide-menu">
+				
+		<h1 class="site-title"><a href="../../../../index.html" rel="home">Macrology</a></h1>
+		<h2 class="site-description">Case Studies in Lisp Macros</h2>
+		
+				
+				
+			<div id="secondary" class="widget-area" role="complementary">
+		<aside id="search-2" class="widget widget_search"><form role="search" method="get" class="search-form" action="http://malisper.me/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form></aside><aside id="pages-3" class="widget widget_pages"><h1 class="widget-title">Pages</h1>		<ul>
+			<li class="page_item page-item-55"><a href="../../../../about-me/index.html">About Michael Malis</a></li>
+<li class="page_item page-item-44"><a href="../../../../about-this-site-2/index.html">About This Site</a></li>
+		</ul>
+		</aside><aside id="nav_menu-3" class="widget widget_nav_menu"><h1 class="widget-title">Contact Me</h1><div class="menu-contact-me-container"><ul id="menu-contact-me" class="menu"><li id="menu-item-60" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-60"><a href="mailto:michaelmalis2@gmail.com">Email</a></li>
+<li id="menu-item-58" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-58"><a href="https://github.com/malisper">Github</a></li>
+<li id="menu-item-59" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-59"><a href="https://news.ycombinator.com/user?id=malisper">Hacker News</a></li>
+</ul></div></aside><aside id="archives-2" class="widget widget_archive"><h1 class="widget-title">Archives</h1>		<ul>
+			<li><a href='../../../../2016/06/index.html'>June 2016</a></li>
+	<li><a href='../../../../2016/04/index.html'>April 2016</a></li>
+	<li><a href='../../../../2016/01/index.html'>January 2016</a></li>
+	<li><a href='../../../12/index.html'>December 2015</a></li>
+	<li><a href='../../../11/index.html'>November 2015</a></li>
+	<li><a href='../../../10/index.html'>October 2015</a></li>
+	<li><a href='../../index.html'>September 2015</a></li>
+	<li><a href='../../../08/index.html'>August 2015</a></li>
+	<li><a href='../../../07/index.html'>July 2015</a></li>
+	<li><a href='../../../06/index.html'>June 2015</a></li>
+	<li><a href='../../../05/index.html'>May 2015</a></li>
+		</ul>
+		</aside><aside id="categories-2" class="widget widget_categories"><h1 class="widget-title">Categories</h1>		<ul>
+	<li class="cat-item cat-item-2"><a href="../../../../category/basics/index.html" title="These are basic Lisp macros that should be trivial to understand.">Basic Macros</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="../../../../category/intermediate-macros/index.html" >Intermediate Macros</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="../../../../category/advanced-macros/index.html" >Advanced Macros</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="../../../../category/debugging-common-lisp/index.html" >Debugging Lisp</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="../../../../category/loops-in-lisp/index.html" >Loops in Lisp</a>
+</li>
+		</ul>
+</aside>	</div><!-- #secondary -->
+	</div><!-- .slide-menu -->
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<header id="masthead" class="site-header" role="banner">
+
+		<div class="site-branding">
+						<h1 class="site-title"><a href="../../../../index.html" rel="home">Macrology</a></h1>
+		</div>
+
+	</header><!-- #masthead -->
+
+	
+	
+	<div id="content" class="site-content">
+
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			<article id="post-831" class="post-831 post type-post status-publish format-standard hentry category-advanced-macros">
+			<header class="entry-header">
+			<h1 class="entry-title">Defasm</h1>		</header><!-- .entry-header -->
+		<div class="entry-content">
+		<p><em>This post is the second part of a two part series exploring the emulator <a href="https://github.com/kingcons/cl-6502">cl-6502</a>. If you haven&#8217;t read the first part exploring the implementation of addressing modes in cl-6502, you can find it <a href="../../../08/27/defaddress/index.html">here</a>.</em></p>
+<p>This post is going to go over how cl-6502 implements the instruction set of the 6502. Most of the work in defining the instruction set is done by a single macro, <strong>defasm</strong>. But before I can go into the details of <strong>defasm</strong>, I have to explain how cl-6502 represents instructions.</p>
+<p>cl-6502 represents each instruction as a function inside an array called <em>*array-funs*</em>. The function for a specific instruction is indexed by that instruction&#8217;s opcode.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='#easy-footnote-bottom-1' title='If you don&#8217;t know, the opcode is the byte used in machine code to represent the instruction.'><sup>1</sup></a></span> To execute an instruction, cl-6502 looks up the opcode of the current instruction and calls the function at that location inside of <em>*array-funs*</em>. There is also a second array, <em>*opcode-metadata*,</em> which keeps track of some metadata about each instruction such as the number of bytes each one takes up. All <strong>d</strong><strong>efasm</strong> does is make it easy to generate all of the functions and metadata that wind up inside of those two arrays.</p>
+<p>To show you just how easy it is to implement instructions with <strong>defasm</strong>, here is the implementation of the adc (add with carry) instruction:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defasm adc (:docs &quot;Add to Accumulator with Carry&quot;)
+    ((#x61 6 2 indirect-x)
+     (#x65 3 2 zero-page)
+     (#x69 2 2 immediate)
+     (#x6d 4 3 absolute)
+     (#x71 5 2 indirect-y)
+     (#x75 4 2 zero-page-x)
+     (#x79 4 3 absolute-y)
+     (#x7d 4 3 absolute-x))
+
+  (let ((result (+ (cpu-ar cpu) 
+                   (getter) 
+                   (status-bit :carry))))
+    (set-flags-if 
+      :carry (&gt; result #xff)
+      :overflow (overflow-p result (cpu-ar cpu) (getter))
+      :negative (logbitp 7 result)
+      :zero (zerop (wrap-byte result)))
+    (setf (cpu-ar cpu) (wrap-byte result))))
+</pre>
+<p>There are two main parts to the above code. The first part specifies all of the addressing modes the instruction is compatible with along with the metadata for each variant of the instruction (there is a different version of the instruction for every possible addressing mode the instruction can be used with).</p>
+<p>After that is the body &#8211; the code that actually implements the instruction being defined. The body is responsible for setting all of the appropriate flags and memory locations to the values they should have after executing the instruction. Make sure you note that just like in <strong>defaddress</strong>, the variable <em>cpu</em> can be used in the body to reference an object that represents the current state of the cpu.</p>
+<p><b>Defasm</b> takes these two pieces, and generates one lambda expression for each variant of the instruction. All of the generated lambda expressions use the same body, except <strong>defasm</strong> generates some additional code that allows the body to work across all of the different addressing modes.</p>
+<p>Now to get into the specifics of the DSL. In the addressing mode part of the DSL, there are four pieces of metadata that need to be associated with each version of the instruction. The first part is the opcode, the machine code representation of the instruction. Next up is the number of cycles it takes for the instruction to execute. After that is the size of the instruction, the number of bytes it takes up in memory. Last is the name of the addressing mode used for that specific variant of the instruction. As an example, here is the metadata for the adc instruction in the indirect-x addressing mode:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(#x61 6 2 indirect-x)
+</pre>
+<p>What it is saying is that this version of the instruction has the opcode #x61, takes six cycles to run, takes two bytes in memory, and uses the indirect-x addressing mode. The fact that when an instruction is used in different addressing modes, it uses a different number of clock cycles and takes up a different amount of space is one reason why different addressing modes are provided in assembly language.</p>
+<p>For the body, <strong>defasm</strong> does something very clever to have the body work for every possible addressing modes. Within the body, the functions <b>getter</b> and <strong>setter</strong> are bound to local functions that can be used to obtain and modify the argument to the instruction. For each variant of the instruction, <strong>defasm</strong> generates the definition of these two functions differently so that they will always calculate the correct argument for the given addressing mode.</p>
+<p>For example, in the version of adc that uses immediate addressing, <strong>getter</strong> will just return the value of the operand, but in the version that uses absolute addressing, <b>getter</b> will use the operand as an address and look up the value at that location in memory. In the definition of the adc instruction above, the body uses <strong>getter</strong> to obtain the argument, adds that to the value in the accumulator, adds in the carry, and then sets all of the appropriate flags and registers depending on the final value it winds up with. Since <strong>getter</strong> and <strong>setter</strong> work across all of the different addressing modes, so does the body!</p>
+<p>Now let&#8217;s look at the actual implementation of <strong>defasm</strong>:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defmacro defasm (name (&amp;key (docs &quot;&quot;) raw-p (track-pc t))
+                  modes &amp;body body)
+  `(progn
+
+     ,@(loop for (op cycles bytes mode) in modes collect
+         `(setf (aref *opcode-meta* ,op) 
+                ',(list name docs cycles bytes mode)))
+
+     ,@(loop for (op cycles bytes mode) in modes collect
+         `(setf (aref *opcode-funs* ,op)
+                (lambda (cpu)
+                  (incf (cpu-pc cpu))
+                  (flet ((getter ()
+                           ,(make-getter name mode raw-p))
+                         (setter (x)
+                           (setf (,mode cpu) x)))
+                    ,@body)
+                  ,@(when track-pc
+                     `((incf (cpu-pc cpu) ,(1- bytes))))
+                  (incf (cpu-cc cpu) ,cycles))))))
+</pre>
+<p>As usual, I&#8217;m going to show a snippet of the implementation of <strong>defasm</strong> and then show what the macroexpansion of that piece looks like. The first part of the implementation handles the addressing modes and metadata:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(loop for (op cycles bytes mode) in modes collect
+  `(setf (aref *opcode-meta* ,op) 
+         ',(list name docs cycles bytes mode)))
+</pre>
+<p>For each addressing mode, this generates code which will store a list containing the metadata into the proper place in the <em>*opcode-meta*</em> array. In other words it takes each part that looks like:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(#x61 6 2 indirect-x)
+</pre>
+<pre>and generates code that looks like:</pre>
+<pre class="brush: plain; title: ; notranslate" title="">
+(setf (aref *opcode-meta* #x61)
+     '(adc &quot;Add to accumulator with carry&quot; 6 2 indirect-x))
+</pre>
+<p>After that we have the part that will generate the actual lambda expressions for the functions that will be stored in <em>*array-funs*</em>:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(loop for (op cycles bytes mode) in modes collect
+  `(setf (aref *opcode-funs* ,op)
+         (lambda (cpu)
+           (incf (cpu-pc cpu))
+           (flet ((getter ()
+                   ,(make-getter name mode raw-p))
+                 (setter (x)
+                   (setf (,mode cpu) x)))
+             ,@body)
+          ,@(when track-pc
+              `((incf (cpu-pc cpu) ,(1- bytes))))
+          (incf (cpu-cc cpu) ,cycles))))
+</pre>
+<p>This code loops over all of the metadata for the different addressing modes and uses this information to generate the expression for each variant of the instruction. As mentioned previously, the function will be stored by the variant&#8217;s opcode. As for the actual function itself, it does something along these lines. First, it advances the pc. This is done so that the pc now points to the operand of the instruction. By doing this, the job of <strong>defaddress</strong> becomes much easier since it can use the pc as a pointer to the operand. Next, the function evaluates the body in an environment with <strong>getter</strong> and <strong>setter</strong> bound to functions that can be used to read and write to the argument. After that it will advance the pc forward to the next instruction (unless <em>track-pc</em> was false, which happens for instructions that modify the pc themselves such as jumps). Finally, the function will increment the cycle count by the number of cycles it takes the instruction to execute.</p>
+<p>The definitions of <strong>getter</strong> and <strong>setter</strong> are really just calls to the function with the same name as the addressing mode associated with the variant of the instruction.<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='#easy-footnote-bottom-2' title='Getter actually uses a function make-getter along with the raw-p argument. This is just to smooth out some differences between instructions.'><sup>2</sup></a></span> If you look back at the last post, you will see that <strong>defaddress</strong> automatically generates these &#8220;mode&#8221; functions. All they do is calculate the effective argument for the given addressing mode! Exactly what <strong>getter</strong> does. As an example of what the expansion looks like, here is the lambda expression generated for the adc instruction in the indirect-x addressing mode.</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(setf (aref *opcode-funs* #x61)
+      (lambda (cpu)
+        (incf (cpu-pc cpu))
+        (flet ((getter ()
+                 (get-byte (indirect-x cpu)))
+               (setter (x)
+                 (setf (indirect-x cpu) x)))
+         (let ((result (+ (cpu-ar cpu) 
+                          (getter) 
+                          (status-bit :carry))))
+          (set-flags-if :carry (&gt; result 255) 
+                        :overflow (overflow-p result 
+                                              (cpu-ar cpu)
+                                              (getter))
+                        :negative (logbitp 7 result) 
+                        :zero (zerop (wrap-byte result)))
+          (setf (cpu-ar cpu) (wrap-byte result))))
+        (incf (cpu-pc cpu) 1)
+        (incf (cpu-cc cpu) 6)))
+</pre>
+<p>And that&#8217;s all there is to <strong>defasm</strong>! There are a couple really cool things you should note about cl-6502. First off, the macros expand into a lot of code. The definition of adc at the beginning of this post expands into roughly 500 lines of code. <a href="https://gist.github.com/malisper/610f691e7b3919d6a421">Here</a> is a link to a gist of it if you want to see it. More incredibly, cl-6502 implements an entire emulator in under 1000 lines of code. cl-6502 is a fantastic example of how effective macros are at creating concise DSLs.</p>
+<ol class="easy-footnotes-wrapper"><li class="easy-footnote-single"><span id="easy-footnote-bottom-1" class="easy-footnote-margin-adjust"></span>If you don&#8217;t know, the opcode is the byte used in machine code to represent the instruction.<a class="easy-footnote-to-top" href="#easy-footnote-1"></a></li><li class="easy-footnote-single"><span id="easy-footnote-bottom-2" class="easy-footnote-margin-adjust"></span>Getter actually uses a function make-getter along with the raw-p argument. This is just to smooth out some differences between instructions.<a class="easy-footnote-to-top" href="#easy-footnote-2"></a></li></ol>			</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="index.html" rel="bookmark"><time class="entry-date published" datetime="2015-09-08T12:48:05+00:00">September 8, 2015</time><time class="updated" datetime="2015-10-11T23:06:33+00:00">October 11, 2015</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../../../author/malisper/index.html">malisper</a></span></span><span class="category-links"> in <a href="../../../../category/advanced-macros/index.html" rel="category tag">Advanced Macros</a></span>			<span class="secondary-entry-meta">
+								<span class="comments-link"><a href="index.html#comments">2</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+			
+	<nav class="navigation post-navigation" role="navigation">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="../../../08/27/defaddress/index.html" rel="prev"><span class="title">Previous post</span>Defaddress</a></div><div class="nav-next"><a href="../../22/getting-places/index.html" rel="next"><span class="title">Next post</span>Getting Places</a></div></div>
+	</nav>
+			
+<div id="comments" class="comments-area">
+
+	
+			<h2 class="comments-title">
+			2 thoughts on &ldquo;<span>Defasm</span>&rdquo;		</h2>
+
+		<ol class="comment-list">
+					<li id="comment-536" class="comment even thread-even depth-1 parent">
+			<article id="div-comment-536" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://0.gravatar.com/avatar/0345f6261d6ced21145afdec166fd114?s=64&amp;d=mm&amp;r=g' srcset='http://0.gravatar.com/avatar/0345f6261d6ced21145afdec166fd114?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn"><a href='http://fare.livejournal.com/tag/lisp' rel='external nofollow' class='url'>François-René Rideau</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-536">
+							<time datetime="2015-09-09T07:29:35+00:00">
+								September 9, 2015 at 7:29 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>What&#8217;s this space in memory thing? And indirect ADC takes three bytes of source code, not 6. Is that the number of memory accesses? Three to fetch the opcode, two to fetch the address, one to fetch the data? How can the instruction take only two cycles when there are 6 cycles just to transfer data on the bus? Or is the total time the sum of those two quantities?</p>
+<p>Or has memory usage something to do with an assembly-to-assembly JIT?</p>
+<p>Also, not all 6502 variants have the same timing per instruction, do they? I thought that later variants had memory access as pure bottleneck, whereas earlier variants added a few cycles to that. Or is that what your numbers are?</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='indexd212.html?replytocom=536#respond' onclick='return addComment.moveForm( "div-comment-536", "536", "respond", "831" )' aria-label='Reply to François-René Rideau'>Reply</a></div>			</article><!-- .comment-body -->
+<ol class="children">
+		<li id="comment-539" class="comment byuser comment-author-malisper bypostauthor odd alt depth-2">
+			<article id="div-comment-539" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://2.gravatar.com/avatar/2587b67431f9cc2a998a25e42e2d172d?s=64&amp;d=mm&amp;r=g' srcset='http://2.gravatar.com/avatar/2587b67431f9cc2a998a25e42e2d172d?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">malisper</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-539">
+							<time datetime="2015-09-09T10:15:03+00:00">
+								September 9, 2015 at 10:15 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I got the number of cycles and the size of the instruction mixed up. Adc with indirect-x addressing actually takes two cycles to execute and takes up two bytes of memory. I have now fixed the article to clear that up. As for the timings I am guessing the author of cl-6502 they just choose the timings for a specific version of the 6502.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='indexd2ff.html?replytocom=539#respond' onclick='return addComment.moveForm( "div-comment-539", "539", "respond", "831" )' aria-label='Reply to malisper'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+		
+	
+	
+					<div id="respond" class="comment-respond">
+			<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" title="Cancel reply" href="index.html#respond" style="display:none;"><span class="screen-reader-text">Cancel reply</span></a></small></h3>				<form action="http://malisper.me/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
+					<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" aria-required="true" required="required"></textarea></p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" aria-required='true' required='required' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" aria-required='true' required='required' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='831' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="b3756c9bc1" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="45"/></p>				</form>
+					</div><!-- #respond -->
+		
+</div><!-- #comments -->
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="site-info">
+			<a href="http://wordpress.org/">Proudly powered by WordPress</a>
+			<span class="sep"> ~ </span>
+			Theme: Scrawl by <a href="https://wordpress.com/themes/" rel="designer">WordPress.com</a>.		</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type='text/javascript' src='../../../../wp-content/plugins/akismet/_inc/form2d73.html?ver=3.1.11'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushPlain09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore09b1.css?ver=3.0.9b";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeEclipse09b1.css?ver=3.0.9b";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+<link rel='stylesheet' id='qtipstyles-css'  href='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='easyfootnotescss-css'  href='../../../../wp-content/plugins/easy-footnotes/assets/easy-footnotes167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='dashicons-css'  href='../../../../wp-includes/css/dashicons.min167b.css?ver=4.6' type='text/css' media='all' />
+<script type='text/javascript' src='../../../../wp-content/themes/scrawl-wpcom/js/scrawld56c.js?ver=20150309'></script>
+<script type='text/javascript' src='../../../../wp-content/themes/scrawl-wpcom/js/skip-link-focus-fix08e0.js?ver=20130115'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/comment-reply.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/imagesloaded.min55a0.js?ver=3.2.0'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtipcall167b.js?ver=4.6'></script>
+
+</body>
+
+<!-- Mirrored from malisper.me/2015/09/08/defasm/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:46:39 GMT -->
+</html>
+<!-- Dynamic page generated in 0.091 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:22:51 -->
+
+<!-- super cache -->

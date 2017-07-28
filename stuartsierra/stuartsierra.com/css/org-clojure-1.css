@@ -1,0 +1,22 @@
+/* Java class names and namespace prefixes */
+.org-type {
+    color: darkblue;
+}
+
+/* Name of the function being defined in defn */
+.org-function-name {
+    color: blue;
+}
+
+.org-comment,.org-comment-delimiter {
+    color: darkred;
+}
+
+.org-clojure-keyword {
+    color: purple;
+}
+
+.org-string,.org-doc {
+    color: darkgreen;
+}
+

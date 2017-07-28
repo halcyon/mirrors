@@ -1,0 +1,73 @@
+(in-package "CL-USER")
+
+;; $Id: //info.ravenbrook.com/user/ndl/lisp/claude/claude-1.0.2/mumble/claude/src/pkg.lisp#1 $
+
+(defpackage "CLAUDE"
+  (:import-from "CL-USER" "*CLAUDE-LIBRARY*")
+  (:shadow "ARRAY" "STANDARD-OBJECT" "STRUCTURE-OBJECT" "CLOSE")
+  (:export
+   "*CLAUDE-LIBRARY*"
+   "*LIBRARY-VERSION*"
+   "ADDRESS-STRING"
+   "COMPLAIN"
+   "DEFCLASS-EXTERNAL"
+   "DEFSTRUCT-EXTERNAL"
+   "DEFUN-EXTERNAL"
+   "DO-ABORT"
+   "HANDLE-STUFF"
+   "INT"
+   "INTERFACE"
+   "INVOKE-CALLBACK"
+   "LOAD-PATCHES"
+   "MANAGER"
+   "OBJECT"
+   "OBJECT-WRAPPER"
+   "RECORD"
+   "REMOVE-OBJECT"
+   "SHIFT-LAST-ERROR"
+   "TO-FOREIGN-STRING"
+   "UINT"
+   "USTRING"
+   "WITH-DEBUG-ENV"
+   ))
+
+(defpackage "CLAUDEP"
+  (:shadow "EXPORT")
+  (:export
+   "DEFINE"
+   "DEFINE-DEFINER-ALIAS"
+   "DEFINE-FORM-PARSER"
+   "EXPORT"
+   "EXPORTS"
+   "MAKE-SHARING-LOCK"
+   "WITH-EXCLUSIVE-LOCK"))
+
+
+;; COPYRIGHT AND LICENCE
+;;
+;; This file is copyright (c) 2014, Nick Levine.  All rights reserved.
+;;
+;; Redistribution and use in source and binary forms, with or without
+;; modification, are permitted provided that the following conditions are
+;; met:
+;;
+;; 1.  Redistributions of source code must retain the above copyright
+;;     notice, this list of conditions and the following disclaimer.
+;;
+;; 2.  Redistributions in binary form must reproduce the above copyright
+;;     notice, this list of conditions and the following disclaimer in
+;;     the documentation and/or other materials provided with the
+;;     distribution.
+;;
+;; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+;; "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+;; LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+;; FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+;; COPYRIGHT HOLDERS AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+;; INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+;; (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+;; SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+;; HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+;; STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+;; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+;; OF THE POSSIBILITY OF SUCH DAMAGE.

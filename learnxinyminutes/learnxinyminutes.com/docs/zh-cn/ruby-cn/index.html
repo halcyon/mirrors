@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/zh-cn/ruby-cn/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:47 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn ruby in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../../css/normalize.css">
+        <link rel="stylesheet" href="../../../css/main.css">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fzh-cn%2Fruby-cn%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3Druby">
+        分享此页
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">X分钟速成Y</a></h2>
+  <h2>其中 Y=ruby</h2>
+  
+    <p class="filelink">
+    源代码下载：
+    <a href="../../files/learnruby-zh.rb">learnruby-zh.rb</a>
+    </p>
+  
+  <div id="doc">
+    <pre class="highlight ruby"><code><span class="c1"># 这是单行注释</span>
+
+<span class="cm">=begin
+这是多行注释
+没人用这个
+你也不该用
+=end</span>
+
+<span class="c1"># 首先，也是最重要的，所有东西都是对象</span>
+
+<span class="c1"># 数字是对象</span>
+
+<span class="mi">3</span><span class="p">.</span><span class="nf">class</span> <span class="c1">#=&gt; Fixnum</span>
+
+<span class="mi">3</span><span class="p">.</span><span class="nf">to_s</span> <span class="c1">#=&gt; "3"</span>
+
+
+<span class="c1"># 一些基本的算术符号</span>
+<span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span> <span class="c1">#=&gt; 2</span>
+<span class="mi">8</span> <span class="o">-</span> <span class="mi">1</span> <span class="c1">#=&gt; 7</span>
+<span class="mi">10</span> <span class="o">*</span> <span class="mi">2</span> <span class="c1">#=&gt; 20</span>
+<span class="mi">35</span> <span class="o">/</span> <span class="mi">5</span> <span class="c1">#=&gt; 7</span>
+
+<span class="c1"># 算术符号只是语法糖而已</span>
+<span class="c1"># 实际上是调用对象的方法</span>
+<span class="mi">1</span><span class="p">.</span><span class="nf">+</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">#=&gt; 4</span>
+<span class="mi">10</span><span class="p">.</span><span class="nf">*</span> <span class="mi">5</span> <span class="c1">#=&gt; 50 </span>
+
+<span class="c1"># 特殊的值也是对象</span>
+<span class="kp">nil</span> <span class="c1"># 空</span>
+<span class="kp">true</span> <span class="c1"># 真</span>
+<span class="kp">false</span> <span class="c1"># 假</span>
+
+<span class="kp">nil</span><span class="p">.</span><span class="nf">class</span> <span class="c1">#=&gt; NilClass</span>
+<span class="kp">true</span><span class="p">.</span><span class="nf">class</span> <span class="c1">#=&gt; TrueClass</span>
+<span class="kp">false</span><span class="p">.</span><span class="nf">class</span> <span class="c1">#=&gt; FalseClass</span>
+
+<span class="c1"># 相等运算符</span>
+<span class="mi">1</span> <span class="o">==</span> <span class="mi">1</span> <span class="c1">#=&gt; true</span>
+<span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span> <span class="c1">#=&gt; false</span>
+
+<span class="c1"># 不等运算符</span>
+<span class="mi">1</span> <span class="o">!=</span> <span class="mi">1</span> <span class="c1">#=&gt; false</span>
+<span class="mi">2</span> <span class="o">!=</span> <span class="mi">1</span> <span class="c1">#=&gt; true</span>
+<span class="o">!</span><span class="kp">true</span>  <span class="c1">#=&gt; false</span>
+<span class="o">!</span><span class="kp">false</span> <span class="c1">#=&gt; true</span>
+
+<span class="c1"># 除了false自己，nil是唯一的值为false的对象 </span>
+
+<span class="o">!</span><span class="kp">nil</span>   <span class="c1">#=&gt; true</span>
+<span class="o">!</span><span class="kp">false</span> <span class="c1">#=&gt; true</span>
+<span class="o">!</span><span class="mi">0</span>     <span class="c1">#=&gt; false</span>
+
+<span class="c1"># 更多比较</span>
+<span class="mi">1</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="c1">#=&gt; true</span>
+<span class="mi">1</span> <span class="o">&gt;</span> <span class="mi">10</span> <span class="c1">#=&gt; false</span>
+<span class="mi">2</span> <span class="o">&lt;=</span> <span class="mi">2</span> <span class="c1">#=&gt; true</span>
+<span class="mi">2</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="c1">#=&gt; true</span>
+
+<span class="c1"># 字符串是对象</span>
+
+<span class="s1">'I am a string'</span><span class="p">.</span><span class="nf">class</span> <span class="c1">#=&gt; String</span>
+<span class="s2">"I am a string too"</span><span class="p">.</span><span class="nf">class</span> <span class="c1">#=&gt; String</span>
+
+<span class="n">placeholder</span> <span class="o">=</span> <span class="s2">"use string interpolation"</span>
+<span class="s2">"I can </span><span class="si">#{</span><span class="n">placeholder</span><span class="si">}</span><span class="s2"> when using double quoted strings"</span>
+<span class="c1">#=&gt; "I can use string interpolation when using double quoted strings"</span>
+
+
+<span class="c1"># 输出值</span>
+<span class="nb">puts</span> <span class="s2">"I'm printing!"</span>
+
+<span class="c1"># 变量</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">25</span> <span class="c1">#=&gt; 25</span>
+<span class="n">x</span> <span class="c1">#=&gt; 25</span>
+
+<span class="c1"># 注意赋值语句返回了赋的值</span>
+<span class="c1"># 这意味着你可以用多重赋值语句</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1">#=&gt; 10</span>
+<span class="n">x</span> <span class="c1">#=&gt; 10</span>
+<span class="n">y</span> <span class="c1">#=&gt; 10</span>
+
+<span class="c1"># 按照惯例，用 snake_case 作为变量名</span>
+<span class="n">snake_case</span> <span class="o">=</span> <span class="kp">true</span>
+
+<span class="c1"># 使用具有描述性的运算符</span>
+<span class="n">path_to_project_root</span> <span class="o">=</span> <span class="s1">'/good/name/'</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s1">'/bad/name/'</span>
+
+<span class="c1"># 符号（Symbols，也是对象)</span>
+<span class="c1"># 符号是不可变的，内部用整数类型表示的可重用的值。</span>
+<span class="c1"># 通常用它代替字符串来有效地表示有意义的值。</span>
+
+
+<span class="ss">:pending</span><span class="p">.</span><span class="nf">class</span> <span class="c1">#=&gt; Symbol</span>
+
+<span class="n">status</span> <span class="o">=</span> <span class="ss">:pending</span>
+
+<span class="n">status</span> <span class="o">==</span> <span class="ss">:pending</span> <span class="c1">#=&gt; true</span>
+
+<span class="n">status</span> <span class="o">==</span> <span class="s1">'pending'</span> <span class="c1">#=&gt; false</span>
+
+<span class="n">status</span> <span class="o">==</span> <span class="ss">:approved</span> <span class="c1">#=&gt; false</span>
+
+<span class="c1"># 数组</span>
+
+<span class="c1"># 这是一个数组</span>
+<span class="n">array</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="c1">#=&gt; [1, 2, 3, 4, 5]</span>
+
+<span class="c1"># 数组可以包含不同类型的元素</span>
+
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"hello"</span><span class="p">,</span> <span class="kp">false</span><span class="p">]</span> <span class="c1">#=&gt; [1, "hello", false]</span>
+
+<span class="c1"># 数组可以被索引</span>
+<span class="c1"># 从前面开始</span>
+<span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1">#=&gt; 1</span>
+<span class="n">array</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="c1">#=&gt; nil</span>
+
+<span class="c1"># 像运算符一样，[var]形式的访问</span>
+<span class="c1"># 也就是一个语法糖</span>
+<span class="c1"># 实际上是调用对象的[] 方法</span>
+<span class="n">array</span><span class="p">.</span><span class="nf">[</span><span class="p">]</span> <span class="mi">0</span> <span class="c1">#=&gt; 1</span>
+<span class="n">array</span><span class="p">.</span><span class="nf">[</span><span class="p">]</span> <span class="mi">12</span> <span class="c1">#=&gt; nil</span>
+
+<span class="c1"># 从尾部开始</span>
+<span class="n">array</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1">#=&gt; 5</span>
+
+<span class="c1"># 同时指定开始的位置和长度</span>
+<span class="n">array</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="c1">#=&gt; [3, 4, 5]</span>
+
+<span class="c1"># 或者指定一个范围</span>
+<span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="mi">3</span><span class="p">]</span> <span class="c1">#=&gt; [2, 3, 4]</span>
+
+<span class="c1"># 像这样往数组增加一个元素</span>
+<span class="n">array</span> <span class="o">&lt;&lt;</span> <span class="mi">6</span> <span class="c1">#=&gt; [1, 2, 3, 4, 5, 6]</span>
+
+<span class="c1"># 哈希表是Ruby的键值对的基本数据结构</span>
+<span class="c1"># 哈希表由大括号定义</span>
+<span class="nb">hash</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'color'</span> <span class="o">=&gt;</span> <span class="s1">'green'</span><span class="p">,</span> <span class="s1">'number'</span> <span class="o">=&gt;</span> <span class="mi">5</span><span class="p">}</span>
+
+<span class="nb">hash</span><span class="p">.</span><span class="nf">keys</span> <span class="c1">#=&gt; ['color', 'number']</span>
+
+<span class="c1"># 哈希表可以通过键快速地查询</span>
+<span class="nb">hash</span><span class="p">[</span><span class="s1">'color'</span><span class="p">]</span> <span class="c1">#=&gt; 'green'</span>
+<span class="nb">hash</span><span class="p">[</span><span class="s1">'number'</span><span class="p">]</span> <span class="c1">#=&gt; 5</span>
+
+<span class="c1"># 查询一个不存在地键将会返回nil</span>
+<span class="nb">hash</span><span class="p">[</span><span class="s1">'nothing here'</span><span class="p">]</span> <span class="c1">#=&gt; nil</span>
+
+<span class="c1"># 用 #each 方法来枚举哈希表:</span>
+<span class="nb">hash</span><span class="p">.</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="o">|</span>
+  <span class="nb">puts</span> <span class="s2">"</span><span class="si">#{</span><span class="n">k</span><span class="si">}</span><span class="s2"> is </span><span class="si">#{</span><span class="n">v</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">end</span>
+
+<span class="c1"># 从Ruby 1.9开始, 用符号作为键的时候有特别的记号表示:</span>
+
+<span class="n">new_hash</span> <span class="o">=</span> <span class="p">{</span> <span class="ss">defcon: </span><span class="mi">3</span><span class="p">,</span> <span class="ss">action: </span><span class="kp">true</span><span class="p">}</span>
+
+<span class="n">new_hash</span><span class="p">.</span><span class="nf">keys</span> <span class="c1">#=&gt; [:defcon, :action]</span>
+
+<span class="c1"># 小贴士：数组和哈希表都是可枚举的</span>
+<span class="c1"># 它们可以共享一些有用的方法，比如each, map, count 等等</span>
+
+<span class="c1"># 控制流</span>
+
+<span class="k">if</span> <span class="kp">true</span>
+  <span class="s2">"if statement"</span>
+<span class="k">elsif</span> <span class="kp">false</span>
+ <span class="s2">"else if, optional"</span>
+<span class="k">else</span>
+ <span class="s2">"else, also optional"</span>
+<span class="k">end</span>
+
+<span class="k">for</span> <span class="n">counter</span> <span class="k">in</span> <span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="mi">5</span>
+  <span class="nb">puts</span> <span class="s2">"iteration </span><span class="si">#{</span><span class="n">counter</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">end</span>
+<span class="c1">#=&gt; iteration 1</span>
+<span class="c1">#=&gt; iteration 2</span>
+<span class="c1">#=&gt; iteration 3</span>
+<span class="c1">#=&gt; iteration 4</span>
+<span class="c1">#=&gt; iteration 5</span>
+
+<span class="c1"># 然而</span>
+<span class="c1"># 没人用for循环</span>
+<span class="c1">#  用`each`来代替，就像这样</span>
+
+<span class="p">(</span><span class="mi">1</span><span class="p">.</span><span class="nf">.</span><span class="mi">5</span><span class="p">).</span><span class="nf">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">counter</span><span class="o">|</span>
+  <span class="nb">puts</span> <span class="s2">"iteration </span><span class="si">#{</span><span class="n">counter</span><span class="si">}</span><span class="s2">"</span>
+<span class="k">end</span>
+<span class="c1">#=&gt; iteration 1</span>
+<span class="c1">#=&gt; iteration 2</span>
+<span class="c1">#=&gt; iteration 3</span>
+<span class="c1">#=&gt; iteration 4</span>
+<span class="c1">#=&gt; iteration 5</span>
+
+<span class="n">counter</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">while</span> <span class="n">counter</span> <span class="o">&lt;=</span> <span class="mi">5</span> <span class="k">do</span>
+  <span class="nb">puts</span> <span class="s2">"iteration </span><span class="si">#{</span><span class="n">counter</span><span class="si">}</span><span class="s2">"</span>
+  <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="k">end</span>
+<span class="c1">#=&gt; iteration 1</span>
+<span class="c1">#=&gt; iteration 2</span>
+<span class="c1">#=&gt; iteration 3</span>
+<span class="c1">#=&gt; iteration 4</span>
+<span class="c1">#=&gt; iteration 5</span>
+
+<span class="n">grade</span> <span class="o">=</span> <span class="s1">'B'</span>
+
+<span class="k">case</span> <span class="n">grade</span>
+<span class="k">when</span> <span class="s1">'A'</span>
+  <span class="nb">puts</span> <span class="s2">"Way to go kiddo"</span>
+<span class="k">when</span> <span class="s1">'B'</span>
+  <span class="nb">puts</span> <span class="s2">"Better luck next time"</span>
+<span class="k">when</span> <span class="s1">'C'</span>
+  <span class="nb">puts</span> <span class="s2">"You can do better"</span>
+<span class="k">when</span> <span class="s1">'D'</span>
+  <span class="nb">puts</span> <span class="s2">"Scraping through"</span>
+<span class="k">when</span> <span class="s1">'F'</span>
+  <span class="nb">puts</span> <span class="s2">"You failed!"</span>
+<span class="k">else</span> 
+  <span class="nb">puts</span> <span class="s2">"Alternative grading system, eh?"</span>
+<span class="k">end</span>
+
+<span class="c1"># 函数</span>
+
+<span class="k">def</span> <span class="nf">double</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span>
+<span class="k">end</span>
+
+<span class="c1"># 函数 (以及所有的方法块) 隐式地返回了最后语句的值</span>
+<span class="n">double</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c1">#=&gt; 4</span>
+
+<span class="c1"># 当不存在歧义的时候括号是可有可无的</span>
+<span class="n">double</span> <span class="mi">3</span> <span class="c1">#=&gt; 6</span>
+
+<span class="n">double</span> <span class="n">double</span> <span class="mi">3</span> <span class="c1">#=&gt; 12</span>
+
+<span class="k">def</span> <span class="nf">sum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+  <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+<span class="k">end</span>
+
+<span class="c1"># 方法的参数通过逗号分隔</span>
+<span class="n">sum</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span> <span class="c1">#=&gt; 7</span>
+
+<span class="n">sum</span> <span class="n">sum</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span> <span class="mi">5</span> <span class="c1">#=&gt; 12</span>
+
+<span class="c1"># yield</span>
+<span class="c1"># 所有的方法都有一个隐式的块参数</span>
+<span class="c1"># 可以用yield参数调用</span>
+
+<span class="k">def</span> <span class="nf">surround</span>
+  <span class="nb">puts</span> <span class="s2">"{"</span>
+  <span class="k">yield</span>
+  <span class="nb">puts</span> <span class="s2">"}"</span>
+<span class="k">end</span>
+
+<span class="n">surround</span> <span class="p">{</span> <span class="nb">puts</span> <span class="s1">'hello world'</span> <span class="p">}</span>
+
+<span class="c1"># {</span>
+<span class="c1"># hello world</span>
+<span class="c1"># }</span>
+
+
+<span class="c1"># 用class关键字定义一个类</span>
+<span class="k">class</span> <span class="nc">Human</span>
+
+     <span class="c1"># 一个类变量，它被这个类地所有实例变量共享</span>
+    <span class="vc">@@species</span> <span class="o">=</span> <span class="s2">"H. sapiens"</span>
+
+    <span class="c1"># 构造函数</span>
+    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="nb">name</span><span class="p">,</span> <span class="n">age</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># 将参数name的值赋给实例变量@name</span>
+        <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
+        <span class="c1"># 如果没有给出age, 那么会采用参数列表中地默认地值</span>
+        <span class="vi">@age</span> <span class="o">=</span> <span class="n">age</span>
+    <span class="k">end</span>
+
+    <span class="c1"># 基本的 setter 方法</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="o">=</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+        <span class="vi">@name</span> <span class="o">=</span> <span class="nb">name</span>
+    <span class="k">end</span>
+
+    <span class="c1"># 基本地 getter 方法</span>
+    <span class="k">def</span> <span class="nf">name</span>
+        <span class="vi">@name</span>
+    <span class="k">end</span>
+
+    <span class="c1"># 一个类方法以self.开头</span>
+    <span class="c1"># 它可以被类调用，但不能被类的实例调用</span>
+    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">say</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+       <span class="nb">puts</span> <span class="s2">"</span><span class="si">#{</span><span class="n">msg</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nf">species</span>
+        <span class="vc">@@species</span>
+    <span class="k">end</span>
+
+<span class="k">end</span>
+
+
+<span class="c1"># 类的例子</span>
+<span class="n">jim</span> <span class="o">=</span> <span class="no">Human</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"Jim Halpert"</span><span class="p">)</span>
+
+<span class="n">dwight</span> <span class="o">=</span> <span class="no">Human</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s2">"Dwight K. Schrute"</span><span class="p">)</span>
+
+<span class="c1"># 让我们来调用一些方法</span>
+<span class="n">jim</span><span class="p">.</span><span class="nf">species</span> <span class="c1">#=&gt; "H. sapiens"</span>
+<span class="n">jim</span><span class="p">.</span><span class="nf">name</span> <span class="c1">#=&gt; "Jim Halpert"</span>
+<span class="n">jim</span><span class="p">.</span><span class="nf">name</span> <span class="o">=</span> <span class="s2">"Jim Halpert II"</span> <span class="c1">#=&gt; "Jim Halpert II"</span>
+<span class="n">jim</span><span class="p">.</span><span class="nf">name</span> <span class="c1">#=&gt; "Jim Halpert II"</span>
+<span class="n">dwight</span><span class="p">.</span><span class="nf">species</span> <span class="c1">#=&gt; "H. sapiens"</span>
+<span class="n">dwight</span><span class="p">.</span><span class="nf">name</span> <span class="c1">#=&gt; "Dwight K. Schrute"</span>
+
+<span class="c1"># 调用对象的方法</span>
+<span class="no">Human</span><span class="p">.</span><span class="nf">say</span><span class="p">(</span><span class="s2">"Hi"</span><span class="p">)</span> <span class="c1">#=&gt; "Hi"</span>
+
+</code></pre>
+
+    <hr>
+    <p>有建议？或者发现什么错误？在Github上<a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">开一个issue</a>，或者你自己也可以写一个pull request！
+    </p>
+    <p class="contributed">
+    原著David Underwood，并由<a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/zh-cn/ruby-cn.html.markdown">3个好心人</a>修改。
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://theflyingdeveloper.com/">David Underwood</a>,
+      
+    
+      
+        <a href="http://joelwalden.net/">Joel Walden</a>,
+      
+    
+      
+        <a href="http://twitter.com/lukeholder">Luke Holder</a>,
+      
+    
+      
+        <a href="https://github.com/lidashuang">lidashuang</a>,
+      
+    
+      
+        <a href="https://github.com/ftwbzhao">ftwbzhao</a>
+      
+    
+    </p>
+
+    <p>
+    
+      Translated by:
+      
+        <a href="https://github.com/oa414">Lin Xiangyu</a>
+      
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/zh-cn/ruby-cn/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:47 GMT -->
+</html>

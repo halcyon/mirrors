@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+
+<!-- Mirrored from blog.thezerobit.com/2014/05/25/python-3-is-killing-python.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:24:57 GMT -->
+<head>
+  <meta charset="utf-8">
+  <title>Python 3 Is Killing Python - the zero bit stream</title>
+  <meta name="author" content="Stephen A. Goss">
+
+  
+  <meta name="description" content="Python 3 is easily the worst thing to happen to the Python community. I remember when I first used Python, I had been spending a lot of time in C++ &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="python-3-is-killing-python.html">
+  <link href="../../../favicon.png" rel="icon">
+  <link href="../../../stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="../../../atom.xml" rel="alternate" title="the zero bit stream" type="application/atom+xml">
+  <script src="../../../javascripts/modernizr-2.0.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="../../../javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="../../../index.html">the zero bit stream</a></h1>
+  
+    <h2>programmer things</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="../../../atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://duckduckgo.com/" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.thezerobit.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="../../../index.html">Blog</a></li>
+  <li><a href="../../../blog/archives/index.html">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Python 3 Is Killing Python</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-05-25T00:00:00-07:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Python 3 is easily the worst thing to happen to the Python community. I remember when I first used Python, I had been spending a lot of time in C++ land, and Python was like a revelation. I could open up a text editor and have a working program in seconds or minutes, not hours or days. I remember when Python 2.5 came out with a lot of neat new language features. I love Python, but I acknowledge that it has weaknesses, but that’s OK, all programming languages do. Its strengths are what make it interesting. While Python 3 has some tiny, incremental improvements over Python 2, it has lost many of Python 2&rsquo;s strengths.</p>
+
+<!--more-->
+
+
+<p>One of the great strengths of Python 2 is the long tail of 3rd party libraries to do, well, just about anything. Python 3 doesn’t have this. Yes, a lot of libraries have been ported, but ten times as many have not, and are not trivial to port. For example, you have a need to parse X, where X is something nontrivial to parse and not extremely common like YAML or JSON. There is a good chance that a parser has already been written for X in Python 2 and has not been ported to Python 3. Additionally, given the fundamental differences between Python 2&rsquo;s byte string (str) and Python 3&rsquo;s byte string (bytes), it will not be easy to port, in fact, it will be difficult to port and will require quite a bit of trickery to port it in such a way as to maintain Python 2 and Python 3 compatibility. So, you have a few choices, write your app in Python 2 (a deprecated language) quickly, port the library (and all its dependencies) which will take ten times as long, or use a different programming language that also has a long tail of libraries, but doesn’t suffer the Python 2 / 3 problem. Choice #2 is obviously not popular, because if it was, we’d have a lot of Python 3 apps in production, and much of the long tail of Python 2 libraries would be ported. Neither of those things is true. People either continue to write software in Python 2 or they pick another language that did not shoot itself in the face.</p>
+
+<p>Another great strength of Python 2 was that programs written in it would almost always run on the next version of Python without much alteration. If your company runs on software written in Python 2 (as many do) it will cost you a great deal of money to port it to Python 3, because your requirements file is probably quite large and stuffed with all manner of libraries that have not been ported. There is no sane business reason to spend 100s of thousands of dollars or millions of dollars worth of engineering time to port to Python 3. You might as well ask someone to port their entire codebase to Ruby. Except, that would be cheaper. Now, if you are going to have to rewrite your software either way, would you choose Python 3? No.</p>
+
+<p>Popular libraries that support Python 2 and 3 are almost all written in a subset of the languages that runs on both platforms. SQLAlchemy, one of my favorite Python libraries, does this well. Django does this, too, but not so well. This subset language, which I will call Python X, is not fun to use, requires weird hacks, and generally is less powerful than either Python 2 or Python 3. How fun is it to port existing Python 2 libraries to Python X? Not fun at all which is sad because fun used to be what made Python so great.</p>
+
+<p>Python 2, sadly, has been deprecated. Python 3 languishes in disuse. The changes in Python 3 are small. Not much was gained, yet much was lost. For the past several months, I have been building applications and services in Python 3. I’m not blown away by it. It is very similar to writing software in Python 2, except that there is a much smaller pool of 3rd party libraries available. There’s really nothing amazing here. The Python community was supposed to be moving to Python 3 over the past few years, but it has become increasingly obvious that people are moving to new languages (or old languages rediscovered). Some of these languages have great features, like powerful type systems, pattern matching, better performance, better threading and concurrency, simpler FFI, nicer lambdas, and so on.</p>
+
+<p>One solution is to fork Python 2.7, and continue developing the language, adding features in a backwards compatible way so large, unportable (due to financial constraints) Python 2 applications can continue to evolve and improve and bring value to the people and companies that invested so much time developing them. This is the correct thing to do (actually, it would be best if Guido and other leaders in the Python community did this officially instead of forcing a fork). Features from Python 3 that can be backported to Python 2 should be, and a Python 2.8 release should be made. Those few who have actually spent time to write new software in pure Python 3 can use a tool like 3to2 to bring Python 2.8 compatibility.</p>
+
+<p>There are perhaps other solutions, but reviving Python 2 seems to me to be the correct thing to do. The Python 2 revival will not happen officially because those in charge of such things have shown disdain for users of Python 2. If the community does not rally and revive Python 2, Python 3 will after many years become the standard Python and many libraries will be ported (though most will certainly never) and many investments will be lost. The community will, by that time, have shrunk dramatically, and lost its former glory. People will move on.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Stephen A. Goss</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-05-25T00:00:00-07:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.thezerobit.com/2014/05/25/python-3-is-killing-python.html" data-via="thezerobit" data-counturl="http://blog.thezerobit.com/2014/05/25/python-3-is-killing-python.html" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="../../../2012/09/01/beautiful-quicksort-in-common-lisp.html" title="Previous Post: Beautiful Quicksort in Common Lisp">&laquo; Beautiful Quicksort in Common Lisp</a>
+      
+      
+        <a class="basic-alignment right" href="../../06/05/the-flow-of-code.html" title="Next Post: The Flow of Code">The Flow of Code &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="../../06/05/the-flow-of-code.html">The Flow of Code</a>
+      </li>
+    
+      <li class="post">
+        <a href="python-3-is-killing-python.html">Python 3 Is Killing Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="../../../2012/09/01/beautiful-quicksort-in-common-lisp.html">Beautiful Quicksort in Common Lisp</a>
+      </li>
+    
+      <li class="post">
+        <a href="../../../2012/08/26/concurrency-in-common-lisp-with-chanl.html">Concurrency in Common Lisp With ChanL</a>
+      </li>
+    
+      <li class="post">
+        <a href="../../../2012/07/28/lazy-sequences-in-common-lisp.html">Lazy Sequences in Common Lisp</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>About Me</h1>
+  <p><a href="http://twitter.com/thezerobit">@thezerobit</a> on Twitter.</p>
+  <p>Email is <strong>steveth45</strong> at <strong>gmail</strong>.</p>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/thezerobit">@thezerobit</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '../../../javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'thezerobit',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="../../../javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Stephen A. Goss -
+  <span class="credit">Powered by <a href="http://octopress.org/">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+
+<!-- Mirrored from blog.thezerobit.com/2014/05/25/python-3-is-killing-python.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:24:57 GMT -->
+</html>

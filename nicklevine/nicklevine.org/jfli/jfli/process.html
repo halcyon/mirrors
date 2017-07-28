@@ -1,0 +1,78 @@
+;;  $Id $
+
+(in-package "MP")
+
+;;                           PROCESS.LISP
+;;           Nick Levine, Ravenbrook Limited, 2007-10-22
+;;
+;; The purpose of this document is to implement reusable threads for
+;; the JFLI interface. I found out the hard way that
+;; detach-current-thread (which is the way I orignally intended to
+;; prevent lisp threads leaking into the JVM) is a generator of
+;; nasties such as SEGVs in foriegn code, random corruption in Java
+;; internals and heaven only knows what else. So for my next trick: we
+;; recycle lisp threads rather than letting them go.
+;;
+;; Copyright (c) 2007 Nick Levine.
+;;
+;; The use and distribution terms for this software are covered by the
+;; Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+;; which can be found in the file CPL.TXT at the root of this
+;; distribution. By using this software in any fashion, you are
+;; agreeing to be bound by the terms of this license.
+;; You must not remove this notice, or any other, from this software.
+
+
+(export 'cached-process-run-function)
+
+(def:def (defun cached-process-run-function)
+  (let ((*handle-warn-on-redefinition* :quiet))
+    (defun cached-process-run-function (name keywords function &rest args)
+      (let ((cached (uncache-a-process)))
+        (destructuring-bind (&key priority mailbox &allow-other-keys)
+            keywords
+          (change-process-priority cached (or priority *default-process-priority*))
+          (setf (getf (process-plist cached) 'invoke) (cons function args)
+                (slot-value cached 'process-wait-function) nil
+                (slot-value cached 'process-wait-function-arguments) nil
+                (slot-value cached 'process-wait-reason) nil
+                (process-name cached) name
+                (process-mailbox cached) mailbox
+                (process-arrest-reasons cached) nil))
+        cached))
+    )) ; def:def
+
+#+lispworks5
+(defmacro sans-interrupts (&body body)
+  `(without-interrupts ,@body))
+
+#-lispworks5
+(defmacro sans-interrupts (&body body)
+  `(with-interrupts-blocked ,@body))
+
+(defun uncache-a-process ()
+  (or (sans-interrupts
+       (loop for process in (list-all-processes) do
+	     (when (equal (process-arrest-reasons process) '(cached))
+	       (setf (process-arrest-reasons process) '(decaching))
+	       (return process))))
+      (new-cacheable-process)))
+
+(defun new-cacheable-process ()
+  (let ((process (process-run-function "new cacheable process" ()
+				       (lambda ()
+					 (process-wait "initialize cacheable process" 'false)))))
+    (setf (process-arrest-reasons process) '(decaching)
+	  (slot-value process 'process-function) 'invoke-and-self-cache
+	  (slot-value process 'process-arguments) (list process))
+    process))
+
+(defun invoke-and-self-cache (process)
+  (loop (process-wait "waiting for invocation"
+		      (lambda (process) (getf (process-plist process) 'invoke)) process)
+	(destructuring-bind (function &rest args)
+	    (shiftf (getf (process-plist process) 'invoke) nil)
+	  (unwind-protect
+	      (apply function args)
+	    (setf (process-name process) "(cached)"
+		  (process-arrest-reasons process) '(cached))))))

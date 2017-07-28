@@ -1,0 +1,160 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/solutions/solutions-3.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:55 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Solutions to exercies in lecture 3</title>
+</head>
+<body>
+
+<center><b><font size=+3>Solutions to exercises from week 3</font></b></center>
+
+<p><tt>;;; implement own version of not</tt>
+<br><tt>(defun my-not (anything)</tt>
+<br><tt>&nbsp; (if anything</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nil</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; t))</tt>
+<p><tt>;;; function of two numbers - return the smaller</tt>
+<br><tt>(defun smaller-of-two (first-number second-number)</tt>
+<br><tt>&nbsp; (if (&lt; first-number second-number)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; first-number</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; second-number))</tt>
+<p><tt>;;; function of three numbers - return the smallest</tt>
+<br><tt>(defun smallest-of-three (first-number second-number third-number)</tt>
+<br><tt>&nbsp; (if (and (&lt; first-number second-number) (&lt; first-number
+third-number))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; first-number</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (if (&lt; second-number third-number)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; second-number</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; third-number)))</tt>
+<p><tt>;;; same again, but this version is more readable</tt>
+<br><tt>(defun smallest-of-three (first-number second-number third-number)</tt>
+<br><tt>&nbsp; (smaller-of-two (smaller-of-two first-number smaller-of-two)
+third-number))</tt>
+<p><tt>;;; reverse the function fahrenheit-to-celsius</tt>
+<br><tt>(defun celsius-to-fahrenheit ()</tt>
+<br><tt>&nbsp; (format t "~&amp;Please give a value in degrees C: ")</tt>
+<br><tt>&nbsp; (let* ((celsius (read))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (fahrenheit (float
+(+ (* celsius 9/5) 32))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (format t "~&amp;~a degrees C is ~a degrees
+F.~&amp;" celsius fahrenheit)))</tt>
+<p><tt>;;; (and foo bar) transforms into (if foo bar nil)</tt>
+<br><tt>(defun transform-and-with-two-args (form)</tt>
+<br><tt>&nbsp; (let* ((first-subform (second form)) ; the first subform
+was the symbol AND</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (second-subform
+(third form)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (list 'if first-subform second-subform nil)))</tt>
+<p><tt>;;; (and foo bar baz) transforms into (if foo (if bar baz nil) nil)</tt>
+<br><tt>(defun transform-and-with-three-args (form)</tt>
+<br><tt>&nbsp; (let* ((first-subform (second form)) ; the first subform
+was the symbol AND</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (second-subform
+(third form))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (third-subform
+(fourth form)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (list 'if</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; first-subform</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list 'if
+second-subform third-subform nil)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nil)))</tt>
+<br>&nbsp;
+<p><tt>#|</tt>
+<br><tt>When considering transformation of (or foo bar) we have to be a</tt>
+<br><tt>little bit careful.</tt>
+<p><tt>Consider</tt>
+<p><tt>&nbsp;&nbsp; (defun ask-for-help-and-return-t ()</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (format t "Help!")</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; t)</tt>
+<p><tt>&nbsp;&nbsp; (or (ask-for-help-and-return-t) nil)</tt>
+<p><tt>Transforming (or foo bar) into</tt>
+<br><tt>&nbsp;&nbsp; (if foo</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; foo</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; bar)</tt>
+<br><tt>would lead to double trouble.</tt>
+<p><tt>Hint: use let* ...</tt>
+<br><tt>|#</tt>
+<p><tt>;;; (or foo bar) transforms into</tt>
+<br><tt>#|</tt>
+<br><tt>(let* ((foo-evaluated foo))</tt>
+<br><tt>&nbsp; (if foo-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; foo-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; bar))</tt>
+<br><tt>|#</tt>
+<br><tt>(defun transform-or-with-two-args (form)</tt>
+<br><tt>&nbsp; (let* ((first-subform (second form))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (second-subform
+(third form)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (list 'let*</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list (list
+'first-evaluated first-subform))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list 'if
+'first-evaluated 'first-evaluated second-subform))))</tt>
+<br>&nbsp;
+<p><tt>;;; (or foo bar baz) transforms into</tt>
+<br><tt>#|</tt>
+<br><tt>(let* ((foo-evaluated foo))</tt>
+<br><tt>&nbsp; (if foo-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; foo-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (let* ((bar-evaluated bar))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if bar-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bar-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; baz))))</tt>
+<br><tt>|#</tt>
+<p><tt>;;; this is getting really revolting. there has to be a better way</tt>
+<br><tt>;;; (and, indeed, there is)</tt>
+<br><tt>(defun transform-or-with-three-args (form)</tt>
+<br><tt>&nbsp; (let* ((first-subform (second form))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (second-subform
+(third form))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (third-subform
+(fourth form)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (list 'let*</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list (list
+'first-evaluated first-subform))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list 'if</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'first-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'first-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(list 'let*</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(list (list 'second-evaluated second-subform))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(list 'if</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'second-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'second-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+third-subform))))))</tt>
+<br>&nbsp;
+<br>&nbsp;
+<p>&nbsp;If you have tried the exercises, looked at the solutions and still
+do not understand what's going on, I am available for consultation at the
+times advertised on my office door. Bring your code with you in BOTH the
+following forms:
+<ul>
+<li>
+Logbook containing printout (nothing handwritten please)</li>
+
+<li>
+file on floppy</li>
+</ul>
+
+<div align=right><a href="mailto:ndl@ravenbrook.com">Nick Levine</a>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+last modified 2000-10-17
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Copyright (C) Nick Levine 1999. All rights reserved.
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/solutions/solutions-3.html#2 $</div>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/solutions/solutions-3.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:55 GMT -->
+</html>

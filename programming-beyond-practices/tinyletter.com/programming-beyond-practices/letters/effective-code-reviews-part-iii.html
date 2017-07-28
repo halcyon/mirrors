@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/effective-code-reviews-part-iii by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:00 GMT -->
+<head>
+    <title> Effective Code Reviews, Part III </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="effective-code-reviews-part-iii.html">
+    <meta property="og:title" content="Effective Code Reviews, Part III">
+    <meta property="og:description" content="Today I'm happy to pick up where we left off in our discussion on effective code reviews.">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Effective Code Reviews, Part III" />
+	<meta name="twitter:description" content="Today I'm happy to pick up where we left off in our discussion on effective code reviews" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> October 08, 2015 </div>
+            <h1 class="subject"> Effective Code Reviews, Part III </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> <div>Hello Developer Friend!<br>
+<br>
+Today I&#39;m happy to pick up where we left off in our discussion on effective code reviews.<br>
+<br>
+So far, we&#39;ve already covered quite a bit of ground on this topic:<br>
+&nbsp;</div>
+
+<ul>
+	<li>In <a href="effective-code-reviews-part-1.html">Part I</a>, we established the idea that code reviews ought to be more than mundane exercises in technical proofreading. In fact, the first questions that need to be asked at the beginning of any review have more to do with software quality as seen from the perspective of its stakeholders and users, rather than the internal code quality issues that programmers tend to care about.<br>
+	&nbsp;</li>
+	<li>In <a href="effective-code-reviews-part-ii.html">Part II</a>, we looked at how to conduct a basic testing audit in order to determine the likelihood that a new changeset will break existing functionality. This process involves verifying that all tests are passing in the code under review:&nbsp;either by way of a continuous integration system, or a manual test run in the reviewer&#39;s development environment. From there, the code under review&nbsp;needs to be checked for any deletions or modifications of&nbsp;tests that were added in earlier&nbsp;changesets, because these are signs of behavior changes that may need more careful consideration before they can assumed to be safe.</li>
+</ul>
+<br>
+Having made it this far, we can finally turn our attention to the behavior of the newly added code. We start this process by looking at whatever new tests have been added in the changeset -- and this is where things get complicated.<br>
+<br>
+Although a strict test-driven development (TDD) practitioner may struggle to admit it, there is no simple set of rules you can follow to determine the optimal quantity and quality of tests for any given change to a software project. That said, it&#39;s clear that a well-maintained test suite can serve as a powerful tool for preventing defective code from escaping into production without being noticed.<br>
+<br>
+With all that in mind, we can reframe the test coverage problem as a risk management concern, and come up with some useful guidelines to help decide what &quot;good enough&quot; testing looks like in various different scenarios.<br>
+<br>
+From a testing perspective, the easiest changesets to review are bug fixes. Because a minimal reproducing example is so close to being a test on its own, there is rarely a good reason to fix a bug without also writing some regression tests.<br>
+<br>
+At a minimum, an effective regression test should include a high level acceptance test that follows a similar path to whatever was described in the bug report associated with the code under review. This test can and should be stripped down to the minimum necessary steps that reproduce the problem, but it should also map closely to actions that could be carried out by a real user, rather than directly triggering the problematic behavior through internal system calls.<br>
+<br>
+For example, a regression test at the acceptance level would be responsible for verifying that leaving an email field blank on a signup form will result in a meaningful error message being displayed to the user, rather than solely digging down into the database layer to verify that the record wasn&#39;t saved due to a validation error.<br>
+<br>
+That said, high level acceptance tests only protect the external behavior of a system, so it makes sense to augment them with unit tests whenever it can help clear up potential problems or misconceptions about internal system details. Anything that would be useful to programmers here is helpful, and for bugs that are either especially complex or especially severe, comprehensive unit testing should be considered essential.<br>
+<br>
+In an ideal world, most bug fixes will include at least one good acceptance test, along with just enough unit tests to help give good protection against future breaking changes. Every unit test you write takes time, and has the (possibly complicated) side effect of constraining internal system behaviors, but they also provide finer-grained feedback when something does go wrong. Figuring out the right balance here depends heavily on context, so you&#39;ll need to sort this part out on your own.<br>
+<br>
+Another important thing to look for in any bug fixes you&#39;re reviewing is to what extent the defect is well isolated. In some cases, a bug is truly unique and unlikely to be a sign of a deeper issue, but in other situations the first bug report is just a canary in the coal mine.<br>
+<br>
+Going back to our earlier example, consider the case where a fix has been introduced to gracefully fail whenever a signup form is submitted with a blank email address. This seems like a fairly mundane problem, but it warrants a more careful investigation.<br>
+<br>
+What if the email address wasn&#39;t blank, but instead it was simply invalid? Does the system gracefully fail in that scenario? Is the error reported in a way that&#39;s consistent with how blank email addresses are being handled in this new changeset? Are there tests to cover all of this?<br>
+<br>
+How about the screename field on the signup page? What happens if it&#39;s left blank? Is the failure handled consistently? Are there tests for it?<br>
+<br>
+If the answer to any of these questions is &quot;no&quot;, then it may be a sign that every similar form in the entire application needs to be audited for this sort of problem! If you start poking around in this fashion, you&#39;ll either be the most loved or hated member of your team, depending on your organization&#39;s culture. :-)<br>
+<br>
+I&#39;m not actually suggesting that each and every review ought to be a recursive effort to fix each and every weak spot in a software project, but I do think these sorts of questions ought to be considered regularly. If broader problems are uncovered through this process, &nbsp;you can take just a few minutes to document them by filing new tickets. In doing so, you&#39;ll make a major contribution to the collective knowledge around your project, and set the stage for future improvements in maintainability.<br>
+<br>
+The final gotcha to keep in mind when reviewing bug fixes is that defects exist solely due to undefined, underspecified, or incorrectly defined behaviors in software projects. Although we don&#39;t tend to think of bug fixes as being behavioral changes in the same way that we might treat a changeset that&#39;s meant to adapt to a new business requirement, they do necessarily change the formal rules of the system.<br>
+<br>
+With each new refinement to a test suite, you need to consider whether the fix merely formalizes a tacit assumption about how the system should work, or if it is inventing new rules on the fly to address problematic behaviors that were never thought through in the requirements discovery phase of the project. As a reviewer, you may not have enough context to answer this question, and so it pays to ask the person who wrote the code and/or the project&#39;s stakeholders. Either case is potentially nothing to worry about, but it&#39;s worth being mindful here.<br>
+<br>
+The good news is that although these review guidelines might seem daunting, many bugs are quite shallow. With a bit of practice, it&#39;s easy to quickly spot check any code under review and then only dig into these deeper questions when you notice something that scares you.<br>
+<br>
+We&#39;ve now reached a pretty good stopping point, so I think that&#39;s all we&#39;ll talk about for today. In the next part of this series, I&#39;ll walk through guidelines for evaluating tests on new feature work, which is a somewhat more complicated question.<br>
+<br>
+Until then, Happy Hacking!<br>
+-greg<br>
+<br>
+PS: For more code-centric thoughts on regression testing, see <a href="https://practicingruby.com/articles/regession-testing">Practicing Ruby, Issue 2.5</a>.<br>
+&nbsp;
+<hr><br>
+<em style="font-size: 16px; outline: none; color: rgb(80, 80, 80); line-height: 22px; max-width: 600px !important;">Your feedback and questions are welcome! Reply directly to this email, or use the&nbsp;<a href="https://twitter.com/search?src=typd&amp;q=%23ProgrammingBeyondPractices">#ProgrammingBeyondPractices</a></em><em style="font-size: 16px; outline: none; line-height: 22px; max-width: 600px !important;"><font color="#505050">&nbsp;hashtag on Twitter. </font><br>
+<br>
+<font color="#505050">If you&#39;re a&nbsp;</font><a href="http://practicingruby.com/" style="color: rgb(52, 102, 204); font-size: 16px; font-family: inherit; outline: none; text-decoration: none; max-width: 600px !important;">Practicing Ruby</a><font color="#505050">&nbsp;subscriber, you can also discuss these essays with me at any time via Slack or Discourse.</font></em> </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="effective-code-reviews-part-iv.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="effective-code-reviews-part-ii.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/effective-code-reviews-part-iii by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:00 GMT -->
+</html>

@@ -1,0 +1,348 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+
+<!-- Mirrored from blog.thezerobit.com/2012/08/26/concurrency-in-common-lisp-with-chanl.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:24:57 GMT -->
+<head>
+  <meta charset="utf-8">
+  <title>Concurrency in Common Lisp With ChanL - the zero bit stream</title>
+  <meta name="author" content="Stephen A. Goss">
+
+  
+  <meta name="description" content="Rob Pike did a great talk
+at Google on concurrency in Newsqueak. The gist of it is that you spawn
+concurrent tasks in separate lightweight processes &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="concurrency-in-common-lisp-with-chanl.html">
+  <link href="../../../favicon.png" rel="icon">
+  <link href="../../../stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="../../../atom.xml" rel="alternate" title="the zero bit stream" type="application/atom+xml">
+  <script src="../../../javascripts/modernizr-2.0.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="../../../javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="../../../index.html">the zero bit stream</a></h1>
+  
+    <h2>programmer things</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="../../../atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://duckduckgo.com/" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.thezerobit.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="../../../index.html">Blog</a></li>
+  <li><a href="../../../blog/archives/index.html">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Concurrency in Common Lisp With ChanL</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2012-08-26T00:00:00-07:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Rob Pike did a great <a href="http://www.youtube.com/watch?v=HmxnCEa8Ctw">talk</a>
+at Google on concurrency in Newsqueak. The gist of it is that you spawn
+concurrent tasks in separate lightweight processes and synchronize by
+communicating through channels. That stuff worked its way into the
+programming language Go.  After seeing that video I wanted to try it out
+myself in Common Lisp, of course. It turns out there is a
+Quicklisp-installable library called
+<a href="https://github.com/sykopomp/chanl">ChanL</a> that provides just that
+functionality. I don&rsquo;t know how lightweight the threads are, but the
+interface is similar.</p>
+
+<!--more-->
+
+
+<p>A simple, but effective example of using channels is to perform a number
+of IO-bound tasks in parallel, such as retrieving several web pages.
+It&rsquo;s surprisingly simple to do in parallel. To start, I&rsquo;ll define a
+little timing macro:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defmacro</span> <span class="nv">time-it</span> <span class="p">(</span><span class="k">&amp;body</span> <span class="nv">body</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">start-time</span> <span class="p">(</span><span class="nb">gensym</span><span class="p">)))</span>
+    <span class="o">`</span><span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="o">,</span><span class="nv">start-time</span> <span class="p">(</span><span class="nb">get-internal-real-time</span><span class="p">)))</span>
+       <span class="o">,@</span><span class="nv">body</span>
+       <span class="p">(</span><span class="nb">format</span> <span class="no">t</span> <span class="s">&quot;Runtime: ~a milliseconds.~%&quot;</span> <span class="p">(</span><span class="nb">-</span> <span class="p">(</span><span class="nb">get-internal-real-time</span><span class="p">)</span> <span class="o">,</span><span class="nv">start-time</span><span class="p">)))))</span></code></pre></div>
+
+
+<p>Then, let&rsquo;s load the ChanL library and Drakma (for simple HTTP requests)
+using quicklisp:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nv">ql:quickload</span> <span class="s">&quot;drakma&quot;</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">ql:quickload</span> <span class="s">&quot;chanl&quot;</span><span class="p">)</span></code></pre></div>
+
+
+<p>Our example set of URLs:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defparameter</span> <span class="vg">*urls*</span>
+  <span class="p">(</span><span class="nb">list</span>
+    <span class="s">&quot;http://blog.thezerobit.com/&quot;</span>
+    <span class="s">&quot;http://quicklisp.org/&quot;</span>
+    <span class="s">&quot;http://www.cliki.net/index&quot;</span>
+    <span class="s">&quot;http://sbcl.org/&quot;</span>
+    <span class="p">))</span></code></pre></div>
+
+
+<p>Now, here&rsquo;s a function that performs a single HTTP request and times it.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">do-request</span> <span class="p">(</span><span class="nv">url</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">start-time</span> <span class="p">(</span><span class="nb">get-internal-real-time</span><span class="p">)))</span>
+    <span class="p">(</span><span class="nb">format</span> <span class="no">t</span> <span class="s">&quot;Starting request: ~a~%&quot;</span> <span class="nv">url</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">drakma:http-request</span> <span class="nv">url</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">elapsed</span> <span class="p">(</span><span class="nb">-</span> <span class="p">(</span><span class="nb">get-internal-real-time</span><span class="p">)</span> <span class="nv">start-time</span><span class="p">)))</span>
+      <span class="p">(</span><span class="nb">format</span> <span class="no">t</span> <span class="s">&quot;Completed request in ~a ms: ~a~%&quot;</span> <span class="nv">elapsed</span> <span class="nv">url</span><span class="p">))))</span></code></pre></div>
+
+
+<p>This is what you might do without concurrency if we wanted to perform
+these HTTP requests:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nv">time-it</span> <span class="p">(</span><span class="nb">dolist</span> <span class="p">(</span><span class="nv">url</span> <span class="vg">*urls*</span><span class="p">)</span>
+           <span class="p">(</span><span class="nv">do-request</span> <span class="nv">url</span><span class="p">)))</span>
+<span class="c1">;; Starting request: http://blog.thezerobit.com/</span>
+<span class="c1">;; Completed request in 616 ms: http://blog.thezerobit.com/</span>
+<span class="c1">;; Starting request: http://quicklisp.org/</span>
+<span class="c1">;; Completed request in 819 ms: http://quicklisp.org/</span>
+<span class="c1">;; Starting request: http://www.cliki.net/index</span>
+<span class="c1">;; Completed request in 429 ms: http://www.cliki.net/index</span>
+<span class="c1">;; Starting request: http://sbcl.org/</span>
+<span class="c1">;; Completed request in 291 ms: http://sbcl.org/</span>
+<span class="c1">;; Runtime: 2155 milliseconds.</span></code></pre></div>
+
+
+<p>It takes over 2 seconds to make all these requests in serial fashion.
+There may be a way to queue up these requests in parallel with the
+Drakma library, but instead we&rsquo;ll just use the ChanL library. Let&rsquo;s
+define a function, like DO-REQUEST that instead of printing its progress
+will send messages over a channel.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">do-request-chan</span> <span class="p">(</span><span class="nv">url</span> <span class="nv">chan</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">start-time</span> <span class="p">(</span><span class="nb">get-internal-real-time</span><span class="p">)))</span>
+    <span class="p">(</span><span class="nv">chanl:send</span> <span class="nv">chan</span> <span class="p">(</span><span class="nb">format</span> <span class="no">nil</span> <span class="s">&quot;Starting request: ~a~%&quot;</span> <span class="nv">url</span><span class="p">))</span>
+    <span class="p">(</span><span class="nv">drakma:http-request</span> <span class="nv">url</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">elapsed</span> <span class="p">(</span><span class="nb">-</span> <span class="p">(</span><span class="nb">get-internal-real-time</span><span class="p">)</span> <span class="nv">start-time</span><span class="p">)))</span>
+      <span class="p">(</span><span class="nv">chanl:send</span> <span class="nv">chan</span>
+                  <span class="p">(</span><span class="nb">format</span> <span class="no">nil</span> <span class="s">&quot;Completed request in ~a ms: ~a~%&quot;</span> <span class="nv">elapsed</span> <span class="nv">url</span><span class="p">)))))</span></code></pre></div>
+
+
+<p>We can use the PEXEC call to spawn separate processes for each HTTP
+request and then wait for the 8 messages to come in on the channel we
+create to synchronize.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nv">time-it</span>
+  <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">chan</span> <span class="p">(</span><span class="nb">make-instance</span> <span class="ss">&#39;chanl:channel</span><span class="p">)))</span>
+    <span class="p">(</span><span class="nb">dolist</span> <span class="p">(</span><span class="nv">url</span> <span class="vg">*urls*</span><span class="p">)</span>
+      <span class="p">(</span><span class="nv">chanl:pexec</span> <span class="p">()</span> <span class="p">(</span><span class="nv">do-request-chan</span> <span class="nv">url</span> <span class="nv">chan</span><span class="p">)))</span>
+    <span class="p">(</span><span class="nb">dotimes</span> <span class="p">(</span><span class="nv">x</span> <span class="mi">8</span><span class="p">)</span>
+      <span class="p">(</span><span class="nb">format</span> <span class="no">t</span> <span class="p">(</span><span class="nv">chanl:recv</span> <span class="nv">chan</span><span class="p">)))))</span>
+<span class="c1">;; Starting request: http://blog.thezerobit.com/</span>
+<span class="c1">;; Starting request: http://quicklisp.org/</span>
+<span class="c1">;; Starting request: http://sbcl.org/</span>
+<span class="c1">;; Starting request: http://www.cliki.net/index</span>
+<span class="c1">;; Completed request in 291 ms: http://blog.thezerobit.com/</span>
+<span class="c1">;; Completed request in 302 ms: http://www.cliki.net/index</span>
+<span class="c1">;; Completed request in 306 ms: http://sbcl.org/</span>
+<span class="c1">;; Completed request in 703 ms: http://quicklisp.org/</span>
+<span class="c1">;; Runtime: 703 milliseconds.</span></code></pre></div>
+
+
+<p>Here, the whole operation takes only as long as the longest single
+request and the overhead of spawning separate threads is negligible
+compared to the time saved by making these requests concurrently. It is
+important to note that, by default, the channels are not buffered so
+calls to SEND will block until there&rsquo;s a RECV called on the same channel
+in a different thread. ChanL also provides buffered channels and some
+other goodies which I haven&rsquo;t touched on here.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Stephen A. Goss</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2012-08-26T00:00:00-07:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>12:00 am</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.thezerobit.com/2012/08/26/concurrency-in-common-lisp-with-chanl.html" data-via="thezerobit" data-counturl="http://blog.thezerobit.com/2012/08/26/concurrency-in-common-lisp-with-chanl.html" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="../../07/28/lazy-sequences-in-common-lisp.html" title="Previous Post: Lazy Sequences in Common Lisp">&laquo; Lazy Sequences in Common Lisp</a>
+      
+      
+        <a class="basic-alignment right" href="../../09/01/beautiful-quicksort-in-common-lisp.html" title="Next Post: Beautiful Quicksort in Common Lisp">Beautiful Quicksort in Common Lisp &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="../../../2014/06/05/the-flow-of-code.html">The Flow of Code</a>
+      </li>
+    
+      <li class="post">
+        <a href="../../../2014/05/25/python-3-is-killing-python.html">Python 3 Is Killing Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="../../09/01/beautiful-quicksort-in-common-lisp.html">Beautiful Quicksort in Common Lisp</a>
+      </li>
+    
+      <li class="post">
+        <a href="concurrency-in-common-lisp-with-chanl.html">Concurrency in Common Lisp With ChanL</a>
+      </li>
+    
+      <li class="post">
+        <a href="../../07/28/lazy-sequences-in-common-lisp.html">Lazy Sequences in Common Lisp</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>About Me</h1>
+  <p><a href="http://twitter.com/thezerobit">@thezerobit</a> on Twitter.</p>
+  <p>Email is <strong>steveth45</strong> at <strong>gmail</strong>.</p>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/thezerobit">@thezerobit</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '../../../javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'thezerobit',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="../../../javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Stephen A. Goss -
+  <span class="credit">Powered by <a href="http://octopress.org/">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+
+<!-- Mirrored from blog.thezerobit.com/2012/08/26/concurrency-in-common-lisp-with-chanl.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:24:57 GMT -->
+</html>

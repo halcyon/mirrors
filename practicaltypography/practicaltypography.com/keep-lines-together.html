@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from practicaltypography.com/keep-lines-together.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 17:01:26 GMT -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript">
+if (navigator.appVersion.indexOf("Win")!=-1) {
+    document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-a.css" />');
+} else if (navigator.appVersion.indexOf("Mac")!=-1) {
+    if (navigator.userAgent.match(/iPad/i) != null) {
+        document.write('<link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="fonts/equity-b.css" type="text/css" />');
+        document.write('<link rel="stylesheet" media="only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2)" type="text/css" href="fonts/equity-a.css" />');
+    } else {
+        document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-b.css" />');
+    }
+} else {
+    document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-a.css" />');
+}
+
+</script>
+
+<title>Keep lines together | Butterick’s Practical Typography</title>
+<link rel="stylesheet" type="text/css" media="all" href="styles.css" />
+<link rel="stylesheet" type="text/css" media="all" href="fonts/1406-fonts.css" />
+<meta name="format-detection" content="telephone=no">
+
+
+
+
+
+<script type="text/javascript">
+var isFirefox = typeof InstallTrigger !== 'undefined';
+if (isFirefox) {
+document.write('<link rel="stylesheet" type="text/css" media="all" href="firefox.css" />');
+}
+var isChromium = window.chrome,
+    winNav = window.navigator,
+    vendorName = winNav.vendor,
+    isOpera = winNav.userAgent.indexOf("OPR") > -1,
+    isIEedge = winNav.userAgent.indexOf("Edge") > -1,
+    isIOSChrome = winNav.userAgent.match("CriOS");
+if(isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isIEedge == false) {
+   // is Google Chrome or Opera
+   document.write('<link rel="stylesheet" type="text/css" media="all" href="chrome.css" />');
+}
+</script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-19281911-7']);
+  _gaq.push(['_setDomainName', 'practicaltypography.com']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+
+<body>
+<div class="content"><div id="doc"><title-block><topic>keep lines together</topic><short-rule>Always use with headings</short-rule></title-block><p><first-use>Keep lines to­gether</first-use> en­sures that all lines in a para­graph ap­pear on the same page. If the last line of the para­graph won’t fit on the cur­rent page, the whole para­graph gets moved to the next <span class="no-hyphens">page.</span></p><p>Use this op­tion with <a href="headings.html" class="xref">head­ings</a> to pre­vent them from start­ing at the bot­tom of one page and con­tin­u­ing at the top of the next. That looks <span class="no-hyphens">bad.</span></p><p>Like <a href="widow-and-orphan-control.html" class="xref">widow and or­phan con­trol</a>, keep­ing lines to­gether will cre­ate gaps at the bot­tom of pages. But un­like widow and or­phan con­trol, you only want to keep lines to­gether in spe­cial sit­u­a­tions, not as part of your de­fault text <span class="no-hyphens">formatting.</span></p><p>Why? Keep­ing lines to­gether is a blunter tech­nique. It only works on whole para­graphs, so the longer the para­graph, the big­ger the <span class="no-hyphens">gap.</span></p><p>If you need to make groups of el­e­ments stick to­gether, the keep-lines-to­gether op­tion works well with <a href="hard-line-breaks.html" class="xref">hard line breaks</a>. Re­call that hard line breaks don’t cre­ate a new para­graph, but rather a set of lines. Keep­ing lines to­gether will en­sure this set of lines ap­pears on a sin­gle <span class="no-hyphens">page.</span></p><p>For in­stance, it’s help­ful to keep lines to­gether in sig­na­ture <span class="no-hyphens">blocks:</span></p><style type="text/css">
+.sigblock td{
+    text-align: left;
+    vertical-align: top;
+    border: 0;
+    line-height: 1.4;
+}
+
+.sigblock td p{
+ font-family:equity-caps;
+ text-transform:lowercase;
+ text-transform: lowercase;
+-moz-font-feature-settings: 'c2sc=1';
+-moz-font-feature-settings: 'c2sc' 1;
+-webkit-font-feature-settings: 'c2sc' 1;
+-o-font-feature-settings: 'c2sc' 1;
+-ms-font-feature-settings: 'c2sc' 1;
+font-feature-settings: 'c2sc' 1;
+
+}
+</style><div class="indented"><table class="sigblock"><tr><td>May 19, 2013       </td><td><p>Boxer Bed­ley &amp; <span class="no-hyphens">Ball</span></p><p>By:__________________<br/>Vi­o­let Man­ganese<br/>Au­di­tor for <span class="no-hyphens">MegaCorp</span></p></td></tr></table></div><p>Here, you’d put a hard line break at the end of each line. Then you’d set the whole sig­na­ture block—which is a sin­gle para­graph—to keep lines to­gether. That way, you’ll never have to worry that half the block will end up on one page and half on the next. All of it trav­els <span class="no-hyphens">together.</span></p><div class="howto"><div class="howto-name">How to keep lines together</div><p><program>Word</program> Right-click in the text and se­lect <ui>Paragraph</ui> → <ui>Line and Page Breaks</ui> → check <ui>Keep lines <span class="no-hyphens">together</span></ui></p><p><program>Pages</program> <ui>View</ui> → <ui>Show Toolbar</ui> (or op­tion + ⌘ + t) → <ui>Format</ui> but­ton → <ui>More</ui> pane → check <ui>Keep lines on same <span class="no-hyphens">page</span></ui></p><p><program>CSS</program> Not <span class="no-hyphens">applicable</span></p></div></div><a id="links"></a><div style="height:1em"></div><ul class="children"></ul></div>
+
+
+<!-- top nav -->
+<div class="nav-outer" id="top"><a href="index-2.html#toc"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="up"><a href="page-layout.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="prev"><a href="widow-and-orphan-control.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="next"><a href="keep-with-next-paragraph.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="bottom"><div class="nav-inner"><div id="navtable">
+
+<div id="left">
+
+<a class="xref box-link" href="widow-and-orphan-control.html"><span class="arrow">←</span>&nbsp;widow and orphan control</a></div>
+
+
+<div id="center-left"><a class="xref box-link" href="index-2.html#toc">top</a></div>
+
+<div id="center-right"><a class="xref box-link" href="page-layout.html#links">Chapter</a></div>
+
+<div id="right">
+<a class="xref box-link" href="keep-with-next-paragraph.html">keep with next paragraph&nbsp;<span class="arrow">→</span></a></div>
+
+
+
+</div></div></div> 
+
+</body>
+
+<!-- Mirrored from practicaltypography.com/keep-lines-together.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 17:01:26 GMT -->
+</html>
+
+<!-- © 2013–16 Matthew Butterick -->
+

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Mapeach</title>
+	<atom:link href="http://malisper.me/2015/06/14/mapeach/feed/" rel="self" type="application/rss+xml" />
+	<link>http://malisper.me/2015/06/14/mapeach/</link>
+	<description>Case Studies in Lisp Macros</description>
+	<lastBuildDate>Thu, 14 Apr 2016 08:46:03 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: William Clifford</title>
+		<link>http://malisper.me/2015/06/14/mapeach/#comment-122</link>
+		<dc:creator><![CDATA[William Clifford]]></dc:creator>
+		<pubDate>Fri, 10 Jul 2015 15:55:27 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=210#comment-122</guid>
+		<description><![CDATA[Although I like this solution, I typically use &lt;code&gt;flet&lt;/code&gt; in these cases. But I could adapt &lt;code&gt;mapeach&lt;/code&gt; to be more like Ruby&#039;s &lt;code&gt;each which would be nice too. I&#039;ll have to try it out. Thank you!]]></description>
+		<content:encoded><![CDATA[<p>Although I like this solution, I typically use <code>flet</code> in these cases. But I could adapt <code>mapeach</code> to be more like Ruby&#8217;s <code>each which would be nice too. I'll have to try it out. Thank you!</code></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Andrew Kirkpatrick</title>
+		<link>http://malisper.me/2015/06/14/mapeach/#comment-101</link>
+		<dc:creator><![CDATA[Andrew Kirkpatrick]]></dc:creator>
+		<pubDate>Thu, 09 Jul 2015 14:51:13 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=210#comment-101</guid>
+		<description><![CDATA[I liked the idea of mapeach and got to playing with the idea. I wanted a mapeach that would work with multiple lists like mapcar, that would intern anaphoric parameters in the caller&#039;s package, and that would work with a single, or multiple forms in the body. Its late but it seems to work ok, its just not as simple as I&#039;d like:
+
+[code]
+(defmacro imapeach (body &#038;amp;rest lists)
+  &#034;Succinct anaphoric mapcar.&#034;
+  (let ((parameters (loop for i from 1 to (length lists)
+                          collect (intern (format nil &#034;IT~A&#034; i))))
+        (it-sym (intern &#034;IT&#034;)))
+    `(symbol-macrolet ((,it-sym ,(first parameters)))
+       (mapcar (lambda (,@parameters)
+                 (declare (ignorable ,@parameters))
+                 ,@(if (listp (car body))
+                       body
+                       (list body)))
+               ,@lists))))
+
+;; (mapeach (+ it 5) &#039;(1 2 3)) =&#062; (6 7 8)
+;; (mapeach (+ it1 it2) &#039;(1 2 3) &#039;(7 8 9)) =&#062; (8 10 12)
+;; (mapeach ((setf it1 (+ it2 1)) (- it2 it1)) &#039;(1 2 3) &#039;(7 8 9)) =&#062; (-1 -1 -1)
+[/code]]]></description>
+		<content:encoded><![CDATA[<p>I liked the idea of mapeach and got to playing with the idea. I wanted a mapeach that would work with multiple lists like mapcar, that would intern anaphoric parameters in the caller&#8217;s package, and that would work with a single, or multiple forms in the body. Its late but it seems to work ok, its just not as simple as I&#8217;d like:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defmacro imapeach (body &amp;amp;rest lists)
+  &quot;Succinct anaphoric mapcar.&quot;
+  (let ((parameters (loop for i from 1 to (length lists)
+                          collect (intern (format nil &quot;IT~A&quot; i))))
+        (it-sym (intern &quot;IT&quot;)))
+    `(symbol-macrolet ((,it-sym ,(first parameters)))
+       (mapcar (lambda (,@parameters)
+                 (declare (ignorable ,@parameters))
+                 ,@(if (listp (car body))
+                       body
+                       (list body)))
+               ,@lists))))
+
+;; (mapeach (+ it 5) '(1 2 3)) =&gt; (6 7 8)
+;; (mapeach (+ it1 it2) '(1 2 3) '(7 8 9)) =&gt; (8 10 12)
+;; (mapeach ((setf it1 (+ it2 1)) (- it2 it1)) '(1 2 3) '(7 8 9)) =&gt; (-1 -1 -1)
+</pre>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: malisper</title>
+		<link>http://malisper.me/2015/06/14/mapeach/#comment-23</link>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+		<pubDate>Wed, 17 Jun 2015 14:28:14 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=210#comment-23</guid>
+		<description><![CDATA[It would look like this:
+
+[code]
+(defmacro mapeach (var list &#038;body body)
+  `(loop for ,var in ,list collect (progn ,@body)))
+[/code]
+
+When using for..in, destructuring is done over the variable. For example
+
+[code]
+  (loop for (x y) in &#039;((1 2) (3 4)) collect (+ x y))
+
+  =&#062; (3 7)
+[/code]
+
+So now with the loop implementation of mapeach, we could do the following:
+
+[code]
+  (mapeach (x y) &#039;((1 2) (3 4))
+    (+ x y))
+
+  =&#062; (3 7)
+[/code]]]></description>
+		<content:encoded><![CDATA[<p>It would look like this:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defmacro mapeach (var list &amp;body body)
+  `(loop for ,var in ,list collect (progn ,@body)))
+</pre>
+<p>When using for..in, destructuring is done over the variable. For example</p>
+<pre class="brush: plain; title: ; notranslate">
+  (loop for (x y) in '((1 2) (3 4)) collect (+ x y))
+
+  =&gt; (3 7)
+</pre>
+<p>So now with the loop implementation of mapeach, we could do the following:</p>
+<pre class="brush: plain; title: ; notranslate">
+  (mapeach (x y) '((1 2) (3 4))
+    (+ x y))
+
+  =&gt; (3 7)
+</pre>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Marco</title>
+		<link>http://malisper.me/2015/06/14/mapeach/#comment-16</link>
+		<dc:creator><![CDATA[Marco]]></dc:creator>
+		<pubDate>Mon, 15 Jun 2015 17:42:59 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=210#comment-16</guid>
+		<description><![CDATA[I am an absolute beginner with Lisp&#039;s Macros. Could you offer a few more details on the &quot;alternative implementation that can expand into loop&quot;? Which form could that be? Thanks!]]></description>
+		<content:encoded><![CDATA[<p>I am an absolute beginner with Lisp&#8217;s Macros. Could you offer a few more details on the &#8220;alternative implementation that can expand into loop&#8221;? Which form could that be? Thanks!</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.088 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:24:13 -->

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.stuartsierra</groupId>
+  <artifactId>lazytest</artifactId>
+  <version>1.2.3-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20101128.142532</timestamp>
+      <buildNumber>2</buildNumber>
+    </snapshot>
+    <lastUpdated>20101128142553</lastUpdated>
+  </versioning>
+</metadata>

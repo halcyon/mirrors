@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/jsonic/setup.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:17 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Extend a data format: jsonic</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;extend-a-data-format-jsonic&quot;)"></div><h1 anchor="extend-a-data-format-jsonic" id="extend-a-data-format-jsonic" hyphens="none">Extend a data format: <span class="my-code" decode="exclude">jsonic</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification.html">2&emsp;spec­i­fi­ca­tion</a></li><li><a class="here" href="setup.html">3&emsp;setup</a></li><li><a href="the-reader.html">4&emsp;the reader</a></li><li><a href="the-tokenizer.html">5&emsp;the tok­enizer</a></li><li><a href="the-parser.html">6&emsp;the parser</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_l2gXe&quot;)"></div><p id="a_l2gXe">To set up our project as a <a class="glossary" href="../appendix/glossary.html#package"><span class="glossary-link-text">pack­age</span></a> from the out­set, we sim­plify the <a href="../bf/packaging-our-language.html">recipe we used</a> in <a href="../bf/index.html"><span class="my-code" decode="exclude">bf</span></a>:</p></div><ol><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Qtfsh&quot;)"></div><p id="a_Qtfsh">We cre­ate a direc­tory for our pack­age. Since we want to invoke our inter­preter as <span class="my-code" decode="exclude">#lang jsonic</span>, we’ll call our pack­age direc­tory <span class="my-code" decode="exclude">jsonic</span>. We can cre­ate this direc­tory any­where con­ve­nient on the filesys­tem.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_wo6Gt&quot;)"></div><p id="a_wo6Gt">Then we use Racket’s com­mand-line pro­gram <span class="my-code" decode="exclude">raco</span> to install our (still empty) pack­age. In a ter­mi­nal win­dow, we <span class="my-code" decode="exclude">cd</span> into our new <span class="my-code" decode="exclude">jsonic</span> direc­tory and do <span class="my-code" decode="exclude">raco pkg install</span>:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_9ebNt&quot;)"></div><div class="highlight-container" id="a_9ebNt"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; cd path/to/jsonic<br/>&gt; raco pkg install</div><div class="highlight" form="false" id="a_r2Lsu"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="source"><pre>&gt; cd path/to/jsonic
+&gt; raco pkg install
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_3Iuij&quot;)"></div><p id="a_3Iuij">This will trig­ger a flurry of sta­tus mes­sages along these lines:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_lqD0U&quot;)"></div><div class="highlight-container" id="a_lqD0U"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">Linking current directory as a package<br/>raco setup: version: 6.8.0.2<br/>raco setup: platform: x86_64-macosx [3m]<br/>raco setup: installation name: development<br/>raco setup: variants: 3m<br/>···<br/>raco setup: --- building documentation ---<br/>raco setup: --- installing collections ---<br/>raco setup: --- post-installing collections ---<br/>&gt;</div><div class="highlight" form="false" id="a_q57h3"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="source"><pre>Linking current directory as a package
+raco setup: version: 6.8.0.2
+raco setup: platform: x86_64-macosx [3m]
+raco setup: installation name: development
+raco setup: variants: 3m
+···
+raco setup: --- building documentation ---
+raco setup: --- installing collections ---
+raco setup: --- post-installing collections ---
+&gt;
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></li></ol><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_zeDvC&quot;)"></div><p id="a_zeDvC">That’s it. We now have a <span class="my-code" decode="exclude">jsonic</span> direc­tory for our project, installed so that Racket rec­og­nizes it as a pack­age. This means that if we invoke <span class="my-code" decode="exclude">#lang jsonic</span>, or refer to a mod­ule like <span class="my-code" decode="exclude">(require jsonic/reader)</span>, Racket will know where to find it.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_GKTPQ&quot;)"></div><p id="a_GKTPQ">Now we can start adding our source files.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification.html">2&emsp;spec­i­fi­ca­tion</a></li><li><a class="here" href="setup.html">3&emsp;setup</a></li><li><a href="the-reader.html">4&emsp;the reader</a></li><li><a href="the-tokenizer.html">5&emsp;the tok­enizer</a></li><li><a href="the-parser.html">6&emsp;the parser</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="specification.html">← prev</a>
+    <a class="nav-right" href="the-reader.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

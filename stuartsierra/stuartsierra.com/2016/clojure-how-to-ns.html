@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from stuartsierra.com/2016/clojure-how-to-ns.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:55:45 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta  charset="utf-8">
+<meta  name="viewport" content="width=device-width, initial-scale=1">
+<title>How to ns</title>
+<meta  name="generator" content="Org-mode">
+<link rel="stylesheet" type="text/css" href="clojure-how-to-ns-style.css">
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">How to ns
+<br>
+<span class="subtitle">Stuart’s Opinionated Style Guide for Clojure Namespace Declarations</span>
+</h1>
+
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="summary"><a id="orgheadline1"></a>Summary</h2>
+<div class="outline-text-2" id="text-summary">
+<p>
+Make it look like this:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">ns</span> <span class="org-type">com.example.my-application.server</span>
+  <span class="org-doc">"Example application HTTP server and routing."</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-clojure-keyword">:refer-clojure</span> <span class="org-clojure-keyword">:exclude</span> <span class="org-rainbow-delimiters-depth-3">[</span>send<span class="org-rainbow-delimiters-depth-3">]</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-clojure-keyword">:require</span>
+   <span class="org-rainbow-delimiters-depth-3">[</span><span class="org-type">clojure.core.async</span> <span class="org-clojure-keyword">:as</span> async <span class="org-clojure-keyword">:refer</span> <span class="org-rainbow-delimiters-depth-4">[</span>&lt;! &lt;!! &gt;! &gt;!!<span class="org-rainbow-delimiters-depth-4">]</span><span class="org-rainbow-delimiters-depth-3">]</span>
+   <span class="org-rainbow-delimiters-depth-3">[</span><span class="org-type">com.example.my-application.server.sse</span> <span class="org-clojure-keyword">:as</span> <span class="org-type">server.sse</span><span class="org-rainbow-delimiters-depth-3">]</span>
+   <span class="org-rainbow-delimiters-depth-3">[</span><span class="org-type">com.example.my-application.base</span><span class="org-rainbow-delimiters-depth-3">]</span>
+   <span class="org-rainbow-delimiters-depth-3">[</span><span class="org-type">io.pedestal.http</span> <span class="org-clojure-keyword">:as</span> http<span class="org-rainbow-delimiters-depth-3">]</span>
+   <span class="org-rainbow-delimiters-depth-3">[</span><span class="org-type">io.pedestal.http.sse</span> <span class="org-clojure-keyword">:as</span> <span class="org-type">http.sse</span><span class="org-rainbow-delimiters-depth-3">]</span>
+   <span class="org-rainbow-delimiters-depth-3">[</span><span class="org-type">ring.util.response</span> <span class="org-clojure-keyword">:as</span> response<span class="org-rainbow-delimiters-depth-3">]</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-clojure-keyword">:import</span>
+   <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-type">java.nio.file</span> <span class="org-type">Files</span> <span class="org-type">LinkOption</span><span class="org-rainbow-delimiters-depth-3">)</span>
+   <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-type">org.apache.commons.io</span> <span class="org-type">FileUtils</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgheadline12" class="outline-2">
+<h2 id="rules"><a id="orgheadline12"></a>The Rules</h2>
+<div class="outline-text-2" id="text-rules">
+<p>
+Roughly in order of importance:
+</p>
+</div>
+
+<div id="outline-container-orgheadline2" class="outline-3">
+<h3 id="main-clauses"><a id="orgheadline2"></a>Main clauses</h3>
+<div class="outline-text-3" id="text-main-clauses">
+<p>
+Put clauses in this order, omitting those that are not needed:
+</p>
+
+<ol class="org-ol">
+<li><code>:refer-clojure</code></li>
+<li><code>:require</code></li>
+<li><code>:import</code></li>
+</ol>
+
+<p>
+Use each clause <b>at most once</b>.
+</p>
+
+<p>
+Do not <code>:use</code>.
+</p>
+
+<p>
+Do not <code>:refer :all</code>.
+</p>
+
+<p>
+Do not <code>:rename</code>.
+</p>
+
+<p>
+Use <code>:require :refer</code> only for very frequently-used symbols.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline3" class="outline-3">
+<h3 id="keywords-or-symbols"><a id="orgheadline3"></a>Keywords or symbols?</h3>
+<div class="outline-text-3" id="text-keywords-or-symbols">
+<p>
+Use keywords, not symbols, for <code>:refer-clojure</code>, <code>:require</code>, and <code>:import</code>.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Good</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">ns</span> <span class="org-type">com.example.my-application</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-clojure-keyword">:require</span>
+   <span class="org-rainbow-delimiters-depth-3">[</span><span class="org-type">clojure.string</span> <span class="org-clojure-keyword">:as</span> string<span class="org-rainbow-delimiters-depth-3">]</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-clojure-keyword">:import</span>
+   <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-type">java.util</span> <span class="org-type">Date</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Bad</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">ns</span> <span class="org-type">com.example.my-application</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>require
+   <span class="org-rainbow-delimiters-depth-3">[</span><span class="org-type">clojure.string</span> <span class="org-clojure-keyword">:as</span> string<span class="org-rainbow-delimiters-depth-3">]</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>import
+   <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-type">java.util</span> <span class="org-type">Date</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+Symbols happen to work in most versions of Clojure, but were never
+correct syntax.
+</p>
+
+<p>
+Reference: <a href="http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/ns">ns macro docstring</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline4" class="outline-3">
+<h3 id="vectors-or-lists-1"><a id="orgheadline4"></a>Vectors or lists?</h3>
+<div class="outline-text-3" id="text-vectors-or-lists-1">
+<p>
+Use lists (parentheses) for the top-level clauses such as <code>(:require
+...)</code>. Because the first element, the <code>:require</code> or <code>:import</code> keyword,
+is special.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Good</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">ns</span> <span class="org-type">com.example.application</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-clojure-keyword">:require</span>
+   <span class="org-rainbow-delimiters-depth-3">[</span><span class="org-type">clojure.string</span> <span class="org-clojure-keyword">:as</span> string<span class="org-rainbow-delimiters-depth-3">]</span><span class="org-rainbow-delimiters-depth-2">)</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-clojure-keyword">:import</span>
+   <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-type">java.util</span> <span class="org-type">Date</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Bad</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">ns</span> <span class="org-type">com.example.application</span>
+  <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-clojure-keyword">:require</span>
+   <span class="org-rainbow-delimiters-depth-3">[</span><span class="org-type">clojure.string</span> <span class="org-clojure-keyword">:as</span> string<span class="org-rainbow-delimiters-depth-3">]</span><span class="org-rainbow-delimiters-depth-2">]</span>
+  <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-clojure-keyword">:import</span>
+   <span class="org-rainbow-delimiters-depth-3">(</span><span class="org-type">java.util</span> <span class="org-type">Date</span><span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+Use vectors (square brackets) inside <code>:require</code>. Because otherwise
+they would be interpreted as prefix lists.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Good</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">clojure.string</span> <span class="org-clojure-keyword">:as</span> string<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Bad</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span>
+ <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">clojure.string</span> <span class="org-clojure-keyword">:as</span> string<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+Use lists (parentheses) inside <code>:import</code>. Because the first symbol,
+the package name, is special.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Good</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:import</span>
+ <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">java.util</span> <span class="org-type">Date</span> <span class="org-constant">UUID</span><span class="org-rainbow-delimiters-depth-2">)</span>
+ <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">java.io</span> <span class="org-type">File</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Bad</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:import</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">java.util</span> <span class="org-type">Date</span> <span class="org-constant">UUID</span><span class="org-rainbow-delimiters-depth-2">]</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">java.io</span> <span class="org-type">File</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+This (lists in <code>:import</code>) turns out to be the most contentious point.
+A number of people disagree with this recommendation, on the grounds
+that the package-class list does not represent an invocation, as lists
+usually do in Clojure. I stand by it, though, for the reason above and
+because both <a href="https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/ns">ns</a> and <a href="https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/import">import</a> have historically been documented this way.
+</p>
+
+<p>
+Put every <code>:require</code>&rsquo;d namespace in a vector (square brackets)
+even if it doesn't have an <code>:as</code> or <code>:refer</code>. This makes visual
+scanning and sorting easier.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Good</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">com.example.client</span> <span class="org-clojure-keyword">:as</span> client<span class="org-rainbow-delimiters-depth-2">]</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">com.example.server</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Bad</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">com.example.client</span> <span class="org-clojure-keyword">:as</span> client<span class="org-rainbow-delimiters-depth-2">]</span>
+ <span class="org-type">com.example.server</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+References: <a href="http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/ns">ns macro docstring</a>, <a href="http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/require">require docstring</a>, <a href="http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/import">import docstring</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline5" class="outline-3">
+<h3 id="prefix-lists"><a id="orgheadline5"></a>Prefix lists</h3>
+<div class="outline-text-3" id="text-prefix-lists">
+<p>
+<b>Never</b> use prefix lists in <code>:require</code>. Write out the full name of
+each namespace. Because namespaces have no hierarchical relationship,
+and it makes searching easier.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Good</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">com.example.client</span><span class="org-rainbow-delimiters-depth-2">]</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">com.example.routes</span><span class="org-rainbow-delimiters-depth-2">]</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">com.example.server</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Bad</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span>
+ <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">com.example</span> client server routes<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+<b>Always</b> use prefix lists in <code>:import</code>, even if you're only importing
+one class from a package. Because packages and classes <b>do</b> have a
+hierarchical relationship: packages contain classes.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Good</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:import</span>
+ <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">java.io</span> <span class="org-type">File</span><span class="org-rainbow-delimiters-depth-2">)</span>
+ <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">java.util</span> <span class="org-type">Date</span> <span class="org-constant">UUID</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Bad</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:import</span>
+ <span class="org-type">java.io.File</span>
+ <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">java.util</span> <span class="org-type">Date</span> <span class="org-constant">UUID</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgheadline6" class="outline-3">
+<h3 id="aliases"><a id="orgheadline6"></a>Aliases</h3>
+<div class="outline-text-3" id="text-aliases">
+<p>
+Use full words as namespace aliases, except for very frequently-used
+namespaces with established conventions such as <br >
+<code>[clojure.spec :as s]</code>.
+</p>
+
+<p>
+Reference: <a href="../2015/05/10/clojure-namespace-aliases.html">Clojure Do’s: Namespace Aliases</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline7" class="outline-3">
+<h3 id="vectors-or-lists-2"><a id="orgheadline7"></a>Vectors or lists? part 2</h3>
+<div class="outline-text-3" id="text-vectors-or-lists-2">
+<p>
+Put <code>:refer</code>&rsquo;d or <code>:exclude</code>&rsquo;d symbols in a vector
+(square brackets).
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Good</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">clojure.string</span> <span class="org-clojure-keyword">:refer</span> <span class="org-rainbow-delimiters-depth-3">[</span>blank? capitalize ends-with?<span class="org-rainbow-delimiters-depth-3">]</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Bad</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">clojure.string</span> <span class="org-clojure-keyword">:refer</span> <span class="org-rainbow-delimiters-depth-3">(</span>blank? capitalize ends-with?<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+The docstrings of <code>ns</code> and <code>refer</code> disagree here: <a href="http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/refer">refer</a> says
+“list-of-symbols,” but <a href="http://clojure.github.io/clojure/clojure.core-api.html#clojure.core/ns">ns</a> shows an example with vectors. Vectors make
+more sense because the first symbol is not special or different from
+the others.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline8" class="outline-3">
+<h3 id="sorting"><a id="orgheadline8"></a>Sorting</h3>
+<div class="outline-text-3" id="text-sorting">
+<p>
+Sorting makes scanning easier and reduces the likelihood of
+accidentally repeating symbols.
+</p>
+
+<p>
+Sort <code>:require</code>&rsquo;d namespaces lexicographically.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Good</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">clojure.java.io</span> <span class="org-clojure-keyword">:as</span> io<span class="org-rainbow-delimiters-depth-2">]</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">cognitect.transit</span> <span class="org-clojure-keyword">:as</span> transit<span class="org-rainbow-delimiters-depth-2">]</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">com.example.my-application.server.api</span> <span class="org-clojure-keyword">:as</span> api<span class="org-rainbow-delimiters-depth-2">]</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">io.pedestal.http</span> <span class="org-clojure-keyword">:as</span> http<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Bad</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">clojure.java.io</span> <span class="org-clojure-keyword">:as</span> io<span class="org-rainbow-delimiters-depth-2">]</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">io.pedestal.http</span> <span class="org-clojure-keyword">:as</span> http<span class="org-rainbow-delimiters-depth-2">]</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">cognitect.transit</span> <span class="org-clojure-keyword">:as</span> transit<span class="org-rainbow-delimiters-depth-2">]</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">com.example.my-application.server.api</span> <span class="org-clojure-keyword">:as</span> api<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+Sort <code>:import</code>&rsquo;ed packages lexicographically.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Good</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:import</span>
+ <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">com.example.java</span> <span class="org-type">ExampleMain</span><span class="org-rainbow-delimiters-depth-2">)</span>
+ <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">java.nio.file</span> <span class="org-type">Files</span><span class="org-rainbow-delimiters-depth-2">)</span>
+ <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">java.nio.file.attribute</span> <span class="org-type">FileAttribute</span><span class="org-rainbow-delimiters-depth-2">)</span>
+ <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">org.apache.commons.io</span> <span class="org-type">FileUtils</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Bad</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:import</span>
+ <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">org.apache.commons.io</span> <span class="org-type">FileUtils</span><span class="org-rainbow-delimiters-depth-2">)</span>
+ <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">java.nio.file</span> <span class="org-type">Files</span><span class="org-rainbow-delimiters-depth-2">)</span>
+ <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">java.nio.file.attribute</span> <span class="org-type">FileAttribute</span><span class="org-rainbow-delimiters-depth-2">)</span>
+ <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-type">com.example.java</span> <span class="org-type">ExampleMain</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+Within a <code>:refer</code> or <code>:exclude</code> vector, sort symbols lexicographically.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Good</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">clojure.string</span> <span class="org-clojure-keyword">:refer</span> <span class="org-rainbow-delimiters-depth-3">[</span>blank? capitalize ends-with?<span class="org-rainbow-delimiters-depth-3">]</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Bad</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">clojure.string</span> <span class="org-clojure-keyword">:refer</span> <span class="org-rainbow-delimiters-depth-3">[</span>capitalize ends-with? blank?<span class="org-rainbow-delimiters-depth-3">]</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+Within an <code>:import</code> prefix list, sort class names lexicographically.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Good</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-type">java.nio.file.attribute</span> <span class="org-type">FileAttribute</span> <span class="org-type">FileAttributeView</span> <span class="org-type">UserPrincipal</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Bad</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-type">java.nio.file.attribute</span> <span class="org-type">FileAttributeView</span> <span class="org-type">UserPrincipal</span> <span class="org-type">FileAttribute</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgheadline9" class="outline-3">
+<h3 id="docstring"><a id="orgheadline9"></a>Docstring</h3>
+<div class="outline-text-3" id="text-docstring">
+<p>
+Include a docstring. Describe what the purpose of this namespace is
+and how it fits into the rest of the codebase.
+</p>
+
+<p>
+Prefer docstrings over large block comments where possible.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Good</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">ns</span> <span class="org-type">com.example.my-application-routes</span>
+  <span class="org-doc">"HTTP server routes for my application.</span>
+<span class="org-doc">  Routes generally follow the pattern /api/:type/:id</span>
+<span class="org-doc">  where </span><span class="org-clojure-keyword"><span class="org-doc">:type</span></span><span class="org-doc"> is a type of object and </span><span class="org-clojure-keyword"><span class="org-doc">:id</span></span><span class="org-doc"> is an integer ID."</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Bad</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">ns</span> <span class="org-type">com.example.my-application-routes</span><span class="org-rainbow-delimiters-depth-1">)</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">HTTP server routes for my application.</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Routes generally follow the pattern /api/:type/:id</span>
+<span class="org-comment-delimiter">;; </span><span class="org-comment">where </span><span class="org-clojure-keyword"><span class="org-comment">:type</span></span><span class="org-comment"> is a type of object and </span><span class="org-clojure-keyword"><span class="org-comment">:id</span></span><span class="org-comment"> is an integer ID.</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgheadline10" class="outline-3">
+<h3 id="line-breaks"><a id="orgheadline10"></a>Line breaks</h3>
+<div class="outline-text-3" id="text-line-breaks">
+<p>
+Start the contents of <code>:require</code> or <code>:import</code> on a new line after the
+keyword.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Good</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">clojure.string</span> <span class="org-clojure-keyword">:as</span> string<span class="org-rainbow-delimiters-depth-2">]</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">io.pedestal.http</span> <span class="org-clojure-keyword">:as</span> http<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Not so good</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span> <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">clojure.string</span> <span class="org-clojure-keyword">:as</span> string<span class="org-rainbow-delimiters-depth-2">]</span>
+          <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">io.pedestal.http</span> <span class="org-clojure-keyword">:as</span> http<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<p>
+This recommendation is slightly different from common practice, but it
+makes it easier to sort names with editor commands (<code>sort-lines</code> in
+Emacs).
+</p>
+
+<p>
+Put each <code>:require</code>&rsquo;d namespace or <code>:import</code>&rsquo;ed package
+on its own line.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Good</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">clojure.string</span> <span class="org-clojure-keyword">:as</span> string<span class="org-rainbow-delimiters-depth-2">]</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">io.pedestal.http</span> <span class="org-clojure-keyword">:as</span> http<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Bad</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">clojure.string</span> <span class="org-clojure-keyword">:as</span> string<span class="org-rainbow-delimiters-depth-2">]</span> <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">io.pedestal.http</span> <span class="org-clojure-keyword">:as</span> http<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgheadline11" class="outline-3">
+<h3 id="require-as-refer"><a id="orgheadline11"></a><code>:require :as :refer</code></h3>
+<div class="outline-text-3" id="text-require-as-refer">
+<p>
+When a <code>:require</code>&rsquo;d namespace has both <code>:as</code> and <code>:refer</code>, put
+<code>:as</code> before <code>:refer</code>.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Good</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">clojure.core.async</span> <span class="org-clojure-keyword">:as</span> async <span class="org-clojure-keyword">:refer</span> <span class="org-rainbow-delimiters-depth-3">[</span>&lt;! &lt;!! &gt;! &gt;!!<span class="org-rainbow-delimiters-depth-3">]</span><span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+<div class="org-src-container">
+
+<pre class="src src-clojure"><span class="org-comment-delimiter">;; </span><span class="org-comment">Bad</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-clojure-keyword">:require</span>
+ <span class="org-rainbow-delimiters-depth-2">[</span><span class="org-type">clojure.core.async</span> <span class="org-clojure-keyword">:refer</span> <span class="org-rainbow-delimiters-depth-3">[</span>&lt;! &lt;!! &gt;! &gt;!!<span class="org-rainbow-delimiters-depth-3">]</span> <span class="org-clojure-keyword">:as</span> async<span class="org-rainbow-delimiters-depth-2">]</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+
+
+<script type="text/javascript">
+var headings = document.getElementsByTagName("h3");
+for (var i = 0; i < headings.length; i++) {
+  var heading = headings[i];
+  if (heading.id) {
+    console.log(heading);
+    var link_tag = document.createElement("a");
+    var link_text = document.createTextNode(String.fromCodePoint(128279));
+    link_tag.appendChild(link_text);
+    link_tag.href = "#" + heading.id;
+    link_tag.className = "reflink";
+    console.log(link_tag);
+    var space = document.createTextNode(" ");
+    // heading.insertChild(space);
+    heading.insertBefore(link_tag, heading.firstChild);
+  }
+}
+</script>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: <a href="../index.html">Stuart Sierra</a></p><p class="date">Last updated: 2016-08-30 Tue 09:14</p>
+</div>
+</body>
+
+<!-- Mirrored from stuartsierra.com/2016/clojure-how-to-ns.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:55:46 GMT -->
+</html>

@@ -1,0 +1,558 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-9.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:50 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Lecture Nine</title>
+</head>
+<body>
+
+<center><b><font size=+3>Declarative Languages</font></b>
+<br><b><font size=+3>Lecture #9</font></b></center>
+
+<p><b>Purpose: Catch &amp; throw etc., symbols, and more about functions</b>
+<p><b>9.1 Catch and throw</b>
+<p>We finished last time with blocks and the special operator <tt>return-from</tt>,
+which together allow you to make <i>lexical</i> exits, i.e. to leave any
+body of code so long as you are still in its textual region. So, for example,
+anywhere within the text of a function you can leave it by invoking <tt>return-from</tt>:
+<blockquote><tt>(defun safe-average (numbers)</tt>
+<br><tt>&nbsp; (if numbers</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (let* ((total 0))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (dolist (number numbers)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (numberp
+number)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(incf total number)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(return-from safe-average</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(format nil "~a not a number" number))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (float (/ total (length
+numbers))))))</tt></blockquote>
+If you are no longer within the textual extent of a block, you cannot <tt>return-from</tt>
+it. The following:
+<blockquote><tt>(defun foo ()</tt>
+<br><tt>&nbsp; (bar))</tt>
+<p><tt>(defun bar ()</tt>
+<br><tt>&nbsp; (return-from foo))</tt></blockquote>
+will not work because you you have to place the <tt>(return-from foo) </tt><i>lexically</i>
+(i.e. textually) within the body of the function <tt>foo</tt>.
+<p>In contrast, the special operators <tt>catch</tt> and <tt>throw</tt>
+have <i>dynamic scope</i> and avoid the above restriction. (So why ever
+bother to use <tt>return-from</tt>? Answer: because <tt>return-from</tt>
+compiles into a simple jump instruction but <tt>catch</tt> and <tt>throw</tt>
+have to mess with the stack, which costs at run-time.)
+<p>Simple example to demonstrate the syntax:
+<ul><tt>(catch 'result</tt>
+<br><tt>&nbsp; (let* ((i 0))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (loop (incf i 3)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (> i
+10)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(throw 'result i)))))</tt>
+<br><tt>=>&nbsp; 12</tt>
+<br>&nbsp;
+<li>
+The syntax of <tt>catch</tt> is</li>
+
+<ul><tt>(catch tag form-1 form-2 ... form-n)</tt></ul>
+The <tt>tag</tt> is evaluated and the result is "remembered". Forms <tt>form-1</tt>
+through to <tt>form-n</tt> are then evaluated as an implicit <tt>progn.</tt>
+<li>
+The syntax of <tt>throw</tt> is</li>
+
+<ul><tt>(throw tag result)</tt>.</ul>
+The <tt>tag</tt> and <tt>result</tt> are evaluated and, provided we are
+<i>dynamically</i>
+within a <tt>catch</tt> form whose <tt>tag</tt> is <tt>eq</tt> to this
+one, control is returned to the <tt>catch</tt> form which immediately returns
+<li>
+&nbsp;The value returned by the <tt>catch</tt> is "normally" that of the
+final form, <tt>form-n</tt>. However, if the value <tt>result</tt> is thrown
+then that is returned instead.</li>
+
+<li>
+The tag forms are typically symbols, because typing the same symbol twice
+in your code guarantees <tt>eq</tt>ness. Note that they are evaluated in
+both the <tt>catch</tt> and <tt>throw</tt> forms. Therefore, other than
+in very subtle code, tag forms are typically quoted symbols.</li>
+
+<li>
+If there is no enclosing <tt>catch</tt> with the same tag then the <tt>throw</tt>
+causes an error.</li>
+</ul>
+As a more complex example, consider this somewhat crude top-level loop
+with basic error handling:
+<ul><tt>CL-USER 9 > (defun basic-top-loop ()</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(loop</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(catch 'restart-top-loop</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(loop</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(format t "~&amp;>> ")</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(let* ((form (read)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(if (eq form :quit)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(return-from basic-top-loop)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(print (eval form))))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(format t "~&amp;; Restarting top-loop.")))</tt>
+<br><tt>BASIC-TOP-LOOP</tt>
+<p><tt>CL-USER 10 > (defun basic-error (string)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(format t "~&amp;; Error: ~a" string)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(throw 'restart-top-loop nil))</tt>
+<br><tt>BASIC-ERROR</tt>
+<p><tt>CL-USER 11 > (basic-top-loop)</tt>
+<br><tt>>> (defun fact (x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (if (and (numberp x) (>= x 0))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (= x 0)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+1</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (*
+x (fact (1- x))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (basic-error (format nil "~a
+not a number >= 0!" x))))</tt>
+<br><tt>FACT</tt>
+<br><tt>>> (fact 4)</tt>
+<br><tt>24</tt>
+<br><tt>>> (fact t)</tt>
+<br><tt>; Error: T not a number >= 0!</tt>
+<br><tt>; Restarting top-loop.</tt>
+<br><tt>>> :quit</tt>
+<br><tt>NIL</tt>
+<p><tt>CL-USER 12 ></tt>
+<br>&nbsp;</ul>
+<b>9.2 unwind-protect</b>
+<p>With all these cute possibilities for getting out of executing vast
+chunks of code by invoking some exit (whether <tt>return-from</tt> or <tt>throw</tt>
+or aborting from an error), there is the chance that some form that simply
+<u>had</u>
+to be executed will be missed out. The classic example is that that once
+you've opened some external resource (for instance a file or database connection),
+you want to guarantee closing it cleanly no matter what else happens, i.e.
+even in the face of unexpected errors.
+<p>Lisp allows you to do this, and the special operator which handles it
+is called <tt>unwind-protect</tt>. Its syntax is
+<br><tt>&nbsp;&nbsp;&nbsp; (unwind-protect protected-form cleanup-1 cleanup-2
+... cleanup-n)</tt>
+<p><tt>unwind-protect</tt> evaluates <tt>protected-form</tt> and guarantees
+that the <tt>cleanup-forms</tt> will be executed before <tt>unwind-protect</tt>
+exits, whether it terminates normally or is aborted by a control transfer
+of some kind (i.e. <tt>return-from</tt>, <tt>throw</tt>, <tt>error</tt>).
+<blockquote><tt>(defun dummy (x)</tt>
+<br><tt>&nbsp; (setf status 'running)</tt>
+<br><tt>&nbsp; (if (numberp x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (setf status (1+ x))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (throw 'abort 'not-a-number)))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; dummy</tt>
+<p><tt>(catch 'abort (dummy 1))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; 2</tt>
+<br><tt>status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; 2</tt>
+<p><tt>(catch 'abort (dummy 'trash))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; not-a-number</tt>
+<br><tt>status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; running</tt>
+<p><tt>(catch 'abort (unwind-protect (dummy 'trash)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(setf status 'aborted)))&nbsp; =>&nbsp; not-a-number</tt>
+<br><tt>status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; aborted</tt></blockquote>
+Notes:
+<ul>
+<li>
+If <tt>unwind-protect</tt> returns normally, its value is the return value
+of the <tt>protected-form</tt>.</li>
+
+<li>
+If a non-local exit occurs during execution of the cleanup-forms, no special
+action is taken. The cleanup-forms of <tt>unwind-protect</tt> are not protected
+by that <tt>unwind-protect</tt>.</li>
+</ul>
+<b>9.3 funcall</b>
+<p>The function <tt>funcall</tt> takes a function and some arguments, and
+calls that function with those arguments. For example,
+<ul><tt>(funcall '+ 1 2 3 4)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; 10</tt>
+<br><tt>(let* ((foo '+)) (funcall foo 1 2 3 4))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; 10</tt>
+<br><tt>(funcall (lambda (p q r s) (+ p q r s)) 1 2 3 4)&nbsp;&nbsp;&nbsp;
+=>&nbsp; 10</tt></ul>
+
+<p><br><b>9.4 Closures</b>
+<p>Another really neat feature of lisp is the ability of functions to access
+variables which are (lexically) bound <u>around</u> the function definition.
+We can retain the value of a variable from one function invocation to the
+next, and share a local variable between several functions, thus:
+<blockquote><tt>(let* ((counter 0))</tt>
+<br><tt>&nbsp; (defun add-one ()</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (incf counter))</tt>
+<br><tt>&nbsp; (defun query ()</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; counter)</tt>
+<br><tt>&nbsp; (defun reset ()</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (setf counter 0)))</tt>
+<p><tt>(query)&nbsp;&nbsp;&nbsp; =>&nbsp; 0</tt>
+<br><tt>(add-one)&nbsp; =>&nbsp; 1</tt>
+<br><tt>(query)&nbsp;&nbsp;&nbsp; =>&nbsp; 1</tt>
+<br><tt>(dotimes (i 5) (add-one))&nbsp; => nil</tt>
+<br><tt>(query)&nbsp;&nbsp;&nbsp; =>&nbsp; 6</tt>
+<br><tt>(reset)&nbsp;&nbsp;&nbsp; =>&nbsp; 0</tt>
+<br><tt>(query)&nbsp;&nbsp;&nbsp; =>&nbsp; 0</tt></blockquote>
+except that the above is not a very interesting example (because we could
+have achieved the same thing by making <tt>counter</tt> a global variable).
+However, note that the variable <tt>counter</tt> is shared between the
+three functions and that its value persists between function calls.
+<p>Now consider the following (I think this is the first example we've
+seen of a function which generates another function as its return value):
+<blockquote><tt>(defun make-thingy ()</tt>
+<br><tt>&nbsp; (let* ((thing nil))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (lambda (&amp;optional new)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (let* ((old thing))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if new</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(setf thing new))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; old))))</tt>
+<p><tt>(setf one (make-thingy))&nbsp; =>&nbsp; <i>&lt;some function object,
+prints ugly></i></tt>
+<br><tt>(setf two (make-thingy))&nbsp; =>&nbsp; <i>&lt;some other function
+object, prints ugly></i></tt>
+<p><tt>(funcall one 'first)&nbsp;&nbsp; =>&nbsp; first</tt>
+<br><tt>(funcall two 'second)&nbsp; =>&nbsp; second</tt>
+<p><tt>(funcall one)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; first</tt>
+<br><tt>(funcall two)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; second</tt></blockquote>
+Every time we call <tt>make-thingy</tt>, we bind a new variable <tt>thingy</tt>.
+Therefore the two functions stored in <tt>one</tt> and <tt>two</tt> work
+with their own private copies of this variable.
+<p>Finally, in
+<blockquote><tt>(defun extract (table)</tt>
+<br><tt>&nbsp; (let* ((keys nil)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (values nil))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (maphash (lambda (key value)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(push key keys)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(push value values))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+table)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (list keys values)))</tt></blockquote>
+the variable <tt>values</tt> though external to the lambda form is lexically
+bound around it and so can be used by the lambda form to return a list
+of the values found in the hash-table.
+<p>The above functions (that is: <tt>add-one query reset</tt>, the functions
+returned by calls to <tt>make-thingy</tt> and the lambda form in <tt>extract</tt>)
+are examples of <i>lexical closures</i>. We say that these functions <i>close
+over</i> the variables <tt>counter</tt>, <tt>thing</tt>, <tt>keys</tt>
+and <tt>values</tt>, respectively.
+<p>Closures allow you to attach state to a function. (Maybe it's more precise
+to say that closures are functions with permanent state, possibly shared.)
+In the first example three closures share access to the same closure variable,
+in the second a new closure is generated each time <tt>make-thingy</tt>
+is called and the state is not shared, in the third case the state consists
+of two variables, both shared with the enclosing function.
+<p>This last case is the most common. Most (but by no means all!) closures
+are not seen as return values.
+<p>Without closures, <tt>lambda</tt> forms wouldn't be nearly so useful.
+The fact that closures exist means that you can write code like <tt>extract</tt>
+and never have to worry about how the lambda form is going to communicate
+with the function it belongs to. Still, Graham is right (page 2) when he
+notes that a function like
+<blockquote><tt>;; generate a function which adds n to its argument</tt>
+<br><tt>(defun addn (n)</tt>
+<br><tt>&nbsp; (lambda (x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (+ x n)))</tt></blockquote>
+simply couldn't be contemplated in C.
+<p><b>9.5 Symbols and names</b>
+<p>We have on our travels encountered a number of <i>general</i> (i.e.
+they can contain any lisp objects) data structures, as in the table in
+last week's notes:
+<br><tt>&nbsp;&nbsp;&nbsp; cons&nbsp;&nbsp;&nbsp; vector&nbsp;&nbsp;&nbsp;
+structure&nbsp;&nbsp;&nbsp; hash-table</tt>
+<br>and a one <i>specialized</i> data structure:
+<br><tt>&nbsp;&nbsp;&nbsp; string</tt>
+<br>We will look now at one <i>semi-specialized</i> structure which we've
+been using all along: the <tt>symbol</tt>. I say semi-specialized because
+one of its fields can contain what you like, and the others can't.
+<p>A symbol can be thought of as a named object. It is of type <tt>symbol</tt>,
+and responds positively to <tt>symbolp</tt>. Note that all keywords are
+symbols.
+<p>To access a symbol, type its name. To create a symbol, type its name
+(although see also the functions <tt>make-symbol</tt> and <tt>intern</tt>).
+To discover whether a symbol with a given name already exists, use the
+function <tt>find-symbol</tt> (which takes the name of the putative symbol
+as a string). To go from a symbol to its name, use the function <tt>symbol-name</tt>
+<blockquote><tt>(find-symbol "FOO")&nbsp; =>&nbsp; nil&nbsp;&nbsp;&nbsp;&nbsp;
+; since this symbol does not exist yet</tt>
+<br><tt>'foo&nbsp; =>&nbsp; foo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; simply typing the symbol creates it</tt>
+<br><tt>(find-symbol "FOO")&nbsp; =>&nbsp; foo&nbsp;&nbsp;&nbsp;&nbsp;
+; and so the symbol is now present</tt>
+<br><tt>(symbol-name 'foo)&nbsp;&nbsp; =>&nbsp; "FOO"</tt>
+<br><tt>(symbol-name :foo)&nbsp;&nbsp; =>&nbsp; "FOO"&nbsp;&nbsp; ; symbols
+foo and :foo have the same name!</tt>
+<br><tt>(type-of 'foo)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =>&nbsp; symbol</tt>
+<br><tt>(mapcar 'symbolp '(foo t nil :wibble))&nbsp; =>&nbsp; (t t t t)</tt></blockquote>
+[Note about case sensitivity: the lisp reader by default converts all symbol
+names to upper case as they are typed, so that internally symbol names
+normally contain only uppercase characters. The lisp printer by default
+prints these names in upper case. You can mess with both sets of behaviour
+if you care to, though heaven only knows why you would. Look up topics
+like readtables (that's another specialized data structure),
+<tt>*print-case*</tt>
+and section 22.1.3.3.2 of the Hyperspec, if you care.]
+<p><b>9.6 Symbols and values</b>
+<p>A symbol may or may not have a value associated with it. If you know
+the name of the symbol when you're typing, then "evaluating the symbol"
+will return the symbol's value.
+<blockquote><tt>(setf foo 99)&nbsp; =>&nbsp; 99&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; setf always returns the [last] new-value</tt>
+<br><tt>foo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; 99&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ; current value of
+the symbol foo</tt>
+<br><tt>(1+ foo)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =>&nbsp; 100&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; etc</tt>
+<br><tt>foo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; 99&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ; do not confuse
+1+ with incf</tt></blockquote>
+If the name of the symbol is only available at run-time, you can still
+access its value by calling the setfable function <tt>symbol-value</tt>:
+<blockquote><tt>(symbol-value 'foo)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; 99</tt>
+<p><tt>(defun find-numb (symbols)</tt>
+<br><tt>&nbsp;&nbsp; (find-if (lambda (sym) (numberp (symbol-value sym)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+symbols))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; => find-numb</tt>
+<p><tt>(find-numb '(foo bar baz))&nbsp; => foo</tt>
+<p><tt>(setf (symbol-value (find-numb '(foo bar baz))) "hello")&nbsp; =>
+"hello"</tt>
+<p><tt>foo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=> "hello"</tt></blockquote>
+To discover whether a symbol does or doesn't have a current value definition
+(whether <i>the symbol is bound</i>), use the function <tt>boundp</tt>.
+To remove a symbol's value definition, call <tt>makunbound</tt>.
+<blockquote><tt>(boundp 'foo)&nbsp;&nbsp; =>&nbsp; t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; the symbol foo currently has a value</tt>
+<br><tt>(makunbound 'foo)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; we remove that value...</tt>
+<br><tt>(boundp 'foo)&nbsp;&nbsp; =>&nbsp; nil&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; ... and it's gone</tt>
+<p><tt>(defun values-if-bound (symbols)</tt>
+<br><tt>&nbsp; (let* ((values nil))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dolist (sym symbols)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (boundp sym)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (push (symbol-value
+sym) values)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (reverse values)))</tt>
+<br><tt>(setf bar 'yes wibble 'no wombat 'maybe)</tt>
+<br><tt>(values-if-bound '(foo bar baz wibble wobble wombat))&nbsp; =>
+(yes no maybe)</tt></blockquote>
+If you attempt to get your hand on the value of a symbol while it is unbound,
+you get an error. Any [non-keyword - why?] symbol you've just created from
+scratch is initially unbound.
+<blockquote><tt>something-new&nbsp;&nbsp; =>&nbsp; Error: The variable
+SOMETHING-NEW is unbound....</tt></blockquote>
+<b>9.7 Symbols and functions</b>
+<p>Similarly, a symbol may or may not have a function associated with it.
+"Calling a symbol" as a function will invoke the appropriate function,
+if one has been defined.
+<blockquote><tt>(defun foo () t)&nbsp; =>&nbsp; foo&nbsp;&nbsp;&nbsp; ;
+defun returns the symbol defined by it</tt>
+<br><tt>(foo)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; t&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ; nothing new so far, I hope</tt></blockquote>
+By analogy to <tt>symbol-value</tt>,<tt> boundp </tt>and<tt> makunbound</tt>,
+you can access the function associated with a symbol by calling <tt>symbol-function</tt>,
+ask whether it exists with <tt>fboundp</tt>, and remove it with <tt>fmakunbound</tt>.
+<ul><tt>(defun foo ()</tt>
+<br><tt>&nbsp; (mapcar (lambda (func) (funcall func 'foo))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(fboundp
+symbol-function fmakunbound fboundp)))</tt>
+<p><tt>(foo)&nbsp; =>&nbsp; (<i>&lt;true>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; prints ugly (in LWW anyway)</tt>
+<br><tt><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&lt;function definition for foo>&nbsp;&nbsp;&nbsp; </i>; also prints ugly</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+foo</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+nil)</tt>
+<p><tt>(foo)&nbsp; =>&nbsp; Error: Undefined function FOO called ...</tt></ul>
+You can <tt>setf</tt> a <tt>symbol-function</tt> but the new value must
+be a function:
+<p><tt>&nbsp;&nbsp;&nbsp; (setf (symbol-function 'foo) (lambda (x) (bar
+(wibble x))))</tt>
+<br>or
+<br><tt>&nbsp;&nbsp;&nbsp; ;; foo will now have the same function definition
+as +</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (setf (symbol-function 'foo) '+)</tt>
+<br>&nbsp;
+<p><b>9.8 Summary</b>
+<p>Symbols, which we've been using heavily since the very beginning, are
+in fact data structures containing a number of fields. We have covered
+three of these here. We won't have time for packages or property lists
+(<i>plists</i>).
+<br>&nbsp;
+<table BORDER CELLPADDING=10 WIDTH="100%" >
+<tr>
+<td>
+<center><b>Accessor</b></center>
+</td>
+
+<td>
+<center><b>Permitted value</b></center>
+</td>
+
+<td>
+<center><b>Setfable?</b></center>
+</td>
+
+<td>
+<center><b>Use</b></center>
+</td>
+</tr>
+
+<tr>
+<td><tt>symbol-name</tt></td>
+
+<td>A string</td>
+
+<td>No</td>
+
+<td>The print-name of the symbol, used to identify the symbol uniquely
+(within its package)</td>
+</tr>
+
+<tr>
+<td><tt>symbol-value</tt></td>
+
+<td>Initially unbound. Can be any lisp object</td>
+
+<td>Yes</td>
+
+<td>The value associated with this symbol "as a variable"</td>
+</tr>
+
+<tr>
+<td><tt>symbol-function</tt></td>
+
+<td>Initially unbound. Can be any function (named or anonymous, closure
+or not, etc.)</td>
+
+<td>Yes</td>
+
+<td>The function associated with this symbol</td>
+</tr>
+
+<tr>
+<td><tt>symbol-package</tt></td>
+
+<td>An object of type <tt>package</tt> (or possibly <tt>nil</tt>)</td>
+
+<td>No, but see <tt>intern</tt>, <tt>import</tt>, <tt>export</tt>, etc.</td>
+
+<td>Packages form (somewhat) private namespaces. For example, the difference
+between <tt>foo</tt> and <tt>:foo</tt> is that they are in different packages</td>
+</tr>
+
+<tr>
+<td><tt>symbol-plist</tt></td>
+
+<td>A list of the form <tt>(name1 value1 name2 value2 ...)</tt>, initially
+<tt>nil</tt>.
+The names must be symbols, the values can be anything.</td>
+
+<td>Yes, but more usually accessed via setfable function <tt>get</tt></td>
+
+<td>To allow you to hang additional values (<i>properties</i>) off a symbol</td>
+</tr>
+</table>
+
+<p><b>9.9 Practical session / Suggested activity</b>
+<ul>
+<li>
+Rewrite <tt>safe-average</tt> (9.1 above) to</li>
+
+<ol TYPE=a>
+<li>
+use <tt>catch</tt> and <tt>throw</tt> rather than <tt>return-from</tt>
+and</li>
+
+<li>
+use <tt>mapc</tt> with a closure rather than the <tt>dolist</tt> form to
+add the numbers</li>
+</ol>
+
+<li>
+Define a function that takes one argument, a number, and returns the greatest
+argument passed to it so far.</li>
+
+<li>
+Define a function that takes one argument, a number, and returns true if
+it is greater than the argument passed to the function last time it was
+called. This function should return <tt>nil</tt> first time it is called.</li>
+</ul>
+<b>9.10 Further reading / exercises</b>
+<ul>
+<li>
+Graham section 5.6 and chapters 6 (omit 6.7) and 8. There are plenty of
+exercises to get your teeth into.</li>
+
+<li>
+Write a function <tt>close-enough-producer</tt> which produces functions
+which determine whether two numerical values are within a certain tolerance
+of one another, where the tolerance is given as an argument to <tt>close-enough-producer</tt>.
+Once you've defined this function, you'll also need to figure out how to
+use it.</li>
+
+<li>
+I would like to be able to define type predicates myself, thus:</li>
+
+<ul><tt>(define-type-predicate 'my-consp 'cons)</tt>
+<br><tt>(define-type-predicate 'my-floatp 'float)</tt></ul>
+etc. (Revisit <tt>typep</tt> in section 5.3).&nbsp; Implement <tt>define-type-predicate</tt>,
+using <tt>(setf symbol-function)</tt> and a closure.
+<li>
+Given <tt>position-if</tt>, we can present a good argument for not needing
+<tt>position</tt>
+in the language. Demonstrate this by implementing position in terms of
+position-if. Ignore the <tt>:test</tt> argument for now.</li>
+
+<li>
+The function <tt>basic-top-loop</tt> in 9.1 above makes calls to <tt>eval</tt>.
+What do you think <tt>eval</tt> does? Try it out. Then look it up. Challenge:
+have a go at implementing it - if you can get as far as handling all the
+cases listed in section 3.1 you've done very well. Try to handle errors
+(especially, unbound symbols, undefined functions) appropriately.</li>
+
+<li>
+[More challenging.] How would you exchange the function definitions associated
+with two symbols? [Try it out.] Write a function which assigns to one symbol
+a function to exchange the function definitions of two further symbols.
+Create a ring of three symbols each of whose function definition exchanges
+the other two. Run them all repeatedly. Suggest at least a couple of ways
+by which you can tell whether or not you've back to where you started.
+Why do these functions print as closures?</li>
+</ul>
+
+<div align=right>Copyright (C) <a href="mailto:ndl@ravenbrook.com">Nick
+Levine</a> 1999. All rights reserved.</div>
+
+<div align=right>Last modified 2000-09-14
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/lectures/lecture-9.html#2 $</div>
+
+<ul>&nbsp;</ul>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-9.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:50 GMT -->
+</html>

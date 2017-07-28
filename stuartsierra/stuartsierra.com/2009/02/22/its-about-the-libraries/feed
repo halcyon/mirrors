@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: It&#8217;s About the Libraries</title>
+	<atom:link href="https://stuartsierra.com/2009/02/22/its-about-the-libraries/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2009/02/22/its-about-the-libraries</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Web Mechs Editor</title>
+		<link>https://stuartsierra.com/2009/02/22/its-about-the-libraries/comment-page-1#comment-42902</link>
+		<dc:creator><![CDATA[Web Mechs Editor]]></dc:creator>
+		<pubDate>Fri, 13 Nov 2009 16:22:19 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=211#comment-42902</guid>
+		<description><![CDATA[Absolutely agree with this blog article&#039;s premise.  I think most people *want* their libraries AND favorite language.  
+
+Hearing Rich Hickey talk about Clojure&#039;s integration with Java/JVM gave me the same excitement that hearing Jim Hugunin talking about how IronPython was such a good fit for the CLR and .NET Framework did.
+
+I learned Scheme a long time ago and never got too far precisely because there weren&#039;t that many libraries for it.  Now Clojure is whetting my appetite for learning a Lisp all over again.]]></description>
+		<content:encoded><![CDATA[<p>Absolutely agree with this blog article&#8217;s premise.  I think most people *want* their libraries AND favorite language.  </p>
+<p>Hearing Rich Hickey talk about Clojure&#8217;s integration with Java/JVM gave me the same excitement that hearing Jim Hugunin talking about how IronPython was such a good fit for the CLR and .NET Framework did.</p>
+<p>I learned Scheme a long time ago and never got too far precisely because there weren&#8217;t that many libraries for it.  Now Clojure is whetting my appetite for learning a Lisp all over again.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: It&#8217;s About the Platform - Digital Digressions by Stuart Sierra</title>
+		<link>https://stuartsierra.com/2009/02/22/its-about-the-libraries/comment-page-1#comment-42729</link>
+		<dc:creator><![CDATA[It&#8217;s About the Platform - Digital Digressions by Stuart Sierra]]></dc:creator>
+		<pubDate>Tue, 22 Sep 2009 21:55:40 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=211#comment-42729</guid>
+		<description><![CDATA[[...] said It&#8217;s About the Libraries, and indeed, one of the major selling points of Clojure is that it can call Java libraries [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] said It&#8217;s About the Libraries, and indeed, one of the major selling points of Clojure is that it can call Java libraries [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Настройка Emacs для работы с Clojure в ArchLinux &#171; Expl0rer&#8217;s Weblog</title>
+		<link>https://stuartsierra.com/2009/02/22/its-about-the-libraries/comment-page-1#comment-42617</link>
+		<dc:creator><![CDATA[Настройка Emacs для работы с Clojure в ArchLinux &#171; Expl0rer&#8217;s Weblog]]></dc:creator>
+		<pubDate>Sun, 19 Jul 2009 10:02:15 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=211#comment-42617</guid>
+		<description><![CDATA[[...] развития своего любимого инструмента. Он считает, что в будущем диалект Clojure вытеснит Common Lisp.   Прочитав [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] развития своего любимого инструмента. Он считает, что в будущем диалект Clojure вытеснит Common Lisp.   Прочитав [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: My road to Clojure &#124; Halfbaked Ideas</title>
+		<link>https://stuartsierra.com/2009/02/22/its-about-the-libraries/comment-page-1#comment-42616</link>
+		<dc:creator><![CDATA[My road to Clojure &#124; Halfbaked Ideas]]></dc:creator>
+		<pubDate>Sat, 18 Jul 2009 20:42:58 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=211#comment-42616</guid>
+		<description><![CDATA[[...] tedious. I want to say something nice about Java, but find myself groping for words. Fortunately, Stuart Sierra has already said what needs saying: But all the arguments about functional programming, software [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] tedious. I want to say something nice about Java, but find myself groping for words. Fortunately, Stuart Sierra has already said what needs saying: But all the arguments about functional programming, software [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Jochen Schmidt</title>
+		<link>https://stuartsierra.com/2009/02/22/its-about-the-libraries/comment-page-1#comment-42615</link>
+		<dc:creator><![CDATA[Jochen Schmidt]]></dc:creator>
+		<pubDate>Sat, 18 Jul 2009 11:11:42 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=211#comment-42615</guid>
+		<description><![CDATA[ABCL was a great effort by its original creator Peter Graves - he was the first one getting a nearly complete CL implementation that works on the JVM. Like many projects which are mainly driven by one person ABCL fell into a snow white sleep when - my guess - its creator didn&#039;t find enough time and energy to get it any further. The same could happen to Clojure when its master mind may shift his priorities. The good thing with Clojure is, that it hopefully has got enough contributors to recover from such a thing reasonably fast. Another good thing is, that ABCL is far from being dead - several contributors, particularily Erik Huelsmann work since months enhance and optimize it. I&#039;ve written an article (not yet published) in which I compared (an older version of) ABCL in speed to several other CL implementations. The only thing that could be called slow was CLOS - all other parts were surprisingly fast. To me Clojure was a nice thing, because it shows many nice language ideas; but a solid ABCL is actually more stunning to me because it brings the rich world of CL to the JVM as a plattform. Many of Clojures nice ideas can get adapted to CL.
+
+Regarding the implementation dependencies of CL:
+Every language standard that isn&#039;t defined through one particular implementation needs to define limits to create some freedom for implementors to do the right thing for their platform. I think it is really some kind of art to get this freedom declared in a way that doesn&#039;t hinder implementation and at the same time doesn&#039;t spoil the standard. CL is a particularily good example here. IMHO defining a programming language by just declaring your own implementation as the standard neither a good idea nor a great design decision.]]></description>
+		<content:encoded><![CDATA[<p>ABCL was a great effort by its original creator Peter Graves &#8211; he was the first one getting a nearly complete CL implementation that works on the JVM. Like many projects which are mainly driven by one person ABCL fell into a snow white sleep when &#8211; my guess &#8211; its creator didn&#8217;t find enough time and energy to get it any further. The same could happen to Clojure when its master mind may shift his priorities. The good thing with Clojure is, that it hopefully has got enough contributors to recover from such a thing reasonably fast. Another good thing is, that ABCL is far from being dead &#8211; several contributors, particularily Erik Huelsmann work since months enhance and optimize it. I&#8217;ve written an article (not yet published) in which I compared (an older version of) ABCL in speed to several other CL implementations. The only thing that could be called slow was CLOS &#8211; all other parts were surprisingly fast. To me Clojure was a nice thing, because it shows many nice language ideas; but a solid ABCL is actually more stunning to me because it brings the rich world of CL to the JVM as a plattform. Many of Clojures nice ideas can get adapted to CL.</p>
+<p>Regarding the implementation dependencies of CL:<br />
+Every language standard that isn&#8217;t defined through one particular implementation needs to define limits to create some freedom for implementors to do the right thing for their platform. I think it is really some kind of art to get this freedom declared in a way that doesn&#8217;t hinder implementation and at the same time doesn&#8217;t spoil the standard. CL is a particularily good example here. IMHO defining a programming language by just declaring your own implementation as the standard neither a good idea nor a great design decision.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Jeff Heon</title>
+		<link>https://stuartsierra.com/2009/02/22/its-about-the-libraries/comment-page-1#comment-42565</link>
+		<dc:creator><![CDATA[Jeff Heon]]></dc:creator>
+		<pubDate>Thu, 18 Jun 2009 17:28:21 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=211#comment-42565</guid>
+		<description><![CDATA[There are many reasons why I like Clojure, but the key feature that got me in the beginning is what Rich said in one of its presentations about Clojure on Java being the canonical implementation of Clojure.
+
+Clojure is my nth attempt to learn Lisp, and though the past failures are due to lack of commitment on my part, it really annoyed me when I was reading the excellent Practical Common Lisp book and read stuff like &quot;The exact behavior depends on your implementation.&quot; (I was not annoyed at the book, obviously, but annoyed at the fact the you get different behaviors on different implementations.)]]></description>
+		<content:encoded><![CDATA[<p>There are many reasons why I like Clojure, but the key feature that got me in the beginning is what Rich said in one of its presentations about Clojure on Java being the canonical implementation of Clojure.</p>
+<p>Clojure is my nth attempt to learn Lisp, and though the past failures are due to lack of commitment on my part, it really annoyed me when I was reading the excellent Practical Common Lisp book and read stuff like &#8220;The exact behavior depends on your implementation.&#8221; (I was not annoyed at the book, obviously, but annoyed at the fact the you get different behaviors on different implementations.)</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Daniel Weinreb</title>
+		<link>https://stuartsierra.com/2009/02/22/its-about-the-libraries/comment-page-1#comment-42489</link>
+		<dc:creator><![CDATA[Daniel Weinreb]]></dc:creator>
+		<pubDate>Sat, 30 May 2009 11:46:11 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=211#comment-42489</guid>
+		<description><![CDATA[Speaking as one of the original &quot;Gang of Five&quot; authors of &quot;Common Lisp: The Language&quot;, I am at this point convinced that Clojure is the future of Lisp (for production applications; Scheme will still have its place).  I think all of those things (libraries, mostly-functional, transactions, maybe not reader macros) are very important.  So is the general cleanup and the use of protocols throughout.  These are all things I had been advocating for the last several years, including running on the JVM, so you can imagine how delighted I was the first time I heard Rich&#039;s talk on Clojure.
+
+And I&#039;m not surprised that Rich is holding his own.  The guy is totally awesome.]]></description>
+		<content:encoded><![CDATA[<p>Speaking as one of the original &#8220;Gang of Five&#8221; authors of &#8220;Common Lisp: The Language&#8221;, I am at this point convinced that Clojure is the future of Lisp (for production applications; Scheme will still have its place).  I think all of those things (libraries, mostly-functional, transactions, maybe not reader macros) are very important.  So is the general cleanup and the use of protocols throughout.  These are all things I had been advocating for the last several years, including running on the JVM, so you can imagine how delighted I was the first time I heard Rich&#8217;s talk on Clojure.</p>
+<p>And I&#8217;m not surprised that Rich is holding his own.  The guy is totally awesome.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: K</title>
+		<link>https://stuartsierra.com/2009/02/22/its-about-the-libraries/comment-page-1#comment-42280</link>
+		<dc:creator><![CDATA[K]]></dc:creator>
+		<pubDate>Fri, 01 May 2009 03:40:39 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=211#comment-42280</guid>
+		<description><![CDATA[Clojure most definitely does not use Java primitives, heck, all the Clojure data structures are immutable by default.]]></description>
+		<content:encoded><![CDATA[<p>Clojure most definitely does not use Java primitives, heck, all the Clojure data structures are immutable by default.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Sean Ross</title>
+		<link>https://stuartsierra.com/2009/02/22/its-about-the-libraries/comment-page-1#comment-42278</link>
+		<dc:creator><![CDATA[Sean Ross]]></dc:creator>
+		<pubDate>Thu, 30 Apr 2009 22:40:25 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=211#comment-42278</guid>
+		<description><![CDATA[Fortunately Lispers, as a group,  are most definitely not against the idea of embedding other languages; sure there are the purists but I can assure you that they are not they only group in the Common Lisp community. 
+
+Rich Hickeys JFLI, which you allude to in your post, has been picked up by Nick Levine and is being used in production systems as well as being recently ported to CCL (previously it was only usable on Lispworks which hindered its adoption) so I would not go as far as saying that Rich didn&#039;t get very far in providing an interface to java libraries.
+
+Personally, I would like to thank you, on behalf of Common Lispers who are interested in getting things done for working on providing an interface to a wealth of Perl libraries.
+
+Sean.]]></description>
+		<content:encoded><![CDATA[<p>Fortunately Lispers, as a group,  are most definitely not against the idea of embedding other languages; sure there are the purists but I can assure you that they are not they only group in the Common Lisp community. </p>
+<p>Rich Hickeys JFLI, which you allude to in your post, has been picked up by Nick Levine and is being used in production systems as well as being recently ported to CCL (previously it was only usable on Lispworks which hindered its adoption) so I would not go as far as saying that Rich didn&#8217;t get very far in providing an interface to java libraries.</p>
+<p>Personally, I would like to thank you, on behalf of Common Lispers who are interested in getting things done for working on providing an interface to a wealth of Perl libraries.</p>
+<p>Sean.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Bruce Lewis</title>
+		<link>https://stuartsierra.com/2009/02/22/its-about-the-libraries/comment-page-1#comment-42274</link>
+		<dc:creator><![CDATA[Bruce Lewis]]></dc:creator>
+		<pubDate>Thu, 30 Apr 2009 16:15:44 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=211#comment-42274</guid>
+		<description><![CDATA[You don&#039;t need primitive-static-method in Kawa as of several years ago.  It&#039;s just there for backward compatibility.  Newer syntax for calling Java methods is much easier:
+
+http://www.gnu.org/software/kawa/Method-operations.html]]></description>
+		<content:encoded><![CDATA[<p>You don&#8217;t need primitive-static-method in Kawa as of several years ago.  It&#8217;s just there for backward compatibility.  Newer syntax for calling Java methods is much easier:</p>
+<p><a href="http://www.gnu.org/software/kawa/Method-operations.html" rel="nofollow">http://www.gnu.org/software/kawa/Method-operations.html</a></p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.298 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:58:42 -->
+
+<!-- Compression = gzip -->

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/jsonic/testing-the-language.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:18 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Extend a data format: jsonic</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;extend-a-data-format-jsonic&quot;)"></div><h1 anchor="extend-a-data-format-jsonic" id="extend-a-data-format-jsonic" hyphens="none">Extend a data format: <span class="my-code" decode="exclude">jsonic</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification.html">2&emsp;spec­i­fi­ca­tion</a></li><li><a href="setup.html">3&emsp;setup</a></li><li><a href="the-reader.html">4&emsp;the reader</a></li><li><a href="the-tokenizer.html">5&emsp;the tok­enizer</a></li><li><a href="the-parser.html">6&emsp;the parser</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a class="here" href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Yu6Sp&quot;)"></div><p id="a_Yu6Sp">We remem­ber from our <a href="language-specification.html">lan­guage spec­i­fi­ca­tion</a> that every valid JSON file should be a valid <span class="my-code" decode="exclude">jsonic</span> pro­gram. Let’s test that propo­si­tion by run­ning our orig­i­nal sam­ple JSON under <span class="my-code" decode="exclude">#lang jsonic</span>:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_xEZVC&quot;)"></div><div class="highlight-container" id="a_xEZVC"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang jsonic<br/>[<br/>  null,<br/>  42,<br/>  true,<br/>  ["array", "of", "strings"],<br/>  {<br/>    "key-1": null,<br/>    "key-2": false,<br/>    "key-3": {"subkey": 21}<br/>  }<br/>]</div><div class="highlight" form="false" id="a_aYLCX"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="source"><pre>#lang jsonic
+[
+  null,
+  42,
+  true,
+  ["array", "of", "strings"],
+  {
+    "key-1": null,
+    "key-2": false,
+    "key-3": {"subkey": 21}
+  }
+]
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_vL4mW&quot;)"></div><div class="highlight-container" id="a_vL4mW"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">[<br/>  null,<br/>  42,<br/>  true,<br/>  ["array", "of", "strings"],<br/>  {<br/>    "key-1": null,<br/>    "key-2": false,<br/>    "key-3": {"subkey": 21}<br/>  }<br/>]</div><div class="highlight" form="false" id="a_dpeJe"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="source"><pre>[
+  null,
+  42,
+  true,
+  ["array", "of", "strings"],
+  {
+    "key-1": null,
+    "key-2": false,
+    "key-3": {"subkey": 21}
+  }
+]
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_zZq9a&quot;)"></div><p id="a_zZq9a">Very good. Now let’s change the <span class="my-code" decode="exclude">42</span> to <span class="my-code" decode="exclude">3/5</span>—which is an invalid JSON num­ber—and see what hap­pens.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_KbMhy&quot;)"></div><div class="highlight-container" id="a_KbMhy"><div id="code_45" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang jsonic<br/>[<br/>  null,<br/>  3/5,<br/>  true,<br/>  ["array", "of", "strings"],<br/>  {<br/>    "key-1": null,<br/>    "key-2": false,<br/>    "key-3": {"subkey": 21}<br/>  }<br/>]</div><div class="highlight" form="false" id="a_rFBy8"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="source"><pre>#lang jsonic
+[
+  null,
+  3/5,
+  true,
+  ["array", "of", "strings"],
+  {
+    "key-1": null,
+    "key-2": false,
+    "key-3": {"subkey": 21}
+  }
+]
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk2" data-clipboard-target="#code_45" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_1Jq68&quot;)"></div><div class="highlight-container err" id="a_1Jq68"><div id="code_46" form="false" decode="exclude" style="font-size:0;width:0;height:0">string::14: string-&gt;jsexpr: error while parsing a json array</div><div class="highlight" form="false" id="a_W7KzB"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>string::14: string-&gt;jsexpr: error while parsing a json array
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk3" data-clipboard-target="#code_46" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_yqEIH&quot;)"></div><p id="a_yqEIH">We could imag­ine a friend­lier error mes­sage. The num­ber <span class="my-code" decode="exclude">14</span> sig­nals that the prob­lem is at the 14th char­ac­ter of the source code. But <span class="my-code" decode="exclude">jsonic</span> is behav­ing cor­rectly. It’s rais­ing an error because it can’t pro­duce a valid JSON result.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_fbvnp&quot;)"></div><p id="a_fbvnp">Now let’s replace our JSON val­ues with embed­ded Racket expres­sions. Taken together, they should pro­duce the same result:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic-test.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_7MwHG&quot;)"></div><div class="highlight-container" id="a_7MwHG"><div id="code_47" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang jsonic<br/>// a line comment<br/>[<br/>    @$ 'null $@,<br/>    @$ #f $@,<br/>    @$ #t $@,<br/>    @$ (* 6 7) $@,<br/>    @$ "string" $@,<br/>    @$ (list "array" "of" "strings") $@,<br/>    @$ (hash 'key-1 42<br/>             'key-2 "value"<br/>             'key-3 (hash 'subkey 21)) $@<br/>]</div><div class="highlight" form="false" id="a_5akIf"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="source"><pre>#lang jsonic
+// a line comment
+[
+    @$ &#39;null $@,
+    @$ #f $@,
+    @$ #t $@,
+    @$ (* 6 7) $@,
+    @$ "string" $@,
+    @$ (list "array" "of" "strings") $@,
+    @$ (hash &#39;key-1 42
+             &#39;key-2 "value"
+             &#39;key-3 (hash &#39;subkey 21)) $@
+]
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk4" data-clipboard-target="#code_47" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_7b04N&quot;)"></div><div class="highlight-container" id="a_7b04N"><div id="code_48" form="false" decode="exclude" style="font-size:0;width:0;height:0">[<br/>  null,<br/>  42,<br/>  true,<br/>  ["array","of","strings"],<br/>  {"key-1":null,"key-3":{"subkey":21},"key-2":false}<br/>]</div><div class="highlight" form="false" id="a_I67vR"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="source"><pre>[
+  null,
+  42,
+  true,
+  ["array","of","strings"],
+  {"key-1":null,"key-3":{"subkey":21},"key-2":false}
+]
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk5" data-clipboard-target="#code_48" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_8JAuZ&quot;)"></div><p id="a_8JAuZ">That’s also cor­rect. The white­space is for­mat­ted dif­fer­ently. The keys inside the JSON object have a dif­fer­ent order. But those dif­fer­ences don’t change the mean­ing of the result­ing JSON.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_nzIf3&quot;)"></div><p id="a_nzIf3">As we did above, let’s break the source code. This time we replace the Racket expres­sion <span class="my-code" decode="exclude">(* 6 7)</span> with <span class="my-code" decode="exclude">(/ 3 5)</span>, which pro­duces an invalid num­ber:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic-test.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_GOJ70&quot;)"></div><div class="highlight-container" id="a_GOJ70"><div id="code_49" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang jsonic<br/>// a line comment<br/>[<br/>  @$ 'null $@,<br/>  @$ (/ 3 5) $@,<br/>  @$ (= 2 (+ 1 1)) $@,<br/>  @$ (list "array" "of" "strings") $@,<br/>  @$ (hash 'key-1 'null<br/>           'key-2 (even? 3)<br/>           'key-3 (hash 'subkey 21)) $@<br/>]</div><div class="highlight" form="false" id="a_Z4NTT"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="source"><pre>#lang jsonic
+// a line comment
+[
+  @$ &#39;null $@,
+  @$ (/ 3 5) $@,
+  @$ (= 2 (+ 1 1)) $@,
+  @$ (list "array" "of" "strings") $@,
+  @$ (hash &#39;key-1 &#39;null
+           &#39;key-2 (even? 3)
+           &#39;key-3 (hash &#39;subkey 21)) $@
+]
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk6" data-clipboard-target="#code_49" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Jiy8Q&quot;)"></div><div class="highlight-container err" id="a_Jiy8Q"><div id="code_50" form="false" decode="exclude" style="font-size:0;width:0;height:0">jsexpr-&gt;string: expected argument of type &lt;legal JSON value&gt;; given: 3/5</div><div class="highlight" form="false" id="a_CAVPS"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>jsexpr-&gt;string: expected argument of type &lt;legal JSON value&gt;; given: 3/5
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk7" data-clipboard-target="#code_50" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_N6by2&quot;)"></div><p id="a_N6by2">Again, we could imag­ine a friend­lier error mes­sage. But <span class="my-code" decode="exclude">jsonic</span> is doing what we hoped. It raises an error when we try to embed an unco­op­er­a­tive S-expres­sion.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_tk3mT&quot;)"></div><p id="a_tk3mT">We’ve met our orig­i­nal require­ments, so <span class="my-code" decode="exclude">jsonic</span> is com­plete.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification.html">2&emsp;spec­i­fi­ca­tion</a></li><li><a href="setup.html">3&emsp;setup</a></li><li><a href="the-reader.html">4&emsp;the reader</a></li><li><a href="the-tokenizer.html">5&emsp;the tok­enizer</a></li><li><a href="the-parser.html">6&emsp;the parser</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a class="here" href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="the-expander.html">← prev</a>
+    <a class="nav-right" href="recap.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

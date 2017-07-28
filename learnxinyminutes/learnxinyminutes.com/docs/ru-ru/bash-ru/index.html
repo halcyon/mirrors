@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/ru-ru/bash-ru/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:36:13 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn X in Y Minutes: Scenic Programming Language Tours</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../../css/normalize.css">
+        <link rel="stylesheet" href="../../../css/main.css">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fru-ru%2Fbash-ru%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3Dbash">
+        Поделиться страницей
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">Изучите X за Y минут</a></h2>
+  <h2>Где X=bash</h2>
+  
+    <p class="filelink">
+    Получить исходный код:
+    <a href="../../files/LearnBash-ru.sh">LearnBash-ru.sh</a>
+    </p>
+  
+  <div id="doc">
+    <p>Bash - это командная оболочка unix (unix shell), которая распространялась как оболочка для операционной системы GNU и используется в качестве оболочки по умолчанию для Linux и Mac OS X.
+Почти все нижеприведенные примеры могут быть частью shell-скриптов или исполнены напрямую в shell.</p>
+
+<p><a href="http://www.gnu.org/software/bash/manual/bashref.html">Подробнее.</a></p>
+<pre class="highlight shell"><code><span class="c">#!/bin/bash</span>
+<span class="c"># Первая строка скрипта - это shebang, который сообщает системе, как исполнять</span>
+<span class="c"># этот скрипт: http://en.wikipedia.org/wiki/Shebang_(Unix)</span>
+<span class="c"># Как вы уже поняли, комментарии начинаются с #. Shebang - тоже комментарий.</span>
+
+<span class="c"># Простой пример hello world:</span>
+<span class="nb">echo </span>Hello world!
+
+<span class="c"># Отдельные команды начинаются с новой строки или разделяются точкой с запятой:</span>
+<span class="nb">echo</span> <span class="s1">'Это первая строка'</span>; <span class="nb">echo</span> <span class="s1">'Это вторая строка'</span>
+
+<span class="c"># Вот так объявляется переменная:</span>
+<span class="nv">VARIABLE</span><span class="o">=</span><span class="s2">"Просто строка"</span>
+
+<span class="c"># но не так:</span>
+VARIABLE <span class="o">=</span> <span class="s2">"Просто строка"</span>
+<span class="c"># Bash решит, что VARIABLE - это команда, которую он должен исполнить,</span>
+<span class="c"># и выдаст ошибку, потому что не сможет найти ее.</span>
+
+<span class="c"># и не так:</span>
+<span class="nv">VARIABLE</span><span class="o">=</span> <span class="s1">'Просто строка'</span>
+<span class="c"># Тут Bash решит, что 'Просто строка' - это команда, которую он должен исполнить,</span>
+<span class="c"># и выдаст ошибку, потому что не сможет найти такой команды</span>
+<span class="c"># (здесь 'VARIABLE=' выглядит как присвоение значения переменной,</span>
+<span class="c"># но только в контексте исполнения команды 'Просто строка').</span>
+
+<span class="c"># Использование переменой:</span>
+<span class="nb">echo</span> <span class="nv">$VARIABLE</span>
+<span class="nb">echo</span> <span class="s2">"</span><span class="nv">$VARIABLE</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="s1">'$VARIABLE'</span>
+<span class="c"># Когда вы используете переменную - присваиваете, экспортируете и т.д. -</span>
+<span class="c"># пишите её имя без $. А для получения значения переменной используйте $.</span>
+<span class="c"># Заметьте, что ' (одинарные кавычки) не раскрывают переменные в них.</span>
+
+<span class="c"># Подстановка строк в переменные</span>
+<span class="nb">echo</span> <span class="k">${</span><span class="nv">VARIABLE</span><span class="p">/Просто/A</span><span class="k">}</span>
+<span class="c"># Это выражение заменит первую встреченную подстроку "Просто" на "A"</span>
+
+<span class="c"># Взять подстроку из переменной</span>
+<span class="nv">LENGTH</span><span class="o">=</span>7
+<span class="nb">echo</span> <span class="k">${</span><span class="nv">VARIABLE</span>:0:LENGTH<span class="k">}</span>
+<span class="c"># Это выражение вернет только первые 7 символов переменной VARIABLE</span>
+
+<span class="c"># Значение по умолчанию</span>
+<span class="nb">echo</span> <span class="k">${</span><span class="nv">FOO</span><span class="k">:-</span><span class="s2">"DefaultValueIfFOOIsMissingOrEmpty"</span><span class="k">}</span>
+<span class="c"># Это сработает при отсутствующем значении (FOO=) и пустой строке (FOO="");</span>
+<span class="c"># ноль (FOO=0) вернет 0.</span>
+<span class="c"># Заметьте, что в любом случае значение самой переменной FOO не изменится.</span>
+
+<span class="c"># Встроенные переменные:</span>
+<span class="c"># В bash есть полезные встроенные переменные, например</span>
+<span class="nb">echo</span> <span class="s2">"Последнее возвращенное значение: </span><span class="nv">$?</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="s2">"PID скрипта: </span><span class="nv">$$</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="s2">"Количество аргументов: $#"</span>
+<span class="nb">echo</span> <span class="s2">"Аргументы скрипта: </span><span class="nv">$@</span><span class="s2">"</span>
+<span class="nb">echo</span> <span class="s2">"Аргументы скрипта, распределённые по отдельным переменным: </span><span class="nv">$1</span><span class="s2"> </span><span class="nv">$2</span><span class="s2">..."</span>
+
+<span class="c"># Чтение аргументов из устройста ввода:</span>
+<span class="nb">echo</span> <span class="s2">"Как Вас зовут?"</span>
+<span class="nb">read </span>NAME <span class="c"># Обратите внимание, что нам не нужно определять новую переменную</span>
+<span class="nb">echo </span>Привет, <span class="nv">$NAME</span>!
+
+<span class="c"># У нас есть обычная структура if:</span>
+<span class="c"># наберите 'man test' для получения подробной информации о форматах условия</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$NAME</span> -ne <span class="nv">$USER</span> <span class="o">]</span>
+<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Имя не совпадает с именем пользователя"</span>
+<span class="k">else
+    </span><span class="nb">echo</span> <span class="s2">"Имя совпадает с именем пользователя"</span>
+<span class="k">fi</span>
+
+<span class="c"># Примечание: если $Name пустой, bash интерпретирует код как:</span>
+<span class="k">if</span> <span class="o">[</span> -ne <span class="nv">$USER</span> <span class="o">]</span>
+<span class="c"># а это ошибочная команда</span>
+<span class="c"># поэтому такие переменные нужно использовать так:</span>
+<span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$Name</span><span class="s2">"</span> -ne <span class="nv">$USER</span> <span class="o">]</span> ...
+<span class="c"># когда $Name пустой, bash видит код как:</span>
+<span class="k">if</span> <span class="o">[</span> <span class="s2">""</span> -ne <span class="nv">$USER</span> <span class="o">]</span> ...
+<span class="c"># что работает правильно</span>
+
+<span class="c"># Также есть условное исполнение</span>
+<span class="nb">echo</span> <span class="s2">"Исполнится всегда"</span> <span class="o">||</span> <span class="nb">echo</span> <span class="s2">"Исполнится, если первая команда завершится ошибкой"</span>
+<span class="nb">echo</span> <span class="s2">"Исполнится всегда"</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">"Исполнится, если первая команда выполнится удачно"</span>
+
+<span class="c"># Можно использовать &amp;&amp; и || в выражениях if, когда нужно несколько пар скобок:</span>
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$NAME</span> <span class="o">==</span> <span class="s2">"Steve"</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> <span class="nv">$AGE</span> -eq 15 <span class="o">]</span>
+<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Исполнится, если </span><span class="nv">$NAME</span><span class="s2"> равно Steve И </span><span class="nv">$AGE</span><span class="s2"> равно 15."</span>
+<span class="k">fi
+
+if</span> <span class="o">[</span> <span class="nv">$NAME</span> <span class="o">==</span> <span class="s2">"Daniya"</span> <span class="o">]</span> <span class="o">||</span> <span class="o">[</span> <span class="nv">$NAME</span> <span class="o">==</span> <span class="s2">"Zach"</span> <span class="o">]</span>
+<span class="k">then
+    </span><span class="nb">echo</span> <span class="s2">"Исполнится, если </span><span class="nv">$NAME</span><span class="s2"> равно Daniya ИЛИ Zach."</span>
+<span class="k">fi</span>
+
+<span class="c"># Выражения обозначаются таким форматом:</span>
+<span class="nb">echo</span> <span class="k">$((</span> <span class="m">10</span> <span class="o">+</span> <span class="m">5</span> <span class="k">))</span>
+
+<span class="c"># В отличие от других языков программирования, Bash - это командная оболочка,</span>
+<span class="c"># а значит, работает в контексте текущей директории.</span>
+<span class="c"># Вы можете просматривать файлы и директории в текущей директории командой ls:</span>
+ls
+
+<span class="c"># У этой команды есть опции:</span>
+ls -l <span class="c"># Показать каждый файл и директорию на отдельной строке</span>
+
+<span class="c"># Результат предыдущей команды может быть направлен на вход следующей.</span>
+<span class="c"># Команда grep фильтрует ввод по шаблону.</span>
+<span class="c"># Так мы можем просмотреть только *.txt файлы в текущей директории:</span>
+ls -l | grep <span class="s2">"</span><span class="se">\.</span><span class="s2">txt"</span>
+
+<span class="c"># Вы можете перенаправить ввод и вывод команды (stdin, stdout и stderr).</span>
+<span class="c"># Следующая команда означает: читать из stdin, пока не встретится ^EOF$, и</span>
+<span class="c"># перезаписать hello.py следующим строками (до строки "EOF"):</span>
+cat &gt; hello.py <span class="sh">&lt;&lt; EOF
+#!/usr/bin/env python
+from __future__ import print_function
+import sys
+print("#stdout", file=sys.stdout)
+print("#stderr", file=sys.stderr)
+for line in sys.stdin:
+    print(line, file=sys.stdout)
+EOF
+
+</span><span class="c"># Запуск hello.py с разными вариантами перенаправления потоков</span>
+<span class="c"># стандартных ввода, вывода и ошибок:</span>
+python hello.py &lt; <span class="s2">"input.in"</span>
+python hello.py &gt; <span class="s2">"output.out"</span>
+python hello.py 2&gt; <span class="s2">"error.err"</span>
+python hello.py &gt; <span class="s2">"output-and-error.log"</span> 2&gt;&amp;1
+python hello.py &gt; /dev/null 2&gt;&amp;1
+<span class="c"># Поток ошибок перезапишет файл, если этот файл существует,</span>
+<span class="c"># поэтому, если вы хотите дописывать файл, используйте "&gt;&gt;":</span>
+python hello.py &gt;&gt; <span class="s2">"output.out"</span> 2&gt;&gt; <span class="s2">"error.err"</span>
+
+<span class="c"># Переписать output.txt, дописать error.err и сосчитать строки:</span>
+info bash <span class="s1">'Basic Shell Features'</span> <span class="s1">'Redirections'</span> &gt; output.out 2&gt;&gt; error.err
+wc -l output.out error.err
+
+<span class="c"># Запустить команду и вывести ее файловый дескриптор (смотрите: man fd)</span>
+<span class="nb">echo</span> &lt;<span class="o">(</span><span class="nb">echo</span> <span class="s2">"#helloworld"</span><span class="o">)</span>
+
+<span class="c"># Перезаписать output.txt строкой "#helloworld":</span>
+cat &gt; output.out &lt;<span class="o">(</span><span class="nb">echo</span> <span class="s2">"#helloworld"</span><span class="o">)</span>
+<span class="nb">echo</span> <span class="s2">"#helloworld"</span> &gt; output.out
+<span class="nb">echo</span> <span class="s2">"#helloworld"</span> | cat &gt; output.out
+<span class="nb">echo</span> <span class="s2">"#helloworld"</span> | tee output.out &gt;/dev/null
+
+<span class="c"># Подчистить временные файлы с подробным выводом ('-i' - интерактивый режим)</span>
+rm -v output.out error.err output-and-error.log
+
+<span class="c"># Команды могут быть подставлены в строку с помощью $( ):</span>
+<span class="c"># следующие команды выводят число файлов и директорий в текущей директории.</span>
+<span class="nb">echo</span> <span class="s2">"Здесь </span><span class="k">$(</span>ls | wc -l<span class="k">)</span><span class="s2"> элементов."</span>
+
+<span class="c"># То же самое можно сделать с использованием обратных кавычек,</span>
+<span class="c"># но они не могут быть вложенными, поэтому предпочтительно использовать $( ).</span>
+<span class="nb">echo</span> <span class="s2">"Здесь </span><span class="sb">`</span>ls | wc -l<span class="sb">`</span><span class="s2"> элементов."</span>
+
+<span class="c"># В Bash есть структура case, которая похожа на switch в Java и C++:</span>
+<span class="k">case</span> <span class="s2">"</span><span class="nv">$VARIABLE</span><span class="s2">"</span> <span class="k">in</span> 
+    <span class="c"># Перечислите шаблоны для условий, которые хотите отловить</span>
+    0<span class="p">)</span> <span class="nb">echo</span> <span class="s2">"Тут ноль."</span><span class="p">;;</span>
+    1<span class="p">)</span> <span class="nb">echo</span> <span class="s2">"Тут один."</span><span class="p">;;</span>
+    <span class="k">*</span><span class="p">)</span> <span class="nb">echo</span> <span class="s2">"Это не пустое значение."</span><span class="p">;;</span>
+<span class="k">esac</span>
+
+<span class="c"># Цикл for перебирает элементы переданные в аргументе:</span>
+<span class="c"># Содержимое $VARIABLE будет напечатано три раза.</span>
+<span class="k">for </span>VARIABLE <span class="k">in</span> <span class="o">{</span>1..3<span class="o">}</span>
+<span class="k">do
+    </span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$VARIABLE</span><span class="s2">"</span>
+<span class="k">done</span>
+
+<span class="c"># Или с использованием "традиционного" синтаксиса цикла for:</span>
+<span class="k">for</span> <span class="o">((</span><span class="nv">a</span><span class="o">=</span>1; a &lt;<span class="o">=</span> 3; a++<span class="o">))</span>
+<span class="k">do
+    </span><span class="nb">echo</span> <span class="nv">$a</span>
+<span class="k">done</span>
+
+<span class="c"># Цикл for можно использовать для действий с файлами.</span>
+<span class="c"># Запустим команду 'cat' для файлов file1 и file2</span>
+<span class="k">for </span>VARIABLE <span class="k">in </span>file1 file2
+<span class="k">do
+    </span>cat <span class="s2">"</span><span class="nv">$VARIABLE</span><span class="s2">"</span>
+<span class="k">done</span>
+
+<span class="c"># ... или выводом из команд</span>
+<span class="c"># Запустим cat для вывода из ls.</span>
+<span class="k">for </span>OUTPUT <span class="k">in</span> <span class="k">$(</span>ls<span class="k">)</span>
+<span class="k">do
+    </span>cat <span class="s2">"</span><span class="nv">$OUTPUT</span><span class="s2">"</span>
+<span class="k">done</span>
+
+<span class="c"># Цикл while:</span>
+<span class="k">while</span> <span class="o">[</span> <span class="nb">true</span> <span class="o">]</span>
+<span class="k">do
+    </span><span class="nb">echo</span> <span class="s2">"тело цикла здесь..."</span>
+    <span class="nb">break
+</span><span class="k">done</span>
+
+<span class="c"># Вы можете определять функции</span>
+<span class="c"># Определение:</span>
+<span class="k">function </span>foo <span class="o">()</span>
+<span class="o">{</span>
+    <span class="nb">echo</span> <span class="s2">"Аргументы работают также, как аргументы скрипта: </span><span class="nv">$@</span><span class="s2">"</span>
+    <span class="nb">echo</span> <span class="s2">"и: </span><span class="nv">$1</span><span class="s2"> </span><span class="nv">$2</span><span class="s2">..."</span>
+    <span class="nb">echo</span> <span class="s2">"Это функция"</span>
+    <span class="k">return </span>0
+<span class="o">}</span>
+
+<span class="c"># или просто</span>
+bar <span class="o">()</span>
+<span class="o">{</span>
+    <span class="nb">echo</span> <span class="s2">"Другой способ определить функцию!"</span>
+    <span class="k">return </span>0
+<span class="o">}</span>
+
+<span class="c"># Вызов функции</span>
+foo <span class="s2">"Мое имя"</span> <span class="nv">$NAME</span>
+
+<span class="c"># Есть много полезных команд, которые нужно знать:</span>
+<span class="c"># напечатать последние 10 строк файла file.txt</span>
+tail -n 10 file.txt
+<span class="c"># напечатать первые 10 строк файла file.txt</span>
+head -n 10 file.txt
+<span class="c"># отсортировать строки file.txt</span>
+sort file.txt
+<span class="c"># отобрать или наоборот пропустить повторяющиеся строки (с опцией -d отбирает)</span>
+uniq -d file.txt
+<span class="c"># напечатать только первую колонку перед символом ','</span>
+cut -d <span class="s1">','</span> -f 1 file.txt
+<span class="c"># заменить каждое 'okay' на 'great' в файле file.txt (regex поддерживается)</span>
+sed -i <span class="s1">'s/okay/great/g'</span> file.txt
+<span class="c"># вывести в stdout все строки из file.txt, совпадающие с шаблоном regex;</span>
+<span class="c"># этот пример выводит строки, которые начинаются на "foo" и оканчиваются "bar"</span>
+grep <span class="s2">"^foo.*bar$"</span> file.txt
+<span class="c"># передайте опцию -c чтобы вывести число строк, в которых совпал шаблон</span>
+grep -c <span class="s2">"^foo.*bar$"</span> file.txt
+<span class="c"># чтобы искать по строке, а не шаблону regex, используйте fgrep (или grep -F)</span>
+fgrep <span class="s2">"^foo.*bar$"</span> file.txt 
+
+<span class="c"># Читайте встроенную документацию оболочки Bash командой 'help':</span>
+<span class="nb">help
+help help
+help </span><span class="k">for
+</span><span class="nb">help </span><span class="k">return
+</span><span class="nb">help source
+help</span> .
+
+<span class="c"># Читайте Bash man-документацию</span>
+apropos bash
+man 1 bash
+man bash
+
+<span class="c"># Читайте документацию info (? для помощи)</span>
+apropos info | grep <span class="s1">'^info.*('</span>
+man info
+info info
+info 5 info
+
+<span class="c"># Читайте bash info документацию:</span>
+info bash
+info bash <span class="s1">'Bash Features'</span>
+info bash 6
+info --apropos bash
+</code></pre>
+
+    <hr>
+    <p>Хотите предложить свой перевод? Может быть, улучшение перевода? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Откройте Issue</a> в репозитории Github или сделайте Pull Request сами!
+    </p>
+    <p class="contributed">
+    Первоначально предоставлено автором Max Yankov, и обновлено <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/ru-ru/bash-ru.html.markdown">7 автором (-ами)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="https://github.com/golergka">Max Yankov</a>,
+      
+    
+      
+        <a href="https://github.com/CogBear">Darren Lin</a>,
+      
+    
+      
+        <a href="http://alemedeiros.sdf.org/">Alexandre Medeiros</a>,
+      
+    
+      
+        <a href="https://github.com/darh">Denis Arh</a>,
+      
+    
+      
+        <a href="https://twitter.com/akirahirose">akirahirose</a>,
+      
+    
+      
+        <a href="http://lutic.org/">Anton Strömkvist</a>,
+      
+    
+      
+        <a href="https://github.com/iamrahil">Rahil Momin</a>,
+      
+    
+      
+        <a href="https://github.com/gskielian">Gregrory Kielian</a>,
+      
+    
+      
+        <a href="https://github.com/deryni">Etan Reisner</a>
+      
+    
+    </p>
+
+    <p>
+    
+      Translated by:
+      
+        <a href="https://github.com/kryzhovnik">Andrey Samsonov</a>
+      
+        <a href="https://github.com/Oire">Andre Polykanine</a>
+      
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/ru-ru/bash-ru/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:36:13 GMT -->
+</html>

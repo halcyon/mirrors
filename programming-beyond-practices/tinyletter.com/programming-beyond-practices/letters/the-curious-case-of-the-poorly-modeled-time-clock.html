@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/the-curious-case-of-the-poorly-modeled-time-clock by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:58 GMT -->
+<head>
+    <title> The curious case of the poorly modeled time clock </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="the-curious-case-of-the-poorly-modeled-time-clock.html">
+    <meta property="og:title" content="The curious case of the poorly modeled time clock">
+    <meta property="og:description" content="Imagine that you're building a basic time tracking system for a small business. Its central purpose is to record employee punch times from a time clock and then compute worked hours from those timesta...">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="The curious case of the poorly modeled time clock" />
+	<meta name="twitter:description" content="Imagine that you're building a basic time tracking system for a small business. Its central purpose is to record employee punch times from a time clock and then compute worked hours from those timesta" />
+	<meta name="twitter:image" content="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/04fd686d-7ae4-4ce3-91a0-8305293dacdb.png" />
+	<meta name="og:image" content="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/04fd686d-7ae4-4ce3-91a0-8305293dacdb.png" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> March 07, 2016 </div>
+            <h1 class="subject"> The curious case of the poorly modeled time clock </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> Imagine that you&#39;re building a basic time tracking system for a small business. Its central purpose is to&nbsp;record employee punch times from a time clock and then compute worked hours from those timestamps.<br>
+<br>
+Simple, right? You&#39;ll define a WorkSession model that tracks each work interval, and the only information you&#39;ll need to collect is an employee id, a start time, and a finish time. From this data, you can compute the duration of a single work session, and you can also aggregate work sessions to get total time worked per day, week, month, etc.<br>
+<br>
+Conceptually, this is about as boring as data modeling gets. A single table with three fields will do the trick. This problem is so easy, that it might make you wonder if you missed something.<br>
+<br>
+Oh, right! Just because the timestamps will be recorded digitally doesn&#39;t mean that the humans will be reliable. Humans... are never reliable.<br>
+<br>
+Suppose that an employee comes to work at 8:30 AM, but forgets to clock in. The employee remembers to clock out for lunch at 1:30 PM, to clock in when they return from lunch at 2:30 PM, and to clock out at the end of the day at 5:15 PM. A small mistake, but one that leads to flawed calculations in the time tracking system.<br>
+<br>
+The next morning, the employee looks at their time records from the previous day, and discovers their error:<br>
+<br>
+<img class="tl-email-image" data-id="660077" height="475" src="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/04fd686d-7ae4-4ce3-91a0-8305293dacdb.png" style="width: 640px; max-width: 640px;" width="640"><br>
+The employee reports their mistake to a manager, who then uses an admin panel to:
+<ul>
+	<li><span style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 16px;">Edit&nbsp;the first work session to begin at 8:30 AM and end at 1:30 PM</span></li>
+	<li>Edit&nbsp;the second work session to begin at 2:30 PM and end at&nbsp;5:15 PM</li>
+</ul>
+The revised timesheet shows 5 hours for the first work session, and 2.75 hours for the second session, which is what the employee meant to record in the first place.<br>
+<br>
+Fixing the data involved modifying four fields on two records, with an opportunity for error in data entry at each modification. Suddenly, the &quot;natural&quot; way of looking at the time data isn&#39;t natural at all, because a single missed punch destroys the concept of static, chronological intervals at the physical modeling level.<br>
+<br>
+After seeing this use case, can you think of a better way to model the work sessions internally? Conceptually, you&#39;ll still need present the timestamps as IN/OUT pairs, and so there is no easy way to prevent this sort of data entry error from happening. However, there are ways to make correcting the problem less awkward at the modeling level, which in turn would make it easier to provide a better punch editing workflow.<br>
+<br>
+I will share my own solution on Thursday, but please do reply to this email with your ideas. I&#39;d love to hear from you!<br>
+<br>
+Thanks!<br>
+-greg </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="building-a-better-timeclock-with-event-modeling.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="the-first-week-of-a-new-side-project.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/the-curious-case-of-the-poorly-modeled-time-clock by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:58 GMT -->
+</html>

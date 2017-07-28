@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/effective-code-reviews-part-ii by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:00 GMT -->
+<head>
+    <title> Effective Code Reviews, Part II </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="effective-code-reviews-part-ii.html">
+    <meta property="og:title" content="Effective Code Reviews, Part II">
+    <meta property="og:description" content="Today we'll be continuing our discussion on effective code reviews.">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Effective Code Reviews, Part II" />
+	<meta name="twitter:description" content="Today we'll be continuing our discussion on effective code reviews" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> October 06, 2015 </div>
+            <h1 class="subject"> Effective Code Reviews, Part II </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> <div>Hello Developer Friend!<br>
+<br>
+Today we&#39;ll be continuing our discussion on effective code reviews.&nbsp;<br>
+<br>
+In <a href="effective-code-reviews-part-1.html">Part 1</a>, I discussed how code reviews aren&#39;t meant to just be proofreading exercises focused on style and coding idioms, but instead should be focused on overall software quality. I then covered a handful of questions you can ask yourself during a review that will help you verify that a new improvement actually solves the problem it&#39;s supposed to --&nbsp;and that it does so in a way that will increase the overall value of the project.&nbsp;<br>
+<br>
+<a href="effective-code-reviews-part-1.html">If you missed the first part, go and read it now</a>,&nbsp;it will only take you a couple minutes. Although I&#39;ve been trying to keep these emails self-contained, this code review series is actually meant to be read in sequence, because it describes a set of steps that should be executed in order.<br>
+<br>
+All caught up? Great!!! Imagine you&#39;re in the middle of a code review now, and you&#39;ve completed the process described in Part 1. From here, we can turn our attention to the project&#39;s test suite.<br>
+<br>
+In essence, this phase of a review is a testing audit. The practices surrounding automated testing vary wildly from team to team: some follow TDD/BDD religously, while others have never written a single unit test before. Most likely, your projects lie somewhere in between these two extremes.<br>
+<br>
+No matter how rigorous or not-so-rigorous your testing standards are, I will assume that you have an easy way to verify whether a new changeset has broken the build for your project. If you don&#39;t have something like that set up, stop reading and fix that problem first, otherwise you&#39;ll never be able to run an effective review process.<br>
+<br>
+If you have an active continuous integration system set up, you&#39;ll already know the state of the build before you even look at any new pull request that needs reviewing. If you don&#39;t, you&#39;ll&nbsp;need to fetch the code you&#39;re reviewing and run tests on your own machine.<br>
+<br>
+If you see any failures, it&#39;s time to pause the review and figure out how to get the build to go green before continuing on. Sometimes tests fail just because they&#39;re brittle or overspecific, but you won&#39;t be able to know this for sure without closer investigation.<br>
+<br>
+The risk of a broken build is that even if the newly introduced improvement works correctly, &nbsp;any changes made to the codebase could have potentially broken existing functionality. &nbsp;Ask for help if you need it here, but don&#39;t just assume that a build failure is innocuous or that it will be sorted out later before the code is merged.<br>
+<br>
+Once you have a successful build, it&#39;s still not a sign that the newly introduced changes are safe. Failed tests can tell you a lot, but a passing test suite is only as good as the behaviors it&nbsp;describes, so you can&#39;t automate the process of reviewing&nbsp;tests.<br>
+<br>
+The first thing to look for is whether any existing tests have been modified or removed in the code you&#39;re reviewing. If so, you really need to slow down and pay careful attention to what&#39;s going on.<br>
+<br>
+Review the modifications, and ask yourself why they were made. If you can understand the reason for the changes, try to think through the effects they might have on the rest of the system. Whenever you delete or modify a test, you effectively change the contract that your codebase needs to live up to, and that can have unintended consequences. Think carefully about whether anything might break as a result of the changed expectations.<br>
+<br>
+A good portion of the time, modifications to existing tests are actually somewhat innocuous: they might remove a test for a behavior that was incorrect or incomplete, or for something that this new changeset will completely replace. In other cases, a fine grained test might be made more coarse grained, or vice-versa. None of this is inherently dangerous, but it does require a bit of careful thought and attention to detail.<br>
+<br>
+A decent guideline here is that changes to tests for areas of the code that are somewhat&nbsp;isolated and independent are relatively safe, but changes to tests for anything that&#39;s meant to be reused or built on top of is more risky.<br>
+<br>
+You may not be able to answer all of these questions on your own. Don&#39;t be afraid to pause the review if you&#39;re uncertain about something and ask the person who made the changes. No matter what the outcome, these conversations are always fruitful because they build shared understanding of the problem space, and can also be used to root out mistaken assumptions before they cause any real damage.<br>
+<br>
+Once you get to this point, you still haven&#39;t even looked at the test coverage for the new improvement. That&#39;s a big topic, so I&#39;ll save it for next time.<br>
+<br>
+To wrap things up for today, let&#39;s take a look at where you&#39;d be at by this point in a review if you followed all the steps I&#39;ve laid out so far:<br>
+&nbsp;</div>
+
+<ul>
+	<li>You&#39;ve verified that the code actually solves a real problem, and it matches the expectations set in a bug report or feature request.<br>
+	&nbsp;</li>
+	<li>You&#39;ve checked that the code is running somewhere other than the machine of the person who wrote it. Ideally speaking, that&#39;d be a production environment, but even your own machine is a good starting point.<br>
+	&nbsp;</li>
+	<li>You&#39;ve experimented with the feature or fix yourself, and used it from the perspective of the people who will benefit from this change. You&#39;ve raised any concerns about usability, awkward error handling, surprising behavior, etc. and they&#39;ve been sorted out by the person who requested the review.<br>
+	&nbsp;</li>
+	<li>You&#39;ve&nbsp;checked to make sure that the test suite for the codebase is running, and that it&#39;s passing all tests.<br>
+	&nbsp;</li>
+	<li>You&#39;ve investigated any changes to existing tests that were made in the new pull request, and have worked with the person who made the changes to ensure that their new work won&#39;t break existing application behavior.<br>
+	&nbsp;</li>
+</ul>
+
+<div>At this point, you&#39;ve still only reviewed a tiny subsection of the submitted code (if any!), but you&#39;ve done quite a bit to set a high software quality standard. It may not have the same instant gratification as saying &quot;use a symbol instead of a string on line 27&quot;, but it is much more valuable.<br>
+&nbsp;<br>
+&nbsp;Next time, we&#39;ll dig into what to look for when reviewing tests. Until then, happy hacking!<br>
+&nbsp;<br>
+-greg<br>
+&nbsp;
+<hr><br>
+<em>Your feedback and questions are always welcome. Reply directly to this email, or use the <strong>#ProgrammingBeyondPractices</strong> hashtag on Twitter. If you&#39;re a <a href="http://practicingruby.com/">Practicing Ruby</a> subscriber, you can also discuss these essays with me at any time via Slack or Discourse.</em></div> </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="effective-code-reviews-part-iii.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="effective-code-reviews-part-1.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/effective-code-reviews-part-ii by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:00 GMT -->
+</html>

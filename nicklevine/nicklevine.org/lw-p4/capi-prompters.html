@@ -1,0 +1,115 @@
+(in-package "LW-P4")
+
+;; This file implements a form for use by "P4 Submit".
+
+(defun prompt-for-description-with-files (files)
+  (let* ((description-pane (make-instance 'p4-description-pane
+                                          :buffer-name (editor-buffer-name)
+                                          :title "Description"
+                                          :title-position :frame
+                                          :min-width '(character 80)
+                                          :min-height '(character 15)))
+         (files-pane (make-instance 'capi:check-button-panel
+                                    :items files
+                                    :layout-class 'capi:column-layout
+                                    :title "Files"
+                                    :title-position :frame
+                                    :callback-type :interface
+                                    :selection-callback :redisplay-interface
+                                    :retract-callback :redisplay-interface))
+         (set-all-pane-callback (lambda (data)
+                                  (setf (capi:choice-selected-items files-pane)
+                                        (when (cadr data)
+                                          (coerce (capi:collection-items files-pane) 'list)))
+                                  (capi:redisplay-interface (capi:element-interface files-pane))))
+         (set-all-pane (make-instance 'capi:push-button-panel
+                                      :items '(("Select all" t)
+                                               ("Clear all" nil))
+                                      :print-function 'car
+                                      :callback-type :data
+                                      :selection-callback set-all-pane-callback))
+         (reopen-button (make-instance 'capi:check-button
+                                       :text "Reopen after submit"))
+         (lower-pane (make-instance 'capi:row-layout
+                                    :description (list set-all-pane nil reopen-button)))
+         (layout (make-instance 'capi:column-layout
+                                :description (list description-pane
+                                                   files-pane
+                                                   lower-pane)))
+         (ok-check (lambda (self)
+                     (declare (ignore self))
+                     (and (plusp (length (capi:editor-pane-text description-pane)))
+                          (capi:choice-selected-items files-pane))))
+         (ok-function (lambda (self)
+                        (declare (ignore self))
+                        (list (capi:editor-pane-text description-pane)
+                              (coerce (capi:choice-selected-items files-pane) 'vector)
+                              (capi:item-selected reopen-button)))))
+    (setf (capi:capi-object-property description-pane 'owner) layout)
+    (multiple-value-prog1
+        (capi:popup-confirmer layout
+                              nil :title "P4 submit"
+                              :ok-check ok-check
+                              :ok-function ok-function)
+      (editor::kill-buffer-no-confirm (capi:editor-pane-buffer description-pane)))))
+
+;;;;;;;;;
+
+;; Need to handle editor errors, need to handle echo area requests, etc
+;; Widget to set package?
+
+
+(defclass p4-description-pane (capi:editor-pane)
+  ())
+
+(defmethod capi:call-editor :after ((self p4-description-pane) command)
+  (let ((buffer (capi:editor-pane-buffer self)))
+    ;; Allow system shutdown without standard prompt about unsaved buffers
+    (setf (editor:buffer-modified buffer) nil))
+  ;; Notify owner that something may have changed. This may affect
+  ;; which buttons are enabled.
+  (let ((owner (capi:capi-object-property self 'owner)))
+    (capi:redisplay-interface (capi:element-interface owner))))
+
+;; Supply a sequence of unique editor-buffer names, otherwise the
+;; system usually does OK but occasionally hijacks the "Main" buffer
+;; with potentially annoying consequences.
+(defvar *editor-count* 0)
+(defun editor-buffer-name ()
+  (format nil "P4 editor ~a"
+          (incf *editor-count*)))
+
+
+;;;;;;;;;;;;;;;;;
+
+;; COPYRIGHT AND LICENCE
+;;
+;; This file is copyright (c) 2003-2011, Nick Levine.  All rights
+;; reserved.
+;;
+;; Redistribution and use in source and binary forms, with or without
+;; modification, are permitted provided that the following conditions are
+;; met:
+;;
+;; 1.  Redistributions of source code must retain the above copyright
+;;     notice, this list of conditions and the following disclaimer.
+;;
+;; 2.  Redistributions in binary form must reproduce the above copyright
+;;     notice, this list of conditions and the following disclaimer in
+;;     the documentation and/or other materials provided with the
+;;     distribution.
+;;
+;; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+;; "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+;; LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+;; A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+;; HOLDERS AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+;; INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+;; BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+;; OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+;; ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+;; TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+;; USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+;; DAMAGE.
+
+;; $Id: //info.ravenbrook.com/user/ndl/lisp/lw-p4/capi-prompters.lisp#2 $

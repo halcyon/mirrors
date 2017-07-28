@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+
+<!-- Mirrored from stuartsierra.com/tag/engineering by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:56:17 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+		<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+<title>engineering &#8211; Digital Digressions by Stuart Sierra</title>
+<link rel='dns-prefetch' href='http://s0.wp.com/'>
+<link rel='dns-prefetch' href='http://secure.gravatar.com/'>
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel='dns-prefetch' href='http://s.w.org/'>
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Comments Feed" href="../comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; engineering Tag Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/stuartsierra.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.6"}};
+			!function(a,b,c){function d(a){var c,d,e,f,g,h=b.createElement("canvas"),i=h.getContext&&h.getContext("2d"),j=String.fromCharCode;if(!i||!i.fillText)return!1;switch(i.textBaseline="top",i.font="600 32px Arial",a){case"flag":return i.fillText(j(55356,56806,55356,56826),0,0),!(h.toDataURL().length<3e3)&&(i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,65039,8205,55356,57096),0,0),c=h.toDataURL(),i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,55356,57096),0,0),d=h.toDataURL(),c!==d);case"diversity":return i.fillText(j(55356,57221),0,0),e=i.getImageData(16,16,1,1).data,f=e[0]+","+e[1]+","+e[2]+","+e[3],i.fillText(j(55356,57221,55356,57343),0,0),e=i.getImageData(16,16,1,1).data,g=e[0]+","+e[1]+","+e[2]+","+e[3],f!==g;case"simple":return i.fillText(j(55357,56835),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode8":return i.fillText(j(55356,57135),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode9":return i.fillText(j(55358,56631),0,0),0!==i.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity","unicode9"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='twentysixteen-jetpack-css'  href='../wp-content/plugins/jetpack/modules/theme-tools/compat/twentysixteen3a05.css?ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-fonts-css'  href='https://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%2C900%2C400italic%2C700italic%2C900italic%7CMontserrat%3A400%2C700%7CInconsolata%3A400&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../wp-content/plugins/jetpack/_inc/genericons/genericons/genericons128b.css?ver=3.1' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-style-css'  href='../wp-content/themes/twentysixteen/style167b.css?ver=4.6' type='text/css' media='all' />
+<!--[if lt IE 10]>
+<link rel='stylesheet' id='twentysixteen-ie-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentysixteen-ie8-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie8.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='twentysixteen-ie7-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie7.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='../wp-content/plugins/jetpack/css/jetpack3a05.css?ver=4.2.2' type='text/css' media='all' />
+<script type='text/javascript' src='../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://stuartsierra.com/wp-content/themes/twentysixteen/js/html5.js?ver=3.7.3'></script>
+<![endif]-->
+<link rel='https://api.w.org/' href='../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+
+<link rel='dns-prefetch' href='http://v0.wordpress.com/'>
+</head>
+
+<body class="archive tag tag-engineering tag-55 hfeed">
+<div id="page" class="site">
+	<div class="site-inner">
+		<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+		<header id="masthead" class="site-header" role="banner">
+			<div class="site-header-main">
+				<div class="site-branding">
+					
+											<p class="site-title"><a href="../index.html" rel="home">Digital Digressions by Stuart Sierra</a></p>
+											<p class="site-description">From programming to everything else</p>
+									</div><!-- .site-branding -->
+
+									<button id="menu-toggle" class="menu-toggle">Menu</button>
+
+					<div id="site-header-menu" class="site-header-menu">
+													<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Primary Menu">
+								<div class="menu-main-menu-container"><ul id="menu-main-menu" class="primary-menu"><li id="menu-item-635" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../about-me.html">About Me</a></li>
+<li id="menu-item-633" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../writing.html">Writing</a></li>
+<li id="menu-item-634" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../presentations.html">Presentations</a></li>
+<li id="menu-item-636" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../software.html">Software</a></li>
+<li id="menu-item-637" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../contact.html">Contact</a></li>
+</ul></div>							</nav><!-- .main-navigation -->
+						
+											</div><!-- .site-header-menu -->
+							</div><!-- .site-header-main -->
+
+											<div class="header-image">
+					<a href="../index.html" rel="home">
+						<img src="../wp-content/uploads/2015/12/header.jpg" srcset="https://stuartsierra.com/wp-content/uploads/2015/12/header-300x70.jpg 300w, https://stuartsierra.com/wp-content/uploads/2015/12/header-768x179.jpg 768w, https://stuartsierra.com/wp-content/uploads/2015/12/header-1024x239.jpg 1024w, https://stuartsierra.com/wp-content/uploads/2015/12/header.jpg 1200w" sizes="(max-width: 709px) 85vw, (max-width: 909px) 81vw, (max-width: 1362px) 88vw, 1200px" width="1200" height="280" alt="Digital Digressions by Stuart Sierra">
+					</a>
+				</div><!-- .header-image -->
+					</header><!-- .site-header -->
+
+		<div id="content" class="site-content">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			<header class="page-header">
+				<h1 class="page-title">Tag: engineering</h1>			</header><!-- .page-header -->
+
+			
+<article id="post-927" class="post-927 post type-post status-publish format-standard hentry category-programming tag-bundling tag-clojure tag-engineering tag-java tag-open-source-software">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2016/03/21/open-source-bundling.html" rel="bookmark">Open-source Bundling</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Cast your mind back to the halcyon days of the late &#8217;90s. Windows 95/98. Internet Explorer 4. Before you laugh, consider that <a href="https://en.wikipedia.org/wiki/Internet_Explorer_4">IE4</a> included some pretty cutting-edge technology for the time: Dynamic HTML, TLS 1.0, single sign-on, streaming media, and &#8220;Channels&#8221; before RSS. IE4 even pioneered — unsuccessfully — the idea of &#8220;web browser as operating system&#8221; a decade before Google Apps.</p>
+<p>But if you remember anything about IE in the &#8217;90s, it&#8217;s probably the word <em>bundling</em>. <a href="https://en.wikipedia.org/wiki/United_States_v._Microsoft_Corp."><i>United States v. Microsoft</i></a> centered on the tight integration of IE with Windows. If you had Windows, you had to have IE. By the time the lawsuit reached a settlement, IE was entrenched as the dominant browser.</p>
+<p>Fast forward to the present. What an enlightened age we live in. <a href="http://www.zdnet.com/article/linux-and-open-source-have-won-get-over-it/">Open-source has won</a> and the <a href="https://en.wikipedia.org/wiki/Usage_share_of_web_browsers">browser market has fragmented</a>. Firefox broke the IE hegemony, and Chrome killed it. The web browser really is an operating system.</p>
+<p>But if you look around at software today, &#8220;bundling&#8221; is still with us, even in open-source software, that champion of choice and touchstone of tinkering.</p>
+<p>To take an example (and to get the taste of IE out of your brain) let&#8217;s look at <a href="https://github.com/Netflix/Hystrix">Hystrix</a>, a Java fault-tolerance framework written at Netflix. First let me say that Hystrix is a fantastic piece of engineering. Netflix has given a great gift to the open-source community by releasing, for free, an essential part of their software infrastructure. I&#8217;ve learned a lot by studying the Hystrix documentation and source code.</p>
+<p>But if you want to use Hystrix in your application, you have to use <a href="https://github.com/ReactiveX/RxJava">RxJava</a> and Netflix&#8217;s <a href="https://github.com/Netflix/archaius">Archaius</a> configuration management framework. Via transitive dependencies, you also have to use Google&#8217;s <a href="https://github.com/google/guava">Guava</a>, the <a href="http://wiki.fasterxml.com/JacksonHome">Jackson</a> JSON processor, <a href="http://slf4j.org/">SLF4J</a>, and Apache&#8217;s <a href="https://commons.apache.org/proper/commons-configuration/">Commons Configuration</a>, <a href="https://commons.apache.org/proper/commons-lang/">Commons Lang</a>, and <a href="https://commons.apache.org/proper/commons-logging/">Commons Logging</a>. For those of you keeping score at home, that&#8217;s two different logging APIs, two configuration APIs, and two grab-bag &#8220;utility&#8221; libraries.</p>
+<p>There&#8217;s nothing wrong with these library choices. They may be suitable for your application or they may not. But either way, <em>you</em> don&#8217;t get a choice. If you want Hystrix, you have to have RxJava and all the rest. Even if you choose to ignore, say, Archaius, it&#8217;s still there, linked into your application code, with whatever bugs and security holes it might carry.</p>
+<p>I don&#8217;t mean to pick on Netflix here either. As I said, Hystrix is a fantastic piece of engineering, and I&#8217;m very happy that Netflix released it. But it points to a mismatch between the goals of &#8220;internal-use&#8221; software and &#8220;open-source&#8221; software.</p>
+<p>If you&#8217;re developing a tool or library for internal use within an organization, it makes sense to integrate closely with other software internal to that organization. It saves time, reduces development effort, and makes the software organization more efficient. When software is <em>tightly integrated</em>, each new tool or library <em>multiplies the value</em> of all the other software which came before it. That&#8217;s how technology companies like Netflix or Google can deliver consistently high-quality products and rapid innovation at scale.</p>
+<p>The downside to this approach, from the open-source point of view, is that each new tool or library released by a software organization tends to be <em>tightly coupled</em> to the software which preceded it. More dependencies mean more opportunities for bugs, security holes, and misconfiguration. For the application developer using open-source libraries, each new dependency <em>multiplies the cost</em> of development and maintenance.</p>
+<p>It&#8217;s not just corporate-sponsored open source that suffers from this problem — just look at the dependency tree of any Apache project.</p>
+<p>The root problem is that great, hairy Minotaur which stalks the labyrinthine passages of any large code base: <strong>cross-cutting concerns</strong>. Almost any piece of code in an application will need, at some point, to deal with <em>at least some of:</em></p>
+<ul>
+<li>Logging</li>
+<li>Configuration</li>
+<li>Error handling &amp; recovery</li>
+<li>Process/thread management</li>
+<li>Resource management</li>
+<li>Startup/shutdown</li>
+<li>Network communication</li>
+<li>Filesystems</li>
+<li>Data persistence</li>
+<li>(De)serialization</li>
+<li>Caching</li>
+<li>Internationalization/translation</li>
+<li>Build/provisioning/deployment</li>
+</ul>
+<p>It&#8217;s much easier to write code if you know how each of these cross-cutting concerns will be handled. So when you&#8217;re developing something in-house, obviously you use the tools and libraries your organization has standardized on. Even if you&#8217;re writing something which you plan to make open-source, it&#8217;s easier to rely on the tools and patterns you already know.</p>
+<p>It&#8217;s difficult to avoid coupling library code to one or more of these concerns. Take logging, for example. Java has had a <a href="http://docs.oracle.com/javase/8/docs/api/java/util/logging/package-summary.html">built-in logging framework</a> since 1.4. But many developers preferred <a href="https://logging.apache.org/log4j/1.2/">Log4j</a> or one of a handful of others. To avoid coupling libraries to a single logging framework, there is <a href="https://commons.apache.org/proper/commons-logging/">Apache Commons Logging</a>, which tries to abstract over different logging frameworks with clever class-loading tricks. That turned out to be a brittle solution, so we got <a href="http://slf4j.org/">SLF4J</a>, which puts responsibility for linking the correct logging APIs back in the hands of the application developer. But no one wants to take an entire day to slog through the SLF4J manual in the middle of building an application. Throw in the mysterious interactions of transitive dependencies in Maven-style build tools, and it&#8217;s no wonder every Java app starts up with an <a href="https://twitter.com/PatrickMcFadin/status/661202930972790785">error message about logging</a>. And logging is the <em>easy</em> case — most programmers could probably agree on what, broadly speaking, a logging framework needs to do. But still we have half a dozen widely-used, slightly-different logging APIs.</p>
+<p>Developing a library which avoids making decisions about cross-cutting concerns is <em>possible</em>, but it takes painstaking attention to detail, with lots of extra extension points. (See Chris Houser&#8217;s talk on <a href="https://www.youtube.com/watch?v=zp0OEDcAro0">Exception Handling</a> for an example.) Unfortunately, the resulting library is often less-than-satisfying to potential users because it has so many &#8220;holes&#8221; that need to be filled in. Who wants to spend half a day writing &#8220;glue&#8221; code and callbacks before you can even <em>try out</em> a new library? Busy application developers have an incentive to choose libraries that work &#8220;out of the box,&#8221; so library creators have an incentive to make <em>arbitrary</em> decisions about cross-cutting concerns. We justify this with the oxymoron &#8220;<a href="https://twitter.com/stuartsierra/status/701900838046982144">sensible defaults</a>.&#8221;</p>
+<p>The conclusion I draw from all this is that modern programming languages have succeeded at making software out of <em>reusable</em> parts, but have largely failed at making software out of <em>interchangeable</em> parts. You cannot just &#8220;swap in,&#8221; say, a different thread-management library. Hystrix itself exists to solve a problem with libraries and cross-cutting concerns in a services architecture. Quoting from the <a href="https://github.com/Netflix/Hystrix/wiki/Home/ee70469de121a1991ec4631b3876bedcc2be785e#what-problem-does-hystrix-solve">Hystrix docs</a>:</p>
+<blockquote><p>
+Applications in complex distributed architectures have dozens of dependencies, each of which will inevitably fail at some point. If the host application is not isolated from these external failures, it risks being taken down with them.</p>
+<p>…</p>
+<p>These issues are exacerbated when network access is performed through a third-party client — a &#8220;black box&#8221; where implementation details are hidden and can change at any time, and network or resource configurations are different for each client library and often difficult to monitor and change.</p>
+<p>Even worse are transitive dependencies that perform potentially expensive or fault-prone network calls without being explicitly invoked by the application.
+</p></blockquote>
+<p>Netflix has so many &#8220;API client&#8221; libraries, each making their own network calls with unpredictable behavior, that to make their systems robust they have to <a href="https://github.com/Netflix/Hystrix/wiki/Home/ee70469de121a1991ec4631b3876bedcc2be785e#how">isolate each library in its own thread pool</a>. Again, this is amazing engineering, but it was necessary precisely because too many libraries came bundled with their own networking, error handling, and resource management decisions.</p>
+<p>A robust solution would seem to require everyone to agree on <a href="https://xkcd.com/927/">standards</a> for every possible cross-cutting concern. That will obviously never happen. Even a so-called <a href="https://docs.python.org/2/tutorial/stdlib.html#batteries-included">batteries-included</a> language <a href="http://radar.oreilly.com/2013/10/dead-batteries-included.html">cannot</a> <a href="http://www.protocolostomy.com/2010/01/22/what-batteries-included-means/">keep</a> the <a href="https://www.python.org/dev/peps/pep-0411/">same</a> <a href="https://www.python.org/dev/peps/pep-3108/">batteries</a> forever. This is a hard problem, and like all truly hard problems in software, it&#8217;s more about people than code.</p>
+<p>I wish I had a perfect solution, but the best I can offer is some guidance. If you&#8217;re writing an open-source library, do everything in your power to avoid dependencies. Use only the features of the core language, and use those conservatively. Don&#8217;t pull in a library that deals with some cross-cutting concern just because it <em>might</em> be more convenient for your users. Build your API around plain functions and standard data structures. </p>
+<p>Some examples, specific to Clojure:</p>
+<ul>
+<li>
+<p>Don&#8217;t depend on a logging framework unless it&#8217;s SLF4J.</p>
+</li>
+<li>
+<p>Don&#8217;t use an error-handling framework: Throw <code>ex-info</code> with enough data for a handler to decide what to do.</p>
+</li>
+<li>
+<p>If you need to do something asynchronous, use callbacks instead of <a href="https://github.com/clojure/core.async">core.async</a>. Callbacks are easily integrated with core.async if that&#8217;s what the user wants to do. Likewise, if you need some kind of inversion of control, use function callbacks or protocols.</p>
+</li>
+<li>
+<p>Don&#8217;t depend on any state-management framework or &#8220;ambient&#8221; state. Pass everything needed by an API function in its arguments. Provide operations for resource initialization and termination as part of your API. Same for configuration: pass a Clojure map as an argument.</p>
+</li>
+<li>
+<p>Network communication and serialization: these are, admittedly, almost impossible to avoid if you&#8217;re writing a library for some network API. But you can at least give users the <em>option</em> of controlling their own networking by providing APIs to prepare requests and parse responses independently of making the actual network calls.</p>
+</li>
+</ul>
+<p>On the other hand, some &#8220;libraries&#8221; really are more like &#8220;embeddable services,&#8221; with their own internal state. Large frameworks like Hystrix fall into this category, as do a few sophisticated &#8220;client&#8221; libraries. These libraries might be expected to manage their own resources and state &#8220;under the hood.&#8221; That&#8217;s a reasonable design choice, but at least be clear about which goal you&#8217;re pursuing and what trade-offs you&#8217;re making. In most language runtimes, the behavior and dependencies of these libraries cannot be fully isolated from the rest of the code. As an application developer, I might be willing to invest time and effort arranging my code to accommodate one or two embedded services that offer significant power in exchange for the added complexity. For everything else, when I need a library, just give me some ordinary functions.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2016/03/21/open-source-bundling.html" rel="bookmark"><time class="entry-date published updated" datetime="2016-03-21T08:32:54+00:00">March 21, 2016</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="bundling.html" rel="tag">bundling</a>, <a href="clojure.html" rel="tag">Clojure</a>, <a href="engineering.html" rel="tag">engineering</a>, <a href="java.html" rel="tag">Java</a>, <a href="open-source-software.html" rel="tag">Open-Source Software</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-132" class="post-132 post type-post status-publish format-standard hentry category-programming tag-engineering">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2008/02/12/crack-for-engineers.html" rel="bookmark">Crack for Engineers</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>I can&#8217;t help it.  I just love big, complicated systems that let you get <em>really</em> precise about what you&#8217;re talking about.  Types, classes, ontologies, schemas, normalization, denormalization, XML, RDF, XSLT, Java, &#8230;  It&#8217;s all so <em>cool</em>.  I can happily spend hours scribbling pages of hierarchies, interfaces, specifications, file formats, and the like.</p>
+<p>But at the end of the day, I have a pile of hand-written notes and no code.  All those fancy systems I love to study are not that useful when it comes to actually doing something useful.  When I want to get something done, I hack up a Ruby script.  It&#8217;s not elegant, but it works.</p>
+<p><a href="http://altlaw.org/">AltLaw</a> makes a particularly tempting target for my engineering fantasies: all that unstructured data with so much potential structure.  But to get the site to actually work, I use a flat index that stores everything as (gasp) <em>strings</em>.</p>
+<p>Perhaps I&#8217;m learning the virtue of the &#8220;<a href="http://en.wikipedia.org/wiki/Worse_is_better">worse is better</a>&#8221; approach to engineering.  The only problem is, &#8220;worse is better&#8221; is worse fun.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2008/02/12/crack-for-engineers.html" rel="bookmark"><time class="entry-date published" datetime="2008-02-12T17:43:24+00:00">February 12, 2008</time><time class="updated" datetime="2014-09-18T07:56:22+00:00">September 18, 2014</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="engineering.html" rel="tag">engineering</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+		</main><!-- .site-main -->
+	</div><!-- .content-area -->
+
+
+	<aside id="secondary" class="sidebar widget-area" role="complementary">
+		<section id="search-3" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://stuartsierra.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+	</label>
+	<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</section><section id="text-4" class="widget widget_text">			<div class="textwidget"><ul>
+<li><a href="http://feeds2.feedburner.com/StuartSierra" title="Syndicate this site using RSS 2.0">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="../comments/feed" title="The latest comments to all posts in RSS">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+</ul>
+<ul>
+<li><a href="https://twitter.com/stuartsierra">Twitter</a></li>
+<li><a href="https://github.com/stuartsierra">GitHub</a></li>
+</ul></div>
+		</section><section id="tag-widget-2" class="widget TagWidget"><h2 class="widget-title">Clojure Do’s and Don’ts</h2><ul class = "posts-by-tag-list"><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-883"><a class = "posts-by-tag-item-title" href="../2015/08/25/clojure-donts-lazy-effects.html">Clojure Don’ts: Lazy Effects</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-877"><a class = "posts-by-tag-item-title" href="../2015/08/10/clojure-donts-redundant-map.html">Clojure Don’ts: Redundant map</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-870"><a class = "posts-by-tag-item-title" href="../2015/06/16/clojure-donts-single-branch-if.html">Clojure Don’ts: Single-branch if</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-854"><a class = "posts-by-tag-item-title" href="../2015/06/10/clojure-donts-heisenparameter.html">Clojure Don’ts: The Heisenparameter</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-849"><a class = "posts-by-tag-item-title" href="../2015/06/01/clojure-donts-optional-arguments-with-varargs.html">Clojure Don’ts: Optional Arguments with Varargs</a></li><li class="posts-by-tag-item Clojure do's and don'ts errors" id="posts-by-tag-item-836"><a class = "posts-by-tag-item-title" href="../2015/05/27/clojure-uncaught-exceptions.html">Clojure Do’s: Uncaught Exceptions</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-831"><a class = "posts-by-tag-item-title" href="../2015/05/17/clojure-record-constructors.html">Record Constructors</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-826"><a class = "posts-by-tag-item-title" href="../2015/05/10/clojure-namespace-aliases.html">Clojure Do’s: Namespace Aliases</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-820"><a class = "posts-by-tag-item-title" href="../2015/05/02/clojure-donts-isa.html">Clojure Don’ts: isa?</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-812"><a class = "posts-by-tag-item-title" href="../2015/04/26/clojure-donts-concat.html">Clojure Don’ts: Concat</a></li></ul></section>	</aside><!-- .sidebar .widget-area -->
+
+		</div><!-- .site-content -->
+
+		<footer id="colophon" class="site-footer" role="contentinfo">
+							<nav class="main-navigation" role="navigation" aria-label="Footer Primary Menu">
+					<div class="menu-main-menu-container"><ul id="menu-main-menu-1" class="primary-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../about-me.html">About Me</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../writing.html">Writing</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../presentations.html">Presentations</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../software.html">Software</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../contact.html">Contact</a></li>
+</ul></div>				</nav><!-- .main-navigation -->
+			
+			
+			<div class="site-info">
+								<span class="site-title"><a href="../index.html" rel="home">Digital Digressions by Stuart Sierra</a></span>
+				<a href="https://wordpress.org/">Proudly powered by WordPress</a>
+			</div><!-- .site-info -->
+		</footer><!-- .site-footer -->
+	</div><!-- .site-inner -->
+</div><!-- .site -->
+
+	<div style="display:none">
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	</div>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201635'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2016Sepaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../wp-content/plugins/jetpack/modules/wpgroho167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../wp-content/themes/twentysixteen/js/skip-link-focus-fix8de4.js?ver=20160816'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var screenReaderText = {"expand":"expand child menu","collapse":"collapse child menu"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../wp-content/themes/twentysixteen/js/functions8de4.js?ver=20160816'></script>
+<script type='text/javascript' src='../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='https://stats.wp.com/e-201635.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.2.2',blog:'2702563',post:'0',tz:'-4',srv:'stuartsierra.com'} ]);
+	_stq.push([ 'clickTrackerInit', '2702563', '0' ]);
+</script>
+</body>
+
+<!-- Mirrored from stuartsierra.com/tag/engineering by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:56:18 GMT -->
+</html>
+
+<!-- Dynamic page generated in 0.321 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:55:11 -->
+
+<!-- Compression = gzip -->

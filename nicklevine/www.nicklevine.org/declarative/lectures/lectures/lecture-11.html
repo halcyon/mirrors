@@ -1,0 +1,620 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-11.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:52 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Lecture Eleven</title>
+</head>
+<body>
+
+<center><b><font size=+3>Declarative Languages</font></b>
+<br><b><font size=+3>Lecture #11</font></b></center>
+
+<p><b>Purpose: Evaluation rules and macros</b>
+<p><b>11.1 Recall the evaluation rules for lists</b>
+<p>We stated early on (section 3.1) that, to evaluate a list:
+<ul>
+<li>
+if it is a function call then evaluate each of its arguments, in order,
+and call the function with the results of these evaluations. The result
+of the evaluation is whatever value the function returns.</li>
+
+<li>
+if it is not a function call, we treat it specially, according to the idiosyncratic
+definition of that particular non-function.</li>
+</ul>
+We are now in a position to return to this subject and cover it more precisely,
+recalling that there are two types of "not a function": macros and special
+operators. They share the properties that:
+<ul>
+<li>
+each of these operators has its own individual syntax and, in particular,</li>
+
+<li>
+they typically don't evaluate all their arguments</li>
+</ul>
+They differ in that:
+<ul>
+<li>
+macros <u>always</u> "stand for" other code, so by <i>macroexpanding</i>
+a macro call (possibly repeatedly) you can always get to the underlying
+non macro form.</li>
+
+<li>
+special operators are implemented "under the hood" - there is no way to
+"expand" a call to a special operator. [Not quite true - an implementation
+is free to implement a special operator as a macro if it wants - it would
+be more accurate for me to state that there is no guarantee that any special
+operator will "expand". For example, none of the special operators in LispWorks
+for Windows "expand".]</li>
+
+<li>
+you can define your own macros but the set of special operators is fixed.</li>
+</ul>
+&nbsp;So why you should bother with macros?. The answer to this is that
+macros result in code which is more:
+<ul>
+<li>
+compact</li>
+
+<li>
+flexible</li>
+
+<li>
+natural / readable</li>
+
+<li>
+maintainable</li>
+
+<li>
+rapidly developed</li>
+</ul>
+
+<p><br><b>11.2 Review of special operators</b>
+<p>Let's start with the special operators. There are 25 of these in the
+language and there is no way to add more of your own. The function <tt>special-operator-p</tt>
+called with one of these symbols returns true:
+<br><tt>&nbsp;&nbsp;&nbsp; (special-operator-p 'setq)&nbsp; =>&nbsp; <i>true</i></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (special-operator-p 'setf)&nbsp; =>&nbsp; nil</tt>
+<p>We have met the following 10 special operators so far:
+<ul><tt>block</tt>
+<br><tt>return-from</tt>
+<br><tt>catch</tt>
+<br><tt>throw</tt>
+<br><tt>function</tt>
+<br><tt>quote</tt>
+<br><tt>if</tt>
+<br><tt>let*</tt>
+<br><tt>progn</tt>
+<br><tt>unwind-protect</tt></ul>
+The following 13 (of which the first 5 will be more useful to you over
+the years than the rest) are outside the scope of this course:
+<ul><tt>eval-when&nbsp; load-time-value&nbsp; locally&nbsp; the&nbsp; labels&nbsp;
+flet&nbsp; macrolet&nbsp; symbol-macrolet&nbsp; go&nbsp; tagbody&nbsp;
+progv&nbsp; multiple-value-call&nbsp; multiple-value-prog1</tt></ul>
+That leaves two more which you might get by without ever using, but for
+completeness I do need to mention them here briefly:
+<ul>
+<li>
+<tt>setq</tt></li>
+
+<br>This is equivalent to the macro <tt>setf</tt>, but can only be used
+for setting a value into a variable / symbol. So <tt>(setf foo <i>some-value</i>)</tt>
+can be rewritten <tt>(setq foo <i>some-value</i>)</tt>. A historical relic
+which probably wouldn't be in the language at all if it had been designed
+from scratch to support the more general purpose <tt>setf</tt>. Emacs lisp
+has <tt>setq</tt> but does not support <tt>setf</tt>.
+<br>&nbsp;
+<li>
+<tt>let</tt></li>
+
+<br>This is similar to the special operator <tt>let*</tt> and has the same
+syntax. The only difference between the two is that <tt>let*</tt> processes
+its binding pairs in order (<i>sequentially</i>) but <tt>let</tt> processes
+them simultaneously (<i>in parallel</i>). For example:
+<br><tt>&nbsp;&nbsp;&nbsp; (let* ((foo 99)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (bar
+(1+ foo)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bar)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; 100</tt>
+<br>but
+<br><tt>&nbsp;&nbsp;&nbsp; (let ((foo 99)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (bar (1+
+foo)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bar)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; <i>error</i></tt>
+<br>because <tt>let</tt> attempts to evaluate all the values in the variable-value
+pairs, i.e. here the values <tt>99</tt> and <tt>(1+ foo)</tt>, <u>before</u>
+it sets any of the results into either of the variables <tt>foo</tt> or
+<tt>bar</tt>.
+So <tt>(1+ foo)</tt> cannot be calculated, as <tt>foo</tt> isn't available
+yet.
+<p>I personally tend to use <tt>let</tt> in preference to <tt>let*</tt>
+when there's only one binding pair, but this is purely a matter of style
+and has absolutely no operational significance. When there are two or more
+variables being bound, you will almost always get away with <tt>let*</tt>
+(either because it doesn't matter in your case, or because - as above -
+<tt>let</tt>
+is wrong in your case).
+<p>To my mind, <tt>let</tt> and <tt>let*</tt> are badly named (c.f. <tt>setf</tt>
+and its parallel counterpart <tt>psetf</tt>).</ul>
+<b>11.3 Back to macros (see also section 7.3)</b>
+<p>In the course of the first ten lectures we have met a fair number of
+lisp's 91 macros:
+<blockquote><tt>and&nbsp; decf&nbsp; defconstant&nbsp; defparameter&nbsp;
+defstruct&nbsp; defun&nbsp; dolist&nbsp; dotimes&nbsp; ignore-errors&nbsp;
+incf&nbsp; lambda&nbsp; loop&nbsp; or&nbsp; pop&nbsp; prog1&nbsp; prog2&nbsp;
+push&nbsp; pushnew&nbsp; return&nbsp; setf&nbsp; trace&nbsp; untrace&nbsp;
+with-open-file</tt></blockquote>
+Some are easily defined (e.g. <tt>and, return</tt>), others are more complex
+in their behaviour (the defining macros, for instance), and several (<tt>push</tt>)
+look OK from a distance but turn out to be slightly more fiendish when
+you get close up. Today we will
+<ul>
+<li>
+take a look at how some of the simpler macros expand</li>
+
+<li>
+introduce a few more</li>
+
+<li>
+see how to add more macros to the language</li>
+</ul>
+Let's start with a very simple example: the macro <tt>return</tt>. We recall
+that this has syntax
+<br><tt>&nbsp;&nbsp;&nbsp; (return &amp;optional <i>what</i>)</tt>
+<br>and that it is shorthand for / equivalent to invoking the special operator
+<tt>return-from</tt>:
+<br><tt>&nbsp;&nbsp;&nbsp; (return <i>what</i>) ==&nbsp; (return-from nil
+<i>what</i>)</tt>
+<p>How is this equivalence managed?
+<p>Lisp provides the following assistance:
+<ul>
+<li>
+the function <tt>macro-function</tt>, which takes a symbol and returns
+true if there is a macro associated with that symbol.</li>
+
+<li>
+the function <tt>macroexpand-1</tt>, which takes an entire lisp form and
+runs the macro-expander associated with the <tt>car</tt> of that form,
+if possible. It returns either the expanded form, or the original if no
+expander was defined.</li>
+</ul>
+So:
+<blockquote><tt>(macro-function 'return)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; <i>true</i></tt>
+<br><tt>(macroexpand-1 '(return))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; (return-from nil)</tt>
+<br><tt>(macroexpand-1 '(return (foo bar))&nbsp; =>&nbsp; (return-from
+nil (foo bar))</tt></blockquote>
+The way you define this behaviour is via yet another (defining) macro:
+<tt>defmacro</tt>.
+For instance:
+<blockquote><tt>(defmacro return (&amp;optional what)</tt>
+<br><tt>&nbsp; (list 'return-from nil what))</tt></blockquote>
+To see how this works in practice, suppose we are running the following
+code:
+<blockquote><tt>(let ((count 0))</tt>
+<br><tt>&nbsp; (dolist (element list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (if (eq element thing)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (return count))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (incf count)))</tt></blockquote>
+and that we have arrived at the <tt>return</tt> form. The lisp system determines
+(by calling <tt>special-operator-p</tt>) that <tt>return</tt> is not a
+special operator. It then determines (by calling <tt>macro-function</tt>)
+that <tt>return</tt> is a macro. The function <tt>macroexpand-1</tt> is
+then called with the entire lisp form constituting the macro call as its
+argument:
+<br><tt>&nbsp;&nbsp;&nbsp; (macroexpand-1 '(return count))</tt>
+<br>That function invokes the macro definition for <tt>return</tt>, which
+generates a list with three elements: the symbols <tt>return-from</tt>,
+<tt>nil</tt>
+and <tt>count</tt>. It has therefore effectively generated a new lisp form:
+<br><tt>&nbsp;&nbsp;&nbsp; (return-from nil count)</tt>
+<br>and this is evaluated in place of the original form.
+<p>You don't have to think all this through every time though. You can
+just say: it's a macro, so the form will be replaced by whatever the macro
+function expands it into.
+<p>Macros transform lisp source into new code. To quote Graham:
+<center>
+<p><i>You define a macro by saying what a call should expand into.</i>
+<br><i>Underneath, macros are just functions that return expressions.</i></center>
+
+<p>Macros are an incredibly flexible and powerful way to expand the language.
+They beat #define into a cocked hat. Effectively, macros are programs which
+write more programs. They permit code which is compact, readable, maintainable.
+And because macros use lisp syntax to transform lisp into more lisp, you
+don't have to "leave the language" to use them.
+<p><b>11.4 Conditionals: when, unless and cond</b>
+<p>Another simple macro is <tt>when</tt>. This has syntax
+<br><tt>&nbsp;&nbsp;&nbsp; (when test-form form-1 form-2 ... form-n)</tt>
+<br>which is equivalent to
+<br><tt>&nbsp;&nbsp;&nbsp; (if test-form (progn form-1 form-2 ... form-n))</tt>
+<br>In other words, <tt>when</tt> evaluates its first form. If that is
+non-<tt>nil</tt>, it evaluates all its remaining forms as an implicit <tt>progn</tt>
+and returns the value of the final form, otherwise <tt>when</tt> simply
+returns <tt>nil</tt>.
+<p>So
+<blockquote><tt>(if (char= next #\;)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (progn</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (setf previous-position position)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (incf count)))</tt></blockquote>
+can be rewritten
+<blockquote><tt>(when (char= next #\;)</tt>
+<br><tt>&nbsp; (setf previous-position position)</tt>
+<br><tt>&nbsp; (incf count))</tt></blockquote>
+We can code its expander thus:
+<blockquote><tt>(defmacro when (test-form &amp;rest forms)</tt>
+<br><tt>&nbsp; (list 'if</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; test-form</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (cons 'progn forms)))</tt></blockquote>
+Note that this is getting a little difficult to read (and to code correctly!)
+- you have to stop and think about when to use <tt>list</tt> and when to
+use <tt>cons</tt>, and this is still a fairly simple example. The trick
+is to use the backquote notation (section 4.5):
+<blockquote><tt>(defmacro when (test-form &amp;rest forms)</tt>
+<br><tt>&nbsp; `(if ,test-form</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (progn ,@forms)))</tt></blockquote>
+Macro writing now becomes a whole load easier, because you simply write
+out the form you're trying to generate and place
+<ul>
+<li>
+a backquote before the whole thing</li>
+
+<li>
+a comma before each form to be evaluated in the macro expander (we didn't
+want the symbol <tt>test-form</tt> in the result - what we did want was
+the lisp code associated with this variable)</li>
+
+<li>
+comma-at before each form to be evaluated and spliced in to the surrounding
+list - typically you splice variables supplied to the macro by <tt>&amp;rest</tt>
+and typically these are forms to be evaluated as as implicit <tt>progn</tt>.</li>
+</ul>
+Another example: the macro <tt>unless</tt> which is like <tt>when</tt>
+but only runs the forms if the <tt>test-form</tt> evaluated to <tt>nil</tt>.
+The following would both work as macro definitions for <tt>unless</tt>.
+Note that one of them defines <tt>unless</tt> in terms of another macro
+(<tt>when</tt>), so that a call involving <tt>unless</tt> would have to
+be macroexpanded twice.
+<blockquote><tt>(defmacro unless (test-form &amp;rest forms)</tt>
+<br><tt>&nbsp; `(if ,test-form</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nil</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (progn ,@forms)))</tt>
+<p><tt>(defmacro unless (test-form &amp;rest forms)</tt>
+<br><tt>&nbsp; `(when (not ,test-form)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; ,@forms))</tt></blockquote>
+Finally in this section, the macro <tt>cond</tt> removes the need for vast
+nested chains of <tt>if</tt> statements. The syntax is:
+<br><tt>&nbsp;&nbsp;&nbsp; (cond clause-1 clause-2 ... clause-n)</tt>
+<br>where each clause looks like this:
+<br><tt>&nbsp;&nbsp;&nbsp; (test-form form-1 ... form-n)</tt>
+<br>If the test in <tt>clause-1</tt> is true then all the subforms in that
+clause are evaluated (implicit <tt>progn</tt>) and the value of the last
+form returned. Otherwise the next clause is tried, and so on in order until
+either one of the tests succeeds or they all fail.
+<p>This definition suggests a recursive implementation:
+<blockquote><tt>(defmacro cond (&amp;rest clauses)</tt>
+<br><tt>&nbsp; (when clauses</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (let* ((this (first clauses))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (others
+(rest clauses))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (test
+(first this))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (forms
+(rest this)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `(if ,test</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (progn
+,@forms)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (cond ,@others)))))</tt></blockquote>
+but an iterative one will do too:
+<blockquote><tt>(defmacro cond (&amp;rest clauses)</tt>
+<br><tt>&nbsp; (let ((expansion nil))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dolist (this (reverse clauses))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (let ((test (first this))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(forms (rest this)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (setf expansion</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+`(if ,test</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(progn ,@forms)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+,expansion))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; expansion))</tt></blockquote>
+Using the first expansion,
+<blockquote><tt>(cond (foo (bar) baz)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (wombat wibble)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (t 99))</tt></blockquote>
+expands to
+<blockquote><tt>(if foo</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (progn (bar) baz)</tt>
+<br><tt>&nbsp; (cond (baz wibble)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (t 99)))</tt></blockquote>
+using the second we get
+<blockquote><tt>(if foo</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (progn (bar) baz)</tt>
+<br><tt>&nbsp; (if wombat</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (progn wibble)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (if t</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (progn 99)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nil)))</tt></blockquote>
+Assuming I haven't made any mistakes in this, the forms are equivalent
+and either macro definition will do.
+<p>As you can see, writing macros can very rapidly become a complex task.
+However, the results tend to be rewarding, because the language is so much
+more powerful for the presence of macros.
+<p><b>11.5 Further examples of macros</b>
+<ul>
+<li>
+<tt>case</tt></li>
+
+<br>&nbsp;
+<p>&nbsp;
+<p>This has a syntax somewhat similar to <tt>cond:</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (case value clause-1 clause-2 ... clause-n)</tt>
+<br>where each clause looks like this:
+<br><tt>&nbsp;&nbsp;&nbsp; (keys form-1 ... form-n)</tt>
+<br>Each of the <tt>keys</tt> forms is a list of objects (not evaluated!).
+If <tt>value</tt> is <tt>eq</tt> to any of the keys for <tt>clause-1</tt>
+then that clause's subforms are evaluated in the usual way; otherwise we
+try the next clause. The final clause may have one of the symbols <tt>t</tt>
+or <tt>otherwise</tt> (it doesn't matter which) instead of a list of keys
+- that means invoke this clause anyway if all else failed. Example:
+<ul><tt>(defun decode (x)</tt>
+<br><tt>&nbsp;&nbsp; (case x</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; ((i uno) 1)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; ((ii dos) 2)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; ((iii tres) 3)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; ((iv cuatro) 4)))</tt>
+<br><tt>(defun add-em (x) (reduce '+ (mapcar 'decode x)))</tt>
+<p><tt>(add-em '(uno iii)) =>&nbsp; 4</tt></ul>
+
+<p><br>Related macros include <tt>ecase</tt> which signals an error if
+none of the keys are matched, and <tt>typecase</tt> (along with <tt>etypecase</tt>)
+which dispatches on the type of <tt>value</tt>:
+<ul><tt>(defun satisfy (requirement state)</tt>
+<br><tt>&nbsp; (etypecase requirement</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (symbol ...)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (string ...)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (cons ...)))</tt></ul>
+
+<li>
+<tt>shiftf </tt>and<tt> rotatef</tt></li>
+
+<br>&nbsp;
+<p>&nbsp;
+<p>These two macros are probably more fun than use, except that <tt>rotatef</tt>
+is dead handy for swapping values around.
+<p><tt>&nbsp;&nbsp;&nbsp; (shiftf place-1 place-2 ... place-n new-value)</tt>
+<br>assigns the old value of <tt>place-2</tt> into <tt>place-1</tt>, the
+old value of <tt>place-3</tt> into <tt>place-2</tt>, and so on to the end
+where <tt>new-value</tt> is assigned to <tt>place-n</tt>. The old value
+of <tt>place-1</tt> is returned.
+<p><tt>&nbsp;&nbsp;&nbsp; (rotatef place-1 place-2 ... place-n)</tt>
+<br>assigns the old value of <tt>place-2</tt> into <tt>place-1</tt>, the
+old value of <tt>place-3</tt> into <tt>place-2</tt>, and so on to the end
+where the old value of <tt>place-1</tt> is assigned to <tt>place-n</tt>.
+The return value is <tt>nil</tt>. In particular,
+<br><tt>&nbsp;&nbsp;&nbsp; (rotatef place-1 place-2)</tt>
+<br>is equivalent to
+<ul>&nbsp;
+<br><tt>(let ((temp (place-1)))</tt>
+<br><tt>&nbsp; (setf place-1 place-2</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; place-2 temp)</tt>
+<br><tt>&nbsp; nil)</tt></ul>
+
+<li>
+<tt>print-unreadable-object</tt></li>
+
+<br>&nbsp;
+<p>&nbsp;
+<p>This macro has syntax:
+<br><tt>&nbsp;&nbsp;&nbsp; (print-unreadable-object (object stream &amp;key
+type identity) forms) => nil</tt>
+<br>It outputs a printed representation of <tt>object</tt> on <tt>stream</tt>,
+beginning with <tt>"&lt;#"</tt> and ending with <tt>">"</tt>. Everything
+output to <tt>stream</tt> by the body <tt>forms</tt> is enclosed in the
+the angle brackets. If <tt>type</tt> is true, the output from <tt>forms</tt>
+is preceded by a brief description of the <tt>object</tt>'s type and a
+space character. If <tt>identity</tt> is true, the output from <tt>forms</tt>
+is followed by a space character and a representation of the <tt>object</tt>'s
+identity, typically a storage address.
+<p>If either <tt>type</tt> or <tt>identity</tt> is not supplied, its value
+defaults to <tt>nil</tt>. It is valid to omit the body <tt>forms</tt>.
+If <tt>type</tt> and
+<tt>identity</tt> are both true and there are no body
+<tt>forms</tt>,
+only one space character separates the type and the identity.
+<p>In this example, the precise form of the output is implementation-dependent.
+<pre>&nbsp;(defmethod print-object ((obj airplane) stream)
+&nbsp;&nbsp; (print-unreadable-object (obj stream :type t :identity t)
+&nbsp;&nbsp;&nbsp;&nbsp; (format stream "~a" (tail-number obj))))
+
+&nbsp;(format nil "~a" my-airplane)
+&nbsp;&nbsp; =>&nbsp; "#&lt;Airplane NW0773 36000123135>"
+OR =>&nbsp; "#&lt;FAA:AIRPLANE NW0773 17>"</pre>
+</ul>
+<b>11.6 Revisiting the function evaluation rules</b>
+<p>&nbsp;So, to evaluate a non empty list (seeing as the empty list is
+identical to the self-evaluating symbol <tt>nil</tt>), we look at the <tt>first</tt>
+element of that list.
+<ol>
+<li>
+If it is a symbol which names one of the 25 special operators, carry out
+the appropriate behaviour for that special operator.</li>
+
+<li>
+Otherwise, if it is a symbol which has a macro definition, expand that
+macro and restart the evaluation (recursive loop!)</li>
+
+<li>
+Otherwise, we must have a function. This may be either a symbol which is
+<tt>fboundp</tt>,
+or a list of the form</li>
+
+<ul><tt>(lambda (arg1 arg2 ...) ....)</tt></ul>
+We evaluate each argument in turn (from "left to right") and call the function
+with the results of these evaluations. The result of the evaluation is
+whatever value the function returns. Example of this rather arcane use
+of <tt>lambda</tt>:
+<ul><tt>((lambda (key value)</tt>
+<br><tt>&nbsp;&nbsp; (setf (gethash key *table*) value))</tt>
+<br><tt>&nbsp;(first pair)</tt>
+<br><tt>&nbsp;(second pair))</tt></ul>
+but note that we could have done the same thing more legibly either by
+inserting a <tt>funcall</tt>
+<ol><tt>(funcall (lambda (key value)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (setf
+(gethash key *table*) value))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (first pair)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (second pair))</tt></ol>
+or [much better] by transforming the expression to use
+<tt>let*</tt>
+<ul><tt>(let* ((key (first pair))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (value (second pair)))</tt>
+<br><tt>&nbsp; (setf (gethash key *table*) value))</tt></ul>
+and so you rarely see <tt>lambda</tt> used like this.</ol>
+
+<p><br><b>11.7 Practical session / Suggested activity</b>
+<ul>
+<li>
+Recall the macros <tt>push</tt> and <tt>pop</tt>:</li>
+
+<ul><tt>(setf words '(opposite of push))&nbsp; =>&nbsp; (opposite of push)</tt>
+<br><tt>(setf same-words words)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; (opposite of push)</tt>
+<br><tt>(push 'the words)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; (the opposite of push)</tt>
+<br><tt>words&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; (the opposite of push)</tt>
+<br><tt>same-words&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; (opposite of push)</tt>
+<br><tt>(pop same-words)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; opposite</tt>
+<br><tt>words&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; (the opposite of push)</tt>
+<br><tt>same-words&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; (of push)</tt></ul>
+and implement them for yourself.
+<br>&nbsp;
+<li>
+Seeing as we're stuck with <tt>let</tt> in the language, use it to implement
+<tt>my-let*</tt>.</li>
+
+<br>&nbsp;
+<li>
+Pick one or more of the macros discussed so far and attempt to implement
+them. Some are harder than others:</li>
+
+<table BORDER=0 CELLSPACING=20 CELLPADDING=3 >
+<tr>
+<td>Easiest</td>
+
+<td><tt>and&nbsp; prog1&nbsp; prog2</tt></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>A little harder</td>
+
+<td><tt>case&nbsp; decf&nbsp; dolist </tt>(in terms of <tt>loop</tt>)<tt>&nbsp;
+dotimes </tt>(ditto)<tt>&nbsp; incf&nbsp; or&nbsp; pushnew&nbsp; rotatef&nbsp;
+shiftf&nbsp; trace </tt>(use the simplified syntax introduced in section
+5.2)<tt>&nbsp; untrace&nbsp; with-open-file</tt></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td>Why are these ones indvisable?</td>
+
+<td><tt>defconstant&nbsp; defparameter defstruct&nbsp; defun&nbsp; ignore-errors&nbsp;
+lambda&nbsp; loop&nbsp; setf&nbsp;</tt></td>
+</tr>
+</table>
+
+<li>
+(Very difficult. Prize for first correct answer.) Evaluate the following
+forms in a lisp listener:</li>
+
+<ul>
+<li>
+<tt>(lambda (x) nil)</tt></li>
+
+<li>
+<tt>(function-lambda-expression (lambda (x) nil))</tt></li>
+</ul>
+and then consider the following cute puzzle among lispers: to come up with
+a self-reproducing <tt>consp</tt> form. A <i>self-reproducing</i> form
+is defined for the purposes of this question as one that evaluates to something
+<tt>equal</tt>
+to the original form. In other words, you need to come up with a form <tt>x</tt>
+such that
+<ul><tt>(and (consp x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (equal x (eval x)))</tt></ul>
+is true.
+<br>It is considered cheating if your solution involves any permanent side
+effects. For example, we could trivially solve the problem by first defining
+a function <tt>foo</tt>, say, that returns <tt>(foo)</tt> as its value.
+But we disqualify this solution because defining a function counts as a
+permanent side effect. As you might no doubt suspect, the best known solution
+involves the use of <tt>lambda</tt>.
+<br>The solution that I am aware of is two lines of code. I would be curious
+to know if there are longer solutions (a family of them perhaps). Anybody
+with time on their hands to prove their research abilities is welcome to
+impress me.</ul>
+<b>11.8 Further reading / exercises.</b>
+<ul>
+<li>
+Graham chapter 10. Skip exercise 4 if you're not happy with the macro <tt>do</tt>
+(I never voluntaily use it, so why should you have to?).</li>
+
+<li>
+Answer no more than one of the following questions:</li>
+
+<ul>
+<li>
+Why should nobody voluntarily want to use <tt>do</tt>?</li>
+
+<li>
+What is it about the macro <tt>do</tt> which means you don't have to know
+how any of the other iteration macros work? Is this true?</li>
+</ul>
+
+<li>
+Write a macro <tt>my-if</tt> which translates calls of the form <tt>(my-if
+a then b)</tt> or <tt>(my-if a then b else c)</tt> into standard <tt>if</tt>
+forms. Go back through your work, find some function you've written using
+<tt>if</tt>
+and rewrite it to use <tt>my-if</tt> instead.</li>
+
+<li>
+Read the specification of print-unreadable-object above and then see if
+you can determine (before trying it out) what the following would print:</li>
+
+<ul><tt>(print-unreadable-object (*standard-output* *standard-output*))</tt></ul>
+When you do try it out, why do you see a <tt>nil</tt>?
+<li>
+The definition of <tt>add-em</tt> in 11.5 above builds a list with <tt>mapcar</tt>
+and then throws it away soon after. Rewrite <tt>add-em</tt> using <tt>lambda</tt>
+to avoid this waste.</li>
+
+<li>
+Revisit your implementation of <tt>eval</tt> from week 9, and extend it
+in the light of this lecture.</li>
+
+<li>
+Revisit the last exercise in section 9.10. This should now look more elegant.</li>
+</ul>
+
+<div align=right>Copyright (C) <a href="mailto:ndl@ravenbrook.com">Nick
+Levine</a> 1999. All rights reserved.</div>
+
+<div align=right>Last modified 2000-09-14
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/lectures/lecture-11.html#2 $</div>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-11.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:52 GMT -->
+</html>

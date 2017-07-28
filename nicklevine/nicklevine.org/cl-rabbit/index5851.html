@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+ 
+<!-- Mirrored from nicklevine.org/cl-rabbit/?C=S;O=D by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:24:36 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=ISO-8859-1" /><!-- /Added by HTTrack -->
+<head>
+  <title>Index of /cl-rabbit</title>
+ </head>
+ <body>
+<h1>Index of /cl-rabbit</h1>
+  <table>
+   <tr><th valign="top"><img src="../icons/blank.gif" alt="[ICO]"></th><th><a href="indexb70a.html?C=N;O=A">Name</a></th><th><a href="indexf8a0.html?C=M;O=A">Last modified</a></th><th><a href="indexbfec.html?C=S;O=A">Size</a></th><th><a href="index30b5.html?C=D;O=A">Description</a></th></tr>
+   <tr><th colspan="5"><hr></th></tr>
+<tr><td valign="top"><img src="../icons/back.gif" alt="[PARENTDIR]"></td><td><a href="../index.html">Parent Directory</a>       </td><td>&nbsp;</td><td align="right">  - </td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../icons/compressed.gif" alt="[   ]"></td><td><a href="cl-rabbit.0.1.0.tar.gz">cl-rabbit.0.1.0.tar.gz</a> </td><td align="right">2014-06-14 11:16  </td><td align="right">322K</td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../icons/unknown.gif" alt="[   ]"></td><td><a href="rabbitmq-client.jar">rabbitmq-client.jar</a>    </td><td align="right">2014-06-14 11:16  </td><td align="right">267K</td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../icons/unknown.gif" alt="[   ]"></td><td><a href="commons-io-1.2.jar">commons-io-1.2.jar</a>     </td><td align="right">2014-06-14 11:16  </td><td align="right"> 64K</td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../icons/unknown.gif" alt="[   ]"></td><td><a href="message.html">message.lisp</a>           </td><td align="right">2014-06-14 11:16  </td><td align="right"> 10K</td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../icons/unknown.gif" alt="[   ]"></td><td><a href="channel.html">channel.lisp</a>           </td><td align="right">2014-06-14 11:16  </td><td align="right"> 10K</td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../icons/unknown.gif" alt="[   ]"></td><td><a href="pkg.html">pkg.lisp</a>               </td><td align="right">2014-06-14 11:16  </td><td align="right">7.1K</td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../icons/unknown.gif" alt="[   ]"></td><td><a href="connection.html">connection.lisp</a>        </td><td align="right">2014-06-14 11:16  </td><td align="right">4.3K</td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../icons/unknown.gif" alt="[   ]"></td><td><a href="errors.html">errors.lisp</a>            </td><td align="right">2014-06-14 11:16  </td><td align="right">3.6K</td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../icons/unknown.gif" alt="[   ]"></td><td><a href="java-classes.lisp.src">java-classes.lisp.src</a>  </td><td align="right">2014-06-14 11:16  </td><td align="right">3.0K</td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../icons/unknown.gif" alt="[   ]"></td><td><a href="rabbitmq-2.html">rabbitmq.lisp</a>          </td><td align="right">2014-06-14 11:16  </td><td align="right">2.4K</td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../icons/unknown.gif" alt="[   ]"></td><td><a href="rabbitmq.html">rabbitmq.asd</a>           </td><td align="right">2014-06-14 11:16  </td><td align="right">1.9K</td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../icons/unknown.gif" alt="[   ]"></td><td><a href="defsys.html">defsys.lisp</a>            </td><td align="right">2014-06-14 11:16  </td><td align="right">1.9K</td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../icons/unknown.gif" alt="[   ]"></td><td><a href="parameters.html">parameters.lisp</a>        </td><td align="right">2014-06-14 11:16  </td><td align="right">1.7K</td><td>&nbsp;</td></tr>
+   <tr><th colspan="5"><hr></th></tr>
+</table>
+<pre>
+         CL-RABBIT - an interface from LispWorks to RabbitMQ
+         ===================================================
+
+                             Version 0.1
+
+
+I am very pleased to announce the release of version 0.1 of CL-RABBIT:
+an interface from LispWorks to RabbitMQ, an implementation of the AMQP
+messaging protocol.
+
+  http://www.rabbitmq.com/
+  http://www.amqp.org/
+
+It's released under an MIT-style license, a copy of which appears in
+each source file. Many thanks to Wiinz Limited for giving me
+permission to do all this and I'm sorry it's taken so long to get
+around to kicking the brute through the door.
+
+You'll note a lack of documentation. I assume knowledge of RabbitMQ;
+see comments in pkg.lisp and the example below. Then get in touch.
+
+                                                      Nick Levine
+                                                      ndl@ravenbrook.com
+                                                      2009-04-02
+
+Steps for running this:
+
+1. See the parts list at the end of this post and get everything into
+   place
+
+2. Start the RabbitMQ server
+
+3. Configure the system: *jni-lib-path* in jfli/jni.lisp and *libjvm*
+   in cl-rabbit/rabbitmq.lisp
+
+4. Use the build-java-classes.lisp tool to build
+   cl-rabbit/java-classes.lisp from java-classes.lisp.src:
+
+
+    CL-USER 1 &gt; (load "c:/p4/user/ndl/lisp/jfli/build-java-classes.lisp")
+    ; Loading text file c:\p4\user\ndl\lisp\jfli\build-java-classes.lisp
+    ;  Loading text file c:\p4\user\ndl\lisp\jfli\defsys.lisp
+    ;  Loading fasl file c:\p4\user\ndl\lisp\jfli\jni.ofasl
+    ;  Loading fasl file c:\p4\user\ndl\lisp\jfli\jfli.ofasl
+    ;  Loading fasl file c:\p4\user\ndl\lisp\jfli\process.ofasl
+    #P"c:/p4/user/ndl/lisp/jfli/build-java-classes.lisp"
+
+    CL-USER 2 &gt; (build-java-classes "c:/p4/user/ndl/lisp/cl-rabbit/java-classes.lisp"
+                                    (directory "c:/p4/user/ndl/lisp/cl-rabbit/*.jar"))
+    ;; Reading c:\p4\user\ndl\lisp\cl-rabbit\java-classes.lisp.src
+    ;; 22 def-java-class forms processed
+    "c:/p4/user/ndl/lisp/cl-rabbit/java-classes.lisp"
+
+    CL-USER 3 &gt; (quit)      ; Do not attempt to do anything else with this lisp!
+
+5. Now we can play.
+
+ - Load the code:
+
+    CL-USER 1 &gt; (load "/p4/user/ndl/lisp/jfli/defsys.lisp")
+    ; Loading text file c:\p4\user\ndl\lisp\jfli\defsys.lisp
+    ;; Creating system JFLI
+    #P"c:/p4/user/ndl/lisp/jfli/defsys.lisp"
+
+    CL-USER 2 &gt; (compile-system "JFLI" :load t)
+
+    ; Loading fasl file c:\p4\user\ndl\lisp\jfli\jni.ofasl
+    ; Loading fasl file c:\p4\user\ndl\lisp\jfli\jfli.ofasl
+    ; Loading fasl file c:\p4\user\ndl\lisp\jfli\process.ofasl
+    ("JFLI")
+
+    CL-USER 3 &gt; (load "/p4/user/ndl/lisp/cl-rabbit/defsys.lisp")
+    ; Loading text file c:\p4\user\ndl\lisp\cl-rabbit\defsys.lisp
+    ;; Creating system RABBITMQ
+    #P"c:/p4/user/ndl/lisp/cl-rabbit/defsys.lisp"
+
+    CL-USER 4 &gt; (compile-system "RABBITMQ" :load t)
+    ; Loading fasl file c:\p4\user\ndl\lisp\cl-rabbit\java-classes.ofasl
+    ; Loading fasl file c:\p4\user\ndl\lisp\cl-rabbit\rabbitmq.ofasl
+    ; Loading fasl file c:\p4\user\ndl\lisp\cl-rabbit\pkg.ofasl
+    ; Loading fasl file c:\p4\user\ndl\lisp\cl-rabbit\errors.ofasl
+    ; Loading fasl file c:\p4\user\ndl\lisp\cl-rabbit\parameters.ofasl
+    ; Loading fasl file c:\p4\user\ndl\lisp\cl-rabbit\connection.ofasl
+    ; Loading fasl file c:\p4\user\ndl\lisp\cl-rabbit\channel.ofasl
+    ; Loading fasl file c:\p4\user\ndl\lisp\cl-rabbit\message.ofasl
+    ("RABBITMQ")
+
+    CL-USER 5 &gt; (in-package rabbitmq)
+    #&lt;The RABBITMQ package, 118/128 internal, 53/64 external&gt;
+
+ - Open a connection and a channel (I'll be lazy and use the same
+   channel for outgoing and incoming messages), declare exchange and
+   queue, bind everything together:
+
+    RABBITMQ 6 &gt; (setf my-connection (new-connection "localhost" "/"))
+    #&lt;AMQCONNECTION. amqp://guest@localhost:5672/ 200DCD87&gt;
+
+    RABBITMQ 7 &gt; (setf my-channel (new-channel my-connection))
+    #&lt;CHANNEL AMQChannel(amqp://guest@localhost:5672/,1) 200F7BB3&gt;
+
+    RABBITMQ 8 &gt; (declare-exchange my-channel "my exchange" :direct)
+    #&lt;|com.rabbitmq.client.impl|::AMQIMPL$EXCHANGE$DECLAREOK. 2009159F&gt;
+
+    RABBITMQ 9 &gt; (declare-queue my-channel "my queue")
+    #&lt;|com.rabbitmq.client.impl|::AMQIMPL$QUEUE$DECLAREOK. 21D050CF&gt;
+
+    RABBITMQ 10 &gt; (bind-queue my-channel "my queue" "my exchange" "my routing key")
+    #&lt;|com.rabbitmq.client.impl|::AMQIMPL$QUEUE$BINDOK. 21CEEFD3&gt;
+
+ - Send a message into the void:
+
+    RABBITMQ 11 &gt; (setf outgoing-message (new-message))
+    #&lt;OUTGOING-MESSAGE 21CE265B&gt;
+
+    RABBITMQ 12 &gt; (setf (message-id outgoing-message) "42"
+                        (message-body outgoing-message) "Hello, World")
+    "Hello, World"
+
+    RABBITMQ 13 &gt; (publish outgoing-message my-channel "my exchange" "my routing key")
+    NIL
+
+ - And get it back again:
+
+    RABBITMQ 14 &gt; (consume-queue my-channel "my queue")
+    "amq.ctag1_rabbit@gannet_20090402084407_"
+
+    RABBITMQ 15 &gt; (channel-arrived-count my-channel)
+    1
+
+    RABBITMQ 16 &gt; (setf incoming-message (next-message my-channel))
+    #&lt;QUEUEINGCONSUMER$DELIVERY. 200E0E93&gt;
+
+    RABBITMQ 17 &gt; (values (message-body incoming-message)
+                          (message-id incoming-message))
+    "Hello, World"
+    "42"
+
+    RABBITMQ 18 &gt;
+
+
+Parts List
+==========
+
+You will need the following:
+
+ 1. CL-RABBIT
+
+ 2. Rich Hickey's JFLI - this needed a bunch of fixes, so with Rich's
+    agreement I released version 0.2 last summer and you'll find a
+    link to that by visiting
+
+      http://www.nicklevine.org/
+
+ 3. LispWorks (JFLI could be ported to other lisps but I don't think
+    anyone's ever bothered) - I developed with LispWorks Pro 5.0 on
+    Windows and we were planning to deploy on Linux so it was tested
+    on that too; I checked it over today with LWW 5.1.2.
+
+ 4. RabbitMQ: It's 18 months since I worked on this project. I tested
+    it today against the materials to hand (RabbitMQ 1.2.0 which
+    implements AMQP 0.8) while being very aware that RabbitMQ is now
+    on version 1.5.3. I hope to have the time to "upgrade" soon but if
+    you want to play with it sooner I'll be happy to advise.
+
+--
+
+$Id: //info.ravenbrook.com/user/ndl/lisp/cl-rabbit/README.txt#3 $
+</pre>
+</body>
+<!-- Mirrored from nicklevine.org/cl-rabbit/?C=S;O=D by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:24:36 GMT -->
+</html>

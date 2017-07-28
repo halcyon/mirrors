@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Thoughts on Clojure Package Management</title>
+	<atom:link href="https://stuartsierra.com/2009/08/31/thoughts-on-clojure-package-management/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2009/08/31/thoughts-on-clojure-package-management</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2009/08/31/thoughts-on-clojure-package-management/comment-page-1#comment-42688</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Tue, 01 Sep 2009 03:02:45 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=269#comment-42688</guid>
+		<description><![CDATA[James wrote: &lt;em&gt;&quot;I’m hoping it’ll be unique enough to justify another re-invention of package management.&quot;&lt;/em&gt;
+
+I wish you luck, but I have my doubts that there&#039;s anything unique left to be done here.]]></description>
+		<content:encoded><![CDATA[<p>James wrote: <em>&#8220;I’m hoping it’ll be unique enough to justify another re-invention of package management.&#8221;</em></p>
+<p>I wish you luck, but I have my doubts that there&#8217;s anything unique left to be done here.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: James Reeves</title>
+		<link>https://stuartsierra.com/2009/08/31/thoughts-on-clojure-package-management/comment-page-1#comment-42687</link>
+		<dc:creator><![CDATA[James Reeves]]></dc:creator>
+		<pubDate>Tue, 01 Sep 2009 01:02:17 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=269#comment-42687</guid>
+		<description><![CDATA[I agree that git submodules are rather useful, but I don&#039;t think they&#039;re a replacement for a good package manager. In my view, Clojure has reached the stage where there are enough third-party libraries that it would be useful to start thinking about package management.
+
+I&#039;m a little biased, though, as I&#039;ve started working on a Clojure package manager called Capra (http://github.com/weavejester/capra). It&#039;ll probably be a few months before the project is in a usable state, but I&#039;m hoping it&#039;ll be unique enough to justify another re-invention of package management.]]></description>
+		<content:encoded><![CDATA[<p>I agree that git submodules are rather useful, but I don&#8217;t think they&#8217;re a replacement for a good package manager. In my view, Clojure has reached the stage where there are enough third-party libraries that it would be useful to start thinking about package management.</p>
+<p>I&#8217;m a little biased, though, as I&#8217;ve started working on a Clojure package manager called Capra (<a href="http://github.com/weavejester/capra" rel="nofollow">http://github.com/weavejester/capra</a>). It&#8217;ll probably be a few months before the project is in a usable state, but I&#8217;m hoping it&#8217;ll be unique enough to justify another re-invention of package management.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2009/08/31/thoughts-on-clojure-package-management/comment-page-1#comment-42684</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Mon, 31 Aug 2009 21:33:14 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=269#comment-42684</guid>
+		<description><![CDATA[Greg wrote: &lt;em&gt;&quot;we need to stop re-inventing package management for every single language and every single operating system distribution.&quot;&lt;/em&gt;
+
+I agree. But package/dependency management is one of those things that&#039;s incredibly hard to get right.  Witness all the attempts in the Linux world: rpm, yum, apt-get, yast, pkgtool, ....  None of them is perfect.  Then you&#039;ve got one for every scripting language ever invented.  Nix is pretty cool, but Unix-specific, and anything built for the JDK should work on any JDK platform.
+
+Using Rubygems sounds ... interesting.  I&#039;m not enthusiastic about Rubygem&#039;s dependency resolution, and using it would require loading the entire JRuby runtime.
+
+The long and short of it is, as Tim said, we&#039;re stuck with Maven.  Kudos to the first person who wraps Maven, including ALL the packaging and deployment features, in a simple Clojure interface.]]></description>
+		<content:encoded><![CDATA[<p>Greg wrote: <em>&#8220;we need to stop re-inventing package management for every single language and every single operating system distribution.&#8221;</em></p>
+<p>I agree. But package/dependency management is one of those things that&#8217;s incredibly hard to get right.  Witness all the attempts in the Linux world: rpm, yum, apt-get, yast, pkgtool, &#8230;.  None of them is perfect.  Then you&#8217;ve got one for every scripting language ever invented.  Nix is pretty cool, but Unix-specific, and anything built for the JDK should work on any JDK platform.</p>
+<p>Using Rubygems sounds &#8230; interesting.  I&#8217;m not enthusiastic about Rubygem&#8217;s dependency resolution, and using it would require loading the entire JRuby runtime.</p>
+<p>The long and short of it is, as Tim said, we&#8217;re stuck with Maven.  Kudos to the first person who wraps Maven, including ALL the packaging and deployment features, in a simple Clojure interface.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Greg</title>
+		<link>https://stuartsierra.com/2009/08/31/thoughts-on-clojure-package-management/comment-page-1#comment-42683</link>
+		<dc:creator><![CDATA[Greg]]></dc:creator>
+		<pubDate>Mon, 31 Aug 2009 19:53:39 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=269#comment-42683</guid>
+		<description><![CDATA[Even if you don&#039;t have &quot;official production ready code&quot; sharing it in a way that can resolve dependencies is very useful. IMHO we need to stop re-inventing package management for every single language and every single operating system distribution. We should all just pick something good like nix http://nixos.org/index.html
+Speaking of re-use, I wonder if you can use rubygems given that it works with jRuby.]]></description>
+		<content:encoded><![CDATA[<p>Even if you don&#8217;t have &#8220;official production ready code&#8221; sharing it in a way that can resolve dependencies is very useful. IMHO we need to stop re-inventing package management for every single language and every single operating system distribution. We should all just pick something good like nix <a href="http://nixos.org/index.html" rel="nofollow">http://nixos.org/index.html</a><br />
+Speaking of re-use, I wonder if you can use rubygems given that it works with jRuby.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Tim Dysinger</title>
+		<link>https://stuartsierra.com/2009/08/31/thoughts-on-clojure-package-management/comment-page-1#comment-42682</link>
+		<dc:creator><![CDATA[Tim Dysinger]]></dc:creator>
+		<pubDate>Mon, 31 Aug 2009 18:49:19 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=269#comment-42682</guid>
+		<description><![CDATA[I should make that a little clearer &quot;It took me an initial few days to figure out clojure + maven&quot;.  After that initial investment, new projects take only seconds to setup using &quot;mvn archetype&quot; and clojure-pom.  They all build the exact same way and the dependency management is exact.]]></description>
+		<content:encoded><![CDATA[<p>I should make that a little clearer &#8220;It took me an initial few days to figure out clojure + maven&#8221;.  After that initial investment, new projects take only seconds to setup using &#8220;mvn archetype&#8221; and clojure-pom.  They all build the exact same way and the dependency management is exact.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Phil</title>
+		<link>https://stuartsierra.com/2009/08/31/thoughts-on-clojure-package-management/comment-page-1#comment-42681</link>
+		<dc:creator><![CDATA[Phil]]></dc:creator>
+		<pubDate>Mon, 31 Aug 2009 18:46:23 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=269#comment-42681</guid>
+		<description><![CDATA[Stuart: yeah, if you can avoid using source repos directly then you&#039;ll be in better shape, but sometimes you just don&#039;t have an option given the state of libraries. Maybe if corkscrew or some other tool made it easier to package Clojure projects up as Maven artifacts we would see more libraries publishing them.
+
+It&#039;s true that you don&#039;t get transitive dependencies with source repos; you need a full-fledged dependency system for that. But git can work with tags instead of arbitrary revisions, so you do have the option to use numbered releases if they are present.
+
+The other problem is that lots of people see the word &quot;maven&quot; and run away screaming with their hair on fire. The corkscrew readme is pretty explicit about the fact that you don&#039;t need to write any XML, but multiple people have told me that they simply stopped reading it as soon as they saw the word &quot;maven&quot;, so that sucks.]]></description>
+		<content:encoded><![CDATA[<p>Stuart: yeah, if you can avoid using source repos directly then you&#8217;ll be in better shape, but sometimes you just don&#8217;t have an option given the state of libraries. Maybe if corkscrew or some other tool made it easier to package Clojure projects up as Maven artifacts we would see more libraries publishing them.</p>
+<p>It&#8217;s true that you don&#8217;t get transitive dependencies with source repos; you need a full-fledged dependency system for that. But git can work with tags instead of arbitrary revisions, so you do have the option to use numbered releases if they are present.</p>
+<p>The other problem is that lots of people see the word &#8220;maven&#8221; and run away screaming with their hair on fire. The corkscrew readme is pretty explicit about the fact that you don&#8217;t need to write any XML, but multiple people have told me that they simply stopped reading it as soon as they saw the word &#8220;maven&#8221;, so that sucks.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Tim Dysinger</title>
+		<link>https://stuartsierra.com/2009/08/31/thoughts-on-clojure-package-management/comment-page-1#comment-42680</link>
+		<dc:creator><![CDATA[Tim Dysinger]]></dc:creator>
+		<pubDate>Mon, 31 Aug 2009 18:45:14 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=269#comment-42680</guid>
+		<description><![CDATA[We use clojure-pom and maven.  It took a couple hours to set up and it works.  Introducing a new non-maven package manager into clojure is an uphill battle IMO.]]></description>
+		<content:encoded><![CDATA[<p>We use clojure-pom and maven.  It took a couple hours to set up and it works.  Introducing a new non-maven package manager into clojure is an uphill battle IMO.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2009/08/31/thoughts-on-clojure-package-management/comment-page-1#comment-42679</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Mon, 31 Aug 2009 16:50:37 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=269#comment-42679</guid>
+		<description><![CDATA[Phil wrote: &lt;em&gt;&quot;As long as we can get people to quit including jar files in the lib/ directory of their repositories I’m happy. =)&quot;&lt;/em&gt;
+
+But that&#039;s just it: everyone does this.  Even big, BIG Java projects like Hadoop have JAR files in their version control systems.  And Hadoop and Maven are both Apache projects!  Automated dependency management for Java libraries has failed.]]></description>
+		<content:encoded><![CDATA[<p>Phil wrote: <em>&#8220;As long as we can get people to quit including jar files in the lib/ directory of their repositories I’m happy. =)&#8221;</em></p>
+<p>But that&#8217;s just it: everyone does this.  Even big, BIG Java projects like Hadoop have JAR files in their version control systems.  And Hadoop and Maven are both Apache projects!  Automated dependency management for Java libraries has failed.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2009/08/31/thoughts-on-clojure-package-management/comment-page-1#comment-42678</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Mon, 31 Aug 2009 16:45:19 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=269#comment-42678</guid>
+		<description><![CDATA[Sorry, Phil, I actually meant nothing ill by &quot;shell-based.&quot;  I think Corkscrew is quite clever at what it does.  My real issue is that it pulls directly from source code repositories.  There&#039;s no continuity if a project disappears from Github.  (Rubygems has the same problem.)  Also, there are no numbered releases or multi-level dependencies.  As I wrote, that&#039;s more a fault of the libraries themselves at the moment.]]></description>
+		<content:encoded><![CDATA[<p>Sorry, Phil, I actually meant nothing ill by &#8220;shell-based.&#8221;  I think Corkscrew is quite clever at what it does.  My real issue is that it pulls directly from source code repositories.  There&#8217;s no continuity if a project disappears from Github.  (Rubygems has the same problem.)  Also, there are no numbered releases or multi-level dependencies.  As I wrote, that&#8217;s more a fault of the libraries themselves at the moment.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Phil</title>
+		<link>https://stuartsierra.com/2009/08/31/thoughts-on-clojure-package-management/comment-page-1#comment-42677</link>
+		<dc:creator><![CDATA[Phil]]></dc:creator>
+		<pubDate>Mon, 31 Aug 2009 16:39:09 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=269#comment-42677</guid>
+		<description><![CDATA[Though I think you&#039;re right in general. I wrote Corkscrew because it was easy (it&#039;s about 200 LOC), but sinking a lot of effort into a Clojure-specific solution probably wouldn&#039;t offer too much benefit over the current state of the art.
+
+As long as we can get people to quit including jar files in the lib/ directory of their repositories I&#039;m happy. =)]]></description>
+		<content:encoded><![CDATA[<p>Though I think you&#8217;re right in general. I wrote Corkscrew because it was easy (it&#8217;s about 200 LOC), but sinking a lot of effort into a Clojure-specific solution probably wouldn&#8217;t offer too much benefit over the current state of the art.</p>
+<p>As long as we can get people to quit including jar files in the lib/ directory of their repositories I&#8217;m happy. =)</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.313 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:00:40 -->
+
+<!-- Compression = gzip -->

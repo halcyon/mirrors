@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/fr-fr/markdown/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:34:50 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn markdown in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../../css/normalize.css">
+        <link rel="stylesheet" href="../../../css/main.css">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Ffr-fr%2Fmarkdown%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3Dmarkdown">
+        Partager cette page
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">Apprendre X en Y minutes</a></h2>
+  <h2>Où X=markdown</h2>
+  
+    <p class="filelink">
+    Récupérer le code :
+    <a href="../../files/markdown-fr.md">markdown-fr.md</a>
+    </p>
+  
+  <div id="doc">
+    <p>Markdown a été créé par John Gruber en 2004. Il se veut être d&#39;une syntaxe
+facile à lire et à écrire, aisément convertible en HTML
+ (et beaucoup d&#39;autres formats aussi à présent).</p>
+
+<p>Faites moi autant de retours que vous voulez! Sentez vous libre de &ldquo;forker&rdquo; 
+et envoyer des pull request!</p>
+<pre class="highlight markdown"><code>&lt;!-- Markdown est une sorte de cousin du HTML, si bien que tout document HTML 
+est un document Markdown valide. Autrement dit, vous pouvez utiliser des 
+balises HTML dans un fichier Markdown, comme la balise commentaire dans 
+laquelle nous sommes à présent, car celle-ci ne sera pas affectée par 
+le parser( analyseur syntaxique ) Markdown. --&gt;
+
+&lt;!-- Toutefois, si vous voulez créer un élément HTML dans un fichier Markdown,
+ vous ne pourrez pas utiliser du Markdown à l'intérieur de ce dernier. --&gt;
+
+&lt;!--  Le Markdown est implémenté de différentes manières, selon le parser. 
+Ce guide va alors tenter de trier les fonctionnalités universelles de celles
+spécifiques à un parser.  --&gt;
+
+<span class="c">&lt;!-- Headers ( En-têtes ) --&gt;</span>
+<span class="c">&lt;!-- Vous pouvez facilement créer des éléments HTML &lt;h1&gt;</span> à <span class="c">&lt;h6&gt;</span> en précédant
+ le texte de votre futur titre par un ou plusieurs dièses ( # ), de un à six,
+  selon le niveau de titre souhaité. --&gt;
+<span class="gh"># Ceci est un &lt;h1&gt;</span>
+<span class="gu">## Ceci est un &lt;h2&gt;</span>
+<span class="gu">### Ceci est un &lt;h3&gt;</span>
+<span class="gu">#### Ceci est un &lt;h4&gt;</span>
+<span class="gu">##### Ceci est un &lt;h5&gt;</span>
+<span class="gu">###### Ceci est un &lt;h6&gt;</span>
+
+&lt;!-- 
+Markdown fournit également une façon alternative de marquer les h1 et h2 
+--&gt;
+
+<span class="gu">Ceci est un h1
+=============
+</span>
+<span class="gh">Ceci est un h2
+-------------
+</span>
+<span class="c">&lt;!-- Styles basiques pour du texte --&gt;</span>
+<span class="c">&lt;!-- On peut facilement rendre un texte "gras" ou "italique" en Markdown --&gt;</span>
+
+<span class="ge">*Ce texte est en italique.*</span>
+<span class="ge">_Celui-ci aussi._</span>
+
+<span class="gs">**Ce texte est en gras.**</span>
+<span class="gs">__Celui-là aussi.__</span>
+
+<span class="gs">***Ce texte a les deux styles.**</span><span class="err">*</span>
+<span class="gs">**_Pareil ici_**</span>
+<span class="ge">*__Et là!__*</span>
+
+&lt;!-- Dans le "GitHub Flavored Markdown", utilisé pour interpréter le Markdown 
+sur GitHub, on a également le strikethrough ( texte barré ) : --&gt;
+
+~~Ce texte est barré avec strikethrough.~~
+
+&lt;!--  Les Paragraphes sont représentés par une ou plusieurs lignes de texte 
+séparées par une ou plusieurs lignes vides. --&gt;
+
+Ceci est un paragraphe. Là, je suis dans un paragraphe, facile non?
+
+Maintenant je suis dans le paragraphe 2.
+Je suis toujours dans le paragraphe 2!<span class="sb">
+
+
+</span>Puis là, eh oui, le paragraphe 3!
+
+&lt;!--  
+Si jamais vous souhaitez insérer une balise HTML <span class="nt">&lt;br</span> <span class="nt">/&gt;</span>, vous pouvez ajouter 
+un ou plusieurs espaces à la fin de votre paragraphe, et en commencer 
+un nouveau.
+--&gt;
+
+J'ai deux espaces vides à la fin (sélectionnez moi pour les voir). 
+
+Bigre, il y a un <span class="nt">&lt;br</span> <span class="nt">/&gt;</span> au dessus de moi!
+
+<span class="c">&lt;!-- Les 'Blocs de Citations' sont générés aisément, grâce au caractère &gt;</span> --&gt;
+<span class="gt">
+&gt; Ceci est une superbe citation. Vous pouvez même</span>
+<span class="gt">&gt; revenir à la ligne quand ça vous chante, et placer un `&gt;` </span>
+<span class="gt">&gt; devant chaque bout de ligne faisant partie</span>
+<span class="gt">&gt; de la citation.</span>
+<span class="gt">&gt; La taille ne compte pas^^ tant que chaque ligne commence par un `&gt;`.</span>
+<span class="gt">
+&gt; Vous pouvez aussi utiliser plus d'un niveau</span>
+<span class="gt">&gt;&gt; d'imbrication!</span>
+<span class="gt">&gt; Classe et facile, pas vrai?</span>
+
+<span class="c">&lt;!-- les Listes --&gt;</span>
+&lt;!-- les Listes non ordonnées sont marquées par des asterisques, 
+signes plus ou signes moins. --&gt;
+<span class="p">
+*</span> Item
+<span class="p">*</span> Item
+<span class="p">*</span> Un autre item
+
+ou
+<span class="p">
++</span> Item
+<span class="p">+</span> Item
+<span class="p">+</span> Encore un item
+
+ou
+<span class="p">
+-</span> Item
+<span class="p">-</span> Item
+<span class="p">-</span> Un dernier item
+
+<span class="c">&lt;!-- les Listes Ordonnées sont générées via un nombre suivi d'un point --&gt;</span>
+<span class="p">
+1.</span> Item un
+<span class="p">2.</span> Item deux
+<span class="p">3.</span> Item trois
+
+&lt;!-- Vous pouvez même vous passer de tout numéroter, et Markdown générera 
+les bons chiffres. Ceci dit, cette variante perd en clarté.--&gt;
+<span class="p">
+1.</span> Item un
+<span class="p">1.</span> Item deux
+<span class="p">1.</span> Item trois
+<span class="c">&lt;!-- ( cette liste sera interprétée de la même façon que celle au dessus ) --&gt;</span>
+
+<span class="c">&lt;!-- Vous pouvez également utiliser des sous-listes --&gt;</span>
+<span class="p">
+1.</span> Item un
+<span class="p">2.</span> Item deux
+<span class="p">3.</span> Item trois
+<span class="p">*</span> Sub-item
+<span class="p">*</span> Sub-item
+<span class="p">4.</span> Item quatre
+
+&lt;!-- Il y a même des "listes de Taches". Elles génèrent des champs HTML 
+de type checkbox. --&gt;
+
+Les <span class="p">[</span><span class="nv"> </span><span class="p">]</span> ci dessous, n'ayant pas de <span class="p">[</span><span class="nv"> x </span><span class="p">]</span>, 
+deviendront des cases à cocher HTML non-cochées.
+<span class="p">
+-</span> <span class="p">[</span><span class="nv"> </span><span class="p">]</span> Première tache à réaliser.
+<span class="p">-</span> <span class="p">[</span><span class="nv"> </span><span class="p">]</span> Une autre chose à faire.
+La case suivante sera une case à cocher HTML cochée.
+<span class="p">-</span> <span class="p">[</span><span class="nv">x</span><span class="p">]</span> Ça ... c'est fait!
+
+<span class="c">&lt;!-- les Blocs de Code --&gt;</span>
+&lt;!-- Pour marquer du texte comme étant du code, il suffit de commencer 
+chaque ligne en tapant 4 espaces (ou un Tab) --&gt;<span class="sb">
+
+    echo "Ça, c'est du Code!";
+    var Ça = "aussi !";
+
+</span>&lt;!-- L'indentation par tab ou série de quatre espaces 
+fonctionne aussi à l'intérieur du bloc de code --&gt;<span class="sb">
+
+    my_array.each do |item|
+       puts item
+    end
+
+</span><span class="c">&lt;!-- Des bouts de code en mode 'inline' s'ajoutent en les entourant de ` --&gt;</span>
+
+La fonction <span class="sb">`run()`</span> ne vous oblige pas à aller courir!
+
+&lt;!-- Via GitHub Flavored Markdown, vous pouvez utiliser 
+des syntaxes spécifiques --&gt;
+
+<span class="se">\`\`\`</span>ruby 
+&lt;!-- mais enlevez les backslashes quand vous faites ça, 
+gardez juste <span class="sb">```</span>ruby ( ou nom de la syntaxe correspondant à votre code )--&gt;
+def foobar
+puts "Hello world!"
+end
+<span class="se">\`\`\`</span> <span class="c">&lt;!-- pareil, pas de backslashes, juste ``` en guise de fin --&gt;</span>
+
+&lt;-- Pas besoin d'indentation pour le code juste au dessus, de plus, GitHub 
+va utiliser une coloration syntaxique pour le langage indiqué après les <span class="sb">```</span> --&gt;
+
+<span class="c">&lt;!-- Ligne Horizontale (&lt;hr /&gt;</span>) --&gt;
+&lt;!-- Pour en insérer une, utilisez trois ou plusieurs astérisques ou tirets, 
+avec ou sans espaces entre chaque un. --&gt;
+<span class="p">
+***</span>
+<span class="p">---
+- - -</span>
+<span class="p">****************
+</span>
+<span class="c">&lt;!-- Liens --&gt;</span>
+&lt;!-- Une des fonctionnalités sympathiques du Markdown est la facilité 
+d'ajouter des liens. Le texte du lien entre <span class="p">[</span><span class="nv"> </span><span class="p">]</span>, l'url entre ( ), 
+et voilà l'travail.
+--&gt;
+
+<span class="p">[</span><span class="nv">Clic moi!</span><span class="p">](</span><span class="sx">http://test.com/</span><span class="p">)</span>
+
+&lt;!-- 
+Pour ajouter un attribut Title, collez le entre guillemets, avec le lien. 
+--&gt;
+
+<span class="p">[</span><span class="nv">Clic moi!</span><span class="p">](</span><span class="sx">http://test.com/</span> <span class="nn">"Lien vers Test.com"</span><span class="p">)</span>
+
+<span class="c">&lt;!-- les Liens Relatifs marchent aussi --&gt;</span>
+
+<span class="p">[</span><span class="nv">En avant la musique</span><span class="p">](</span><span class="sx">/music/</span><span class="p">)</span>.
+
+<span class="c">&lt;!-- Les liens façon "références" sont eux aussi disponibles en Markdown --&gt;</span>
+
+<span class="p">[</span><span class="nv">Cliquez ici</span><span class="p">][</span><span class="ss">link1</span><span class="p">]</span> pour plus d'information!
+<span class="p">[</span><span class="nv">Regardez aussi par ici</span><span class="p">][</span><span class="ss">foobar</span><span class="p">]</span> si vous voulez.<span class="sb">
+
+
+
+
+</span>&lt;!--  Le titre peut aussi être entouré de guillemets simples, 
+entre parenthèses ou absent. Les références peuvent être placées 
+un peu où vous voulez dans le document, et les identifiants 
+(link1, foobar, ...) quoi que ce soit tant qu'ils sont uniques --&gt;
+
+&lt;!-- Il y a également le "nommage implicite" qui transforme le texte du lien
+ en identifiant --&gt;
+
+<span class="p">[</span><span class="nv">Ceci</span><span class="p">][]</span> est un lien.<span class="sb">
+
+
+
+</span><span class="c">&lt;!-- mais ce n'est pas beaucoup utilisé. --&gt;</span>
+
+<span class="c">&lt;!-- Images --&gt;</span>
+&lt;!-- Pour les images, la syntaxe est identique aux liens, sauf que précédée
+ d'un point d'exclamation! --&gt;
+
+<span class="p">![</span><span class="nv">Attribut ALT de l'image</span><span class="p">](</span><span class="sx">http://imgur.com/monimage.jpg</span> <span class="nn">"Titre optionnel"</span><span class="p">)</span>
+
+<span class="c">&lt;!-- Là aussi, on peut utiliser le mode "références" --&gt;</span>
+
+<span class="p">![</span><span class="nv">Ceci est l'attribut ALT de l'image</span><span class="p">][</span><span class="ss">monimage</span><span class="p">]</span><span class="sb">
+
+
+
+</span><span class="c">&lt;!-- Divers --&gt;</span>
+<span class="c">&lt;!-- Liens Automatiques --&gt;</span>
+
+<span class="nv">&lt;http://testwebsite.com/&gt;</span> est équivalent à :
+<span class="p">[</span><span class="nv">http://testwebsite.com/</span><span class="p">](</span><span class="sx">http://testwebsite.com/</span><span class="p">)</span>
+
+<span class="c">&lt;!-- Liens Automatiques pour emails --&gt;</span>
+
+<span class="nv">&lt;foo@bar.com&gt;</span>
+
+<span class="c">&lt;!-- Escaping --&gt;</span>
+Il suffit de précéder les caractères spécifiques à ignorer par des backslash <span class="err">\</span>
+
+Pour taper <span class="ge">*ce texte*</span> entouré d'astérisques mais pas en italique : 
+Tapez <span class="se">\*</span>ce texte<span class="se">\*</span>.
+
+<span class="c">&lt;!-- Tableaux --&gt;</span>
+&lt;!-- les Tableaux ne sont disponibles que dans le GitHub Flavored Markdown
+ et c'est ce n'est pas super agréable d'utilisation. 
+ Mais si vous en avez besoin :
+ --&gt;
+
+| Col1 | Col2 | Col3 |
+| :----------- | :------: | ------------: |
+| Alignement Gauche | Centé | Alignement Droite |
+| bla | bla | bla |
+
+<span class="c">&lt;!-- ou bien, pour un résultat équivalent : --&gt;</span>
+
+Col 1 | Col2 | Col3
+:-- | :-: | --:
+Ough que c'est moche | svp | arrêtez
+
+<span class="c">&lt;!-- Fin! --&gt;</span>
+
+</code></pre>
+
+<p>Pour plus d&#39;information :
+ consultez <a href="http://daringfireball.net/projects/markdown/syntax">ici</a> le post officiel de Jhon Gruber à propos de la syntaxe, 
+ et <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">là</a> la superbe cheatsheet de Adam Pritchard.</p>
+
+    <hr>
+    <p>Vous avez une suggestion ? Peut-être une correction ? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Ouvrez un ticket</a> sur Github, ou faites vous-même une pull request !
+    </p>
+    <p class="contributed">
+    Version originale par Andrei Curelaru, mis à jour par <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/fr-fr/markdown.html.markdown">0 contributeur(s)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://www.infinidad.fr/">Andrei Curelaru</a>
+      
+    
+    </p>
+
+    <p>
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/fr-fr/markdown/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:34:50 GMT -->
+</html>

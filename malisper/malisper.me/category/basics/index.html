@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns#">
+
+<!-- Mirrored from malisper.me/category/basics/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:46:29 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Basic Macros Archives - Macrology</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="../../xmlrpc.php">
+
+
+<!-- This site is optimized with the Yoast SEO plugin v3.4.2 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="index.html" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="object" />
+<meta property="og:title" content="Basic Macros Archives - Macrology" />
+<meta property="og:description" content="These are basic Lisp macros that should be trivial to understand." />
+<meta property="og:url" content="index.html" />
+<meta property="og:site_name" content="Macrology" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Basic Macros Archives - Macrology" />
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Feed" href="../../feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Comments Feed" href="../../comments/feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Basic Macros Category Feed" href="feed/index.html" />
+<link rel='stylesheet' id='scrawl-style-css'  href='../../wp-content/themes/scrawl-wpcom/style167b.css?ver=4.6' type='text/css' media='all' />
+<link rel='stylesheet' id='scrawl-fonts-css'  href='https://fonts.googleapis.com/css?family=Lora:400,700|Merriweather:400italic,400,700,700italic&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../wp-content/themes/scrawl-wpcom/fonts/genericons6de8.css?ver=3.3' type='text/css' media='all' />
+<script type='text/javascript' src='../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<link rel='https://api.w.org/' href='../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-63547056-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<style type="text/css" id="syntaxhighlighteranchor"></style>
+
+<script type="text/javascript">
+  window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var n=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(n?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var o=document.getElementsByTagName("script")[0];o.parentNode.insertBefore(a,o);for(var r=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["clearEventProperties","identify","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=r(p[c])};
+    heap.load("931515525");
+</script>
+</head>
+
+<body class="archive category category-basics category-2">
+	<button class="menu-toggle x">
+		<span class="lines"></span>
+		<span class="screen-reader-text">Primary Menu</span>
+	</button>
+	<div class="slide-menu">
+				
+		<h1 class="site-title"><a href="../../index.html" rel="home">Macrology</a></h1>
+		<h2 class="site-description">Case Studies in Lisp Macros</h2>
+		
+				
+				
+			<div id="secondary" class="widget-area" role="complementary">
+		<aside id="search-2" class="widget widget_search"><form role="search" method="get" class="search-form" action="http://malisper.me/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form></aside><aside id="pages-3" class="widget widget_pages"><h1 class="widget-title">Pages</h1>		<ul>
+			<li class="page_item page-item-55"><a href="../../about-me/index.html">About Michael Malis</a></li>
+<li class="page_item page-item-44"><a href="../../about-this-site-2/index.html">About This Site</a></li>
+		</ul>
+		</aside><aside id="nav_menu-3" class="widget widget_nav_menu"><h1 class="widget-title">Contact Me</h1><div class="menu-contact-me-container"><ul id="menu-contact-me" class="menu"><li id="menu-item-60" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-60"><a href="mailto:michaelmalis2@gmail.com">Email</a></li>
+<li id="menu-item-58" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-58"><a href="https://github.com/malisper">Github</a></li>
+<li id="menu-item-59" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-59"><a href="https://news.ycombinator.com/user?id=malisper">Hacker News</a></li>
+</ul></div></aside><aside id="archives-2" class="widget widget_archive"><h1 class="widget-title">Archives</h1>		<ul>
+			<li><a href='../../2016/06/index.html'>June 2016</a></li>
+	<li><a href='../../2016/04/index.html'>April 2016</a></li>
+	<li><a href='../../2016/01/index.html'>January 2016</a></li>
+	<li><a href='../../2015/12/index.html'>December 2015</a></li>
+	<li><a href='../../2015/11/index.html'>November 2015</a></li>
+	<li><a href='../../2015/10/index.html'>October 2015</a></li>
+	<li><a href='../../2015/09/index.html'>September 2015</a></li>
+	<li><a href='../../2015/08/index.html'>August 2015</a></li>
+	<li><a href='../../2015/07/index.html'>July 2015</a></li>
+	<li><a href='../../2015/06/index.html'>June 2015</a></li>
+	<li><a href='../../2015/05/index.html'>May 2015</a></li>
+		</ul>
+		</aside><aside id="categories-2" class="widget widget_categories"><h1 class="widget-title">Categories</h1>		<ul>
+	<li class="cat-item cat-item-2 current-cat"><a href="index.html" title="These are basic Lisp macros that should be trivial to understand.">Basic Macros</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="../intermediate-macros/index.html" >Intermediate Macros</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="../advanced-macros/index.html" >Advanced Macros</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="../debugging-common-lisp/index.html" >Debugging Lisp</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="../loops-in-lisp/index.html" >Loops in Lisp</a>
+</li>
+		</ul>
+</aside>	</div><!-- #secondary -->
+	</div><!-- .slide-menu -->
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<header id="masthead" class="site-header" role="banner">
+
+		<div class="site-branding">
+						<h1 class="site-title"><a href="../../index.html" rel="home">Macrology</a></h1>
+		</div>
+
+	</header><!-- #masthead -->
+
+	
+	
+	<div id="content" class="site-content">
+
+
+	<section id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			<header class="page-header">
+				<h1 class="page-title">Category: Basic Macros</h1><div class="taxonomy-description"><p>These are basic Lisp macros that should be trivial to understand.</p>
+</div>			</header><!-- .page-header -->
+
+			
+				
+					
+<article id="post-1410" class="post-1410 post type-post status-publish format-standard hentry category-basics">
+	<header class="entry-header">
+					<h1 class="entry-title"><a href="../../2016/04/20/writing-self-referential-programs/index.html" rel="bookmark">How to Generate Self-Referential Programs</a></h1>			</header><!-- .entry-header -->
+			<div class="entry-content">
+			<p>In this post, I am going to show you how to write programs that are self-referential. By self-referential, I mean programs which are able to obtain their own source code without any external input. In other words, they won&#8217;t just read from their own files. This post is based on section 6.1 of the book <em>Introduction to the Theory of Computation</em>.</p>
+<p>Before we can start generating self-referential programs we are first going to need some techniques for generating programs in general. The first technique we need is a method of taking a given program and writing a second program that outputs the given program. As an example, given (+ 2 2), we would need to write a program that outputs (+ 2 2). In most languages this is easy. One way to do it in Lisp is to put a quote in front of the program:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+'(+ 2 2)
+=&gt; (+ 2 2)
+</pre>
+<p>We are also going to need a function that automates this process. Such a function would take a program as its argument and return a new program that when ran, outputs the program that was originally passed to the function. In most languages doing this is fairly tricky. In Lisp, we can write this function easily through backquote:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun code-that-generates (program)
+  `',program)
+
+(code-that-generates '(+ 2 2))
+=&gt; '(+ 2 2)
+</pre>
+<p>If you don&#8217;t understand how backquote works, you can read <a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Backquote.html">this</a>. Even though it&#8217;s for Emacs Lisp, everything there is still applicable to other Lisps. Just make sure that you understand that <strong>code-that-generates</strong> can be used to generate a program that outputs a given program.</p>
+<p>Now that we have these two techniques, we can begin writing programs that are able to refer to themselves. The first self-referential program we will write will be an example of a <em>quine</em>. If you don&#8217;t know, a quine is a program that outputs its own source code. The quine we are going to write is made up of two parts, part A and part B, where part A is a function that is applied to part B:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(A B)
+</pre>
+<p>To describe how the quine works, it is easiest to start with part B. All that part B needs to do is return the source code of part A:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(A 'A)
+</pre>
+<p>Part A&#8217;s job is to take its own source code, and use it to obtain the source code of the entire quine. Since B is a program that outputs A, A can use <strong>code-that-generates</strong> on its own source code in order to obtain the source code of B. Once A has the source code of both A and B, it becomes trivial to combine the two to obtain the source code of the entire quine. Here is the complete quine, with the call to <strong>code-that-generates</strong> inlined:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+((lambda (a)
+   (let ((b `',a))
+     `(,a ,b)))
+ '(lambda (a)
+    (let ((b `',a))
+      `(,a ,b))))
+=&gt;
+((lambda (a)
+   (let ((b `',a))
+     `(,a ,b)))
+ '(lambda (a)
+    (let ((b `',a))
+      `(,a ,b))))
+</pre>
+<p>Now this is where things start getting interesting. A quine can be thought of as a program that generates its own source code, and immediately returns it. What if instead of immediately returning its own source code, the quine applied a function to it first, and then returned the result of that. The steps for building such a program are almost exactly the same as the steps we took for building the quine. This time, there is a third part F, for the function we want to call. The structure of the program will look like the following:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(F AB)
+</pre>
+<p>Where AB has a similar structure to our quine. After breaking AB into the two parts, A and B, the program looks like the following:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(F (A B))
+</pre>
+<p>Part B in the above program has the same responsibilities as B in the quine, it returns the source code for A:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(F (A 'A))
+</pre>
+<p>Then once A has the source code for itself, it can use <strong>code-that-generates </strong>to obtain the source code for B. Now that it has the source of A and B, it is easy for it to construct AB. Once part A has the code for AB, it can easily generate the source of the entire program. Here is what the program becomes after filling in everything except F:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(F
+ ((lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(F ,ab))))
+  '(lambda (a)
+     (let ((b `',a))
+       (let ((ab `(,a ,b)))
+         `(F ,ab))))))
+</pre>
+<p>What makes this so awesome is that F can be any function we want, and the above program will run F with the source code of the entire program! For example, replacing F with <strong>identity</strong> causes the program to become a quine:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(identity
+ ((lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(identity ,ab))))
+  '(lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(identity ,ab))))))
+=&gt;
+(identity
+ ((lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(identity ,ab))))
+  '(lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(identity ,ab))))))
+</pre>
+<p>But we can also do some much more impressive things. We can replace F with a function that lists its argument twice, and get a program that returns a list containing its own source code twice:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+((lambda (x) (list x x))
+ ((lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `((lambda (x) (list x x)) ,ab))))
+  '(lambda (a)
+     (let ((b `',a))
+       (let ((ab `(,a ,b)))
+         `((lambda (x) (list x x)) ,ab))))))
+
+=&gt;
+
+(((lambda (x) (list x x))
+  ((lambda (a)
+     (let ((b `',a))
+       (let ((ab `(,a ,b)))
+         `((lambda (x) (list x x)) ,ab))))
+   '(lambda (a)
+      (let ((b `',a))
+        (let ((ab `(,a ,b)))
+          `((lambda (x) (list x x)) ,ab))))))
+ ((lambda (x) (list x x))
+  ((lambda (a)
+     (let ((b `',a))
+       (let ((ab `(,a ,b)))
+         `((lambda (x) (list x x)) ,ab))))
+   '(lambda (a)
+      (let ((b `',a))
+        (let ((ab `(,a ,b)))
+          `((lambda (x) (list x x)) ,ab)))))))
+</pre>
+<p>To make writing these self-referential programs easier, we can define a function that fills in F for us. It just requires a little nested backquote trickery.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='../../2016/04/20/writing-self-referential-programs/index.html#easy-footnote-bottom-1' title='You may have noticed the extra comma and quote in front of F in the generated program. Although it doesn&#8217;t make a difference semantically it does make a different syntactically. Luckily, all of the code generated by a program with the extra comma and quote will also contain the extra comma and quote, so everything is okay.'><sup>1</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun self-referential-version-of (f)
+  `(,f
+     ((lambda (a)
+        (let ((b `',a))
+          (let ((ab `(,a ,b)))
+            `(,',f ,ab))))
+       '(lambda (a)
+          (let ((b `',a))
+            (let ((ab `(,a ,b)))
+              `(,',f ,ab)))))))
+
+(self-referential-version-of '(lambda (x) (list x x))
+=&gt;
+((lambda (x) (list x x))
+ ((lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(,'(lambda (x) (list x x)) ,ab))))
+  '(lambda (a)
+     (let ((b `',a))
+       (let ((ab `(,a ,b)))
+         `(,'(lambda (x) (list x x)) ,ab))))))
+</pre>
+<p>Now that we&#8217;ve got a function that can generate self-referential programs for us, I am going to show you how to build something called a <em>quine-relay</em>. A quine-relay is like a normal quine, except it passes through multiple languages. The <em>quine-relay</em> we are going to write is a Lisp program that outputs a C program that outputs the original Lisp program. All we have to do is write a function that takes its argument and writes a C program that prints the argument it was given. Then we can pass that function to <strong>self-referential-version-of</strong> to get the quine-relay! That&#8217;s it! Here is a program that will generate the quine-relay:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(self-referential-version-of
+  '(lambda (self)
+     (format t
+
+&quot;#include &lt;stdio.h&gt;~%int main(){printf(\&quot;%s\&quot;,~(~s~));}&quot;
+
+             (remove #\newline (prin1-to-string self)))))
+</pre>
+<p>I&#8217;ve omitted the actual quine-relay for brevity, but you can find it <a href="https://gist.github.com/malisper/77db18aa8b1cb96fa7a984144eaf51aa">here</a> if you are curious. There are a few idiosyncrasies in the above program and in the quine-relay because of the differences in behavior between Lisp and C. For example, in C you can&#8217;t have multi-line strings, so it becomes easier to remove all of the newlines from the Lisp program, than it is to keep them.</p>
+<p>And that&#8217;s all it takes to write self-referential programs. After seeing how easy it is to generate a quine-relay, it shouldn&#8217;t be hard to imagine how to write one with many more steps. You may even be able to get up to <a href="https://github.com/mame/quine-relay">100</a> if you work at it long enough.</p>
+					</div><!-- .entry-content -->
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="../../2016/04/20/writing-self-referential-programs/index.html" rel="bookmark"><time class="entry-date published" datetime="2016-04-20T00:39:07+00:00">April 20, 2016</time><time class="updated" datetime="2016-04-20T00:57:04+00:00">April 20, 2016</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../author/malisper/index.html">malisper</a></span></span>			<span class="secondary-entry-meta">
+																	<span class="comments-link"><a href="../../2016/04/20/writing-self-referential-programs/index.html#respond">0</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</article><!-- #post-## -->
+
+				
+					
+<article id="post-1106" class="post-1106 post type-post status-publish format-standard hentry category-basics category-loops-in-lisp">
+	<header class="entry-header">
+					<h1 class="entry-title"><a href="../../2015/11/24/loops-lisp-part-1-goto/index.html" rel="bookmark">Loops in Lisp Part 1: Goto</a></h1>			</header><!-- .entry-header -->
+			<div class="entry-content">
+			<p>At its core, Common Lisp provides two primitives for performing iteration. The first of those primitives is recursion. Recursion is an amazing technique, but in this post I am going to focus on the other primitive &#8211; goto.</p>
+<p>Goto is extremely powerful. It lets you manipulate the control flow of your program in anyway you can think of. This freedom to do whatever you want is also what makes goto so dangerous. In any given piece of code that uses goto, it is difficult to tell what the purpose of the goto is because it could be used for so many different reasons. Because of this, most languages provide various kinds of builtin loops instead of providing raw goto. Even though loops aren&#8217;t as general as goto, they express the intention of the code much more clearly.</p>
+<p>As an example, let&#8217;s say you want to print all of the characters in a file. If your language provided while loops, you could do this by printing characters from the file one at a time while there are more characters left. If Common Lisp had while loops,<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='../../2015/11/24/loops-lisp-part-1-goto/index.html#easy-footnote-bottom-1' title='Common Lisp does provide the do macro, which can be used as a while loop. I&#8217;m not mentioning it for pedagogical reasons.'><sup>1</sup></a></span> the code for this procedure would look like this:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(while (peek-char file nil nil)
+  (write-char (read-char file)))
+</pre>
+<p>If your language only had goto, it becomes much more difficult to implement the procedure. In the end, you have to, in some way, simulate a while loop. One way to code the procedure with just goto is the following. First check if there are any characters left in the file. If there aren&#8217;t any, goto the end. Otherwise print the next character and go back to the start. Here is Common Lisp code that implements this:<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='../../2015/11/24/loops-lisp-part-1-goto/index.html#easy-footnote-bottom-2' title='In Common Lisp, you need to use tagbody when creating labels because otherwise the labels would be interpreted as variables to be evaluated.'><sup>2</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(tagbody
+  start
+  (if (not (peek-char file nil nil))
+      (go end))
+  (write-char (read-char file))
+  (go start)
+  end)
+</pre>
+<p>Not only is the version with goto much more verbose, it is also much harder to understand. The code lacks clarity because goto is so general. It gives you no context into how it is being used. The reader of the code will have to think about the positioning of all of the gotos before they can think about the overall flow of the program. On the other hand, in the version with the while loop, merely the fact that a while loop is being used gives whoever is reading the code a decent idea of the control flow.</p>
+<p>In reality all loops are eventually compiled down to gotos. Whenever the compiler for a language that provides loops sees a loop, it generates code that simulates the loop through goto. You can do the same thing with Lisp macros!</p>
+<p>If you don&#8217;t know, Lisp macros are compile time functions which take code as their input and return code as their output. When Lisp code is being compiled, all of the macros in the code are called and each one is replaced with its result. This means you can write a macro that looks like a while loop when you use it, but at compile time generates code to simulate a while loop through goto. You are in effect adding while loops to the Lisp compiler! Here is code that defines such a macro:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defmacro while (test &amp;body body)
+  (let ((gtop (gensym))
+        (gend (gensym)))
+    `(tagbody
+       ,gtop
+       (if (not ,test)
+           (go ,gend))
+       ,@body
+       (go ,gtop)
+       ,gend)))
+</pre>
+<p>With this macro, the first code example is now valid lisp code! The <strong>while </strong>macro takes as arguments a test and a body. It then generates code that uses the method used in the second example to simulate a while loop with goto. You can actually see what the first example looks like after expanding the macro by using the function <strong>macroexpand</strong>. Here is what the generated code looks like:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(tagbody
+  #:g729
+  (if (not (peek-char file nil nil))
+      (go #:g730))
+  (write-char (read-char file))
+  (go #:g729)
+  #:g730)
+</pre>
+<p>The generated code is the exact same as the code in the second example except for the names of the labels. This means the two examples are the same functionally! The only real difference between them is that the first one is expressed in terms of loops, and the second one is expressed in terms of goto. Since it is so much easier to think in terms of loops than goto, there is no reason why you wouldn&#8217;t use the first example over the second.</p>
+<p>Macros allow you to build any feature you want as long as it is possible to simulate that feature through lower level features. With respect to goto, this means you can build any kind of control flow construct you want by simulating it with goto and then putting a macro on top. In Common Lisp, all of the looping constructs (<strong>do</strong>, <strong>do*</strong>, <strong>dotimes</strong>, <strong>dolist</strong>, <strong>loop</strong>) are really just macros that expand into goto. This is what Alan Kay meant when he said &#8220;Lisp isn&#8217;t a language, it&#8217;s a building material&#8221;. It bears repeating. In Lisp, you can build any feature you want as long as it is possible to simulate that feature in terms of lower level features.</p>
+					</div><!-- .entry-content -->
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="../../2015/11/24/loops-lisp-part-1-goto/index.html" rel="bookmark"><time class="entry-date published" datetime="2015-11-24T10:00:44+00:00">November 24, 2015</time><time class="updated" datetime="2015-11-22T15:29:38+00:00">November 22, 2015</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../author/malisper/index.html">malisper</a></span></span>			<span class="secondary-entry-meta">
+																	<span class="comments-link"><a href="../../2015/11/24/loops-lisp-part-1-goto/index.html#comments">6</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</article><!-- #post-## -->
+
+				
+					
+<article id="post-1048" class="post-1048 post type-post status-publish format-standard hentry category-basics">
+	<header class="entry-header">
+					<h1 class="entry-title"><a href="../../2015/11/10/defmemo/index.html" rel="bookmark">Defmemo</a></h1>			</header><!-- .entry-header -->
+			<div class="entry-content">
+			<p>In my <a href="../../index.html">last post</a> I talked about memoization i.e. caching the results of a function. Memoization is a fairly common technique for optimization. It is common enough to warrant writing a macro that makes it easy to define memoized functions. When demonstrating memoization, I had a memoized Fibonacci function that looked like this:<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='../../2015/11/10/defmemo/index.html#easy-footnote-bottom-1' title='Alternatively you could use or=, but in order to keep the code in this post pure Common Lisp, I am leaving it out.'><sup>1</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(let ((table (make-hash-table)))
+  (defun fib (n)
+    (or (gethash n table)
+        (setf (gethash n table)
+              (if (&lt;= 0 n 1)
+                  n
+                  (+ (fib (- n 1))
+                     (fib (- n 2))))))))
+</pre>
+<p>There are a couple problems with the above code. One problem is the boilerplate. If you wanted ten different memoized functions, you would have to copy lines 1, 3, and 4 for every single memoized function. Some people like to call programmers who do this needless duplication, &#8220;human compilers&#8221;, since they are writing code that the compiler should be writing for them.</p>
+<p>Another issue with the above code is the lack of abstraction. If you wanted to change the caching mechanism to say, only cache the last hundred values, you would have to change the definition of every single function! Ideally you would only need to modify the code in one place in order to change how the caching is implemented.</p>
+<p><strong>Defmemo</strong> is one way to solve both of these problems. Here is what the above code would look like if it were were to use <strong>defmemo</strong>:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defmemo fib (n)
+  (if (&lt;= 0 n 1)
+      n
+      (+ (fib (- n 1))
+         (fib (- n 2)))))
+</pre>
+<p><strong>Defmemo</strong> solves both of the problems extremely well. It removes all of the differences between the memoized version on the regular version except for having to use &#8220;defmemo&#8221; instead of &#8220;defun&#8221;. <strong>Defmemo</strong> also solves the abstraction problem by moving all of the code relevant to memoization into the body of <strong>defmemo</strong>. If you want to change how memoization works, all you have to do is change the code for <strong>defmemo</strong>.</p>
+<p>Now for the implementation of <strong>defmemo</strong>. The implementation is made up of two separate parts. First, a higher order function, <strong>memo</strong>, which takes a function as an argument, and returns a memoized version of that function. The second part is the actual macro, <strong>defmemo</strong>. Instead of just defining the function like <strong>defun</strong>, <strong>defmemo</strong> first builds a lambda expression for the body. Then it generates code that calls <strong>memo</strong> on that lambda function. Finally <strong>defmemo</strong> uses the result of <strong>memo</strong> as the implementation of the function being defined.<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='../../2015/11/10/defmemo/index.html#easy-footnote-bottom-2' title='If you are experienced with Python, you should be able to see what we are doing. The function memo is effectively a decorator and defmemo is just a way of applying it.'><sup>2</sup></a></span></p>
+<p>Here is the code for <strong>memo</strong>:<span id='easy-footnote-3' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='../../2015/11/10/defmemo/index.html#easy-footnote-bottom-3' title='You could also use or= so you don&#8217;t have to call gethash multiple times.'><sup>3</sup></a></span><span id='easy-footnote-4' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='../../2015/11/10/defmemo/index.html#easy-footnote-bottom-4' title='There is a problem with the code below, when the result being stored is nil. The code determines if it has been called before by checking if the value in the hash-table is non-nil. Instead it should do this check by looking at the second value returned by gethash.'><sup>4</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun memo (f)
+  (let ((cache (make-hash-table :test #'equalp)))
+    (lambda (&amp;rest args)
+      (or (gethash args cache)
+          (setf (gethash args cache)
+                (apply f args))))))
+</pre>
+<p><b>Memo</b> works by returning a function that has an internal hash-table. When that function is called, it first checks its hash-table to see if it has been called with the same arguments before. If so, it returns the value it had calculated the first time it was called.<span id='easy-footnote-5' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='../../2015/11/10/defmemo/index.html#easy-footnote-bottom-5' title='The logic for this is expressed concisely in the code through or. Or evaluates its first argument. If it is non-nil it returns it. Otherwise it continues with the remaining arguments.'><sup>5</sup></a></span> If it hasn&#8217;t been called with the same arguments before, the function will instead call the function that was passed in to <strong>memo</strong>, and then store the result of that inside the table. This way, if the memoized function is called with the same arguments a second time, it can just look up the result in the table.</p>
+<p>Next, for <strong>defmemo</strong> itself, we need to generate code that takes the body as a lambda expression, passes that lambda function through <strong>memo</strong>, and uses that as the implementation of the function. One way to set the implementation of a function to be a lambda function is to use <strong>setf</strong> with <strong>symbol-function</strong>.<span id='easy-footnote-6' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='../../2015/11/10/defmemo/index.html#easy-footnote-bottom-6' title='Another way is to use setf with fdefinition which not only works on symbols, but setf functions as well.'><sup>6</sup></a></span> For example, here is how you could set the implementation of <strong>square</strong> to be a lambda function that squares its argument:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(setf (symbol-function 'square) (lambda (x) (* x x)))
+
+(square 5) =&gt; 25
+</pre>
+<p>Based on the paragraph above, here is the code for <strong>defmemo</strong>:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defmacro defmemo (name args &amp;body body)
+ `(setf (symbol-function ',name) 
+        (memo (lambda ,args ,@body))))
+</pre>
+<p>Now instead of defining a function with <strong>defun</strong>, we can define it with <strong>defmemo</strong> and it will automatically be memoized! <strong>Defmemo</strong> is a great example of how you can define your own ways to define functions. Many libraries provide similar features in which you use the same syntax as <strong>defun</strong>, only with a bit of magic thrown in.</p>
+					</div><!-- .entry-content -->
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="../../2015/11/10/defmemo/index.html" rel="bookmark"><time class="entry-date published" datetime="2015-11-10T06:00:59+00:00">November 10, 2015</time><time class="updated" datetime="2015-11-08T00:03:01+00:00">November 8, 2015</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../author/malisper/index.html">malisper</a></span></span>			<span class="secondary-entry-meta">
+																	<span class="comments-link"><a href="../../2015/11/10/defmemo/index.html#comments">3</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</article><!-- #post-## -->
+
+				
+					
+<article id="post-988" class="post-988 post type-post status-publish format-standard hentry category-basics">
+	<header class="entry-header">
+					<h1 class="entry-title"><a href="../../2015/09/29/zap/index.html" rel="bookmark">Zap</a></h1>			</header><!-- .entry-header -->
+			<div class="entry-content">
+			<p><em>This post makes use of places. If you are unfamiliar with how places work, see my post <a href="../../2015/09/22/getting-places/index.html">Getting Places</a>.</em></p>
+<p>Many languages provide syntactic sugar for evaluating an expression involving a variable and assigning the result of that expression to the variable at the same time. In these languages you can do something such as the following:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+x += 5
+</pre>
+<p>The above expression both adds five to the value of <em>x</em> and writes that new value back to <em>x</em>. In this post, I&#8217;m going to show you how you can write a macro <b>zap</b> that is a generalized version of this technique. With <strong>zap</strong> the above example would look like the following:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(zap #'+ x 5)
+</pre>
+<p>There are a couple things that make <strong>zap</strong> really cool. First of all, it can be used with any function. For example, if you wanted to cube the value in <em>x</em>, you could use the following:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(zap #'expt x 3)
+</pre>
+<p>The other thing that makes <strong>zap</strong> so awesome is that it can be used on any place. If you want to use <strong>zap</strong> on the value stored in a hash table with key 5, you can do that:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(zap #'+ (gethash 5 table) 5)
+</pre>
+<p>Now that you&#8217;ve seen how <strong>zap</strong> is used, here is how it can be implemented:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defmacro zap (fn place &amp;rest args)
+  (multiple-value-bind 
+        (temps exprs stores store-expr access-expr) 
+      (get-setf-expansion place)
+    `(let* (,@(mapcar #'list temps exprs)
+            (,(car stores) 
+              (funcall ,fn ,access-expr ,@args)))
+       ,store-expr)))
+</pre>
+<p>You should be able to see that the code for <strong>zap</strong> is eerily similar to that of <strong>incf</strong> (from <a href="../../2015/09/22/getting-places/index.html">Getting Places</a>). They are the exact same except instead of binding the gensym that will hold the new value to one plus the value already in the place:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(,(car stores) (+ 1 ,access-expr))
+</pre>
+<p>The gensym is bound to the result of calling the function with the value in the place and all of the other arguments passed to <strong>zap</strong>:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(,(car stores) (funcall ,fn ,access-expr ,@args))
+</pre>
+<p>Although <strong>zap</strong> is just a nice syntactic shortcut, it is a great example of the crazy things you can do with places.</p>
+					</div><!-- .entry-content -->
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="../../2015/09/29/zap/index.html" rel="bookmark"><time class="entry-date published" datetime="2015-09-29T11:38:35+00:00">September 29, 2015</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../author/malisper/index.html">malisper</a></span></span>			<span class="secondary-entry-meta">
+																	<span class="comments-link"><a href="../../2015/09/29/zap/index.html#respond">0</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</article><!-- #post-## -->
+
+				
+					
+<article id="post-370" class="post-370 post type-post status-publish format-standard hentry category-basics">
+	<header class="entry-header">
+					<h1 class="entry-title"><a href="../../2015/06/30/multiple-value-bind/index.html" rel="bookmark">Multiple-value-bind</a></h1>			</header><!-- .entry-header -->
+			<div class="entry-content">
+			<p>Common Lisp is a pretty unique language. One of the many features that makes Common Lisp such an awesome language is multiple values. Yes, you read right. In Common Lisp it is possible for a function to return more than a single value. One example of a function that takes advantage of multiple values is <b>floor</b>. <b>Floor</b> takes a number as its argument and returns two values, whatever was passed in rounded down and the remainder.</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(floor 3.5)
+=&gt;
+3
+0.5
+</pre>
+<p>When you use <strong>floor</strong> in the manner above, you get two values back, 3 as the first return value, and 0.5 as the second. What&#8217;s really cool is that the values besides the first are completely ignored unless you explicitly ask for them.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='../../2015/06/30/multiple-value-bind/index.html#easy-footnote-bottom-1' title='Since we are using floor from the repl, all of the values are shown.'><sup>1</sup></a></span> This means you can pretend that <strong>floor</strong> returns only a single value as long as you don&#8217;t need the other ones. Notice how in the following example, the <strong>+</strong> function is not aware of the second value returned by <strong>floor</strong>:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(+ (floor 3.5) 10)
+=&gt; 13
+</pre>
+<p>Now you may be wondering, &#8220;How can I obtain other values besides the first one?&#8221;. Well, there are several macros for doing that, the main one being <strong>multiple-value-bind</strong>. To use <strong>multiple-value-bind</strong>, you specify a list of the variables you want to bind each value to, followed by the expression that will return multiple values. Let&#8217;s say you want to multiply the two values returned by <strong>floor</strong> together. Here is how you would do that with <strong>multiple-value-bind</strong>:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(multiple-value-bind (val remainder) (floor 3.5)
+  (* val remainder))
+=&gt; 1.5
+</pre>
+<p>It is also easy to create your own function that returns multiple values. All you need to do is pass each value you want to return to the <strong>values</strong> function. Below is a function which returns both twice its argument and three times its argument:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun multiples (x)
+  (values (* 2 x) (* 3 x)))
+
+(multiples 10)
+=&gt;
+20
+30
+</pre>
+<p>There is just one more thing you need to know about multiple values. If the last call of a function is to another that returns multiple values, the first function will return all of the values the second one returns. If you were to write a function that doubles its argument and then uses <strong>floor</strong> to round it down, that function will return both values that are returned by <strong>floor</strong>.</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun double-and-round-down (x)
+  (floor (* 2 x)))
+
+(double-and-round-down 5.25)
+=&gt;
+10
+0.5
+</pre>
+<p>This behavior may or may not be desired. The standard way to make sure your function only returns a single value is to wrap the function that returns multiple values with a call to <strong>values</strong>. <strong>Values</strong> will pay attention only to the first value and will return just that and nothing else.</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun double-and-round-down (x)
+  (values (floor (* 2 x))))
+
+(double-and-round-down 5.25)
+=&gt; 10
+</pre>
+<p>And that&#8217;s all you need to know to work with multiple values!</p>
+					</div><!-- .entry-content -->
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="../../2015/06/30/multiple-value-bind/index.html" rel="bookmark"><time class="entry-date published" datetime="2015-06-30T13:24:41+00:00">June 30, 2015</time><time class="updated" datetime="2015-07-04T15:49:11+00:00">July 4, 2015</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../author/malisper/index.html">malisper</a></span></span>			<span class="secondary-entry-meta">
+																	<span class="comments-link"><a href="../../2015/06/30/multiple-value-bind/index.html#comments">8</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</article><!-- #post-## -->
+
+				
+					
+<article id="post-241" class="post-241 post type-post status-publish format-standard hentry category-basics">
+	<header class="entry-header">
+					<h1 class="entry-title"><a href="../../2015/06/17/hofeach/index.html" rel="bookmark">Hofeach</a></h1>			</header><!-- .entry-header -->
+			<div class="entry-content">
+			<p>Last time I talked about <a href="../../2015/06/14/mapeach/index.html">mapeach</a>, a macro which is a simple wrapper around <strong>mapcar</strong>. After using <strong>mapeach</strong> a couple times, I found that I wanted &#8216;each&#8217; version of many other other functions, <strong>remove</strong>, <strong>find</strong>, and <strong>count</strong> to name a few. One option I had was to write a macro for every single one of these functions. If I were to have done this, I would have wound up with &#8216;remove-each&#8217;, &#8216;find-each&#8217;, and so on. Instead I took door number two, creating a general macro which I call &#8216;<strong>hofeach&#8217;</strong>. <strong>Hofeach</strong>, is just like <strong>mapeach</strong>, except it takes an extra argument for the HOF (higher order function), that you want to use. Below is one possible implementation of <strong>hofeach</strong>.</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defmacro hofeach (hof var list &amp;body body)
+  `(funcall ,hof (lambda (,var) ,@body) ,list))
+</pre>
+<p>Here is what code that uses <strong>hofeach</strong> as a fill in for <strong>mapeach</strong> looks like:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(hofeach #'mapcar x '(1 2 3)
+  (* x x))
+
+=&gt; (1 4 9)
+</pre>
+<p>Now we get to specify which HOF we want to use! If we want to keep all of the numbers in a list that are even, here is how we could do that:<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='../../2015/06/17/hofeach/index.html#easy-footnote-bottom-1' title='Remove-if-not is a pretty bad name. Removing all of the elements that do not satisfy some property can be thought of as keeping all of the ones that do. So instead of being called &#8216;remove-if-not&#8217;, it should be called &#8216;keep-if&#8217;.'><sup>1</sup></a></span> <span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='../../2015/06/17/hofeach/index.html#easy-footnote-bottom-2' title='We need to use integerp since evenp signals an error when called with a non-integer value.'><sup>2</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(hofeach #'remove-if-not x '(1.2 5 7 2 3.5 6 9)
+  (and (integerp x) (evenp x)))
+
+=&gt; (2 6)
+</pre>
+<p>So now that I have <strong>hofeach</strong>, I generally will use it instead of passing a complex lambda expression to a HOF. Most of the time I use <strong>hofeach</strong> with <strong>remove-if-not</strong>, but I have also used it with <b>count-if</b> as well. It gives code a nice down and to the right look, which I find pretty easy to read. You get to read the forms in the order that they appear. If you were to use a lambda expression instead, it becomes much more difficult to read since you have to jump around in order to read the code.</p>
+					</div><!-- .entry-content -->
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="../../2015/06/17/hofeach/index.html" rel="bookmark"><time class="entry-date published" datetime="2015-06-17T10:46:50+00:00">June 17, 2015</time><time class="updated" datetime="2015-07-04T15:57:48+00:00">July 4, 2015</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../author/malisper/index.html">malisper</a></span></span>			<span class="secondary-entry-meta">
+																	<span class="comments-link"><a href="../../2015/06/17/hofeach/index.html#comments">10</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</article><!-- #post-## -->
+
+				
+					
+<article id="post-210" class="post-210 post type-post status-publish format-standard hentry category-basics">
+	<header class="entry-header">
+					<h1 class="entry-title"><a href="../../2015/06/14/mapeach/index.html" rel="bookmark">Mapeach</a></h1>			</header><!-- .entry-header -->
+			<div class="entry-content">
+			<p>Many times when using <strong>mapcar</strong>, I find myself using a complex lambda expression for the function argument. This makes the code difficult to read since it breaks apart the flow. My code winds up looking like the following:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(mapcar (lambda (x)
+          ...)
+        list)
+</pre>
+<p>First you have to read the possibly massive lambda expression, then you finally find out what you are mapping over. As the lambda expression increases in length, it becomes harder and harder to read. A way to fix this is with the macro <strong>mapeach</strong>. <strong>Mapeach</strong> is a macro which is meant to be used when the lambda expression that would be passed to <strong>mapcar</strong> is much longer than the expression for the list. <strong>Mapeach</strong> works just like <strong>mapcar</strong>, but instead provides an alternative syntax which makes it easier to read when the lambda expression is complicated. Here is one possible implementation of <strong>mapeach</strong>:<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='../../2015/06/14/mapeach/index.html#easy-footnote-bottom-1' title='An alternative implementation can expand into loop. That way it will automatically support destructuring over the list elements.'><sup>1</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defmacro mapeach (var list &amp;body body)
+  `(mapcar (lambda (,var) ,@body) ,list))
+</pre>
+<p><strong>Mapeach</strong>, does two things to fix the problem. First it hides the lambda, making it easier to find the important parts of the code. Second, it inverts the order of the arguments, putting the simple list expression first and the complex body second. As a simple example of <strong>mapeach</strong>, here is how one could square each element in a list using it:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(mapeach x '(1 2 3)
+  (* x x))
+</pre>
+<p>If one wanted to write the above code by using <strong>mapcar</strong>, it would look something like the following:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(mapcar (lambda (x)
+          (* x x))
+        '(1 2 3))
+</pre>
+<p>Although it doesn&#8217;t shine for this simple example, you can tell that <strong>mapeach</strong> makes the code a bit clearer. As the body for the lambda expression gets longer and longer, <strong>mapeach</strong> begins to make the code much easier to understand. I find that <strong>mapcar</strong> is nice to use only when the expression for the function is short. This happens either when you are either using a named function or you are using some sort of reader macro. <strong>Mapeach</strong> is another one of those macros that makes what seems like an insignificant difference. Even so, I find that it aids a lot in readability since it puts all of the simple parts in one place.</p>
+					</div><!-- .entry-content -->
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="../../2015/06/14/mapeach/index.html" rel="bookmark"><time class="entry-date published" datetime="2015-06-14T08:51:57+00:00">June 14, 2015</time><time class="updated" datetime="2015-07-04T15:53:32+00:00">July 4, 2015</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../author/malisper/index.html">malisper</a></span></span>			<span class="secondary-entry-meta">
+																	<span class="comments-link"><a href="../../2015/06/14/mapeach/index.html#comments">4</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</article><!-- #post-## -->
+
+				
+					
+<article id="post-102" class="post-102 post type-post status-publish format-standard hentry category-basics">
+	<header class="entry-header">
+					<h1 class="entry-title"><a href="../../2015/06/02/automatically-binding-gensyms/index.html" rel="bookmark">Automatically Binding Gensyms</a></h1>			</header><!-- .entry-header -->
+			<div class="entry-content">
+			<p>One of the most common macros that almost everyone keeps in their utilities file is <strong>with-gensyms</strong>. <strong>With-gensyms</strong> is a macro that binds a list of variables to gensyms. That&#8217;s it! All <strong>with-gensyms</strong> does it take a list of symbols and generates code which binds each of those symbols to a gensym.  Although <strong>with-gensyms</strong> is simple, it removes a lot of boiler plate code. Here is a simple implementation of <strong>with-gensyms</strong>:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defmacro with-gensyms (vars &amp;body body)
+  `(let ,(loop for v in vars collect `(,v (gensym)))
+     ,@body))
+</pre>
+<p>Looking at my implementation of <a href="../../2015/05/31/efficiently-building-lists/index.html">accum</a>, here is how one could simplify it by using <strong>with-gensyms</strong>. Pay attention to how much boiler plate is removed.</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defmacro accum (accfn &amp;body body)
+  (with-gensyms (ghead gtail garg)
+    `(let* ((,ghead (list nil))
+            (,gtail ,ghead))
+       (macrolet ((,accfn (,garg)
+                    `(setf ,',gtail
+                           (setf (cdr ,',gtail)
+                                 (list ,,garg)))))
+         ,@body
+         (cdr ,ghead)))))
+</pre>
+<p>By removing so much boiler plate, <strong>with-gensyms</strong> helps greatly reduce the cognitive load in certain cases. This will be important when I introduce <strong>once-only</strong>, the next macro I plan to talk about. There are also other variations of <strong>with-gensyms</strong> such as the one in <a href="https://common-lisp.net/project/alexandria/">Alexandria</a> which makes it easier to have base names associated with the gensyms created.</p>
+					</div><!-- .entry-content -->
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="../../2015/06/02/automatically-binding-gensyms/index.html" rel="bookmark"><time class="entry-date published" datetime="2015-06-02T13:53:36+00:00">June 2, 2015</time><time class="updated" datetime="2015-06-02T13:56:08+00:00">June 2, 2015</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../author/malisper/index.html">malisper</a></span></span>			<span class="secondary-entry-meta">
+																	<span class="comments-link"><a href="../../2015/06/02/automatically-binding-gensyms/index.html#respond">0</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</article><!-- #post-## -->
+
+				
+					
+<article id="post-8" class="post-8 post type-post status-publish format-standard hentry category-basics">
+	<header class="entry-header">
+					<h1 class="entry-title"><a href="../../2015/05/30/the-ret-macro/index.html" rel="bookmark">The Ret Macro</a></h1>			</header><!-- .entry-header -->
+			<div class="entry-content">
+			<p>The <strong>ret</strong> macro is simple, but useful. It allows you to bind a variable and simultaneously specify the final value of that variable as the result of the <strong>ret</strong> expression, hence the name &#8220;ret&#8221;, a blend of <strong>let</strong> and <strong>return</strong>. Here is the implementation of <strong>ret</strong>:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defmacro ret (var val &amp;body body)
+  `(let ((,var ,val))
+     ,@body
+     ,var))
+</pre>
+<p>And now for an example. If you want to write a function that converts a hash-table into an alist, here is how you could do that using <strong>ret</strong>.</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun table-&gt;alist (table)
+  (ret result '()
+    (maphash (lambda (k v)
+               (push (cons k v) result))
+             table)))
+</pre>
+<p>Personally, I find code using <strong>ret</strong> to be much clearer than the equivalent code using <strong>let</strong>. When writing the <b>let </b>version, I commonly find myself forgetting to return the value I want to at the end. <strong>Ret </strong>eliminates this problem by returning the result for me. The only downside I see to using <strong>ret</strong> is that it has the same problem as all of the &#8220;do&#8221; macros (dotimes, dolist, etc), they change where the resulting value comes from. Even so, this problem is much more mild with <strong>ret</strong> because <strong>ret</strong> will always change the control flow, whereas the &#8220;do&#8221; macros may or may not change the final value depending on the number of arguments passed to them.</p>
+					</div><!-- .entry-content -->
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="../../2015/05/30/the-ret-macro/index.html" rel="bookmark"><time class="entry-date published" datetime="2015-05-30T16:31:59+00:00">May 30, 2015</time><time class="updated" datetime="2015-05-30T15:27:39+00:00">May 30, 2015</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../author/malisper/index.html">malisper</a></span></span>			<span class="secondary-entry-meta">
+																	<span class="comments-link"><a href="../../2015/05/30/the-ret-macro/index.html#comments">2</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</article><!-- #post-## -->
+
+				
+			
+		
+		</main><!-- #main -->
+	</section><!-- #primary -->
+
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="site-info">
+			<a href="http://wordpress.org/">Proudly powered by WordPress</a>
+			<span class="sep"> ~ </span>
+			Theme: Scrawl by <a href="https://wordpress.com/themes/" rel="designer">WordPress.com</a>.		</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type='text/javascript' src='../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript' src='../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushPlain09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore09b1.css?ver=3.0.9b";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeEclipse09b1.css?ver=3.0.9b";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+<link rel='stylesheet' id='qtipstyles-css'  href='../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='easyfootnotescss-css'  href='../../wp-content/plugins/easy-footnotes/assets/easy-footnotes167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='dashicons-css'  href='../../wp-includes/css/dashicons.min167b.css?ver=4.6' type='text/css' media='all' />
+<script type='text/javascript' src='../../wp-content/themes/scrawl-wpcom/js/scrawld56c.js?ver=20150309'></script>
+<script type='text/javascript' src='../../wp-content/themes/scrawl-wpcom/js/skip-link-focus-fix08e0.js?ver=20130115'></script>
+<script type='text/javascript' src='../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../wp-includes/js/imagesloaded.min55a0.js?ver=3.2.0'></script>
+<script type='text/javascript' src='../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtipcall167b.js?ver=4.6'></script>
+
+</body>
+
+<!-- Mirrored from malisper.me/category/basics/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:46:29 GMT -->
+</html>
+<!-- Dynamic page generated in 0.125 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:22:23 -->
+
+<!-- super cache -->

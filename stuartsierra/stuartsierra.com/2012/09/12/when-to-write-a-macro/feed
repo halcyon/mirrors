@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: When (Not) to Write a Macro</title>
+	<atom:link href="https://stuartsierra.com/2012/09/12/when-to-write-a-macro/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2012/09/12/when-to-write-a-macro</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Tim</title>
+		<link>https://stuartsierra.com/2012/09/12/when-to-write-a-macro/comment-page-1#comment-44634</link>
+		<dc:creator><![CDATA[Tim]]></dc:creator>
+		<pubDate>Thu, 13 Sep 2012 17:49:28 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=659#comment-44634</guid>
+		<description><![CDATA[My return value
+&lt;code&gt;
+[resp (do-the-thing (query db-connection uri))
+flags [:assoc :secrets-included]]
+&lt;/code&gt;
+should probably be
+&lt;code&gt;
+[resp (do-the-thing (query db-connection uri))
+ flags #(assoc % :secrets-included]]
+&lt;/code&gt;
+i.e., if you return a function for a key it will be applied to the value of that key.
+
+Also, the parameter declaration can be extended to be better at reaching further nested maps.]]></description>
+		<content:encoded><![CDATA[<p>My return value<br />
+<code><br />
+[resp (do-the-thing (query db-connection uri))<br />
+flags [:assoc :secrets-included]]<br />
+</code><br />
+should probably be<br />
+<code><br />
+[resp (do-the-thing (query db-connection uri))<br />
+ flags #(assoc % :secrets-included]]<br />
+</code><br />
+i.e., if you return a function for a key it will be applied to the value of that key.</p>
+<p>Also, the parameter declaration can be extended to be better at reaching further nested maps.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Tim</title>
+		<link>https://stuartsierra.com/2012/09/12/when-to-write-a-macro/comment-page-1#comment-44633</link>
+		<dc:creator><![CDATA[Tim]]></dc:creator>
+		<pubDate>Thu, 13 Sep 2012 17:42:51 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=659#comment-44633</guid>
+		<description><![CDATA[Hey Stuart,
+
+I think you have a fair point - if the defpipe macro is used in one or two places.  But if used pervasively throughout your system it&#039;s completely ok.  Any large system requires learning the semantics of its building blocks (if you&#039;re lucky enough to work in a system with discernable building blocks.  ugh).  
+
+I&#039;m not suggesting the defpipe macro as originally posted is ready for primetime.  I&#039;m saying it could still be a nice area to explore.  For example, I did a little building on your defpipe macro.  I adopted clojure&#039;s require syntax to the pipe parameter declaration so you could write e.g.
+
+&lt;code&gt;
+(defpipe [[request body headers uri]
+                  response :as resp
+                  db-connection]
+     (when (and ((complement nil?) resp)
+                (authorized? headers))
+        [resp (do-the-thing (query db-connection  uri))
+          flags [:assoc :secrets-included])))
+
+;; a request context
+{:request {:body &quot;blah&quot;
+           :headers {:http-basic-auth &quot;authorized&quot;
+                     :totally-a-real-header true}
+           :uri &quot;/secrets&quot;}
+ :db-connection #sqlite://localhost}
+&lt;/code&gt;
+
+
+I was specifically thinking about web development here - but it does not have to be.  What&#039;s neat is you can capture which pipes consume and produce which data - allowing for some interesting things.
+
+Not that I&#039;m completely happy with this, but I think it has potential.
+
+tl;dr: there&#039;s always more to explore]]></description>
+		<content:encoded><![CDATA[<p>Hey Stuart,</p>
+<p>I think you have a fair point &#8211; if the defpipe macro is used in one or two places.  But if used pervasively throughout your system it&#8217;s completely ok.  Any large system requires learning the semantics of its building blocks (if you&#8217;re lucky enough to work in a system with discernable building blocks.  ugh).  </p>
+<p>I&#8217;m not suggesting the defpipe macro as originally posted is ready for primetime.  I&#8217;m saying it could still be a nice area to explore.  For example, I did a little building on your defpipe macro.  I adopted clojure&#8217;s require syntax to the pipe parameter declaration so you could write e.g.</p>
+<p><code><br />
+(defpipe [[request body headers uri]<br />
+                  response :as resp<br />
+                  db-connection]<br />
+     (when (and ((complement nil?) resp)<br />
+                (authorized? headers))<br />
+        [resp (do-the-thing (query db-connection  uri))<br />
+          flags [:assoc :secrets-included])))</p>
+<p>;; a request context<br />
+{:request {:body "blah"<br />
+           :headers {:http-basic-auth "authorized"<br />
+                     :totally-a-real-header true}<br />
+           :uri "/secrets"}<br />
+ :db-connection #sqlite://localhost}<br />
+</code></p>
+<p>I was specifically thinking about web development here &#8211; but it does not have to be.  What&#8217;s neat is you can capture which pipes consume and produce which data &#8211; allowing for some interesting things.</p>
+<p>Not that I&#8217;m completely happy with this, but I think it has potential.</p>
+<p>tl;dr: there&#8217;s always more to explore</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.275 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:02:23 -->
+
+<!-- Compression = gzip -->

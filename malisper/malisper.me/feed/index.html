@@ -1,0 +1,1055 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Macrology</title>
+	<atom:link href="http://malisper.me/feed/" rel="self" type="application/rss+xml" />
+	<link>http://malisper.me</link>
+	<description>Case Studies in Lisp Macros</description>
+	<lastBuildDate>Thu, 16 Jun 2016 21:54:14 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>Building Fizzbuzz in Fractran from the Bottom Up</title>
+		<link>http://malisper.me/2016/06/11/building-fizzbuzz-fractran-bottom/</link>
+		<comments>http://malisper.me/2016/06/11/building-fizzbuzz-fractran-bottom/#respond</comments>
+		<pubDate>Sun, 12 Jun 2016 00:59:52 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Intermediate Macros]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=1520</guid>
+		<description><![CDATA[<p>In this post, I am going to show you how to write Fizzbuzz in the programming language Fractran. If you don&#8217;t know, Fractran is an esoteric programming language. That means it is extraordinary difficult to write any program in Fractran. To mitigate this difficultly, instead of writing Fizzbuzz in raw Fractran, what we are going to do is [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2016/06/11/building-fizzbuzz-fractran-bottom/">Building Fizzbuzz in Fractran from the Bottom Up</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p>In this post, I am going to show you how to write <a href="https://www.rosettacode.org/wiki/FizzBuzz">Fizzbuzz</a> in the programming language Fractran. If you don&#8217;t know, Fractran is an esoteric programming language. That means it is extraordinary difficult to write any program in Fractran. To mitigate this difficultly, instead of writing Fizzbuzz in raw Fractran, what we are going to do is build a language that compiles to Fractran, and then write Fizzbuzz in that language.</p>
+<p>This post is broken up into three parts. The first part covers what Fractran is and a way of understanding what a Fractran program does. Part 2 will go over the foundation of the language we will build and how it will map to Fractran. Finally, in Part 3, we will keep adding new features to the language until it becomes easy to write Fizzbuzz in it.</p>
+<hr />
+<h2>Part 1: Understanding Fractran</h2>
+<p>Before we can start writing programs in Fractran, we have to first understand what Fractran is. A Fractran program is represented as just a list of fractions. To execute a Fractran program, you start with a variable N=2. You then go through the list of fractions until you find a fraction F, such that N*F is an integer. You then set N=N*F and go back to the beginning of the list of fractions. You keep repeating this process until there is no fraction F such that N*F is an integer.</p>
+<p>Since there is no way to print anything with the regular Fractran rules, we are going to add one additional rule on top of the ordinary ones. In addition to the list of fractions, each program will have a mapping from numbers to characters representing the &#8220;alphabet&#8221; of the program. After multiplying N by F, whenever the new N is a multiple of one of the numbers in the alphabet, that will &#8220;print&#8221; the character that the number maps to. I have written a function, <strong>run-fractran</strong>, which implements this version of Fractran and included it <a href="https://gist.github.com/malisper/3a8594c96cea47471565be8d08be25f9">here</a>. It takes a list of fractions and an alphabet as an <a href="https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node153.html">alist</a> and executes the program.</p>
+<p>Let&#8217;s walk through a simple example. Let&#8217;s say we have the following Fractran program:</p>
+<pre class="brush: plain; title: ; notranslate">
+9/2, 1/5, 5/3
+</pre>
+<p>with the alphabet 5-&gt;&#8217;a&#8217;. To run this program, we start with N=2. We then go through the list fractions until we find a fraction F such that N*F is an integer. On this first step, F becomes 9/2, since N*F = 2 * 9/2 = 9 which is an integer. We then set N to N*F so that N now becomes 9. Repeating this process again, we get F=5/3 and N=N*F=15. Since the number 5 is in the alphabet, and N is now a multiple of 5, we output the character that 5 maps to, &#8216;a&#8217;. If we keep repeating these steps, we eventually reach a point where N=1 and we have outputted the string &#8220;aa&#8221;. Since 1 times any of the fractions does not result in an integer, the program terminates with the output &#8220;aa&#8221;.</p>
+<p>At this point, you may be thinking that writing any program in Fractran is nearly impossible. The truth is that there is a simple trick you can use that makes it much easier program Fractran. All you need to do is look at the prime factorization of all of the numbers. Let&#8217;s see what the above Fractran program looks like if we convert every number into a tuple (a,b,c) where a is the how many times 2 divides the number, b is how many times 3 does, and c is how many times 5 does. The program then becomes:</p>
+<pre class="brush: plain; title: ; notranslate">
+(0, 2, 0) / (1, 0, 0)
+(0, 0, 0) / (0, 0, 1)
+(0, 0, 1) / (0, 1, 0)
+</pre>
+<p>We also have the tuple (0,0,1) mapping to &#8216;a&#8217; for our alphabet. We start with N = (1,0,0). If you don&#8217;t know, multiplying two numbers is the same as adding the counts of each prime factors, and division is the same as subtracting the counts. For example, 2 * 6 = (1,0,0) + (1,1,0) = (2,1,0) = 12. With this way of looking at the program, finding a fraction F such that N*F is an integer becomes finding a &#8220;fraction&#8221; F such that each element in the tuple N is greater than or equal to the corresponding element in the tuple in the denominator of F. Once we find such F, instead of multiplying N by it, you subtract from each element of N the corresponding value in the denominator of F (equivalent to dividing by the denominator), and add the corresponding value in the numerator (equivalent to multiplying by the numerator). Executing the program with this interpretation proceeds as follows.</p>
+<p>We start with N = (1,0,0). Since every value in N is greater than or equal to their corresponding values in the denominator of the first fraction, we subtract every value in the first denominator and then add every value in the numerator to get N = (1,0,0) &#8211; (1,0,0) + (0,2,0) = (0,2,0). Repeating this again, F becomes the third fraction. Subtracting the denominator and adding the numerator gets us N = (0,1,1). Then since every value in N is greater than or equal to their corresponding element in (0,0,1), we print &#8216;a&#8217;. The program continues, just like it did for the original Fractran program.</p>
+<p>Basically we can think of every prime number as having a &#8220;register&#8221; which can take on non-negative integer values. Each fraction is an instruction that operates on some of the registers. You can interpret a fraction as saying if the current value of each register is greater than or equal to the the value specified by the denominator (the number of times the prime for that register divides the denominator), you subtract from the registers all of the values in the denominator, add all the values specified in the numerator (the number of times the prime for each register divides the numerator), and then jump back to the first instruction. Otherwise, if any register is less than the value specified in the denominator, continue to the next fraction. For example, the fraction 9/2 can be translated into the following pseudocode:</p>
+<pre class="brush: plain; title: ; notranslate">
+;; If the register corresponding to the prime number 2 
+;; is greater or equal to 1
+if reg[2] &gt;= 1
+  ;; Decrement it by 1 and increment the register 
+  ;; corresponding to 3 by 2. 
+  reg[2] = reg[2] - 1
+  reg[3] = reg[3] + 2
+  goto the beginning of the program
+;; Otherwise continue with the rest of the program.
+</pre>
+<p>Although programming Fractran is still difficult, this technique suddenly makes writing Fizzbuzz in Fractran tractable.</p>
+<hr />
+<h2>Part 2: Compiling to Fractran</h2>
+<p>For our compiler, we are going to need to generate a lot of primes. To do so, we will use a function, <strong>new-prime</strong>, which will generate a different prime each time it is called.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2016/06/11/building-fizzbuzz-fractran-bottom/#easy-footnote-bottom-1' title='If you are wondering why *next-new-prime* is initialized to nil, it&#8217;s because we are going to initialize all of the variables that don&#8217;t persist between runs of the compiler in the compiler. *next-new-prime* is an example of such a variable.'><sup>1</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate">
+(defun prime (n)
+  &quot;Is N a prime number?&quot;
+  (loop for i from 2 to (isqrt n)
+        never (multiple n i)))
+
+(defparameter *next-new-prime* nil)
+
+(defun new-prime ()
+  &quot;Returns a new prime we haven't used yet.&quot;
+  (prog1 *next-new-prime*
+    (setf *next-new-prime*
+          (loop for i from (+ *next-new-prime* 1)
+                if (prime i)
+                  return i))))
+</pre>
+<p>So now that we&#8217;ve got <strong>new-prime</strong>, we&#8217;ve we can start figuring out how we are going to compile to Fractran. The first detail we will need to figure out is how to express control flow in Fractran.  In other words, we need a way to specify which fractions will execute after each other fractions. This is a problem because after a fraction executes, you always jump back to the first fraction.</p>
+<p>Expressing control flow actually winds up being surprisingly easy. For each fraction we can designate a register. Then, we only execute a fraction if its register is set. It is easy to have a fraction conditionally execute depending on whether its register is set by using the trick we are using to interpret a Fractran program. All we need to do is multiply the denominator of each fraction by the prime for the register of that fraction. This way, we will pass over a fraction unless its register is set. Also, all we need to do to specify which fraction should execute after a given fraction is to multiply the numerator of the given fraction by the prime of the register for the next fraction. By doing this, after a fraction executes, it will set the register of the next fraction.</p>
+<p>In order to keep track of the primes for the current fraction and for the next fraction, we will have two global variables. The first will be the prime number for the current instruction, and the second will be the prime number for the next instruction:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defparameter *cur-inst-prime* nil)
+(defparameter *next-inst-prime* nil)
+</pre>
+<p>We will also need a function <strong>advance</strong> which will advance the values of the variables once we move on to the next instruction.</p>
+<pre class="brush: plain; title: ; notranslate">
+(defun advance ()
+  (setf *cur-inst-prime* *next-inst-prime*
+        *next-inst-prime* (new-prime)))
+</pre>
+<p>Now that we&#8217;ve got a way of expressing control flow, we can start planning out what the language we will build will look like. From this point on, I am going to call the language we are building, Lisptran. An easy way we represent a Lisptran program is as just a list of expressions. We can have several different kinds of expressions each of which does something different.</p>
+<p>The simplest kind of expression we will want is an inline fraction. If a Lisptran expression is just a fraction, we can just add that fraction to the Fractran program being generated.</p>
+<p>Another kind of expression that would be useful are labels. Whenever a Lisptran expression is a Lisp symbol, we can interpret that as a label. Each label will be converted into that fraction that is the prime of the next instruction after the label divided by the prime of the label. This way we can jump to the instruction after the label by setting the register for the label. In order to make keeping track of the primes of labels easy, we are going to keep a hash-table, <em>*lisptran-labels*</em>, mapping from labels to the primes for those labels. We will also have a function <strong>prime-for-label</strong>, which will lookup the prime for a label or assign a new prime if one hasn&#8217;t been assigned yet:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defparameter *lisptran-labels* nil)
+
+(defun prime-for-label (label)
+  (or (gethash label *lisptran-labels*)
+      (setf (gethash label *lisptran-labels*)
+            (new-prime))))
+</pre>
+<p>One last kind of expression that will be useful are macro calls. A macro call will be a list whose first element is the name of a macro followed by a list of arbitrary Lisp expressions (The expressions don&#8217;t have to be Fractran expressions. They can be interpreted however the macro wants them to be.). In order to compile a macro call, we will lookup the function associated with the macro, and call it on the expressions in the rest of the macro call. That function should then return a list of Lisptran expressions which will then be compiled in place of the macro call. After that we just continue compiling the new code generated by the macro expansion.</p>
+<p>To keep track of the definitions of macros, we will keep a hash-table <em>*lisptran-macros*</em>, which will map from the name of the macro to the function for that macro. In order to make defining Lisptran macros easy, we can create a Lisp macro <strong>deftran</strong>, that works in a similar way to <strong>defmacro</strong>. When defining a macro with <strong>deftran</strong>, you are really just defining a function which will take the expressions in the macro call, and return a list of Lisptran instructions to be compiled in its place. Here is the definition for <strong>deftran</strong>:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defparameter *lisptran-macros* (make-hash-table))
+
+(defmacro deftran (name args &amp;body body)
+  &quot;Define a Lisptran macro.&quot;
+  `(setf (gethash ',name *lisptran-macros*)
+         (lambda ,args ,@body)))
+</pre>
+<p>And that&#8217;s all of the different kinds of expressions we will need in Lisptran.</p>
+<p>Although we now have all of the expressions we need, there are a few more pieces of the compiler we need to figure out. For example, we still haven&#8217;t figured out how we are going to represent variables yet. Ultimately this is trivial. We can just assign a register to every variable and keep a mapping from variable names to primes in the same way we have the mapping for labels:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defparameter *lisptran-vars* nil)
+
+(defun prime-for-var (var)
+  (or (gethash var *lisptran-vars*)
+      (setf (gethash var *lisptran-vars*)
+            (new-prime))))
+</pre>
+<p>One last piece of the compiler we need to figure out is how we are going to represent the alphabet of the program. One way we can do this is just represent the characters in our alphabet as variables. The alphabet of a program could just be all of the variables that have characters for names and the primes of the registers for those variables. By doing it this way, we can print a character by just incrementing and then immediately decrementing a variable! Here is code that can be used to obtain the alphabet from <em>*lisptran-vars*</em>:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defun alphabet (vars)
+  &quot;Given a hash-table of the Lisptran variables to primes, 
+   returns an alist representing the alphabet.&quot;
+  (loop for var being the hash-keys in vars 
+        using (hash-value prime)
+        if (characterp var)
+          collect (cons var prime)))
+</pre>
+<p>Now that we can express control flow, variables, and macros, we have everything we need to write the actual Lisptran to Fractran compiler:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defun assemble (insts)
+  &quot;Compile the given Lisptran program into Fractran. 
+   Returns two values. The first is the Fractran program 
+   and the second is the alphabet of the program.&quot;
+  (let* ((*cur-prime* 2)
+         (*cur-inst-prime* (new-prime))
+         (*next-inst-prime* (new-prime))
+         (*lisptran-labels* (make-hash-table))
+         (*lisptran-vars* (make-hash-table)))
+    (values (assemble-helper insts)
+            (alphabet *lisptran-vars*))))
+
+(defun assemble-helper (exprs)
+  (if (null insts)
+      '()
+      (let ((expr (car exprs))
+            (rest (cdr exprs)))
+        (cond
+          ;; If it's a number, we just add it to the 
+          ;; Fractran  program and compile the rest 
+          ;; of the Lisptran program
+          ((numberp expr)
+           (cons expr (assemble-helper rest)))
+
+          ;; If it's a symbol, we divide the prime for 
+          ;; the next instruction by the prime for the 
+          ;; label.
+          ((symbolp expr)
+           (cons (/ *cur-inst-prime* 
+                    (prime-for-label expr))
+                 (assemble-helper rest)))
+
+          ;; Otherwise it's a macro call. We look up the 
+          ;; macro named by the first symbol in the 
+          ;; expression and call it on the rest of the 
+          ;; rest of the expressions in the macro call. 
+          ;; We then append all of the instructions 
+          ;; returned by it to the rest of the program 
+          ;; and compile that.
+          (:else
+            (let ((macrofn (gethash (car inst)
+                                    *lisptran-macros*)))
+              (assemble-helper (append (apply macrofn
+                                              (cdr inst))
+                                       rest))))))))
+</pre>
+<p>The function <strong>assemble</strong> takes a Lisptran program and returns two values. It returns the generated Fractran program and the alphabet of that program. <strong>assemble</strong> first initializes all of the global variables for the program and then goes to <strong>assemble-helper</strong> which recursively processes the Lisptran program according to the specification above. Using the function <strong>run-fractran</strong> that I mentioned above, we can write a function that will execute a given Lisptran program as follows:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defun run-lisptran (insts)
+  &quot;Run the given Lisptran program.&quot;
+  (multiple-value-call #'run-fractran (assemble insts)))
+</pre>
+<hr />
+<h2>Part 3: Building Lisptran</h2>
+<p>Now that we&#8217;ve completed the core compiler, we can start adding actual features to it. From here on out, we will not touch the core compiler. All we are going to do is define a couple Lisptran macros. Eventually we will have enough macros such that programming Lisptran seems like programming a high level assembly language.</p>
+<p>The first operations we are going should define are basic arithmetic operations. For example, addition. In order to add addition to Lisptran, we can define a macro <strong>addi</strong>, which stands for add immediate. Immediate just means that we know what number we are adding at compile time. The macro <strong>a</strong><strong>ddi</strong> will take a variable and a number, and will expand into a fraction which will add the given number to the register for the variable. In this case, the denominator for the fraction will just be the prime for the current instruction (execute this instruction when that register is set) and the numerator will be the prime for the next instruction (execute the next instruction after this one) times the prime for the variable raised to the power of the number we are adding (add the immediate to the register). Here is what the definition for <strong>addi</strong> looks like:</p>
+<pre class="brush: plain; title: ; notranslate">
+(deftran addi (x y)
+  (prog1 (list (/ (* *next* (expt (prime-for-var x) y))
+                  *cur*))
+    (advance)))
+</pre>
+<p>With are also going to want an operation that performs subtraction. It&#8217;s a bit tricky, but we can implement a macro <strong>subi </strong>(subtract immediate) in terms of <strong>addi</strong>, since adding a number is the same as adding the negative of that number:<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2016/06/11/building-fizzbuzz-fractran-bottom/#easy-footnote-bottom-2' title='We&#8217;ll just say that it results in undefined behavior if the immediate is greater than the variable.'><sup>2</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate">
+(deftran subi (x y) `((addi x ,(- y))))
+</pre>
+<p>Now that we&#8217;ve got some macros for performing basic arithmetic, we can start focusing on macros that allow us to express control flow. The first control flow macro we will implement is <strong>&gt;=i</strong> (jump if greater than or equal to immediate). In order to implement <strong>&gt;=i</strong>, we will have it expand into three fractions. The first fraction will test if the variable is greater or equal to the immediate. If the test succeeds, we will then advance to the second fraction which will restore the variable (since when a test succeeds, all of the values from the denominator are decremented from the corresponding registers), and then jump to the label passed in to <strong>&gt;=i</strong>. If the test fails, we will fall through to the third fraction which will just continue onto the next fraction after that.</p>
+<p>The denominator of the first fraction will be the prime for current instruction (execute the instruction if that register is set) times the prime for the register raised to the power of the constant (how we test that the register is greater than or equal to the immediate) and the numerator will be the prime for the second instruction (so we go to the second instruction if the test succeeds). The second fraction is just the prime for the label passed into <strong>&gt;=i</strong> (so we jump to wherever the label designates) divided the prime for that instruction. Lastly, the denominator of the third fraction is the prime for the current instruction (so we fall through to it if the test in the first fraction fails), and the numerator is just the prime for the next instruction so that we continue to that if the test fails:</p>
+<pre class="brush: plain; title: ; notranslate">
+(deftran &gt;=i (var val label)
+  (prog1 (let ((restore (new-prime)))
+           (list (/ restore
+                    (expt (prime-for-var var) val)
+                    *cur-inst-prime*)
+                 (/ (* (prime-for-label label)
+                       (expt (prime-for-var var) val))
+                    restore)
+                 (/ *next-inst-prime* *cur-inst-prime*)))
+    (advance)))
+</pre>
+<p>Believe it or not, but after this point, we won&#8217;t need to even think about fractions anymore. Lisptran now has enough of a foundation that all of the further macros we will need can be expressed in terms of <strong>addi</strong>, <strong>subi</strong> and <strong>&gt;=i</strong>. The only two functions that actually need to be implemented in terms of Fractran are <strong>addi</strong> and <strong>&gt;=i</strong>. That means no more thinking about Fractran. From here on out, all we have is Lisptran!</p>
+<p>We can easily define unconditional goto in terms of <strong>&gt;=i</strong>. Since all of the registers start at 0, we can implement <strong>goto</strong> as greater than or equal to zero. We use the Lisp function <strong>gensym</strong> to generate a variable without a name so that the variable doesn&#8217;t conflict with any other Lisptran variables:</p>
+<pre class="brush: plain; title: ; notranslate">
+(deftran goto (label) `((&gt;=i ,(gensym) 0 ,label)))
+</pre>
+<p>Then through a combination of <strong>&gt;=i</strong> and <strong>goto</strong>, we can define <strong>&lt;=i</strong>:</p>
+<pre class="brush: plain; title: ; notranslate">
+(deftran &lt;=i (var val label)
+  (let ((gskip (gensym))) 
+    `((&gt;=i ,var (+ ,val 1) ,gskip)
+      (goto ,label)
+      ,gskip)))
+</pre>
+<p>Now that we have several macros for doing control flow, we can start building some utilities for printing. As mentioned previously printing a character is the same as incrementing the variable with the character as its name and then immediately decrementing it:</p>
+<pre class="brush: plain; title: ; notranslate">
+(deftran print-char (char)
+  `((addi ,char 1)
+    (subi ,char 1)))
+</pre>
+<p>Then if we want to write a macro that prints a string, it can just expand into a series of calls to <strong>print-char</strong>, each of which prints a single character in the string:</p>
+<pre class="brush: plain; title: ; notranslate">
+(deftran print-string (str)
+  (loop for char across str
+        collect `(print-char ,char)))
+</pre>
+<p>We are also going to need a function to print a number. Writing this with the current state of Lisptran is fairly difficult since we haven&#8217;t implemented several utilities such as mod yet, but we can start by implementing a macro <strong>print-digit </strong>that prints the value of a variable that is between 0 and 9. We can implement it, by having it expand into a series of conditions. The first one will check if the variable is less than or equal to zero. If so it will print the character zero and jump past the rest of the conditions. Otherwise it falls through to the next condition which tests if the variable is less than or equal to one and so on. We don&#8217;t have to manually write the code for <strong>print-digit</strong> because we can use Lisp to generate the code for us:</p>
+<pre class="brush: plain; title: ; notranslate">
+(deftran print-digit (var)
+  (loop with gend = (gensym)
+        for i from 0 to 9
+        for gprint = (gensym)
+        for gskip = (gensym)
+        append `((&lt;=i ,var ,i ,gprint)
+                 (goto ,gskip)
+                 ,gprint
+                 (print-char ,(digit-char i))
+                 (goto ,gend)
+                 ,gskip)
+        into result
+        finally (return `(,@result ,gend))))
+</pre>
+<p>At this point, now that we have macros for performing basic arithmetic, basic control flow, and printing, we can start writing some recognizable programs. For example here is a program that prints the numbers from zero to nine:</p>
+<pre class="brush: plain; title: ; notranslate">
+(start
+ (&gt;=i x 10 end)
+ (print-digit x)
+ (print-char #\newline)
+ (addi x 1)
+ (goto start)
+ end)
+</pre>
+<p>If you are curious I have included the Fractran program generated by this Lisptran program <a href="https://gist.github.com/malisper/46635d7e3723c911e5f2ec9440908ced">here</a>. It&#8217;s hard to believe that the above Lisptran program and the Fractran program are equivalent. They look completely different!</p>
+<p>Now that we have a bunch of low level operations, we can start building some higher level ones. You may not have thought of it, but instructions don&#8217;t need to just have flat structure. For example, now that we have <strong>goto</strong>, we can use it to define while loops (just like in <a href="http://malisper.me/2015/11/24/loops-lisp-part-1-goto/">Loops in Lisp</a>):</p>
+<pre class="brush: plain; title: ; notranslate">
+(deftran while (test &amp;rest body)
+  (let ((gstart (gensym))
+        (gend (gensym)))
+    `((goto ,gend)
+      ,gstart
+      ,@body
+      ,gend
+      (,@test ,gstart))))
+</pre>
+<p>In order to implement <strong>while</strong>, we are assuming that all predicates take labels as their last argument which is where they will jump to if the predicate succeeds. Now that we have while loops, we can start writing some much more powerful macros around manipulating variables. Here&#8217;s two useful ones, one that sets a variable to zero, and one that copies the value in one variable to another:</p>
+<pre class="brush: plain; title: ; notranslate">
+(deftran zero (var)
+  `((while (&gt;=i ,var 1)
+      (subi ,var 1))))
+
+(deftran move (to from)
+  (let ((gtemp (gensym)))
+    `((zero ,to)
+      (while (&gt;=i ,from 1)
+        (addi ,gtemp 1)
+        (subi ,from 1))
+      (while (&gt;=i ,gtemp 1)
+        (addi ,to 1)
+        (addi ,from 1)
+        (subi ,gvar 1)))))
+</pre>
+<p>For <strong>move</strong>, we first have to decrement the number we are moving from and increment a temporary variable. Than we restore both the original variable and the variable we are moving the value to at the same time.</p>
+<p>With all of these macros, we can finally start focusing on macros that are actually relevant to Fizzbuzz. One operation that is absolutely going to be necessary for Fizzbuzz is mod. We can implement a macro <strong>modi</strong> by repeatedly subtracting the immediate until the variable is less than the immediate.</p>
+<pre class="brush: plain; title: ; notranslate">
+(deftran modi (var val)
+  `((while (&gt;=i ,var ,val)
+      (subi ,var ,val))))
+</pre>
+<p>We only need one more real feature before we can start writing Fizzbuzz. We are going to need a way of printing numbers. In order to print an arbitrary number, we are going to need a way of doing integer division. We can implement a macro <strong>divi</strong> by repeatedly subtracting the immediate until the variable is less than the immediate and keeping track of the number of times we&#8217;ve subtracted the immediate.</p>
+<pre class="brush: plain; title: ; notranslate">
+(deftran divi (x y)
+  (let ((gresult (gensym)))
+    `((zero ,gresult)
+      (while (&gt;=i ,x ,y)
+        (addi ,gresult 1)
+        (subi ,x ,y))
+      (move ,x ,gresult))))
+</pre>
+<p>Now for the final macro we will need. A macro for printing numbers. Actually, we are going to cheat a little. Printing numbers winds up being pretty difficult since you have to print the digits from left to right, but you can only look at the lowest digit at a time. To make things easier, we are only to write a macro that is able to print two digit numbers. We won&#8217;t need to print 100 since &#8220;buzz&#8221; will be printed instead.</p>
+<pre class="brush: plain; title: ; notranslate">
+(deftran print-number (var)
+  (let ((gtemp (gensym))
+        (gskip (gensym)))
+    `((move ,gtemp ,var)
+      (divi ,gtemp 10)
+      (&gt;=i ,gtemp 0 ,gskip)
+      (print-digit ,gtemp)
+      ,gskip
+      (move ,gtemp ,var)
+      (modi ,gtemp 10)
+      (print-digit ,gtemp)
+      (print-char #\newline))))
+</pre>
+<p>Now our language is sufficiently high enough that Fizzbuzz is going to be practically as easy as it will get. Here is an implementation of Fizzbuzz in Fractran.</p>
+<pre class="brush: plain; title: ; notranslate">
+((move x 1)
+ (while (&lt;=i x 100)
+   (move rem x)
+   (modi rem 15)
+   (&lt;=i rem 0 fizzbuzz)
+
+   (move rem x)
+   (modi rem 3)
+   (&lt;=i rem 0 fizz)
+
+   (move rem x)
+   (modi rem 5)
+   (&lt;=i rem 0 buzz)
+
+   (print-number x)
+   (goto end)
+
+   fizzbuzz
+   (print-string &quot;fizzbuzz&quot;)
+   (goto end)
+
+   fizz
+   (print-string &quot;fizz&quot;)
+   (goto end)
+
+   buzz
+   (print-string &quot;buzz&quot;)
+   (goto end)
+
+   end
+   (addi x 1)))
+</pre>
+<p>I&#8217;ve also included the generated Fractran program <a href="https://gist.github.com/malisper/7227bc8c428949d8c1f277effca28d14">here</a> and included all of the full source code for this blog post <a href="https://gist.github.com/malisper/fcd5fda9741220355f6ce36a423c69cc">here</a>.</p>
+<p>I find it absolutely amazing that we were able to build a pretty decent language by repeatedly adding more and more features on top of what we already had. To recap, we implemented a basic arithmetic operation (<strong>addi</strong>) in terms of raw Fractran and then defined a second (<strong>subi</strong>) in terms of that. From there we defined three macros for doing control flow (<strong>&gt;=i</strong>, <strong>goto</strong>, <strong>&lt;=i</strong>), with the second two being defined in terms of the first. Then we were then able to define macros for printing (<strong>print-char</strong>, <strong>print-string</strong>, <strong>print-digit</strong>). At this point we had all of the low level operations we needed so we could start implement while loops (<strong>while)</strong>, a high level control flow construct. With while loops, we were able to define several macros for manipulating variables (<strong>zero</strong>, <strong>move)</strong>. With these new utilities for manipulating variables we could define more advanced arithmetic operations (<strong>modi</strong>, <strong>divi</strong>). Then with these new operations we were able to define a way to print an arbitrary two digit number (<strong>print-number</strong>). Finally, using everything we had up to this point, we were able to write Fizzbuzz. It&#8217;s just incredible that we could make a language by always making slight abstractions on top of the operations we already had.</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2016/06/11/building-fizzbuzz-fractran-bottom/">Building Fizzbuzz in Fractran from the Bottom Up</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2016/06/11/building-fizzbuzz-fractran-bottom/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>How to Generate Self-Referential Programs</title>
+		<link>http://malisper.me/2016/04/20/writing-self-referential-programs/</link>
+		<comments>http://malisper.me/2016/04/20/writing-self-referential-programs/#respond</comments>
+		<pubDate>Wed, 20 Apr 2016 05:39:07 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Basic Macros]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=1410</guid>
+		<description><![CDATA[<p>In this post, I am going to show you how to write programs that are self-referential. By self-referential, I mean programs which are able to obtain their own source code without any external input. In other words, they won&#8217;t just read from their own files. This post is based on section 6.1 of the book Introduction [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2016/04/20/writing-self-referential-programs/">How to Generate Self-Referential Programs</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p>In this post, I am going to show you how to write programs that are self-referential. By self-referential, I mean programs which are able to obtain their own source code without any external input. In other words, they won&#8217;t just read from their own files. This post is based on section 6.1 of the book <em>Introduction to the Theory of Computation</em>.</p>
+<p>Before we can start generating self-referential programs we are first going to need some techniques for generating programs in general. The first technique we need is a method of taking a given program and writing a second program that outputs the given program. As an example, given (+ 2 2), we would need to write a program that outputs (+ 2 2). In most languages this is easy. One way to do it in Lisp is to put a quote in front of the program:</p>
+<pre class="brush: plain; title: ; notranslate">
+'(+ 2 2)
+=&gt; (+ 2 2)
+</pre>
+<p>We are also going to need a function that automates this process. Such a function would take a program as its argument and return a new program that when ran, outputs the program that was originally passed to the function. In most languages doing this is fairly tricky. In Lisp, we can write this function easily through backquote:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defun code-that-generates (program)
+  `',program)
+
+(code-that-generates '(+ 2 2))
+=&gt; '(+ 2 2)
+</pre>
+<p>If you don&#8217;t understand how backquote works, you can read <a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Backquote.html">this</a>. Even though it&#8217;s for Emacs Lisp, everything there is still applicable to other Lisps. Just make sure that you understand that <strong>code-that-generates</strong> can be used to generate a program that outputs a given program.</p>
+<p>Now that we have these two techniques, we can begin writing programs that are able to refer to themselves. The first self-referential program we will write will be an example of a <em>quine</em>. If you don&#8217;t know, a quine is a program that outputs its own source code. The quine we are going to write is made up of two parts, part A and part B, where part A is a function that is applied to part B:</p>
+<pre class="brush: plain; title: ; notranslate">
+(A B)
+</pre>
+<p>To describe how the quine works, it is easiest to start with part B. All that part B needs to do is return the source code of part A:</p>
+<pre class="brush: plain; title: ; notranslate">
+(A 'A)
+</pre>
+<p>Part A&#8217;s job is to take its own source code, and use it to obtain the source code of the entire quine. Since B is a program that outputs A, A can use <strong>code-that-generates</strong> on its own source code in order to obtain the source code of B. Once A has the source code of both A and B, it becomes trivial to combine the two to obtain the source code of the entire quine. Here is the complete quine, with the call to <strong>code-that-generates</strong> inlined:</p>
+<pre class="brush: plain; title: ; notranslate">
+((lambda (a)
+   (let ((b `',a))
+     `(,a ,b)))
+ '(lambda (a)
+    (let ((b `',a))
+      `(,a ,b))))
+=&gt;
+((lambda (a)
+   (let ((b `',a))
+     `(,a ,b)))
+ '(lambda (a)
+    (let ((b `',a))
+      `(,a ,b))))
+</pre>
+<p>Now this is where things start getting interesting. A quine can be thought of as a program that generates its own source code, and immediately returns it. What if instead of immediately returning its own source code, the quine applied a function to it first, and then returned the result of that. The steps for building such a program are almost exactly the same as the steps we took for building the quine. This time, there is a third part F, for the function we want to call. The structure of the program will look like the following:</p>
+<pre class="brush: plain; title: ; notranslate">
+(F AB)
+</pre>
+<p>Where AB has a similar structure to our quine. After breaking AB into the two parts, A and B, the program looks like the following:</p>
+<pre class="brush: plain; title: ; notranslate">
+(F (A B))
+</pre>
+<p>Part B in the above program has the same responsibilities as B in the quine, it returns the source code for A:</p>
+<pre class="brush: plain; title: ; notranslate">
+(F (A 'A))
+</pre>
+<p>Then once A has the source code for itself, it can use <strong>code-that-generates </strong>to obtain the source code for B. Now that it has the source of A and B, it is easy for it to construct AB. Once part A has the code for AB, it can easily generate the source of the entire program. Here is what the program becomes after filling in everything except F:</p>
+<pre class="brush: plain; title: ; notranslate">
+(F
+ ((lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(F ,ab))))
+  '(lambda (a)
+     (let ((b `',a))
+       (let ((ab `(,a ,b)))
+         `(F ,ab))))))
+</pre>
+<p>What makes this so awesome is that F can be any function we want, and the above program will run F with the source code of the entire program! For example, replacing F with <strong>identity</strong> causes the program to become a quine:</p>
+<pre class="brush: plain; title: ; notranslate">
+(identity
+ ((lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(identity ,ab))))
+  '(lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(identity ,ab))))))
+=&gt;
+(identity
+ ((lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(identity ,ab))))
+  '(lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(identity ,ab))))))
+</pre>
+<p>But we can also do some much more impressive things. We can replace F with a function that lists its argument twice, and get a program that returns a list containing its own source code twice:</p>
+<pre class="brush: plain; title: ; notranslate">
+((lambda (x) (list x x))
+ ((lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `((lambda (x) (list x x)) ,ab))))
+  '(lambda (a)
+     (let ((b `',a))
+       (let ((ab `(,a ,b)))
+         `((lambda (x) (list x x)) ,ab))))))
+
+=&gt;
+
+(((lambda (x) (list x x))
+  ((lambda (a)
+     (let ((b `',a))
+       (let ((ab `(,a ,b)))
+         `((lambda (x) (list x x)) ,ab))))
+   '(lambda (a)
+      (let ((b `',a))
+        (let ((ab `(,a ,b)))
+          `((lambda (x) (list x x)) ,ab))))))
+ ((lambda (x) (list x x))
+  ((lambda (a)
+     (let ((b `',a))
+       (let ((ab `(,a ,b)))
+         `((lambda (x) (list x x)) ,ab))))
+   '(lambda (a)
+      (let ((b `',a))
+        (let ((ab `(,a ,b)))
+          `((lambda (x) (list x x)) ,ab)))))))
+</pre>
+<p>To make writing these self-referential programs easier, we can define a function that fills in F for us. It just requires a little nested backquote trickery.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2016/04/20/writing-self-referential-programs/#easy-footnote-bottom-1' title='You may have noticed the extra comma and quote in front of F in the generated program. Although it doesn&#8217;t make a difference semantically it does make a different syntactically. Luckily, all of the code generated by a program with the extra comma and quote will also contain the extra comma and quote, so everything is okay.'><sup>1</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate">
+(defun self-referential-version-of (f)
+  `(,f
+     ((lambda (a)
+        (let ((b `',a))
+          (let ((ab `(,a ,b)))
+            `(,',f ,ab))))
+       '(lambda (a)
+          (let ((b `',a))
+            (let ((ab `(,a ,b)))
+              `(,',f ,ab)))))))
+
+(self-referential-version-of '(lambda (x) (list x x))
+=&gt;
+((lambda (x) (list x x))
+ ((lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(,'(lambda (x) (list x x)) ,ab))))
+  '(lambda (a)
+     (let ((b `',a))
+       (let ((ab `(,a ,b)))
+         `(,'(lambda (x) (list x x)) ,ab))))))
+</pre>
+<p>Now that we&#8217;ve got a function that can generate self-referential programs for us, I am going to show you how to build something called a <em>quine-relay</em>. A quine-relay is like a normal quine, except it passes through multiple languages. The <em>quine-relay</em> we are going to write is a Lisp program that outputs a C program that outputs the original Lisp program. All we have to do is write a function that takes its argument and writes a C program that prints the argument it was given. Then we can pass that function to <strong>self-referential-version-of</strong> to get the quine-relay! That&#8217;s it! Here is a program that will generate the quine-relay:</p>
+<pre class="brush: plain; title: ; notranslate">
+(self-referential-version-of
+  '(lambda (self)
+     (format t
+
+&quot;#include &lt;stdio.h&gt;~%int main(){printf(\&quot;%s\&quot;,~(~s~));}&quot;
+
+             (remove #\newline (prin1-to-string self)))))
+</pre>
+<p>I&#8217;ve omitted the actual quine-relay for brevity, but you can find it <a href="https://gist.github.com/malisper/77db18aa8b1cb96fa7a984144eaf51aa">here</a> if you are curious. There are a few idiosyncrasies in the above program and in the quine-relay because of the differences in behavior between Lisp and C. For example, in C you can&#8217;t have multi-line strings, so it becomes easier to remove all of the newlines from the Lisp program, than it is to keep them.</p>
+<p>And that&#8217;s all it takes to write self-referential programs. After seeing how easy it is to generate a quine-relay, it shouldn&#8217;t be hard to imagine how to write one with many more steps. You may even be able to get up to <a href="https://github.com/mame/quine-relay">100</a> if you work at it long enough.</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2016/04/20/writing-self-referential-programs/">How to Generate Self-Referential Programs</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2016/04/20/writing-self-referential-programs/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Loops in Lisp Part 4: Series</title>
+		<link>http://malisper.me/2016/04/13/loops-in-lisp-part-4-series/</link>
+		<comments>http://malisper.me/2016/04/13/loops-in-lisp-part-4-series/#comments</comments>
+		<pubDate>Wed, 13 Apr 2016 08:06:36 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Advanced Macros]]></category>
+		<category><![CDATA[Loops in Lisp]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=1366</guid>
+		<description><![CDATA[<p>This is part four of Loops in Lisp. Follow one of the following links for part one, two, or three). One of the many advantages of programming in a functional style (by this, I mean manipulating your data through the operations, map, fold, and filter) is that your program winds up being made up a bunch of tiny and [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2016/04/13/loops-in-lisp-part-4-series/">Loops in Lisp Part 4: Series</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p><em>This is part four of Loops in Lisp. Follow one of the following links for part <a href="http://malisper.me/2015/11/24/loops-lisp-part-1-goto/">one</a>, <a href="http://malisper.me/2015/12/15/loops-in-lisp-part-2-loop/">two</a>, or <a href="http://malisper.me/2016/01/12/loops-in-lisp-part-3-iterate/">three</a>).</em></p>
+<p>One of the many advantages of programming in a functional style (by this, I mean manipulating your data through the operations, map, fold, and filter) is that your program winds up being made up a bunch of tiny and composable pieces. Since each piece is so small, usually only a few lines each, it becomes trivial to unit test the entire program. Additionally, it is easy to express new features as just the composition of several existing functions. One disadvantage of programming through map and friends, is that there is fairly large time penalty for allocating the intermediate results. For example, every time filter is called on a list, a new list needs to be allocated. These costs add up pretty quickly and can make a functional program much slower than its imperative equivalent.</p>
+<p>One solution to this problem is laziness. Instead of allocating a new list every time an operation is performed on a list, you instead keep track of all of the transformations made on the list. Then when you fold over the list, you perform all of the transformations as you are folding over it. By doing this, you don&#8217;t need to allocate intermediate lists. Although laziness doesn&#8217;t allocate any intermediate lists, there is still a small cost for keeping track of the laziness. An alternative solution that makes functional programming just as fast as imperative programming is provided by the Series library.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2016/04/13/loops-in-lisp-part-4-series/#easy-footnote-bottom-1' title='The technique used by Series is sometimes referred to as &#8220;stream fusion&#8221;.'><sup>1</sup></a></span> Series lets you write your program in a functional style without <em>any</em> runtime penalty at all!</p>
+<p>Personally, the Series library is my favorite example of the magic that can be pulled off with macros. In short, Series works by taking your functional code and compiling it down into a single loop. In this loop, there is one step per transformation performed on the original list. The loop iterates over the values of the original sequence on at a time. On each iteration, the loop takes a single element, performs all of the transformations performed on the list on that single element, and then accumulates that value into the result according to the folding operation. This loop requires no additional memory allocation at runtime, and their is no time penalty either! As an example, here is a program that sums the first N squares, written using Series:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defun integers ()
+  &quot;Returns a 'series' of all of the natural numbers.&quot;
+  (declare (optimizable-series-function))
+  (scan-range :from 1))
+
+(defun squares ()
+  &quot;Returns a 'series' of all of the square numbers.&quot;
+  (declare (optimizable-series-function))
+  (map-fn t 
+          (lambda (x) (* x x)) 
+          (integers)))
+
+(defun sum-squares (n)
+  &quot;Returns the sum of the first N square numbers.&quot;
+  (collect-sum (subseries (squares) 0 n)))
+
+(sum-squares 10)
+=&gt; 385
+</pre>
+<p>The above code certainly looks functional, there are no side effects in sight. Now let&#8217;s look at the code generated by Series. Here is what the macroexpansion of <strong>collect-sum</strong> looks like:</p>
+<pre class="brush: plain; title: ; notranslate">
+(common-lisp:let* ((#:out-969 n))
+  (common-lisp:let ((#:numbers-966
+                     (coerce-maybe-fold (- 1 1) 'number))
+                    #:items-967
+                    (#:index-965 -1)
+                    (#:sum-959 0))
+    (declare (type number #:numbers-966)
+             (type (integer -1) #:index-965)
+             (type number #:sum-959))
+    (tagbody
+       #:ll-970
+       (setq #:numbers-966
+             (+ #:numbers-966
+                (coerce-maybe-fold 1 'number)))
+       (setq #:items-967
+             ((lambda (x) (* x x)) #:numbers-966))
+       (incf #:index-965)
+       (locally
+          (declare (type nonnegative-integer #:index-965))
+         (if (&gt;= #:index-965 #:out-969)
+             (go end))
+         (if (&lt; #:index-965 0)
+             (go #:ll-970)))
+       (setq #:sum-959 (+ #:sum-959 #:items-967))
+       (go #:ll-970)
+     end)
+    #:sum-959))
+</pre>
+<p>What series does it looks at the entire lifetime of the sequence from its creation until it is folded. It uses this information to build the above loop which simultaneously generates the original sequence, maps over it, filters elements out of it, and folds it into the final result. Here is the breakdown of the expansion. Lines 1-9 are just initialization. They define all of the variables the loop will be using and set them to their starting values. The important variables to keep track of are #:NUMBERS-966, #:ITEMS-967, and #:SUM-959. As the code &#8220;iterates&#8221; over the original sequence, #:NUMBERS-966 is the value of the original sequence, #:ITEMS-967 is the square of that value, and #:SUM-959 is the sum of the squares so far. The rest of the code is the actual loop.</p>
+<p>The loop first takes #:NUMBERS-966, the previous value of the sequence, and increments it in order to set it to current value of the sequence (since the sequence is the range from 1 to infinity). Next the loop takes the square of #:NUMBERS-966 to get the ith square number and stores that in #:ITEMS-967. Then the loop checks if it ha taken more than N elements out of the sequence, and if so, terminates. Finally the loop takes the value in #:ITEMS-967 and accumulates that into #:SUM-959.</p>
+<p>Although the imperative version is equivalent to the original functional code, it is much faster than the functional code if the functional code were to allocate intermediate results or use laziness. This idea of turning transformations on a list into a loop doesn&#8217;t just work for this simple example, it also works for much more complicated programs. I just find it incredible that Series is able to take such pretty code and compile it into code that is extremely fast.</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2016/04/13/loops-in-lisp-part-4-series/">Loops in Lisp Part 4: Series</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2016/04/13/loops-in-lisp-part-4-series/feed/</wfw:commentRss>
+		<slash:comments>4</slash:comments>
+		</item>
+		<item>
+		<title>Loops in Lisp Part 3: Iterate</title>
+		<link>http://malisper.me/2016/01/12/loops-in-lisp-part-3-iterate/</link>
+		<comments>http://malisper.me/2016/01/12/loops-in-lisp-part-3-iterate/#comments</comments>
+		<pubDate>Tue, 12 Jan 2016 18:00:11 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Advanced Macros]]></category>
+		<category><![CDATA[Loops in Lisp]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=1292</guid>
+		<description><![CDATA[<p>This is part 3 of Loops in Lisp. For part 1 on how you can build any kind of looping construct you want out of just goto and macros, click here. For part 2 on Loop, click here. The Iterate library is pretty awesome. It provides a macro iterate (and an alias for it, iter) that is basically a [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2016/01/12/loops-in-lisp-part-3-iterate/">Loops in Lisp Part 3: Iterate</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p><em>This is part 3 of Loops in Lisp. For part 1 on how you can build any kind of looping construct you want out of just goto and macros, click <a href="http://malisper.me/2015/11/24/loops-lisp-part-1-goto/">here</a>. For part 2 on Loop, click <a href="http://malisper.me/2015/12/15/loops-in-lisp-part-2-loop/">here</a>.</em></p>
+<p>The <a href="https://common-lisp.net/project/iterate/">Iterate</a> library is pretty awesome. It provides a macro <strong>iterate</strong> (and an alias for it, <strong>iter</strong>) that is basically a Lispy version of <strong>loop</strong>. The most obvious consequence of this is that <strong>iterate</strong> uses a lot more parens than <strong>loop</strong> does:</p>
+<pre class="brush: plain; title: ; notranslate">
+;; Loop code
+(loop for i from 1 to 10
+      collect i)
+
+;; Iterate code
+(iter (for i from 1 to 10)
+      (collect i))
+</pre>
+<p>Even though all of the extra parens make <strong>iterate</strong> much uglier than <strong>loop</strong>, they give <strong>iterate</strong> all of the advantages of Lisp syntax. One such advantage is the ability to embed <strong>iterate</strong> clauses within Lisp code and vice versa. While you can&#8217;t do this with <strong>loop</strong>, you can do it with <strong>iterate</strong> because the syntax of <strong>iterate</strong> is so similar to the syntax of ordinary Lisp code. Here is what happens when you try to embed a <strong>collect</strong> clause within Lisp code with <strong>loop</strong> and with <strong>iterate</strong>:<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2016/01/12/loops-in-lisp-part-3-iterate/#easy-footnote-bottom-1' title='It is possible to write a valid version of the loop code below by using the version of &#8216;when&#8217; provided by loop. Although that trick works for this specific case, it doesn&#8217;t allow for the use of arbitrary Lisp expressions like iterate does.'><sup>1</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate">
+;; Not valid loop code.
+(loop for i from 1 to 10
+      do (when (evenp i)
+           (collect i)))
+
+;; Valid iterate code
+(iter (for i from 1 to 10)
+      (when (evenp i)
+        (collect i)))
+</pre>
+<p>Although the ability to seamlessly go between Lisp code and <strong>iterate</strong> is pretty awesome, the greatest feature provided by <strong>iterate</strong> is also the entire reason why Lisp syntax has so many parens in the first place. Lisp syntax (and by extension <strong>iterate</strong>) makes it easy to write macros! Because of this, you can add pretty much any feature you want to <strong>iterate</strong>. As a simple example, here&#8217;s how you could define an <strong>iterate</strong> clause specifically for looping over the digits of a number:<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2016/01/12/loops-in-lisp-part-3-iterate/#easy-footnote-bottom-2' title='Defmacro-clause is a macro provided by Iterate that can be used to define new iterate clauses.'><sup>2</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate">
+(defun digits (n)
+  &quot;Returns a list of the digits of N.&quot;
+  (map 'list #'digit-char-p (princ-to-string n)))
+
+(defmacro-clause (for var in-digits-of n)
+  `(for ,var in (digits ,n)))
+</pre>
+<p>And here is how you would use it:</p>
+<pre class="brush: plain; title: ; notranslate">
+(iter (for i in-digits-of 123)
+      (sum i))
+=&gt; 6
+</pre>
+<p>I cannot express how awesome this is. If you want an <strong>iterate</strong> clause for iterating over SQL queries, you can add <a href="https://common-lisp.net/project/iterate-clsql/">it</a>. If you want an <strong>iterate</strong> clause for looping over your own custom data structure, you can add it. You can add any feature you want all because <strong>iterate</strong> allows for the use of macros!</p>
+<p>Personally, I prefer to use <strong>iterate</strong> over <strong>loop</strong>. Even though it is uglier, it is much more extensible than <strong>loop</strong> because it decides to use a Lisp like syntax.</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2016/01/12/loops-in-lisp-part-3-iterate/">Loops in Lisp Part 3: Iterate</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2016/01/12/loops-in-lisp-part-3-iterate/feed/</wfw:commentRss>
+		<slash:comments>3</slash:comments>
+		</item>
+		<item>
+		<title>Loops in Lisp Part 2: Loop</title>
+		<link>http://malisper.me/2015/12/15/loops-in-lisp-part-2-loop/</link>
+		<comments>http://malisper.me/2015/12/15/loops-in-lisp-part-2-loop/#respond</comments>
+		<pubDate>Tue, 15 Dec 2015 15:00:22 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Loops in Lisp]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=1264</guid>
+		<description><![CDATA[<p>This is part 2 of Loops in Lisp. Click here to view the previous post on how you can build any iteration abstraction you want out of just goto and macros. The loop macro is probably the most well known of all macros. It provides a DSL for performing any kind of iteration imaginable. To give you [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/12/15/loops-in-lisp-part-2-loop/">Loops in Lisp Part 2: Loop</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p><em>This is part 2 of Loops in Lisp. Click <a href="http://malisper.me/2015/11/24/loops-lisp-part-1-goto/">here</a> to view the previous post on how you can build any iteration abstraction you want out of just goto and macros.</em></p>
+<p>The <strong>loop</strong> macro is probably the most well known of all macros. It provides a DSL for performing any kind of iteration imaginable. To give you an idea of just how powerful <strong>loop</strong> is, here are the first two <a href="https://projecteuler.net/">Project Euler</a> problems, solved using just <strong>loop</strong>:</p>
+<pre class="brush: plain; title: ; notranslate">
+;; Solution for problem #1.
+(loop for i from 1 below 1000
+      if (or (= 0 (mod i 3))
+             (= 0 (mod i 5)))
+        sum i)
+
+;; Solution for problem #2.
+(loop for a = 1 then (+ a b)
+      and b = 0 then a
+      while (&lt; a 4000000)
+      if (evenp a)
+        sum a)
+</pre>
+<p>The coolest part of <strong>loop</strong> is that it is just a macro! That means it would be possible to build <strong>loop</strong> in Common Lisp, even if it wasn&#8217;t provided as a builtin (<a href="https://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/lisp/code/iter/loop/mit/original/loop.cl">here</a> is one such implementation). That also means any <strong>loop</strong> code is eventually compiled down to goto! For example, here is the expansion of the solution to the first Project Euler problem:</p>
+<pre class="brush: plain; title: ; notranslate">
+(block nil
+  (let ((i 1))
+    (declare (type (and real number) i))
+    (let ((#:loop-sum-2482 0))
+      (declare (type number #:loop-sum-2482))
+      (tagbody
+       sb-loop::next-loop
+        (if (&gt;= i '1000)
+            (progn (go sb-loop::end-loop))
+            nil)
+        (if (let ((#:g2483 (= 0 (mod i 3))))
+              (if #:g2483
+                  #:g2483
+                  (the t (= 0 (mod i 5)))))
+            (setq #:loop-sum-2482 (+ #:loop-sum-2482 i)))
+        (setq i (1+ i))
+        (go sb-loop::next-loop)
+       sb-loop::end-loop
+        (return-from nil #:loop-sum-2482)))))
+</pre>
+<p>If you look carefully, the expansion is nothing more than a mix of a few gotos and conditionals. Also, even though the generated code is a complete mess, you are able to work with it through interface provided by <strong>loop</strong>. Even though <strong>loop</strong> is fairly complex, it is still much simpler than raw gotos. If you think about it, <strong>loop</strong> is really just a convenient way of specifying a combination of patterns of gotos and conditionals.</p>
+<p>I don&#8217;t have much to add about <strong>loop</strong> that others haven&#8217;t already said. If you are looking for a basic introduction to <strong>loop</strong> you should read Peter Seibel&#8217;s guide which can be found <a href="http://www.gigamonkeys.com/book/loop-for-black-belts.html">here</a>. If you are looking for a more complete reference, check out the <strong>loop</strong> chapter in Common Lisp the Language which can be found <a href="https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node235.html">here</a>.</p>
+<p>While all of the features of loop compose well with each other, they do not compose well with the rest of Common Lisp. You cannot embed a loop clause (e.g. collect) within ordinary lisp code. That brings us to what will be next week&#8217;s topic, <strong>i</strong><strong>terate</strong>. <strong>Iterate</strong> is basically a more lispy version of <strong>loop</strong>. It allows you to seamlessly go between <strong>iterate</strong> clauses and regular Lisp code. More importantly, <strong>iterate</strong> allows you to define macros that then become part of the <strong>iterate</strong> DSL!</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/12/15/loops-in-lisp-part-2-loop/">Loops in Lisp Part 2: Loop</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2015/12/15/loops-in-lisp-part-2-loop/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Loops in Lisp Part 1: Goto</title>
+		<link>http://malisper.me/2015/11/24/loops-lisp-part-1-goto/</link>
+		<comments>http://malisper.me/2015/11/24/loops-lisp-part-1-goto/#comments</comments>
+		<pubDate>Tue, 24 Nov 2015 16:00:44 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Basic Macros]]></category>
+		<category><![CDATA[Loops in Lisp]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=1106</guid>
+		<description><![CDATA[<p>At its core, Common Lisp provides two primitives for performing iteration. The first of those primitives is recursion. Recursion is an amazing technique, but in this post I am going to focus on the other primitive &#8211; goto. Goto is extremely powerful. It lets you manipulate the control flow of your program in anyway you [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/11/24/loops-lisp-part-1-goto/">Loops in Lisp Part 1: Goto</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p>At its core, Common Lisp provides two primitives for performing iteration. The first of those primitives is recursion. Recursion is an amazing technique, but in this post I am going to focus on the other primitive &#8211; goto.</p>
+<p>Goto is extremely powerful. It lets you manipulate the control flow of your program in anyway you can think of. This freedom to do whatever you want is also what makes goto so dangerous. In any given piece of code that uses goto, it is difficult to tell what the purpose of the goto is because it could be used for so many different reasons. Because of this, most languages provide various kinds of builtin loops instead of providing raw goto. Even though loops aren&#8217;t as general as goto, they express the intention of the code much more clearly.</p>
+<p>As an example, let&#8217;s say you want to print all of the characters in a file. If your language provided while loops, you could do this by printing characters from the file one at a time while there are more characters left. If Common Lisp had while loops,<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/11/24/loops-lisp-part-1-goto/#easy-footnote-bottom-1' title='Common Lisp does provide the do macro, which can be used as a while loop. I&#8217;m not mentioning it for pedagogical reasons.'><sup>1</sup></a></span> the code for this procedure would look like this:</p>
+<pre class="brush: plain; title: ; notranslate">
+(while (peek-char file nil nil)
+  (write-char (read-char file)))
+</pre>
+<p>If your language only had goto, it becomes much more difficult to implement the procedure. In the end, you have to, in some way, simulate a while loop. One way to code the procedure with just goto is the following. First check if there are any characters left in the file. If there aren&#8217;t any, goto the end. Otherwise print the next character and go back to the start. Here is Common Lisp code that implements this:<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/11/24/loops-lisp-part-1-goto/#easy-footnote-bottom-2' title='In Common Lisp, you need to use tagbody when creating labels because otherwise the labels would be interpreted as variables to be evaluated.'><sup>2</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate">
+(tagbody
+  start
+  (if (not (peek-char file nil nil))
+      (go end))
+  (write-char (read-char file))
+  (go start)
+  end)
+</pre>
+<p>Not only is the version with goto much more verbose, it is also much harder to understand. The code lacks clarity because goto is so general. It gives you no context into how it is being used. The reader of the code will have to think about the positioning of all of the gotos before they can think about the overall flow of the program. On the other hand, in the version with the while loop, merely the fact that a while loop is being used gives whoever is reading the code a decent idea of the control flow.</p>
+<p>In reality all loops are eventually compiled down to gotos. Whenever the compiler for a language that provides loops sees a loop, it generates code that simulates the loop through goto. You can do the same thing with Lisp macros!</p>
+<p>If you don&#8217;t know, Lisp macros are compile time functions which take code as their input and return code as their output. When Lisp code is being compiled, all of the macros in the code are called and each one is replaced with its result. This means you can write a macro that looks like a while loop when you use it, but at compile time generates code to simulate a while loop through goto. You are in effect adding while loops to the Lisp compiler! Here is code that defines such a macro:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defmacro while (test &amp;body body)
+  (let ((gtop (gensym))
+        (gend (gensym)))
+    `(tagbody
+       ,gtop
+       (if (not ,test)
+           (go ,gend))
+       ,@body
+       (go ,gtop)
+       ,gend)))
+</pre>
+<p>With this macro, the first code example is now valid lisp code! The <strong>while </strong>macro takes as arguments a test and a body. It then generates code that uses the method used in the second example to simulate a while loop with goto. You can actually see what the first example looks like after expanding the macro by using the function <strong>macroexpand</strong>. Here is what the generated code looks like:</p>
+<pre class="brush: plain; title: ; notranslate">
+(tagbody
+  #:g729
+  (if (not (peek-char file nil nil))
+      (go #:g730))
+  (write-char (read-char file))
+  (go #:g729)
+  #:g730)
+</pre>
+<p>The generated code is the exact same as the code in the second example except for the names of the labels. This means the two examples are the same functionally! The only real difference between them is that the first one is expressed in terms of loops, and the second one is expressed in terms of goto. Since it is so much easier to think in terms of loops than goto, there is no reason why you wouldn&#8217;t use the first example over the second.</p>
+<p>Macros allow you to build any feature you want as long as it is possible to simulate that feature through lower level features. With respect to goto, this means you can build any kind of control flow construct you want by simulating it with goto and then putting a macro on top. In Common Lisp, all of the looping constructs (<strong>do</strong>, <strong>do*</strong>, <strong>dotimes</strong>, <strong>dolist</strong>, <strong>loop</strong>) are really just macros that expand into goto. This is what Alan Kay meant when he said &#8220;Lisp isn&#8217;t a language, it&#8217;s a building material&#8221;. It bears repeating. In Lisp, you can build any feature you want as long as it is possible to simulate that feature in terms of lower level features.</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/11/24/loops-lisp-part-1-goto/">Loops in Lisp Part 1: Goto</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2015/11/24/loops-lisp-part-1-goto/feed/</wfw:commentRss>
+		<slash:comments>6</slash:comments>
+		</item>
+		<item>
+		<title>Defmemo</title>
+		<link>http://malisper.me/2015/11/10/defmemo/</link>
+		<comments>http://malisper.me/2015/11/10/defmemo/#comments</comments>
+		<pubDate>Tue, 10 Nov 2015 12:00:59 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Basic Macros]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=1048</guid>
+		<description><![CDATA[<p>In my last post I talked about memoization i.e. caching the results of a function. Memoization is a fairly common technique for optimization. It is common enough to warrant writing a macro that makes it easy to define memoized functions. When demonstrating memoization, I had a memoized Fibonacci function that looked like this: There are a [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/11/10/defmemo/">Defmemo</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p>In my <a href="http://malisper.me/">last post</a> I talked about memoization i.e. caching the results of a function. Memoization is a fairly common technique for optimization. It is common enough to warrant writing a macro that makes it easy to define memoized functions. When demonstrating memoization, I had a memoized Fibonacci function that looked like this:<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/11/10/defmemo/#easy-footnote-bottom-1' title='Alternatively you could use or=, but in order to keep the code in this post pure Common Lisp, I am leaving it out.'><sup>1</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate">
+(let ((table (make-hash-table)))
+  (defun fib (n)
+    (or (gethash n table)
+        (setf (gethash n table)
+              (if (&lt;= 0 n 1)
+                  n
+                  (+ (fib (- n 1))
+                     (fib (- n 2))))))))
+</pre>
+<p>There are a couple problems with the above code. One problem is the boilerplate. If you wanted ten different memoized functions, you would have to copy lines 1, 3, and 4 for every single memoized function. Some people like to call programmers who do this needless duplication, &#8220;human compilers&#8221;, since they are writing code that the compiler should be writing for them.</p>
+<p>Another issue with the above code is the lack of abstraction. If you wanted to change the caching mechanism to say, only cache the last hundred values, you would have to change the definition of every single function! Ideally you would only need to modify the code in one place in order to change how the caching is implemented.</p>
+<p><strong>Defmemo</strong> is one way to solve both of these problems. Here is what the above code would look like if it were were to use <strong>defmemo</strong>:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defmemo fib (n)
+  (if (&lt;= 0 n 1)
+      n
+      (+ (fib (- n 1))
+         (fib (- n 2)))))
+</pre>
+<p><strong>Defmemo</strong> solves both of the problems extremely well. It removes all of the differences between the memoized version on the regular version except for having to use &#8220;defmemo&#8221; instead of &#8220;defun&#8221;. <strong>Defmemo</strong> also solves the abstraction problem by moving all of the code relevant to memoization into the body of <strong>defmemo</strong>. If you want to change how memoization works, all you have to do is change the code for <strong>defmemo</strong>.</p>
+<p>Now for the implementation of <strong>defmemo</strong>. The implementation is made up of two separate parts. First, a higher order function, <strong>memo</strong>, which takes a function as an argument, and returns a memoized version of that function. The second part is the actual macro, <strong>defmemo</strong>. Instead of just defining the function like <strong>defun</strong>, <strong>defmemo</strong> first builds a lambda expression for the body. Then it generates code that calls <strong>memo</strong> on that lambda function. Finally <strong>defmemo</strong> uses the result of <strong>memo</strong> as the implementation of the function being defined.<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/11/10/defmemo/#easy-footnote-bottom-2' title='If you are experienced with Python, you should be able to see what we are doing. The function memo is effectively a decorator and defmemo is just a way of applying it.'><sup>2</sup></a></span></p>
+<p>Here is the code for <strong>memo</strong>:<span id='easy-footnote-3' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/11/10/defmemo/#easy-footnote-bottom-3' title='You could also use or= so you don&#8217;t have to call gethash multiple times.'><sup>3</sup></a></span><span id='easy-footnote-4' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/11/10/defmemo/#easy-footnote-bottom-4' title='There is a problem with the code below, when the result being stored is nil. The code determines if it has been called before by checking if the value in the hash-table is non-nil. Instead it should do this check by looking at the second value returned by gethash.'><sup>4</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate">
+(defun memo (f)
+  (let ((cache (make-hash-table :test #'equalp)))
+    (lambda (&amp;rest args)
+      (or (gethash args cache)
+          (setf (gethash args cache)
+                (apply f args))))))
+</pre>
+<p><b>Memo</b> works by returning a function that has an internal hash-table. When that function is called, it first checks its hash-table to see if it has been called with the same arguments before. If so, it returns the value it had calculated the first time it was called.<span id='easy-footnote-5' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/11/10/defmemo/#easy-footnote-bottom-5' title='The logic for this is expressed concisely in the code through or. Or evaluates its first argument. If it is non-nil it returns it. Otherwise it continues with the remaining arguments.'><sup>5</sup></a></span> If it hasn&#8217;t been called with the same arguments before, the function will instead call the function that was passed in to <strong>memo</strong>, and then store the result of that inside the table. This way, if the memoized function is called with the same arguments a second time, it can just look up the result in the table.</p>
+<p>Next, for <strong>defmemo</strong> itself, we need to generate code that takes the body as a lambda expression, passes that lambda function through <strong>memo</strong>, and uses that as the implementation of the function. One way to set the implementation of a function to be a lambda function is to use <strong>setf</strong> with <strong>symbol-function</strong>.<span id='easy-footnote-6' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/11/10/defmemo/#easy-footnote-bottom-6' title='Another way is to use setf with fdefinition which not only works on symbols, but setf functions as well.'><sup>6</sup></a></span> For example, here is how you could set the implementation of <strong>square</strong> to be a lambda function that squares its argument:</p>
+<pre class="brush: plain; title: ; notranslate">
+(setf (symbol-function 'square) (lambda (x) (* x x)))
+
+(square 5) =&gt; 25
+</pre>
+<p>Based on the paragraph above, here is the code for <strong>defmemo</strong>:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defmacro defmemo (name args &amp;body body)
+ `(setf (symbol-function ',name) 
+        (memo (lambda ,args ,@body))))
+</pre>
+<p>Now instead of defining a function with <strong>defun</strong>, we can define it with <strong>defmemo</strong> and it will automatically be memoized! <strong>Defmemo</strong> is a great example of how you can define your own ways to define functions. Many libraries provide similar features in which you use the same syntax as <strong>defun</strong>, only with a bit of magic thrown in.</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/11/10/defmemo/">Defmemo</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2015/11/10/defmemo/feed/</wfw:commentRss>
+		<slash:comments>3</slash:comments>
+		</item>
+		<item>
+		<title>Or=</title>
+		<link>http://malisper.me/2015/10/13/or/</link>
+		<comments>http://malisper.me/2015/10/13/or/#comments</comments>
+		<pubDate>Tue, 13 Oct 2015 17:00:07 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Intermediate Macros]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=1016</guid>
+		<description><![CDATA[<p>This post makes use of places. If you are unfamiliar with places, see my post Getting Places. There are many cases where caching the results of a function (also called memoization), make a function much more efficient. For example a function that calculates the Fibonacci numbers: If you try running fib on different values, you [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/10/13/or/">Or=</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p><em>This post makes use of places. If you are unfamiliar with places, see my post <a href="http://malisper.me/2015/09/22/getting-places/">Getting Places</a>.</em></p>
+<p>There are many cases where caching the results of a function (also called memoization), make a function much more efficient. For example a function that calculates the Fibonacci numbers:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defun fib (n)
+  (if (&lt;= 0 n 1)
+      n
+      (+ (fib (- n 1))
+         (fib (- n 2)))))
+</pre>
+<p>If you try running <strong>fib</strong> on different values, you will notice that around 35 or so, it starts to take quite a long time to run. The problem is that <strong>fib</strong> calculates the smaller Fibonacci numbers many more times than it needs to. When calculating the 35th Fibonacci number, the second Fibonacci number is calculated a total of 5702887 times.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/10/13/or/#easy-footnote-bottom-1' title='It will be calculated F(n-1) times. 5702887 is just the 34th Fibonacci number.'><sup>1</sup></a></span></p>
+<p>This is where memoization comes in. If the above function were memoized, it would only need to calculate each Fibonacci number once. Then, whenever <strong>fib</strong> is asked to calculate a number it has already calculated, it can just look up the result in the table. Here is what the above code would look like if it were to take advantage of memoization:</p>
+<pre class="brush: plain; title: ; notranslate">
+(let ((table (make-hash-table)))
+  (defun fib (n)
+    (or (gethash n table)
+        (setf (gethash n table)
+              (if (&lt;= 0 n 1)
+                  n
+                  (+ (fib (- n 1))
+                     (fib (- n 2))))))))
+</pre>
+<p>With the memoized version, you will hit a stack overflow before you find a value that takes more than a moment to calculate. The problem with the above implementation is that it has some duplicate code. There are two calls made to <strong>gethash</strong>. The first call checks to see if the value has already been calculated. If not, <strong>fib</strong> calculates the value manually, and then uses the second call to store it into the table. The fact that the <strong>gethash</strong> call is repeated may not seem like a problem, but when the expression for the place is more complicated, it can become a much bigger deal.</p>
+<p><strong>Or=</strong><em> </em>is a macro that fixes this problem. It does so by first checking whether its first argument, which should be a place, has a non-nil value.<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/10/13/or/#easy-footnote-bottom-2' title='Effectively determining whether the value has already been calculated.'><sup>2</sup></a></span> If it does, <strong>or=</strong> will just return that value. Otherwise it evaluates its remaining arguments until one of them evaluates to a non-nil value. <strong>Or=</strong> will then write the value of that expression into the place designated by the first argument. Here is the above code rewritten to use <strong>or=</strong>.</p>
+<pre class="brush: plain; title: ; notranslate">
+(let ((table (make-hash-table)))
+  (defun fib (n)
+    (or= (gethash n table)
+         (if (&lt;= 0 n 1)
+             n
+             (+ (fib (- n 1))
+                (fib (- n 2)))))))
+</pre>
+<p>The implementation of <strong>or=</strong> looks very similar to the <strong>incf</strong> &#8216;template&#8217;<span id='easy-footnote-3' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/10/13/or/#easy-footnote-bottom-3' title='That sounds like a macro.'><sup>3</sup></a></span> that is used when writing a macro that works with places. Here is the implementation of <strong>or=</strong>:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defmacro or= (place &amp;rest args)
+  (multiple-value-bind 
+        (temps exprs stores store-expr access-expr) 
+      (get-setf-expansion place)
+    `(let* (,@(mapcar #'list temps exprs)
+            (,(car stores) (or ,access-expr ,@args)))
+       ,store-expr)))
+</pre>
+<p>This time, the value being stored to the place is the or of the place and whatever other arguments are passed in. Since <strong>or</strong> evaluates its arguments lazily, we get the desired behavior of <strong>or</strong><strong>=</strong> &#8211; evaluate the expression (and store the result) only if the place doesn&#8217;t have a value already. One problem with <strong>or=</strong> is that it determines if a value has already been stored in the place by testing if the value is non-nil. This can lead to a problem if the value stored in the place is actually nil! As an exercise, try writing a version of <strong>or=</strong> that takes advantage of the multiple values returned by <strong>gethash</strong> in order to properly handle nil.</p>
+<p>In my next post, I am going to continue with the memoization example and demonstrate how to write a macro <strong>defmemo</strong>, which makes it easy to define memoized functions.</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/10/13/or/">Or=</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2015/10/13/or/feed/</wfw:commentRss>
+		<slash:comments>6</slash:comments>
+		</item>
+		<item>
+		<title>Zap</title>
+		<link>http://malisper.me/2015/09/29/zap/</link>
+		<comments>http://malisper.me/2015/09/29/zap/#respond</comments>
+		<pubDate>Tue, 29 Sep 2015 16:38:35 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Basic Macros]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=988</guid>
+		<description><![CDATA[<p>This post makes use of places. If you are unfamiliar with how places work, see my post Getting Places. Many languages provide syntactic sugar for evaluating an expression involving a variable and assigning the result of that expression to the variable at the same time. In these languages you can do something such as the [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/09/29/zap/">Zap</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p><em>This post makes use of places. If you are unfamiliar with how places work, see my post <a href="http://malisper.me/2015/09/22/getting-places/">Getting Places</a>.</em></p>
+<p>Many languages provide syntactic sugar for evaluating an expression involving a variable and assigning the result of that expression to the variable at the same time. In these languages you can do something such as the following:</p>
+<pre class="brush: plain; title: ; notranslate">
+x += 5
+</pre>
+<p>The above expression both adds five to the value of <em>x</em> and writes that new value back to <em>x</em>. In this post, I&#8217;m going to show you how you can write a macro <b>zap</b> that is a generalized version of this technique. With <strong>zap</strong> the above example would look like the following:</p>
+<pre class="brush: plain; title: ; notranslate">
+(zap #'+ x 5)
+</pre>
+<p>There are a couple things that make <strong>zap</strong> really cool. First of all, it can be used with any function. For example, if you wanted to cube the value in <em>x</em>, you could use the following:</p>
+<pre class="brush: plain; title: ; notranslate">
+(zap #'expt x 3)
+</pre>
+<p>The other thing that makes <strong>zap</strong> so awesome is that it can be used on any place. If you want to use <strong>zap</strong> on the value stored in a hash table with key 5, you can do that:</p>
+<pre class="brush: plain; title: ; notranslate">
+(zap #'+ (gethash 5 table) 5)
+</pre>
+<p>Now that you&#8217;ve seen how <strong>zap</strong> is used, here is how it can be implemented:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defmacro zap (fn place &amp;rest args)
+  (multiple-value-bind 
+        (temps exprs stores store-expr access-expr) 
+      (get-setf-expansion place)
+    `(let* (,@(mapcar #'list temps exprs)
+            (,(car stores) 
+              (funcall ,fn ,access-expr ,@args)))
+       ,store-expr)))
+</pre>
+<p>You should be able to see that the code for <strong>zap</strong> is eerily similar to that of <strong>incf</strong> (from <a href="http://malisper.me/2015/09/22/getting-places/">Getting Places</a>). They are the exact same except instead of binding the gensym that will hold the new value to one plus the value already in the place:</p>
+<pre class="brush: plain; title: ; notranslate">
+(,(car stores) (+ 1 ,access-expr))
+</pre>
+<p>The gensym is bound to the result of calling the function with the value in the place and all of the other arguments passed to <strong>zap</strong>:</p>
+<pre class="brush: plain; title: ; notranslate">
+(,(car stores) (funcall ,fn ,access-expr ,@args))
+</pre>
+<p>Although <strong>zap</strong> is just a nice syntactic shortcut, it is a great example of the crazy things you can do with places.</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/09/29/zap/">Zap</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2015/09/29/zap/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Getting Places</title>
+		<link>http://malisper.me/2015/09/22/getting-places/</link>
+		<comments>http://malisper.me/2015/09/22/getting-places/#comments</comments>
+		<pubDate>Tue, 22 Sep 2015 23:00:58 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Advanced Macros]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=270</guid>
+		<description><![CDATA[<p>This post will serve as an introduction to writing macros that work with places. I will refer back to it whenever I examine a macro which deals with places. Places are an incredible part of Common Lisp. In short, a &#8220;place&#8221; is any location that can hold a value. The obvious example of a place [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/09/22/getting-places/">Getting Places</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p><em>This post will serve as an introduction to writing macros that work with places. I will refer back to it whenever I examine a macro which deals with places.</em></p>
+<p>Places are an incredible part of Common Lisp. In short, a &#8220;place&#8221; is any location that can hold a value. The obvious example of a place is a variable. Less obvious examples include the elements of an array, or the slots of an object. What makes the concept of places special is that Common Lisp provides a standard interface for reading and writing to them. You can write macros on top of this interface that work for every kind of place. As an example, look at the macro <strong>incf</strong>. It takes a place as an argument, adds one to its value, and stores the new value back into the place. If you want to increment a variable <em>x,</em> you would use:</p>
+<pre class="brush: plain; title: ; notranslate">
+(incf x)
+</pre>
+<p>And if you wanted to increment the element at index <em>x</em> of a sequence, you would use:</p>
+<pre class="brush: plain; title: ; notranslate">
+(incf (elt seq x))
+</pre>
+<p>They use the exact same syntax even though a variable is very different from an element of a sequence. Because it takes advantage of the interface for places, <strong>incf</strong> will work on any place, be it a variable, the slot of an object, or a user defined place.</p>
+<p>So at this point you are probably wondering how does <strong>incf</strong> work and more generally, how do you write macros that use places? To write such a macro, you need to use the function <strong>get-setf-expansion</strong>.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/09/22/getting-places/#easy-footnote-bottom-1' title='There is an easier way through the macro define-modify-macro, but that only works in a few basic cases.'><sup>1</sup></a></span> <strong>Get-setf-expansion</strong> takes an expression representing a place and returns a total of five values (if you are unfamiliar with multiple values, see my post on <a href="http://malisper.me/2015/06/30/multiple-value-bind/">multiple-value-bind</a>). Altogether, these five values tell you everything you need to know about the place in order to read and write to it.</p>
+<p>To show you how you are supposed to use <strong>get-setf-expansion</strong>, I&#8217;m first going to demonstrate how you could use it to write the expansion of <strong>incf</strong> by hand. After that, I will show code that will automate this, which winds up being an implementation of <strong>incf</strong>. Let&#8217;s start by writing the expansion of the example above. The one where the element of a sequence is being incremented. To write the expansion of that by hand, you would first call <strong>get-setf-expansion</strong> to obtain all of the information:<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/09/22/getting-places/#easy-footnote-bottom-2' title='You are actually supposed to call get-setf-expansion with an environment object so that locally defined macros can be expanded properly. An environment object can be obtained through the &amp;environment keyword in a macro argument list. For the sake of simplicity, I will be ignoring the environment object.'><sup>2</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate">
+(get-setf-expansion '(elt seq x))
+</pre>
+<p>In SBCL this call will return the following values:</p>
+<pre class="brush: plain; title: ; notranslate">
+;; (1) temps
+(#:seq1017 #:x1016)
+
+;; (2) exprs
+(seq x) 
+
+;; (3) stores
+(#:new1015) 
+
+;; (4) store-expr
+(sb-kernel:%setelt #:seq1017 #:x1016 #:new1015) 
+
+;; (5) access-expr
+(elt #:seq1017 #:x1016))
+</pre>
+<p>From now on, I will refer to each value returned by <strong>get-setf-expansion</strong> by the name in the comment before it (e.g. <em>temps</em> refers to the first value).</p>
+<p>In order to uniquely identify the element of a sequence (the place we are working with in this example), you need two things. You need the sequence itself and the index into the sequence. That is exactly what the two expressions in <em>exprs</em> evaluate to! Since <strong>incf</strong> needs to use these values multiple times, the two values have to be bound to gensyms in order to prevent multiple evaluation (see my post on <a href="http://malisper.me/2015/06/06/once-only/">once-only</a> for why multiple evaluation is a problem). You are supposed to bind the values of the expressions to the gensyms in <em>temps</em> so that the other expressions returned by <strong>get-setf-expansion</strong> can use those gensyms to easily determine the place being worked with. The bindings need to be made with <strong>let*</strong> because it is possible for an expression in <em>exprs</em> to refer to the value of a previous expression in <em>exprs</em>. So the first part of the expansion will bind all of the symbols in <em>temps</em> to values of the expressions in <em>exprs</em> with <strong>let*</strong>:</p>
+<pre class="brush: plain; title: ; notranslate">
+(let* ((#:seq1017 seq) (#:x1016 x))
+  ...)
+</pre>
+<p>Now the gensyms in <em>temps</em> can be used to uniquely identify the place. As I mentioned previously, the other expressions can now easily determine the place through the gensyms. For example, <em>access-expr</em> can be used to retrieve the value currently in the place. Since the place we are dealing with is the element of a sequence,  <em>access-expr</em> is just a call to <strong>elt</strong> using the gensyms in <em>temps</em> as the arguments. We are going to use <em>access-expr</em> in a moment, but first I have to talk about how to write to the place.</p>
+<p>In order to write to the place, you need to use <em>stores</em> and <em>store-expr</em>. <em>Stores</em> is a list of gensyms that need to be bound to the values that are to be stored in the place (it is possible for a single place to hold multiple values).  In this case we want to bind the gensym in <em>stores</em> to one plus the value already in the place. We can easily obtain the value in the place through <i>access-expr</i>. Once the gensyms have been bound, you can use <em>store-expr</em> to actually write the values in <em>stores</em> to the place. Notice how <em>store-expr</em> is a call to an internal SBCL function <strong>sb-kernel:setelt%</strong> that uses the gensyms in <em>temps</em> and <em>stores</em> as arguments. Presumably <strong>sb-kernel:setelt%</strong> sets the element of a sequence. After adding the binding for the gensym in <em>stores</em> and <em>store-expr</em>, we wind up with the final expansion which looks like:<span id='easy-footnote-3' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/09/22/getting-places/#easy-footnote-bottom-3' title='If you try to evaluate the code, there are two things you have to. First you have to make sure you are using SBCL because sb-kernel:%setelt is a function specific to SBCL. Second, you have to remove the &#8216;#:&#8217; from all of the symbols that use it because every use of #: creates a new symbol.'><sup>3</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate">
+(let* ((#:seq1017 seq) 
+       (#:x1016 x) 
+       (#:new1015 (+ 1 (elt #:seq1017 #:x1016))))
+  (sb-kernel:%setelt #:seq1017 #:x1016 #:new1015))
+ </pre>
+<p>To review, the above code first binds the gensyms in <em>temps</em> to the values of the expressions in <em>exprs</em>. This allows <i>access-expr</i> and <em>store-expr</em> to use the gensyms in <em>temps</em> in order to determine the place being worked with. Then the code uses <em>access-expr</em> to retrieve the value, adds one to that, and binds that value to the gensym in <em>stores</em>. This is because the value of the gensym in <em>stores</em> is ultimately going to be the one written to the place. Finally the code evaluates <em>store-expr</em> in order to actually store the value in the gensym into the place.</p>
+<p>Now here is one possible implementation of <strong>incf</strong>,<span id='easy-footnote-4' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/09/22/getting-places/#easy-footnote-bottom-4' title='As I mentioned in a previous footnote, you are actually supposed to pass get-setf-expansion an environment object'><sup>4</sup></a></span> which is code for everything we just did by hand. I called it <strong>incf%</strong> so that it doesn&#8217;t have the same name as the builtin version.</p>
+<pre class="brush: plain; title: ; notranslate">
+(defmacro incf% (place)
+  (multiple-value-bind
+        (temps exprs stores store-expr access-expr)
+      (get-setf-expansion place)
+    `(let* (,@(mapcar #'list temps exprs)
+            (,(car stores) (+ 1 ,access-expr)))
+       ,store-expr)))
+</pre>
+<p>The above code first binds the five values returned by <strong>get-setf-expansion</strong> to variables. It then generates a <strong>let*</strong> binding which binds the symbols in <em>temps</em> to the expressions in <em>exprs</em> and also binds the gensym in <em>stores</em> to one plus the result of evaluating <em>access-expr</em>. Finally the above code splices in <em>store-expr</em> to actually write the value. And that is everything there is to <strong>incf</strong>.</p>
+<p><b>Incf</b> is but a single example of what can be done with places. In the next couple of posts, I plan to cover some really cool macros that encapsulate a bunch of common patterns related to places.</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/09/22/getting-places/">Getting Places</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2015/09/22/getting-places/feed/</wfw:commentRss>
+		<slash:comments>3</slash:comments>
+		</item>
+	</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.178 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:26:23 -->

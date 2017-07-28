@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/pt-br/markdown-pt/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:34:51 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn markdown in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../../css/normalize.css">
+        <link rel="stylesheet" href="../../../css/main.css">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fpt-br%2Fmarkdown-pt%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3Dmarkdown">
+        Compartilhe esta página
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">Aprenda X em Y Minutos</a></h2>
+  <h2>Onde X=markdown</h2>
+  
+    <p class="filelink">
+    Baixar o código:
+    <a href="../../files/learnmarkdown-pt.md">learnmarkdown-pt.md</a>
+    </p>
+  
+  <div id="doc">
+    <p>Markdown foi criado por John Gruber in 2004. Originado para ser fácil de ler e 
+escrever sintaxe que converte facilmente em HTML (hoje, suporta outros formatos também).</p>
+
+<p>Dê-me feedback tanto quanto você quiser! / Sinta-se livre para a garfar (fork) e 
+puxar o projeto (pull request)</p>
+<pre class="highlight markdown"><code>&lt;!-- Markdown é um superconjunto do HTML, de modo que qualquer arvquivo HTML é 
+um arquivo Markdown válido, isso significa que nós podemos usar elementos HTML 
+em Markdown, como o elemento de comentário, e eles não serão afetados pelo analisador
+de remarcação. No entanto, se você criar um elemento HTML em seu arquivo Markdown, você
+não pode usar sintaxe remarcação dentro desse conteúdo do elemento.--&gt;
+
+&lt;!--Markdown também varia de implementação de um analisador para uma próxima.
+Este guia vai tentar esclarecer quando as características são universais, ou quando eles são 
+específico para um determinado parser --&gt;
+
+<span class="c">&lt;!-- Cabeçalhos --&gt;</span>
+<span class="c">&lt;!-- Você pode criar elementos HTML &lt;h1&gt;</span> até <span class="c">&lt;h6&gt;</span> facilmente antecedendo o texto
+que deseja estar nesse elemento por um número de hashes (#) --&gt;
+<span class="gh"># Isto é um cabeçalho &lt;h1&gt;</span>
+<span class="gu">## Isto é um cabeçalho &lt;h2&gt;</span>
+<span class="gu">### Isto é um cabeçalho &lt;h3&gt;</span>
+<span class="gu">#### Isto é um cabeçalho &lt;h4&gt;</span>
+<span class="gu">##### Isto é um cabeçalho &lt;h5&gt;</span>
+<span class="gu">###### Isto é um cabeçalho &lt;h6&gt;</span>
+
+<span class="c">&lt;!-- Markdown também nos fornece duas maneiras alternativas de indicar h1 e h2 --&gt;</span>
+<span class="gu">Isto é um cabeçalho h1
+======================
+</span>
+<span class="gh">Isto é um cabeçalho h2
+----------------------
+</span>
+<span class="c">&lt;!-- Estilos de texto simples --&gt;</span> 
+<span class="c">&lt;!-- O texto pode ser facilmente denominado como remarcação itálico, negrito ou tachado usando --&gt;</span>
+
+<span class="ge">*Este texto está em itálico*</span>
+<span class="ge">_E este também está._</span>
+
+<span class="gs">**Este texto está em negrito**</span>
+<span class="ge">__</span>E este também está._
+
+<span class="gs">***Este texto está em negrito e itálico.**</span><span class="err">*</span>
+<span class="gs">**_E este também está_**</span>
+<span class="ge">*--Danouse! Este também__*</span>
+
+&lt;!-- Em GitHub Flavored Markdown, que é usado para processar arquivos Markdown 
+GitHub, nós também temos: --&gt; 
+
+~~Este texto é processado com tachado.~~
+
+&lt;!-- Os parágrafos estão uma ou várias linhas adjacentes de texto separadas por 
+uma ou múltiplas linhas em branco. --&gt;
+
+Este é um parágrafo. Eu estou digitando em um parágrafo, não é legal?
+
+Agora, eu estou no parágrado 2.
+... Ainda continuo no parágrafo 2! :)
+
+Eu estou no parágrafo três.
+
+<span class="c">&lt;!-- Se você quiser inserir uma tag HTML &lt;br /&gt;</span>, você pode acabar com um parágrafo 
+com dois ou mais espaços e, em seguida, começar um novo parágrafo --&gt;
+
+Termino com dois espaços (destacar-me para vê-los). 
+
+Há um <span class="c">&lt;br /&gt;</span> acima de mim!
+
+<span class="c">&lt;!-- Bloco de citações são fáceis e feito com o caractere &gt;</span>. --&gt;
+<span class="gt">
+&gt; Este é um bloco de citação. Você pode </span>
+<span class="gt">&gt; Enrolar manualmente suas linhas e colocar um `&gt;` antes de cada linha ou você pode</span>
+<span class="gt">&gt; deixar suas linhas ficarem muito longas e enrolar por conta própria. Não faz diferença, </span>
+<span class="gt">&gt; desde que eles começam com um `&gt;`.</span>
+<span class="gt">
+&gt; Você também pode usar mais de um nível </span>
+<span class="gt">&gt;&gt; De recuo? </span>
+<span class="gt">&gt; Como pura é isso?</span>
+
+<span class="c">&lt;!-- Listas --&gt;</span> 
+<span class="c">&lt;!-- As listas não ordenadas podem ser feitas usando asteriscos, positivos ou hífens --&gt;</span>
+<span class="p">
+*</span> Item
+<span class="p">*</span> Item
+<span class="p">*</span> Outro item
+
+ou
+<span class="p">
++</span> Item
+<span class="p">+</span> Item
+<span class="p">+</span> Outro item
+
+ou
+<span class="p">
+-</span> Item
+<span class="p">-</span> Item
+<span class="p">-</span> Um último item
+
+<span class="c">&lt;!-- Listas ordenadas são feitas com um número seguido por um ponto --&gt;</span>
+<span class="p">
+1.</span> Item um
+<span class="p">2.</span> Item dois
+<span class="p">3.</span> Tem três
+
+&lt;!-- Você não tem poder para rotular os itens corretamente e a remarcação será ainda
+tornar os números em ordem, mas isso pode não ser uma boa idéia --&gt;
+<span class="p">
+1.</span> Item um
+<span class="p">1.</span> Item dois
+<span class="p">1.</span> Item três
+<span class="c">&lt;!-- (Isto é processado da mesma forma que o exemplo acima) --&gt;</span>
+
+<span class="c">&lt;!-- Você também pode usar subtítulos --&gt;</span>
+<span class="p">
+1.</span> Item um
+<span class="p">2.</span> Item dois
+<span class="p">3.</span> Item três
+<span class="p">    *</span> Sub-item
+<span class="p">    *</span> Sub-item
+<span class="p">4.</span> Item quatro
+
+<span class="c">&lt;!-- blocos de código --&gt;</span> 
+<span class="c">&lt;!-- Você pode indicar um bloco de código (que utiliza o elemento &lt;code&gt;</span>) pelo recuo
+uma linha com quatro espaços ou uma guia --&gt;<span class="sb">
+
+    Isto é código
+    É assim, sacou?
+
+</span>&lt;!-- Você pode também re-guia (ou adicionar mais quatro espaços adicionais) para o recuo 
+dentro do seu código --&gt;<span class="sb">
+
+    my_array.each do |item|
+        puts item
+    end 
+
+</span><span class="c">&lt;!-- Código embutido pode ser criada usando o caractere de crase ` --&gt;</span>
+
+John não sabia nem o que o função 'goto()' fazia!
+
+<span class="c">&lt;!-- Em GitHub Flavored Markdown, você pode usar uma sintaxe especial para o código --&gt;</span>
+
+<span class="se">\`\`\`</span>ruby &lt;!-- exceto remover essas barras invertidas quando você faz isso, apenas <span class="sb">```</span>
+ruby! --&gt; 
+def foobar
+    puts "Hello world!"
+end
+<span class="se">\`\`\`</span> <span class="c">&lt;!-- Aqui também, não barras invertidas, apenas ``` --&gt;</span>
+
+&lt;-- O texto acima não requer recuo, mas o GitHub vai usar a sintaxe 
+destacando do idioma que você especificar após a <span class="sb">```</span> --&gt;
+
+<span class="c">&lt;!-- Regra Horizontal (&lt;hr /&gt;</span>) --&gt; 
+&lt;!-- Regras horizontais são facilmente adicionados com três ou mais asteriscos ou hífens,
+com ou sem espaços. --&gt;
+<span class="p">
+***</span>
+<span class="p">---
+- - - </span>
+<span class="p">****************
+</span>
+<span class="c">&lt;!-- Links --&gt;</span> 
+&lt;!-- Uma das melhores coisas sobre a remarcação é o quão fácil é fazer ligações. Colocar 
+o texto a ser exibido entre parênteses rígidos <span class="err">[</span>] seguido pela url em parênteses () --&gt;
+
+<span class="p">[</span><span class="nv">Click aqui!</span><span class="p">](</span><span class="sx">http://test.com/</span><span class="p">)</span>
+
+<span class="c">&lt;!-- Você também pode adicionar um título link usando aspas dentro dos parênteses --&gt;</span>
+
+<span class="p">[</span><span class="nv">Click aqui!</span><span class="p">](</span><span class="sx">http://test.com/</span> <span class="nn">"Link para Test.com"</span><span class="p">)</span>
+
+<span class="c">&lt;!-- Caminhos relativos funcionam também. --&gt;</span>
+
+<span class="p">[</span><span class="nv">Ir para música</span><span class="p">](</span><span class="sx">/música/</span><span class="p">)</span>.
+
+<span class="c">&lt;!-- Markdown também suporta ligações de estilo de referência --&gt;</span>
+
+<span class="p">[</span><span class="nv">Clique neste link</span><span class="p">]</span> <span class="p">[</span><span class="ss">link1</span><span class="p">]</span> para mais informações sobre isso!
+<span class="p">[</span><span class="nv">Além disso, verifique este link</span><span class="p">]</span> <span class="p">[</span><span class="ss">foobar</span><span class="p">]</span> se você quiser.<span class="sb">
+
+
+
+
+</span>&lt;!-- O título também pode estar entre aspas simples ou entre parênteses, ou omitido 
+inteiramente. As referências podem estar em qualquer lugar no documento e os IDs de referência 
+pode ser qualquer um, desde que eles são únicos. --&gt;
+
+<span class="c">&lt;!-- Existe também o "nomear implícita", que permite que você use o texto do link como o id --&gt;</span> 
+
+<span class="p">[</span><span class="nv">Este</span><span class="p">]</span> <span class="p">[]</span> é um link. <span class="sb">
+
+
+
+</span><span class="c">&lt;!-- Mas não são usados normalmente--&gt;</span> 
+
+<span class="c">&lt;!-- Imagens --&gt;</span> 
+<span class="c">&lt;!-- As imagens são feitas da mesma forma que as ligações, mas com um ponto de exclamação na frente! --&gt;</span>
+
+<span class="p">![</span><span class="nv">Este é pairar-texto (texto alternativo) para minha imagem</span><span class="p">](</span><span class="sx">http://imgur.com/myimage.jpg</span> <span class="nn">"Um título opcional"</span><span class="p">)</span> 
+
+<span class="c">&lt;!-- E estilo de referência funciona como esperado --&gt;</span> 
+
+<span class="p">![</span><span class="nv">Este é o pairar-texto.</span><span class="p">][</span><span class="ss">Myimage</span><span class="p">]</span> <span class="sb">
+
+
+
+</span><span class="c">&lt;!-- Miscelânea --&gt;</span> 
+<span class="c">&lt;!-- Auto-links --&gt;</span> 
+
+<span class="nv">&lt;http://testwebsite.com/&gt;</span> é equivalente a 
+<span class="p">[</span><span class="nv">http://testwebsite.com/</span><span class="p">](</span><span class="sx">http://testwebsite.com/</span><span class="p">)</span> 
+
+<span class="c">&lt;!-- Auto-links para e-mails --&gt;</span> 
+
+<span class="nv">&lt;foo@bar.com&gt;</span> 
+
+<span class="c">&lt;!-- Escapando caracteres --&gt;</span> 
+
+Quero digitar <span class="ge">* Este texto entre asteriscos *</span>, mas eu não quero que ele seja 
+em itálico, então eu faço o seguinte: <span class="se">\*</span>Este texto entre asteriscos <span class="se">\*</span>.
+
+<span class="c">&lt;!-- Tabelas --&gt;</span> 
+&lt;!-- Tabelas estão disponíveis apenas no GitHub Flavored Markdown e são ligeiramente 
+complicadas, mas se você realmente quer: --&gt;
+
+| Col1         | Col2     | Col3          |
+| :----------- | :------: | ------------: |
+| esquerda-alin| Centrado | direita-alinh |
+| blah         | blah     | blah          |
+
+<span class="c">&lt;!-- Ou, para os mesmos resultados --&gt;</span>
+
+Col 1 | Col2 | Col3
+:-- | :-: | --:
+Ugh isso é tão feio | faça isto | parar
+
+<span class="c">&lt;!-- O fim! --&gt;</span>
+
+</code></pre>
+
+<p>Para mais informações, confira o post oficial de John Gruber de sintaxe <a href="http://daringfireball.net/projects/markdown/syntax">aqui</a>
+e de Adam Pritchard grande cheatsheet <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">aqui</a>.</p>
+
+    <hr>
+    <p>Sugestões ou correções? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Abra uma issue</a> no repositório do Github, ou faça um Pull Request você mesmo!
+    </p>
+    <p class="contributed">
+    Originalmente contribuído por Dan Turkel e atualizado por <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/pt-br/markdown-pt.html.markdown">0 colaborador(es)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://danturkel.com/">Dan Turkel</a>
+      
+    
+    </p>
+
+    <p>
+    
+      Translated by:
+      
+        <a href="https://github.com/miguelarauj1o">Miguel Araújo</a>
+      
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/pt-br/markdown-pt/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:34:51 GMT -->
+</html>

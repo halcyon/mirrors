@@ -1,0 +1,73 @@
+(in-package "CL-USER")
+
+;; nick 2000-09-15
+
+;; Simple HTML generator. You need never bother with Netscape Composer
+;; again... 
+
+;; Any calls to debug-format within your code will generate output at
+;; the head of the resulting web page
+
+(defun debug-format (format-string &rest format-args)
+  (apply 'format *trace-output* format-string format-args))
+
+;; This function is the entry point to the html-generating code. The
+;; idea is that generate-html calls two other functions which you have
+;; to define: generate-title and generate-body. See application.lisp...
+
+(defun generate-html (request stream)
+  (with-tag (html stream)
+    (with-tag (head stream)
+      (with-tag (title stream)
+        ;;                   *** YOU HAVE TO REDEFINE THIS FUNCTION
+        (generate-title request stream)))
+    (with-tag (body stream)
+      (with-debugging (stream)
+                      ;;     *** YOU ALSO HAVE TO REDEFINE THIS FUNCTION
+                      (generate-body request stream)))))
+
+;; All the remaining functions in this file are html-generating
+;; utilities which you might want to make free use of. The first three
+;; control layout of the text etc on the html page, the rest offer
+;; controls so the user can send requests back to you.
+
+;; Layout - this function creates a large, centred heading from the
+;; text supplied to it.
+
+(defun heading (text stream)
+  (with-tag (center stream)        ; you can use this tag on its own
+    (with-tag (h1 stream)
+      (format stream "~a" text))))
+
+;; Layout - this function issues a "line break" - further output will
+;; start on a new line. 
+
+(defun line-break (stream) 
+  (with-tag (br stream :no-close t)))
+
+;; Layout - this function draws a horizontal line across the page.
+
+(defun horizontal-line (stream) 
+  (with-tag (hr stream :no-close t)))
+
+;; Control - the "text" (second argument) will be an "active link" -
+;; if the user clicks on it then generate-html will be called again
+;; with "link-to" as the new request.
+
+(defun html-link (link-to text stream)
+  (with-tag (a stream :href link-to)
+    (format stream "~a" text)))
+
+;; Control - the user can type into a text box. There's a button next
+;; to the box (and you specify the text on the button). When the user
+;; clicks on the button, generate-html will be called again with a new
+;; request consisting of the value you supplied as "link-to", followed
+;; by the string "?DATA=", followed by whatever was typed into the
+;; text box.
+
+(defun simple-text-input (link-to button-text stream)
+  (with-tag (form stream :action link-to :method "get")
+    (with-tag (input stream :type :text :name :data :no-close t))
+    (with-tag (input stream :type :submit :value button-text :no-close t))))
+
+

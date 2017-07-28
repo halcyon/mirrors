@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Lifecycle Composition</title>
+	<atom:link href="https://stuartsierra.com/2013/09/15/lifecycle-composition/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2013/09/15/lifecycle-composition</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Vadim</title>
+		<link>https://stuartsierra.com/2013/09/15/lifecycle-composition/comment-page-1#comment-45651</link>
+		<dc:creator><![CDATA[Vadim]]></dc:creator>
+		<pubDate>Sat, 21 Sep 2013 07:17:38 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=741#comment-45651</guid>
+		<description><![CDATA[We found it beneficial to make Lifecycle#start:
+
+(start [this started]
+    (reduce (fn [system key]
+              (update-in system [key] start system))
+            this component-order))
+
+Which allows to depend on already started components. Do you see any problems with that?]]></description>
+		<content:encoded><![CDATA[<p>We found it beneficial to make Lifecycle#start:</p>
+<p>(start [this started]<br />
+    (reduce (fn [system key]<br />
+              (update-in system [key] start system))<br />
+            this component-order))</p>
+<p>Which allows to depend on already started components. Do you see any problems with that?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Murtaza Husain</title>
+		<link>https://stuartsierra.com/2013/09/15/lifecycle-composition/comment-page-1#comment-45637</link>
+		<dc:creator><![CDATA[Murtaza Husain]]></dc:creator>
+		<pubDate>Fri, 20 Sep 2013 16:42:45 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=741#comment-45637</guid>
+		<description><![CDATA[Stuart, can you give an example where a mutable reference would be preferred instead of an immutable value. In which case the above system would not work ? 
+
+I am also using a complete clojure stack (including datomic), so the immutable values concept should owrk. However want to understand where the above scheme of things will break.]]></description>
+		<content:encoded><![CDATA[<p>Stuart, can you give an example where a mutable reference would be preferred instead of an immutable value. In which case the above system would not work ? </p>
+<p>I am also using a complete clojure stack (including datomic), so the immutable values concept should owrk. However want to understand where the above scheme of things will break.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Murtaza Husain</title>
+		<link>https://stuartsierra.com/2013/09/15/lifecycle-composition/comment-page-1#comment-45619</link>
+		<dc:creator><![CDATA[Murtaza Husain]]></dc:creator>
+		<pubDate>Thu, 19 Sep 2013 05:02:53 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=741#comment-45619</guid>
+		<description><![CDATA[Stuart, thanks for the series, I have been enjoying it. Is it possible for you to release a sample project ( a sort of hello world or little more than it), that utilizes the above ideas. It will be cool to see them in action.]]></description>
+		<content:encoded><![CDATA[<p>Stuart, thanks for the series, I have been enjoying it. Is it possible for you to release a sample project ( a sort of hello world or little more than it), that utilizes the above ideas. It will be cool to see them in action.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2013/09/15/lifecycle-composition/comment-page-1#comment-45603</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Tue, 17 Sep 2013 12:10:42 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=741#comment-45603</guid>
+		<description><![CDATA[No. :)]]></description>
+		<content:encoded><![CDATA[<p>No. :)</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Laurent Petit</title>
+		<link>https://stuartsierra.com/2013/09/15/lifecycle-composition/comment-page-1#comment-45600</link>
+		<dc:creator><![CDATA[Laurent Petit]]></dc:creator>
+		<pubDate>Tue, 17 Sep 2013 08:08:04 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=741#comment-45600</guid>
+		<description><![CDATA[Have you been tempted by using Spring Core for components wiring under the cover? :-)]]></description>
+		<content:encoded><![CDATA[<p>Have you been tempted by using Spring Core for components wiring under the cover? :-)</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Dmitry Groshev</title>
+		<link>https://stuartsierra.com/2013/09/15/lifecycle-composition/comment-page-1#comment-45594</link>
+		<dc:creator><![CDATA[Dmitry Groshev]]></dc:creator>
+		<pubDate>Sun, 15 Sep 2013 21:45:04 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=741#comment-45594</guid>
+		<description><![CDATA[I can&#039;t help but think about how this resembles Erlang and it&#039;s OTP. It looks like every sufficiently well designed system contains half of OTP. I believe that you can benefit a lot from investing some time in it, besides, it&#039;s very fun by itself.]]></description>
+		<content:encoded><![CDATA[<p>I can&#8217;t help but think about how this resembles Erlang and it&#8217;s OTP. It looks like every sufficiently well designed system contains half of OTP. I believe that you can benefit a lot from investing some time in it, besides, it&#8217;s very fun by itself.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Ben Mabey</title>
+		<link>https://stuartsierra.com/2013/09/15/lifecycle-composition/comment-page-1#comment-45593</link>
+		<dc:creator><![CDATA[Ben Mabey]]></dc:creator>
+		<pubDate>Sun, 15 Sep 2013 18:53:45 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=741#comment-45593</guid>
+		<description><![CDATA[Could you explain more about the problems you&#039;ve faced in using a graph-like library for dependency order?  I&#039;ve been using this approach for a bit over a year now with good results, but we may be thinking about different things.
+
+I&#039;ve been using a library like Prismatic&#039;s graph (and Prismatic&#039;s version itself in later projects) which uses the topological sort of the graph as the order in which to start the components.  Once the system graph is computed the topo sort is stored as metadata onto the system object (map) which is then used in #&#039;stop to guarantee components are stopped in reverse order.  The graph library doesn&#039;t need to remember the order, the Lifecycle #&#039;start is responsible for storing it in the metadata for later use.]]></description>
+		<content:encoded><![CDATA[<p>Could you explain more about the problems you&#8217;ve faced in using a graph-like library for dependency order?  I&#8217;ve been using this approach for a bit over a year now with good results, but we may be thinking about different things.</p>
+<p>I&#8217;ve been using a library like Prismatic&#8217;s graph (and Prismatic&#8217;s version itself in later projects) which uses the topological sort of the graph as the order in which to start the components.  Once the system graph is computed the topo sort is stored as metadata onto the system object (map) which is then used in #&#8217;stop to guarantee components are stopped in reverse order.  The graph library doesn&#8217;t need to remember the order, the Lifecycle #&#8217;start is responsible for storing it in the metadata for later use.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.280 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:01:26 -->
+
+<!-- Compression = gzip -->

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/bg-bg/perl-bg/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:23 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn perl in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../../css/normalize.css">
+        <link rel="stylesheet" href="../../../css/main.css">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fbg-bg%2Fperl-bg%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3Dperl">
+        Share this page
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">Learn X in Y minutes</a></h2>
+  <h2>Where X=perl</h2>
+  
+    <p class="filelink">
+    Get the code:
+    <a href="../../files/learnperl.perl">learnperl.pl</a>
+    </p>
+  
+  <div id="doc">
+    <p>Perl 5 е изключително мощен език за програмиране с широка област на приложение
+и над 25 годишна история.</p>
+
+<p>Perl 5 работи на повече от 100 операционни системи от мини до супер-компютри и е
+подходящ както за бърза разработка на скриптове така и за огромни приложения.</p>
+<pre class="highlight perl"><code><span class="c1"># Едноредовите коментари започват със знака диез.</span>
+
+<span class="c1">#### Стриктен режим и предупреждения</span>
+
+<span class="k">use</span> <span class="nv">strict</span><span class="p">;</span>
+<span class="k">use</span> <span class="nv">warnings</span><span class="p">;</span>
+
+<span class="c1"># Силно препоръчително е всички скриптове и модули да включват тези редове.</span>
+<span class="c1"># strict спира компилацията в случай на необявени предварително променливи.</span>
+<span class="c1"># warnings показва предупредителни съобщения в случай на често допускани грешки,</span>
+<span class="c1"># например използване на променливи без стойност в низове.</span>
+
+<span class="c1">#### Типове променливи в Perl</span>
+
+<span class="c1"># Променливите започват със съответен знак (sigil - от латински sigillum ),</span>
+<span class="c1"># който представлява символ, указващ типа на променливата. Името на самата</span>
+<span class="c1"># променлива започва с буква или знак за подчертаване (_), следван от какъвто и</span>
+<span class="c1"># да е брой букви, цифри или знаци за подчертаване. Забележете, че ако напишете</span>
+<span class="c1"># 'use utf8;' (без кавичките), можете да използвате всякакви букви за имена на</span>
+<span class="c1"># променливите, включително и български.</span>
+
+<span class="c1">### Perl има три главни типа променливи: $scalar (скалар), @array (масив), and %hash (хеш).</span>
+
+<span class="c1">## Скалари</span>
+<span class="c1">#  Скаларът представлява единична стойност:</span>
+<span class="k">my</span> <span class="nv">$animal</span> <span class="o">=</span> <span class="s">"camel"</span><span class="p">;</span>
+<span class="k">my</span> <span class="nv">$answer</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+<span class="k">use</span> <span class="nv">utf8</span><span class="p">;</span>
+<span class="k">my</span> <span class="nv">$</span><span class="err">животно</span> <span class="err">=</span> <span class="err">'камила';</span>
+
+<span class="err">#</span> <span class="err">Стойностите</span> <span class="err">на</span> <span class="err">скаларите</span> <span class="err">могат</span> <span class="err">да</span> <span class="err">бъдат</span> <span class="err">низове</span><span class="p">,</span> <span class="err">цели</span> <span class="err">числа</span> <span class="err">или</span> <span class="err">числа</span> <span class="err">с</span>
+<span class="c1"># плаваща запетая (десетични дроби). Perl автоматично ги ползва и превръща от</span>
+<span class="c1"># един тип стойност в друга, според както е необходимо.</span>
+
+<span class="c1">## Масиви</span>
+<span class="c1">#  Масивът представлява списък от стойности:</span>
+<span class="k">my</span> <span class="nv">@animals</span> <span class="o">=</span> <span class="p">(</span><span class="s">"камила"</span><span class="p">,</span> <span class="s">"llama"</span><span class="p">,</span> <span class="s">"owl"</span><span class="p">);</span>
+<span class="k">my</span> <span class="nv">@numbers</span> <span class="o">=</span> <span class="p">(</span><span class="mi">23</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">69</span><span class="p">);</span>
+<span class="k">my</span> <span class="nv">@mixed</span>   <span class="o">=</span> <span class="p">(</span><span class="s">"camel"</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mf">1.23</span><span class="p">);</span>
+
+<span class="c1"># Елементите на масива се достъпват като се използват квадратни скоби и $,</span>
+<span class="c1"># който указва каква стойност ще бъде върната (скалар).</span>
+<span class="k">my</span> <span class="nv">$second</span> <span class="o">=</span> <span class="nv">$animals</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+
+<span class="c1">## Хешове</span>
+<span class="c1">#  Хешът представлява набор от двойки ключ/стойност:</span>
+
+<span class="k">my</span> <span class="nv">%fruit_color</span> <span class="o">=</span> <span class="p">(</span><span class="s">"ябълка"</span><span class="p">,</span> <span class="s">"червена"</span><span class="p">,</span> <span class="s">"banana"</span><span class="p">,</span> <span class="s">"yellow"</span><span class="p">);</span>
+
+<span class="c1"># Може да използвате празно пространство и оператора "=&gt;" (тлъста запетая),</span>
+<span class="c1"># за да ги изложите по-прегледно:</span>
+
+<span class="nv">%fruit_color</span> <span class="o">=</span> <span class="p">(</span>
+  <span class="err">ябълка</span>  <span class="o">=&gt;</span> <span class="s">"червена"</span><span class="p">,</span>
+  <span class="nv">banana</span> <span class="o">=&gt;</span> <span class="s">"yellow"</span><span class="p">,</span>
+<span class="p">);</span>
+
+<span class="c1"># Елементите (стойностите) от хеша се достъпват чрез използване на ключовете.</span>
+<span class="c1"># Ключовете се ограждат с фигурни скоби и се поставя $ пред името на хеша.</span>
+<span class="k">my</span> <span class="nv">$color</span> <span class="o">=</span> <span class="nv">$fruit_color</span><span class="p">{</span><span class="err">ябълка</span><span class="p">};</span>
+
+<span class="c1"># Скаларите, масивите и хешовете са документирани по-пълно в perldata.</span>
+<span class="c1"># На командния ред напишете (без кавичките) 'perldoc perldata'.</span>
+
+<span class="c1">#### Указатели (Референции)</span>
+
+<span class="c1"># По-сложни типове данни могат да бъдат създавани чрез използване на указатели,</span>
+<span class="c1"># които ви позволяват да изграждате масиви и хешове в други масиви и хешове.</span>
+
+<span class="k">my</span> <span class="nv">$array_ref</span> <span class="o">=</span> <span class="o">\</span><span class="nv">@array</span><span class="p">;</span>
+<span class="k">my</span> <span class="nv">$hash_ref</span> <span class="o">=</span> <span class="o">\</span><span class="nv">%hash</span><span class="p">;</span>
+<span class="k">my</span> <span class="nv">@array_of_arrays</span> <span class="o">=</span> <span class="p">(</span><span class="o">\</span><span class="nv">@array1</span><span class="p">,</span> <span class="o">\</span><span class="nv">@array2</span><span class="p">,</span> <span class="o">\</span><span class="nv">@array3</span><span class="p">);</span>
+
+<span class="c1"># Също така можете да създавате безименни масиви и хешове, към които сочат само</span>
+<span class="c1"># указатели.</span>
+
+<span class="k">my</span> <span class="nv">$fruits</span> <span class="o">=</span> <span class="p">[</span><span class="s">"apple"</span><span class="p">,</span> <span class="s">"banana"</span><span class="p">];</span>
+<span class="k">my</span> <span class="nv">$colors</span> <span class="o">=</span> <span class="p">{</span><span class="nv">apple</span> <span class="o">=&gt;</span> <span class="s">"red"</span><span class="p">,</span> <span class="nv">banana</span> <span class="o">=&gt;</span> <span class="s">"yellow"</span><span class="p">};</span>
+
+<span class="c1"># Можете да достигате до безименните структури като поставяте отпред съответния</span>
+<span class="c1"># знак на структурата, която искате да достъпите (дереферирате).</span>
+
+<span class="k">my</span> <span class="nv">@fruits_array</span> <span class="o">=</span> <span class="nv">@$fruits</span><span class="p">;</span>
+<span class="k">my</span> <span class="nv">%colors_hash</span> <span class="o">=</span> <span class="nv">%$colors</span><span class="p">;</span>
+
+<span class="c1"># Можете да използвате оператора стрелка (-&gt;), за да достигнете до отделна</span>
+<span class="c1"># скаларна стойност.</span>
+
+<span class="k">my</span> <span class="nv">$first</span> <span class="o">=</span> <span class="nv">$array_ref</span><span class="o">-&gt;</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="k">my</span> <span class="nv">$value</span> <span class="o">=</span> <span class="nv">$hash_ref</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">banana</span><span class="p">};</span>
+
+<span class="c1"># Вижте perlreftut и perlref, където ще намерите по-задълбочена документация за</span>
+<span class="c1"># указателите (референциите).</span>
+
+<span class="c1">#### Условни изрази и цикли</span>
+
+<span class="c1"># В Perl ще срещнете повечето от обичайните изрази за условия и обхождане (цикли).</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="nv">$var</span><span class="p">)</span> <span class="p">{</span>
+  <span class="o">...</span>
+<span class="p">}</span> <span class="k">elsif</span> <span class="p">(</span><span class="nv">$var</span> <span class="ow">eq</span> <span class="s">'bar'</span><span class="p">)</span> <span class="p">{</span>
+  <span class="o">...</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="o">...</span>
+<span class="p">}</span>
+
+<span class="k">unless</span> <span class="p">(</span><span class="err">условие</span><span class="p">)</span> <span class="p">{</span>
+  <span class="o">...</span>
+<span class="p">}</span>
+<span class="c1"># Това е друг, по-четим вариант на "if (!условие)"</span>
+
+<span class="c1"># Perl-овския начин след-условие</span>
+<span class="k">print</span> <span class="s">"Yow!"</span> <span class="k">if</span> <span class="nv">$zippy</span><span class="p">;</span>
+<span class="k">print</span> <span class="s">"Нямаме банани"</span> <span class="k">unless</span> <span class="nv">$bananas</span><span class="p">;</span>
+
+<span class="c1">#  докато</span>
+<span class="k">while</span> <span class="p">(</span><span class="err">условие</span><span class="p">)</span> <span class="p">{</span>
+  <span class="o">...</span>
+<span class="p">}</span>
+
+
+<span class="c1"># цикли for и повторение</span>
+<span class="k">for</span> <span class="p">(</span><span class="k">my</span> <span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nv">$max</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">print</span> <span class="s">"index is $i"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="k">my</span> <span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nv">@elements</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">print</span> <span class="s">"Current element is "</span> <span class="o">.</span> <span class="nv">$elements</span><span class="p">[</span><span class="nv">$i</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="k">my</span> <span class="nv">$element</span> <span class="p">(</span><span class="nv">@elements</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">print</span> <span class="nv">$element</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1"># мълчаливо - използва се подразбиращата се променлива $_.</span>
+<span class="k">for</span> <span class="p">(</span><span class="nv">@elements</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">print</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1"># Отново Perl-овския начин след-</span>
+<span class="k">print</span> <span class="k">for</span> <span class="nv">@elements</span><span class="p">;</span>
+
+<span class="c1"># отпечатване на стойностите чрез обхождане ключовете на указател към хеш</span>
+<span class="k">print</span> <span class="nv">$hash_ref</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$_</span><span class="p">}</span> <span class="k">for</span> <span class="nb">keys</span> <span class="nv">%$hash_ref</span><span class="p">;</span>
+
+<span class="c1">#### Регулярни (обикновени) изрази</span>
+
+<span class="c1"># Поддръжката на регулярни изрази  е залеганала дълбоко в Perl. Задълбочена</span>
+<span class="c1"># документация ще намерите в perlrequick, perlretut и на други места.</span>
+<span class="c1"># Но ето накратко:</span>
+
+<span class="c1"># Просто съвпадение</span>
+<span class="k">if</span> <span class="p">(</span><span class="sr">/foo/</span><span class="p">)</span>       <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>  <span class="c1"># истина ако $_ съдържа "foo"</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$x</span> <span class="o">=~</span> <span class="sr">/foo/</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>  <span class="c1"># истина ако $x съдържа "foo"</span>
+
+<span class="c1"># Просто заместване</span>
+
+<span class="nv">$x</span> <span class="o">=~</span> <span class="sr">s/foo/bar/</span><span class="p">;</span>         <span class="c1"># замества foo с bar в $x</span>
+<span class="nv">$x</span> <span class="o">=~</span> <span class="sr">s/foo/bar/g</span><span class="p">;</span>        <span class="c1"># Замества ВСИЧКИ ПОЯВИ на foo с bar в $x</span>
+
+
+<span class="c1">#### Файлове и Вход/Изход (I/O)</span>
+
+<span class="c1"># Можете да отворите файл за въвеждане на данни в него или за извеждане на</span>
+<span class="c1"># данни от него като използвате функцията "open()".</span>
+
+<span class="nb">open</span><span class="p">(</span><span class="k">my</span> <span class="nv">$in</span><span class="p">,</span>  <span class="s">"&lt;"</span><span class="p">,</span>  <span class="s">"input.txt"</span><span class="p">)</span>  <span class="ow">or</span> <span class="nb">die</span> <span class="s">"Не мога да отворя input.txt: $!"</span><span class="p">;</span>
+<span class="nb">open</span><span class="p">(</span><span class="k">my</span> <span class="nv">$out</span><span class="p">,</span> <span class="s">"&gt;"</span><span class="p">,</span>  <span class="s">"output.txt"</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">die</span> <span class="s">"Can't open output.txt: $!"</span><span class="p">;</span>
+<span class="nb">open</span><span class="p">(</span><span class="k">my</span> <span class="nv">$log</span><span class="p">,</span> <span class="s">"&gt;&gt;"</span><span class="p">,</span> <span class="s">"my.log"</span><span class="p">)</span>     <span class="ow">or</span> <span class="nb">die</span> <span class="s">"Can't open my.log: $!"</span><span class="p">;</span>
+
+<span class="c1"># Можете да четете от отворен файлов манипулатор като използвате оператора</span>
+<span class="c1"># "&lt;&gt;". В скаларен контекст той чете по един ред от файла наведнъж, а в списъчен</span>
+<span class="c1"># контекст изчита всички редове от файла наведнъж като присвоява всеки ред на</span>
+<span class="c1"># масива:</span>
+
+<span class="k">my</span> <span class="nv">$line</span>  <span class="o">=</span> <span class="sr">&lt;$in&gt;</span><span class="p">;</span>
+<span class="k">my</span> <span class="nv">@lines</span> <span class="o">=</span> <span class="sr">&lt;$in&gt;</span><span class="p">;</span>
+
+<span class="c1">#### Подпрограми (функции)</span>
+
+<span class="c1"># Да се пишат подпрограми е лесно:</span>
+
+<span class="k">sub </span><span class="nf">logger</span> <span class="p">{</span>
+  <span class="k">my</span> <span class="nv">$logmessage</span> <span class="o">=</span> <span class="nb">shift</span><span class="p">;</span>
+
+  <span class="nb">open</span> <span class="k">my</span> <span class="nv">$logfile</span><span class="p">,</span> <span class="s">"&gt;&gt;"</span><span class="p">,</span> <span class="s">"my.log"</span> <span class="ow">or</span> <span class="nb">die</span> <span class="s">"Could not open my.log: $!"</span><span class="p">;</span>
+
+  <span class="k">print</span> <span class="nv">$logfile</span> <span class="nv">$logmessage</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1"># Сега можем да ползваме подпрограмата като всяка друга вградена функция:</span>
+
+<span class="nv">logger</span><span class="p">(</span><span class="s">"Имаме подпрограма, която пише във файл-отчет!"</span><span class="p">);</span>
+
+<span class="c1">#### Модули</span>
+
+<span class="c1"># Модулът е набор от програмен код на Perl, обикновено подпрограми, който може</span>
+<span class="c1"># да бъде използван в друг програмен код на Perl. Обикновено се съхранява във</span>
+<span class="c1"># файл с разширение .pm, така че perl (програмата) да може лесно да го разпознае.</span>
+
+<span class="c1"># В MyModule.pm</span>
+<span class="nb">package</span> <span class="nv">MyModule</span><span class="p">;</span>
+<span class="k">use</span> <span class="nv">strict</span><span class="p">;</span>
+<span class="k">use</span> <span class="nv">warnings</span><span class="p">;</span>
+
+<span class="k">sub </span><span class="nf">trim</span> <span class="p">{</span>
+  <span class="k">my</span> <span class="nv">$string</span> <span class="o">=</span> <span class="nb">shift</span><span class="p">;</span>
+  <span class="nv">$string</span> <span class="o">=~</span> <span class="sr">s/^\s+//</span><span class="p">;</span>
+  <span class="nv">$string</span> <span class="o">=~</span> <span class="sr">s/\s+$//</span><span class="p">;</span>
+  <span class="k">return</span> <span class="nv">$string</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="mi">1</span><span class="p">;</span>
+
+<span class="c1"># От другаде:</span>
+
+<span class="k">use</span> <span class="nv">MyModule</span><span class="p">;</span>
+<span class="nn">MyModule::</span><span class="nv">trim</span><span class="p">(</span><span class="nv">$string</span><span class="p">);</span>
+
+<span class="c1"># Чрез модула Exporter може да направите функциите си износни, така че други</span>
+<span class="c1"># програми да могат да ги внасят (импортират).</span>
+<span class="c1"># Такива функции се използват така:</span>
+
+<span class="k">use</span> <span class="nv">MyModule</span> <span class="s">'trim'</span><span class="p">;</span>
+<span class="nv">trim</span><span class="p">(</span><span class="nv">$string</span><span class="p">);</span>
+
+<span class="c1"># Много Perl-модули могат да се свалят от CPAN (http://www.cpan.org/). Те</span>
+<span class="c1"># притежават редица полезни свойства, които ще ви помогнат да си свършите работа</span>
+<span class="c1"># без да откривате колелото. Голям брой известни модули като Exporter са включени</span>
+<span class="c1"># в дистрибуцията на самия Perl. Вижте perlmod  за повече подробности, свързани с</span>
+<span class="c1"># модулите в Perl.</span>
+
+<span class="c1">#### Обекти</span>
+
+<span class="c1"># Обектите в Perl са просто референции, които знаят на кой клас (пакет)</span>
+<span class="c1"># принадлежат. По този начин методите (подпрограми), които се извикват срещу</span>
+<span class="c1"># тях могат да бъдат намерени в съответния клас. За да се случи това, в</span>
+<span class="c1"># конструкторите (обикновено new) се използва вградената функция</span>
+<span class="c1"># bless. Ако използвате обаче модули като Moose или Moo, няма да ви се налага</span>
+<span class="c1"># сами да извиквате bless (ще видите малко по-долу).</span>
+
+<span class="nb">package</span> <span class="nv">MyCounter</span><span class="p">;</span>
+<span class="k">use</span> <span class="nv">strict</span><span class="p">;</span>
+<span class="k">use</span> <span class="nv">warnings</span><span class="p">;</span>
+
+<span class="k">sub </span><span class="nf">new</span> <span class="p">{</span>
+  <span class="k">my</span> <span class="nv">$class</span> <span class="o">=</span> <span class="nb">shift</span><span class="p">;</span>
+  <span class="k">my</span> <span class="nv">$self</span> <span class="o">=</span> <span class="p">{</span><span class="nv">count</span> <span class="o">=&gt;</span> <span class="mi">0</span><span class="p">};</span>
+  <span class="k">return</span> <span class="nb">bless</span> <span class="nv">$self</span><span class="p">,</span> <span class="nv">$class</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">sub </span><span class="nf">count</span> <span class="p">{</span>
+  <span class="k">my</span> <span class="nv">$self</span> <span class="o">=</span> <span class="nb">shift</span><span class="p">;</span>
+  <span class="k">return</span> <span class="nv">$self</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">count</span><span class="p">};</span>
+<span class="p">}</span>
+
+<span class="k">sub </span><span class="nf">increment</span> <span class="p">{</span>
+  <span class="k">my</span> <span class="nv">$self</span> <span class="o">=</span> <span class="nb">shift</span><span class="p">;</span>
+  <span class="nv">$self</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">count</span><span class="p">}</span><span class="o">++</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="mi">1</span><span class="p">;</span>
+
+<span class="c1"># Методите могат да се извикват на клас или на обект като се използва оператора </span>
+<span class="c1"># стрелка (-&gt;).</span>
+
+<span class="k">use</span> <span class="nv">MyCounter</span><span class="p">;</span>
+<span class="k">my</span> <span class="nv">$counter</span> <span class="o">=</span> <span class="nv">MyCounter</span><span class="o">-&gt;</span><span class="k">new</span><span class="p">;</span>
+<span class="k">print</span> <span class="nv">$counter</span><span class="o">-&gt;</span><span class="nv">count</span><span class="p">,</span> <span class="s">"\n"</span><span class="p">;</span> <span class="c1"># 0</span>
+<span class="nv">$counter</span><span class="o">-&gt;</span><span class="nv">increment</span><span class="p">;</span>
+<span class="k">print</span> <span class="nv">$counter</span><span class="o">-&gt;</span><span class="nv">count</span><span class="p">,</span> <span class="s">"\n"</span><span class="p">;</span> <span class="c1"># 1</span>
+
+<span class="c1"># Модулите Moose и Moo от CPAN  ви помагат леснот да създавате класове. Те</span>
+<span class="c1"># предоставят готов конструктор (new) и прост синтаксис за деклариране на</span>
+<span class="c1"># свойства на обектите (attributes). Този клас може да се използва по същия начин</span>
+<span class="c1"># като предишния по-горе.</span>
+
+<span class="nb">package</span> <span class="nv">MyCounter</span><span class="p">;</span>
+<span class="k">use</span> <span class="nv">Moo</span><span class="p">;</span> <span class="c1"># внася strict и warnings</span>
+
+<span class="nv">has</span> <span class="s">'count'</span> <span class="o">=&gt;</span> <span class="p">(</span><span class="nv">is</span> <span class="o">=&gt;</span> <span class="s">'rwp'</span><span class="p">,</span> <span class="nv">default</span> <span class="o">=&gt;</span> <span class="mi">0</span><span class="p">,</span> <span class="nv">init_arg</span> <span class="o">=&gt;</span> <span class="nb">undef</span><span class="p">);</span>
+
+<span class="k">sub </span><span class="nf">increment</span> <span class="p">{</span>
+  <span class="k">my</span> <span class="nv">$self</span> <span class="o">=</span> <span class="nb">shift</span><span class="p">;</span>
+  <span class="nv">$self</span><span class="o">-&gt;</span><span class="nv">_set_count</span><span class="p">(</span><span class="nv">$self</span><span class="o">-&gt;</span><span class="nv">count</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="mi">1</span><span class="p">;</span>
+
+<span class="c1"># Обектно-ориентираното програмиране е разгледано по-задълбочено в perlootut,</span>
+<span class="c1"># а изпълнението му на ниско ниво в Perl е обяснено в perlobj.</span>
+</code></pre>
+
+<h4>Често задавани въпроси (FAQ)</h4>
+
+<h1>perlfaq съдържа въпроси и отговори, отнасящи се до много общи задачи и предлага</h1>
+
+<h1>за ползване добри модлули от CPAN, подходящи за решаване на различни проблеми.</h1>
+
+<h4>Повече за четене</h4>
+
+<ul>
+<li><a href="http://www.slideshare.net/kberov/01-intro-bg">Въведение в Perl</a></li>
+<li><a href="http://www.mgu.bg/drugi/ebooks/belchevski/perl.html">PERL - Курс на МГУ &ldquo;Св.Иван Рилски&rdquo; (13 ЧАСТИ)</a></li>
+<li><a href="http://perl-tutorial.org/">perl-tutorial</a></li>
+<li><a href="http://www.perl.org/learn.html">Learn at www.perl.com</a></li>
+<li><a href="http://perldoc.perl.org/">perldoc</a></li>
+<li>и идващото с perl: <code>perldoc perlintro</code></li>
+</ul>
+
+    <hr>
+    <p>Got a suggestion? A correction, perhaps? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Open an Issue</a> on the Github Repo, or make a pull request yourself!
+    </p>
+    <p class="contributed">
+    Originally contributed by Korjavin Ivan, and updated by <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/bg-bg/perl-bg.html.markdown">0 contributor(s)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://github.com/korjavin">Korjavin Ivan</a>,
+      
+    
+      
+        <a href="http://github.com/Grinnz">Dan Book</a>
+      
+    
+    </p>
+
+    <p>
+    
+      Translated by:
+      
+        <a href="https://github.com/kberov">Красимир Беров</a>
+      
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/bg-bg/perl-bg/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:23 GMT -->
+</html>

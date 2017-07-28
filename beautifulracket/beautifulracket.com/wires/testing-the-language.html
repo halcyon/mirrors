@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/wires/testing-the-language.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:41 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Imagine a language: wires</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;imagine-a-language-wires&quot;)"></div><h1 anchor="imagine-a-language-wires" id="imagine-a-language-wires" hyphens="none">Imagine a language: <span class="my-code" decode="exclude">wires</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-reader.html">3&emsp;the reader</a></li><li><a href="the-expander.html">4&emsp;the expander</a></li><li><a class="here" href="testing-the-language.html">5&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">6&emsp;recap</a></li><li><a href="source-listing.html">7&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_GEoIp&quot;)"></div><p id="a_GEoIp">First, we’ll test our lan­guage with our sam­ple cir­cuit. All we do is add a <span class="my-code" decode="exclude">#lang wires</span> des­ig­na­tion to the top:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">test.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_id4jn&quot;)"></div><div class="highlight-container" id="a_id4jn"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang wires<br/>x AND y -&gt; d<br/>x OR y -&gt; e<br/>x LSHIFT 2 -&gt; f<br/>y RSHIFT 2 -&gt; g<br/>NOT x -&gt; h<br/>NOT y -&gt; i<br/>123 -&gt; x<br/>456 -&gt; y</div><div class="highlight" form="false" id="a_HCDWf"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="source"><pre>#lang wires
+x AND y -&gt; d
+x OR y -&gt; e
+x LSHIFT 2 -&gt; f
+y RSHIFT 2 -&gt; g
+NOT x -&gt; h
+NOT y -&gt; i
+123 -&gt; x
+456 -&gt; y
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rVWja&quot;)"></div><p id="a_rVWja">When we run this in DrRacket, we get the result:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Gwhcp&quot;)"></div><div class="highlight-container" id="a_Gwhcp"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">d: 72<br/>e: 507<br/>f: 492<br/>g: 114<br/>h: 65412<br/>i: 65079<br/>x: 123<br/>y: 456</div><div class="highlight" form="false" id="a_FoTP0"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="source"><pre>d: 72
+e: 507
+f: 492
+g: 114
+h: 65412
+i: 65079
+x: 123
+y: 456
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_8wEwk&quot;)"></div><p id="a_8wEwk">Exactly right. Because we’ve mod­eled our wires as Racket func­tions, we can fid­dle with them on the REPL just like any other func­tions:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_jCq1i&quot;)"></div><div class="highlight-container" id="a_jCq1i"><div id="code_45" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; x<br/>#&lt;procedure:x&gt;<br/>&gt; (x)<br/>123<br/>&gt; (y)<br/>456<br/>&gt; (d)<br/>72</div><div class="highlight" form="false" id="a_ewLPa"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="source"><pre>&gt; x
+#&lt;procedure:x&gt;
+&gt; (x)
+123
+&gt; (y)
+456
+&gt; (d)
+72
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk2" data-clipboard-target="#code_45" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_yAkwR&quot;)"></div><p id="a_yAkwR">Since our expander <span class="my-code" decode="exclude">wires</span> pro­vides the 16-bit oper­a­tions, we can use those on the REPL too:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_k0Dqx&quot;)"></div><div class="highlight-container" id="a_k0Dqx"><div id="code_46" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; (AND (x) (y)) ; same as definition of `d`<br/>72<br/>&gt; (LSHIFT (x) 2) ; same as definition of `f`<br/>492</div><div class="highlight" form="false" id="a_hrjoD"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="source"><pre>&gt; (AND (x) (y)) ; same as definition of `d`
+72
+&gt; (LSHIFT (x) 2) ; same as definition of `f`
+492
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk3" data-clipboard-target="#code_46" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_cH7tG&quot;)"></div><p id="a_cH7tG">Now we can try the main puz­zle file, which is a 339-wire cir­cuit. As before, we just add <span class="my-code" decode="exclude">#lang wires</span> to the top (excerpt below, but the whole thing is avail­able in the <a href="source-listing.html">source list­ing</a>):</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">puzzle.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_MJ0mX&quot;)"></div><div class="highlight-container" id="a_MJ0mX"><div id="code_47" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang wires<br/>bn RSHIFT 2 -&gt; bo<br/>lf RSHIFT 1 -&gt; ly<br/>fo RSHIFT 3 -&gt; fq<br/>cj OR cp -&gt; cq<br/>fo OR fz -&gt; ga<br/>t OR s -&gt; u<br/>lx -&gt; a<br/>NOT ax -&gt; ay<br/>he RSHIFT 2 -&gt; hf<br/>lf OR lq -&gt; lr<br/>lr AND lt -&gt; lu<br/>dy OR ej -&gt; ek<br/>1 AND cx -&gt; cy<br/>hb LSHIFT 1 -&gt; hv<br/>1 AND bh -&gt; bi<br/>ih AND ij -&gt; ik<br/>···</div><div class="highlight" form="false" id="a_gBEql"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="source"><pre>#lang wires
+bn RSHIFT 2 -&gt; bo
+lf RSHIFT 1 -&gt; ly
+fo RSHIFT 3 -&gt; fq
+cj OR cp -&gt; cq
+fo OR fz -&gt; ga
+t OR s -&gt; u
+lx -&gt; a
+NOT ax -&gt; ay
+he RSHIFT 2 -&gt; hf
+lf OR lq -&gt; lr
+lr AND lt -&gt; lu
+dy OR ej -&gt; ek
+1 AND cx -&gt; cy
+hb LSHIFT 1 -&gt; hv
+1 AND bh -&gt; bi
+ih AND ij -&gt; ik
+···
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk4" data-clipboard-target="#code_47" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ILeEV&quot;)"></div><p id="a_ILeEV">This will print a list of all the wire val­ues:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_VhLHb&quot;)"></div><div class="highlight-container" id="a_VhLHb"><div id="code_48" form="false" decode="exclude" style="font-size:0;width:0;height:0">bo: 10292<br/>ly: 4045<br/>fq: 6560<br/>cq: 15518<br/>ga: 60815<br/>u: 1<br/>a: 46065<br/>ay: 65531<br/>hf: 15568<br/>lr: 8187<br/>lu: 7027<br/>ek: 15935<br/>cy: 0<br/>hv: 1438<br/>bi: 1<br/>ik: 9873<br/>···</div><div class="highlight" form="false" id="a_W6ekq"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="source"><pre>bo: 10292
+ly: 4045
+fq: 6560
+cq: 15518
+ga: 60815
+u: 1
+a: 46065
+ay: 65531
+hf: 15568
+lr: 8187
+lu: 7027
+ek: 15935
+cy: 0
+hv: 1438
+bi: 1
+ik: 9873
+···
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk5" data-clipboard-target="#code_48" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_CRwIb&quot;)"></div><p id="a_CRwIb">Since we might not notice the value of wire <span class="my-code" decode="exclude">a</span> as it goes whizzing by, we have two choices. We can update our <span class="my-code" decode="exclude">define/display</span> macro in <a href="the-expander.html#helper-define-display">the expander</a> to only print the value of the <span class="my-code" decode="exclude">a</span> wire. (An exer­cise left to the reader.) Or we can just eval­u­ate <span class="my-code" decode="exclude">a</span> on the REPL:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_VPXSj&quot;)"></div><div class="highlight-container" id="a_VPXSj"><div id="code_49" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; (a)<br/>46065</div><div class="highlight" form="false" id="a_tP8QD"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="source"><pre>&gt; (a)
+46065
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk6" data-clipboard-target="#code_49" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_kXiCX&quot;)"></div><p id="a_kXiCX">Puz­zle solved. (If you sign up at <a class=" ext" href="http://adventofcode.com/2015">Advent of Code</a>, you can get your own <a class=" ext" href="http://adventofcode.com/2015/day/7">puz­zle file</a> and feed it to <span class="my-code" decode="exclude">#lang wires</span>.)</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-reader.html">3&emsp;the reader</a></li><li><a href="the-expander.html">4&emsp;the expander</a></li><li><a class="here" href="testing-the-language.html">5&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">6&emsp;recap</a></li><li><a href="source-listing.html">7&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="the-expander.html">← prev</a>
+    <a class="nav-right" href="recap.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

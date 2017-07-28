@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<!-- $Id: //info.ravenbrook.com/user/ndl/lisp/cl-log/index.html#14 $ -->
+
+
+<!-- Mirrored from nicklevine.org/cl-log/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:15 GMT -->
+<head>
+
+<title>CL-LOG - a general purpose logging utility</title>
+
+  <meta name="Author" content="Nick Levine" />
+  <meta name="Copyright" content="Copyright (c) Nick Levine 2007-2014. All rights reserved." />
+  <meta name="Keywords" content="Common Lisp, logging" />
+  <meta name="Publisher" content="Nick Levine" />
+  <meta name="Robots" content="index" />
+
+<style type="text/css">
+   <!--
+          a {color: #006699; text-decoration: none; font-weight: bold}
+          body, td, th {background: white; color: black}
+   -->
+  </style>
+
+</head>
+
+<body>
+
+<h1>CL-LOG - a general purpose logging utility</h1>
+
+<p>CL-LOG is a general purpose logging utility, loosely modelled in
+some respects after Gary King's <a
+href="http://common-lisp.net/project/log5/">Log5</a>.</p>
+
+<p>Its features include:</p>
+
+<ul>
+<li>logging to several destinations at once, via "messengers",</li>
+<li>each messenger is tailored to accept some log messages and
+      reject others, and this tailoring can be changed on-the-fly,</li>
+<li>very rapid processing of messages which are rejected by all
+      messengers,</li>
+<li>fully independent use of the utility by several different
+  sub-systems in an application,</li>
+<li>support for messengers which cl:format text to a stream,</li>
+<li>support for messengers which do not invoke cl:format,</li>
+<li>timestamps in theory accurate to internal-time-units-per-second.</li>
+</ul>
+
+
+<p>Typically, logging utilities only support the one, simple paradigm of
+formatting objects to a text-stream. Removing this restriction allows
+you to:</p>
+
+
+<ul>
+<li>log random objects instead of plain text,</li>
+<li>generate internationalized log messages,</li>
+<li>create specialised binary logs,</li>
+<li>base the test-suite of complex applications around logging.</li>
+</ul>
+
+<p>Logging is controlled by the following classes: log-manager,
+base-messenger, base-message, category-set; any of these might be
+specialised by your application. Whether or not a messenger will
+accept a given message is controlled by the "category" of the message
+and the "filter" of the messenger; these are logical combinations of
+atoms (typically keywords).</p>
+
+<p>I'd expect CL-LOG to work as-is on
+any <a href="http://www.lispworks.com/documentation/HyperSpec/Body/26_glo_c.htm#conforming_implementation">conforming
+implementation</a> of Common Lisp. I've tested it on: ABCL, ACL, CCL,
+LW, SBCL.</p>
+
+<p>CL-LOG is released with an MIT-style license.</p>
+
+<h2>Obtaining CL-LOG</h2>
+
+<p>CL-LOG consists of two source files: <a
+href="master/pkg.html">pkg.lisp</a> and <a
+href="master/cl-log.html">cl-log.lisp</a>. An <a
+href="http://www.cliki.net/asdf">asdf</a> <a
+href="master/cl-log-2.html">definition</a> is also provided,
+and a simple <a href="master/cl-log-test.html">test suite</a>.</p>
+
+<p>There's also <a href="master/doc/index.txt">documentation</a> which is
+longer than the source, so it's up to you which you read.</p>
+
+<p>You can download the current release of all these files in
+a <a href="cl-log-latest.tar.gz">bundle</a> (gzipped tarball).</p>
+
+<p>Finally, CL-LOG and its test-suite are avaliable for download and
+installation
+via <a href="http://www.quicklisp.org/">Quicklisp</a>.</p>
+
+<blockquote><pre>(ql:quickload :cl-log)
+(ql:quickload :cl-log-test)</pre></blockquote>
+
+<h2>Problems? Suggestions? Derision?</h2>
+
+<p><a href="mailto:cl-log@nicklevine.org">Let me know</a>.</p>
+
+</body>
+
+
+<!-- Mirrored from nicklevine.org/cl-log/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:15 GMT -->
+</html>
+
+

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/jsonic-2/indenting.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:20 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Level up: jsonic revisited</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;level-up-jsonic-revisited&quot;)"></div><h1 anchor="level-up-jsonic-revisited" id="level-up-jsonic-revisited" hyphens="none">Level up: <span class="my-code" decode="exclude">jsonic</span> revisited</h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="setup.html">2&emsp;setup</a></li><li><a href="contracts.html">3&emsp;con­tracts</a></li><li><a href="unit-tests.html">4&emsp;unit tests</a></li><li><a href="source-locations.html">5&emsp;source loca­tions</a></li><li><a href="drracket-integration.html">6&emsp;drracket inte­gra­tion</a></li><li><a href="syntax-coloring.html">7&emsp;syn­tax col­or­ing</a></li><li><a class="here" href="indenting.html">8&emsp;indent­ing</a></li><li><a href="toolbar-buttons.html">9&emsp;tool­bar but­tons</a></li><li><a href="recap.html">10&emsp;recap</a></li><li><a href="source-listing.html">11&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_zrf6x&quot;)"></div><p id="a_zrf6x">Now we’ll write an <em><a class="glossary" href="../appendix/glossary.html#indenter"><span class="glossary-link-text">inden­ter</span></a></em>, a func­tion that’s used to auto­mat­i­cally indent source code in DrRacket. Like <a href="syntax-coloring.html">syn­tax col­or­ing</a>, writ­ing an inden­ter is optional.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ozfxA&quot;)"></div><p id="a_ozfxA">When <a href="drracket-integration.html#the-get-info-function">we made our</a> <span class="my-code" decode="exclude">get-info</span> func­tion for <span class="my-code" decode="exclude">jsonic</span>, we included a hook for the inden­ter with the key <span class="my-code" decode="exclude">drracket:indentation</span>. At the time, we hypoth­e­sized a new <span class="my-code" decode="exclude">"jsonic/indenter.rkt"</span> mod­ule that would <span class="my-code" decode="exclude">provide</span> an <span class="my-code" decode="exclude">indent-jsonic</span> func­tion. We’ll start that mod­ule now, import­ing <span class="my-code" decode="exclude">br/indent</span> for some helper func­tions we’ll need shortly, and <span class="my-code" decode="exclude">racket/contract</span> too:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/indenter.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_gPhXK&quot;)"></div><div class="highlight-container" id="a_gPhXK"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br<br/>(require br/indent racket/contract)<br/><br/>(define (indent-jsonic tbox [posn 0])<br/>  ···)<br/>(provide<br/>  (contract-out<br/>   [indent-jsonic ···]))</div><div class="highlight" form="false" id="a_uViBL"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="n">br/indent</span> <span class="n">racket/contract</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">indent-jsonic</span> <span class="n">tbox</span> <span class="p">[</span><span class="n">posn</span> <span class="mi">0</span><span class="p">])</span>
+  <span class="n">···</span><span class="p">)</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/attaching-contracts-to-values.html#(form._((lib._racket/contract/base..rkt)._contract-out))" class="docs" hyphens="none">contract-out</a></span>
+   <span class="p">[</span><span class="n">indent-jsonic</span> <span class="n">···</span><span class="p">]))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;writing-a-contract&quot;)"></div><h3 anchor="writing-a-contract" class="subhead" id="writing-a-contract"><a href="#writing-a-contract">Writ­ing a con­tract</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_0h2ZC&quot;)"></div><p id="a_0h2ZC">How does our indent­ing func­tion work? When DrRacket needs to indent some code, it will call our func­tion with a <span class="my-code" decode="exclude">tbox</span> and a <span class="my-code" decode="exclude">posn</span>:</p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_gDEE7&quot;)"></div><p id="a_gDEE7">The <span class="my-code" decode="exclude">tbox</span> argu­ment—short for <em>text box</em>—is a Racket user-inter­face object that con­tains the source code. Specif­i­cally, it’s an instance of the <a href="http://docs.racket-lang.org/gui/text_.html##f" class="docs" hyphens="none">text%</a> class from <a href="http://docs.racket-lang.org/gui/index.html?q=text%25"><span class="my-code" decode="exclude">racket/gui</span></a>. <span class="tooltip" onclick="this.classList.toggle('tooltip_visible')"> + <span class="tooltip-inner">Using <span class="my-code" decode="exclude">racket/gui</span>, cross-plat­form GUI appli­ca­tions can be made entirely within Racket. DrRacket is one exam­ple.</span></span> For now, we won’t detour into <span class="my-code" decode="exclude">racket/gui</span>. But it’s eas­ier to work with the text box—rather than a <a class="glossary" href="../appendix/glossary.html#port"><span class="glossary-link-text">port</span></a> or string—because the text box can tell us use­ful things about the lay­out of the source code.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Wffu8&quot;)"></div><p id="a_Wffu8">The <span class="my-code" decode="exclude">posn</span> argu­ment is a char­ac­ter posi­tion inside the text box, indi­cat­ing the line we need to indent. It is a non­neg­a­tive inte­ger (mean­ing <span class="my-code" decode="exclude">&gt;=0</span>). We declare the argu­ment as <span class="my-code" decode="exclude">[posn 0]</span> to indi­cate that it should have a default value of <span class="my-code" decode="exclude">0</span> if only one argu­ment (the text box) is used.</p></div></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ktEsk&quot;)"></div><p id="a_ktEsk">DrRacket expects our inden­ter to return either a pos­i­tive inte­ger with the total num­ber of spaces to indent the line, or <span class="my-code" decode="exclude">#f</span> (not <span class="my-code" decode="exclude">0</span>) if the line should not be indented. We don’t have to account for the exist­ing indent. DrRacket will remove it before apply­ing ours.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_nTgQv&quot;)"></div><p id="a_nTgQv">With this infor­ma­tion, we can write a con­tract for our inden­ter. We import <span class="my-code" decode="exclude">racket/contract</span> to get our con­tract com­bi­na­tors. Because <span class="my-code" decode="exclude">tbox</span> is an instance of <span class="my-code" decode="exclude">text%</span>, we can test it with the con­tract com­bi­na­tor <a href="http://docs.racket-lang.org/reference/Object_and_Class_Contracts.html#(def._((lib._racket/class..rkt)._is-a~3f/c))" class="docs" hyphens="none">is-a?/c</a>, if we also import <span class="my-code" decode="exclude">text%</span> from <span class="my-code" decode="exclude">racket/gui/base</span>. The other pred­i­cates for the con­tract fol­low from the descrip­tions above:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_zVWMQ&quot;)"></div><div class="highlight-container" id="a_zVWMQ"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">((is-a?/c text%)<br/> exact-nonnegative-integer? . -&gt; .<br/> (or/c exact-nonnegative-integer? #f))</div><div class="highlight" form="false" id="a_ZqZeO"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="source"><pre><span class="p">((</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Object_and_Class_Contracts.html#(def._((lib._racket/class..rkt)._is-a~3f/c))" class="docs" hyphens="none">is-a?/c</a></span> <span class="nb"><a href="http://docs.racket-lang.org/gui/text_.html##f" class="docs" hyphens="none">text%</a></span><span class="p">)</span>
+ <span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-nonnegative-integer~3f))" class="docs" hyphens="none">exact-nonnegative-integer?</a></span> <span class="o">.</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/function-contracts.html#(form._((lib._racket/contract/base..rkt)._-~3e))" class="docs" hyphens="none">-&gt;</a></span> <span class="o">.</span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/data-structure-contracts.html#(def._((lib._racket/contract/base..rkt)._or/c))" class="docs" hyphens="none">or/c</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-nonnegative-integer~3f))" class="docs" hyphens="none">exact-nonnegative-integer?</a></span> <span class="no">#f</span><span class="p">))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_cTfuu&quot;)"></div><p id="a_cTfuu">The twist, how­ever, is that our con­tract has one manda­tory argu­ment, and one optional argu­ment. So instead of the <a href="http://docs.racket-lang.org/reference/function-contracts.html#(form._((lib._racket/contract/base..rkt)._-~3e))" class="docs" hyphens="none">-&gt;</a> con­tract com­bi­na­tor, we’ll use the <a href="http://docs.racket-lang.org/reference/function-contracts.html#(form._((lib._racket/contract/base..rkt)._-~3e*))" class="docs" hyphens="none">-&gt;*</a> vari­ant, which sup­ports optional argu­ments. We just need to move our manda­tory and optional argu­ments into their own paren­the­sized groups, like so:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_nv4rk&quot;)"></div><div class="highlight-container" id="a_nv4rk"><div id="code_45" form="false" decode="exclude" style="font-size:0;width:0;height:0">(((is-a?/c text%))<br/>(exact-nonnegative-integer?) . -&gt;* .<br/>(or/c exact-nonnegative-integer? #f))</div><div class="highlight" form="false" id="a_7fg47"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="source"><pre><span class="p">(((</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Object_and_Class_Contracts.html#(def._((lib._racket/class..rkt)._is-a~3f/c))" class="docs" hyphens="none">is-a?/c</a></span> <span class="nb"><a href="http://docs.racket-lang.org/gui/text_.html##f" class="docs" hyphens="none">text%</a></span><span class="p">))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-nonnegative-integer~3f))" class="docs" hyphens="none">exact-nonnegative-integer?</a></span><span class="p">)</span> <span class="o">.</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/function-contracts.html#(form._((lib._racket/contract/base..rkt)._-~3e*))" class="docs" hyphens="none">-&gt;*</a></span> <span class="o">.</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/data-structure-contracts.html#(def._((lib._racket/contract/base..rkt)._or/c))" class="docs" hyphens="none">or/c</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-nonnegative-integer~3f))" class="docs" hyphens="none">exact-nonnegative-integer?</a></span> <span class="no">#f</span><span class="p">))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk2" data-clipboard-target="#code_45" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_sCFwk&quot;)"></div><p id="a_sCFwk">Then we can move the fin­ished con­tract into our <a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a> expres­sion using <a href="http://docs.racket-lang.org/reference/attaching-contracts-to-values.html#(form._((lib._racket/contract/base..rkt)._contract-out))" class="docs" hyphens="none">contract-out</a>:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/indenter.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_G3UIA&quot;)"></div><div class="highlight-container" id="a_G3UIA"><div id="code_46" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br<br/>(require br/indent racket/contract racket/gui/base )<br/><br/>(define (indent-jsonic tbox [posn 0])<br/>  ···)<br/>(provide<br/> (contract-out<br/>  [indent-jsonic (((is-a?/c text%))<br/>                  (exact-nonnegative-integer?) . -&gt;* .<br/>                  (or/c exact-nonnegative-integer? #f))]))</div><div class="highlight" form="false" id="a_y4kqE"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="n">br/indent</span> <span class="n">racket/contract</span> <span class="n">racket/gui/base</span> <span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">indent-jsonic</span> <span class="n">tbox</span> <span class="p">[</span><span class="n">posn</span> <span class="mi">0</span><span class="p">])</span>
+  <span class="n">···</span><span class="p">)</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span>
+<span class="hll"> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/attaching-contracts-to-values.html#(form._((lib._racket/contract/base..rkt)._contract-out))" class="docs" hyphens="none">contract-out</a></span>
+</span><span class="hll">  <span class="p">[</span><span class="n">indent-jsonic</span> <span class="p">(((</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Object_and_Class_Contracts.html#(def._((lib._racket/class..rkt)._is-a~3f/c))" class="docs" hyphens="none">is-a?/c</a></span> <span class="nb"><a href="http://docs.racket-lang.org/gui/text_.html##f" class="docs" hyphens="none">text%</a></span><span class="p">))</span>
+</span><span class="hll">                  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-nonnegative-integer~3f))" class="docs" hyphens="none">exact-nonnegative-integer?</a></span><span class="p">)</span> <span class="o">.</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/function-contracts.html#(form._((lib._racket/contract/base..rkt)._-~3e*))" class="docs" hyphens="none">-&gt;*</a></span> <span class="o">.</span>
+</span><span class="hll">                  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/data-structure-contracts.html#(def._((lib._racket/contract/base..rkt)._or/c))" class="docs" hyphens="none">or/c</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-nonnegative-integer~3f))" class="docs" hyphens="none">exact-nonnegative-integer?</a></span> <span class="no">#f</span><span class="p">))]))</span>
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk3" data-clipboard-target="#code_46" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;the-indenting-rules&quot;)"></div><h3 anchor="the-indenting-rules" class="subhead" id="the-indenting-rules"><a href="#the-indenting-rules">The indent­ing rules</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_VmwlR&quot;)"></div><p id="a_VmwlR">Our inden­ter will have four rules:</p></div><ol><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_WPOkZ&quot;)"></div><p id="a_WPOkZ">Every line will be indented the same as the line above it, except for the two con­di­tions below.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_KHhfs&quot;)"></div><p id="a_KHhfs">If the pre­vi­ous line begins with a left bracket—either <span class="my-code" decode="exclude">{</span> or <span class="my-code" decode="exclude">[</span>—then the cur­rent line will be indented (= moved far­ther to the right) rel­a­tive to the pre­vi­ous line.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_uW13w&quot;)"></div><p id="a_uW13w">If the cur­rent line begins with a right bracket—either <span class="my-code" decode="exclude">}</span> or <span class="my-code" decode="exclude">]</span>—then the cur­rent line will be unin­dented (= moved far­ther to the left) rel­a­tive to the pre­vi­ous line.</p></div></li></ol><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_qjHTf&quot;)"></div><p id="a_qjHTf">So if we start with an plain chunk of source like this:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_8tQmN&quot;)"></div><div class="highlight-container" id="a_8tQmN"><div id="code_47" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang jsonic<br/>{<br/>"value",<br/>"string":<br/>[<br/>{<br/>"array": @$(range 5)$@,<br/>"object": @$(hash 'k1 "valstring")$@<br/>}<br/>]<br/>// "bar"<br/>}</div><div class="highlight" form="false" id="a_bxQgq"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="source"><pre>#lang jsonic
+{
+"value",
+"string":
+[
+{
+"array": @$(range 5)$@,
+"object": @$(hash &#39;k1 "valstring")$@
+}
+]
+// "bar"
+}
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk4" data-clipboard-target="#code_47" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_gnd7c&quot;)"></div><p id="a_gnd7c">It will be indented like so:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Vtmsv&quot;)"></div><div class="highlight-container" id="a_Vtmsv"><div id="code_48" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang jsonic<br/>{<br/>  "value",<br/>  "string":<br/>  [<br/>    {<br/>      "array": @$(range 5)$@,<br/>      "object": @$(hash 'k1 "valstring")$@<br/>    }<br/>  ]<br/>  // "bar"<br/>}</div><div class="highlight" form="false" id="a_gGX8n"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="source"><pre>#lang jsonic
+{
+  "value",
+  "string":
+  [
+    {
+      "array": @$(range 5)$@,
+      "object": @$(hash &#39;k1 "valstring")$@
+    }
+  ]
+  // "bar"
+}
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk5" data-clipboard-target="#code_48" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;implementing-the-rules&quot;)"></div><h3 anchor="implementing-the-rules" class="subhead" id="implementing-the-rules"><a href="#implementing-the-rules">Imple­ment­ing the rules</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Yf5vn&quot;)"></div><p id="a_Yf5vn">First let’s estab­lish an <span class="my-code" decode="exclude">indent-width</span> of <span class="my-code" decode="exclude">2</span>, and set up <span class="my-code" decode="exclude">left-bracket?</span> and <span class="my-code" decode="exclude">right-bracket?</span> as <a class="glossary" href="../appendix/glossary.html#predicate"><span class="glossary-link-text">pred­i­cates</span></a> to use within the body of the main func­tion:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/indenter.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_lqjz5&quot;)"></div><div class="highlight-container" id="a_lqjz5"><div id="code_49" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br<br/>(require br/indent racket/contract racket/gui/base)<br/><br/>(define indent-width 2)<br/>(define (left-bracket? c) (member c (list #\{ #\[)))<br/>(define (right-bracket? c) (member c (list #\} #\])))<br/><br/>(define (indent-jsonic tbox [posn 0])<br/>  ···)<br/>(provide<br/> (contract-out<br/>  [indent-jsonic (((is-a?/c text%))<br/>                  (exact-nonnegative-integer?) . -&gt;* .<br/>                  (or/c exact-nonnegative-integer? #f))]))</div><div class="highlight" form="false" id="a_haVGO"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="n">br/indent</span> <span class="n">racket/contract</span> <span class="n">racket/gui/base</span><span class="p">)</span>
+
+<span class="hll"><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">indent-width</span> <span class="mi">2</span><span class="p">)</span>
+</span><span class="hll"><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">left-bracket?</span> <span class="n">c</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/private/base..rkt)._member))" class="docs" hyphens="none">member</a></span> <span class="n">c</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="sc">#\{</span> <span class="sc">#\[</span><span class="p">)))</span>
+</span><span class="hll"><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">right-bracket?</span> <span class="n">c</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/private/base..rkt)._member))" class="docs" hyphens="none">member</a></span> <span class="n">c</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="sc">#\}</span> <span class="sc">#\]</span><span class="p">)))</span>
+</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">indent-jsonic</span> <span class="n">tbox</span> <span class="p">[</span><span class="n">posn</span> <span class="mi">0</span><span class="p">])</span>
+  <span class="n">···</span><span class="p">)</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/attaching-contracts-to-values.html#(form._((lib._racket/contract/base..rkt)._contract-out))" class="docs" hyphens="none">contract-out</a></span>
+  <span class="p">[</span><span class="n">indent-jsonic</span> <span class="p">(((</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Object_and_Class_Contracts.html#(def._((lib._racket/class..rkt)._is-a~3f/c))" class="docs" hyphens="none">is-a?/c</a></span> <span class="nb"><a href="http://docs.racket-lang.org/gui/text_.html##f" class="docs" hyphens="none">text%</a></span><span class="p">))</span>
+                  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-nonnegative-integer~3f))" class="docs" hyphens="none">exact-nonnegative-integer?</a></span><span class="p">)</span> <span class="o">.</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/function-contracts.html#(form._((lib._racket/contract/base..rkt)._-~3e*))" class="docs" hyphens="none">-&gt;*</a></span> <span class="o">.</span>
+                  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/data-structure-contracts.html#(def._((lib._racket/contract/base..rkt)._or/c))" class="docs" hyphens="none">or/c</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-nonnegative-integer~3f))" class="docs" hyphens="none">exact-nonnegative-integer?</a></span> <span class="no">#f</span><span class="p">))]))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk6" data-clipboard-target="#code_49" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_oaHav&quot;)"></div><p id="a_oaHav">Let’s pause to intro­duce a new type of data. Our inden­ter is going to work with <em><a class="glossary" href="../appendix/glossary.html#character"><span class="glossary-link-text">char­ac­ters</span></a></em>. A char­ac­ter in Racket is a numer­i­cal type rep­re­sent­ing a Uni­code value. Char­ac­ters are the raw ingre­di­ents of any string. A char­ac­ter is writ­ten with a <span class="my-code" decode="exclude">#\</span> pre­fix. Char­ac­ters can be faster than the equiv­a­lent one-char­ac­ter strings, so cer­tain Racket func­tions use char­ac­ters. For our pred­i­cates, we use <a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/private/base..rkt)._member))" class="docs" hyphens="none">member</a> to check whether a char­ac­ter <span class="my-code" decode="exclude">c</span> appears in a list of pos­si­bil­i­ties. <span class="tooltip" onclick="this.classList.toggle('tooltip_visible')"> + <span class="tooltip-inner">Those who have stud­ied Racket’s <a class="explainer" href="../explainer/equality.html">equal­ity</a> func­tions might know that char­ac­ters can be com­pared with <a href="http://docs.racket-lang.org/reference/booleans.html#(def._((quote._~23~25kernel)._eqv~3f))" class="docs" hyphens="none">eqv?</a> rather than the slower <a href="http://docs.racket-lang.org/reference/booleans.html#(def._((quote._~23~25kernel)._equal~3f))" class="docs" hyphens="none">equal?</a>. So in this case, we could use <a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/private/base..rkt)._memv))" class="docs" hyphens="none">memv</a>, which relies on <span class="my-code" decode="exclude">eqv?</span>, rather than <span class="my-code" decode="exclude">member</span>, which uses <span class="my-code" decode="exclude">equal?</span>.</span></span></p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_T6cps&quot;)"></div><p id="a_T6cps">Mov­ing to the inside of <span class="my-code" decode="exclude">indent-jsonic</span>. We can see from the rules that the infor­ma­tion we need to indent a line comes from the cur­rent line and the pre­vi­ous line. So we start our inden­ter by get­ting those line num­bers with the helper func­tions <a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._previous-line))" class="docs" hyphens="none">previous-line</a> and <a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._line))" class="docs" hyphens="none">line</a>. (These helper func­tions are all imported from <span class="my-code" decode="exclude">br/indent</span>.) We’ll also get the indent of the pre­vi­ous line using <a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._line-indent))" class="docs" hyphens="none">line-indent</a>. We recall that an unin­dent line will return an indent of <span class="my-code" decode="exclude">#f</span>. So we’ll tem­porar­ily con­vert that value to <span class="my-code" decode="exclude">0</span> since that will be more con­ve­nient for doing inden­ta­tion math:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/indenter.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_OoqWO&quot;)"></div><div class="highlight-container" id="a_OoqWO"><div id="code_50" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br<br/>(require br/indent racket/contract racket/gui/base)<br/><br/>(define indent-width 2)<br/>(define (left-bracket? c) (member c (list #\{ #\[)))<br/>(define (right-bracket? c) (member c (list #\} #\])))<br/><br/>(define (indent-jsonic tbox [posn 0])<br/>  (define prev-line (previous-line tbox posn))<br/>  (define current-line (line tbox posn))<br/>  (define prev-indent (or (line-indent tbox prev-line) 0))<br/>  ···)<br/>(provide<br/> (contract-out<br/>  [indent-jsonic (((is-a?/c text%))<br/>                  (exact-nonnegative-integer?) . -&gt;* .<br/>                  (or/c exact-nonnegative-integer? #f))]))</div><div class="highlight" form="false" id="a_rM2oo"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="n">br/indent</span> <span class="n">racket/contract</span> <span class="n">racket/gui/base</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">indent-width</span> <span class="mi">2</span><span class="p">)</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">left-bracket?</span> <span class="n">c</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/private/base..rkt)._member))" class="docs" hyphens="none">member</a></span> <span class="n">c</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="sc">#\{</span> <span class="sc">#\[</span><span class="p">)))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">right-bracket?</span> <span class="n">c</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/private/base..rkt)._member))" class="docs" hyphens="none">member</a></span> <span class="n">c</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="sc">#\}</span> <span class="sc">#\]</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">indent-jsonic</span> <span class="n">tbox</span> <span class="p">[</span><span class="n">posn</span> <span class="mi">0</span><span class="p">])</span>
+<span class="hll">  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">prev-line</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._previous-line))" class="docs" hyphens="none">previous-line</a></span> <span class="n">tbox</span> <span class="n">posn</span><span class="p">))</span>
+</span><span class="hll">  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">current-line</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._line))" class="docs" hyphens="none">line</a></span> <span class="n">tbox</span> <span class="n">posn</span><span class="p">))</span>
+</span><span class="hll">  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">prev-indent</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((lib._racket/private/letstx-scheme..rkt)._or))" class="docs" hyphens="none">or</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._line-indent))" class="docs" hyphens="none">line-indent</a></span> <span class="n">tbox</span> <span class="n">prev-line</span><span class="p">)</span> <span class="mi">0</span><span class="p">))</span>
+</span>  <span class="n">···</span><span class="p">)</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/attaching-contracts-to-values.html#(form._((lib._racket/contract/base..rkt)._contract-out))" class="docs" hyphens="none">contract-out</a></span>
+  <span class="p">[</span><span class="n">indent-jsonic</span> <span class="p">(((</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Object_and_Class_Contracts.html#(def._((lib._racket/class..rkt)._is-a~3f/c))" class="docs" hyphens="none">is-a?/c</a></span> <span class="nb"><a href="http://docs.racket-lang.org/gui/text_.html##f" class="docs" hyphens="none">text%</a></span><span class="p">))</span>
+                  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-nonnegative-integer~3f))" class="docs" hyphens="none">exact-nonnegative-integer?</a></span><span class="p">)</span> <span class="o">.</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/function-contracts.html#(form._((lib._racket/contract/base..rkt)._-~3e*))" class="docs" hyphens="none">-&gt;*</a></span> <span class="o">.</span>
+                  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/data-structure-contracts.html#(def._((lib._racket/contract/base..rkt)._or/c))" class="docs" hyphens="none">or/c</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-nonnegative-integer~3f))" class="docs" hyphens="none">exact-nonnegative-integer?</a></span> <span class="no">#f</span><span class="p">))]))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk7" data-clipboard-target="#code_50" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_3Taym&quot;)"></div><p id="a_3Taym">To fin­ish our func­tion, we com­pute the <span class="my-code" decode="exclude">current-indent</span>. Let’s add the code, then we’ll step through each part:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/indenter.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Vfr4V&quot;)"></div><div class="highlight-container" id="a_Vfr4V"><div id="code_51" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br<br/>(require br/indent racket/contract racket/gui/base)<br/><br/>(define indent-width 2)<br/>(define (left-bracket? c) (member c (list #\{ #\[)))<br/>(define (right-bracket? c) (member c (list #\} #\])))<br/><br/>(define (indent-jsonic tbox [posn 0])<br/>  (define prev-line (previous-line tbox posn))<br/>  (define current-line (line tbox posn))<br/>  (define prev-indent (or (line-indent tbox prev-line) 0))<br/>  (define current-indent<br/>    (cond<br/>      [(left-bracket?<br/>        (line-first-visible-char tbox prev-line))<br/>       (+ prev-indent indent-width)]<br/>      [(right-bracket?<br/>        (line-first-visible-char tbox current-line))<br/>       (- prev-indent indent-width)]<br/>      [else prev-indent]))<br/>  (and (exact-positive-integer? current-indent)<br/>       current-indent))<br/>(provide<br/> (contract-out<br/>  [indent-jsonic (((is-a?/c text%))<br/>                  (exact-nonnegative-integer?) . -&gt;* .<br/>                  (or/c exact-nonnegative-integer? #f))]))</div><div class="highlight" form="false" id="a_SZmg3"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="n">br/indent</span> <span class="n">racket/contract</span> <span class="n">racket/gui/base</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">indent-width</span> <span class="mi">2</span><span class="p">)</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">left-bracket?</span> <span class="n">c</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/private/base..rkt)._member))" class="docs" hyphens="none">member</a></span> <span class="n">c</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="sc">#\{</span> <span class="sc">#\[</span><span class="p">)))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">right-bracket?</span> <span class="n">c</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/private/base..rkt)._member))" class="docs" hyphens="none">member</a></span> <span class="n">c</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="sc">#\}</span> <span class="sc">#\]</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">indent-jsonic</span> <span class="n">tbox</span> <span class="p">[</span><span class="n">posn</span> <span class="mi">0</span><span class="p">])</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">prev-line</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._previous-line))" class="docs" hyphens="none">previous-line</a></span> <span class="n">tbox</span> <span class="n">posn</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">current-line</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._line))" class="docs" hyphens="none">line</a></span> <span class="n">tbox</span> <span class="n">posn</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">prev-indent</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((lib._racket/private/letstx-scheme..rkt)._or))" class="docs" hyphens="none">or</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._line-indent))" class="docs" hyphens="none">line-indent</a></span> <span class="n">tbox</span> <span class="n">prev-line</span><span class="p">)</span> <span class="mi">0</span><span class="p">))</span>
+<span class="hll">  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">current-indent</span>
+</span><span class="hll">    <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((lib._racket/private/letstx-scheme..rkt)._cond))" class="docs" hyphens="none">cond</a></span>
+</span><span class="hll">      <span class="p">[(</span><span class="n">left-bracket?</span>
+</span><span class="hll">        <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._line-first-visible-char))" class="docs" hyphens="none">line-first-visible-char</a></span> <span class="n">tbox</span> <span class="n">prev-line</span><span class="p">))</span>
+</span><span class="hll">       <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span> <span class="n">prev-indent</span> <span class="n">indent-width</span><span class="p">)]</span>
+</span><span class="hll">      <span class="p">[(</span><span class="n">right-bracket?</span>
+</span><span class="hll">        <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._line-first-visible-char))" class="docs" hyphens="none">line-first-visible-char</a></span> <span class="n">tbox</span> <span class="n">current-line</span><span class="p">))</span>
+</span><span class="hll">       <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._-))" class="docs" hyphens="none">-</a></span> <span class="n">prev-indent</span> <span class="n">indent-width</span><span class="p">)]</span>
+</span><span class="hll">      <span class="p">[</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((lib._racket/private/letstx-scheme..rkt)._else))" class="docs" hyphens="none">else</a></span> <span class="n">prev-indent</span><span class="p">]))</span>
+</span><span class="hll">  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((lib._racket/private/letstx-scheme..rkt)._and))" class="docs" hyphens="none">and</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-positive-integer~3f))" class="docs" hyphens="none">exact-positive-integer?</a></span> <span class="n">current-indent</span><span class="p">)</span>
+</span><span class="hll">       <span class="n">current-indent</span><span class="p">))</span>
+</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/attaching-contracts-to-values.html#(form._((lib._racket/contract/base..rkt)._contract-out))" class="docs" hyphens="none">contract-out</a></span>
+  <span class="p">[</span><span class="n">indent-jsonic</span> <span class="p">(((</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Object_and_Class_Contracts.html#(def._((lib._racket/class..rkt)._is-a~3f/c))" class="docs" hyphens="none">is-a?/c</a></span> <span class="nb"><a href="http://docs.racket-lang.org/gui/text_.html##f" class="docs" hyphens="none">text%</a></span><span class="p">))</span>
+                  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-nonnegative-integer~3f))" class="docs" hyphens="none">exact-nonnegative-integer?</a></span><span class="p">)</span> <span class="o">.</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/function-contracts.html#(form._((lib._racket/contract/base..rkt)._-~3e*))" class="docs" hyphens="none">-&gt;*</a></span> <span class="o">.</span>
+                  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/data-structure-contracts.html#(def._((lib._racket/contract/base..rkt)._or/c))" class="docs" hyphens="none">or/c</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-nonnegative-integer~3f))" class="docs" hyphens="none">exact-nonnegative-integer?</a></span> <span class="no">#f</span><span class="p">))]))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk8" data-clipboard-target="#code_51" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_qtfPt&quot;)"></div><p id="a_qtfPt">Within the branches of our <a href="http://docs.racket-lang.org/reference/if.html#(form._((lib._racket/private/letstx-scheme..rkt)._cond))" class="docs" hyphens="none">cond</a> expres­sion, we imple­ment our indent­ing rules:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_FptQW&quot;)"></div><p id="a_FptQW">The first branch checks whether the first vis­i­ble char­ac­ter of the pre­vi­ous line is a <span class="my-code" decode="exclude">left-bracket?</span>. (“Vis­i­ble” mean­ing some­thing other than white­space.) If so, it indents the line by adding <span class="my-code" decode="exclude">indent-width</span> to the <span class="my-code" decode="exclude">prev-indent</span>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_jFJMr&quot;)"></div><p id="a_jFJMr">Sim­i­larly, the next branch checks whether the first vis­i­ble char­ac­ter of the cur­rent line is a <span class="my-code" decode="exclude">right-bracket?</span>. If so, it unin­dents the line by sub­tract­ing <span class="my-code" decode="exclude">indent-width</span> from the <span class="my-code" decode="exclude">prev-indent</span>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_bH5BI&quot;)"></div><p id="a_bH5BI">Oth­er­wise we reach the <span class="my-code" decode="exclude">else</span> branch, and use the pre­vi­ous indent.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ad9jZ&quot;)"></div><p id="a_ad9jZ">Finally, we need to make sure we’re return­ing a value that meets our out­put con­tract. The last line returns <span class="my-code" decode="exclude">current-indent</span> if it’s an <a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-positive-integer~3f))" class="docs" hyphens="none">exact-positive-integer?</a>, and oth­er­wise returns <span class="my-code" decode="exclude">#f</span>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;testing-our-indenter&quot;)"></div><h3 anchor="testing-our-indenter" class="subhead" id="testing-our-indenter"><a href="#testing-our-indenter">Test­ing our inden­ter</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_gJN78&quot;)"></div><p id="a_gJN78">As usual, we want to make sure our func­tion works before we move on. As we’ve done before, we’ll set up a <span class="my-code" decode="exclude">test</span> sub­mod­ule to hold our unit tests. (We’ll only make one. More would be wiser.) We’ll use <a href="#the-indenting-rules">our sam­ple case</a> as the basis of the test:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/indenter.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_kBUGl&quot;)"></div><div class="highlight-container" id="a_kBUGl"><div id="code_52" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br<br/>(require br/indent racket/contract racket/gui/base)<br/><br/>(define indent-width 2)<br/>(define (left-bracket? c) (member c (list #\{ #\[)))<br/>(define (right-bracket? c) (member c (list #\} #\])))<br/><br/>(define (indent-jsonic tbox [posn 0])<br/>  (define prev-line (previous-line tbox posn))<br/>  (define current-line (line tbox posn))<br/>  (define prev-indent (or (line-indent tbox prev-line) 0))<br/>  (define current-indent<br/>    (cond<br/>      [(left-bracket?<br/>        (line-first-visible-char tbox prev-line))<br/>       (+ prev-indent indent-width)]<br/>      [(right-bracket?<br/>        (line-first-visible-char tbox current-line))<br/>       (- prev-indent indent-width)]<br/>      [else prev-indent]))<br/>  (and (exact-positive-integer? current-indent)<br/>       current-indent))<br/>(provide<br/> (contract-out<br/>  [indent-jsonic (((is-a?/c text%))<br/>                  (exact-nonnegative-integer?) . -&gt;* .<br/>                  (or/c exact-nonnegative-integer? #f))]))<br/><br/>(module+ test<br/>  (require rackunit)<br/>  (define test-str #&lt;&lt;HERE<br/>#lang jsonic<br/>{<br/>"value",<br/>"string":<br/>[<br/>{<br/>"array": @$(range 5)$@,<br/>"object": @$(hash 'k1 "valstring")$@<br/>}<br/>]<br/>// "bar"<br/>}<br/>HERE<br/>    )<br/>  (apply-indenter indent-jsonic test-str))</div><div class="highlight" form="false" id="a_Emptx"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="n">br/indent</span> <span class="n">racket/contract</span> <span class="n">racket/gui/base</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">indent-width</span> <span class="mi">2</span><span class="p">)</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">left-bracket?</span> <span class="n">c</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/private/base..rkt)._member))" class="docs" hyphens="none">member</a></span> <span class="n">c</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="sc">#\{</span> <span class="sc">#\[</span><span class="p">)))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">right-bracket?</span> <span class="n">c</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/private/base..rkt)._member))" class="docs" hyphens="none">member</a></span> <span class="n">c</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="sc">#\}</span> <span class="sc">#\]</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">indent-jsonic</span> <span class="n">tbox</span> <span class="p">[</span><span class="n">posn</span> <span class="mi">0</span><span class="p">])</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">prev-line</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._previous-line))" class="docs" hyphens="none">previous-line</a></span> <span class="n">tbox</span> <span class="n">posn</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">current-line</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._line))" class="docs" hyphens="none">line</a></span> <span class="n">tbox</span> <span class="n">posn</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">prev-indent</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((lib._racket/private/letstx-scheme..rkt)._or))" class="docs" hyphens="none">or</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._line-indent))" class="docs" hyphens="none">line-indent</a></span> <span class="n">tbox</span> <span class="n">prev-line</span><span class="p">)</span> <span class="mi">0</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">current-indent</span>
+    <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((lib._racket/private/letstx-scheme..rkt)._cond))" class="docs" hyphens="none">cond</a></span>
+      <span class="p">[(</span><span class="n">left-bracket?</span>
+        <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._line-first-visible-char))" class="docs" hyphens="none">line-first-visible-char</a></span> <span class="n">tbox</span> <span class="n">prev-line</span><span class="p">))</span>
+       <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span> <span class="n">prev-indent</span> <span class="n">indent-width</span><span class="p">)]</span>
+      <span class="p">[(</span><span class="n">right-bracket?</span>
+        <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._line-first-visible-char))" class="docs" hyphens="none">line-first-visible-char</a></span> <span class="n">tbox</span> <span class="n">current-line</span><span class="p">))</span>
+       <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._-))" class="docs" hyphens="none">-</a></span> <span class="n">prev-indent</span> <span class="n">indent-width</span><span class="p">)]</span>
+      <span class="p">[</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((lib._racket/private/letstx-scheme..rkt)._else))" class="docs" hyphens="none">else</a></span> <span class="n">prev-indent</span><span class="p">]))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((lib._racket/private/letstx-scheme..rkt)._and))" class="docs" hyphens="none">and</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-positive-integer~3f))" class="docs" hyphens="none">exact-positive-integer?</a></span> <span class="n">current-indent</span><span class="p">)</span>
+       <span class="n">current-indent</span><span class="p">))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/attaching-contracts-to-values.html#(form._((lib._racket/contract/base..rkt)._contract-out))" class="docs" hyphens="none">contract-out</a></span>
+  <span class="p">[</span><span class="n">indent-jsonic</span> <span class="p">(((</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Object_and_Class_Contracts.html#(def._((lib._racket/class..rkt)._is-a~3f/c))" class="docs" hyphens="none">is-a?/c</a></span> <span class="nb"><a href="http://docs.racket-lang.org/gui/text_.html##f" class="docs" hyphens="none">text%</a></span><span class="p">))</span>
+                  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-nonnegative-integer~3f))" class="docs" hyphens="none">exact-nonnegative-integer?</a></span><span class="p">)</span> <span class="o">.</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/function-contracts.html#(form._((lib._racket/contract/base..rkt)._-~3e*))" class="docs" hyphens="none">-&gt;*</a></span> <span class="o">.</span>
+                  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/data-structure-contracts.html#(def._((lib._racket/contract/base..rkt)._or/c))" class="docs" hyphens="none">or/c</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-nonnegative-integer~3f))" class="docs" hyphens="none">exact-nonnegative-integer?</a></span> <span class="no">#f</span><span class="p">))]))</span>
+<span class="hll">
+</span><span class="hll"><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._module+))" class="docs" hyphens="none">module+</a></span> <span class="n">test</span>
+</span><span class="hll">  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="n">rackunit</span><span class="p">)</span>
+</span><span class="hll">  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">test-str</span> <span class="sh">#&lt;&lt;HERE</span>
+</span><span class="hll"><span class="sh">#lang jsonic</span>
+</span><span class="hll"><span class="sh">{</span>
+</span><span class="hll"><span class="sh">"value",</span>
+</span><span class="hll"><span class="sh">"string":</span>
+</span><span class="hll"><span class="sh">[</span>
+</span><span class="hll"><span class="sh">{</span>
+</span><span class="hll"><span class="sh">"array": @$(range 5)$@,</span>
+</span><span class="hll"><span class="sh">"object": @$(hash &#39;k1 "valstring")$@</span>
+</span><span class="hll"><span class="sh">}</span>
+</span><span class="hll"><span class="sh">]</span>
+</span><span class="hll"><span class="sh">// "bar"</span>
+</span><span class="hll"><span class="sh">}</span>
+</span><span class="hll"><span class="sh">HERE</span>
+</span><span class="hll">    <span class="p">)</span>
+</span><span class="hll">  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._apply-indenter))" class="docs" hyphens="none">apply-indenter</a></span> <span class="n">indent-jsonic</span> <span class="n">test-str</span><span class="p">))</span>
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk9" data-clipboard-target="#code_52" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_DVb1B&quot;)"></div><p id="a_DVb1B"><a href="../jsonic/the-parser.html#here-strings">Once again</a>, we use the <span class="my-code" decode="exclude">#&lt;&lt;HERE ··· HERE</span> delim­iters to cre­ate a <a class="glossary" href="../appendix/glossary.html#here-string"><span class="glossary-link-text">here string</span></a>, a con­ve­nience for using a string as a lit­eral value with­out hav­ing to escape the dou­ble-quote marks within. We can paste what­ever we want between the here-string delim­iters and it will be assigned to <span class="my-code" decode="exclude">test-str</span> as a value.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Thbox&quot;)"></div><p id="a_Thbox">In the last line, we use the test­ing helper <a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._apply-indenter))" class="docs" hyphens="none">apply-indenter</a>, which takes as argu­ments our <span class="my-code" decode="exclude">indent-jsonic</span> func­tion and our <span class="my-code" decode="exclude">test-str</span>. If we now run <span class="my-code" decode="exclude">"jsonic/indenter.rkt"</span>, our test will run and we’ll see the result:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_uv4N9&quot;)"></div><div class="highlight-container" id="a_uv4N9"><div id="code_53" form="false" decode="exclude" style="font-size:0;width:0;height:0">"#lang jsonic\n{\n  \"value\",\n  \"string\":\n  [\n    {\n      \"array\": @$(range 5)$@,\n      \"object\": @$(hash 'k1 \"valstring\")$@\n    }\n  ]\n  // \"bar\"\n}\u0000"</div><div class="highlight" form="false" id="a_hkAhi"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre><span class="s2">"#lang jsonic</span><span class="se">\n</span><span class="s2">{</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">value</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">string</span><span class="se">\"</span><span class="s2">:</span><span class="se">\n</span><span class="s2">  [</span><span class="se">\n</span><span class="s2">    {</span><span class="se">\n</span><span class="s2">      </span><span class="se">\"</span><span class="s2">array</span><span class="se">\"</span><span class="s2">: @$(range 5)$@,</span><span class="se">\n</span><span class="s2">      </span><span class="se">\"</span><span class="s2">object</span><span class="se">\"</span><span class="s2">: @$(hash &#39;k1 </span><span class="se">\"</span><span class="s2">valstring</span><span class="se">\"</span><span class="s2">)$@</span><span class="se">\n</span><span class="s2">    }</span><span class="se">\n</span><span class="s2">  ]</span><span class="se">\n</span><span class="s2">  // </span><span class="se">\"</span><span class="s2">bar</span><span class="se">\"\n</span><span class="s2">}</span><span class="se">\u0000</span><span class="s2">"</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpka" data-clipboard-target="#code_53" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_nxyCg&quot;)"></div><p id="a_nxyCg">It’s a lit­tle hard to see what’s going on. If we change our test to <a href="http://docs.racket-lang.org/reference/Writing.html#(def._((quote._~23~25kernel)._display))" class="docs" hyphens="none">display</a> the result:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_OdN7h&quot;)"></div><div class="highlight-container" id="a_OdN7h"><div id="code_54" form="false" decode="exclude" style="font-size:0;width:0;height:0">(display (apply-indenter indent-jsonic test-str))</div><div class="highlight" form="false" id="a_TDVVZ"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Writing.html#(def._((quote._~23~25kernel)._display))" class="docs" hyphens="none">display</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._apply-indenter))" class="docs" hyphens="none">apply-indenter</a></span> <span class="n">indent-jsonic</span> <span class="n">test-str</span><span class="p">))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkb" data-clipboard-target="#code_54" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_EA2D7&quot;)"></div><p id="a_EA2D7">The indent­ing will become obvi­ous:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Vtmsve&quot;)"></div><div class="highlight-container" id="a_Vtmsve"><div id="code_55" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang jsonic<br/>{<br/>  "value",<br/>  "string":<br/>  [<br/>    {<br/>      "array": @$(range 5)$@,<br/>      "object": @$(hash 'k1 "valstring")$@<br/>    }<br/>  ]<br/>  // "bar"<br/>}</div><div class="highlight" form="false" id="a_gGX8nc"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="source"><pre>#lang jsonic
+{
+  "value",
+  "string":
+  [
+    {
+      "array": @$(range 5)$@,
+      "object": @$(hash &#39;k1 "valstring")$@
+    }
+  ]
+  // "bar"
+}
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkd" data-clipboard-target="#code_55" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_xzmr9&quot;)"></div><p id="a_xzmr9">If we com­pare this <a href="#the-indenting-rules">our intended result</a>, we can see that our inden­ter does what we hoped. But if this is going to become a unit test, we need to find a way to quan­tify the inden­ta­tion of this string so we can ver­ify it auto­mat­i­cally with <a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a>, not with our eyes.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_1QX67&quot;)"></div><p id="a_1QX67">Here’s how we do that:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/indenter.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_LX9ri&quot;)"></div><div class="highlight-container" id="a_LX9ri"><div id="code_56" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br<br/>(require br/indent racket/contract racket/gui/base)<br/><br/>(define indent-width 2)<br/>(define (left-bracket? c) (member c (list #\{ #\[)))<br/>(define (right-bracket? c) (member c (list #\} #\])))<br/><br/>(define (indent-jsonic tbox [posn 0])<br/>  (define prev-line (previous-line tbox posn))<br/>  (define current-line (line tbox posn))<br/>  (define prev-indent (or (line-indent tbox prev-line) 0))<br/>  (define current-indent<br/>    (cond<br/>      [(left-bracket?<br/>        (line-first-visible-char tbox prev-line))<br/>       (+ prev-indent indent-width)]<br/>      [(right-bracket?<br/>        (line-first-visible-char tbox current-line))<br/>       (- prev-indent indent-width)]<br/>      [else prev-indent]))<br/>  (and (exact-positive-integer? current-indent)<br/>       current-indent))<br/>(provide<br/> (contract-out<br/>  [indent-jsonic (((is-a?/c text%)) <br/>                  (exact-nonnegative-integer?) . -&gt;* .<br/>                  (or/c exact-nonnegative-integer? #f))]))<br/><br/>(module+ test<br/>  (require rackunit)<br/>  (define test-str #&lt;&lt;HERE<br/>#lang jsonic<br/>{<br/>"value",<br/>"string":<br/>[<br/>{<br/>"array": @$(range 5)$@,<br/>"object": @$(hash 'k1 "valstring")$@<br/>}<br/>]<br/>// "bar"<br/>}<br/>HERE<br/>    )<br/>  (check-equal?<br/>   (string-indents (apply-indenter indent-jsonic test-str))<br/>   '(#f #f 2 2 2 4 6 6 4 2 2 #f)))</div><div class="highlight" form="false" id="a_slZKg"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="n">br/indent</span> <span class="n">racket/contract</span> <span class="n">racket/gui/base</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">indent-width</span> <span class="mi">2</span><span class="p">)</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">left-bracket?</span> <span class="n">c</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/private/base..rkt)._member))" class="docs" hyphens="none">member</a></span> <span class="n">c</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="sc">#\{</span> <span class="sc">#\[</span><span class="p">)))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">right-bracket?</span> <span class="n">c</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/private/base..rkt)._member))" class="docs" hyphens="none">member</a></span> <span class="n">c</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="sc">#\}</span> <span class="sc">#\]</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">indent-jsonic</span> <span class="n">tbox</span> <span class="p">[</span><span class="n">posn</span> <span class="mi">0</span><span class="p">])</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">prev-line</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._previous-line))" class="docs" hyphens="none">previous-line</a></span> <span class="n">tbox</span> <span class="n">posn</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">current-line</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._line))" class="docs" hyphens="none">line</a></span> <span class="n">tbox</span> <span class="n">posn</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">prev-indent</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((lib._racket/private/letstx-scheme..rkt)._or))" class="docs" hyphens="none">or</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._line-indent))" class="docs" hyphens="none">line-indent</a></span> <span class="n">tbox</span> <span class="n">prev-line</span><span class="p">)</span> <span class="mi">0</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">current-indent</span>
+    <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((lib._racket/private/letstx-scheme..rkt)._cond))" class="docs" hyphens="none">cond</a></span>
+      <span class="p">[(</span><span class="n">left-bracket?</span>
+        <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._line-first-visible-char))" class="docs" hyphens="none">line-first-visible-char</a></span> <span class="n">tbox</span> <span class="n">prev-line</span><span class="p">))</span>
+       <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span> <span class="n">prev-indent</span> <span class="n">indent-width</span><span class="p">)]</span>
+      <span class="p">[(</span><span class="n">right-bracket?</span>
+        <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._line-first-visible-char))" class="docs" hyphens="none">line-first-visible-char</a></span> <span class="n">tbox</span> <span class="n">current-line</span><span class="p">))</span>
+       <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._-))" class="docs" hyphens="none">-</a></span> <span class="n">prev-indent</span> <span class="n">indent-width</span><span class="p">)]</span>
+      <span class="p">[</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((lib._racket/private/letstx-scheme..rkt)._else))" class="docs" hyphens="none">else</a></span> <span class="n">prev-indent</span><span class="p">]))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((lib._racket/private/letstx-scheme..rkt)._and))" class="docs" hyphens="none">and</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-positive-integer~3f))" class="docs" hyphens="none">exact-positive-integer?</a></span> <span class="n">current-indent</span><span class="p">)</span>
+       <span class="n">current-indent</span><span class="p">))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/attaching-contracts-to-values.html#(form._((lib._racket/contract/base..rkt)._contract-out))" class="docs" hyphens="none">contract-out</a></span>
+  <span class="p">[</span><span class="n">indent-jsonic</span> <span class="p">(((</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Object_and_Class_Contracts.html#(def._((lib._racket/class..rkt)._is-a~3f/c))" class="docs" hyphens="none">is-a?/c</a></span> <span class="nb"><a href="http://docs.racket-lang.org/gui/text_.html##f" class="docs" hyphens="none">text%</a></span><span class="p">))</span> 
+                  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-nonnegative-integer~3f))" class="docs" hyphens="none">exact-nonnegative-integer?</a></span><span class="p">)</span> <span class="o">.</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/function-contracts.html#(form._((lib._racket/contract/base..rkt)._-~3e*))" class="docs" hyphens="none">-&gt;*</a></span> <span class="o">.</span>
+                  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/data-structure-contracts.html#(def._((lib._racket/contract/base..rkt)._or/c))" class="docs" hyphens="none">or/c</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-nonnegative-integer~3f))" class="docs" hyphens="none">exact-nonnegative-integer?</a></span> <span class="no">#f</span><span class="p">))]))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._module+))" class="docs" hyphens="none">module+</a></span> <span class="n">test</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="n">rackunit</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">test-str</span> <span class="sh">#&lt;&lt;HERE</span>
+<span class="sh">#lang jsonic</span>
+<span class="sh">{</span>
+<span class="sh">"value",</span>
+<span class="sh">"string":</span>
+<span class="sh">[</span>
+<span class="sh">{</span>
+<span class="sh">"array": @$(range 5)$@,</span>
+<span class="sh">"object": @$(hash &#39;k1 "valstring")$@</span>
+<span class="sh">}</span>
+<span class="sh">]</span>
+<span class="sh">// "bar"</span>
+<span class="sh">}</span>
+<span class="sh">HERE</span>
+    <span class="p">)</span>
+<span class="hll">  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a></span>
+</span><span class="hll">   <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._string-indents))" class="docs" hyphens="none">string-indents</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._apply-indenter))" class="docs" hyphens="none">apply-indenter</a></span> <span class="n">indent-jsonic</span> <span class="n">test-str</span><span class="p">))</span>
+</span><span class="hll">   <span class="o">&#39;</span><span class="p">(</span><span class="no">#f</span> <span class="no">#f</span> <span class="mi">2</span> <span class="mi">2</span> <span class="mi">2</span> <span class="mi">4</span> <span class="mi">6</span> <span class="mi">6</span> <span class="mi">4</span> <span class="mi">2</span> <span class="mi">2</span> <span class="no">#f</span><span class="p">)))</span>
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkf" data-clipboard-target="#code_56" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_3hnEZ&quot;)"></div><p id="a_3hnEZ">Instead of <span class="my-code" decode="exclude">display</span>, we’ll pass the result string to <a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._string-indents))" class="docs" hyphens="none">string-indents</a> (another helper func­tion from the help­ful <span class="my-code" decode="exclude">br/indent</span>) which will list the num­ber of spaces at the begin­ning of each line, or <span class="my-code" decode="exclude">#f</span> if there’s no indent. We can eas­ily com­pare this to an expected list of inte­gers and <span class="my-code" decode="exclude">#f</span> val­ues.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_bD9F0&quot;)"></div><p id="a_bD9F0">By the way, where did we get this list of indent val­ues? One way is to use <span class="my-code" decode="exclude">string-indents</span> on the REPL with our indented string, and then paste the result­ing list of val­ues into our unit test.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_EArGy&quot;)"></div><div class="highlight-container" id="a_EArGy"><div id="code_57" form="false" decode="exclude" style="font-size:0;width:0;height:0">(string-indents #&lt;&lt;HERE<br/>#lang jsonic<br/>{<br/>  "value",<br/>  "string":<br/>  [<br/>    {<br/>      "array": @$(range 5)$@,<br/>      "object": @$(hash 'k1 "valstring")$@<br/>    }<br/>  ]<br/>  // "bar"<br/>}<br/>HERE<br/>                   )</div><div class="highlight" form="false" id="a_fXjOT"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="source"><pre><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/indent..rkt)._string-indents))" class="docs" hyphens="none">string-indents</a></span> <span class="sh">#&lt;&lt;HERE</span>
+<span class="sh">#lang jsonic</span>
+<span class="sh">{</span>
+<span class="sh">  "value",</span>
+<span class="sh">  "string":</span>
+<span class="sh">  [</span>
+<span class="sh">    {</span>
+<span class="sh">      "array": @$(range 5)$@,</span>
+<span class="sh">      "object": @$(hash &#39;k1 "valstring")$@</span>
+<span class="sh">    }</span>
+<span class="sh">  ]</span>
+<span class="sh">  // "bar"</span>
+<span class="sh">}</span>
+<span class="sh">HERE</span>
+                   <span class="p">)</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkg" data-clipboard-target="#code_57" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_hMa4S&quot;)"></div><div class="highlight-container" id="a_hMa4S"><div id="code_58" form="false" decode="exclude" style="font-size:0;width:0;height:0">'(#f #f 2 2 2 4 6 6 4 2 2 #f)</div><div class="highlight" form="false" id="a_e3gBC"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre><span class="o">&#39;</span><span class="p">(</span><span class="no">#f</span> <span class="no">#f</span> <span class="mi">2</span> <span class="mi">2</span> <span class="mi">2</span> <span class="mi">4</span> <span class="mi">6</span> <span class="mi">6</span> <span class="mi">4</span> <span class="mi">2</span> <span class="mi">2</span> <span class="no">#f</span><span class="p">)</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkh" data-clipboard-target="#code_58" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_I2aCg&quot;)"></div><p id="a_I2aCg">Again, in the real world we’d want to write more unit tests with a wider vari­ety of input strings. But for now, we’ll say that <span class="my-code" decode="exclude">indent-jsonic</span> is com­plete.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;indenting-caveat&quot;)"></div><h3 anchor="indenting-caveat" class="subhead" id="indenting-caveat"><a href="#indenting-caveat">Indent­ing caveat</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_hCENs&quot;)"></div><p id="a_hCENs">Indent­ing is a cos­metic con­ve­nience. Every­thing we’ve done here pre­sumes that white­space is not seman­ti­cally mean­ing­ful, and thus we can freely indent lines with­out chang­ing the pro­gram result. This is true for <span class="my-code" decode="exclude">jsonic</span> and many other lan­guages. But not always. Python, for instance, depends on white space to describe the struc­ture of the pro­gram. In those cases, an inden­ter would need to be less casual and more con­ser­v­a­tive, to ensure that the act of indent­ing doesn’t change the mean­ing of the pro­gram.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="setup.html">2&emsp;setup</a></li><li><a href="contracts.html">3&emsp;con­tracts</a></li><li><a href="unit-tests.html">4&emsp;unit tests</a></li><li><a href="source-locations.html">5&emsp;source loca­tions</a></li><li><a href="drracket-integration.html">6&emsp;drracket inte­gra­tion</a></li><li><a href="syntax-coloring.html">7&emsp;syn­tax col­or­ing</a></li><li><a class="here" href="indenting.html">8&emsp;indent­ing</a></li><li><a href="toolbar-buttons.html">9&emsp;tool­bar but­tons</a></li><li><a href="recap.html">10&emsp;recap</a></li><li><a href="source-listing.html">11&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="syntax-coloring.html">← prev</a>
+    <a class="nav-right" href="toolbar-buttons.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

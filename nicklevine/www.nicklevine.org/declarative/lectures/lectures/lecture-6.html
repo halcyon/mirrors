@@ -1,0 +1,386 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-6.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:47 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Lecture Six</title>
+</head>
+<body>
+
+<center><b><font size=+3>Declarative Languages</font></b>
+<br><b><font size=+3>Lecture #6</font></b></center>
+
+<p><b>Purpose: </b>Vectors, strings, characters and keywords.
+<p><b>6.1 Types - the story so far</b>
+<br>&nbsp;
+<br>&nbsp;
+<br>
+<br>
+<center>
+<p><img SRC="image-6-1.jpg" height=289 width=501></center>
+
+<p><b>6.2 Vectors</b>
+<p>We have now met and played extensively with lisp's most flexible compound
+data type: the list. (To be pedantic, we met the cons, and you can use
+conses to build lists. Enough.) Lisp has plenty of other ways of grouping
+data together...
+<p>The function <tt>vector</tt> generates vectors (one-dimensional arrays)
+in exactly the same way as <tt>list</tt> generates lists. It can take any
+number of arguments and will generate a vector of that length:
+<p><tt>&nbsp;&nbsp; (vector 'foo "bar" 99)&nbsp; =>&nbsp; #(foo "bar" 99)</tt>
+<br><tt>&nbsp;&nbsp; (list 'foo "bar" 99)&nbsp; =>&nbsp; (foo "bar" 99)</tt>
+<p>Or, if you want to generate a vector and all you know at this stage
+is its length, you can use <tt>make-array</tt> (and btw there is a list
+equivalent called <tt>make-list</tt>, although in practice it's not very
+useful - why? - and therefore is not used much).
+<p><tt>&nbsp;&nbsp; (make-array 5)&nbsp; =>&nbsp; #(nil nil nil nil nil)&nbsp;&nbsp;
+; stuffed with nil</tt>
+<br><tt>&nbsp;&nbsp; (make-list 5)&nbsp;&nbsp; =>&nbsp; (nil nil nil nil
+nil)&nbsp;&nbsp;&nbsp; ; ditto</tt>
+<p>Note how vectors print out: <tt>#( .... )</tt>. In fact (syntactic sugar)
+you can use the <tt>#()</tt> syntax to input a vector in the first place:
+<blockquote><tt>CL-USER 2 > #(foo "bar" 99)</tt>
+<br><tt>#(FOO "bar" 99)</tt>
+<p><tt>CL-USER 3 ></tt></blockquote>
+Recall also (from the beginning of lecture 3) that <u>everything in lisp
+other than a symbol or cons is self-evaluating</u>. In particular a vector
+is self-evaluating, which is why it didn't need to be quoted in the example
+above.
+<p>Vectors are of type <tt>vector</tt>, and the predicate <tt>vectorp</tt>
+is true of them.
+<p>The functions <tt>length</tt> and <tt>reverse</tt> from last week can
+be used on vectors as well as on lists:
+<blockquote><tt>(length #(foo "bar" 99))&nbsp;&nbsp; =>&nbsp; 3</tt>
+<br><tt>(length #())&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; ; the empty vector</tt>
+<br><tt>(reverse #(foo "bar" 99))&nbsp; =>&nbsp; #(99 "bar" foo)</tt></blockquote>
+To get values out of and into a vector, we have the setfable accessor <tt>aref</tt>
+<blockquote><tt>(setf wibble #(foo "bar" 99))&nbsp;&nbsp; =>&nbsp; #(foo
+"bar" 99)</tt>
+<br><tt>wibble&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; #(foo "bar" 99)</tt>
+<br><tt>(aref wibble 0)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; foo</tt>
+<br><tt>(aref wibble 1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=> "bar"</tt>
+<br><tt>(setf (aref wibble 2) 'wombat)&nbsp; =>&nbsp; wombat</tt>
+<br><tt>wibble&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; #(foo "bar" wombat)</tt></blockquote>
+We note the following:
+<ul>
+<li>
+<tt>aref</tt> accesses the first element of a vector with argument <tt>0</tt>
+(like <tt>nth</tt>), and so on</li>
+
+<li>
+<tt>aref</tt> takes the vector as its first argument and the index as its
+second argument (regrettably unlike <tt>nth</tt>, which takes the index
+as its first argument and the list as its second argument)</li>
+
+<li>
+if you give an index which is out of range, you get an error (also unlike
+<tt>nth</tt>,
+which cheerfully returns <tt>nil</tt> if you fall off the end of a list)</li>
+
+<ul><tt>CL-USER 5 > (aref #(foo "bar" 99) 99)</tt>
+<p><tt>Error: The subscript 99 exceeds the limit 2 for the first dimension
+of the array #(FOO "bar" 99).</tt></ul>
+</ul>
+And the crucial point is this:
+<ul>
+<li>
+<tt>aref</tt> takes the same time to access the 5000th member of a vector
+as it does to access the first (also unlike <tt>nth</tt>, which will take
+~5000 times longer)</li>
+</ul>
+This is the inherent difference between vectors and lists (as opposed to
+a difference between the two functions <tt>nth</tt> and <tt>aref</tt>).
+If you want the flexibility of being able to change the length of a sequence
+of objects, inserting elements at either end or even somewhere in the middle,
+use a list to store them. If you want constant time access down the whole
+of a sequence no matter how long it is, use a vector.
+<p>What you should be aware of, but is not "part of this course":
+<ul>
+<li>
+A vector can be thought of as a one-dimensional array. Lisp supports multi-dimensional
+arrays, if you need them.</li>
+
+<li>
+If you really really really think you need to adjust the length of a vector
+after you created it (this is known as having your cake and eating it)
+it is possible, but be aware that it won't be cheap at runtime. You can
+also displace one array into another. We won't mess with either of these,
+which means that our vectors are known as <i>simple vectors</i> (hence
+the <tt>simple</tt> in <tt>simple-base-string</tt>).</li>
+
+<li>
+If you want efficiency, you can tell lisp in advance that all the members
+of a vector are of a particular type. For some types, eg numbers, this
+will enable lisp to pack them in tighter and can reduce access times (and
+duration of garbage collections). If you want to, read up about an array's
+<tt>element-type</tt>
+and the function <tt>upgraded-array-element-type</tt>.</li>
+</ul>
+Examples:
+<blockquote><tt>(defun sum-members-of-vector (vec)</tt>
+<br><tt>&nbsp; (let* ((total 0))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dotimes (i (length vec))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (incf total (aref vec i)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; total))</tt>
+<p><tt>(defun vector-to-list (vec)</tt>
+<br><tt>&nbsp; (let* ((new-list nil))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dotimes (i (length vec))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (push (aref vec i) new-list))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (reverse new-list)))</tt>
+<p><tt>(defun list-to-vector-a (list)</tt>
+<br><tt>&nbsp; (let* ((length (length list))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (vec (make-array
+length)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dotimes (i length)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (setf (aref vec i) (pop list)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; vec))</tt>
+<p><tt>(defun list-to-vector-b (list)</tt>
+<br><tt>&nbsp; (let* ((length (length list))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (vec (make-array
+length))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (i 0))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dolist (thing list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (setf (aref vec i) thing)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (incf i))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; vec))</tt></blockquote>
+<b>6.3 Strings and characters</b>
+<p>We've also met and played with strings. Here is a string: <tt>"Lisp
+is so wonderful"</tt>. We have also met a couple of ways of generating
+strings: typing them in between quotation marks, and using <tt>(format
+nil ...)</tt>. Another is to use the function <tt>make-string</tt>:
+<blockquote><tt>(make-string 5)&nbsp; =>&nbsp; <i>some string of length
+5 filled with random garbage</i></tt></blockquote>
+If you need to get a quotation mark into a string, <i>escape</i> it with
+a backslash, thus <tt>"\""</tt> is a string containing one character: a
+quotation mark. To get a backslash into a string, escape it similarly:
+<tt>"\\"</tt>.
+<p>Any string is also a vector (we might say that <i><tt>string</tt> is
+a subtype of <tt>vector</tt></i> - see the figure in 6.1 above), so any
+operation you can perform on a vector can also be performed on a string.
+For instance, you can ask for its <tt>length</tt>, you can <tt>reverse</tt>
+it (as ever, this gives you a fresh string and reverses that, the original
+string remaining unchanged), you can <tt>aref</tt> into it to get your
+hands on individual characters and <tt>(setf aref)</tt> to modify them.
+<blockquote><tt>(setf my-string "Lisp is great")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; "Lisp is great"</tt>
+<br><tt>(length my-string)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; 13</tt>
+<br><tt>(reverse my-string)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; "taerg si psiL"</tt>
+<br><tt>my-string&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; "Lisp is great"</tt>
+<br><tt>(aref my-string 0)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; #\L</tt>
+<br><tt>(aref my-string (1- (length my-string)))&nbsp; =>&nbsp; #\t</tt>
+<br><tt>(setf (aref my-string 6) #\t)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; #\t</tt>
+<br><tt>my-string&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; "Lisp it great"</tt></blockquote>
+Strings are of type <tt>string</tt> (and so the predicate <tt>stringp</tt>
+is true of them). The predicate <tt>vectorp</tt> also is true of them,
+because all strings are vectors too.
+<blockquote><tt>(typep my-string 'string)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; t</tt>
+<br><tt>(typep my-string 'vector)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; t</tt>
+<br><tt>(typep #() 'string)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; nil</tt></blockquote>
+Equivalently:
+<blockquote><tt>(stringp my-string)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; t</tt>
+<br><tt>(vectorp my-string&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; t</tt>
+<br><tt>(stringp #())&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; nil</tt></blockquote>
+Each member of a string has to be a character (try <tt>(setf (aref my-string
+6) nil)</tt> and see what happens to you). This sets strings aside from
+lists and from more general vectors, where you can mix'n'match the types
+of elements and lisp doesn't care. Characters are read in and printed out
+like this:
+<br><tt>&nbsp;&nbsp;&nbsp; #\w&nbsp;&nbsp; ; the character standing for
+lower-case "w"</tt>
+<br>The following specially named characters might be useful to you one
+day:
+<br><tt>&nbsp;&nbsp;&nbsp; #\Space&nbsp;&nbsp;&nbsp; #\Newline&nbsp;&nbsp;&nbsp;
+#\Tab</tt>
+<br>I personally tend to capitalize these special names although lisp,
+being not very case-sensitive, doesn't notice it.
+<p>If you want to compare a whole load of characters to see if they're
+the same, use <tt>char=</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (char= #\a #\a #\a)&nbsp; =>&nbsp; t</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (char= #\A #\a #\a)&nbsp; =>&nbsp; nil</tt>
+<br>And there is a case-insensitive version of <tt>char=</tt> called <tt>char-equal</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (char-equal #\A #\a #\A)&nbsp; =>&nbsp; t</tt>
+<p>If you are desperate to convert between characters and their ASCII values,
+the functions <tt>char-code</tt> and <tt>code-char</tt> will assist:
+<blockquote><tt>(char-code #\p)&nbsp; =>&nbsp; 112</tt>
+<br><tt>(code-char 112)&nbsp; =>&nbsp; #\p</tt></blockquote>
+The predicate <tt>characterp</tt> is true of all characters, the predicates
+<tt>alpha-char-p</tt>
+and <tt>digit-char-p</tt> are true of letters of the alphabet and digits
+respectively, and <tt>alphanumericp</tt> is true of letters or digits:
+<blockquote><tt>(let ((characters '(#\x #\8 #\*)))</tt>
+<br><tt>&nbsp; (list (mapcar 'alpha-char-p characters)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (mapcar 'digit-char-p
+characters)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (mapcar 'alphanumericp
+characters)))</tt>
+<br><tt>=></tt>
+<br><tt>((t nil nil) (nil 8 nil) (t t nil))&nbsp; ; the 8, while inelegant,
+is non-nil</tt></blockquote>
+If you look in the books / HyperSpec you'll find all sorts of goodies in
+the reference sections on strings and characters. Some random examples:
+<blockquote><tt>(string-capitalize "ethel the aardvark")&nbsp; =>&nbsp;
+"Ethel The Aardvark"</tt>
+<br><tt>(string-downcase "Ethel The Aardvark")&nbsp;&nbsp;&nbsp; =>&nbsp;
+"ethel the aardvark"</tt>
+<br><tt>(string&lt; "Earlier" "Later")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; t&nbsp; ; alphabetical ordering</tt>
+<br><tt>(char-name #\x)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; "Latin-Small-Letter-X"</tt></blockquote>
+Finally, for the sake of completeness (only), let me mention two further
+ways to generate strings. Given that I said that all strings are vectors
+and that you can create vectors with <tt>make-array</tt>...
+<blockquote><tt>(make-array 5 :element-type 'standard-char)</tt></blockquote>
+... is equivalent to <tt>(make-string 5)</tt>. Don't remember the details
+of the above, but do note that it can be done.
+<p>The other way is the function <tt>read-line</tt> which can be used for
+reading strings from the listener. When <tt>read-line</tt> is called, the
+system waits for keyboard input. Everything typed up to (but not including)
+the next
+<tt>#\Newline</tt> is returned in a fresh string. For example,
+<blockquote><tt>CL-USER 10 > (read-line)</tt>
+<br><tt>This is what I typed to generate a string which read-line returned.</tt>
+<br><tt>"This is what I typed to generate a string which read-line returned."</tt>
+<br><tt>NIL</tt>
+<p><tt>CL-USER 11 ></tt></blockquote>
+[If you're observant, you'll want to know what the <tt>nil</tt> is doing
+here. Well, <tt>read-line</tt> returns <u>two</u> values, the string we
+read in and a flag to tell you whether the string was terminated by end-of-file
+(as opposed to terminated by a <tt>#\Newline</tt>). Although you cannot
+on Windows<sup>(tm) </sup>generate end-of-file in any window you can type
+at, <tt>read-line</tt> can be asked to take its input from a file (or socket
+etc) and then the flag becomes relevant. Functions which return multiple
+values are a little beyond the scope of this course, but do be aware that
+they provide a saner alterntive to all that mucking around with "inout"
+parameters that other languages depend on.]
+<p><b>6.4 Quick digression - keywords</b>
+<p>Anyone who's still awake will have noticed the (a) the colon before
+the symbol <tt>element-type</tt> above and (b) that I didn't quote the
+symbol.
+<p>A symbol preceded by a colon is called a <i>keyword</i>. Keywords are
+symbols (so they respond warmly to <tt>symbolp</tt>) but they are distinguished
+by <u>always being self-evaluating</u>.
+<blockquote><tt>:brand-new-keyword&nbsp; =>&nbsp; :brand-new-keyword</tt></blockquote>
+It's as if whenever you type in a new keyword <tt>:foo</tt>, the system
+goes
+<tt>(defconstant :foo ':foo)</tt> behind your back.
+<p>(OK, so we didn't cover <tt>defconstant</tt> before. It's like <tt>defparameter</tt>
+except that you guarantee not to go changing that symbol's value later
+on. So <tt>(defconstant foo 99) </tt>followed by<tt> (setf foo 88)</tt>
+signals an error.)
+<p>Keywords are mainly used in complex argument lists with lots of optional
+arguments. We'll come back to this later, but here's an example: the function
+<tt>string=</tt>.
+This takes two strings (let's call them <tt>string1</tt> and <tt>string2</tt>)
+and returns true if they match, character for character. It's case-sensitive
+(use <tt>string-equal</tt> if you want case-insensitive). You can optionally
+specify that you only want to compare part of either string (or both),
+by means of the keyword arguments <tt>:start1 :start2 :end1 :end2</tt>
+(which are zero-based, and which default to the start and end of the respective
+strings if you don't specify them). <tt>string=</tt> returns true if the
+supplied substrings are of the same length and contain the same characters
+in corresponding positions; otherwise it returns <tt>nil</tt>.
+<blockquote><tt>(string= "I love lisp" "lisp is wonderful" :start1 7 :end2
+4)&nbsp; =>&nbsp; t</tt></blockquote>
+You can specify the keywords in any combination and in any order.
+<p>[There is a convention that a <tt>:start</tt> argument points to the
+first character in the substring, and an <tt>:end</tt> argument points
+to the character following the end of the substring. Brownie points / smarties
+for telling me why.]
+<p><b>6.5 Practical session</b>
+<p>Write a program to ask the user to type in a sentence, read it using
+<tt>read-line</tt>
+and then count how many words there were in this sentence.
+<p><b>6.6 Suggested activity / exercises etc</b>
+<ol>
+<li>
+Go through Chapter 4 of Graham (omit sections 6,7 and 8) and then exercises
+1 and 2 at the end of it.</li>
+
+<li>
+Suppose you have been given a string and you want to find out how often
+each (alphabetical, i.e. ignore spaces, puncuation and the like) character
+occurs in it. Implement a function to solve this problem for you. [Some
+of you will have seen a similar problem before.] Hints:</li>
+
+<ul>
+<li>
+<tt>string-downcase</tt></li>
+
+<li>
+<tt>char-code</tt></li>
+
+<li>
+<tt>make-array</tt> - this takes a keyword argument <tt>:initial-element
+</tt>which
+you can use to fill the array with some starting value other than <tt>nil</tt>
+and&nbsp; you may find this feature useful here. For example try out both
+of the following:</li>
+
+<ul><tt>(make-array 5)</tt>
+<br><tt>(make-array 5 :initial-element 'foo)</tt></ul>
+
+<li>
+<tt>dotimes</tt></li>
+
+<li>
+<tt>incf</tt></li>
+</ul>
+
+<li>
+Keen observers of section 6.3 will have asked by now why we can't use <tt>equal</tt>
+rather than <tt>char=</tt>. The answer is that char= can compare more than
+two values in one function call, which might sometimes (though not often,
+I'll grant you) be useful; on the other hand <tt>equal</tt> takes precisely
+two arguments. Write a version of <tt>equal</tt> which takes any number
+of arguments. Since you don't yet know how to define a function which takes
+a completely variable number of arguments, pass them all in a single list.
+For example:</li>
+
+<ol><tt>(better-equal '("aardvark" "aardvark" "aardvark" "aardvark"))&nbsp;
+=>&nbsp; t</tt>
+<br><tt>(better-equal '("aardvark" "aardvark" "aardvark" "goat"))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; nil</tt></ol>
+
+<li>
+Implement a function which takes two arguments, a list and a vector, and
+determines whether they have the same elements (in the same order). If
+you did this iteratively, now do it again recursively. Or vice versa.</li>
+
+<li>
+Look up how the function <tt>subseq</tt> works. It is not part of the lecture
+course, but has been useful to students attempting the assignments.</li>
+</ol>
+<b>6.7 Major assignment</b><b></b>
+<p>Pick one or both of the <a href="../index-2.html#additionals">assignments</a>
+and work on it in parallel with the rest of this course.
+<br>&nbsp;
+<div align=right>Copyright (C) <a href="mailto:ndl@ravenbrook.com">Nick
+Levine</a> 1999. All rights reserved.
+<br>Last modified 2000-09-13
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/lectures/lecture-6.html#2
+$</div>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-6.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:47 GMT -->
+</html>

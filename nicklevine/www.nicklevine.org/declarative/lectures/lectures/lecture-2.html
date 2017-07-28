@@ -1,0 +1,595 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:42 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Lecture Two</title>
+</head>
+<body>
+
+<center><b><font size=+3>Declarative Languages</font></b>
+<br><b><font size=+3>Lecture #2</font></b></center>
+
+<p><b>Purpose:&nbsp;</b> To introduce enough basic concepts that you can
+start to write simple programs for yourself
+<p><b>2.1 A glorified pocket calculator</b>
+<p>Lisp systems are interactive. Type some lisp at the prompt - it will
+go away, think about it and hopefully return some lisp in exchange. Then
+it gives you another prompt and the process repeats itself. More formally,
+we are in a loop (known as the "<tt>read-eval-print</tt>" loop) which does
+the following:
+<ol>
+<li>
+read in a lisp form</li>
+
+<li>
+evaluate this form</li>
+
+<li>
+print the result</li>
+</ol>
+Now, it happens that numbers always evaluate to themselves (<i>self-evaluating</i>).
+Therefore, when you type in a lisp number you will get that number back.
+Note by the way that lisp offers the following types of number
+<ul>
+<li>
+integers (with arbitrary magnitude)</li>
+
+<li>
+ratios (such as <tt>1/2</tt> or <tt>1234567/890123343456</tt>)</li>
+
+<li>
+floats (sometimes with a choice of precisions, e.g. 64-bit IEEE format)</li>
+
+<li>
+complex numbers (!)</li>
+</ul>
+To make our calculator a little bit more interesting, we can apply arithmetic
+operations to these numbers. The syntax for doing so is
+<ol>
+<li>
+left parenthesis</li>
+
+<li>
+name of operator</li>
+
+<li>
+various arguments to that operator, each preceded by whitespace</li>
+
+<li>
+right parenthesis</li>
+</ol>
+For example:
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (+ 1 2 3)</tt>
+<br>&nbsp;- in this case, the operator is&nbsp; <tt>+ </tt>and the arguments
+are the numbers <tt>1</tt>, <tt>2 </tt>and <tt>3</tt>. Similarly, we have
+the operators (or, to be precise, <i>functions</i>)
+<ul>
+<li>
+<tt>-</tt>&nbsp; (which takes its first argument and subtracts from that
+all following arguments)</li>
+
+<li>
+<tt>*</tt></li>
+
+<li>
+<tt>/ </tt>(which takes its first argument and divides that by all following
+arguments)</li>
+</ul>
+Note that you can mix types (e.g. integer and float) within a call to any
+of the above and lisp will (a) not complain and (b) do the intelligent
+thing on your behalf. For example, <tt>(+ 1/5 0.8) => 1.0</tt>
+<p>Note about fonts. Anything in <tt>fixed width font</tt> is lisp - either
+what you entered or what the lisp system returned. Anything else is just
+me talking. I use the symbol "<tt>=></tt>" to mean "returns". So in the
+above, if you type in the lisp form <tt>(+ 1/5 0.8)</tt> and press the
+Return key, I claim that a lisp system will return and print out the number
+<tt>1.0</tt>.
+<p><b>2.2 Nested calculations</b>
+<p>We can nest one function call within another one, for example:
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (+ (* 2 3) (* 4 5 6))</tt>
+.
+<br>There is an unambiguous rule for evaluating function calls, as follows:
+<ol>
+<li>
+process the arguments to the function, in order ("from left to right")</li>
+
+<li>
+evaluate each argument in turn</li>
+
+<li>
+once all the arguments have been evaluated, call the original function
+with these values</li>
+
+<li>
+return the result</li>
+</ol>
+So, to evaluate <tt>(+ (* 2 3) (* 4 5 6))</tt>
+<ol>
+<li>
+We start by noting that we have a call to the function <tt>+</tt> with
+arguments <tt>(* 2 3)</tt> and <tt>(* 4 5 6)</tt></li>
+
+<li>
+We evaluate the first argument, namely <tt>(* 2 3)</tt></li>
+
+<ol>
+<li>
+We note that this is itself a function call (the function is <tt>*</tt>
+and its arguments are <tt>2</tt> and <tt>3</tt>)</li>
+
+<li>
+We must therefore evaluate the first argument to <tt>* </tt>- this is the
+number <tt>2</tt></li>
+
+<ul>
+<li>
+The number <tt>2 </tt>evaluates to itself</li>
+</ul>
+
+<li>
+We next evaluate the second argument to <tt>* </tt>- this is the number
+<tt>3</tt></li>
+
+<ul>
+<li>
+The number <tt>3 </tt>evaluates to itself</li>
+</ul>
+
+<li>
+We can now call the function <tt>*</tt> with arguments <tt>2</tt> and <tt>3</tt></li>
+
+<ul>
+<li>
+The result of this function call is <tt>6</tt></li>
+</ul>
+</ol>
+
+<li>
+The value of the first argument to the function <tt>+</tt> is therefore
+<tt>6</tt></li>
+
+<li>
+Similarly the value of the second argument to the function <tt>+</tt> is
+<tt>120</tt></li>
+
+<li>
+We can now call the function <tt>+</tt> with arguments <tt>6</tt> and <tt>120</tt>
+and finally return the value <tt>126</tt>.</li>
+</ol>
+When written out in full like this, it seems very long-winded and complicated,
+but it isn't really. Just bear in mind that lisp will evaluate everything
+in sight, going from left to right, and evaluating inner expressions before
+outer ones. Think of it as the obvious thing to do!
+<p><b>2.3 Interim summary</b>
+<p>We have a uniform syntax for function calls:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (function arg-1 arg-2 ....)
+<p>To evaluate a function call, lisp first evaluates all the function's
+arguments (in order) and then calls the function itself, with the evaluated
+arguments.
+<p><b>2.4 Some simple functions</b>
+<p><tt>float&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </tt>takes one argument
+(of any numerical type) and returns the equivalent float.
+<br><tt>list&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </tt>takes
+any number of arguments (of any type / types) and returns a list of those
+arguments.
+<br><tt>identity&nbsp;&nbsp;&nbsp;&nbsp; </tt>takes one argument (anything)
+and returns it.
+<p>As we are beginning to see, the types of arguments to functions and
+of values returned by them are not necessarily tied down in advance. In
+lisp you do not have to declare types of variables, or what types a function
+expects to receive and return. This may take some getting use to, but it
+really does make programming considerably less painful :-)
+<blockquote>Aside: there may be circumstances (optimizing inner loops)
+when you need to declare types, to get lisp to run that bit faster. A mechanism
+for this does exist but is outside the scope of this course.</blockquote>
+<b>2.5 Some examples of operators which are not functions</b>
+<p><tt>quote&nbsp;&nbsp;&nbsp; </tt>takes one argument (anything) and returns
+it UNEVALUATED
+<br><tt>defun&nbsp;&nbsp;&nbsp; </tt>used for defining more functions -
+see below
+<p>Recall - a function evaluates all its arguments, using the rules described
+in 2.2 / 2.3 above. Always. Therefore, if an operator does not evaluate
+all of its arguments as per these rules, then it cannot be a function.
+(Logic.)
+<p>The operator <tt>quote</tt> suspends evaluation - it returns its argument
+as-is. For example:
+<br>&nbsp;<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (quote (foo bar wibble))</tt>
+<br><tt>=>&nbsp;&nbsp;&nbsp;&nbsp; (foo bar wibble)</tt>
+<br>Therefore <tt>quote</tt> is not a function.
+<p>For another example, consider the difference between
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (quote (+ 1 2 3 4))</tt>
+<br>and<tt>&nbsp;&nbsp;&nbsp;&nbsp; (identity (+ 1 2 3 4))</tt>
+<br>-<tt> identity </tt>is a function and therefore it evaluates its argument,
+whereas <tt>quote
+</tt>is not and does not.
+<blockquote>Aside: lisp has two sorts of "not a function" - <i>macros</i>
+and
+<i>special operators</i>. When using one of these you do not ever need
+to know whether it was a macro or a special operator. The only distinctions
+between macros and special operators are that (i) macros always work by
+"transforming source code" - a bit like #define in C and (ii) you can define
+more macros yourself, but the set of special operators is fixed.</blockquote>
+In fact, <tt>quote</tt> is a special operator. (Aren't you glad you know
+that?) To see the value of being able to quote constructs in a language,
+visit <a href="http://www.cob.ohio-state.edu/~tomassin/whotext.html">http://www.cob.ohio-state.edu/~tomassin/whotext.html</a>
+(or, if terribly enthusiastic, read <a href="http://www.amazon.co.uk/exec/obidos/ASIN/0140289208/o/qid=968838469/sr=8-1/026-1943534-9027618">"<i>Godel,
+Escher, Bach</i>" by&nbsp; Douglas R. Hofstadter</a> or at least <a href="http://www.ncsu.edu/felder-public/kenny/papers/godel.html">http://www.ncsu.edu/felder-public/kenny/papers/godel.html</a>).
+<p>Finally note the following shorthand for quote:
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '(foo bar wombat)</tt>
+<br>is the same as
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (quote (foo bar wombat))</tt>
+<p>The <tt>' </tt>character is sometimes referred to as <i>syntactic sugar</i>
+- it's there to make the syntax that bit sweeter but doesn't add anything
+that couldn't be done another way. Nevertheless, lisp programmers are lazy
+(the language encourages this) and you'll never find them typing the symbol
+<tt>quote</tt>
+in full. Ever.
+<p><b>2.6 Defining your own functions</b>
+<p>To define a function of your own, use the macro <tt>defun</tt>. Examples:
+<blockquote><tt>;;; returns the number of days in a non-leap year</tt>
+<br><tt>(defun days-in-year ()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; no arguments</tt>
+<br><tt>&nbsp; (+ (* 30 4)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (* 31 7)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; 28))</tt>
+<p><tt>;;; takes one argument and returns a list containing that argument
+twice</tt>
+<br><tt>(defun list-of-two (thing)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; one argument</tt>
+<br><tt>&nbsp; (list thing thing))</tt></blockquote>
+Note:
+<ul>
+<li>
+the syntax of defun is</li>
+
+<ul><tt>(defun name (arg-1 arg-2 ...) form-1 form-2 ...)</tt></ul>
+where <tt>name</tt> is the name of the function, <tt>arg-1</tt> etc. are
+the arguments to that function, and <tt>form-1</tt> etc. are the lisp forms
+to evaluate in order to evaluate a call to that function.
+<li>
+there is no need to declare types of arguments, or of the function itself
+:-)</li>
+
+<li>
+in the first example there were no arguments, and so the argument list
+was empty -&nbsp; <tt>()</tt>&nbsp; - and the function is called thus</li>
+
+<ul><tt>(days-in-year)</tt>
+<br><tt>=> 365</tt></ul>
+
+<li>
+in the second example there is one argument <tt>thing </tt>and the function
+is called thus</li>
+
+<ul><tt>(list-of-two (+ 2 2))</tt>
+<br><tt>=> (4 4)</tt></ul>
+During the execution of the function call, the local variable <tt>thing</tt>
+has the value passed as an argument (in this case, that is the result of
+evaluating <tt>(+ 2 2)</tt>)</ul>
+<b>2.7 Beauty tips</b>
+<p>A few stylistic layout conventions (please observe them rather than
+inventing your own, as they will make your code more readable both for
+you and for the examiners):
+<ul>
+<li>
+it is traditional for function definitions to be laid out as in the examples
+above, namely with <tt>defun</tt>, the function name and the argument list
+on one line, and the body of the function starting on the next line</li>
+
+<li>
+any lisp editor worth its salt will indent (the current line of) lisp code
+correctly when you press the Tab key. Use it</li>
+
+<li>
+if you have several parentheses together, keep them together, eg
+<tt>)))))))</tt>
+or whatever. Do not separate them with spaces or newlines</li>
+</ul>
+Comments:
+<ul>
+<li>
+the semicolon <tt>;</tt> introduces a comment that lasts until the end
+of the current line.</li>
+
+<li>
+semicolon comments appended to the end of a line of code should be introduced
+by a single semicolon, whereas comments which take up the whole line have
+two or more (HyperSpec section 2.4.4 for enthusiasts).</li>
+
+<li>
+to comment out several lines of code, start the comment with <tt>#|</tt>
+and terminate it with <tt>|#</tt></li>
+</ul>
+<b>2.8 Lists</b>
+<p>As you will probably have spotted by now, a list is any collection of
+objects with a left parenthesis at one end and a right parenthesis at the
+other. For example,
+<br><tt>&nbsp;&nbsp;&nbsp; (round the ragged rocks the rugged rascal ran)</tt>
+<br>Lists can be of any length, and can hold data of mixed type (as in
+the example below).
+<p>Lisp code is built with lists. Lists can also be used to hold program
+data.
+<p>The function <tt>list</tt> can be used to build lists, e.g.
+<br><tt>&nbsp;&nbsp;&nbsp; (list "my" (+ 1 2) 'sons)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; ("my" 3 SONS)</tt>
+<p>To get at the contents of a list, use the functions <tt>first</tt>,
+<tt>second</tt>,
+<tt>third</tt>,...
+(up to <tt>tenth</tt>). So:
+<br><tt>&nbsp;&nbsp;&nbsp; (second (list "my" (+ 1 2) 'sons))&nbsp; =>&nbsp;
+3</tt>
+<br>To "drop the front" off a list, use the function <tt>rest</tt>:
+<br><tt>&nbsp;&nbsp;&nbsp; (rest (list "my" (+ 1 2) 'sons))&nbsp;&nbsp;&nbsp;
+=>&nbsp; (3 SONS)</tt>
+<br>&nbsp;
+<p><b>2.9 The empty list and nil</b>
+<p>A list can be <i>empty</i> - in other words it doesn't contain anything
+at all. You would type it like this:
+<br><tt>&nbsp;&nbsp;&nbsp; ()</tt>
+<br>but the weird thing is that when you do that, lisp stores it (and,
+indeed, prints it) not as a list but as the symbol:
+<br><tt>&nbsp;&nbsp;&nbsp; nil</tt>
+<p>This is because the empty list <tt>()</tt> and the symbol <tt>nil</tt>
+are the same object. .
+<p>Be aware that <tt>nil</tt> is self-evaluating, so
+<br><tt>&nbsp;&nbsp;&nbsp; nil => NIL</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; ()&nbsp; => NIL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; not the usual rule for evaluating lists</tt>
+<p><b>2.10 True or false?</b>
+<p>To add to the fun, <tt>nil</tt> is also used by lisp to denote logical
+falsehood.
+<p>Anything which is non-<tt>nil</tt> denotes logical truth. To prevent
+a total free for all, functions which are required to answer "true" or
+"false" (<i>predicates</i>) usually return the symbol <tt>t</tt> to denote
+truth.
+<p>Stylistic issue: the names of lisp predicates generally end in the letter
+<tt>p</tt>.
+If the name contains hyphens already, then hyphenate the <tt>p</tt> also.
+So:
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; zerop</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; array-has-fill-pointer-p</tt>
+<p>Example:
+<blockquote><tt>CL-USER 1 > (defun equal-to-fourty-two-p (number)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+;; is number equal to 42?</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(= number 42))</tt>
+<br><tt>EQUAL-TO-FOURTY-TWO-P</tt>
+<p><tt>CL-USER 2 > (equal-to-fourty-two-p 15)</tt>
+<br><tt>NIL</tt>
+<p><tt>CL-USER 3 > (equal-to-fourty-two-p 42)</tt>
+<br><tt>T</tt>
+<p><tt>CL-USER 4 ></tt></blockquote>
+Note here the predicate <tt>=</tt>, which is an immediate exception to
+the above naming convention (sorry about that). This function takes any
+number of arguments - so long as they are all numbers - and returns <tt>t</tt>
+provided they are all numerically the same:
+<br><tt>&nbsp;&nbsp;&nbsp; (= 3 3.0)&nbsp; =>&nbsp;&nbsp; T</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (= 5/2 2.5)&nbsp; =>&nbsp; T</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (= 3 3 3 3 3)&nbsp; =>&nbsp; T</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (= 3 3 17 3 3)&nbsp; =>&nbsp; NIL</tt>
+<p><b>2.11 If...</b>
+<p>The syntax for the operator <tt>if</tt> is
+<ol>
+<li>
+<tt>if</tt></li>
+
+<li>
+predicate (always evaluated)</li>
+
+<li>
+what to do if the predicate is true, ie if the predicate does not evaluate
+to <tt>nil</tt> (this argument is not evaluated if the predicate is false)</li>
+
+<li>
+what to do if the predicate is false, ie if the predicate evaluates to
+<tt>nil</tt>
+(this argument is not evaluated if the predicate is true)</li>
+</ol>
+For example:
+<blockquote><tt>(if (saucepan-is-cool-enough-p)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (pick-it-up)</tt>
+<br><tt>&nbsp; (let-it-cool-down))</tt></blockquote>
+It's just as well that <tt>if</tt> is not a function (if it were, you'd
+always get burned).
+<p>Another example:
+<blockquote><tt>;;; Given an integer n and a list,</tt>
+<br><tt>;;; return the nth (zero based) member of list.</tt>
+<br><tt>;;; Make it easier by assuming list is short.</tt>
+<br><tt>(defun nth-member (n list)</tt>
+<br><tt>&nbsp; ;; there has to be a better way... (we hope)</tt>
+<br><tt>&nbsp; (if (= n 0)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (first list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (if (= n 1)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (second list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (= n 2)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (third list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "etc"))))</tt></blockquote>
+<b>2.12 Summary</b>
+<ul>
+<li>
+Lisp sits there and evaluates objects</li>
+
+<li>
+Some objects evaluate to themselves (the act of evaluation is effectively
+a no-op)</li>
+
+<ul>
+<li>
+numbers</li>
+
+<li>
+strings</li>
+
+<li>
+certain symbols: <tt>t </tt>and <tt>nil</tt></li>
+</ul>
+
+<li>
+A non-<tt>nil</tt> list whose first element is a function is evaluated
+according to the rules described in 2.2 / 2.3 above.</li>
+
+<li>
+A non-<tt>nil</tt> list whose first element is not a function is handled
+specially. Examples of non-functions include</li>
+
+<ul>
+<li>
+<tt>quote</tt></li>
+
+<li>
+<tt>defun</tt></li>
+
+<li>
+<tt>if</tt></li>
+</ul>
+</ul>
+<b>2.13 How to put this to use</b>
+<p>Let's take as an example the following sample problem. You may want
+to work through this one carefully before moving on to the following exercises.
+<ul>
+<li>
+Write a function which takes two arguments, both numbers, and returns the
+sum of their squares.</li>
+</ul>
+You may find that the following steps are helpful:
+<ol TYPE=a>
+<li>
+Come up with a name for the function before you attempt to do anything
+else. Hmm, so how about <tt>sum-of-squares </tt>?</li>
+
+<li>
+Make sure you're clear what calls to this function would look like and
+what value would be returned. We get this information directly from the
+statement of the problem: the function takes two (number) arguments, squares
+each one, adds these together and returns the result. So a call would look
+like (for example)</li>
+
+<ul><tt>(sum-of-squares 3 4)</tt></ul>
+and the return value in this case should be <tt>25</tt>.
+<li>
+Decide on names for the arguments. In this case, I would suggest something
+like <tt>first-number</tt> and <tt>second-number</tt> or, for brevity,
+<tt>first</tt>
+and <tt>second</tt>.</li>
+
+<li>
+Now you can write the "outer" part of the function:</li>
+
+<ol TYPE=a><tt>(defun sum-of-squares (first second)</tt>
+<br><tt>&nbsp; )</tt></ol>
+With this much written, you should be happy with the statement that our
+sample call would execute the (as yet unwritten) body of this function
+with <tt>first</tt> having the value <tt>3</tt> and <tt>second</tt> having
+the value <tt>4</tt>
+<li>
+Next you have to write the function calls which will take two values and
+evaluate the sum of their squares. The square of the first number is expressed
+thus:</li>
+
+<ol><tt>(* first first)</tt></ol>
+(and similarly for the square of the other), and the sum of the two quantities
+is therefore:
+<ul><tt>(+ (* first first) (* second second))</tt></ul>
+
+<li>
+Now you can slot this into the function template you wrote earlier:</li>
+
+<ol TYPE=a><tt>(defun sum-of-squares (first second)</tt>
+<br><tt>&nbsp; (+ (* first first)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (* second second)))</tt></ol>
+and type this into a lisp listener.
+<li>
+Finally you test that the function works, by typing in sample calls and
+checking that the correct answer is returned.</li>
+</ol>
+<b>2.14 Suggested activity / exercises etc</b>
+<ol>
+<li>
+Read Graham to page 18</li>
+
+<li>
+The functions <tt>+ - * / = list </tt>all take a variable number of arguments.
+Experiment to find out what each of these does with exactly one argument.
+Now try each function with zero arguments, e.g. <tt>(+)</tt> and find out
+what happens.</li>
+
+<ul>
+<li>
+Don't forget the key-binding Meta-Shift-A to bail out of errors.</li>
+</ul>
+
+<li>
+As in 2.2. above, describe in detail what happens when lisp evaluates each
+of the following</li>
+
+<ul>
+<li>
+<tt>(list 1 (+ 2 3))</tt></li>
+
+<li>
+<tt>(if (= (+ 2 2) 4)</tt></li>
+
+<br><tt>&nbsp;&nbsp;&nbsp; (* 2 2)</tt>
+<br><tt>&nbsp; (/ 1 0))&nbsp;&nbsp;&nbsp; ; why does this apparent division
+by zero not take place?</tt></ul>
+
+<li>
+Write a function <tt>my-identity</tt> which takes one argument and returns
+that value. Sample call:</li>
+
+<ol><tt>(my-identity "anything")&nbsp; => "anything"</tt></ol>
+
+<li>
+Write a function which takes two arguments and returns them in a list,
+second argument first.</li>
+
+<li>
+Write a function which takes one argument, guaranteed to be a list of precisely
+two elements, and returns a new list which contains both these elements
+but in reverse order.</li>
+
+<li>
+Write a function which takes three numbers as separate arguments and computes
+their average</li>
+
+<li>
+Write a function which takes a list of three numbers (i.e. one argument),
+and computes the average of these numbers</li>
+
+<li>
+Write a function called <tt>minutes-in-one-year</tt> which takes one argument
+<tt>leapp</tt>.
+If <tt>leapp</tt> is true (i.e. non-<tt>nil</tt>) the function returns
+the number of minutes in a leap year; if <tt>leapp</tt> is false (i.e.
+<tt>nil</tt>)
+then it returns the number of minutes in a non-leap year.</li>
+
+<ul>
+<li>
+Example call: <tt>(minutes-in-one-year t)&nbsp; =>&nbsp; ?</tt></li>
+</ul>
+
+<li>
+Given that lisp defines <tt>first</tt>,
+<tt>second</tt>,..., <tt>tenth</tt>
+for you, how would you define <tt>eleventh</tt>?</li>
+</ol>
+If you get seriously stuck, look at the <a href="../solutions/solutions-2.html">solutions</a>
+but please have a good go at each problem first.
+<div align=right><a href="mailto:ndl@ravenbrook.com">Nick Levine</a>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+last modified 2000-09-13
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Copyright (C) Nick Levine 1999-2001. All rights reserved.
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/lectures/lecture-2.html#2
+$</div>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:42 GMT -->
+</html>

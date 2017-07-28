@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/dart/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:33:42 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn dart in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../css/normalize.css">
+        <link rel="stylesheet" href="../../css/main.css">
+        <link href="../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fdart%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3Ddart">
+        Share this page
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../index.html">Learn X in Y minutes</a></h2>
+  <h2>Where X=dart</h2>
+  
+    <p class="filelink">
+    Get the code:
+    <a href="../files/learndart.dart">learndart.dart</a>
+    </p>
+  
+  <div id="doc">
+    <p>Dart is a newcomer into the realm of programming languages.
+It borrows a lot from other mainstream languages, having as a goal not to deviate too much from
+its JavaScript sibling. Like JavaScript, Dart aims for great browser integration.</p>
+
+<p>Dart&rsquo;s most controversial feature must be its Optional Typing.</p>
+<pre class="highlight javascript"><code><span class="kr">import</span> <span class="s2">"dart:collection"</span><span class="p">;</span>
+<span class="kr">import</span> <span class="s2">"dart:math"</span> <span class="nx">as</span> <span class="nx">DM</span><span class="p">;</span>
+
+<span class="c1">// Welcome to Learn Dart in 15 minutes. http://www.dartlang.org/</span>
+<span class="c1">// This is an executable tutorial. You can run it with Dart or on</span>
+<span class="c1">// the Try Dart! site if you copy/paste it there. http://try.dartlang.org/</span>
+
+<span class="c1">// Function declaration and method declaration look the same. Function</span>
+<span class="c1">// declarations can be nested. The declaration takes the form of</span>
+<span class="c1">// name() {} or name() =&gt; singleLineExpression;</span>
+<span class="c1">// The fat arrow function declaration has an implicit return for the result of</span>
+<span class="c1">// the expression.</span>
+<span class="nx">example1</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">example1nested1</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">example1nested2</span><span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">print</span><span class="p">(</span><span class="s2">"Example1 nested 1 nested 2"</span><span class="p">);</span>
+    <span class="nx">example1nested2</span><span class="p">();</span>
+  <span class="p">}</span>
+  <span class="nx">example1nested1</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="c1">// Anonymous functions don't include a name.</span>
+<span class="nx">example2</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">example2nested1</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fn</span><span class="p">();</span>
+  <span class="p">}</span>
+  <span class="nx">example2nested1</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="nx">print</span><span class="p">(</span><span class="s2">"Example2 nested 1"</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="c1">// When a function parameter is declared, the declaration can include the</span>
+<span class="c1">// number of parameters the function takes by specifying the names of the</span>
+<span class="c1">// parameters it takes.</span>
+<span class="nx">example3</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">example3nested1</span><span class="p">(</span><span class="nx">fn</span><span class="p">(</span><span class="nx">informSomething</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">fn</span><span class="p">(</span><span class="s2">"Example3 nested 1"</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nx">example3planB</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// Or don't declare number of parameters.</span>
+    <span class="nx">fn</span><span class="p">(</span><span class="s2">"Example3 plan B"</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nx">example3nested1</span><span class="p">((</span><span class="nx">s</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">print</span><span class="p">(</span><span class="nx">s</span><span class="p">));</span>
+  <span class="nx">example3planB</span><span class="p">((</span><span class="nx">s</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">print</span><span class="p">(</span><span class="nx">s</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="c1">// Functions have closure access to outer variables.</span>
+<span class="kd">var</span> <span class="nx">example4Something</span> <span class="o">=</span> <span class="s2">"Example4 nested 1"</span><span class="p">;</span>
+<span class="nx">example4</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">example4nested1</span><span class="p">(</span><span class="nx">fn</span><span class="p">(</span><span class="nx">informSomething</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nx">fn</span><span class="p">(</span><span class="nx">example4Something</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nx">example4nested1</span><span class="p">((</span><span class="nx">s</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">print</span><span class="p">(</span><span class="nx">s</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="c1">// Class declaration with a sayIt method, which also has closure access</span>
+<span class="c1">// to the outer variable as though it were a function as seen before.</span>
+<span class="kd">var</span> <span class="nx">example5method</span> <span class="o">=</span> <span class="s2">"Example5 sayIt"</span><span class="p">;</span>
+<span class="kr">class</span> <span class="nx">Example5Class</span> <span class="p">{</span>
+  <span class="nx">sayIt</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">print</span><span class="p">(</span><span class="nx">example5method</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="nx">example5</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// Create an anonymous instance of the Example5Class and call the sayIt</span>
+  <span class="c1">// method on it.</span>
+  <span class="k">new</span> <span class="nx">Example5Class</span><span class="p">().</span><span class="nx">sayIt</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="c1">// Class declaration takes the form of class name { [classBody] }.</span>
+<span class="c1">// Where classBody can include instance methods and variables, but also</span>
+<span class="c1">// class methods and variables.</span>
+<span class="kr">class</span> <span class="nx">Example6Class</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">example6InstanceVariable</span> <span class="o">=</span> <span class="s2">"Example6 instance variable"</span><span class="p">;</span>
+  <span class="nx">sayIt</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">print</span><span class="p">(</span><span class="nx">example6InstanceVariable</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="nx">example6</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">new</span> <span class="nx">Example6Class</span><span class="p">().</span><span class="nx">sayIt</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="c1">// Class methods and variables are declared with "static" terms.</span>
+<span class="kr">class</span> <span class="nx">Example7Class</span> <span class="p">{</span>
+  <span class="kr">static</span> <span class="kd">var</span> <span class="nx">example7ClassVariable</span> <span class="o">=</span> <span class="s2">"Example7 class variable"</span><span class="p">;</span>
+  <span class="kr">static</span> <span class="nx">sayItFromClass</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">print</span><span class="p">(</span><span class="nx">example7ClassVariable</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nx">sayItFromInstance</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">print</span><span class="p">(</span><span class="nx">example7ClassVariable</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="nx">example7</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">Example7Class</span><span class="p">.</span><span class="nx">sayItFromClass</span><span class="p">();</span>
+  <span class="k">new</span> <span class="nx">Example7Class</span><span class="p">().</span><span class="nx">sayItFromInstance</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="c1">// Literals are great, but there's a restriction for what literals can be</span>
+<span class="c1">// outside of function/method bodies. Literals on the outer scope of class</span>
+<span class="c1">// or outside of class have to be constant. Strings and numbers are constant</span>
+<span class="c1">// by default. But arrays and maps are not. They can be made constant by</span>
+<span class="c1">// declaring them "const".</span>
+<span class="kd">var</span> <span class="nx">example8A</span> <span class="o">=</span> <span class="kr">const</span> <span class="p">[</span><span class="s2">"Example8 const array"</span><span class="p">],</span>
+  <span class="nx">example8M</span> <span class="o">=</span> <span class="kr">const</span> <span class="p">{</span><span class="s2">"someKey"</span><span class="err">:</span> <span class="s2">"Example8 const map"</span><span class="p">};</span>
+<span class="nx">example8</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">print</span><span class="p">(</span><span class="nx">example8A</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+  <span class="nx">print</span><span class="p">(</span><span class="nx">example8M</span><span class="p">[</span><span class="s2">"someKey"</span><span class="p">]);</span>
+<span class="p">}</span>
+
+<span class="c1">// Loops in Dart take the form of standard for () {} or while () {} loops,</span>
+<span class="c1">// slightly more modern for (.. in ..) {}, or functional callbacks with many</span>
+<span class="c1">// supported features, starting with forEach.</span>
+<span class="kd">var</span> <span class="nx">example9A</span> <span class="o">=</span> <span class="kr">const</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">];</span>
+<span class="nx">example9</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">example9A</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">print</span><span class="p">(</span><span class="s2">"Example9 for loop '${example9A[i]}'"</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">example9A</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">print</span><span class="p">(</span><span class="s2">"Example9 while loop '${example9A[i]}'"</span><span class="p">);</span>
+    <span class="nx">i</span><span class="o">++</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">e</span> <span class="k">in</span> <span class="nx">example9A</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">print</span><span class="p">(</span><span class="s2">"Example9 for-in loop '${e}'"</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nx">example9A</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">print</span><span class="p">(</span><span class="s2">"Example9 forEach loop '${e}'"</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="c1">// To loop over the characters of a string or to extract a substring.</span>
+<span class="kd">var</span> <span class="nx">example10S</span> <span class="o">=</span> <span class="s2">"ab"</span><span class="p">;</span>
+<span class="nx">example10</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">example10S</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">print</span><span class="p">(</span><span class="s2">"Example10 String character loop '${example10S[i]}'"</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">example10S</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">print</span><span class="p">(</span><span class="s2">"Example10 substring loop '${example10S.substring(i, i + 1)}'"</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Int and double are the two supported number formats.</span>
+<span class="nx">example11</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">320</span><span class="p">,</span> <span class="nx">d</span> <span class="o">=</span> <span class="mf">3.2</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">;</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example11 int ${i}"</span><span class="p">);</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example11 double ${d}"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// DateTime provides date/time arithmetic.</span>
+<span class="nx">example12</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">now</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DateTime</span><span class="p">.</span><span class="nx">now</span><span class="p">();</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example12 now '${now}'"</span><span class="p">);</span>
+  <span class="nx">now</span> <span class="o">=</span> <span class="nx">now</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="k">new</span> <span class="nx">Duration</span><span class="p">(</span><span class="nx">days</span><span class="err">:</span> <span class="mi">1</span><span class="p">));</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example12 tomorrow '${now}'"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Regular expressions are supported.</span>
+<span class="nx">example13</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">s1</span> <span class="o">=</span> <span class="s2">"some string"</span><span class="p">,</span> <span class="nx">s2</span> <span class="o">=</span> <span class="s2">"some"</span><span class="p">,</span> <span class="nx">re</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"^s.+?g\$"</span><span class="p">);</span>
+  <span class="nx">match</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">re</span><span class="p">.</span><span class="nx">hasMatch</span><span class="p">(</span><span class="nx">s</span><span class="p">))</span> <span class="p">{</span>
+      <span class="nx">print</span><span class="p">(</span><span class="s2">"Example13 regexp matches '${s}'"</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">print</span><span class="p">(</span><span class="s2">"Example13 regexp doesn't match '${s}'"</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="nx">match</span><span class="p">(</span><span class="nx">s1</span><span class="p">);</span>
+  <span class="nx">match</span><span class="p">(</span><span class="nx">s2</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Boolean expressions need to resolve to either true or false, as no</span>
+<span class="c1">// implicit conversions are supported.</span>
+<span class="nx">example14</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">v</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">v</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">print</span><span class="p">(</span><span class="s2">"Example14 value is true"</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nx">v</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">v</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// Never runs</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="c1">// Never runs</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">print</span><span class="p">(</span><span class="s2">"Example14 null value causes an exception: '${e}'"</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// try/catch/finally and throw are used for exception handling.</span>
+<span class="c1">// throw takes any object as parameter;</span>
+<span class="nx">example15</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="k">throw</span> <span class="s2">"Some unexpected error."</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">print</span><span class="p">(</span><span class="s2">"Example15 an exception: '${e}'"</span><span class="p">);</span>
+      <span class="k">throw</span> <span class="nx">e</span><span class="p">;</span> <span class="c1">// Re-throw</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">print</span><span class="p">(</span><span class="s2">"Example15 catch exception being re-thrown: '${e}'"</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">finally</span> <span class="p">{</span>
+    <span class="nx">print</span><span class="p">(</span><span class="s2">"Example15 Still run finally"</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// To be efficient when creating a long string dynamically, use</span>
+<span class="c1">// StringBuffer. Or you could join a string array.</span>
+<span class="nx">example16</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">StringBuffer</span><span class="p">(),</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">,</span> <span class="s2">"c"</span><span class="p">,</span> <span class="s2">"d"</span><span class="p">],</span> <span class="nx">e</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nx">e</span> <span class="k">in</span> <span class="nx">a</span><span class="p">)</span> <span class="p">{</span> <span class="nx">sb</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span> <span class="p">}</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example16 dynamic string created with "</span>
+    <span class="s2">"StringBuffer '${sb.toString()}'"</span><span class="p">);</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example16 join string array '${a.join()}'"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Strings can be concatenated by just having string literals next to</span>
+<span class="c1">// one another with no further operator needed.</span>
+<span class="nx">example17</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example17 "</span>
+      <span class="s2">"concatenate "</span>
+      <span class="s2">"strings "</span>
+      <span class="s2">"just like that"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Strings have single-quote or double-quote for delimiters with no</span>
+<span class="c1">// actual difference between the two. The given flexibility can be good</span>
+<span class="c1">// to avoid the need to escape content that matches the delimiter being</span>
+<span class="c1">// used. For example, double-quotes of HTML attributes if the string</span>
+<span class="c1">// contains HTML content.</span>
+<span class="nx">example18</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s1">'Example18 &lt;a href="etc"&gt;'</span>
+      <span class="s2">"Don't can't I'm Etc"</span>
+      <span class="s1">'&lt;/a&gt;'</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Strings with triple single-quotes or triple double-quotes span</span>
+<span class="c1">// multiple lines and include line delimiters.</span>
+<span class="nx">example19</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s1">'''Example19 &lt;a href="etc"&gt;
+Example19 Don'</span><span class="nx">t</span> <span class="nx">can</span><span class="s1">'t I'</span><span class="nx">m</span> <span class="nx">Etc</span>
+<span class="nx">Example19</span> <span class="o">&lt;</span><span class="sr">/a&gt;'''</span><span class="se">)</span><span class="err">;
+</span><span class="p">}</span>
+
+<span class="c1">// Strings have the nice interpolation feature with the $ character.</span>
+<span class="c1">// With $ { [expression] }, the return of the expression is interpolated.</span>
+<span class="c1">// $ followed by a variable name interpolates the content of that variable.</span>
+<span class="c1">// $ can be escaped like so \$ to just add it to the string instead.</span>
+<span class="nx">example20</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">s1</span> <span class="o">=</span> <span class="s2">"'\${s}'"</span><span class="p">,</span> <span class="nx">s2</span> <span class="o">=</span> <span class="s2">"'\$s'"</span><span class="p">;</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example20 \$ interpolation ${s1} or $s2 works."</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Optional types allow for the annotation of APIs and come to the aid of</span>
+<span class="c1">// IDEs so the IDEs can better refactor, auto-complete and check for</span>
+<span class="c1">// errors. So far we haven't declared any types and the programs have</span>
+<span class="c1">// worked just fine. In fact, types are disregarded during runtime.</span>
+<span class="c1">// Types can even be wrong and the program will still be given the</span>
+<span class="c1">// benefit of the doubt and be run as though the types didn't matter.</span>
+<span class="c1">// There's a runtime parameter that checks for type errors which is</span>
+<span class="c1">// the checked mode, which is said to be useful during development time,</span>
+<span class="c1">// but which is also slower because of the extra checking and is thus</span>
+<span class="c1">// avoided during deployment runtime.</span>
+<span class="kr">class</span> <span class="nx">Example21</span> <span class="p">{</span>
+  <span class="nx">List</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span> <span class="nx">_names</span><span class="p">;</span>
+  <span class="nx">Example21</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">];</span>
+  <span class="p">}</span>
+  <span class="nx">List</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span> <span class="nx">get</span> <span class="nx">names</span> <span class="o">=&gt;</span> <span class="nx">_names</span><span class="p">;</span>
+  <span class="nx">set</span> <span class="nx">names</span><span class="p">(</span><span class="nx">List</span><span class="o">&lt;</span><span class="nb">String</span><span class="o">&gt;</span> <span class="nx">list</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">_names</span> <span class="o">=</span> <span class="nx">list</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="kr">int</span> <span class="nx">get</span> <span class="nx">length</span> <span class="o">=&gt;</span> <span class="nx">_names</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+  <span class="k">void</span> <span class="nx">add</span><span class="p">(</span><span class="nb">String</span> <span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">_names</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">void</span> <span class="nx">example21</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">Example21</span> <span class="nx">o</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Example21</span><span class="p">();</span>
+  <span class="nx">o</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">"c"</span><span class="p">);</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example21 names '${o.names}' and length '${o.length}'"</span><span class="p">);</span>
+  <span class="nx">o</span><span class="p">.</span><span class="nx">names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"d"</span><span class="p">,</span> <span class="s2">"e"</span><span class="p">];</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example21 names '${o.names}' and length '${o.length}'"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Class inheritance takes the form of class name extends AnotherClassName {}.</span>
+<span class="kr">class</span> <span class="nx">Example22A</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">_name</span> <span class="o">=</span> <span class="s2">"Some Name!"</span><span class="p">;</span>
+  <span class="nx">get</span> <span class="nx">name</span> <span class="o">=&gt;</span> <span class="nx">_name</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kr">class</span> <span class="nx">Example22B</span> <span class="kr">extends</span> <span class="nx">Example22A</span> <span class="p">{}</span>
+<span class="nx">example22</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Example22B</span><span class="p">();</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example22 class inheritance '${o.name}'"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Class mixin is also available, and takes the form of</span>
+<span class="c1">// class name extends SomeClass with AnotherClassName {}.</span>
+<span class="c1">// It's necessary to extend some class to be able to mixin another one.</span>
+<span class="c1">// The template class of mixin cannot at the moment have a constructor.</span>
+<span class="c1">// Mixin is mostly used to share methods with distant classes, so the</span>
+<span class="c1">// single inheritance doesn't get in the way of reusable code.</span>
+<span class="c1">// Mixins follow the "with" statement during the class declaration.</span>
+<span class="kr">class</span> <span class="nx">Example23A</span> <span class="p">{}</span>
+<span class="kr">class</span> <span class="nx">Example23Utils</span> <span class="p">{</span>
+  <span class="nx">addTwo</span><span class="p">(</span><span class="nx">n1</span><span class="p">,</span> <span class="nx">n2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">n1</span> <span class="o">+</span> <span class="nx">n2</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="kr">class</span> <span class="nx">Example23B</span> <span class="kr">extends</span> <span class="nx">Example23A</span> <span class="kd">with</span> <span class="nx">Example23Utils</span> <span class="p">{</span>
+  <span class="nx">addThree</span><span class="p">(</span><span class="nx">n1</span><span class="p">,</span> <span class="nx">n2</span><span class="p">,</span> <span class="nx">n3</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">addTwo</span><span class="p">(</span><span class="nx">n1</span><span class="p">,</span> <span class="nx">n2</span><span class="p">)</span> <span class="o">+</span> <span class="nx">n3</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="nx">example23</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Example23B</span><span class="p">(),</span> <span class="nx">r1</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">addThree</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+    <span class="nx">r2</span> <span class="o">=</span> <span class="nx">o</span><span class="p">.</span><span class="nx">addTwo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example23 addThree(1, 2, 3) results in '${r1}'"</span><span class="p">);</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example23 addTwo(1, 2) results in '${r2}'"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// The Class constructor method uses the same name of the class and</span>
+<span class="c1">// takes the form of SomeClass() : super() {}, where the ": super()"</span>
+<span class="c1">// part is optional and it's used to delegate constant parameters to the</span>
+<span class="c1">// super-parent's constructor.</span>
+<span class="kr">class</span> <span class="nx">Example24A</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">_value</span><span class="p">;</span>
+  <span class="nx">Example24A</span><span class="p">({</span><span class="na">value</span><span class="p">:</span> <span class="s2">"someValue"</span><span class="p">})</span> <span class="p">{</span>
+    <span class="nx">_value</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">get</span> <span class="nx">value</span> <span class="o">=&gt;</span> <span class="nx">_value</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kr">class</span> <span class="nx">Example24B</span> <span class="kr">extends</span> <span class="nx">Example24A</span> <span class="p">{</span>
+  <span class="nx">Example24B</span><span class="p">({</span><span class="na">value</span><span class="p">:</span> <span class="s2">"someOtherValue"</span><span class="p">})</span> <span class="p">:</span> <span class="kr">super</span><span class="p">(</span><span class="na">value</span><span class="p">:</span> <span class="nx">value</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">example24</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">o1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Example24B</span><span class="p">(),</span>
+    <span class="nx">o2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Example24B</span><span class="p">(</span><span class="na">value</span><span class="p">:</span> <span class="s2">"evenMore"</span><span class="p">);</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example24 calling super during constructor '${o1.value}'"</span><span class="p">);</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example24 calling super during constructor '${o2.value}'"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// There's a shortcut to set constructor parameters in case of simpler classes.</span>
+<span class="c1">// Just use the this.parameterName prefix and it will set the parameter on</span>
+<span class="c1">// an instance variable of same name.</span>
+<span class="kr">class</span> <span class="nx">Example25</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">anotherValue</span><span class="p">;</span>
+  <span class="nx">Example25</span><span class="p">({</span><span class="k">this</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">anotherValue</span><span class="p">});</span>
+<span class="p">}</span>
+<span class="nx">example25</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Example25</span><span class="p">(</span><span class="na">value</span><span class="p">:</span> <span class="s2">"a"</span><span class="p">,</span> <span class="na">anotherValue</span><span class="p">:</span> <span class="s2">"b"</span><span class="p">);</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example25 shortcut for constructor '${o.value}' and "</span>
+    <span class="s2">"'${o.anotherValue}'"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Named parameters are available when declared between {}.</span>
+<span class="c1">// Parameter order can be optional when declared between {}.</span>
+<span class="c1">// Parameters can be made optional when declared between [].</span>
+<span class="nx">example26</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">_name</span><span class="p">,</span> <span class="nx">_surname</span><span class="p">,</span> <span class="nx">_email</span><span class="p">;</span>
+  <span class="nx">setConfig1</span><span class="p">({</span><span class="nx">name</span><span class="p">,</span> <span class="nx">surname</span><span class="p">})</span> <span class="p">{</span>
+    <span class="nx">_name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+    <span class="nx">_surname</span> <span class="o">=</span> <span class="nx">surname</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">setConfig2</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="p">[</span><span class="nx">surname</span><span class="p">,</span> <span class="nx">email</span><span class="p">])</span> <span class="p">{</span>
+    <span class="nx">_name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+    <span class="nx">_surname</span> <span class="o">=</span> <span class="nx">surname</span><span class="p">;</span>
+    <span class="nx">_email</span> <span class="o">=</span> <span class="nx">email</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">setConfig1</span><span class="p">(</span><span class="na">surname</span><span class="p">:</span> <span class="s2">"Doe"</span><span class="p">,</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"John"</span><span class="p">);</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example26 name '${_name}', surname '${_surname}', "</span>
+    <span class="s2">"email '${_email}'"</span><span class="p">);</span>
+  <span class="nx">setConfig2</span><span class="p">(</span><span class="s2">"Mary"</span><span class="p">,</span> <span class="s2">"Jane"</span><span class="p">);</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example26 name '${_name}', surname '${_surname}', "</span>
+  <span class="s2">"email '${_email}'"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Variables declared with final can only be set once.</span>
+<span class="c1">// In case of classes, final instance variables can be set via constant</span>
+<span class="c1">// constructor parameter.</span>
+<span class="kr">class</span> <span class="nx">Example27</span> <span class="p">{</span>
+  <span class="kr">final</span> <span class="nx">color1</span><span class="p">,</span> <span class="nx">color2</span><span class="p">;</span>
+  <span class="c1">// A little flexibility to set final instance variables with syntax</span>
+  <span class="c1">// that follows the :</span>
+  <span class="nx">Example27</span><span class="p">({</span><span class="k">this</span><span class="p">.</span><span class="nx">color1</span><span class="p">,</span> <span class="nx">color2</span><span class="p">})</span> <span class="p">:</span> <span class="nx">color2</span> <span class="o">=</span> <span class="nx">color2</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">example27</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kr">final</span> <span class="nx">color</span> <span class="o">=</span> <span class="s2">"orange"</span><span class="p">,</span> <span class="nx">o</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Example27</span><span class="p">(</span><span class="na">color1</span><span class="p">:</span> <span class="s2">"lilac"</span><span class="p">,</span> <span class="na">color2</span><span class="p">:</span> <span class="s2">"white"</span><span class="p">);</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example27 color is '${color}'"</span><span class="p">);</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example27 color is '${o.color1}' and '${o.color2}'"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// To import a library, use import "libraryPath" or if it's a core library,</span>
+<span class="c1">// import "dart:libraryName". There's also the "pub" package management with</span>
+<span class="c1">// its own convention of import "package:packageName".</span>
+<span class="c1">// See import "dart:collection"; at the top. Imports must come before</span>
+<span class="c1">// other code declarations. IterableBase comes from dart:collection.</span>
+<span class="kr">class</span> <span class="nx">Example28</span> <span class="kr">extends</span> <span class="nx">IterableBase</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">names</span><span class="p">;</span>
+  <span class="nx">Example28</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">,</span> <span class="s2">"b"</span><span class="p">];</span>
+  <span class="p">}</span>
+  <span class="nx">get</span> <span class="nx">iterator</span> <span class="o">=&gt;</span> <span class="nx">names</span><span class="p">.</span><span class="nx">iterator</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">example28</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Example28</span><span class="p">();</span>
+  <span class="nx">o</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">name</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">print</span><span class="p">(</span><span class="s2">"Example28 '${name}'"</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="c1">// For control flow we have:</span>
+<span class="c1">// * standard switch with must break statements</span>
+<span class="c1">// * if-else if-else and ternary ..?..:.. operator</span>
+<span class="c1">// * closures and anonymous functions</span>
+<span class="c1">// * break, continue and return statements</span>
+<span class="nx">example29</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">v</span> <span class="o">=</span> <span class="kc">true</span> <span class="p">?</span> <span class="mi">30</span> <span class="p">:</span> <span class="mi">60</span><span class="p">;</span>
+  <span class="k">switch</span> <span class="p">(</span><span class="nx">v</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="mi">30</span><span class="p">:</span>
+      <span class="nx">print</span><span class="p">(</span><span class="s2">"Example29 switch statement"</span><span class="p">);</span>
+      <span class="k">break</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">v</span> <span class="o">&lt;</span> <span class="mi">30</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">v</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">print</span><span class="p">(</span><span class="s2">"Example29 if-else statement"</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="nx">callItForMe</span><span class="p">(</span><span class="nx">fn</span><span class="p">())</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">fn</span><span class="p">();</span>
+  <span class="p">}</span>
+  <span class="nx">rand</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">v</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DM</span><span class="p">.</span><span class="nx">Random</span><span class="p">().</span><span class="nx">nextInt</span><span class="p">(</span><span class="mi">50</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">v</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">print</span><span class="p">(</span><span class="s2">"Example29 callItForMe(rand) '${callItForMe(rand)}'"</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">v</span> <span class="o">!=</span> <span class="mi">30</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">continue</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">// Never gets here.</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Parse int, convert double to int, or just keep int when dividing numbers</span>
+<span class="c1">// by using the ~/ operation. Let's play a guess game too.</span>
+<span class="nx">example30</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">gn</span><span class="p">,</span> <span class="nx">tooHigh</span> <span class="o">=</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nx">n</span><span class="p">,</span> <span class="nx">n2</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.0</span><span class="p">).</span><span class="nx">toInt</span><span class="p">(),</span> <span class="nx">top</span> <span class="o">=</span> <span class="kr">int</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s2">"123"</span><span class="p">)</span> <span class="o">~</span><span class="sr">/ n2, bottom = 0</span><span class="err">;
+</span>  <span class="nx">top</span> <span class="o">=</span> <span class="nx">top</span> <span class="o">~</span><span class="sr">/ 6</span><span class="err">;
+</span>  <span class="nx">gn</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">DM</span><span class="p">.</span><span class="nx">Random</span><span class="p">().</span><span class="nx">nextInt</span><span class="p">(</span><span class="nx">top</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">// +1 because nextInt top is exclusive</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Example30 Guess a number between 0 and ${top}"</span><span class="p">);</span>
+  <span class="nx">guessNumber</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">n</span> <span class="o">==</span> <span class="nx">gn</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">print</span><span class="p">(</span><span class="s2">"Example30 Guessed right! The number is ${gn}"</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">tooHigh</span> <span class="o">=</span> <span class="nx">n</span> <span class="o">&gt;</span> <span class="nx">gn</span><span class="p">;</span>
+      <span class="nx">print</span><span class="p">(</span><span class="s2">"Example30 Number ${n} is too "</span>
+        <span class="s2">"${tooHigh ? 'high' : 'low'}. Try again"</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">n</span> <span class="o">==</span> <span class="nx">gn</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">n</span> <span class="o">=</span> <span class="p">(</span><span class="nx">top</span> <span class="o">-</span> <span class="nx">bottom</span><span class="p">)</span> <span class="o">~</span><span class="sr">/ 2</span><span class="err">;
+</span>  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="nx">guessNumber</span><span class="p">(</span><span class="nx">n</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">tooHigh</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">top</span> <span class="o">=</span> <span class="nx">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">bottom</span> <span class="o">=</span> <span class="nx">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">n</span> <span class="o">=</span> <span class="nx">bottom</span> <span class="o">+</span> <span class="p">((</span><span class="nx">top</span> <span class="o">-</span> <span class="nx">bottom</span><span class="p">)</span> <span class="o">~</span><span class="sr">/ 2</span><span class="se">)</span><span class="err">;
+</span>  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Programs have only one entry point in the main function.</span>
+<span class="c1">// Nothing is expected to be executed on the outer scope before a program</span>
+<span class="c1">// starts running with what's in its main function.</span>
+<span class="c1">// This helps with faster loading and even lazily loading of just what</span>
+<span class="c1">// the program needs to startup with.</span>
+<span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">print</span><span class="p">(</span><span class="s2">"Learn Dart in 15 minutes!"</span><span class="p">);</span>
+  <span class="p">[</span><span class="nx">example1</span><span class="p">,</span> <span class="nx">example2</span><span class="p">,</span> <span class="nx">example3</span><span class="p">,</span> <span class="nx">example4</span><span class="p">,</span> <span class="nx">example5</span><span class="p">,</span> <span class="nx">example6</span><span class="p">,</span> <span class="nx">example7</span><span class="p">,</span>
+    <span class="nx">example8</span><span class="p">,</span> <span class="nx">example9</span><span class="p">,</span> <span class="nx">example10</span><span class="p">,</span> <span class="nx">example11</span><span class="p">,</span> <span class="nx">example12</span><span class="p">,</span> <span class="nx">example13</span><span class="p">,</span> <span class="nx">example14</span><span class="p">,</span>
+    <span class="nx">example15</span><span class="p">,</span> <span class="nx">example16</span><span class="p">,</span> <span class="nx">example17</span><span class="p">,</span> <span class="nx">example18</span><span class="p">,</span> <span class="nx">example19</span><span class="p">,</span> <span class="nx">example20</span><span class="p">,</span>
+    <span class="nx">example21</span><span class="p">,</span> <span class="nx">example22</span><span class="p">,</span> <span class="nx">example23</span><span class="p">,</span> <span class="nx">example24</span><span class="p">,</span> <span class="nx">example25</span><span class="p">,</span> <span class="nx">example26</span><span class="p">,</span>
+    <span class="nx">example27</span><span class="p">,</span> <span class="nx">example28</span><span class="p">,</span> <span class="nx">example29</span><span class="p">,</span> <span class="nx">example30</span>
+    <span class="p">].</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">ef</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">ef</span><span class="p">());</span>
+<span class="p">}</span>
+
+</code></pre>
+
+<h2>Further Reading</h2>
+
+<p>Dart has a comprehensive web-site. It covers API reference, tutorials, articles and more, including a
+useful Try Dart online.
+http://www.dartlang.org/
+http://try.dartlang.org/</p>
+
+    <hr>
+    <p>Got a suggestion? A correction, perhaps? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Open an Issue</a> on the Github Repo, or make a pull request yourself!
+    </p>
+    <p class="contributed">
+    Originally contributed by Joao Pedrosa, and updated by <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/dart.html.markdown">3 contributor(s)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="https://github.com/jpedrosa/">Joao Pedrosa</a>
+      
+    
+    </p>
+
+    <p>
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/dart/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:33:42 GMT -->
+</html>

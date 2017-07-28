@@ -1,0 +1,315 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/additional/agony-corner.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:24:03 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Agony Corner</title>
+</head>
+<body>
+
+<center><b><font size=+3>Declarative Languages</font></b>
+<br><b><font size=+3>Agony Corner</font></b></center>
+
+<p><i>Dear Dr Levine,</i>
+<br><i>I was working away at my lisp session and a console window popped
+up. None of my lisp windows respond any more. What should I do?</i>
+<br><i>Yours, Erroneous</i>
+<p>Dear Erroneous,
+<br>You have run into what we in the trade refer to as "deep trouble".
+Every time your lisp system reports an error to you, you are supposed to
+do something about it. If you don't, then the errors keep piling up. When
+they get to about 8 or 9 deep, you get the console window.
+<br>Dismiss the console by typing :top into it. Then <b>minimize</b> it
+(do <b>not</b> close it).
+<br>If you decide to deal with errors before you get to that stage, you
+have the following options:
+<ul>
+<li>
+If you just want to get rid of the error prompt</li>
+
+<ul>
+<li>
+type <tt>:top</tt></li>
+
+<li>
+type <tt>:c</tt>, a space, and one of the numbered options offered to you,
+e.g. <tt>:c 5</tt></li>
+
+<li>
+the key combination Alt-Shift-A will take you up one level of errors</li>
+</ul>
+
+<li>
+If you want to debug the error</li>
+
+<ul>
+<li>
+see chapter 3 of the "LispWorks User Guide"</li>
+
+<li>
+use the right-button menu / Debug... to get useful options</li>
+
+<li>
+from this menu, "Start GUI debugger" to give you an interactive window
+in which you can click on frames to see their arguments, double click to
+see the source (if it's your code, i.e. not system code), double click
+on arguments to open an "inspector" in which you can explore their structure
+more thoroughly</li>
+
+<li>
+stay in the listener if you like and</li>
+
+<ul>
+<li>
+type <tt>:b</tt> for a backtrace showing all the function calls, or :b
+followed by a number (e.g. :b 10) to see that number of calls</li>
+
+<li>
+use <tt>:p</tt> and <tt>:n</tt> to navigate up and down the stack</li>
+
+<li>
+use <tt>:v</tt> to see arguments to the frame you're on now</li>
+</ul>
+</ul>
+</ul>
+
+<p><br><i>Dear Dr Levine,</i>
+<br><i>I called my function and I think there must be something wrong because
+it never returned and that was ten minutes ago. How do I interrupt it?</i>
+<br><i>Yours, Forever.</i>
+<p>Dear Forever,
+<br>To interrupt the lisp process, type Control-Break into the listener.
+This should give you a debugging prompt.
+<br>Sometimes, you might imagine your code went away and never returned,
+but in fact you hadn't typed in a complete lisp form yet and the listener
+is hung reading your form. Test for this by seeing if the listener responds
+at all to mouse clicks, etc. If it does then it's still waiting for input.
+Check you closed all your lists, strings, etc. As a last resort, Alt-K
+will give you a fresh prompt and you can repeat the damage.
+<br>&nbsp;
+<p><i>Dear Dr Levine,</i>
+<br><i>How do I find out what a function does? How do I find the function
+I need to do a job?</i>
+<br><i>Yours, Lookitup.</i>
+<p>Dear Lookitup,
+<br>To find out what a Common Lisp function does, look it up first in Graham.
+For further detail, try Cltl2 online and / or the HyperSpec (under Help
+/ Manuals menu as "ANSI Common Lisp Standard" or go to LispWorks Browesable
+Documentation from your start menu). To get direct to the correct HyperSpec
+entry for a symbol, click on that symbol and use the key combination Control-Shift-D.
+This will prompt you (see thin window at bottom of listener / editor) to
+confirm the symbol you're interested in: type return and the html doc will
+be displayed for you.
+<br>To find related functions from a HyperSpec page, try the icon of an
+up-arrow - this will take you to a dictionary of related concepts.
+<br>To get rapidly to see the argument list for any function (yours or
+system), use the key combination Alt-=.
+<br>To get a list of functions with related names, try the lisp function
+<tt>apropos</tt>.
+Example:
+<blockquote><tt>CL-USER 14 > (apropos 'apropos 'CL)</tt>
+<p><tt>APROPOS -- #&lt;function APROPOS 20200D02></tt>
+<br><tt>APROPOS-LIST -- #&lt;function APROPOS-LIST 2020DE0A></tt>
+<p><tt>CL-USER 15 ></tt></blockquote>
+This gives you every symbol either in Common Lisp, or typed by you, with
+the word "apropos" anywhere in its name. Output sometimes voluminous, but
+can be helpful. (Warning: <tt>(apropos 'a 'CL) </tt>will give you every
+symbol containing the letter "a". Stand well back.)
+<p><i>Dear Dr Levine,</i>
+<br><i>I get muddled between the listener and the editor, and between files
+and buffers, and all that. Can you sort me out?</i>
+<br><i>Yours, Troubled.</i>
+<p>Dear Troubled,
+<br>Think of the listener as a scratch-pad, and the editor as where you
+generate your code. Points to watch out for:
+<ul>
+<li>
+the editor window may have several files on the go at once. To switch between
+them, either use the "buffers" tab (double click on the buffer you want
+to edit), or use the key combination Control-X B.</li>
+
+<li>
+when you save a source file from the editor, make sure it really has a
+.lisp extension. <b>You have to type this in explicitly</b> - the dialog
+box claims to be showing you files of type .lisp (and indeed it is doing
+that) but this does not mean that it will supply that for you as a default
+file type. If you mess up, rename the file (the lisp function <tt>rename-file</tt>,
+or "Alt-X Rename File", or the desktop).</li>
+
+<li>
+to open a file, use the File / Open menu from the podium, or the "open
+file" icon on the podium, or the key combination Control-X Control-F, or
+the right-button File menu.</li>
+
+<li>
+to save a file, you have the obvious counterparts of all the above ways
+to do it. The key combination for "save" is Control-X Control-S and for
+"save as" it's Control-X Control-W. Otoh, Control-X S will save <u>all</u>
+your files, which is handy if the pub beckons.</li>
+
+<li>
+while I think of it, be aware that Control-X Control-C is "save files and
+exit".</li>
+
+<li>
+don't forget Control-H B to see the full unexpurgated list of all these
+key bindings.</li>
+</ul>
+Once you have written and saved your code, you need to know how to get
+the lisp image to pay attention to it. As ever, multiple choices for how
+you do it. Pick a favourite and discard the herd.
+<ul>
+<li>
+to get the contents of a <u>buffer</u> loaded into the lisp, use the right
+button Buffer menu. Compiling takes a little longer that evaluating but
+is more likely to find syntax errors up front. On the other hand, interpreted
+code is often more debuggable, as the debugger has access to all your local
+variables. Pay heed to all compilation warnings. Type a space bar when
+it asks you. Use the "Output" tab to see it again if you need this.</li>
+
+<li>
+to get the contents of a <u>file</u> loaded into lisp, use the right button
+File menu, or the podium's file menu. Note that in this case, compiling
+a file does not imply loading its code too. So you need to compile <u>and</u>
+load it. Compiled files are of type .fsl.</li>
+
+<li>
+you can mix these with definitions typed directly into the listener. Lisp
+doesn't care, but make sure you have saved everything at the end of the
+day.</li>
+</ul>
+
+<p><br><i>Dear Dr Levine,</i>
+<br><i>How do I insert a newline into a function I'm messing with in the
+listener. Each time I type return it yanks the whole thing down to the
+prompt. It's getting annoying.</i>
+<br><i>Yours, Annoyed.</i>
+<p>Dear Annoyed,
+<br>In the listener, Return is bound to the editor command "Execute or
+Insert Newline or Yank from Previous Prompt" (igh). What you probably wanted
+was Control-O (letter O not digit 0) which stands for "Open Line". It inserts
+a newline into the buffer without moving anything anywhere.
+<br>&nbsp;
+<p><i>Dear Dr Levine,</i>
+<br><i>I wish to cultivate your suggestions for becoming a lazy typist.
+Can you remind me how it's done?</i>
+<br><i>Yours, Slothful.</i>
+<p>Dear Slothful,
+<br>What a good idea. Type Alt-Control-I to complete a symbol by comparing
+what you've typed with all the symbols in memory. Type Alt-/ to complete
+by looking backwards up the current window.
+<br>&nbsp;
+<p><i>Dear Dr Levine,</i>
+<br><i>Although it doesn't signal any errors, my code still doesn't do
+what I want it to? How do I fix it?</i>
+<br><i>Yours, Broken</i>
+<p>Dear Broken,
+<br>The macros <tt>trace</tt> and <tt>untrace</tt>, and the function <tt>break</tt>
+will all be of interest to you. Chapter 5 of the "LispWorks User Guide"
+will be of great use, but the basic idea is that if you <tt>trace</tt>
+a function, then every time it is called and every time it returns, you
+get a line of output in your listener to tell you about it. If the function
+returns abnormally (e.g by throwing - which we haven't covered yet - or
+by you aborting from an error), the trace output will say "Throwing".
+<br>Function <tt>break</tt> takes a format string (and format arguments
+if the string wants them). You insert the function in your code. When it's
+called, it uses the format information to print a message to the listener,
+then it enters a debugging loop.
+<blockquote><tt>CL-USER 29 > (defun foo (x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(if (> x 5)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(progn</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(break "Hello, x is ~a." x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(1- x))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(1+ (foo (+ x 2)))))</tt>
+<br><tt>FOO</tt>
+<p><tt>CL-USER 30 > (trace foo)</tt>
+<br><tt>(FOO)</tt>
+<p><tt>CL-USER 31 > (foo -8)</tt>
+<br><tt>0 FOO > (-8)</tt>
+<br><tt>&nbsp; 1 FOO > (-6)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; 2 FOO > (-4)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3 FOO > (-2)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4 FOO > (0)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5 FOO >
+(2)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+6 FOO > (4)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+7 FOO > (6)</tt>
+<p><tt>Hello, x is 6.</tt>
+<br><tt>&nbsp; 1 (continue) Return from break.</tt>
+<br><tt>&nbsp; 2 (abort) Return to level 0.</tt>
+<br><tt>&nbsp; 3 Return to top loop level 0.</tt>
+<p><tt>Type :b for backtrace, :c &lt;option number> to proceed,&nbsp; or
+:? for other options</tt>
+<p><tt>CL-USER 32 : 1 > :c</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+7 FOO &lt; (5)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+6 FOO &lt; (6)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5 FOO &lt;
+(7)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4 FOO &lt; (8)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3 FOO &lt; (9)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; 2 FOO &lt; (10)</tt>
+<br><tt>&nbsp; 1 FOO &lt; (11)</tt>
+<br><tt>0 FOO &lt; (12)</tt>
+<br><tt>12</tt>
+<p><tt>CL-USER 33 ></tt></blockquote>
+<i>Dear Dr Levine,</i>
+<br><i>I know you're hot on getting indentation right, and I do appreciate
+that badly indented code is almost impossible to fix because you can't
+see what's happening where. How do I sort this?</i>
+<br><i>Yours, Jagged.</i>
+<p>Dear Jagged,
+<br>To indent one line of code, use the Tab key. You do not need to be
+at the start of the line to get this to work.
+<br>To indent a whole lisp form (eg a whole defun) click on the opening
+left parenthesis and use the key combination Alt-Control-Q.
+<p><i>Dear Dr Levine,</i>
+<br><i>How do I tell whether a function is defined or not? How do I tell
+if it's a Common Lisp function or one of yours / mine?</i>
+<br><i>Yours, Scatty</i>
+<p>Dear Scatty,
+<br>To find out whether a symbol is defined as a function or not, use <tt>fboundp</tt>:
+<br><tt>&nbsp;&nbsp;&nbsp; (fboundp 'mapcar) => true</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (fboundp 'rubbish) => nil</tt>
+<br>To find out whether it is a Common Lisp symbol, use <tt>symbol-package</tt>:
+<br><tt>&nbsp;&nbsp;&nbsp; (symbol-package 'defun)&nbsp; =>&nbsp; #&lt;PACKAGE
+COMMON-LISP></tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (symbol-package 'my-own-junk)&nbsp; =>&nbsp;
+#&lt;PACKAGE COMMON-LISP-USER></tt>
+<br>To find out whether it's a macro or a function, use <tt>macro-function</tt>:
+<br><tt>&nbsp;&nbsp;&nbsp; (macro-function 'mapcar) => nil</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (macro-function 'defun) => true</tt>
+<br>Similarly, <tt>special-operator-p</tt> will tell you whether a symbol
+is defined to be a special operator.
+<br>&nbsp;
+<p><i>Dear Dr Levine,</i>
+<br><i>How will I ever learn to use all the flash features in the Editor?</i>
+<br><i>Yours, Keycode.</i>
+<p>Dear Keycode,
+<br>I suppose the lazy (from my point of view) answer is to suggest you
+look in the "Editor User Guide"! A quick flick through chapter 2 may be
+enough. If you want to know (say) all the commands to do with moving Backwards,
+use the key combination Control-H A, then type the word <i>backwards</i>
+to the prompt, and see what you get.
+<br>&nbsp;
+<div align=right>Copyright (C) <a href="mailto:ndl@ravenbrook.com">Nick
+Levine</a> 1999. All rights reserved.
+<br>last modified 1999-11-02
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/additional/agony-corner.html#2 $</div>
+
+<br>&nbsp;
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/additional/agony-corner.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:24:03 GMT -->
+</html>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Testing Named Routes in the Rails Console</title>
+	<atom:link href="https://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Abhilash</title>
+		<link>https://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console/comment-page-1#comment-44189</link>
+		<dc:creator><![CDATA[Abhilash]]></dc:creator>
+		<pubDate>Wed, 18 May 2011 15:01:22 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console#comment-44189</guid>
+		<description><![CDATA[This was a big help! Thanks very much.]]></description>
+		<content:encoded><![CDATA[<p>This was a big help! Thanks very much.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Peter Baker</title>
+		<link>https://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console/comment-page-1#comment-44183</link>
+		<dc:creator><![CDATA[Peter Baker]]></dc:creator>
+		<pubDate>Mon, 02 May 2011 22:14:14 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console#comment-44183</guid>
+		<description><![CDATA[Very cool. Now I have a quick way to look at all the automagic paths and urls! Thanks all
+
+#from rails console
+app.methods.grep(/(path&#124;url)/).sort]]></description>
+		<content:encoded><![CDATA[<p>Very cool. Now I have a quick way to look at all the automagic paths and urls! Thanks all</p>
+<p>#from rails console<br />
+app.methods.grep(/(path|url)/).sort</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Turadg</title>
+		<link>https://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console/comment-page-1#comment-44181</link>
+		<dc:creator><![CDATA[Turadg]]></dc:creator>
+		<pubDate>Thu, 21 Apr 2011 02:04:54 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console#comment-44181</guid>
+		<description><![CDATA[Joshua, that&#039;s even better! Thanks.]]></description>
+		<content:encoded><![CDATA[<p>Joshua, that&#8217;s even better! Thanks.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Testing Rails Routes in the Console &#124; Sophwarist</title>
+		<link>https://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console/comment-page-1#comment-43251</link>
+		<dc:creator><![CDATA[Testing Rails Routes in the Console &#124; Sophwarist]]></dc:creator>
+		<pubDate>Thu, 04 Nov 2010 21:24:07 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console#comment-43251</guid>
+		<description><![CDATA[[...] a useful tip for testing rails routes in your [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] a useful tip for testing rails routes in your [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Joshua Emmons</title>
+		<link>https://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console/comment-page-1#comment-43221</link>
+		<dc:creator><![CDATA[Joshua Emmons]]></dc:creator>
+		<pubDate>Wed, 08 Sep 2010 00:27:54 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console#comment-43221</guid>
+		<description><![CDATA[An even easier way (that still works in Rails3), just call your named route off of  app:
+
+app.my_route_name_url(1) #=&#062; &quot;http://http://www.example.com/my_route_name/1&quot;]]></description>
+		<content:encoded><![CDATA[<p>An even easier way (that still works in Rails3), just call your named route off of  app:</p>
+<p>app.my_route_name_url(1) #=&gt; &#8220;http://http://www.example.com/my_route_name/1&#8221;</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Josh&#039;s Blog &#187; Blog Archive &#187; T​e​s​t​i​n​g N​a​m​e​d R​o​u​t​e​s i​n t​h​e R​a​i​l​s C​o​n​s​o​l​e</title>
+		<link>https://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console/comment-page-1#comment-43220</link>
+		<dc:creator><![CDATA[Josh&#039;s Blog &#187; Blog Archive &#187; T​e​s​t​i​n​g N​a​m​e​d R​o​u​t​e​s i​n t​h​e R​a​i​l​s C​o​n​s​o​l​e]]></dc:creator>
+		<pubDate>Tue, 07 Sep 2010 22:03:10 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console#comment-43220</guid>
+		<description><![CDATA[[...] Also works for RESTful routes. &#8211; Link [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] Also works for RESTful routes. &#8211; Link [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: insanedreamer</title>
+		<link>https://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console/comment-page-1#comment-43198</link>
+		<dc:creator><![CDATA[insanedreamer]]></dc:creator>
+		<pubDate>Tue, 24 Aug 2010 19:06:47 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console#comment-43198</guid>
+		<description><![CDATA[For those of you who find this and are using Rails3, ActionController::UrlWriter has been deprecated. Instead use:
+
+include Rails.application.routes.url_helpers]]></description>
+		<content:encoded><![CDATA[<p>For those of you who find this and are using Rails3, ActionController::UrlWriter has been deprecated. Instead use:</p>
+<p>include Rails.application.routes.url_helpers</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: lucapette</title>
+		<link>https://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console/comment-page-1#comment-43093</link>
+		<dc:creator><![CDATA[lucapette]]></dc:creator>
+		<pubDate>Fri, 02 Apr 2010 07:25:31 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console#comment-43093</guid>
+		<description><![CDATA[nice tip. I&#039;m using it at this very moment]]></description>
+		<content:encoded><![CDATA[<p>nice tip. I&#8217;m using it at this very moment</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Phil</title>
+		<link>https://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console/comment-page-1#comment-43025</link>
+		<dc:creator><![CDATA[Phil]]></dc:creator>
+		<pubDate>Thu, 21 Jan 2010 12:45:41 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console#comment-43025</guid>
+		<description><![CDATA[Thank you kindly.]]></description>
+		<content:encoded><![CDATA[<p>Thank you kindly.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Max Williams</title>
+		<link>https://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console/comment-page-1#comment-42750</link>
+		<dc:creator><![CDATA[Max Williams]]></dc:creator>
+		<pubDate>Mon, 28 Sep 2009 11:03:15 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2008/01/08/testing-named-routes-in-the-rails-console#comment-42750</guid>
+		<description><![CDATA[Just what i was looking for, thanks :)]]></description>
+		<content:encoded><![CDATA[<p>Just what i was looking for, thanks :)</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.282 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:01:45 -->
+
+<!-- Compression = gzip -->

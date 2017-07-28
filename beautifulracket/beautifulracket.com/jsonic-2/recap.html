@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/jsonic-2/recap.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:33 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Level up: jsonic revisited</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;level-up-jsonic-revisited&quot;)"></div><h1 anchor="level-up-jsonic-revisited" id="level-up-jsonic-revisited" hyphens="none">Level up: <span class="my-code" decode="exclude">jsonic</span> revisited</h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="setup.html">2&emsp;setup</a></li><li><a href="contracts.html">3&emsp;con­tracts</a></li><li><a href="unit-tests.html">4&emsp;unit tests</a></li><li><a href="source-locations.html">5&emsp;source loca­tions</a></li><li><a href="drracket-integration.html">6&emsp;drracket inte­gra­tion</a></li><li><a href="syntax-coloring.html">7&emsp;syn­tax col­or­ing</a></li><li><a href="indenting.html">8&emsp;indent­ing</a></li><li><a href="toolbar-buttons.html">9&emsp;tool­bar but­tons</a></li><li><a class="here" href="recap.html">10&emsp;recap</a></li><li><a href="source-listing.html">11&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_F89wl&quot;)"></div><p id="a_F89wl">In this tuto­r­ial we learned about some of the optional ingre­di­ents com­monly found in well-crafted Racket lan­guages. Maybe we would skip these extra steps for a quick-and-dirty DSL like the upcom­ing <a href="../wires/index.html"><span class="my-code" decode="exclude">wires</span></a>. But for a lan­guage like <span class="my-code" decode="exclude">jsonic</span>, that we want to main­tain and share, these are wise invest­ments.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_K8gBd&quot;)"></div><p id="a_K8gBd">On the imple­men­ta­tion side, we intro­duced:</p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_tV9pN&quot;)"></div><p id="a_tV9pN"><a href="contracts.html">Con­tracts</a>, which wrap around func­tions to ensure their input argu­ments and return val­ues meet our require­ments.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_SqJfd&quot;)"></div><p id="a_SqJfd"><a href="unit-tests.html">Unit tests</a>, which auto­mat­i­cally check that our func­tions behave the way we expect them to with sam­ple cases.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_iRth0&quot;)"></div><p id="a_iRth0"><a href="source-locations.html">Source loca­tions</a>, which we pre­serve through­out our imple­men­ta­tion so that our lan­guage inter­faces well with other tools.</p></div></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_7Ngok&quot;)"></div><p id="a_7Ngok">On the user side, we saw how we can cus­tomize the behav­ior of DrRacket for our lan­guage:</p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Ws23q&quot;)"></div><p id="a_Ws23q"><a href="syntax-coloring.html">Syn­tax col­or­ing</a>, which uses a lexer to apply color cat­e­gories to parts of the source code.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Lomyk&quot;)"></div><p id="a_Lomyk"><a href="indenting.html">Indent­ing</a>, which auto­mat­i­cally refor­mats the code.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_fNUB5&quot;)"></div><p id="a_fNUB5"><a href="toolbar-buttons.html">Tool­bar but­tons</a>, which appear at the top of the DrRacket win­dow and can have any behav­ior within the UI.</p></div></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_C32Qg&quot;)"></div><p id="a_C32Qg">The last step in a lan­guage project is prepar­ing it for dis­tri­b­u­tion by set­ting it up as a pack­age with doc­u­men­ta­tion. We’ll cover that in <a href="../jsonic-3/index.html">the final part</a> of our <span class="my-code" decode="exclude">jsonic</span> tril­ogy.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="setup.html">2&emsp;setup</a></li><li><a href="contracts.html">3&emsp;con­tracts</a></li><li><a href="unit-tests.html">4&emsp;unit tests</a></li><li><a href="source-locations.html">5&emsp;source loca­tions</a></li><li><a href="drracket-integration.html">6&emsp;drracket inte­gra­tion</a></li><li><a href="syntax-coloring.html">7&emsp;syn­tax col­or­ing</a></li><li><a href="indenting.html">8&emsp;indent­ing</a></li><li><a href="toolbar-buttons.html">9&emsp;tool­bar but­tons</a></li><li><a class="here" href="recap.html">10&emsp;recap</a></li><li><a href="source-listing.html">11&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="toolbar-buttons.html">← prev</a>
+    <a class="nav-right" href="source-listing.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

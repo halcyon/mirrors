@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/basic/testing-the-language.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:44 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Go with the flow: basic</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;go-with-the-flow-basic&quot;)"></div><h1 anchor="go-with-the-flow-basic" id="go-with-the-flow-basic" hyphens="none">Go with the flow: <span class="my-code" decode="exclude">basic</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-lexer.html">3&emsp;the lexer</a></li><li><a href="the-tokenizer.html">4&emsp;the tok­enizer</a></li><li><a href="the-parser.html">5&emsp;the parser</a></li><li><a href="the-reader.html">6&emsp;the reader</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a class="here" href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_kHiyy&quot;)"></div><p id="a_kHiyy">But does it work? Let’s start with the all-time BASIC favorite:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Kj6lT&quot;)"></div><div class="highlight-container" id="a_Kj6lT"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic<br/>10 print "HELLO WORLD!"<br/>20 goto 10</div><div class="highlight" form="false" id="a_jhyNf"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="source"><pre>#lang basic
+<span class="nl">10</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"HELLO WORLD!"</span>
+<span class="nl">20</span><span class="w"> </span><span class="vg">goto</span><span class="w"> </span><span class="il">10</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_4tpjn&quot;)"></div><div class="highlight-container" id="a_4tpjn"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">HELLO WORLD!<br/>HELLO WORLD!<br/>HELLO WORLD!<br/>HELLO WORLD!<br/>HELLO WORLD!<br/>HELLO WORLD!<br/>···</div><div class="highlight" form="false" id="a_Mj7Iw"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="source"><pre>HELLO WORLD!
+HELLO WORLD!
+HELLO WORLD!
+HELLO WORLD!
+HELLO WORLD!
+HELLO WORLD!
+···
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_EpWT7&quot;)"></div><p id="a_EpWT7">Let’s also try our orig­i­nal sam­ple pro­gram, which was designed to cause extra grief for <a href="the-tokenizer.html">the tok­enizer</a> and <a href="the-parser.html">the parser</a>:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Vh4Vl&quot;)"></div><div class="highlight-container" id="a_Vh4Vl"><div id="code_45" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic<br/>30 rem print 'ignored'<br/>35<br/>50 print "never gets here"<br/>40 end<br/>60 print 'three' : print 1.0 + 3<br/>70 goto 11. + 18.5 + .5 rem ignored<br/>10 print "o" ; "n" ; "e"<br/>20 print : goto 60.0 : end</div><div class="highlight" form="false" id="a_Fritf"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="source"><pre>#lang basic
+30 rem print &#39;ignored&#39;
+35
+50 print "never gets here"
+40 end
+60 print &#39;three&#39; : print 1.0 + 3
+70 goto 11. + 18.5 + .5 rem ignored
+10 print "o" ; "n" ; "e"
+20 print : goto 60.0 : end
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk2" data-clipboard-target="#code_45" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_cHnm4&quot;)"></div><div class="highlight-container" id="a_cHnm4"><div id="code_46" form="false" decode="exclude" style="font-size:0;width:0;height:0">one<br/><br/>three<br/>4</div><div class="highlight" form="false" id="a_mXHQ0"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="source"><pre>one
+
+three
+4
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk3" data-clipboard-target="#code_46" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_GX7lG&quot;)"></div><p id="a_GX7lG">Let’s also see how our source loca­tions worked out. Sup­pose we change line num­ber <span class="my-code" decode="exclude">50</span> to be <span class="my-code" decode="exclude">30</span>:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_MuUiR&quot;)"></div><div class="highlight-container" id="a_MuUiR"><div id="code_47" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic<br/>30 rem print 'ignored'<br/>35<br/>30 print "never gets here"<br/>40 end<br/>60 print 'three' : print 1.0 + 3<br/>70 goto 11. + 18.5 + .5<br/>10 print "o" ; "n" ; "e"<br/>20 print : goto 60.0 : end</div><div class="highlight" form="false" id="a_bdl7Y"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="source"><pre>#lang basic
+30 rem print &#39;ignored&#39;
+35
+<span class="hll">30 print "never gets here"
+</span>40 end
+60 print &#39;three&#39; : print 1.0 + 3
+70 goto 11. + 18.5 + .5
+10 print "o" ; "n" ; "e"
+20 print : goto 60.0 : end
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk4" data-clipboard-target="#code_47" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_fkFMi&quot;)"></div><p id="a_fkFMi">DrRacket will raise the error we’d expect it to when it finds con­flict­ing def­i­n­i­tions, and the offend­ing line is high­lighted cor­rectly:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Vldpk5&quot;)"></div><div id="a_Vldpk5" style="text-align:center;padding:0.5rem;padding-bottom:1rem"><img style="width:90%;border:1px solid #ccc" src="define-error.gif"/></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rJE8W&quot;)"></div><p id="a_rJE8W">Let’s switch it back, and see what hap­pens if we intro­duce a bogus line num­ber in the last <span class="my-code" decode="exclude">goto</span>:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_XIMtQ&quot;)"></div><div class="highlight-container" id="a_XIMtQ"><div id="code_48" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic-demo<br/>30 rem print 'ignored'<br/>35<br/>50 print "never gets here"<br/>40 end<br/>60 print 'three' : print 1.0 + 3<br/>70 goto 11. + 18.5 + .5<br/>10 print "o" ; "n" ; "e"<br/>20 print : goto 6000.0 : end</div><div class="highlight" form="false" id="a_9dThH"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="source"><pre>#lang basic-demo
+30 rem print &#39;ignored&#39;
+35
+<span class="hll">50 print "never gets here"
+</span>40 end
+60 print &#39;three&#39; : print 1.0 + 3
+70 goto 11. + 18.5 + .5
+10 print "o" ; "n" ; "e"
+<span class="hll">20 print : goto 6000.0 : end
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk6" data-clipboard-target="#code_48" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_bj72X&quot;)"></div><div class="highlight-container err" id="a_bj72X"><div id="code_49" form="false" decode="exclude" style="font-size:0;width:0;height:0">error in line 20: line 6000 not found</div><div class="highlight" form="false" id="a_HDFR3"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>error in line 20: line 6000 not found
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk7" data-clipboard-target="#code_49" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_YBztr&quot;)"></div><p id="a_YBztr">A side effect of mak­ing our lines into func­tions is that they’re avail­able in the DrRacket REPL like any other func­tion. For instance:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_9UaPT&quot;)"></div><div class="highlight-container" id="a_9UaPT"><div id="code_50" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; (line-10)<br/>one<br/>&gt; (line-60)<br/>three<br/>4<br/>&gt; (line-70)<br/>uncaught exception: #&lt;change-line-signal&gt;</div><div class="highlight" form="false" id="a_zYZuz"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="source"><pre>&gt; (line-10)
+one
+&gt; (line-60)
+three
+4
+&gt; (line-70)
+uncaught exception: #&lt;change-line-signal&gt;
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk8" data-clipboard-target="#code_50" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_chEvj&quot;)"></div><p id="a_chEvj">This last result makes sense: we’re try­ing to exe­cute a <span class="my-code" decode="exclude">goto</span> out­side the con­text of the pro­gram loop.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-lexer.html">3&emsp;the lexer</a></li><li><a href="the-tokenizer.html">4&emsp;the tok­enizer</a></li><li><a href="the-parser.html">5&emsp;the parser</a></li><li><a href="the-reader.html">6&emsp;the reader</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a class="here" href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="the-expander.html">← prev</a>
+    <a class="nav-right" href="recap.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

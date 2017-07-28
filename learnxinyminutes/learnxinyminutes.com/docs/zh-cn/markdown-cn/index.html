@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/zh-cn/markdown-cn/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:34:52 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn markdown in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../../css/normalize.css">
+        <link rel="stylesheet" href="../../../css/main.css">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fzh-cn%2Fmarkdown-cn%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3Dmarkdown">
+        分享此页
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">X分钟速成Y</a></h2>
+  <h2>其中 Y=markdown</h2>
+  
+    <p class="filelink">
+    源代码下载：
+    <a href="../../files/learnmarkdown-cn.md">learnmarkdown-cn.md</a>
+    </p>
+  
+  <div id="doc">
+    <p>Markdown 由 John Gruber 于 2004年创立. 它旨在成为一门容易读写的语法结构，并可以便利地转换成 HTML（以及其他很多）格式。</p>
+
+<p>欢迎您多多反馈以及分支和请求合并。</p>
+<pre class="highlight markdown"><code>&lt;!-- Markdown 是 HTML 的父集，所以任何 HTML 文件都是有效的 Markdown。
+这意味着我们可以在 Markdown 里使用任何 HTML 元素，比如注释元素，
+且不会被 Markdown 解析器所影响。不过如果你在 Markdown 文件内创建了 HTML 元素，
+你将无法在 HTML 元素的内容中使用 Markdown 语法。--&gt;
+
+&lt;!-- 在不同的解析器中，Markdown 的实现方法有所不同。
+此教程会指出当某功能是否通用及是否只对某一解析器有效。 --&gt;
+
+<span class="c">&lt;!-- 标头 --&gt;</span>
+<span class="c">&lt;!-- 通过在文本前加上不同数量的hash(#), 你可以创建相对应的 &lt;h1&gt;</span> 
+到 <span class="c">&lt;h6&gt;</span> HTML元素。--&gt;
+
+<span class="gh"># 这是一个 &lt;h1&gt;</span>
+<span class="gu">## 这是一个 &lt;h2&gt;</span>
+<span class="gu">### 这是一个 &lt;h3&gt;</span>
+<span class="gu">#### 这是一个 &lt;h4&gt;</span>
+<span class="gu">##### 这是一个 &lt;h5&gt;</span>
+<span class="gu">###### 这是一个 &lt;h6&gt;</span>
+
+<span class="c">&lt;!-- 对于 &lt;h1&gt;</span> 和 <span class="c">&lt;h2&gt;</span> 元素，Markdown 额外提供了两种添加方式。 --&gt;
+<span class="gu">这是一个 h1
+=============
+</span>
+<span class="gh">这是一个 h2
+-------------
+</span>
+<span class="c">&lt;!-- 简易文本样式 --&gt;</span>
+<span class="c">&lt;!-- 文本的斜体，粗体，和删除线在 Markdown 中可以轻易地被实现。--&gt;</span>
+
+<span class="ge">*此文本为斜体。*</span>
+<span class="ge">_此文本也是。_</span>
+
+<span class="gs">**此文本为粗体。**</span>
+<span class="gs">__此文本也是__</span>
+
+<span class="gs">***此文本是斜体加粗体。**</span><span class="err">*</span>
+<span class="gs">**_或者这样。_**</span>
+<span class="ge">*__这个也是！__*</span>
+
+<span class="c">&lt;!-- 在 GitHub 采用的 Markdown 中 --&gt;</span>
+
+~~此文本为删除线效果。~~
+
+<span class="c">&lt;!-- 单个段落由一句或多句邻近的句子组成，这些句子由一个或多个空格分隔。--&gt;</span>
+
+这是第一段落. 这句话在同一个段落里，好玩么？
+
+现在我是第二段落。
+这句话也在第二段落！
+
+这句话在第三段落！
+
+<span class="c">&lt;!-- 如果你插入一个 HTML中的&lt;br /&gt;</span>标签，你可以在段末加入两个以上的空格，
+然后另起一段。--&gt;
+
+此段落结尾有两个空格（选中以显示）。  
+
+上文有一个 <span class="c">&lt;br /&gt;</span> ！
+
+<span class="c">&lt;!-- 段落引用可由 &gt;</span> 字符轻松实现。--&gt;
+<span class="gt">
+&gt; 这是一个段落引用. 你可以</span>
+<span class="gt">&gt; 手动断开你的句子，然后在每句句子前面添加 “&gt;” 字符。或者让你的句子变得很长，以至于他们自动得断开。</span>
+<span class="gt">&gt; 只要你的文字以“&gt;” 字符开头，两种方式无异。</span>
+<span class="gt">
+&gt; 你也对文本进行</span>
+<span class="gt">&gt;&gt; 多层引用</span>
+<span class="gt">&gt; 这多机智啊！</span>
+
+<span class="c">&lt;!-- 序列 --&gt;</span>
+<span class="c">&lt;!-- 无序序列可由星号，加号或者减号来建立 --&gt;</span>
+<span class="p">
+*</span> 项目
+<span class="p">*</span> 项目
+<span class="p">*</span> 另一个项目
+
+或者
+<span class="p">
++</span> 项目
+<span class="p">+</span> 项目
+<span class="p">+</span> 另一个项目
+
+或者 
+<span class="p">
+-</span> 项目
+<span class="p">-</span> 项目
+<span class="p">-</span> 最后一个项目
+
+<span class="c">&lt;!-- 有序序列可由数字加点来实现 --&gt;</span>
+<span class="p">
+1.</span> 项目一
+<span class="p">2.</span> 项目二
+<span class="p">3.</span> 项目三
+
+&lt;!-- 即使你的标签数字有误，Markdown 依旧会呈现出正确的序号，
+不过这并不是一个好主意--&gt;
+<span class="p">
+1.</span> 项目一
+<span class="p">1.</span> 项目二
+<span class="p">1.</span> 项目三
+<span class="c">&lt;!-- (此段与前例一模一样) --&gt;</span>
+
+<span class="c">&lt;!-- 你也可以使用子序列 --&gt;</span>
+<span class="p">
+1.</span> 项目一
+<span class="p">2.</span> 项目二
+<span class="p">3.</span> 项目三
+<span class="p">    *</span> 子项目
+<span class="p">    *</span> 子项目
+<span class="p">4.</span> 项目四
+
+<span class="c">&lt;!-- 代码段落 --&gt;</span>
+<span class="c">&lt;!-- 代码段落（HTML中 &lt;code&gt;</span>标签）可以由缩进四格（spaces）
+或者一个制表符（tab）实现--&gt;<span class="sb">
+
+    This is code
+    So is this
+
+</span><span class="c">&lt;!-- 在你的代码中，你仍然使用tab可以进行缩进操作 --&gt;</span><span class="sb">
+
+    my_array.each do |item|
+        puts item
+    end
+
+</span><span class="c">&lt;!-- 内联代码可由反引号 ` 实现 --&gt;</span>
+
+John 甚至不知道 <span class="sb">`go_to()`</span> 方程是干嘛的!
+
+<span class="c">&lt;!-- 在GitHub的 Markdown中，对于代码你可以使用特殊的语法 --&gt;</span>
+
+<span class="se">\`\`\`</span>ruby <span class="c">&lt;!-- 插入时记得移除反斜线， 仅留```ruby ！ --&gt;</span>
+def foobar
+    puts "Hello world!"
+end
+<span class="se">\`\`\`</span> <span class="c">&lt;!-- 这里也是，移除反斜线，仅留 ``` --&gt;</span>
+
+<span class="c">&lt;!-- 以上代码不需要缩进，而且 GitHub 会根据```后表明的语言来进行语法高亮 --&gt;</span>
+
+<span class="c">&lt;!-- 水平线 （&lt;hr /&gt;</span>） --&gt;
+<span class="c">&lt;!-- 水平线可由三个或以上的星号或者减号创建，可带可不带空格。 --&gt;</span>
+<span class="p">
+***</span>
+<span class="p">---
+- - - </span>
+<span class="p">****************
+</span>
+<span class="c">&lt;!-- 链接 --&gt;</span>
+&lt;!-- Markdown 最棒的地方就是简易的链接制作。链接文字放在中括号<span class="err">[</span>]内，
+在随后的括弧()内加入url。--&gt;
+
+<span class="p">[</span><span class="nv">点我点我!</span><span class="p">](</span><span class="sx">http://test.com/</span><span class="p">)</span>
+
+<span class="c">&lt;!-- 你也可以为链接加入一个标题：在括弧内使用引号 --&gt;</span>
+
+<span class="p">[</span><span class="nv">点我点我!</span><span class="p">](</span><span class="sx">http://test.com/</span> <span class="nn">"连接到Test.com"</span><span class="p">)</span>
+
+<span class="c">&lt;!-- 相对路径也可以有 --&gt;</span>
+
+<span class="p">[</span><span class="nv">去 music</span><span class="p">](</span><span class="sx">/music/</span><span class="p">)</span>.
+
+<span class="c">&lt;!-- Markdown同样支持引用样式的链接 --&gt;</span>
+
+<span class="p">[</span><span class="nv">点此链接</span><span class="p">][</span><span class="ss">link1</span><span class="p">]</span>以获取更多信息！
+<span class="p">[</span><span class="nv">看一看这个链接</span><span class="p">][</span><span class="ss">foobar</span><span class="p">]</span> 如果你愿意的话.<span class="sb">
+
+
+
+
+</span>&lt;!-- 链接的标题可以处于单引号中，括弧中或是被忽略。引用名可以在文档的任意何处，
+并且可以随意命名，只要名称不重复。--&gt;
+
+<span class="c">&lt;!-- “隐含式命名” 的功能可以让链接文字作为引用名 --&gt;</span>
+
+<span class="p">[</span><span class="nv">This</span><span class="p">][]</span> is a link.<span class="sb">
+
+
+
+</span><span class="c">&lt;!-- 但这并不常用 --&gt;</span>
+
+<span class="c">&lt;!-- 图像 --&gt;</span>
+<span class="c">&lt;!-- 图像与链接相似，只需在前添加一个感叹号 --&gt;</span>
+
+<span class="p">![</span><span class="nv">这是我图像的悬停文本(alt text)</span><span class="p">](</span><span class="sx">http://imgur.com/myimage.jpg</span> <span class="nn">"可选命名"</span><span class="p">)</span>
+
+<span class="c">&lt;!-- 引用样式也同样起作用 --&gt;</span>
+
+<span class="p">![</span><span class="nv">这是我的悬停文本.</span><span class="p">][</span><span class="ss">myimage</span><span class="p">]</span><span class="sb">
+
+
+
+</span><span class="c">&lt;!-- 杂项 --&gt;</span>
+<span class="c">&lt;!-- 自动链接 --&gt;</span>
+
+<span class="nv">&lt;http://testwebsite.com/&gt;</span> 与
+<span class="p">[</span><span class="nv">http://testwebsite.com/</span><span class="p">](</span><span class="sx">http://testwebsite.com/</span><span class="p">)</span> 等同
+
+<span class="c">&lt;!-- 电子邮件的自动链接 --&gt;</span>
+
+<span class="nv">&lt;foo@bar.com&gt;</span>
+
+<span class="c">&lt;!-- 转义字符 --&gt;</span>
+
+我希望 <span class="ge">*将这段文字置于星号之间*</span> 但是我不希望它被
+斜体化, 所以我就: <span class="se">\*</span>这段置文字于星号之间<span class="se">\*</span>。
+
+<span class="c">&lt;!-- 表格 --&gt;</span>
+<span class="c">&lt;!-- 表格只被 GitHub 的 Markdown 支持，并且有一点笨重，但如果你真的要用的话: --&gt;</span>
+
+| 第一列        | 第二列    | 第三列       |
+| :----------   | :------:  | ----------:  |
+| 左对齐        | 居个中    | 右对齐       |
+| 某某某        | 某某某    | 某某某       |
+
+<span class="c">&lt;!-- 或者, 同样的 --&gt;</span>
+
+第一列 | 第二列 | 第三列
+:-- | :-: | --:
+这太丑了 | 药不能 | 停
+
+<span class="c">&lt;!-- 结束! --&gt;</span>
+
+</code></pre>
+
+<p>更多信息, 请于<a href="http://daringfireball.net/projects/Markdown/syntax">此处</a>参见 John Gruber 关于语法的官方帖子，及于<a href="https://github.com/adam-p/Markdown-here/wiki/Markdown-Cheatsheet">此处</a> 参见 Adam Pritchard 的摘要笔记。</p>
+
+    <hr>
+    <p>有建议？或者发现什么错误？在Github上<a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">开一个issue</a>，或者你自己也可以写一个pull request！
+    </p>
+    <p class="contributed">
+    原著Dan Turkel，并由<a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/zh-cn/markdown-cn.html.markdown">0个好心人</a>修改。
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://danturkel.com/">Dan Turkel</a>
+      
+    
+    </p>
+
+    <p>
+    
+      Translated by:
+      
+        <a href="https://github.com/FZSS">Fangzhou Chen</a>
+      
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/zh-cn/markdown-cn/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:34:52 GMT -->
+</html>

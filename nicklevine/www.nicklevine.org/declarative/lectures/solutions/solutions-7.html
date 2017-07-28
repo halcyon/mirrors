@@ -1,0 +1,183 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/solutions/solutions-7.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:58 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Solutions to exercises in lecture 7</title>
+</head>
+<body>
+
+<center><b><font size=+3>Solutions to exercises from "lecture notes 7"</font></b></center>
+
+<p><br>
+<br>
+<br>
+<p><tt>(defun reducing-copy-list (list)</tt>
+<br><tt>&nbsp; (reduce 'cons list :from-end t :initial-value nil))</tt>
+<p><tt>(defun reducing-reverse (list)</tt>
+<br><tt>&nbsp; (reduce (lambda (x y) (cons y x)) list :initial-value nil))</tt>
+<p><tt>;;;;;;;;;;</tt>
+<br><tt>#||</tt>
+<p><tt>(defstruct node</tt>
+<br><tt>&nbsp; data</tt>
+<br><tt>&nbsp; child-1</tt>
+<br><tt>&nbsp; child-2</tt>
+<br><tt>&nbsp; child-3)</tt>
+<p><tt>(defun copy-all-nodes (node)</tt>
+<br><tt>&nbsp; (when node</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (make-node :data (node-data node)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+:child-1 (copy-all-nodes (node-child-1 node))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+:child-2 (copy-all-nodes (node-child-2 node))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+:child-3 (copy-all-nodes (node-child-3 node)))))</tt>
+<p><tt>(defun node-find (data node)</tt>
+<br><tt>&nbsp; (when node</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (or (eql data (node-data node))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (node-find data (node-child-1
+node))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (node-find data (node-child-2
+node))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (node-find data (node-child-3
+node)))))</tt>
+<p><tt>||#</tt>
+<br><tt>;;;;;;;;;;;</tt>
+<p><tt>;; Actually I prefer the following, which does not assume the number</tt>
+<br><tt>;; of child nodes and produces cleaner code...</tt>
+<p><tt>(defstruct node</tt>
+<br><tt>&nbsp; data</tt>
+<br><tt>&nbsp; children)</tt>
+<p><tt>(defun copy-all-nodes (node)</tt>
+<br><tt>&nbsp; (make-node :data (node-data node)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+:children (mapcar 'copy-all-nodes (node-children node))))</tt>
+<p><tt>(defun node-find (data node)</tt>
+<br><tt>&nbsp; (or (eql data (node-data node))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (dolist (child (node-children node))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (when (node-find data
+child)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (return
+t)))))</tt>
+<p><tt>;;;;;;;;;;;</tt>
+<p><tt>(defun govt-cons (car cdr)</tt>
+<br><tt>&nbsp; (cons cdr car))</tt>
+<p><tt>(defun govt-car (x)</tt>
+<br><tt>&nbsp; (cdr x))</tt>
+<br><tt>(defun govt-cdr (x)</tt>
+<br><tt>&nbsp; (car x))</tt>
+<p><tt>;; this question is difficult to interpret - I guess it means that
+the</tt>
+<br><tt>;; argument to govt-list is a proper list -- otherwise if the argument</tt>
+<br><tt>;; was already a govt-list we could say (defun govt-list (&amp;rest
+x) x) ...</tt>
+<br><tt>(defun govt-list (&amp;rest things)</tt>
+<br><tt>&nbsp; (in-govt-list things))</tt>
+<p><tt>(defun in-govt-list (things)</tt>
+<br><tt>&nbsp; (when things</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (govt-cons (car things)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(in-govt-list (cdr things)))))</tt>
+<p><tt>(defun govt-length (list)</tt>
+<br><tt>&nbsp; (if list</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (1+ (govt-length (govt-cdr list)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; 0))</tt>
+<p><tt>(defun govt-member (thing govt-list)</tt>
+<br><tt>&nbsp; (when govt-list</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (if (eql thing (govt-car govt-list))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; govt-list</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (govt-member thing (govt-cdr govt-list)))))</tt>
+<p><tt>;;;;;;;;;;;</tt>
+<p><tt>;; this looks like a total rewrite to me (sigh)</tt>
+<p><tt>(defun lottery-distinct ()</tt>
+<br><tt>&nbsp; (in-lottery-distinct nil 6))</tt>
+<p><tt>(defun in-lottery-distinct (numbers how-many)</tt>
+<br><tt>&nbsp; (if (plusp how-many)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (let* ((next (1+ (random 49))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (find next numbers)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(in-lottery-distinct numbers how-many)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (in-lottery-distinct
+(cons next numbers) (1- how-many))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (sort numbers '&lt;)))</tt>
+<br>&nbsp;
+<p><tt>(defun lottery-distinct-iterative ()</tt>
+<br><tt>&nbsp; (let* ((numbers nil)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (how-many 6))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (loop (let* ((next (1+ (random 49))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(unless (find next numbers)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(push next numbers)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(when (zerop (decf how-many))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(return (sort numbers '&lt;))))))))</tt>
+<p><tt>;;;;;;;;;;;</tt>
+<p><tt>(defun maximum-with-lambda (numbers)</tt>
+<br><tt>&nbsp; (let* ((best (first numbers)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (mapc (lambda (number)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(if (> number best)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(setf best number)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (rest numbers))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; best))</tt>
+<p><tt>(defun dotty-with-lambda (things)</tt>
+<br><tt>&nbsp; (mapc (lambda (junk)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (declare
+(ignore junk))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (format
+t "."))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; things))</tt>
+<p><tt>;;;;;;;;;;;</tt>
+<p><tt>;; similar to the govt-cons above</tt>
+<p><tt>;; probably don't need a my-nil (depends how it's going to be used...)</tt>
+<p><tt>(defstruct my-cons</tt>
+<br><tt>&nbsp; car</tt>
+<br><tt>&nbsp; cdr)</tt>
+<p><tt>(defun my-first (thing)</tt>
+<br><tt>&nbsp; (my-cons-car thing))</tt>
+<p><tt>(defun my-rest (thing)</tt>
+<br><tt>&nbsp; (my-cons-cdr thing))</tt>
+<p><tt>(defun my-cons (first rest) ; NB ok to have function name same as
+structure</tt>
+<br><tt>&nbsp; (make-my-cons :car first :cdr rest))</tt>
+<p><tt>(defun my-list (&amp;rest things)</tt>
+<br><tt>&nbsp; (in-my-list things))</tt>
+<br><tt>(defun in-my-list (things)</tt>
+<br><tt>&nbsp; (when things</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (make-my-cons :car (first things)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+:cdr (in-my-list (rest things)))))</tt>
+<p><tt>(defun my-length (thing)</tt>
+<br><tt>&nbsp; (if thing</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (1+ (my-length (my-rest thing)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; 0))</tt>
+<p>&nbsp;If you have tried the exercises, looked at the solutions and still
+do not understand what's going on, I am available for consultation at the
+times advertised on my office door. Bring your code with you in BOTH the
+following forms:
+<ul>
+<li>
+Logbook containing printout (nothing handwritten please)</li>
+
+<li>
+file on floppy</li>
+</ul>
+&nbsp;
+<div align=right>
+<br><a href="mailto:ndl@ravenbrook.com">Nick Levine</a>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+last modified 2000-11-24
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Copyright (C) Nick Levine 1999. All rights reserved.
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/solutions/solutions-7.html#2 $</div>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/solutions/solutions-7.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:58 GMT -->
+</html>

@@ -1,0 +1,142 @@
+(in-package "LW-P4")
+
+;; This file, automatically loaded by load.lisp, creates bindings in
+;; the LispWorks editor to manage the p4 connection:
+;;
+;; control-x p e           "P4 Edit"
+;; control-x p S           "P4 Submit"
+;; control-x p o           "P4 Opened"
+;; control-x p r           "P4 Revert"
+
+;; [TBD: Doc strings need writing]
+
+(editor:defcommand "P4 Edit" (p)
+     "" ""
+  (declare (ignore p))
+  (when-let* ((buffer (editor:current-buffer))
+              (pathname (editor:buffer-pathname buffer))
+              (result (car (p4-edit pathname)))
+              (code (gethash "code" result)))
+    (if (string= code "info")
+        (capi:display-message "~a" (gethash "data" result))
+      (editor:revert-buffer-command ()))))
+
+(editor:bind-key "P4 Edit" #(#\control-\x #\p #\e))
+
+;; Should revert buffers (as appropriate) after the submit. Should display useful messages.
+
+(editor:defcommand "P4 Submit" (p)
+     "" ""
+  (declare (ignore p))
+  (multiple-value-bind (ignore proceed)
+      (editor:save-all-files-command ())
+    (declare (ignore ignore))
+    (unless proceed
+      (return-from p4-submit-command)))
+  (let* ((change (car (p4-run "change -o")))
+         (possible-files (loop for i from 0 
+                               for lookup = (format nil "Files~d" i)
+                               for possible = (gethash lookup change)
+                               while possible 
+                               collect (progn (remhash lookup change)
+                                         possible))))
+    (if (plusp (length possible-files))
+        (multiple-value-bind (options proceed)
+            (prompt-for-description-with-files possible-files)
+          (when proceed
+            (destructuring-bind (description files reopen-p) options
+              (loop for i from 0
+                    as file across files
+                    do (setf (gethash (format nil "Files~d" i) change) file))
+              (setf (gethash "Description" change) description)
+              (let ((results (p4-run (if reopen-p
+                                         "submit -ri"
+                                       "submit -i")
+                                     :form change)))
+                ;; This is a bunch of hash-tables. We'll have to trawl them for feedback.
+                (loop for result in results do
+                      (when-let (change (gethash "submittedChange" result))
+                        (return (capi:display-message "Submitted change ~a" change)))))
+
+              #+broken
+              (loop for file across files do
+                    ;; e.g. #("//server/code/utils/defsys.lisp //nick-gannet/server/code/utils/defsys.lisp c:\home\mick\p4\code\utils\defsys.lisp")
+                    ;; but components might have stray spaces. The following isn't idiot proof, but I would be pleased to meet the idiot who
+                    ;; broke it unintentionally.
+                    (let* ((where (aref (p4-run "where ~a" file) 0))
+                           (type-starts (position #\. where :from-end t))
+                           (type (subseq where type-starts))
+                           (previous-type-starts (search (format nil "~a " type) where :from-end t :end2 type-starts))
+                           (local (subseq where (+ previous-type-starts (1+ (length type)))))
+                           (buffer (editor::find-file-in-buffer-list (make-pathname :name (pathname-name local)
+                                                                                    :type (pathname-type local)
+                                                                                    :defaults (truename (pathname-location local))))))
+                      (editor:revert-buffer-command nil buffer nil)))
+
+              )))
+      (capi:display-message "File(s) not opened on this client."))))
+
+(editor:bind-key "P4 Submit" #(#\control-\x #\p #\S))
+
+(editor:defcommand "P4 Opened" (p)
+     "" ""
+  (let ((opened (p4-opened p)))
+    (if (zerop (length opened))
+        (capi:display-message "File(s) not opened on this client.")
+      (capi:display-message "~a" opened))))
+
+(editor:bind-key "P4 Opened" #(#\control-\x #\p #\o))
+
+(editor:defcommand "P4 Revert" (p)
+     "" ""
+  (declare (ignore p))
+  (let* ((buffer (editor:current-buffer))
+         (file (editor:buffer-pathname buffer)))
+    (if file
+        (if (p4-run (format nil "opened \"~a\"" file))
+            (when (capi:prompt-for-confirmation (format nil "Are you sure you wish to revert ~a?" (file-namestring file)))
+              (let* ((result (car (p4-run (format nil "revert \"~a\"" file))))
+                     (message (format nil "~a ~a"
+                                      (gethash "depotFile" result)
+                                      (gethash "action" result))))
+                (editor:revert-buffer-command nil buffer nil)
+                (capi:display-message message)))
+          (capi:display-message "File ~a not opened on this client." (file-namestring file)))
+      (capi:display-message "There is no file associated with the current buffer"))))
+
+(editor:bind-key "P4 Revert" #(#\control-\x #\p #\r))
+
+
+;;;;;;;;;;;;;;;;;
+
+;; COPYRIGHT AND LICENCE
+;;
+;; This file is copyright (c) 2003-2011, Nick Levine.  All rights
+;; reserved.
+;;
+;; Redistribution and use in source and binary forms, with or without
+;; modification, are permitted provided that the following conditions are
+;; met:
+;;
+;; 1.  Redistributions of source code must retain the above copyright
+;;     notice, this list of conditions and the following disclaimer.
+;;
+;; 2.  Redistributions in binary form must reproduce the above copyright
+;;     notice, this list of conditions and the following disclaimer in
+;;     the documentation and/or other materials provided with the
+;;     distribution.
+;;
+;; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+;; "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+;; LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+;; A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+;; HOLDERS AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+;; INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+;; BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+;; OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+;; ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+;; TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+;; USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+;; DAMAGE.
+
+;; $Id: //info.ravenbrook.com/user/ndl/lisp/lw-p4/editor-bindings.lisp#1 $

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Ruby: Python for Lisp Programmers</title>
+	<atom:link href="https://stuartsierra.com/2006/06/19/ruby-python-for-lisp-programmers/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2006/06/19/ruby-python-for-lisp-programmers</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Marc</title>
+		<link>https://stuartsierra.com/2006/06/19/ruby-python-for-lisp-programmers/comment-page-1#comment-48</link>
+		<dc:creator><![CDATA[Marc]]></dc:creator>
+		<pubDate>Thu, 22 Jun 2006 05:02:36 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=33#comment-48</guid>
+		<description><![CDATA[Very interesting post and comments. I believe that Ruby and Lisp have a lot in common because Matz was influenced by Lisp (in addition to Smalltalk and Perl).
+I can see how Lisp programmers might appreciate Ruby a bit more than Python, though I&#039;m sure there&#039;s people who go the other way as well.
+
+The bummer for me is that Ruby, Python, and Lisp are all very interesting languages, but I don&#039;t get a lot of opportunities to play with them.]]></description>
+		<content:encoded><![CDATA[<p>Very interesting post and comments. I believe that Ruby and Lisp have a lot in common because Matz was influenced by Lisp (in addition to Smalltalk and Perl).<br />
+I can see how Lisp programmers might appreciate Ruby a bit more than Python, though I&#8217;m sure there&#8217;s people who go the other way as well.</p>
+<p>The bummer for me is that Ruby, Python, and Lisp are all very interesting languages, but I don&#8217;t get a lot of opportunities to play with them.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: hyperstruct</title>
+		<link>https://stuartsierra.com/2006/06/19/ruby-python-for-lisp-programmers/comment-page-1#comment-44</link>
+		<dc:creator><![CDATA[hyperstruct]]></dc:creator>
+		<pubDate>Tue, 20 Jun 2006 12:22:11 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=33#comment-44</guid>
+		<description><![CDATA[Stuart,
+
+actually Ruby methods can be passed any number of lambdas:
+
+  foo = proc {&#124;a&#124; ... }
+  bar = proc {&#124;b&#124; ... }
+  doSomething(foo, bar)
+
+(&quot;proc&quot; is even aliased to &quot;lambda&quot;)
+
+The form:
+
+  doSomething {&#124;c&#124; 
+     ...
+  }
+
+...is syntactical sugar on the outer side of doSomething for when you need just one lambda, and enables some syntactical sugar on the inner side: it lets you pass control and data to the block with &quot;yield x&quot; instead of &quot;block.call(x)&quot;.
+
+I got interested in Lisp (and eventually fell in love with it) while  programming in Ruby.  I really hope the two communities will be friendly to each other because they have so much in common.]]></description>
+		<content:encoded><![CDATA[<p>Stuart,</p>
+<p>actually Ruby methods can be passed any number of lambdas:</p>
+<p>  foo = proc {|a| &#8230; }<br />
+  bar = proc {|b| &#8230; }<br />
+  doSomething(foo, bar)</p>
+<p>(&#8220;proc&#8221; is even aliased to &#8220;lambda&#8221;)</p>
+<p>The form:</p>
+<p>  doSomething {|c|<br />
+     &#8230;<br />
+  }</p>
+<p>&#8230;is syntactical sugar on the outer side of doSomething for when you need just one lambda, and enables some syntactical sugar on the inner side: it lets you pass control and data to the block with &#8220;yield x&#8221; instead of &#8220;block.call(x)&#8221;.</p>
+<p>I got interested in Lisp (and eventually fell in love with it) while  programming in Ruby.  I really hope the two communities will be friendly to each other because they have so much in common.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Johann</title>
+		<link>https://stuartsierra.com/2006/06/19/ruby-python-for-lisp-programmers/comment-page-1#comment-43</link>
+		<dc:creator><![CDATA[Johann]]></dc:creator>
+		<pubDate>Tue, 20 Jun 2006 03:40:00 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=33#comment-43</guid>
+		<description><![CDATA[Ruby&#039;s blocks are more than simple lambda&#039;s, since they support control statements like &quot;break&quot;, &quot;next&quot;, etc.
+
+Of course, you could create a sufficiently powerful macro that would handle these properly.  Or you could use enough levels of blocks and return-from.  It&#039;s just not as trivial as a first glance might make it appear.]]></description>
+		<content:encoded><![CDATA[<p>Ruby&#8217;s blocks are more than simple lambda&#8217;s, since they support control statements like &#8220;break&#8221;, &#8220;next&#8221;, etc.</p>
+<p>Of course, you could create a sufficiently powerful macro that would handle these properly.  Or you could use enough levels of blocks and return-from.  It&#8217;s just not as trivial as a first glance might make it appear.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Adrian</title>
+		<link>https://stuartsierra.com/2006/06/19/ruby-python-for-lisp-programmers/comment-page-1#comment-42</link>
+		<dc:creator><![CDATA[Adrian]]></dc:creator>
+		<pubDate>Tue, 20 Jun 2006 02:24:47 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=33#comment-42</guid>
+		<description><![CDATA[Ruby has been a &quot;gateway&quot; to Lisp for some of my friends who wouldn&#039;t even look at Lisp before.  So you could title the article &quot;Ruby is a Gateway to Lisp Programming&quot;.  ;o)]]></description>
+		<content:encoded><![CDATA[<p>Ruby has been a &#8220;gateway&#8221; to Lisp for some of my friends who wouldn&#8217;t even look at Lisp before.  So you could title the article &#8220;Ruby is a Gateway to Lisp Programming&#8221;.  ;o)</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: bill a</title>
+		<link>https://stuartsierra.com/2006/06/19/ruby-python-for-lisp-programmers/comment-page-1#comment-41</link>
+		<dc:creator><![CDATA[bill a]]></dc:creator>
+		<pubDate>Tue, 20 Jun 2006 02:21:18 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=33#comment-41</guid>
+		<description><![CDATA[&quot;A function or method in Ruby can have only one functional argument, which must be the last argument. Functional arguments, or “blocks,” as they’re called in Ruby, appear outside the argument list of the function when it is called.&quot;
+
+A block is not the same thing as a functional argument.  Your statement is false:
+
+   def meth( a, b )
+      puts a.call( 4 )
+      puts b.call( 4 )
+   end
+
+   meth( lambda { &#124;a&#124; a }, lambda { &#124;a&#124; a + 2 } )]]></description>
+		<content:encoded><![CDATA[<p>&#8220;A function or method in Ruby can have only one functional argument, which must be the last argument. Functional arguments, or “blocks,” as they’re called in Ruby, appear outside the argument list of the function when it is called.&#8221;</p>
+<p>A block is not the same thing as a functional argument.  Your statement is false:</p>
+<p>   def meth( a, b )<br />
+      puts a.call( 4 )<br />
+      puts b.call( 4 )<br />
+   end</p>
+<p>   meth( lambda { |a| a }, lambda { |a| a + 2 } )</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: John Wiseman</title>
+		<link>https://stuartsierra.com/2006/06/19/ruby-python-for-lisp-programmers/comment-page-1#comment-40</link>
+		<dc:creator><![CDATA[John Wiseman]]></dc:creator>
+		<pubDate>Tue, 20 Jun 2006 01:23:30 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=33#comment-40</guid>
+		<description><![CDATA[I&#039;m not sure, but I think the functional argument has to be the last argument to a function only if you want to use the special iterator-style block syntax with that function, which uses yield.
+
+If you just want to pass method A to method B and call method A, I think A.call is good enough.
+
+It does seem like Ruby did away with some of the Python annoyances.]]></description>
+		<content:encoded><![CDATA[<p>I&#8217;m not sure, but I think the functional argument has to be the last argument to a function only if you want to use the special iterator-style block syntax with that function, which uses yield.</p>
+<p>If you just want to pass method A to method B and call method A, I think A.call is good enough.</p>
+<p>It does seem like Ruby did away with some of the Python annoyances.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.303 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:02:59 -->
+
+<!-- Compression = gzip -->

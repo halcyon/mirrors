@@ -1,0 +1,49 @@
+(in-package "CL-USER")
+
+;; nick 2000-09-15
+
+;; Macros to support code in html-tags.lisp. I'm not convinced you
+;; need to read this. You'll see several examples of how the with-tag
+;; macro is called in "html-tags.lisp" and these may be of passing
+;; interest... 
+
+(defmacro with-tag ((tag stream &rest parameters &key no-close &allow-other-keys) 
+                    &body body)
+  (let ((stream-var (gensym "stream"))
+        (tag-var (gensym "tag")))
+    `(let ((,stream-var ,stream)
+           (,tag-var (string-downcase ',tag)))
+       (format ,stream-var "~&<~a~{ ~a~}>" 
+               ,tag-var
+               (tag-parameters (list ,@parameters)))
+       ,@body
+       ,@(unless no-close
+           `((format ,stream-var "</~a>~&" ,tag-var))))))
+ 
+;; Helper function to assist the with-tag macro above 
+
+(defun tag-parameters (parameters)
+  (loop for (parameter value) on parameters by 'cddr 
+        unless (eq parameter :no-close)
+        collect
+        (let ((parameter (string-downcase parameter)))
+          (if value
+              (format nil (if (keywordp value) 
+                              "~a=~(~a~)"
+                            "~a=~s")
+                      parameter value)
+            parameter))))
+
+;; "Use-once" macro to make workings of generate-html more transparent
+;; - handles collection of trace and debugging output and formats them
+;; appropriately onto the web page
+
+(defmacro with-debugging ((stream-var) form)
+  `(let* ((,stream-var ,stream-var)
+          (body (with-output-to-string (,stream-var) ,form))
+          (trace-output (get-output-stream-string *trace-output*)))
+     (when (plusp (length trace-output))
+       (with-tag (pre ,stream-var)
+         (write-string trace-output ,stream-var))
+       (horizontal-line ,stream-var))
+     (write-string body ,stream-var)))

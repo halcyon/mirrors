@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/rapid-prototyping-part-i by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:58 GMT -->
+<head>
+    <title> Rapid Prototyping, Part I </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="rapid-prototyping-part-i.html">
+    <meta property="og:title" content="Rapid Prototyping, Part I">
+    <meta property="og:description" content="Imagine that you and some non-technical friends are about to start a side project.">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Rapid Prototyping, Part I" />
+	<meta name="twitter:description" content="Imagine that you and some non-technical friends are about to start a side project" />
+	<meta name="twitter:image" content="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/377e06dd-e888-494a-8a91-5537f599dc6f.jpg" />
+	<meta name="og:image" content="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/377e06dd-e888-494a-8a91-5537f599dc6f.jpg" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> October 20, 2015 </div>
+            <h1 class="subject"> Rapid Prototyping, Part I </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> Imagine that you and some&nbsp;non-technical friends are about to start a side project.&nbsp;<br>
+<br>
+The goal of the project will be to create a small music&nbsp;video player that provides recommendations for what to watch based on whatever is currently playing. This is something we&#39;ve all seen before on virtually every video-oriented website, but the benefit of building your own tool is that you&#39;ll be able to tweak the recommendation system to work however you&#39;d like.<br>
+<br>
+Your friends don&#39;t know much about programming, but they can help a great deal with play testing the application and giving feedback on whether they like the way things work or not. To keep them from getting bored or frustrated, you need to communicate at a very high level, and also give them frequent opportunities to offer feedback so that they can be an active part of the development process.<br>
+<br>
+To kick things off, you create a basic wireframe&nbsp;drawing that shows a big box for the currently playing video, and a three smaller boxes to represent the recommendations:<br>
+<br>
+<img class="tl-email-image" data-id="430445" height="520" src="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/377e06dd-e888-494a-8a91-5537f599dc6f.jpg" style="width: 480px; max-width: 480px;" width="480"><br>
+Because this isn&#39;t some brand new idea, everyone pretty much nods in agreement that this is a good enough starting point. There are some grumblings about the where the recommendations box should be placed, and whether it should appear right away or after a video has finished playing. You reassure your friends that these are all things that can be decided upon later, and they trust your judgement.<br>
+<br>
+You spend about 15 minutes mocking up the same wireframe in HTML, then you deploy it to Heroku so that your friends can take a look at it on their own devices. On your machine, it looks like this:<br>
+<br>
+<img class="tl-email-image" data-id="430497" height="484" src="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/5409ac4e-77e6-48e8-82cf-6c70b29d89e2.png" style="width: 480px; max-width: 480px;" width="480"><br>
+The entire page fits on a single screen at 1440x900 resolution, and more-or-less looks clean and easy to use. Is that something you can take for granted when your friends view the page? Not necessarily! This is why you actually deployed the web app rather than asking them to look at your screen and tell you what they think.<br>
+<br>
+Less than 20 minutes into this project, you&#39;ve completed two fast feedback loops. In a couple days, we&#39;ll continue this exercise and walk through a few more.<br>
+<br>
+Two questions for you to think about between now and then:<br>
+<br>
+1. What could go wrong when your friends try to view this newly created web application? (You don&#39;t need the source code to know this, just use your imagination!)<br>
+<br>
+2. If you were the one writing the code, what would be the next task you&#39;d tackle, if your goal was to complete another feedback cycle within 15-20 minutes of work at most?<br>
+<br>
+Please share your replies via any of the channels listed below -- I&#39;d love to hear from you!<br>
+<br>
+Until next time, happy hacking!<br>
+-greg<br>
+&nbsp;
+<hr><br>
+<em style="font-weight: normal; font-size: 16px; outline: none; color: rgb(80, 80, 80); line-height: 22px; max-width: 600px !important;">Your feedback and questions are welcome! Reply directly to this email, or use the&nbsp;<a href="https://twitter.com/search?src=typd&amp;q=%23ProgrammingBeyondPractices" style="font-size: 16px; font-family: inherit; outline: none; color: rgb(52, 102, 204); text-decoration: none; max-width: 600px !important;">#ProgrammingBeyondPractices</a></em><em style="font-weight: normal; font-size: 16px; outline: none; color: rgb(80, 80, 80); line-height: 22px; max-width: 600px !important;"><font color="#505050" style="max-width: 600px !important;">&nbsp;hashtag on Twitter.&nbsp;</font><br style="max-width: 600px !important;">
+<br style="max-width: 600px !important;">
+<font color="#505050" style="max-width: 600px !important;">If you&#39;re a&nbsp;</font><a href="http://practicingruby.com/" style="font-size: 16px; font-family: inherit; outline: none; color: rgb(52, 102, 204); text-decoration: none; max-width: 600px !important;">Practicing Ruby</a><font color="#505050" style="max-width: 600px !important;">&nbsp;subscriber, you can also discuss these essays with me at any time via Slack or Discourse.</font></em> </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="rapid-prototyping-part-ii.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="effective-code-reviews-part-v.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/rapid-prototyping-part-i by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:58 GMT -->
+</html>

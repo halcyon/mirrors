@@ -1,0 +1,201 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/solutions/solutions-6.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:58 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Solutions to exercises in lecture 6</title>
+</head>
+<body>
+
+<center><b><font size=+3>Solutions to exercises from "lecture notes 6"</font></b></center>
+
+<p><br>
+<br>
+<br>
+<br>
+<p><tt>;;;; A couple of these turn out (when I actually did them) to be
+more</tt>
+<br><tt>;;;; than somewhat unpleasant. Do not give up the struggle...</tt>
+<p><tt>;;; WORD COUNTS</tt>
+<p><tt>(defun word-count ()</tt>
+<br><tt>&nbsp; (do-word-count (read-line)))</tt>
+<p><tt>;; split this off so we can run tests to verify whether it works</tt>
+<br><tt>(defun do-word-count (string)</tt>
+<br><tt>&nbsp; (let* ((count 0))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dotimes (i (length string))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;; need to look for a word BOUNDARY...</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (and (or (zerop i)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(spacep string (1- i)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(not (spacep string i)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (incf count)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; count))</tt>
+<p><tt>;; utility</tt>
+<br><tt>(defun spacep (string index)</tt>
+<br><tt>&nbsp; (char= (aref string index) #\Space))</tt>
+<p><tt>;; tests</tt>
+<br><tt>(let* ((tests '(("One two three" 3)&nbsp;&nbsp;&nbsp; ; simplest
+case</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+("One&nbsp; two&nbsp; three" 3)&nbsp; ; multiple spaces</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(" One two three" 3)&nbsp;&nbsp; ; leading space</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+("One two three " 3)&nbsp;&nbsp; ; trailing space</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+("&nbsp;&nbsp;&nbsp; One&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+two&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; three&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+" 3)&nbsp; ; lots of spaces</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+("" 0)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; empty</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; " 0)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; just spaces</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+)))</tt>
+<br><tt>&nbsp; (dolist (test tests)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (let* ((string (first test))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (expected
+(second test))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (obtained
+(do-word-count string)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (unless (= expected obtained)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (error "Test on ~s failed:
+count appears to be ~a but expected ~a."</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+string obtained expected)))))</tt>
+<p><tt>;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;</tt>
+<p><tt>(defun rotate-square-array (array)</tt>
+<br><tt>&nbsp; (let* ((dimensions (array-dimensions array))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (dimension (first
+dimensions))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (new-array (make-array
+dimensions)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; ;; error check...</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (unless (= dimension (second dimensions))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (error "Not a square array!"))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dotimes (i dimension)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (dotimes (j dimension)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (setf (aref new-array
+j (- dimension i 1))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(aref array i j))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; new-array))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; nasty</tt>
+<p><tt>(defun reducing-copy-list (list)</tt>
+<br><tt>&nbsp; (reduce 'cons list :initial-value nil :from-end t))</tt>
+<p><tt>(defun reducing-reverse (list)</tt>
+<br><tt>&nbsp; (reduce 'rcons list :initial-value nil))</tt>
+<p><tt>(defun rcons (rest first)</tt>
+<br><tt>&nbsp; (cons first rest))</tt>
+<p><tt>;; could have downcased the whole string in one go...</tt>
+<br><tt>(defun alpha-count (string)</tt>
+<br><tt>&nbsp; (let* ((counts (make-array 26 :initial-element 0))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (lower-a (char-code
+#\a)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dotimes (i (length string))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (let* ((char (aref string i)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (alpha-char-p char)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(incf (aref counts (- (char-code (char-downcase char))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+lower-a))))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dotimes (i 26)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (format t "~&amp;~a&nbsp;&nbsp;
+~a"</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(code-char (+ lower-a i))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(aref counts i))))</tt>
+<br><tt>&nbsp; nil)</tt>
+<p><tt>;; char= and = &amp;co require one argument minimum...</tt>
+<br><tt>(defun better-equal (things)</tt>
+<br><tt>&nbsp; (if things</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (in-better-equal (first things)
+(rest things))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (error "Call to ~s needs at least one thing."
+'better-equal)))</tt>
+<p><tt>(defun in-better-equal (thing others)</tt>
+<br><tt>&nbsp; (if others</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (equal thing (first others))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (in-better-equal
+thing (rest others))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nil)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; termination condition: fail</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; t)))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; termination condition: success</tt>
+<p><tt>(defun recursive-compare (list vector)</tt>
+<br><tt>&nbsp; (in-recursive-compare list vector 0))</tt>
+<p><tt>(defun in-recursive-compare (list vector index)</tt>
+<br><tt>&nbsp; (let* ((vector-length (length vector))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (vector-expired
+(= index vector-length))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list-expired
+(null list)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (or ;; got to the end of both?</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (and vector-expired
+list-expired)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;;&nbsp;&nbsp;&nbsp;
+did one sequence run out too soon?</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (and (not (or vector-expired
+list-expired))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+;; do the check</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(equal (first list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(aref vector index))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+;; and carry on along both sequences</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(in-recursive-compare (rest list) vector (1+ index)))))</tt>
+<br><tt>&nbsp; )&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; quite unpleasant</tt>
+<p><tt>;; probably less hassle to use a "free ride" along the vector, ie
+to</tt>
+<br><tt>;; use dotimes - this way we don't have to worry about going over
+the</tt>
+<br><tt>;; end of the vector</tt>
+<br><tt>(defun iterative-compare (list vector)</tt>
+<br><tt>&nbsp; (and (dotimes (i (length vector) t)&nbsp; ; note the default
+return value</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (or (null
+list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(not (equal (pop list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(aref vector i))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(return nil)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (null list)))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; moderately tough</tt>
+<br>&nbsp;
+<p>&nbsp;If you have tried the exercises, looked at the solutions and still
+do not understand what's going on, I am available for consultation at the
+times advertised on my office door. Bring your code with you in BOTH the
+following forms:
+<ul>
+<li>
+Logbook containing printout (nothing handwritten please)</li>
+
+<li>
+file on floppy</li>
+</ul>
+&nbsp;
+<div align=right>
+<br><a href="mailto:ndl@ravenbrook.com">Nick Levine</a>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+last modified 2000-11-06
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Copyright (C) Nick Levine 1999. All rights reserved.
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/solutions/solutions-6.html#2 $</div>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/solutions/solutions-6.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:58 GMT -->
+</html>

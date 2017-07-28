@@ -1,0 +1,110 @@
+(in-package "CL-USER")
+
+;; nick 2000-10-21
+
+;; This file contains a simple demo to show how easy it is to put web
+;; pages together with the html-generating utilities provided in
+;; "html-tags.lisp".
+
+;; Your task is to delete the following definitions of generate-title
+;; and generate-body and replace them with your own application...
+
+;; generate-title writes the new page's title to stream - the calling
+;; code will place this caption on the browser's title bar. In this
+;; example the request is simply ignored, but you can do it your own
+;; way... 
+
+(let ((counter 0))
+  (defun generate-title (request stream)
+    (declare (ignore request))
+    (format stream "Demo Page ~r"
+            (incf counter))))
+
+;; generate-body writes the contents (body) of the html page to
+;; stream. Other than for trivial test sites, you cannot ignore the
+;; request any more. Functions request-match-p and hunt-for-token (in
+;; "server.lisp") will ease your burden...
+
+(defun generate-body (request stream)
+  (let ((calculator-request "/calculator-demo"))
+    (if (request-match-p request calculator-request)
+        (generate-calculator-body request stream calculator-request)
+      (generate-demo-body request stream))))
+
+;; Now we've filtered out the case of "requests to see the
+;; calculator", we can go ahead and generate a standard page. 
+
+(defun generate-demo-body (request stream)
+  (heading "Declarative Languages 2000 Demo Page" stream)
+  (write-string "This is some sample text. It just appears on the 
+                 web page. Note that extra    spacing    and new lines
+                 in this text are ignored - the web browser decides 
+                 this sort of thing for itself. "
+                stream)
+  (write-string "Here is some more text. If I make this line
+                 long enough you can see the browser's line-wrap in 
+                 operation." 
+                stream)
+  (line-break stream)
+  (write-string "Now we're on a new line. Wasn't that exciting?" 
+                stream)
+  (write-string " Now for a horizontal line..." 
+                stream)
+  (horizontal-line stream)
+  (format stream "The request we're serving is ~s." 
+          request)
+  (line-break stream) ; repeating this creates... 
+  (line-break stream) ; ... a "blank line"
+  (write-string "And now for a link to the "
+                stream)
+  (html-link "/calculator-demo/" "calculator demo" stream)
+  (write-string "and finally an interesting text box:" 
+                stream)
+  (let ((eval-request "/eval.html?data="))
+    (simple-text-input eval-request "Lisp evaluator" stream)
+    (maybe-evaluate request stream eval-request)))
+
+;; I slipped the following read-eval-print feature into the demo, not
+;; because you will in any way need it, but to show you that you
+;; really can invoke arbitrary functionality in this (or indeed any)
+;; web server. The macro ignore-errors is part of Common Lisp but its
+;; use is frowned upon as it encourages sloppy programming style - it
+;; tells the system to ignore any and all errors which is too blunt an
+;; instrument for real code (handler-case is much better). The
+;; function form-url-decode is needed to convert the contents of the
+;; text box from the form in which HTTP has transmitted them back into
+;; the exact characters which the user typed.
+
+;; Note that maybe-evaluate represents an obvious security hole. If
+;; anyone knew it was there, they could use it to (i) quit your lisp
+;; image [a primitive denial of service attack] or (ii) wipe your hard
+;; drive.  Please be sensible with this, as with any CGI software.
+
+(defun maybe-evaluate (request stream eval-request)
+  (when (request-match-p request eval-request)
+    (multiple-value-bind (eval error)
+        (ignore-errors 
+          (let* ((url-encoded-input-string (subseq request
+                                                   (length eval-request)))
+                 (input-string (form-url-decode url-encoded-input-string)))
+            (if (plusp (length input-string))
+                (eval (read-from-string input-string))
+              ;; traps obvious case when button is pushed but nothing
+              ;; in the text box. Otoh if there's a single space in
+              ;; the text box the behaviour is different. (Can you
+              ;; improve on this?).
+              (return-from maybe-evaluate))))
+      ;; watch out for (eval ...) returning multiple-values
+      (if (typep error 'error) 
+          (format stream "Error: ~a" error)
+        (format stream "=> ~s" eval)))))
+
+;; I found myself using this code twice so I extracted it into a new
+;; function... 
+
+(defun request-match-p (request match)
+  (let ((match-length (length match)))
+    (and (>= (length request) match-length)
+         (string= request match :end1 match-length))))
+
+

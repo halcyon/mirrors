@@ -1,0 +1,156 @@
+(in-package "CL-USER")
+
+;; $Id: //info.ravenbrook.com/user/ndl/lisp/claude/claude-1.0.2/mumble/build/save-dll.lisp#1 $
+
+;;;			    SAVE-DLL.LISP
+;;;	       Nick Levine, Ravenbrook Ltd, 2013-03-08
+
+;; This script should be loaded into a TTY LispWorks (using the -init
+;; command-line option is recommended) to save your CLAUDE-based
+;; library as a DLL.
+;;
+;; Your system should have been defined in the file ../src/defsys.lisp
+;; (relative to this one). If you'd rather use ASDF to manage your
+;; code then the definition will be in the .asd file one level up from
+;; this file; you'll need an obvious edit to (defun application-load)
+;; to support this.
+;;
+;; Supply "-force" on the command-line to force recompile the system.
+;;
+;; Supply "-devel" to save a full development image (LispWorks IDE
+;; opens when your library is initialized); otherwise the library
+;; will be delivered at level 0.
+;;
+;;
+;; Libraries
+;;
+;; We don't _need_ Quicklisp, but we do need two Quicklisp libraries
+;; (Bordeaux Threads, and the Common Foreign Function Interface) and
+;; it's assumed that Quicklisp knows where to find them. What's
+;; essential is that CLAUDE can say that it :depends-on these two
+;; systems, and that ASDF can then find them.
+;;
+;;
+;; Configurations:
+;;
+;; 1. If you have a .ico file which you want associated with the
+;; library, uncomment the :icon-file line in the call to deliver.
+;;
+;; 2. In the IDE you might find it handy for listeners to open in some
+;; particular package. See #+try-this below.
+
+
+(load-all-patches)
+
+(setf system:*debug-initialization-errors-in-snap-shot* nil)
+
+;; As if added by ql:add-to-init-file. Note that if Quicklisp can't be
+;; found, nothing happens.
+#-quicklisp
+(let ((quicklisp-init (merge-pathnames "quicklisp/setup.lisp" (user-homedir-pathname))))
+  (when (probe-file quicklisp-init)
+    (load quicklisp-init)))
+
+(defvar *mumble-source-root* (truename (pathname-location (current-pathname "../"))))
+(defun relative-path (path)
+  (merge-pathnames path *mumble-source-root*))
+
+;; This variable must be set before attempting to build the system. If
+;; you subsequently rename the library, make sure to force recompile
+;; all of CLAUDE as well as the library itself.
+(defparameter *claude-library*
+  (with-open-file (library (relative-path "library"))
+    (read-line library)))
+
+(defvar *image-name* (make-pathname :defaults (relative-path *claude-library*)
+				    :type "dll"))
+
+(defun application-load (&key (force (find "-force" sys:*line-arguments-list*
+					   :test 'string=)))
+  (when force
+    (force-compile-claude))
+  (let ((defsys (truename (or (relative-path "./src/defsys.lisp")
+			      ;; (relative-path "./mumble.asd")        --- SUITABLY RENAMED!
+			  ))))
+    (load defsys))
+  (compile-system (string-upcase *claude-library*)
+		  :load t :force force))
+
+
+(defun force-compile-claude ()
+  (require "asdf")
+  (let* ((package (find-package "ASDF"))
+	 (central-registry (find-symbol "*CENTRAL-REGISTRY*" package))
+	 (compile-system (find-symbol "COMPILE-SYSTEM" package)))
+    (push (pathname-location (relative-path "claude/")) (symbol-value central-registry))
+    (funcall compile-system :claude :force t)))
+
+
+(application-load)
+
+
+(defvar *standalone* (not (find "-devel" sys:*line-arguments-list*
+				:test 'string=)))
+
+(when *standalone*
+  (deliver 'claude:load-patches *image-name* 0
+	   :dll-exports (claudep:exports)
+	   ;; Uncomment (and rename!) if you've got a .ico for your library
+	   ;;:icon-file (relative-path "build/mumble.ico")
+	   :interface :capi))
+
+
+(define-action "Initialize LispWorks Tools" "Reload library"
+  (lambda (screen)
+    (declare (ignore screen))
+    (when-let (listener (mp:find-process-from-name "Listener 1"))
+      (mp:process-interrupt listener
+			    (lambda ()
+                              (application-load)
+			      ))))
+  :after "Run the environment start up functions")
+
+#+try-this
+(defadvice (capi::interactive-pane-top-loop set-mumble-package :before) (top-level istream)
+  ;; Set this to the package you'd like the listener to come up in, while working
+  ;; on your library
+  (setf *package* (find-package ...)))
+
+(save-image *image-name*
+            :dll-exports (claudep:exports)
+            :environment t
+	    :restart-function 'claude:load-patches)
+
+(format t "~%;; Image saved - ~a~2%" *image-name*)
+
+(quit)
+
+
+;; COPYRIGHT AND LICENCE
+;;
+;; This file is copyright (c) 2014, Nick Levine.  All rights reserved.
+;;
+;; Redistribution and use in source and binary forms, with or without
+;; modification, are permitted provided that the following conditions are
+;; met:
+;;
+;; 1.  Redistributions of source code must retain the above copyright
+;;     notice, this list of conditions and the following disclaimer.
+;;
+;; 2.  Redistributions in binary form must reproduce the above copyright
+;;     notice, this list of conditions and the following disclaimer in
+;;     the documentation and/or other materials provided with the
+;;     distribution.
+;;
+;; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+;; "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+;; LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+;; FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+;; COPYRIGHT HOLDERS AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+;; INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+;; (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+;; SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+;; HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+;; STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+;; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+;; OF THE POSSIBILITY OF SUCH DAMAGE.

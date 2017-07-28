@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/debugging-silent-failures-with-breadcrumb-trails by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:58 GMT -->
+<head>
+    <title> Debugging silent failures with breadcrumb trails </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="debugging-silent-failures-with-breadcrumb-trails.html">
+    <meta property="og:title" content="Debugging silent failures with breadcrumb trails">
+    <meta property="og:description" content="If there is anything worse than silent failures, it is silent failures that happen only once in a blue moon. Limited information + painfully slow feedback loops = the kind of bugs that make you want t...">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Debugging silent failures with breadcrumb trails" />
+	<meta name="twitter:description" content="If there is anything worse than silent failures, it is silent failures that happen only once in a blue moon. Limited information + painfully slow feedback loops = the kind of bugs that make you want t" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> January 11, 2016 </div>
+            <h1 class="subject"> Debugging silent failures with breadcrumb trails </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> <div>If there is anything worse than silent failures, it is silent failures that happen only once in a blue moon. Limited information + painfully slow feedback loops = the kind of bugs that make you want to pull your hair out.<br>
+<br>
+This was the story of my life for a few months on one of my projects. We had a complicated, fragile data import process setup that pretty much did its job, but once every couple weeks the process would freeze and we&#39;d need to manually restart it.&nbsp;<br>
+<br>
+When the import process failed, nothing critically damaging happened. &nbsp;The reports that depended on the imported data became outdated, but it was obvious when this happened because the &quot;last updated&quot; timestamp lagged hours behind. That made it clear that the system was not updating every ten minutes as it should be.<br>
+<br>
+The first time this problem happened, I didn&#39;t have much to go on, so I decided to wait and see if and when it would happen again.&nbsp;<br>
+<br>
+The second time the process got stuck, I added a monitoring service that would trigger an alert if the import didn&#39;t successfully run at least once in a 30 minute period.<br>
+<br>
+The third time it happened, I noticed the issue before anyone else (thanks to the monitoring alerts), but I still had no clue what was happening. Frustrated with the feeling of being completely in the dark and realizing that this issue wasn&#39;t just going to disappear on its own, I decided to dig a little deeper.<br>
+<br>
+The workflow for the data import process resembled an awkward Rube Goldberg machine:&nbsp;it involved a homespun task management system, a terribly unstable third party web service, a legacy database system that we were accessing via a completely unsupported adapter, and a quickly hacked together web application running on Heroku.<br>
+<br>
+Each of these moving parts had some failure reporting capabilities, but they weren&#39;t especially detailed -- so it was hard to pinpoint exactly where the issue was coming from. Although each of these systems deserved to have their logging capabilities improved, it would have been costly to update them all at once in the hopes of debugging this rarely occurring issue.<br>
+<br>
+To narrow the search space, I decided to implement a minimal breadcrumb logger that traced the key steps of the importer as it worked. It didn&#39;t provide any level of detail on what was happening under the hood... it just listed out what steps had been completed, and when:</div>
+
+<pre>
+    [12:48:56.4612] Starting import process.
+
+    [12:48:56.4616] Retrieving data from SHIFTS_API...
+
+    [12:48:56.9011] |   Fetch Assistants schedule for SomeClinic.
+    [12:48:58.5586] |   Fetch Dentists schedule for SomeClinic.
+    [12:49:00.2306] |   Fetch Hygienists schedule for SomeClinic.
+    [12:49:01.9125] |   Fetch Receptionists schedule for SomeClinic.
+    [12:49:03.6029] |   Fetch Management schedule for SomeClinic.
+    
+    (... similar log entries for several other clinics omitted ...)
+
+    [12:49:41.3154] All SHIFTS_API data retrieved!
+    
+    [12:49:41.3155] Getting data from APPOINTMENTS_DB.
+    [12:50:03.0173] APPOINTMENTS_DB data retrieved!
+
+    [12:50:03.0173] Checking fingerprint to determine if sync is needed
+    [12:50:03.4013] Fingerprints don&#39;t match, sync is needed!
+
+    [12:50:03.4014] Sending wake up request to SCHEDULE_TOOL.
+
+    [12:50:03.4818] Importing vacation data.
+    [12:50:03.9474] Vacations imported. Sending shift data.
+    [12:50:04.9477] Shift data imported. Generating new fingerprint.
+
+    [12:50:04.9480] Done! TASK_RUNNER should show a completed job.</pre>
+
+<div>&nbsp;&nbsp;<br>
+I wish I could say that as soon as I added this breadcrumb trail, it immediately pointed me in the right direction the moment the importer got stuck again. Unfortunately, reality has a way of not being quite so straightforward.<br>
+<br>
+The first few times the worker got stuck after I added this logging capability, the results really confused me. Rather than consistently failing in one place, it seemed like the problems could happen from almost any step of the process.&nbsp;<br>
+<br>
+But that alone was useful information, because it eventually led me to realize that the task management system was attempting to retry jobs that it really should not have been retrying, and in the process of doing that it was swallowing exception reports.<br>
+<br>
+I turned off the retry mechanism entirely, because we didn&#39;t really need it anyway. This import process was something that could run standalone, so it wasn&#39;t necessary to re-run any imports that failed. In doing this, we got all sorts of exceptions bubbling up to the surface again, and one by one I added cases for things that should cause the job to fail with a note about what went wrong, but not raise an exception.<br>
+<br>
+I was hoping that all of the stuck jobs were a result of this bad retry mechanism, but that didn&#39;t turn out to be the case. It turned out that occasionally both the web service integration and the database queries could run for seemingly arbitrarily long times, and that would cause a stuck process too.&nbsp;<br>
+<br>
+I was only able to debug this indirectly by looking at the breadcrumb trail logs, and then correlating this with external bug reports. One day it was the web service having a bunch of interruptions, another day it was that the database we had been using had been moved to a backup system temporarily and the performance was 10% of its ordinary production environment.&nbsp;<br>
+<br>
+As a stopgap measure for dealing with these kinds of issues, I added a global timeout on the importer which would raise an exception after 15 minutes or so, and this helped us get alerted faster when there were genuine problems with the systems we were depending on while preventing a stuck job from running indefinitely.<br>
+<br>
+In theory, that should have resolved&nbsp;this issue. In practice, computers are not so kind.<br>
+<br>
+&nbsp;Within a couple weeks, we ran into a job getting into a stuck state silently again, this time in the database query part of the process. Then a couple weeks later, the same thing happened again, in the same step, around the same time of day as the previous freeze.<br>
+&nbsp;<br>
+&nbsp;I looked at pretty much every other unrelated task and report that we had running against the database during that time, and sure enough, there were scheduled tasks that ran both daily and weekly during that time period. I examined their own error logs, and found something that pretty much nailed the source of the problem... deadlocks.<br>
+&nbsp;<br>
+&nbsp;In the other systems we had built for this client, we had used a totally different tech stack, and in that stack the database adapter we were using would automatically detect SQL Server 2000 deadlocks and turn them into exceptions, which would cause the jobs to fail and eventually be retried.<br>
+&nbsp;<br>
+&nbsp;In this newer data import process, I was using a &quot;modernized&quot; toolchain which for the most part was easier to work with, except for one critical detail: I ended up having to use a specific commit of a specific fork of an unofficially supported database adapter because everything else was incompatible with the newer tools I was using. Apparently, this adapter did not gracefully handle deadlock detection, and so... there was the root cause.<br>
+&nbsp;<br>
+&nbsp;The short term fix was to not run the import process between 2:00 AM and 3:00AM while all these other nightly tasks were running, a change that had zero impact on the business but helped reduce the frequency of deadlocks substantially.<br>
+&nbsp;<br>
+&nbsp;The long term fix is something that would require more work: figuring out and fixing the database adapter, searching for alternatives, or switching to a totally different toolchain so that we could use the adapter I knew worked.&nbsp;<br>
+&nbsp;<br>
+Although that&#39;s not something I ever quite got around to, the breadcrumb trail logs at least helped me figure where this problem was coming from and when. &nbsp;I only wish that I had put them in place the first day the project was used in production... it would have saved me a lot of headaches.<br>
+<br>
+---<br>
+<br>
+Hope you enjoyed this essay! I&#39;d love to hear your own debugging horror stories, and what techniques you used to figure out what went wrong.<br>
+<br>
+-greg</div> </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="how-do-you-decide-where-to-start-on-a-new-project.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="beginning-to-climb-out-of-the-software-death-spiral.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/debugging-silent-failures-with-breadcrumb-trails by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:58 GMT -->
+</html>

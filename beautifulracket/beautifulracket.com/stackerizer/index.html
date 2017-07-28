@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/stackerizer/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:14 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Dive deeper into macros: stackerizer</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;dive-deeper-into-macros-stackerizer&quot;)"></div><h1 anchor="dive-deeper-into-macros-stackerizer" id="dive-deeper-into-macros-stackerizer" hyphens="none">Dive deeper into macros: <span class="my-code" decode="exclude">stackerizer</span></h1></div><ul class="siblinks"><li><a class="here" href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-expander.html">3&emsp;the expander</a></li><li><a href="recap.html">4&emsp;recap</a></li><li><a href="source-listing.html">5&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_pFIdL&quot;)"></div><p id="a_pFIdL">This is an optional tuto­r­ial for those curi­ous to see what we can do with slightly more sophis­ti­cated <a class="glossary" href="../appendix/glossary.html#macro"><span class="glossary-link-text">macros</span></a>.</p></div><div anchorize="false" style="height:1em"></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_w96Ri&quot;)"></div><p id="a_w96Ri">In <a href="../stacker/index.html"><span class="my-code" decode="exclude">stacker</span></a>, <a href="../stacker/why-make-languages.html#how-are-languages-implemented">we learned</a> that when we imple­ment a lan­guage in Racket, we’re essen­tially mak­ing a <a class="glossary" href="../appendix/glossary.html#source-to-source-compiler"><span class="glossary-link-text">source-to-source com­piler</span></a>: a pro­gram for con­vert­ing the source code of our new lan­guage into ordi­nary Racket code, which we can then run as an ordi­nary Racket pro­gram.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_vvEaj&quot;)"></div><p id="a_vvEaj">“Can we make a source-to-source com­piler that runs in the oppo­site direc­tion?” Yes. We can con­vert ordi­nary Racket code into code for another lan­guage. As a demon­stra­tion, we’ll make <span class="my-code" decode="exclude">stackerizer</span>, a lan­guage that con­verts cer­tain Racket S-expres­sions into a <span class="my-code" decode="exclude">stacker</span> pro­gram.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_N8Iwd&quot;)"></div><p id="a_N8Iwd">Why would we want to do this? A great rea­son is to help us gen­er­ate non­triv­ial test pro­grams. We claimed that <span class="my-code" decode="exclude">stacker</span> can han­dle a pro­gram of any length, and per­form any kind of addi­tion and mul­ti­pli­ca­tion. But the only test pro­gram we used when writ­ing it was this one:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_2QKGB&quot;)"></div><div class="highlight-container" id="a_2QKGB"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang reader "stacker.rkt"<br/>4<br/>8<br/>+<br/>3<br/>*</div><div class="highlight" form="false" id="a_bROJh"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">reader</span> <span class="s2">"stacker.rkt"</span>
+<span class="mi">4</span>
+<span class="mi">8</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span>
+<span class="mi">3</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Xh8HJ&quot;)"></div><p id="a_Xh8HJ">It would be nice to have some longer test pro­grams. But it would be bor­ing to write out these test pro­grams by hand. Cal­cu­lat­ing the expected result for each pro­gram would also be a chore.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Zqp3t&quot;)"></div><p id="a_Zqp3t">The faster, more reli­able approach would be to write an appro­pri­ate Racket S-expres­sion. We can eval­u­ate this S-expres­sion in DrRacket to find the ini­tial result. We can then use <span class="my-code" decode="exclude">stackerizer</span> to con­vert this S-expres­sion to the <span class="my-code" decode="exclude">stacker</span> lan­guage (where we could check that it pro­duced the same result).</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_9P7cy&quot;)"></div><p id="a_9P7cy">More­over, we’ll be able to imple­ment this lan­guage with two short macros. Macros are not usu­ally the tool of first resort. If we can get the job done with ordi­nary func­tions, that tends to be the bet­ter idea. But macros are great at rewrit­ing code. In this case, that’s all that <span class="my-code" decode="exclude">stackerizer</span> does.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ATYkM&quot;)"></div><p id="a_ATYkM">We can try a demo now with:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rAOEj&quot;)"></div><div class="highlight-container" id="a_rAOEj"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang s-exp stackerizer-demo/stackerizer<br/>(* 3 (+ 8 4))</div><div class="highlight" form="false" id="a_RVIue"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">s-exp</span> <span class="n">stackerizer-demo/stackerizer</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span> <span class="mi">3</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span> <span class="mi">8</span> <span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_7HfZO&quot;)"></div><p id="a_7HfZO">This will return our orig­i­nal <span class="my-code" decode="exclude">stacker</span> test pro­gram:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rBJI2&quot;)"></div><div class="highlight-container" id="a_rBJI2"><div id="code_45" form="false" decode="exclude" style="font-size:0;width:0;height:0">4<br/>8<br/>+<br/>3<br/>*</div><div class="highlight" form="false" id="a_iZYPf"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="source"><pre><span class="mi">4</span>
+<span class="mi">8</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span>
+<span class="mi">3</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk2" data-clipboard-target="#code_45" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_qJFtV&quot;)"></div><p id="a_qJFtV">A slightly more chal­leng­ing exam­ple:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_iBHvx&quot;)"></div><div class="highlight-container" id="a_iBHvx"><div id="code_46" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang s-exp stackerizer-demo/stackerizer<br/>(* 1 2 (+ 3 4 (* 5 6 (+ 7 8 (* 9 10)))))</div><div class="highlight" form="false" id="a_4XfOc"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">s-exp</span> <span class="n">stackerizer-demo/stackerizer</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span> <span class="mi">1</span> <span class="mi">2</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span> <span class="mi">3</span> <span class="mi">4</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span> <span class="mi">5</span> <span class="mi">6</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span> <span class="mi">7</span> <span class="mi">8</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span> <span class="mi">9</span> <span class="mi">10</span><span class="p">)))))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk3" data-clipboard-target="#code_46" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_JnOWE&quot;)"></div><p id="a_JnOWE">In this case, <span class="my-code" decode="exclude">stackerizer</span> will insert extra <span class="my-code" decode="exclude">+</span> and <span class="my-code" decode="exclude">*</span> oper­a­tors where nec­es­sary:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_arhxW&quot;)"></div><div class="highlight-container" id="a_arhxW"><div id="code_47" form="false" decode="exclude" style="font-size:0;width:0;height:0">10<br/>9<br/>*<br/>8<br/>+<br/>7<br/>+<br/>6<br/>*<br/>5<br/>*<br/>4<br/>+<br/>3<br/>+<br/>2<br/>*<br/>1<br/>*</div><div class="highlight" form="false" id="a_conif"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="source"><pre><span class="mi">10</span>
+<span class="mi">9</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span>
+<span class="mi">8</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span>
+<span class="mi">7</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span>
+<span class="mi">6</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span>
+<span class="mi">5</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span>
+<span class="mi">4</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span>
+<span class="mi">3</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span>
+<span class="mi">2</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span>
+<span class="mi">1</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk4" data-clipboard-target="#code_47" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_HeOeU&quot;)"></div><p id="a_HeOeU">The curi­ous can con­firm that the S-expres­sion used as input, and the <span class="my-code" decode="exclude">stacker</span> pro­gram returned as out­put, both eval­u­ate to <span class="my-code" decode="exclude">6314</span>.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a class="here" href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-expander.html">3&emsp;the expander</a></li><li><a href="recap.html">4&emsp;recap</a></li><li><a href="source-listing.html">5&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="../funstacker/source-listing.html">← prev</a>
+    <a class="nav-right" href="specification-and-setup.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

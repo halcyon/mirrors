@@ -1,0 +1,233 @@
+;; $Id: //info.ravenbrook.com/user/ndl/lisp/play/xhtml.lisp#13 $
+
+(in-package "CL-USER")
+
+;;                            XHTML.LISP
+;;           Nick Levine, Ravenbrook Limited, 2002-09-30
+;;
+;; Package for incorporating xhtml-generating forms within lisp code.
+;;
+;; This document was developed and tested on LispWorks. It uses the
+;; code walker, via walker:walk-form. I expect this invocation to work
+;; without modification in some implementations but not in others. I
+;; am not aware of any other implementation dependencies. Please send
+;; corrections and suggestions, regarding either this or anything else
+;; in this document, to ndl@ravenbrook.com.
+;;
+;; See end of file for copyright and license.
+;;
+;;
+;; USAGE:
+;;
+;; (defmacro with-xhtml ((stream &optional destination) &body body))
+;;
+;; The body is walked and transformed according to the following rule.
+;; If any operator (in the sense of section 3.1.2.1.2 in the CL Spec)
+;; is a valid xhtml tag (see *all-tags* below for the complete list)
+;; then the compound form containing that operator is interpreted
+;; thus:
+;;        (tag [attribute value]* . forms)
+;; The tag is opened and its attributes are written to stream; the
+;; (walked) subforms are executed; the tag is closed.
+;;
+;; For instance, the form (a :href url "this") in the example below
+;; expands to
+;;
+;;  (multiple-value-prog1 (progn
+;;                          (open-tag 'a (list :href url) nil stream)
+;;                          (format-to-xhtml stream "~a" "this"))
+;;                        (close-tag 'a nil stream))
+;;
+;; stream should be: either a stream already opened for output (in
+;; which case don't supply the destination), or a variable (which will
+;; be bound to an output stream connected to either a string-stream if
+;; destination is null, or the file named by destination otherwise).
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                                                              ;;
+#+example-of-use                                                              ;;
+(defun redirect-example (ofile title url)                                     ;;
+  (with-xhtml (ostream ofile)                                                 ;;
+      (head (title title)                                                     ;;
+            (meta :http-equiv "Refresh"                                       ;;
+                  :content (format nil "0; URL=~a" url)))                     ;;
+      (redirect-example-body ostream title url)))                             ;;
+                                                                              ;;
+#+example-of-use                                                              ;;
+(defun redirect-example-body (ostream title url)                              ;;
+  (let ((format-string "This page should automatically redirect you to ~a. ~
+                        If it does not, please click on "))                   ;;
+    (with-xhtml (ostream)                                                     ;;
+      (body (h1 title)                                                        ;;
+            (p (format-to-xhtml ostream format-string                         ;;
+                                title)                                        ;;
+               (a :href url "this")                                           ;;
+               " link.")))))                                                  ;;
+                                                                              ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(defparameter *xthml-header* "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+
+<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"DTD/xhtml1-transitional.dtd\">
+
+<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">
+")
+
+(defparameter *xthml-footer* "</html>")
+
+(defparameter *all-tags*
+  '(a abbr acronym address applet area b base basefont bdo big
+      blockquote body br button caption center cite code col colgroup dd del
+      dfn dir div dl dt em fieldset font form h1 h2 h3 h4 h5 h6 head hr html
+      i iframe img input ins isindex kbd label legend li link map menu meta
+      noframes noscript object ol optgroup option p param pre q s samp
+      script select small span strike strong style sub sup table tbody td
+      textarea tfoot th thead title tr tt u ul var))
+
+;; I think these tags probably "look" better if the html continues on
+;; a fresh line 
+(defparameter *block-tags* '(head body p h1 h2 h3 h4 br table tr td th ul ol li))
+
+;; Specify null filename to open a string-stream
+(defmacro with-xhtml ((stream &optional (filename nil filenamep) &rest stuff) &body body)
+  (cond
+   (filename `(with-open-file (,stream ,filename
+				       :direction :output
+				       :if-exists :supersede
+				       :external-format :default
+				       ,@stuff)
+                (write-string *xthml-header* ,stream)
+                ,(walk-xhtml `(progn ,@body) stream)
+                (write-string *xthml-footer* ,stream)
+                nil))
+   (filenamep `(with-output-to-string (,stream nil ,@stuff)
+                 (write-string *xthml-header* ,stream)
+                 ,(walk-xhtml `(progn ,@body) stream)
+                 (write-string *xthml-footer* ,stream)
+                 nil))
+   (t (walk-xhtml `(progn ,@body) stream))))
+
+(defun walk-xhtml (form stream)
+  (walk-form form 
+             (lambda (form)
+               (form-write-tags form stream))))
+
+(defun form-write-tags (form stream)
+  (if (atom form)
+      form
+    (let ((car (car form)))
+      (if (find car *all-tags* :key 'symbol-name :test 'string=)
+	  (destructuring-bind (tag &rest attributes-and-contents)
+	      form
+	    (loop for contents on attributes-and-contents by #'cddr
+		  for (key value) = contents
+		  while (keywordp key) 
+		  collect key into attributes
+		  collect value into attributes
+		  finally
+		  (return
+		   `(multiple-value-prog1
+		     (progn
+		       (open-tag ',tag (list ,@attributes) ,(null contents) ,stream)
+		       ,@(loop for content in contents collect
+			       (if (atom content)
+				   `(format-to-xhtml ,stream "~a" ,content)
+				 content)))
+		     (close-tag ',tag ,(null contents) ,stream)))))
+	form))))
+
+(defun open-tag (tag attributes null-contents stream)
+  (format stream "<~(~a~)" tag)
+  (loop for (key value) on attributes by #'cddr do
+        (when value
+          (format stream " ~(~a~)=\"~a\""
+                  key 
+                  (cond ((and (stringp value)
+			      (string-requires-entity-quoting value))
+                         (string-downcase (entity-quote value)))
+                        ((keywordp value) (string-downcase value))
+                        (t value)))))
+  (unless null-contents
+    (write-string ">" stream)))
+
+(defun close-tag (tag null-contents stream)
+  (if null-contents
+      (write-string " />" stream)
+    (format stream "</~(~a~)>" tag))
+  (when (member tag *block-tags* :key 'symbol-name :test 'string=)
+    (terpri stream))
+  nil)
+
+(defun format-to-xhtml (stream format-string &rest format-arguments)
+  (let ((string (apply 'format nil format-string format-arguments)))
+    (write-string (entity-quote-as-necessary string)
+                  stream)))
+
+(defun write-xhtml-string (string stream)
+  (format-to-xhtml stream "~a" string))
+
+;; Entity quoting
+
+(defun string-requires-entity-quoting (string)
+  (let ((interesting-chars (map 'string 'cdr (character-entities))))
+    (dotimes (i (length string))
+      (let ((char (schar string i)))
+        (when (or (not (safe-char-p char))
+                  (find char interesting-chars))
+          (return-from string-requires-entity-quoting
+            t)))))
+  nil)
+
+(defun entity-quote (string)
+  (let ((character-entities (character-entities)))
+    (with-output-to-string (out)
+      (dotimes (i (length string))
+        (let* ((char (schar string i))
+               (assoc (rassoc char character-entities)))
+          (cond
+           (assoc (format out "&~a;" (car assoc)))
+           ((safe-char-p char) (write-char char out))
+           (t (format out "&#~d;" (char-code char)))))))))
+
+(defun entity-quote-as-necessary (string)
+  (if (string-requires-entity-quoting string)
+      (entity-quote string)
+    string))
+
+(defvar *character-entities* '(("lt"   . #\<)
+                               ("gt"   . #\>)
+                               ("amp"  . #\&)
+                               ("quot" . #\")
+                               ("pound" . #\£)))
+
+(defun character-entities ()
+  *character-entities*)
+
+;; Characters which are "safe" to send down a socket, save to a file
+;; without worrying about encoding, etc.
+(defun safe-char-p (char)
+  (let ((code (char-code char)))
+    (or (<= 32 code 126)
+        (<= 160 code 255))))
+
+;;;;;;;;;;;; Implementation dependency ;;;;;;;;;;;;
+
+(defun walk-form (form walker)
+  (implementation-walk-form form ()
+			    (lambda (form &rest ignore)
+			      (declare (ignore ignore))
+			      (funcall walker form))))
+
+(setf (symbol-function 'implementation-walk-form)
+      #+lispworks #'walker:walk-form
+      #+allegro #'excl::walk-form)
+
+
+;; Copyright (c) 2001-2006 Nick Levine.
+;;
+;; This document is provided "as is", without any express or implied
+;; warranty.  In no event will the author be held liable for any
+;; damages arising from the use of this document.  You may make and
+;; distribute verbatim copies of this document provided that you do
+;; not charge a fee for this document or for its distribution.

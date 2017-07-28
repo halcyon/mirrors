@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/de-de/python3-de/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:37 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn python3 in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../../css/normalize.css">
+        <link rel="stylesheet" href="../../../css/main.css">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fde-de%2Fpython3-de%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3Dpython3">
+        Teile diese Seite mit anderen
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">Lerne X in Y Minuten</a></h2>
+  <h2>Wobei X=python3</h2>
+  
+    <p class="filelink">
+    Lade den Code herunter:
+    <a href="../../files/learnpython3-de.py">learnpython3-de.py</a>
+    </p>
+  
+  <div id="doc">
+    <p>Anmerkungen des ursprünglichen Autors:
+Python wurde in den frühen Neunzigern von Guido van Rossum entworfen. Es ist heute eine der beliebtesten Sprachen. Ich habe mich in Python wegen seiner syntaktischen Übersichtlichkeit verliebt. Eigentlich ist es ausführbarer Pseudocode.</p>
+
+<p>Feedback ist herzlich willkommen! Ihr erreicht mich unter <a href="http://twitter.com/louiedinh">@louiedinh</a> oder louiedinh [at] [google&rsquo;s email service].</p>
+
+<p>Hinweis: Dieser Beitrag bezieht sich insplizit auf Python 3. Falls du lieber Python 2.7 lernen möchtest, schau <a href="../../python/index.html">hier</a> weiter.</p>
+<pre class="highlight python"><code>
+<span class="c"># Einzeilige Kommentare beginnen mit einer Raute (Doppelkreuz)</span>
+
+<span class="s">""" Mehrzeilige Strings werden mit
+    drei '-Zeichen geschrieben und werden
+    oft als Kommentare genutzt.
+"""</span>
+
+<span class="c">####################################################</span>
+<span class="c">## 1. Primitive Datentypen und Operatoren</span>
+<span class="c">####################################################</span>
+
+<span class="c"># Die Zahlen</span>
+<span class="mi">3</span> <span class="c">#=&gt; 3</span>
+
+<span class="c"># Mathematik funktioniert so, wie man das erwartet</span>
+<span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span> <span class="c">#=&gt; 2</span>
+<span class="mi">8</span> <span class="o">-</span> <span class="mi">1</span> <span class="c">#=&gt; 7</span>
+<span class="mi">10</span> <span class="o">*</span> <span class="mi">2</span> <span class="c">#=&gt; 20</span>
+
+<span class="c"># Außer Division, welche automatisch Gleitkommazahlen zurückgibt</span>
+<span class="mi">35</span> <span class="o">/</span> <span class="mi">5</span>  <span class="c"># =&gt; 7.0</span>
+
+<span class="c"># Eine Division kann mit "//" für positive sowie negative Werte abgerundet werden.</span>
+<span class="mi">5</span> <span class="o">//</span> <span class="mi">3</span>     <span class="c"># =&gt; 1</span>
+<span class="mf">5.0</span> <span class="o">//</span> <span class="mf">3.0</span> <span class="c"># =&gt; 1.0 # works on floats too</span>
+<span class="o">-</span><span class="mi">5</span> <span class="o">//</span> <span class="mi">3</span>  <span class="c"># =&gt; -2</span>
+<span class="o">-</span><span class="mf">5.0</span> <span class="o">//</span> <span class="mf">3.0</span> <span class="c"># =&gt; -2.0</span>
+
+<span class="c"># Benutzt man eine Gleitkommazahl, ist auch das Ergebnis eine solche</span>
+<span class="mi">3</span> <span class="o">*</span> <span class="mf">2.0</span> <span class="c"># =&gt; 6.0</span>
+
+<span class="c"># Der Rest einer Division</span>
+<span class="mi">7</span> <span class="o">%</span> <span class="mi">3</span> <span class="c"># =&gt; 1</span>
+
+<span class="c"># Potenz</span>
+<span class="mi">2</span><span class="o">**</span><span class="mi">4</span> <span class="c"># =&gt; 16</span>
+
+<span class="c"># Rangfolge wird mit Klammern erzwungen</span>
+<span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="c">#=&gt; 8</span>
+
+<span class="c"># Boolesche Ausdrücke sind primitive Datentypen</span>
+<span class="bp">True</span>
+<span class="bp">False</span>
+
+<span class="c"># Mit not wird negiert</span>
+<span class="ow">not</span> <span class="bp">True</span> <span class="c">#=&gt; False</span>
+<span class="ow">not</span> <span class="bp">False</span> <span class="c">#=&gt; True</span>
+
+<span class="c"># Boolesche Operatoren</span>
+<span class="c"># Hinweis: "and" und "or" müssen klein geschrieben werden</span>
+<span class="bp">True</span> <span class="ow">and</span> <span class="bp">False</span> <span class="c">#=&gt; False</span>
+<span class="bp">False</span> <span class="ow">or</span> <span class="bp">True</span> <span class="c">#=&gt; True</span>
+
+<span class="c"># Für die Benutzung von Booleschen Operatoren und ganzen Zahlen</span>
+<span class="mi">0</span> <span class="ow">and</span> <span class="mi">2</span> <span class="c">#=&gt; 0</span>
+<span class="o">-</span><span class="mi">5</span> <span class="ow">or</span> <span class="mi">0</span> <span class="c">#=&gt; -5</span>
+<span class="mi">0</span> <span class="o">==</span> <span class="bp">False</span> <span class="c">#=&gt; True</span>
+<span class="mi">2</span> <span class="o">==</span> <span class="bp">True</span> <span class="c">#=&gt; False</span>
+<span class="mi">1</span> <span class="o">==</span> <span class="bp">True</span> <span class="c">#=&gt; True</span>
+
+<span class="c"># Gleichheit ist ==</span>
+<span class="mi">1</span> <span class="o">==</span> <span class="mi">1</span> <span class="c">#=&gt; True</span>
+<span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span> <span class="c">#=&gt; False</span>
+
+<span class="c"># Ungleichheit ist !=</span>
+<span class="mi">1</span> <span class="o">!=</span> <span class="mi">1</span> <span class="c">#=&gt; False</span>
+<span class="mi">2</span> <span class="o">!=</span> <span class="mi">1</span> <span class="c">#=&gt; True</span>
+
+<span class="c"># Ein paar weitere Vergleiche</span>
+<span class="mi">1</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="c">#=&gt; True</span>
+<span class="mi">1</span> <span class="o">&gt;</span> <span class="mi">10</span> <span class="c">#=&gt; False</span>
+<span class="mi">2</span> <span class="o">&lt;=</span> <span class="mi">2</span> <span class="c">#=&gt; True</span>
+<span class="mi">2</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="c">#=&gt; True</span>
+
+<span class="c"># Vergleiche können verknüpft werden!</span>
+<span class="mi">1</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="c">#=&gt; True</span>
+<span class="mi">2</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="c">#=&gt; False</span>
+
+<span class="c"># Strings werden mit " oder ' gebildet</span>
+<span class="s">"Das ist ein String."</span>
+<span class="s">'Das ist auch ein String.'</span>
+
+<span class="c"># Strings können auch addiert werden! Vermeide dies aber lieber.</span>
+<span class="s">"Hallo "</span> <span class="o">+</span> <span class="s">"Welt!"</span> <span class="c">#=&gt; "Hallo Welt!"</span>
+<span class="c"># Strings können ohne "+" addiert werden</span>
+<span class="s">"Hallo "</span> <span class="s">"welt!"</span>  <span class="c"># =&gt; "Hallo Welt!"</span>
+
+<span class="c"># Ein String kann wie eine Liste von Zeichen verwendet werden</span>
+<span class="s">"Das ist ein String"</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c">#=&gt; 'D'</span>
+
+<span class="c"># .format kann Strings formatieren</span>
+<span class="s">"{} können {} werden"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">"Strings"</span><span class="p">,</span> <span class="s">"formatiert"</span><span class="p">)</span>
+
+<span class="c"># Schneller geht das mit Wiederholungen</span>
+<span class="s">"{0} mag Spagetthi, {0} liebt es zu Schwimmen und ganz besonders mag {0} {1}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">"Hans"</span><span class="p">,</span> <span class="s">"Blattsalat"</span><span class="p">)</span>
+<span class="c">#=&gt; "Hans mag Spagetthi, Hans liebt es zu Schwimmen und ganz besonders mag Hans Blattsalat"</span>
+
+<span class="c"># Wir können Schlüsselwörter verwenden, wenn wir nicht abzählen wollen.</span>
+<span class="s">"{name} will {food} essen"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"Bob"</span><span class="p">,</span> <span class="n">food</span><span class="o">=</span><span class="s">"Lasagne"</span><span class="p">)</span>
+<span class="c">#=&gt; "Bob will Lasagne kochen"</span>
+
+<span class="c">#Falls dein Python 3 Code auch unter Python 2.5 oder darunter laufen soll, kann das alte Format benutzt werden:</span>
+<span class="s">"</span><span class="si">%</span><span class="s">s können </span><span class="si">%</span><span class="s">s werden"</span> <span class="o">%</span> <span class="p">(</span><span class="s">"Strings"</span><span class="p">,</span> <span class="s">"interpoliert"</span><span class="p">)</span>
+
+
+<span class="c"># None ist ein Objekt</span>
+<span class="bp">None</span> <span class="c">#=&gt; None</span>
+
+<span class="c"># Verwendet nicht das Symbol für Gleichheit `==`, um Objekte mit None zu vergleichen</span>
+<span class="c"># Benutzt stattdessen `is`. Dieser Operator testet Objektidentität</span>
+<span class="s">"etc"</span> <span class="ow">is</span> <span class="bp">None</span> <span class="c">#=&gt; False</span>
+<span class="bp">None</span> <span class="ow">is</span> <span class="bp">None</span>  <span class="c">#=&gt; True</span>
+
+
+
+<span class="c"># None, 0, und leere Strings/Listen werden alle als False bewertet.</span>
+<span class="c"># Alle anderen Werte sind True</span>
+<span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c"># =&gt; False</span>
+<span class="nb">bool</span><span class="p">(</span><span class="s">""</span><span class="p">)</span>  <span class="c"># =&gt; False</span>
+<span class="nb">bool</span><span class="p">([])</span> <span class="c">#=&gt; False</span>
+<span class="nb">bool</span><span class="p">({})</span> <span class="c">#=&gt; False</span>
+
+
+<span class="c">####################################################</span>
+<span class="c">## 2. Variablen und Collections</span>
+<span class="c">####################################################</span>
+
+<span class="c"># Textausgabe ist sehr einfach</span>
+<span class="k">print</span> <span class="s">"Ich bin Python. Schön, dich kennenzulernen!"</span>
+
+<span class="c"># Es gibt keinen Grund, Variablen vor der Zuweisung zu deklarieren.</span>
+<span class="n">some_var</span> <span class="o">=</span> <span class="mi">5</span>    <span class="c"># kleinschreibung_mit_unterstrichen entspricht der Norm</span>
+<span class="n">some_var</span> <span class="c">#=&gt; 5</span>
+
+<span class="c"># Das Ansprechen einer noch nicht deklarierte Variable löst eine Exception aus.</span>
+<span class="c"># Unter "Kontrollstruktur" kann noch mehr über</span>
+<span class="c"># Ausnahmebehandlung erfahren werden.</span>
+<span class="n">some_unknown_var</span>  <span class="c"># Löst einen NameError aus</span>
+
+<span class="c"># Listen speichern Sequenzen</span>
+<span class="n">li</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c"># Wir können mit einer bereits gefüllten Liste anfangen</span>
+<span class="n">other_li</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+
+<span class="c"># append fügt Daten am Ende der Liste ein</span>
+<span class="n">li</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>    <span class="c">#li ist jetzt [1]</span>
+<span class="n">li</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>    <span class="c">#li ist jetzt [1, 2]</span>
+<span class="n">li</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>    <span class="c">#li ist jetzt [1, 2, 4]</span>
+<span class="n">li</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>    <span class="c">#li ist jetzt [1, 2, 4, 3]</span>
+<span class="c"># Vom Ende der Liste mit pop entfernen</span>
+<span class="n">li</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>        <span class="c">#=&gt; 3 und li ist jetzt [1, 2, 4]</span>
+<span class="c"># und dann wieder hinzufügen</span>
+<span class="n">li</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>    <span class="c"># li ist jetzt wieder [1, 2, 4, 3].</span>
+
+<span class="c"># Greife auf Listen wie auf Arrays zu</span>
+<span class="n">li</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c">#=&gt; 1</span>
+<span class="c"># Das letzte Element ansehen</span>
+<span class="n">li</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c">#=&gt; 3</span>
+
+<span class="c"># Bei Zugriffen außerhalb der Liste kommt es jedoch zu einem IndexError</span>
+<span class="n">li</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="c"># Verursacht einen IndexError</span>
+
+<span class="c"># Wir können uns Ranges mit Slice-Syntax ansehen</span>
+<span class="n">li</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="c">#=&gt; [2, 4]</span>
+<span class="c"># Den Anfang auslassen</span>
+<span class="n">li</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="c">#=&gt; [4, 3]</span>
+<span class="c"># Das Ende auslassen</span>
+<span class="n">li</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="c">#=&gt; [1, 2, 4]</span>
+<span class="c"># Jeden Zweiten Eintrag auswählen</span>
+<span class="n">li</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>   <span class="c"># =&gt;[1, 4]</span>
+<span class="c"># Eine umgekehrte Kopie zurückgeben</span>
+<span class="n">li</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>   <span class="c"># =&gt; [3, 4, 2, 1]</span>
+<span class="c"># Jegliche Kombination dieser Syntax machen fortgeschrittene Slices möglich</span>
+<span class="c"># li[Start:Ende:Schritt]</span>
+
+<span class="c"># Ein bestimmtes Element mit del aus der Liste entfernen</span>
+<span class="k">del</span> <span class="n">li</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="c"># li ist jetzt [1, 2, 3]</span>
+
+<span class="c"># Listen können addiert werden</span>
+<span class="n">li</span> <span class="o">+</span> <span class="n">other_li</span> <span class="c">#=&gt; [1, 2, 3, 4, 5, 6] - Hinweis: li und other_li werden in Ruhe gelassen</span>
+
+<span class="c"># Listen mit extend verknüpfen</span>
+<span class="n">li</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">other_li</span><span class="p">)</span> <span class="c"># Jetzt ist li [1, 2, 3, 4, 5, 6]</span>
+
+<span class="c"># Mit in auf Existenz eines Elements prüfen</span>
+<span class="mi">1</span> <span class="ow">in</span> <span class="n">li</span> <span class="c">#=&gt; True</span>
+
+<span class="c"># Die Länge der Liste mit len ermitteln</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">li</span><span class="p">)</span> <span class="c">#=&gt; 6</span>
+
+
+<span class="c"># Tupel sind wie Listen, nur unveränderlich.</span>
+<span class="n">tup</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c">#=&gt; 1</span>
+<span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c"># Löst einen TypeError aus</span>
+
+<span class="c"># Wir können all diese Listen-Dinge auch mit Tupeln anstellen</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span> <span class="c">#=&gt; 3</span>
+<span class="n">tup</span> <span class="o">+</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="c">#=&gt; (1, 2, 3, 4, 5, 6)</span>
+<span class="n">tup</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="c">#=&gt; (1, 2)</span>
+<span class="mi">2</span> <span class="ow">in</span> <span class="n">tup</span> <span class="c">#=&gt; True</span>
+
+<span class="c"># Wir können Tupel (oder Listen) in Variablen entpacken</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>     <span class="c"># a ist jetzt 1, b ist jetzt 2 und c ist jetzt 3</span>
+<span class="c"># Tupel werden standardmäßig erstellt, wenn wir uns die Klammern sparen</span>
+<span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span>
+<span class="c"># Es ist kinderleicht zwei Werte zu tauschen</span>
+<span class="n">e</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span>     <span class="c"># d is now 5 and e is now 4</span>
+
+
+<span class="c"># Dictionarys (Wörterbucher) speichern Schlüssel-Werte-Paare</span>
+<span class="n">empty_dict</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="c"># Hier ein gefülltes Wörterbuch</span>
+<span class="n">filled_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">"one"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">"two"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">"three"</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+
+<span class="c"># Wir können Einträge mit [] nachschlagen</span>
+<span class="n">filled_dict</span><span class="p">[</span><span class="s">"one"</span><span class="p">]</span> <span class="c">#=&gt; 1</span>
+
+<span class="c"># So holen wir alle Keys (Schlüssel) als Liste</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">filled_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="c">#=&gt; ["three", "two", "one"]</span>
+<span class="c"># Hinweis - Die Reihenfolge von Schlüsseln in der Liste ist nicht garantiert.</span>
+<span class="c"># Einzelne Resultate können anders angeordnet sein.</span>
+
+<span class="c"># Alle Values (Werte) als Liste</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">filled_dict</span><span class="o">.</span><span class="n">values</span><span class="p">())</span> <span class="c">#=&gt; [3, 2, 1]</span>
+<span class="c"># Hinweis - Hier gelten dieselben Einschränkungen für die Reihenfolge wie bei Schlüsseln.</span>
+
+<span class="c"># Das Vorhandensein eines Schlüssels im Wörterbuch mit "in" prüfen</span>
+<span class="s">"one"</span> <span class="ow">in</span> <span class="n">filled_dict</span> <span class="c">#=&gt; True</span>
+<span class="mi">1</span> <span class="ow">in</span> <span class="n">filled_dict</span> <span class="c">#=&gt; False</span>
+
+<span class="c"># Einen nicht vorhandenenen Schlüssel zu suchen, löst einen KeyError aus</span>
+<span class="n">filled_dict</span><span class="p">[</span><span class="s">"four"</span><span class="p">]</span> <span class="c"># KeyError</span>
+
+<span class="c"># Mit der get-Methode verhindern wir das</span>
+<span class="n">filled_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"one"</span><span class="p">)</span> <span class="c">#=&gt; 1</span>
+<span class="n">filled_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"four"</span><span class="p">)</span> <span class="c">#=&gt; None</span>
+<span class="c"># Die get-Methode unterstützt auch ein Standardargument, falls der Wert fehlt</span>
+<span class="n">filled_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"one"</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="c">#=&gt; 1</span>
+<span class="n">filled_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"four"</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="c">#=&gt; 4</span>
+
+<span class="c"># Die setdefault-Methode ist ein sicherer Weg, ein neues Schlüssel-Wert-Paar anzulegen</span>
+<span class="n">filled_dict</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">"five"</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="c">#filled_dict["five"] wird auf 5 gesetzt</span>
+<span class="n">filled_dict</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">"five"</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="c">#filled_dict["five"] ist noch immer 5</span>
+
+<span class="c"># Einträge zu einem Wörterbuch hinzufügen</span>
+<span class="n">filled_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">"four"</span><span class="p">:</span><span class="mi">4</span><span class="p">})</span> <span class="c">#=&gt; {"one": 1, "two": 2, "three": 3, "four": 4}</span>
+<span class="c">#filled_dict["four"] = 4  # noch ein Weg, Werte hinzuzufügen</span>
+
+<span class="c"># Schlüssel von einem Wörterbuch entfernen</span>
+<span class="k">del</span> <span class="n">filled_dict</span><span class="p">[</span><span class="s">"one"</span><span class="p">]</span>  <span class="c"># Entfert den Schlüssel "one"</span>
+
+
+<span class="c"># Sets speichern Mengen</span>
+<span class="n">empty_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+<span class="c"># Initialisieren wir ein Set mit ein paar Werten</span>
+<span class="n">some_set</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">}</span> <span class="c"># some_set ist jetzt {1, 2, 3, 4}</span>
+
+<span class="c"># Neue Variablen können einer Menge gleichgesetzt werden</span>
+<span class="n">filled_set</span> <span class="o">=</span> <span class="n">some_set</span>
+
+<span class="c"># Mehr Elemente hinzufügen</span>
+<span class="n">filled_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="c"># filled_set ist jetzt {1, 2, 3, 4, 5}</span>
+
+<span class="c"># Schnittmengen werden mit &amp; gebildet</span>
+<span class="n">other_set</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">}</span>
+<span class="n">filled_set</span> <span class="o">&amp;</span> <span class="n">other_set</span> <span class="c">#=&gt; {3, 4, 5}</span>
+
+<span class="c"># Mengen werden mit | vereinigt</span>
+<span class="n">filled_set</span> <span class="o">|</span> <span class="n">other_set</span> <span class="c">#=&gt; {1, 2, 3, 4, 5, 6}</span>
+
+<span class="c"># Die Differenz einer Menge mit - bilden</span>
+<span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span> <span class="o">-</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">}</span> <span class="c">#=&gt; {1, 4}</span>
+
+<span class="c"># Auf Vorhandensein von Elementen mit in prüfen</span>
+<span class="mi">2</span> <span class="ow">in</span> <span class="n">filled_set</span> <span class="c">#=&gt; True</span>
+<span class="mi">10</span> <span class="ow">in</span> <span class="n">filled_set</span> <span class="c">#=&gt; False</span>
+
+
+<span class="c">####################################################</span>
+<span class="c">## 3. Kontrollstruktur und Iteratoren</span>
+<span class="c">####################################################</span>
+
+<span class="c"># Erstellen wir mal eine Variable</span>
+<span class="n">some_var</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="c"># Hier eine if-Anweisung. Die Einrückung ist in Python wichtig!</span>
+<span class="c"># gibt "some_var ist kleiner als 10" aus</span>
+<span class="k">if</span> <span class="n">some_var</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">"some_var ist viel größer als 10."</span>
+<span class="k">elif</span> <span class="n">some_var</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>    <span class="c"># Dieser elif-Absatz ist optional.</span>
+    <span class="k">print</span> <span class="s">"some_var ist kleiner als 10."</span>
+<span class="k">else</span><span class="p">:</span>           <span class="c"># Das hier ist auch optional.</span>
+    <span class="k">print</span> <span class="s">"some_var ist tatsächlich 10."</span>
+
+
+<span class="s">"""
+For-Schleifen iterieren über Listen
+Ausgabe:
+    hund ist ein Säugetier
+    katze ist ein Säugetier
+    maus ist ein Säugetier
+"""</span>
+<span class="k">for</span> <span class="n">animal</span> <span class="ow">in</span> <span class="p">[</span><span class="s">"hund"</span><span class="p">,</span> <span class="s">"katze"</span><span class="p">,</span> <span class="s">"maus"</span><span class="p">]:</span>
+    <span class="c"># Wir können Strings mit format() formatieren</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"{}  ist ein Säugetier"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">animal</span><span class="p">))</span>
+
+<span class="s">"""
+`range(Zahl)` gibt eine null-basierte Liste bis zur angegebenen Zahl wieder
+Ausgabe:
+    0
+    1
+    2
+    3
+"""</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+    <span class="k">print</span> <span class="n">i</span>
+
+<span class="s">"""
+"range(unten, oben)" gibt eine Liste von der unteren Zahl bis zur oberen Zahl aus
+Ausgabe:
+    4
+    5
+    6
+    7
+"""</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+<span class="s">"""
+While-Schleifen laufen, bis eine Bedingung erfüllt ist.
+Ausgabe:
+    0
+    1
+    2
+    3
+"""</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">x</span>
+    <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c"># Kurzform für x = x + 1</span>
+
+<span class="c"># Ausnahmebehandlung mit einem try/except-Block</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="c"># Mit raise wird ein Fehler ausgegeben</span>
+    <span class="k">raise</span> <span class="nb">IndexError</span><span class="p">(</span><span class="s">"Das hier ist ein Index-Fehler"</span><span class="p">)</span>
+<span class="k">except</span> <span class="nb">IndexError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">pass</span>    <span class="c"># Pass ist nur eine no-op. Normalerweise würden wir hier den Fehler klären.</span>
+<span class="k">except</span> <span class="p">(</span><span class="nb">TypeError</span><span class="p">,</span> <span class="nb">NameError</span><span class="p">):</span>
+    <span class="k">pass</span>    <span class="c"># Mehrere Fehler können zusammen geklärt werden, falls erforderlich.</span>
+<span class="k">else</span><span class="p">:</span>   <span class="c"># Optional, hinter allen except-Blöcken</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Keine Probleme!"</span><span class="p">)</span>   <span class="c"># Wird nur ausgeführt, wenn keine Ausnahmen aufgetreten sind</span>
+<span class="k">finally</span><span class="p">:</span> <span class="c">#  Wird immer ausgeführt</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"Hier können wir Ressourcen aufräumen"</span><span class="p">)</span>
+
+<span class="c"># alternativ zu einem try/finally Block um Aufzuräumen:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">"meineDatei.txt"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+<span class="c"># Python bietet ein fundamentales Konzept der Iteration.</span>
+<span class="c"># Das Objekt, auf das die Interation, also die Wiederholung einer Methode angewandt wird heißt auf Englisch "iterable".</span>
+<span class="c"># Die range Method gibt ein solches Objekt aus.</span>
+
+<span class="n">filled_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">"one"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">"two"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">"three"</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+<span class="n">our_iterable</span> <span class="o">=</span> <span class="n">filled_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">our_iterable</span><span class="p">)</span> <span class="c">#=&gt; range(1,10). Dies ist ein "iterable" Objekt.</span>
+
+<span class="c"># Über dieses können  wir auch iterieren</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">our_iterable</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>    <span class="c"># Gibt one, two, three aus</span>
+
+<span class="c"># Allerdings können wir die einzelnen Elemente nicht mit ihrem index ausgeben</span>
+<span class="n">our_iterable</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c"># TypeError</span>
+
+<span class="c"># Ein iterable ist ein Objekt, das weiß wie es einen Iteratoren erschafft.</span>
+<span class="n">our_iterator</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">our_iterable</span><span class="p">)</span>
+
+<span class="c"># Unser Iterator ist ein Objekt, das sich merkt, welchen Status es geraden hat während wir durch es gehen.</span>
+<span class="c"># Das jeweeils nächste Objekt bekommen wir mit "next()"</span>
+<span class="nb">next</span><span class="p">(</span><span class="n">our_iterator</span><span class="p">)</span>  <span class="c">#=&gt; "one"</span>
+
+<span class="c"># Es hält den vorherigen Status</span>
+<span class="nb">next</span><span class="p">(</span><span class="n">our_iterator</span><span class="p">)</span>  <span class="c">#=&gt; "two"</span>
+<span class="nb">next</span><span class="p">(</span><span class="n">our_iterator</span><span class="p">)</span>  <span class="c">#=&gt; "three"</span>
+
+<span class="c"># Nachdem alle Daten ausgegeben worden sind, kommt eine StopIterator Ausnahme zurück</span>
+<span class="nb">next</span><span class="p">(</span><span class="n">our_iterator</span><span class="p">)</span> <span class="c"># Gibt StopIteration aus</span>
+
+<span class="c"># Alle Elemente können mit "list()" ausgegeben werden</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">filled_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>  <span class="c">#=&gt; ["one", "two", "three"]</span>
+
+
+
+<span class="c">####################################################</span>
+<span class="c">## 4. Funktionen</span>
+<span class="c">####################################################</span>
+
+<span class="c"># Mit def neue Funktionen erstellen</span>
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">"x ist </span><span class="si">%</span><span class="s">s und y ist </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>    <span class="c"># Werte werden mit return zurückgegeben</span>
+
+<span class="c"># Funktionen mit Parametern aufrufen</span>
+<span class="n">add</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="c">#=&gt; Ausgabe ist "x ist 5 und y ist 6" und gibt 11 zurück</span>
+
+<span class="c"># Ein anderer Weg des Funktionsaufrufs sind Schlüsselwort-Argumente</span>
+<span class="n">add</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>   <span class="c"># Schlüsselwörter können in beliebiger Reihenfolge übergeben werden.</span>
+
+<span class="c"># Wir können Funktionen mit beliebiger Anzahl von # Positionsargumenten definieren</span>
+<span class="k">def</span> <span class="nf">varargs</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">args</span>
+
+<span class="n">varargs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c">#=&gt; (1,2,3)</span>
+
+
+<span class="c"># Wir können auch Funktionen mit beliebiger Anzahl</span>
+<span class="c"># Schlüsselwort-Argumenten definieren</span>
+<span class="k">def</span> <span class="nf">keyword_args</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">kwargs</span>
+
+<span class="c"># Rufen wir es mal auf, um zu sehen, was passiert</span>
+<span class="n">keyword_args</span><span class="p">(</span><span class="n">big</span><span class="o">=</span><span class="s">"foot"</span><span class="p">,</span> <span class="n">loch</span><span class="o">=</span><span class="s">"ness"</span><span class="p">)</span> <span class="c">#=&gt; {"big": "foot", "loch": "ness"}</span>
+
+<span class="c"># Wir können beides gleichzeitig machem, wenn wir wollen</span>
+<span class="k">def</span> <span class="nf">all_the_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">print</span> <span class="n">args</span>
+    <span class="k">print</span> <span class="n">kwargs</span>
+<span class="s">"""
+all_the_args(1, 2, a=3, b=4) Ausgabe:
+    (1, 2)
+    {"a": 3, "b": 4}
+"""</span>
+
+<span class="c"># Beim Aufruf von Funktionen können wir das Gegenteil von varargs/kwargs machen!</span>
+<span class="c"># Wir benutzen dann *, um Tupel auszuweiten, und ** für kwargs.</span>
+<span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s">"a"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s">"b"</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+<span class="n">all_the_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span> <span class="c"># äquivalent zu foo(1, 2, 3, 4)</span>
+<span class="n">all_the_args</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="c"># äquivalent zu foo(a=3, b=4)</span>
+<span class="n">all_the_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="c"># äquivalent zu  foo(1, 2, 3, 4, a=3, b=4)</span>
+
+
+<span class="c"># Anwendungsbereich von Funktionen</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="k">def</span> <span class="nf">setX</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="c"># lokale Variable x ist nicht die globale Variable x</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">num</span> <span class="c"># =&gt; 43</span>
+    <span class="k">print</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c"># =&gt; 43</span>
+
+<span class="k">def</span> <span class="nf">setGlobalX</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">x</span>
+    <span class="k">print</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c"># =&gt; 5</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">num</span> <span class="c"># globale Variable x ist jetzt 6</span>
+    <span class="k">print</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c"># =&gt; 6</span>
+
+<span class="n">setX</span><span class="p">(</span><span class="mi">43</span><span class="p">)</span>
+<span class="n">setGlobalX</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+
+
+<span class="c"># Python hat First-Class-Funktionen</span>
+<span class="k">def</span> <span class="nf">create_adder</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">adder</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+    <span class="k">return</span> <span class="n">adder</span>
+
+<span class="n">add_10</span> <span class="o">=</span> <span class="n">create_adder</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">add_10</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c">#=&gt; 13</span>
+
+<span class="c"># Es gibt auch anonyme Funktionen</span>
+<span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)(</span><span class="mi">3</span><span class="p">)</span> <span class="c">#=&gt; True</span>
+
+<span class="c"># Es gibt auch Funktionen höherer Ordnung als Built-Ins</span>
+<span class="nb">map</span><span class="p">(</span><span class="n">add_10</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span> <span class="c">#=&gt; [11, 12, 13]</span>
+<span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span> <span class="c">#=&gt; [6, 7]</span>
+
+<span class="c"># Wir können bei map- und filter-Funktionen auch List Comprehensions einsetzen</span>
+<span class="p">[</span><span class="n">add_10</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span>  <span class="c">#=&gt; [11, 12, 13]</span>
+<span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">]</span> <span class="c">#=&gt; [6, 7]</span>
+
+<span class="c">####################################################</span>
+<span class="c">## 5. Klassen</span>
+<span class="c">####################################################</span>
+
+<span class="c"># Wir bilden die Unterklasse eines Objekts, um Klassen zu erhalten.</span>
+<span class="k">class</span> <span class="nc">Human</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="c"># Ein Klassenattribut. Es wird von allen Instanzen einer Klasse geteilt</span>
+    <span class="n">species</span> <span class="o">=</span> <span class="s">"H. sapiens"</span>
+
+    <span class="c"># Ein simpler Konstruktor</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="c"># Wir weisen das Argument name dem name-Attribut der Instanz zu</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+    <span class="c"># Eine Instanzmethode. Alle Methoden erhalten self als erstes Argument.</span>
+    <span class="k">def</span> <span class="nf">say</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">"{name}: {message}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c"># Eine Klassenmethode wird von allen Instanzen geteilt.</span>
+    <span class="c"># Sie werden mit der aufrufenden Klasse als erstem Argument aufgerufen</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_species</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">species</span>
+
+    <span class="c"># Eine statische Methode wird ohne Klasse oder Instanz aufgerufen</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">grunt</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s">"*grunt*"</span>
+
+
+<span class="c"># Eine Instanz einer Klasse erstellen</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">Human</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"Ian"</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">i</span><span class="o">.</span><span class="n">say</span><span class="p">(</span><span class="s">"hi"</span><span class="p">)</span>     <span class="c"># gibt "Ian: hi" aus</span>
+
+<span class="n">j</span> <span class="o">=</span> <span class="n">Human</span><span class="p">(</span><span class="s">"Joel"</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">j</span><span class="o">.</span><span class="n">say</span><span class="p">(</span><span class="s">"hello"</span><span class="p">)</span>  <span class="c">#gibt "Joel: hello" aus</span>
+
+<span class="c"># Rufen wir mal unsere Klassenmethode auf</span>
+<span class="n">i</span><span class="o">.</span><span class="n">get_species</span><span class="p">()</span> <span class="c">#=&gt; "H. sapiens"</span>
+
+<span class="c"># Ändern wir mal das gemeinsame Attribut</span>
+<span class="n">Human</span><span class="o">.</span><span class="n">species</span> <span class="o">=</span> <span class="s">"H. neanderthalensis"</span>
+<span class="n">i</span><span class="o">.</span><span class="n">get_species</span><span class="p">()</span> <span class="c">#=&gt; "H. neanderthalensis"</span>
+<span class="n">j</span><span class="o">.</span><span class="n">get_species</span><span class="p">()</span> <span class="c">#=&gt; "H. neanderthalensis"</span>
+
+<span class="c"># Aufruf der statischen Methode</span>
+<span class="n">Human</span><span class="o">.</span><span class="n">grunt</span><span class="p">()</span> <span class="c">#=&gt; "*grunt*"</span>
+
+
+<span class="c">####################################################</span>
+<span class="c">## 6. Module</span>
+<span class="c">####################################################</span>
+
+<span class="c"># Wir können Module importieren</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="k">print</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="c">#=&gt; 4</span>
+
+<span class="c"># Wir können auch nur spezielle Funktionen eines Moduls importieren</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">floor</span>
+<span class="k">print</span> <span class="n">ceil</span><span class="p">(</span><span class="mf">3.7</span><span class="p">)</span>  <span class="c">#=&gt; 4.0</span>
+<span class="k">print</span> <span class="n">floor</span><span class="p">(</span><span class="mf">3.7</span><span class="p">)</span> <span class="c">#=&gt; 3.0</span>
+
+<span class="c"># Wir können auch alle Funktionen eines Moduls importieren</span>
+<span class="c"># Warnung: Dies wird nicht empfohlen</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c"># Wir können Modulnamen abkürzen</span>
+<span class="kn">import</span> <span class="nn">math</span> <span class="kn">as</span> <span class="nn">m</span>
+<span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="c">#=&gt; True</span>
+
+<span class="c"># Module sind in Python nur gewöhnliche Dateien. Wir</span>
+<span class="c"># können unsere eigenen schreiben und importieren. Der Name des</span>
+<span class="c"># Moduls ist der Dateiname.</span>
+
+<span class="c"># Wir können auch die Funktionen und Attribute eines</span>
+<span class="c"># Moduls herausfinden.</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="nb">dir</span><span class="p">(</span><span class="n">math</span><span class="p">)</span>
+
+
+<span class="c">####################################################</span>
+<span class="c">## 7. Fortgeschritten</span>
+<span class="c">####################################################</span>
+
+<span class="c"># Generatoren helfen um Code schnell und einfach zu schreiben</span>
+<span class="k">def</span> <span class="nf">double_numbers</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">i</span> <span class="o">+</span> <span class="n">i</span>
+
+<span class="c"># Ein Generator erschafft Werte spontan</span>
+<span class="c"># Statt alle Werte auf einmal, wird bei jeder Iteration einer erschaffen.</span>
+<span class="c"># iteration.  Das heißt, Werte größer als 15 werden nicht behandelt.</span>
+<span class="c"># Die range-Methode ist auch ein Generator. Im Fall einer Liste von 1-900000000</span>
+<span class="c"># würde das sehr viel Zeit in Anspruch nehmen.</span>
+<span class="c"># Wenn wir eine variable mit einem Namen erschaffen wollen, das</span>
+<span class="c"># normalerweise mit einem Python - Schlüsselwort kollidieren würde,</span>
+<span class="c"># benutzen wir einen Unterstrich nach dem Wort.</span>
+<span class="n">range_</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">900000000</span><span class="p">)</span>
+<span class="c"># Alle Nummern bis zu einem Ergebnis von &gt;=30 werden verdoppelt</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">double_numbers</span><span class="p">(</span><span class="n">range_</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">30</span><span class="p">:</span>
+        <span class="k">break</span>
+
+
+<span class="c"># Dekoratoren</span>
+<span class="c"># In diesem Beispiel die Methode beg umwickelt say</span>
+<span class="c"># Beim Aufruf von beg, say wird aufgerufen</span>
+<span class="c"># Falls say_please true ist, ändert sich die ausgegebene Nachricht</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+
+<span class="k">def</span> <span class="nf">beg</span><span class="p">(</span><span class="n">target_function</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">target_function</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">msg</span><span class="p">,</span> <span class="n">say_please</span> <span class="o">=</span> <span class="n">target_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">say_please</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">"{} {}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s">"Please! I am poor :("</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">msg</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="nd">@beg</span>
+<span class="k">def</span> <span class="nf">say</span><span class="p">(</span><span class="n">say_please</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s">"Can you buy me a beer?"</span>
+    <span class="k">return</span> <span class="n">msg</span><span class="p">,</span> <span class="n">say_please</span>
+
+
+<span class="k">print</span><span class="p">(</span><span class="n">say</span><span class="p">())</span>  <span class="c"># Can you buy me a beer?</span>
+<span class="k">print</span><span class="p">(</span><span class="n">say</span><span class="p">(</span><span class="n">say_please</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>  <span class="c"># Can you buy me a beer? Please! I am poor :(</span>
+
+</code></pre>
+
+<h2>Lust auf mehr?</h2>
+
+<h3>Kostenlos online (Englisch)</h3>
+
+<ul>
+<li><a href="https://automatetheboringstuff.com/">Automate the Boring Stuff with Python</a></li>
+<li><a href="http://learnpythonthehardway.org/book/">Learn Python The Hard Way</a></li>
+<li><a href="http://www.diveintopython.net/">Dive Into Python</a></li>
+<li><a href="http://pythonpracticeprojects.com/">Ideas for Python Projects</a></li>
+<li><a href="http://docs.python.org/3/">The Official Docs</a></li>
+<li><a href="http://docs.python-guide.org/en/latest/">Hitchhiker&rsquo;s Guide to Python</a></li>
+<li><a href="http://nbviewer.ipython.org/5920182">A Crash Course in Python for Scientists</a></li>
+<li><a href="http://www.python-course.eu/index.php">Python Course</a></li>
+<li><a href="https://realpython.com/learn/python-first-steps/">First Steps With Python</a></li>
+</ul>
+
+<h3>Totholz (Englisch)</h3>
+
+<ul>
+<li><a href="http://www.amazon.com/gp/product/0596158106/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596158106&amp;linkCode=as2&amp;tag=homebits04-20">Programming Python</a></li>
+<li><a href="http://www.amazon.com/gp/product/1441413022/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1441413022&amp;linkCode=as2&amp;tag=homebits04-20">Dive Into Python</a></li>
+<li><a href="http://www.amazon.com/gp/product/0672329786/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0672329786&amp;linkCode=as2&amp;tag=homebits04-20">Python Essential Reference</a></li>
+</ul>
+
+    <hr>
+    <p>Du hast einen Verbesserungsvorschlag oder einen Fehler gefunden? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Erstelle ein Ticket</a> im offiziellen Github Repo, oder du erstellst einfach gleich einen Pull Request!
+    </p>
+    <p class="contributed">
+    Originalversion von Louie Dinh, mit Updates von <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/de-de/python3-de.html.markdown">0 contributor(s)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://ldinh.ca/">Louie Dinh</a>
+      
+    
+    </p>
+
+    <p>
+    
+      Translated by:
+      
+        <a href="../../../www.kulturproktologie.html">kultprok</a>
+      
+        <a href="https://github.com/matthiaskern">matthiaskern</a>
+      
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/de-de/python3-de/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:37 GMT -->
+</html>

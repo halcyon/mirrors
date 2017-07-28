@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/basic-3/intro.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:46:51 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Closing the loop: basic</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;closing-the-loop-basic&quot;)"></div><h1 anchor="closing-the-loop-basic" id="closing-the-loop-basic" hyphens="none">Closing the loop: <span class="my-code" decode="exclude">basic</span></h1></div><ul class="siblinks"><li><a class="here" href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="functions.html">3&emsp;func­tions</a></li><li><a href="imports.html">4&emsp;imports</a></li><li><a href="exports.html">5&emsp;exports</a></li><li><a href="the-repl.html">6&emsp;the repl</a></li><li><a href="command-line-arguments.html">7&emsp;com­mand-line argu­ments</a></li><li><a href="recap.html">8&emsp;recap</a></li><li><a href="source-listing.html">9&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_qbLwA&quot;)"></div><p id="a_qbLwA">Dur­ing our tuto­ri­als, we’ve seen how a lan­guage imple­mented in Racket is essen­tially a <a class="glossary" href="../appendix/glossary.html#source-to-source-compiler"><span class="glossary-link-text">source-to-source com­piler</span></a> that con­verts the code of the source lan­guage into an equiv­a­lent Racket pro­gram.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_m20P4&quot;)"></div><p id="a_m20P4">One ben­e­fit of this approach is that any Racket-imple­mented lan­guage can coop­er­ate with a core set of Racket tools, like DrRacket. For instance, we built a <a href="../basic-2/the-syntax-colorer.html">syn­tax col­orer</a> for <span class="my-code" decode="exclude">basic</span> that works with DrRacket.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_N0dJz&quot;)"></div><p id="a_N0dJz">But the ben­e­fits aren’t merely cos­metic. Because a Racket-imple­mented lan­guage ulti­mately becomes a Racket pro­gram, these lan­guages can do any­thing that an ordi­nary Racket pro­gram can.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_3xuTN&quot;)"></div><p id="a_3xuTN">For exam­ple, <span class="my-code" decode="exclude">#lang brag</span>. On the sur­face, it doesn’t look like Racket or behave like Racket. But it can export func­tions like <a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/examples/nested-word-list..rkt)._parse))" class="docs" hyphens="none">parse</a> to other Racket pro­grams, which remain unaware that those func­tions were gen­er­ated by a domain-spe­cific lan­guage.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_KeDsR&quot;)"></div><p id="a_KeDsR"> In this third and final <span class="my-code" decode="exclude">basic</span> tuto­r­ial, we’ll learn that even though BASIC is a lan­guage from the ’60s, there’s no rea­son we can’t graft on some new pieces to make it coop­er­ate with the broader Racket ecosys­tem.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a class="here" href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="functions.html">3&emsp;func­tions</a></li><li><a href="imports.html">4&emsp;imports</a></li><li><a href="exports.html">5&emsp;exports</a></li><li><a href="the-repl.html">6&emsp;the repl</a></li><li><a href="command-line-arguments.html">7&emsp;com­mand-line argu­ments</a></li><li><a href="recap.html">8&emsp;recap</a></li><li><a href="source-listing.html">9&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="../basic-2/source-listing.html">← prev</a>
+    <a class="nav-right" href="specification-and-setup.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

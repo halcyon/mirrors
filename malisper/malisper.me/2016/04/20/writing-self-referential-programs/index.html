@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns#">
+
+<!-- Mirrored from malisper.me/2016/04/20/writing-self-referential-programs/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:46:35 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Generate Self-Referential Programs - Macrology</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="../../../../xmlrpc.php">
+
+
+<!-- This site is optimized with the Yoast SEO plugin v3.4.2 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="index.html" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="How to Generate Self-Referential Programs - Macrology" />
+<meta property="og:description" content="In this post, I am going to show you how to write programs that are self-referential. By self-referential, I mean programs which are able to obtain their own source code without any external input. In other words, they won&#8217;t just read from their own files. This post is based on section 6.1 of the book Introduction &hellip;" />
+<meta property="og:url" content="index.html" />
+<meta property="og:site_name" content="Macrology" />
+<meta property="article:section" content="Basic Macros" />
+<meta property="article:published_time" content="2016-04-20T00:39:07-05:00" />
+<meta property="article:modified_time" content="2016-04-20T00:57:04-05:00" />
+<meta property="og:updated_time" content="2016-04-20T00:57:04-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:description" content="In this post, I am going to show you how to write programs that are self-referential. By self-referential, I mean programs which are able to obtain their own source code without any external input. In other words, they won&#8217;t just read from their own files. This post is based on section 6.1 of the book Introduction [&hellip;]" />
+<meta name="twitter:title" content="How to Generate Self-Referential Programs - Macrology" />
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Feed" href="../../../../feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Comments Feed" href="../../../../comments/feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; How to Generate Self-Referential Programs Comments Feed" href="feed/index.html" />
+<link rel='stylesheet' id='scrawl-style-css'  href='../../../../wp-content/themes/scrawl-wpcom/style167b.css?ver=4.6' type='text/css' media='all' />
+<link rel='stylesheet' id='scrawl-fonts-css'  href='https://fonts.googleapis.com/css?family=Lora:400,700|Merriweather:400italic,400,700,700italic&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../../../wp-content/themes/scrawl-wpcom/fonts/genericons6de8.css?ver=3.3' type='text/css' media='all' />
+<script type='text/javascript' src='../../../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<link rel='https://api.w.org/' href='../../../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../../../wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+<link rel='shortlink' href='../../../../index24bb.html?p=1410' />
+<link rel="alternate" type="application/json+oembed" href="../../../../wp-json/oembed/1.0/embed5d6d.json?url=http%3A%2F%2Fmalisper.me%2F2016%2F04%2F20%2Fwriting-self-referential-programs%2F" />
+<link rel="alternate" type="text/xml+oembed" href="../../../../wp-json/oembed/1.0/embed35f9?url=http%3A%2F%2Fmalisper.me%2F2016%2F04%2F20%2Fwriting-self-referential-programs%2F&amp;format=xml" />
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-63547056-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<style type="text/css" id="syntaxhighlighteranchor"></style>
+
+<script type="text/javascript">
+  window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var n=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(n?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var o=document.getElementsByTagName("script")[0];o.parentNode.insertBefore(a,o);for(var r=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["clearEventProperties","identify","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=r(p[c])};
+    heap.load("931515525");
+</script>
+</head>
+
+<body class="single single-post postid-1410 single-format-standard">
+	<button class="menu-toggle x">
+		<span class="lines"></span>
+		<span class="screen-reader-text">Primary Menu</span>
+	</button>
+	<div class="slide-menu">
+				
+		<h1 class="site-title"><a href="../../../../index.html" rel="home">Macrology</a></h1>
+		<h2 class="site-description">Case Studies in Lisp Macros</h2>
+		
+				
+				
+			<div id="secondary" class="widget-area" role="complementary">
+		<aside id="search-2" class="widget widget_search"><form role="search" method="get" class="search-form" action="http://malisper.me/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form></aside><aside id="pages-3" class="widget widget_pages"><h1 class="widget-title">Pages</h1>		<ul>
+			<li class="page_item page-item-55"><a href="../../../../about-me/index.html">About Michael Malis</a></li>
+<li class="page_item page-item-44"><a href="../../../../about-this-site-2/index.html">About This Site</a></li>
+		</ul>
+		</aside><aside id="nav_menu-3" class="widget widget_nav_menu"><h1 class="widget-title">Contact Me</h1><div class="menu-contact-me-container"><ul id="menu-contact-me" class="menu"><li id="menu-item-60" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-60"><a href="mailto:michaelmalis2@gmail.com">Email</a></li>
+<li id="menu-item-58" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-58"><a href="https://github.com/malisper">Github</a></li>
+<li id="menu-item-59" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-59"><a href="https://news.ycombinator.com/user?id=malisper">Hacker News</a></li>
+</ul></div></aside><aside id="archives-2" class="widget widget_archive"><h1 class="widget-title">Archives</h1>		<ul>
+			<li><a href='../../../06/index.html'>June 2016</a></li>
+	<li><a href='../../index.html'>April 2016</a></li>
+	<li><a href='../../../01/index.html'>January 2016</a></li>
+	<li><a href='../../../../2015/12/index.html'>December 2015</a></li>
+	<li><a href='../../../../2015/11/index.html'>November 2015</a></li>
+	<li><a href='../../../../2015/10/index.html'>October 2015</a></li>
+	<li><a href='../../../../2015/09/index.html'>September 2015</a></li>
+	<li><a href='../../../../2015/08/index.html'>August 2015</a></li>
+	<li><a href='../../../../2015/07/index.html'>July 2015</a></li>
+	<li><a href='../../../../2015/06/index.html'>June 2015</a></li>
+	<li><a href='../../../../2015/05/index.html'>May 2015</a></li>
+		</ul>
+		</aside><aside id="categories-2" class="widget widget_categories"><h1 class="widget-title">Categories</h1>		<ul>
+	<li class="cat-item cat-item-2"><a href="../../../../category/basics/index.html" title="These are basic Lisp macros that should be trivial to understand.">Basic Macros</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="../../../../category/intermediate-macros/index.html" >Intermediate Macros</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="../../../../category/advanced-macros/index.html" >Advanced Macros</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="../../../../category/debugging-common-lisp/index.html" >Debugging Lisp</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="../../../../category/loops-in-lisp/index.html" >Loops in Lisp</a>
+</li>
+		</ul>
+</aside>	</div><!-- #secondary -->
+	</div><!-- .slide-menu -->
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<header id="masthead" class="site-header" role="banner">
+
+		<div class="site-branding">
+						<h1 class="site-title"><a href="../../../../index.html" rel="home">Macrology</a></h1>
+		</div>
+
+	</header><!-- #masthead -->
+
+	
+	
+	<div id="content" class="site-content">
+
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			<article id="post-1410" class="post-1410 post type-post status-publish format-standard hentry category-basics">
+			<header class="entry-header">
+			<h1 class="entry-title">How to Generate Self-Referential Programs</h1>		</header><!-- .entry-header -->
+		<div class="entry-content">
+		<p>In this post, I am going to show you how to write programs that are self-referential. By self-referential, I mean programs which are able to obtain their own source code without any external input. In other words, they won&#8217;t just read from their own files. This post is based on section 6.1 of the book <em>Introduction to the Theory of Computation</em>.</p>
+<p>Before we can start generating self-referential programs we are first going to need some techniques for generating programs in general. The first technique we need is a method of taking a given program and writing a second program that outputs the given program. As an example, given (+ 2 2), we would need to write a program that outputs (+ 2 2). In most languages this is easy. One way to do it in Lisp is to put a quote in front of the program:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+'(+ 2 2)
+=&gt; (+ 2 2)
+</pre>
+<p>We are also going to need a function that automates this process. Such a function would take a program as its argument and return a new program that when ran, outputs the program that was originally passed to the function. In most languages doing this is fairly tricky. In Lisp, we can write this function easily through backquote:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun code-that-generates (program)
+  `',program)
+
+(code-that-generates '(+ 2 2))
+=&gt; '(+ 2 2)
+</pre>
+<p>If you don&#8217;t understand how backquote works, you can read <a href="https://www.gnu.org/software/emacs/manual/html_node/elisp/Backquote.html">this</a>. Even though it&#8217;s for Emacs Lisp, everything there is still applicable to other Lisps. Just make sure that you understand that <strong>code-that-generates</strong> can be used to generate a program that outputs a given program.</p>
+<p>Now that we have these two techniques, we can begin writing programs that are able to refer to themselves. The first self-referential program we will write will be an example of a <em>quine</em>. If you don&#8217;t know, a quine is a program that outputs its own source code. The quine we are going to write is made up of two parts, part A and part B, where part A is a function that is applied to part B:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(A B)
+</pre>
+<p>To describe how the quine works, it is easiest to start with part B. All that part B needs to do is return the source code of part A:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(A 'A)
+</pre>
+<p>Part A&#8217;s job is to take its own source code, and use it to obtain the source code of the entire quine. Since B is a program that outputs A, A can use <strong>code-that-generates</strong> on its own source code in order to obtain the source code of B. Once A has the source code of both A and B, it becomes trivial to combine the two to obtain the source code of the entire quine. Here is the complete quine, with the call to <strong>code-that-generates</strong> inlined:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+((lambda (a)
+   (let ((b `',a))
+     `(,a ,b)))
+ '(lambda (a)
+    (let ((b `',a))
+      `(,a ,b))))
+=&gt;
+((lambda (a)
+   (let ((b `',a))
+     `(,a ,b)))
+ '(lambda (a)
+    (let ((b `',a))
+      `(,a ,b))))
+</pre>
+<p>Now this is where things start getting interesting. A quine can be thought of as a program that generates its own source code, and immediately returns it. What if instead of immediately returning its own source code, the quine applied a function to it first, and then returned the result of that. The steps for building such a program are almost exactly the same as the steps we took for building the quine. This time, there is a third part F, for the function we want to call. The structure of the program will look like the following:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(F AB)
+</pre>
+<p>Where AB has a similar structure to our quine. After breaking AB into the two parts, A and B, the program looks like the following:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(F (A B))
+</pre>
+<p>Part B in the above program has the same responsibilities as B in the quine, it returns the source code for A:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(F (A 'A))
+</pre>
+<p>Then once A has the source code for itself, it can use <strong>code-that-generates </strong>to obtain the source code for B. Now that it has the source of A and B, it is easy for it to construct AB. Once part A has the code for AB, it can easily generate the source of the entire program. Here is what the program becomes after filling in everything except F:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(F
+ ((lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(F ,ab))))
+  '(lambda (a)
+     (let ((b `',a))
+       (let ((ab `(,a ,b)))
+         `(F ,ab))))))
+</pre>
+<p>What makes this so awesome is that F can be any function we want, and the above program will run F with the source code of the entire program! For example, replacing F with <strong>identity</strong> causes the program to become a quine:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(identity
+ ((lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(identity ,ab))))
+  '(lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(identity ,ab))))))
+=&gt;
+(identity
+ ((lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(identity ,ab))))
+  '(lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(identity ,ab))))))
+</pre>
+<p>But we can also do some much more impressive things. We can replace F with a function that lists its argument twice, and get a program that returns a list containing its own source code twice:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+((lambda (x) (list x x))
+ ((lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `((lambda (x) (list x x)) ,ab))))
+  '(lambda (a)
+     (let ((b `',a))
+       (let ((ab `(,a ,b)))
+         `((lambda (x) (list x x)) ,ab))))))
+
+=&gt;
+
+(((lambda (x) (list x x))
+  ((lambda (a)
+     (let ((b `',a))
+       (let ((ab `(,a ,b)))
+         `((lambda (x) (list x x)) ,ab))))
+   '(lambda (a)
+      (let ((b `',a))
+        (let ((ab `(,a ,b)))
+          `((lambda (x) (list x x)) ,ab))))))
+ ((lambda (x) (list x x))
+  ((lambda (a)
+     (let ((b `',a))
+       (let ((ab `(,a ,b)))
+         `((lambda (x) (list x x)) ,ab))))
+   '(lambda (a)
+      (let ((b `',a))
+        (let ((ab `(,a ,b)))
+          `((lambda (x) (list x x)) ,ab)))))))
+</pre>
+<p>To make writing these self-referential programs easier, we can define a function that fills in F for us. It just requires a little nested backquote trickery.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='#easy-footnote-bottom-1' title='You may have noticed the extra comma and quote in front of F in the generated program. Although it doesn&#8217;t make a difference semantically it does make a different syntactically. Luckily, all of the code generated by a program with the extra comma and quote will also contain the extra comma and quote, so everything is okay.'><sup>1</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun self-referential-version-of (f)
+  `(,f
+     ((lambda (a)
+        (let ((b `',a))
+          (let ((ab `(,a ,b)))
+            `(,',f ,ab))))
+       '(lambda (a)
+          (let ((b `',a))
+            (let ((ab `(,a ,b)))
+              `(,',f ,ab)))))))
+
+(self-referential-version-of '(lambda (x) (list x x))
+=&gt;
+((lambda (x) (list x x))
+ ((lambda (a)
+    (let ((b `',a))
+      (let ((ab `(,a ,b)))
+        `(,'(lambda (x) (list x x)) ,ab))))
+  '(lambda (a)
+     (let ((b `',a))
+       (let ((ab `(,a ,b)))
+         `(,'(lambda (x) (list x x)) ,ab))))))
+</pre>
+<p>Now that we&#8217;ve got a function that can generate self-referential programs for us, I am going to show you how to build something called a <em>quine-relay</em>. A quine-relay is like a normal quine, except it passes through multiple languages. The <em>quine-relay</em> we are going to write is a Lisp program that outputs a C program that outputs the original Lisp program. All we have to do is write a function that takes its argument and writes a C program that prints the argument it was given. Then we can pass that function to <strong>self-referential-version-of</strong> to get the quine-relay! That&#8217;s it! Here is a program that will generate the quine-relay:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(self-referential-version-of
+  '(lambda (self)
+     (format t
+
+&quot;#include &lt;stdio.h&gt;~%int main(){printf(\&quot;%s\&quot;,~(~s~));}&quot;
+
+             (remove #\newline (prin1-to-string self)))))
+</pre>
+<p>I&#8217;ve omitted the actual quine-relay for brevity, but you can find it <a href="https://gist.github.com/malisper/77db18aa8b1cb96fa7a984144eaf51aa">here</a> if you are curious. There are a few idiosyncrasies in the above program and in the quine-relay because of the differences in behavior between Lisp and C. For example, in C you can&#8217;t have multi-line strings, so it becomes easier to remove all of the newlines from the Lisp program, than it is to keep them.</p>
+<p>And that&#8217;s all it takes to write self-referential programs. After seeing how easy it is to generate a quine-relay, it shouldn&#8217;t be hard to imagine how to write one with many more steps. You may even be able to get up to <a href="https://github.com/mame/quine-relay">100</a> if you work at it long enough.</p>
+<ol class="easy-footnotes-wrapper"><li class="easy-footnote-single"><span id="easy-footnote-bottom-1" class="easy-footnote-margin-adjust"></span>You may have noticed the extra comma and quote in front of F in the generated program. Although it doesn&#8217;t make a difference semantically it does make a different syntactically. Luckily, all of the code generated by a program with the extra comma and quote will also contain the extra comma and quote, so everything is okay.<a class="easy-footnote-to-top" href="#easy-footnote-1"></a></li></ol>			</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="index.html" rel="bookmark"><time class="entry-date published" datetime="2016-04-20T00:39:07+00:00">April 20, 2016</time><time class="updated" datetime="2016-04-20T00:57:04+00:00">April 20, 2016</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../../../author/malisper/index.html">malisper</a></span></span><span class="category-links"> in <a href="../../../../category/basics/index.html" rel="category tag">Basic Macros</a></span>			<span class="secondary-entry-meta">
+								<span class="comments-link"><a href="index.html#respond">0</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+			
+	<nav class="navigation post-navigation" role="navigation">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="../../13/loops-in-lisp-part-4-series/index.html" rel="prev"><span class="title">Previous post</span>Loops in Lisp Part 4: Series</a></div><div class="nav-next"><a href="../../../06/11/building-fizzbuzz-fractran-bottom/index.html" rel="next"><span class="title">Next post</span>Building Fizzbuzz in Fractran from the Bottom Up</a></div></div>
+	</nav>
+			
+<div id="comments" class="comments-area">
+
+	
+	
+	
+					<div id="respond" class="comment-respond">
+			<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" title="Cancel reply" href="index.html#respond" style="display:none;"><span class="screen-reader-text">Cancel reply</span></a></small></h3>				<form action="http://malisper.me/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
+					<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" aria-required="true" required="required"></textarea></p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" aria-required='true' required='required' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" aria-required='true' required='required' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='1410' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="ed689b9dcc" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="178"/></p>				</form>
+					</div><!-- #respond -->
+		
+</div><!-- #comments -->
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="site-info">
+			<a href="http://wordpress.org/">Proudly powered by WordPress</a>
+			<span class="sep"> ~ </span>
+			Theme: Scrawl by <a href="https://wordpress.com/themes/" rel="designer">WordPress.com</a>.		</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type='text/javascript' src='../../../../wp-content/plugins/akismet/_inc/form2d73.html?ver=3.1.11'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushPlain09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore09b1.css?ver=3.0.9b";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeEclipse09b1.css?ver=3.0.9b";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+<link rel='stylesheet' id='qtipstyles-css'  href='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='easyfootnotescss-css'  href='../../../../wp-content/plugins/easy-footnotes/assets/easy-footnotes167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='dashicons-css'  href='../../../../wp-includes/css/dashicons.min167b.css?ver=4.6' type='text/css' media='all' />
+<script type='text/javascript' src='../../../../wp-content/themes/scrawl-wpcom/js/scrawld56c.js?ver=20150309'></script>
+<script type='text/javascript' src='../../../../wp-content/themes/scrawl-wpcom/js/skip-link-focus-fix08e0.js?ver=20130115'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/comment-reply.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/imagesloaded.min55a0.js?ver=3.2.0'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtipcall167b.js?ver=4.6'></script>
+
+</body>
+
+<!-- Mirrored from malisper.me/2016/04/20/writing-self-referential-programs/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:46:35 GMT -->
+</html>
+<!-- Dynamic page generated in 0.077 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:22:38 -->
+
+<!-- super cache -->

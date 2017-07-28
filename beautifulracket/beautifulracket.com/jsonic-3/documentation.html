@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/jsonic-3/documentation.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:34 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Finishing moves: jsonic</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;finishing-moves-jsonic&quot;)"></div><h1 anchor="finishing-moves-jsonic" id="finishing-moves-jsonic" hyphens="none">Finishing moves: <span class="my-code" decode="exclude">jsonic</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a class="here" href="documentation.html">2&emsp;doc­u­men­ta­tion</a></li><li><a href="the-info.rkt-file.html">3&emsp;the info.rkt file</a></li><li><a href="the-package-server.html">4&emsp;the pack­age server</a></li><li><a href="recap.html">5&emsp;recap</a></li><li><a href="source-listing.html">6&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;introducing-scribble&quot;)"></div><h3 anchor="introducing-scribble" class="subhead" id="introducing-scribble"><a href="#introducing-scribble">Intro­duc­ing Scrib­ble</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_HBC2w&quot;)"></div><p id="a_HBC2w">Many of the links in this book, includ­ing func­tion names in code sam­ples, lead into Racket’s browser-based doc­u­men­ta­tion. For instance, here’s the entry on <a href="http://docs.racket-lang.org/guide/pairs.html">pairs and lists</a>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_aKCmw&quot;)"></div><p id="a_aKCmw">A copy of all Racket doc­u­men­ta­tion is main­tained online at <a href="http://docs.racket-lang.org/"><span class="my-code" decode="exclude">docs.racket-lang.org</span></a>. But Racket also builds a local copy of the doc­u­men­ta­tion for every installed pack­age.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_C1Gt1&quot;)"></div><p id="a_C1Gt1">This allows the doc­u­men­ta­tion to be inte­grated with DrRacket with­out depend­ing on a net­work con­nec­tion. For instance, if we right-click a func­tion name in DrRacket, the con­text menu will let us <em>View doc­u­men­ta­tion</em> for that func­tion, which will open a browser and send us to the right place.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_3bYOX&quot;)"></div><p id="a_3bYOX">Given every­thing we’ve learned so far, it shouldn’t sur­prise any­one to find out that Racket’s doc­u­men­ta­tion is made with a domain-spe­cific lan­guage called <a href="http://docs.racket-lang.org/scribble/">Scrib­ble</a>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Shnl2&quot;)"></div><p id="a_Shnl2">We don’t have to make our doc­u­men­ta­tion with Scrib­ble. (We don’t have to make doc­u­men­ta­tion at all.) But as we saw with DrRacket, the advan­tage of using Scrib­ble is that it pro­vides a set of con­ve­niences that are avail­able to any Racket-imple­mented lan­guage:</p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_f9sIe&quot;)"></div><p id="a_f9sIe">Scrib­ble docs are auto­mat­i­cally inte­grated with DrRacket.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_FPuAS&quot;)"></div><p id="a_FPuAS">Scrib­ble docs are indexed and search­able.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_kYkwJ&quot;)"></div><p id="a_kYkwJ">Scrib­ble docs can refer to any­thing else in the Racket docs, and the hyper­links will be auto­mat­i­cally gen­er­ated.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_kAyYn&quot;)"></div><p id="a_kAyYn">Because Scrib­ble is a Racket dialect, it can be extended with func­tions and macros, just like ordi­nary Racket.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_i64UT&quot;)"></div><p id="a_i64UT">Scrib­ble docs are ren­dered in HTML by default, but can also be ren­dered to PDF.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_KqHtl&quot;)"></div><p id="a_KqHtl">Scrib­ble docs are the best-look­ing in the busi­ness. <span class="tooltip" onclick="this.classList.toggle('tooltip_visible')"> + <span class="tooltip-inner">I’m biased. I designed them. But I have had peo­ple tell me “It’s crazy, but I tried Racket just because the docs looked so good…”</span></span> But they can be fur­ther cus­tomized.</p></div></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_8WXrb&quot;)"></div><p id="a_8WXrb">The cost, how­ever, is that using Scrib­ble is not as easy as, say, writ­ing a <a class=" ext" href="https://www.python.org/dev/peps/pep-0257/">Python doc­string</a>. A Scrib­ble doc­u­men­ta­tion file is itself a pro­gram. As of today, there’s no way to auto­mat­i­cally gen­er­ate Scrib­ble doc­u­men­ta­tion from exist­ing source code. We have to write our doc­u­men­ta­tion by hand. Unde­ni­ably, it cre­ates extra house­keep­ing.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_m6C4G&quot;)"></div><p id="a_m6C4G">But if Scrib­ble demands a higher base­line of effort, it also raises the ceil­ing of what we can accom­plish. We can do a lot more with Scrib­ble than we can with the lowly doc­string. After all, no soft­ware user has ever said “gosh, this doc­u­men­ta­tion is just too vast, thor­ough, and detailed.”</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_1CeSs&quot;)"></div><p id="a_1CeSs">In that sense, we can see Scrib­ble partly as a pol­icy deci­sion about the cul­ture of doc­u­men­ta­tion Racket wants to encour­age among its devel­op­ers: namely, to write a lot of doc­u­men­ta­tion, and make it con­sis­tent and cross-ref­er­enced. And if we look through the <a href="http://docs.racket-lang.org/">exist­ing doc­u­men­ta­tion</a>—vast, thor­ough, and detailed—that pol­icy is work­ing.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;scribble-basics&quot;)"></div><h3 anchor="scribble-basics" class="subhead" id="scribble-basics"><a href="#scribble-basics">Scrib­ble basics</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_XIDF0&quot;)"></div><p id="a_XIDF0">Seman­ti­cally, Scrib­ble builds on top of Racket. The big dif­fer­ence is the syn­tax: rather than embed­ding text within S-expres­sions, Scrib­ble allows us to embed S-expres­sions within plain text using <a href="http://docs.racket-lang.org/scribble/reader.html">@-expres­sions</a>. Scrib­ble sup­ports two styles of @-expres­sions:</p></div><ol><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_hRXJO&quot;)"></div><p id="a_hRXJO">The first starts with an @ sign and a func­tion name, option­ally fol­lowed by a sequence of Racket expres­sions between square brack­ets, and then option­ally end­ing with text between curly brack­ets. So this S-expres­sion in Racket:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_vhrgm&quot;)"></div><div class="highlight-container" id="a_vhrgm"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">(list 42 #f "hello world")</div><div class="highlight" form="false" id="a_gqBl7"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="mi">42</span> <span class="no">#f</span> <span class="s2">"hello world"</span><span class="p">)</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_SZmx7&quot;)"></div><p id="a_SZmx7">Is the same as this @-expres­sion in Scrib­ble:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_P9gjl&quot;)"></div><div class="highlight-container" id="a_P9gjl"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">@list[42 #f]{hello world}</div><div class="highlight" form="false" id="a_435ul"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre><span class="n">@list</span><span class="p">[</span><span class="mi">42</span> <span class="no">#f</span><span class="p">]{</span><span class="n">hello</span> <span class="n">world</span><span class="p">}</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_fpFLt&quot;)"></div><p id="a_fpFLt">The curly brack­ets are sim­i­lar to <a class="glossary" href="../appendix/glossary.html#here-string"><span class="glossary-link-text">here strings</span></a> in that they gen­er­ate a string with­out requir­ing us to escape any char­ac­ters. But they’re also more flex­i­ble than here strings, because other @-expres­sions can be nested inside.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_2mw0f&quot;)"></div><p id="a_2mw0f">We can also make an @-expres­sion by sim­ply pre­fix­ing any paren­the­sized S-expres­sion with an @ sign. So this @-expres­sion is also equiv­a­lent to the above <a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a>:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_EepQm&quot;)"></div><div class="highlight-container" id="a_EepQm"><div id="code_45" form="false" decode="exclude" style="font-size:0;width:0;height:0">@(list 42 #f "hello world")</div><div class="highlight" form="false" id="a_vLtAF"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre><span class="n">@</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="mi">42</span> <span class="no">#f</span> <span class="s2">"hello world"</span><span class="p">)</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk2" data-clipboard-target="#code_45" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></li></ol><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_u2nhB&quot;)"></div><p id="a_u2nhB">Over­all, we can think of Scrib­ble as just a more con­ve­nient way of writ­ing Racket pro­grams that han­dle a lot of text. For instance, con­sider this sim­ple pro­gram:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_5nbUZ&quot;)"></div><div class="highlight-container" id="a_5nbUZ"><div id="code_46" form="false" decode="exclude" style="font-size:0;width:0;height:0">(define (greet . words)<br/>   (format "Good morning, ~a" (string-append* words)))<br/>(define surname "Trevor")<br/>(display (greet "Mr. " surname "!")) (display " How are you?")</div><div class="highlight" form="false" id="a_Kexg8"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="source"><pre><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">greet</span> <span class="o">.</span> <span class="n">words</span><span class="p">)</span>
+   <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Writing.html#(def._((quote._~23~25kernel)._format))" class="docs" hyphens="none">format</a></span> <span class="s2">"Good morning, ~a"</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/strings.html#(def._((lib._racket/string..rkt)._string-append*))" class="docs" hyphens="none">string-append*</a></span> <span class="n">words</span><span class="p">)))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">surname</span> <span class="s2">"Trevor"</span><span class="p">)</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Writing.html#(def._((quote._~23~25kernel)._display))" class="docs" hyphens="none">display</a></span> <span class="p">(</span><span class="n">greet</span> <span class="s2">"Mr. "</span> <span class="n">surname</span> <span class="s2">"!"</span><span class="p">))</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Writing.html#(def._((quote._~23~25kernel)._display))" class="docs" hyphens="none">display</a></span> <span class="s2">" How are you?"</span><span class="p">)</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk3" data-clipboard-target="#code_46" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_esW5Y&quot;)"></div><div class="highlight-container" id="a_esW5Y"><div id="code_47" form="false" decode="exclude" style="font-size:0;width:0;height:0">Good morning, Mr. Trevor! How are you?</div><div class="highlight" form="false" id="a_elDN4"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre><span class="n">Good</span> <span class="n">morning</span><span class="o">,</span> <span class="n">Mr.</span> <span class="n">Trevor!</span> <span class="n">How</span> <span class="n">are</span> <span class="n">you?</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk4" data-clipboard-target="#code_47" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_oc8Cb&quot;)"></div><p id="a_oc8Cb">We can con­vert this to equiv­a­lent @-expres­sions like so (though we’ll omit the calls to <a href="http://docs.racket-lang.org/reference/Writing.html#(def._((quote._~23~25kernel)._display))" class="docs" hyphens="none">display</a>, because the <a href="http://docs.racket-lang.org/scribble-pp/text.html"><span class="my-code" decode="exclude">scribble/text</span></a> dialect will auto­mat­i­cally <a href="http://docs.racket-lang.org/reference/Writing.html#(def._((quote._~23~25kernel)._display))" class="docs" hyphens="none">display</a> its results):</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Mf1Us&quot;)"></div><div class="highlight-container" id="a_Mf1Us"><div id="code_48" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang scribble/text<br/>@(define (greet . words)<br/>   (format "Good morning, ~a" (string-append* words)))<br/>@(define surname "Trevor")<br/>@greet{Mr. @surname}! How are you?</div><div class="highlight" form="false" id="a_J6HPr"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">scribble/text</span>
+<span class="n">@</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">greet</span> <span class="o">.</span> <span class="n">words</span><span class="p">)</span>
+   <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Writing.html#(def._((quote._~23~25kernel)._format))" class="docs" hyphens="none">format</a></span> <span class="s2">"Good morning, ~a"</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/strings.html#(def._((lib._racket/string..rkt)._string-append*))" class="docs" hyphens="none">string-append*</a></span> <span class="n">words</span><span class="p">)))</span>
+<span class="n">@</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">surname</span> <span class="s2">"Trevor"</span><span class="p">)</span>
+<span class="n">@greet</span><span class="p">{</span><span class="n">Mr.</span> <span class="n">@surname</span><span class="p">}</span><span class="n">!</span> <span class="n">How</span> <span class="n">are</span> <span class="n">you?</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk5" data-clipboard-target="#code_48" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_esW5Y8&quot;)"></div><div class="highlight-container" id="a_esW5Y8"><div id="code_49" form="false" decode="exclude" style="font-size:0;width:0;height:0">Good morning, Mr. Trevor! How are you?</div><div class="highlight" form="false" id="a_elDN46"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre><span class="n">Good</span> <span class="n">morning</span><span class="o">,</span> <span class="n">Mr.</span> <span class="n">Trevor!</span> <span class="n">How</span> <span class="n">are</span> <span class="n">you?</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk7" data-clipboard-target="#code_49" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_qkyqG&quot;)"></div><p id="a_qkyqG">We’re mix­ing both styles of @-expres­sions: the sim­pler style for the func­tion and vari­able def­i­n­i­tions, and the curly-brace style for the text con­tent. But beyond that, both code frag­ments work the same way.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;writing-scribble-documentation&quot;)"></div><h3 anchor="writing-scribble-documentation" class="subhead" id="writing-scribble-documentation"><a href="#writing-scribble-documentation">Writ­ing Scrib­ble doc­u­men­ta­tion</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_AEopt&quot;)"></div><p id="a_AEopt">The <a href="http://docs.racket-lang.org/scribble/manual.html"><span class="my-code" decode="exclude">scribble/manual</span></a> dialect used for mak­ing doc­u­men­ta­tion uses the same syn­tax as <span class="my-code" decode="exclude">scribble/text</span>. But it also pro­vides a core set of func­tions for han­dling com­mon doc­u­men­ta­tion tasks. And rather than ren­der­ing the source as text, it cre­ates a data object that’s passed to an HTML or PDF ren­derer.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_9v8SI&quot;)"></div><p id="a_9v8SI">By con­ven­tion, the main Scrib­ble doc­u­men­ta­tion file for a Racket pack­age lives in a sub­di­rec­tory called <span class="my-code" decode="exclude">scribblings</span> and is called <span class="my-code" decode="exclude">package-name.scrbl</span>. So let’s cre­ate our <span class="my-code" decode="exclude">jsonic.scrbl</span> file now, and put <span class="my-code" decode="exclude">#lang scribble/manual</span> at the top to invoke the Scrib­ble doc­u­men­ta­tion dialect:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/scribblings/jsonic.scrbl</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_pN9M1&quot;)"></div><div class="highlight-container" id="a_pN9M1"><div id="code_50" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang scribble/manual</div><div class="highlight" form="false" id="a_dKWRs"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>#lang scribble/manual
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk9" data-clipboard-target="#code_50" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_qmqfc&quot;)"></div><p id="a_qmqfc">When we use <span class="my-code" decode="exclude">scribble/manual</span>, it adds <a href="../jsonic-2/toolbar-buttons.html">two but­tons</a> to the DrRacket tool­bar: <em>Scrib­ble PDF</em> and <em>Scrib­ble HTML</em>. We can use these but­tons at any time to pre­view our Scrib­ble file ren­dered as PDF or HTML.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_pQm1G&quot;)"></div><p id="a_pQm1G">In fact, let’s click the <em>Scrib­ble HTML</em> but­ton right now. We’ll see some sta­tus mes­sages in the DrRacket REPL:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_LwnJH&quot;)"></div><div class="highlight-container" id="a_LwnJH"><div id="code_51" form="false" decode="exclude" style="font-size:0;width:0;height:0">scribble: loading xref<br/>scribble: rendering</div><div class="highlight" form="false" id="a_bW2bE"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="source"><pre><span class="n">scribble:</span> <span class="n">loading</span> <span class="n">xref</span>
+<span class="n">scribble:</span> <span class="n">rendering</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpka" data-clipboard-target="#code_51" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_pVhVu&quot;)"></div><p id="a_pVhVu">Then a web browser will be opened with the ren­dered page. This page will be blank in the main col­umn, and have some <span class="my-code" decode="exclude">???</span> sig­nals in the left col­umn. That’s not sur­pris­ing: no source = no result.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_GZ1cL&quot;)"></div><p id="a_GZ1cL">So let’s add some. The only two indis­pens­able ele­ments of doc­u­men­ta­tion for a lan­guage are a <a href="http://docs.racket-lang.org/scribble/base.html#(def._((lib._scribble/base..rkt)._title))" class="docs" hyphens="none">title</a> and a <a href="http://docs.racket-lang.org/scribble/doc-modules.html#(form._((lib._scribble/manual..rkt)._defmodulelang))" class="docs" hyphens="none">defmodulelang</a> dec­la­ra­tion:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/scribblings/jsonic.scrbl</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_wYpXH&quot;)"></div><div class="highlight-container" id="a_wYpXH"><div id="code_52" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang scribble/manual<br/><br/>@title{jsonic: because JSON is boring}<br/><br/>@defmodulelang[jsonic]</div><div class="highlight" form="false" id="a_Rlniz"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="source"><pre>#lang scribble/manual
+
+<span class="hll">@title{jsonic: because JSON is boring}
+</span>
+<span class="hll">@defmodulelang[jsonic]
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkb" data-clipboard-target="#code_52" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Nuqo2&quot;)"></div><p id="a_Nuqo2">The <span class="my-code" decode="exclude">title</span> of the main doc­u­men­ta­tion file is the name that will show up in the table of con­tents. This func­tion takes a text argu­ment that we put between curly brack­ets. The title can be any­thing we want, though of course it’s nice to make it descrip­tive.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_iIqRI&quot;)"></div><p id="a_iIqRI">The <span class="my-code" decode="exclude">defmodulelang</span> dec­la­ra­tion tells Racket that this is the start­ing point for the doc­u­men­ta­tion for a par­tic­u­lar lan­guage. That way, if some­one searches the Racket doc­u­men­ta­tion for <span class="my-code" decode="exclude">jsonic</span>, it will take them to this page. <span class="my-code" decode="exclude">defmodulelang</span> takes the name of our lan­guage as input, which is an <a class="explainer" href="../explainer/identifiers.html">iden­ti­fier</a>, not a string, so we put it between square brack­ets, not curly ones.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_tF0SG&quot;)"></div><p id="a_tF0SG">If we save our <span class="my-code" decode="exclude">"jsonic.scrbl"</span> and click <em>Scrib­ble HTML</em> again, we’ll now see this in our web browser:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Vldpkc&quot;)"></div><div id="a_Vldpkc" style="text-align:center;padding:0.5rem;padding-bottom:1rem"><img style="width:90%;border:1px solid #ccc" src="preview-01.gif"/></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_oHoZF&quot;)"></div><p id="a_oHoZF">What we’re see­ing is a pre­view of the doc­u­men­ta­tion that will be added locally when a user installs our lan­guage (and, if we upload our lan­guage to the <a href="the-package-server.html">the pack­age server</a>, the doc­u­men­ta­tion that will be added to <a href="http://docs.racket-lang.org/">docs.racket-lang.org</a>).</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_v7YOg&quot;)"></div><p id="a_v7YOg">We can also add an <a href="http://docs.racket-lang.org/scribble/base.html#(def._((lib._scribble/base..rkt)._author))" class="docs" hyphens="none">author</a> name and <a href="http://docs.racket-lang.org/scribble/base.html#(def._((lib._scribble/base..rkt)._section))" class="docs" hyphens="none">section</a> title:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/scribblings/jsonic.scrbl</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_0E8Su&quot;)"></div><div class="highlight-container" id="a_0E8Su"><div id="code_53" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang scribble/manual<br/><br/>@title{jsonic: because JSON is boring}<br/>@author{Roxy Lexington}<br/><br/>@defmodulelang[jsonic]<br/><br/>@section{Introduction}<br/><br/>This is a domain-specific language.</div><div class="highlight" form="false" id="a_AeBQu"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="source"><pre>#lang scribble/manual
+
+@title{jsonic: because JSON is boring}
+<span class="hll">@author{Roxy Lexington}
+</span>
+@defmodulelang[jsonic]
+
+<span class="hll">@section{Introduction}
+</span>
+<span class="hll">This is a domain-specific language.
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkd" data-clipboard-target="#code_53" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_xUsqz&quot;)"></div><p id="a_xUsqz">Again, we can pre­view these changes by click­ing <em>Scrib­ble HTML</em>:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Vldpke&quot;)"></div><div id="a_Vldpke" style="text-align:center;padding:0.5rem;padding-bottom:1rem"><img style="width:90%;border:1px solid #ccc" src="preview-02.gif"/></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_LHq3E&quot;)"></div><p id="a_LHq3E">How about adding cross-ref­er­ences to other Racket libraries and func­tions? We can refer to a top-level mod­ule like <a href="http://docs.racket-lang.org/json/"><span class="my-code" decode="exclude">json</span></a> by using <a href="http://docs.racket-lang.org/scribble/scribble_manual_code.html#(form._((lib._scribble/manual..rkt)._racketmodname))" class="docs" hyphens="none">racketmodname</a>, which will auto­mat­i­cally cre­ate a hyper­linked cross-ref­er­ence to the main page of the <span class="my-code" decode="exclude">json</span> doc­u­men­ta­tion:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/scribblings/jsonic.scrbl</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_W4Y0n&quot;)"></div><div class="highlight-container" id="a_W4Y0n"><div id="code_54" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang scribble/manual<br/><br/>@title{jsonic: because JSON is boring}<br/>@author{Roxy Lexington}<br/><br/>@defmodulelang[jsonic]<br/><br/>@section{Introduction}<br/><br/>This is a domain-specific language<br/>that relies on the @racketmodname[json] library.</div><div class="highlight" form="false" id="a_zNFco"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="source"><pre>#lang scribble/manual
+
+@title{jsonic: because JSON is boring}
+@author{Roxy Lexington}
+
+@defmodulelang[jsonic]
+
+@section{Introduction}
+
+<span class="hll">This is a domain-specific language
+</span><span class="hll">that relies on the @racketmodname[json] library.
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkf" data-clipboard-target="#code_54" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_aqYhf&quot;)"></div><p id="a_aqYhf">Which will look like this:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Vldpkg&quot;)"></div><div id="a_Vldpkg" style="text-align:center;padding:0.5rem;padding-bottom:1rem"><img style="width:90%;border:1px solid #ccc" src="preview-03.gif"/></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_G6hnp&quot;)"></div><p id="a_G6hnp">Insert­ing a cross-ref­er­ence to a spe­cific func­tion like <a href="http://docs.racket-lang.org/json/index.html#(def._((lib._json/main..rkt)._jsexpr-~3estring))" class="docs" hyphens="none">jsexpr-&gt;string</a> hap­pens in two steps. First, we wrap the term in <a href="http://docs.racket-lang.org/scribble/scribble_manual_code.html#(form._((lib._scribble/manual..rkt)._racket))" class="docs" hyphens="none">racket</a>, which flags it as a Racket iden­ti­fier. Scrib­ble will link this to a doc­u­men­ta­tion entry if the iden­ti­fier is bound, oth­er­wise it will be type­set as plain code. To bind the iden­ti­fier so Scrib­ble can see it, we <a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a> the <span class="my-code" decode="exclude">json</span> mod­ule using the spe­cial <a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._for-label))" class="docs" hyphens="none">for-label</a> qual­i­fier:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/scribblings/jsonic.scrbl</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_EEmWp&quot;)"></div><div class="highlight-container" id="a_EEmWp"><div id="code_55" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang scribble/manual<br/>@(require (for-label json))<br/><br/>@title{jsonic: because JSON is boring}<br/>@author{Roxy Lexington}<br/><br/>@defmodulelang[jsonic]<br/><br/>@section{Introduction}<br/><br/>This is a domain-specific language<br/>that relies on the @racketmodname[json] library.<br/><br/>In particular, the @racket[jsexpr-&gt;string] function.</div><div class="highlight" form="false" id="a_OKY20"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="source"><pre>#lang scribble/manual
+<span class="hll">@(require (for-label json))
+</span>
+@title{jsonic: because JSON is boring}
+@author{Roxy Lexington}
+
+@defmodulelang[jsonic]
+
+@section{Introduction}
+
+This is a domain-specific language
+that relies on the @racketmodname[json] library.
+
+<span class="hll">In particular, the @racket[jsexpr-&gt;string] function.
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkh" data-clipboard-target="#code_55" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_YVRCU&quot;)"></div><p id="a_YVRCU">The result:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Vldpki&quot;)"></div><div id="a_Vldpki" style="text-align:center;padding:0.5rem;padding-bottom:1rem"><img style="width:90%;border:1px solid #ccc" src="preview-04.gif"/></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Lz0D7&quot;)"></div><p id="a_Lz0D7">Beyond that, we can doc­u­ment our lan­guage how­ever we like. We’ll prob­a­bly want to show some sam­ple code and results. For that, we’ll use <a href="http://docs.racket-lang.org/scribble/base.html#(def._((lib._scribble/base..rkt)._verbatim))" class="docs" hyphens="none">verbatim</a> to print before-and-after sam­ples:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/scribblings/jsonic.scrbl</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_cklt1&quot;)"></div><div class="highlight-container" id="a_cklt1"><div id="code_56" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang scribble/manual<br/>@(require (for-label json))<br/><br/>@title{jsonic: because JSON is boring}<br/>@author{Roxy Lexington}<br/><br/>@defmodulelang[jsonic]<br/><br/>@section{Introduction}<br/><br/>This is a domain-specific language<br/>that relies on the @racketmodname[json] library.<br/><br/>In particular, the @racket[jsexpr-&gt;string] function.<br/><br/>If we start with this:<br/><br/>@verbatim{<br/>#lang jsonic<br/>[<br/>  @$ 'null $@,<br/>  @$ (* 6 7) $@,<br/>  @$ (= 2 (+ 1 1)) $@<br/>]<br/>}<br/><br/>We'll end up with this:<br/><br/>@verbatim{<br/>[<br/>  null,<br/>  42,<br/>  true<br/>]<br/>}</div><div class="highlight" form="false" id="a_lZfEH"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35</pre></div></td><td class="code"><div class="source"><pre>#lang scribble/manual
+@(require (for-label json))
+
+@title{jsonic: because JSON is boring}
+@author{Roxy Lexington}
+
+@defmodulelang[jsonic]
+
+@section{Introduction}
+
+This is a domain-specific language
+that relies on the @racketmodname[json] library.
+
+In particular, the @racket[jsexpr-&gt;string] function.
+
+<span class="hll">If we start with this:
+</span><span class="hll">
+</span><span class="hll">@verbatim{
+</span><span class="hll">#lang jsonic
+</span><span class="hll">[
+</span><span class="hll">  @$ &#39;null $@,
+</span><span class="hll">  @$ (* 6 7) $@,
+</span><span class="hll">  @$ (= 2 (+ 1 1)) $@
+</span><span class="hll">]
+</span><span class="hll">}
+</span><span class="hll">
+</span><span class="hll">We&#39;ll end up with this:
+</span><span class="hll">
+</span><span class="hll">@verbatim{
+</span><span class="hll">[
+</span><span class="hll">  null,
+</span><span class="hll">  42,
+</span><span class="hll">  true
+</span><span class="hll">]
+</span><span class="hll">}
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkj" data-clipboard-target="#code_56" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_dODWk&quot;)"></div><p id="a_dODWk">But this time, when we click on <em>Scrib­ble HTML</em>, we get an error:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_NO2qt&quot;)"></div><div class="highlight-container err" id="a_NO2qt"><div id="code_57" form="false" decode="exclude" style="font-size:0;width:0;height:0">unexpected whitespace after @</div><div class="highlight" form="false" id="a_1ALsp"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>unexpected whitespace after @
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkk" data-clipboard-target="#code_57" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_1QCFm&quot;)"></div><p id="a_1QCFm">The prob­lem is that Scrib­ble sees the <span class="my-code" decode="exclude">@</span> signs within the <span class="my-code" decode="exclude">jsonic</span> sam­ple code and thinks they intro­duce nested @-expres­sions. As the docs for <a href="http://docs.racket-lang.org/scribble/base.html#(def._((lib._scribble/base..rkt)._verbatim))" class="docs" hyphens="none">verbatim</a> would tell us, we can dis­able this assump­tion by using <span class="my-code" decode="exclude">|{...}|</span> as delim­iters rather than plain <span class="my-code" decode="exclude">{...}</span>:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/scribblings/jsonic.scrbl</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_jcoI5&quot;)"></div><div class="highlight-container" id="a_jcoI5"><div id="code_58" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang scribble/manual<br/>@(require (for-label json))<br/><br/>@title{jsonic: because JSON is boring}<br/>@author{Roxy Lexington}<br/><br/>@defmodulelang[jsonic]<br/><br/>@section{Introduction}<br/><br/>This is a domain-specific language<br/>that relies on the @racketmodname[json] library.<br/><br/>In particular, the @racket[jsexpr-&gt;string] function.<br/><br/>If we start with this:<br/><br/>@verbatim|{<br/>#lang jsonic<br/>[<br/>  @$ 'null $@,<br/>  @$ (* 6 7) $@,<br/>  @$ (= 2 (+ 1 1)) $@<br/>]<br/>}|<br/><br/>We'll end up with this:<br/><br/>@verbatim{<br/>[<br/>  null,<br/>  42,<br/>  true<br/>]<br/>}</div><div class="highlight" form="false" id="a_351e3"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35</pre></div></td><td class="code"><div class="source"><pre>#lang scribble/manual
+@(require (for-label json))
+
+@title{jsonic: because JSON is boring}
+@author{Roxy Lexington}
+
+@defmodulelang[jsonic]
+
+@section{Introduction}
+
+This is a domain-specific language
+that relies on the @racketmodname[json] library.
+
+In particular, the @racket[jsexpr-&gt;string] function.
+
+If we start with this:
+
+<span class="hll">@verbatim|{
+</span>#lang jsonic
+[
+  @$ &#39;null $@,
+  @$ (* 6 7) $@,
+  @$ (= 2 (+ 1 1)) $@
+]
+<span class="hll">}|
+</span>
+We&#39;ll end up with this:
+
+@verbatim{
+[
+  null,
+  42,
+  true
+]
+}
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkl" data-clipboard-target="#code_58" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_1r6ZX&quot;)"></div><p id="a_1r6ZX">This time, we’ll get the right result:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Vldpkm&quot;)"></div><div id="a_Vldpkm" style="text-align:center;padding:0.5rem;padding-bottom:1rem"><img style="width:90%;border:1px solid #ccc" src="preview-05.gif"/></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_gLs2Y&quot;)"></div><p id="a_gLs2Y">Of course, in real life we’d want to elab­o­rate fur­ther. But this will suf­fice for now.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;by-the-way&quot;)"></div><h3 anchor="by-the-way" class="subhead" id="by-the-way"><a href="#by-the-way">By the way</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_1ko35&quot;)"></div><p id="a_1ko35">When we use the <em>Scrib­ble HTML</em> but­ton to pre­view our doc­u­men­ta­tion, it cre­ates a num­ber of CSS and JavaScript files in the same direc­tory. These are needed to dis­play the page. But they can be deleted after­ward. When Scrib­ble builds the local doc­u­men­ta­tion dur­ing the pack­age instal­la­tion, it relies on shared copies of these files.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a class="here" href="documentation.html">2&emsp;doc­u­men­ta­tion</a></li><li><a href="the-info.rkt-file.html">3&emsp;the info.rkt file</a></li><li><a href="the-package-server.html">4&emsp;the pack­age server</a></li><li><a href="recap.html">5&emsp;recap</a></li><li><a href="source-listing.html">6&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="intro.html">← prev</a>
+    <a class="nav-right" href="the-info.rkt-file.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/basic-3/recap.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:48:14 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Closing the loop: basic</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;closing-the-loop-basic&quot;)"></div><h1 anchor="closing-the-loop-basic" id="closing-the-loop-basic" hyphens="none">Closing the loop: <span class="my-code" decode="exclude">basic</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="functions.html">3&emsp;func­tions</a></li><li><a href="imports.html">4&emsp;imports</a></li><li><a href="exports.html">5&emsp;exports</a></li><li><a href="the-repl.html">6&emsp;the repl</a></li><li><a href="command-line-arguments.html">7&emsp;com­mand-line argu­ments</a></li><li><a class="here" href="recap.html">8&emsp;recap</a></li><li><a href="source-listing.html">9&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_2e7QK&quot;)"></div><p id="a_2e7QK">In this tuto­r­ial, we made our <span class="my-code" decode="exclude">basic</span> lan­guage coop­er­ate bet­ter with Racket at large:</p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Cyc4K&quot;)"></div><p id="a_Cyc4K">We added a <span class="my-code" decode="exclude">def</span> state­ment for mak­ing named <a href="functions.html">func­tions</a>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_hweOV&quot;)"></div><p id="a_hweOV">We added sup­port for <a href="exports.html">exports</a> of func­tions and vari­ables defined in a BASIC pro­gram, and <a href="imports.html">imports</a> of Racket libraries. We learned about using <a class="glossary" href="../appendix/glossary.html#parameter"><span class="glossary-link-text">para­me­ters</span></a> to exert remote influ­ence on func­tion behav­ior.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_kvqPN&quot;)"></div><p id="a_kvqPN">We saw how to adjust <a href="the-repl.html">the REPL</a> to make it read &amp; eval­u­ate cer­tain BASIC state­ments and expres­sions, by extract­ing a parser from the mid­dle of our <span class="my-code" decode="exclude">brag</span> gram­mar.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_JQqCt&quot;)"></div><p id="a_JQqCt">We made <a href="command-line-arguments.html">com­mand-line argu­ments</a> avail­able to our BASIC pro­grams, and learned how to man­age <a class="glossary" href="../appendix/glossary.html#hygiene"><span class="glossary-link-text">hygiene</span></a> cor­rectly when using a macro to intro­duce iden­ti­fiers.</p></div></li></ul><div anchorize="false" style="height:1em"></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_xY8CM&quot;)"></div><div class="author-note" id="a_xY8CM"><p anchorize="false">Con­grat­u­la­tions! You’ve made it to the end of the Beau­ti­ful Racket tuto­ri­als. Whether you’ve skipped around, or gone straight through, I appre­ci­ate your time and energy.</p><p anchorize="false">I’ve tried to cover all the essen­tial con­cepts of mak­ing lan­guages with Racket. (If I missed some­thing, let me know.)</p><p anchorize="false">I hope you’ll con­tinue to find these tuto­ri­als, and the <a href="../index.html#explainers">explain­ers</a> that fol­low, use­ful resources as you embark on your own lan­guage projects.</p><p anchorize="false">I also rec­om­mend the <a href="../appendix/master-recipe.html">mas­ter recipe</a>, which con­sol­i­dates the whole lan­guage process onto a sin­gle page.</p><p anchorize="false">Believe it or not, there’s still a lot more to say. In the months to come, I plan to add more tuto­ri­als that high­light other aspects of mak­ing lan­guages with Racket. (For instance, mak­ing a text-based lan­guage like <a class=" ext" href="http://pollenpub.com/">Pollen</a>.)</p><p anchorize="false">I hope you find mak­ing pro­gram­ming lan­guages as pro­duc­tive &amp; inter­est­ing as I have. Noth­ing I’ve said here should be taken as defin­i­tive. Rather, it’s a start­ing point for you to develop your own tech­niques and make your own dis­cov­er­ies. Have fun &amp; break things!</p><p anchorize="false">—Matthew But­t­er­ick</p></div></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="functions.html">3&emsp;func­tions</a></li><li><a href="imports.html">4&emsp;imports</a></li><li><a href="exports.html">5&emsp;exports</a></li><li><a href="the-repl.html">6&emsp;the repl</a></li><li><a href="command-line-arguments.html">7&emsp;com­mand-line argu­ments</a></li><li><a class="here" href="recap.html">8&emsp;recap</a></li><li><a href="source-listing.html">9&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="command-line-arguments.html">← prev</a>
+    <a class="nav-right" href="source-listing.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

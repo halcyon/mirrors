@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+
+<!-- Mirrored from stuartsierra.com/2013/03/29/perils-of-dynamic-scope by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 17:02:26 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+		<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+<title>On the Perils of Dynamic Scope &#8211; Digital Digressions by Stuart Sierra</title>
+<link rel='dns-prefetch' href='http://s0.wp.com/'>
+<link rel='dns-prefetch' href='http://secure.gravatar.com/'>
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel='dns-prefetch' href='http://s.w.org/'>
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Comments Feed" href="../../../comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; On the Perils of Dynamic Scope Comments Feed" href="perils-of-dynamic-scope/feed" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/stuartsierra.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.6"}};
+			!function(a,b,c){function d(a){var c,d,e,f,g,h=b.createElement("canvas"),i=h.getContext&&h.getContext("2d"),j=String.fromCharCode;if(!i||!i.fillText)return!1;switch(i.textBaseline="top",i.font="600 32px Arial",a){case"flag":return i.fillText(j(55356,56806,55356,56826),0,0),!(h.toDataURL().length<3e3)&&(i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,65039,8205,55356,57096),0,0),c=h.toDataURL(),i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,55356,57096),0,0),d=h.toDataURL(),c!==d);case"diversity":return i.fillText(j(55356,57221),0,0),e=i.getImageData(16,16,1,1).data,f=e[0]+","+e[1]+","+e[2]+","+e[3],i.fillText(j(55356,57221,55356,57343),0,0),e=i.getImageData(16,16,1,1).data,g=e[0]+","+e[1]+","+e[2]+","+e[3],f!==g;case"simple":return i.fillText(j(55357,56835),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode8":return i.fillText(j(55356,57135),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode9":return i.fillText(j(55358,56631),0,0),0!==i.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity","unicode9"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='twentysixteen-jetpack-css'  href='../../../wp-content/plugins/jetpack/modules/theme-tools/compat/twentysixteen3a05.css?ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-fonts-css'  href='https://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%2C900%2C400italic%2C700italic%2C900italic%7CMontserrat%3A400%2C700%7CInconsolata%3A400&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../../wp-content/plugins/jetpack/_inc/genericons/genericons/genericons128b.css?ver=3.1' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-style-css'  href='../../../wp-content/themes/twentysixteen/style167b.css?ver=4.6' type='text/css' media='all' />
+<!--[if lt IE 10]>
+<link rel='stylesheet' id='twentysixteen-ie-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentysixteen-ie8-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie8.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='twentysixteen-ie7-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie7.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='../../../wp-content/plugins/jetpack/css/jetpack3a05.css?ver=4.2.2' type='text/css' media='all' />
+<script type='text/javascript' src='../../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://stuartsierra.com/wp-content/themes/twentysixteen/js/html5.js?ver=3.7.3'></script>
+<![endif]-->
+<link rel='https://api.w.org/' href='../../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../../wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Affordance and Concision' href='../../02/04/affordance-concision.html' />
+<link rel='next' title='My Clojure Workflow, Reloaded' href='../../06/04/my-clojure-workflow-reloaded.html' />
+<meta name="generator" content="WordPress 4.6" />
+<link rel="canonical" href="perils-of-dynamic-scope.html" />
+<link rel='shortlink' href='https://wp.me/pbl3J-bs' />
+<link rel="alternate" type="application/json+oembed" href="../../../wp-json/oembed/1.0/embedfa6b.json?url=https%3A%2F%2Fstuartsierra.com%2F2013%2F03%2F29%2Fperils-of-dynamic-scope" />
+<link rel="alternate" type="text/xml+oembed" href="../../../wp-json/oembed/1.0/embed0a75?url=https%3A%2F%2Fstuartsierra.com%2F2013%2F03%2F29%2Fperils-of-dynamic-scope&amp;format=xml" />
+
+<link rel='dns-prefetch' href='http://v0.wordpress.com/'>
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="On the Perils of Dynamic Scope" />
+<meta property="og:url" content="https://stuartsierra.com/2013/03/29/perils-of-dynamic-scope" />
+<meta property="og:description" content="Common Lisp the Language (CLtL) devotes an entire chapter to the subject of Scope and Extent. It defines scope as the textual region of a program in which an entity may be used, where &#8220;entity…" />
+<meta property="article:published_time" content="2013-03-29T13:00:52+00:00" />
+<meta property="article:modified_time" content="2013-03-29T01:10:34+00:00" />
+<meta property="og:site_name" content="Digital Digressions by Stuart Sierra" />
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary" />
+</head>
+
+<body class="single single-post postid-710 single-format-standard">
+<div id="page" class="site">
+	<div class="site-inner">
+		<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+		<header id="masthead" class="site-header" role="banner">
+			<div class="site-header-main">
+				<div class="site-branding">
+					
+											<p class="site-title"><a href="../../../index.html" rel="home">Digital Digressions by Stuart Sierra</a></p>
+											<p class="site-description">From programming to everything else</p>
+									</div><!-- .site-branding -->
+
+									<button id="menu-toggle" class="menu-toggle">Menu</button>
+
+					<div id="site-header-menu" class="site-header-menu">
+													<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Primary Menu">
+								<div class="menu-main-menu-container"><ul id="menu-main-menu" class="primary-menu"><li id="menu-item-635" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../../../about-me.html">About Me</a></li>
+<li id="menu-item-633" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../../../writing.html">Writing</a></li>
+<li id="menu-item-634" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../../../presentations.html">Presentations</a></li>
+<li id="menu-item-636" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../../../software.html">Software</a></li>
+<li id="menu-item-637" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../../../contact.html">Contact</a></li>
+</ul></div>							</nav><!-- .main-navigation -->
+						
+											</div><!-- .site-header-menu -->
+							</div><!-- .site-header-main -->
+
+											<div class="header-image">
+					<a href="../../../index.html" rel="home">
+						<img src="../../../wp-content/uploads/2015/12/header.jpg" srcset="https://stuartsierra.com/wp-content/uploads/2015/12/header-300x70.jpg 300w, https://stuartsierra.com/wp-content/uploads/2015/12/header-768x179.jpg 768w, https://stuartsierra.com/wp-content/uploads/2015/12/header-1024x239.jpg 1024w, https://stuartsierra.com/wp-content/uploads/2015/12/header.jpg 1200w" sizes="(max-width: 709px) 85vw, (max-width: 909px) 81vw, (max-width: 1362px) 88vw, 1200px" width="1200" height="280" alt="Digital Digressions by Stuart Sierra">
+					</a>
+				</div><!-- .header-image -->
+					</header><!-- .site-header -->
+
+		<div id="content" class="site-content">
+
+<div id="primary" class="content-area">
+	<main id="main" class="site-main" role="main">
+		
+<article id="post-710" class="post-710 post type-post status-publish format-standard hentry category-programming tag-clojure tag-patterns tag-scope">
+	<header class="entry-header">
+		<h1 class="entry-title">On the Perils of Dynamic Scope</h1>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p><i>Common Lisp the Language</i> (CLtL) devotes an entire chapter to the subject of <a href="http://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node43.html">Scope and Extent</a>. It defines <b>scope</b> as the textual region of a program in which an entity may be used, where &#8220;entity&#8221; could be a symbol, a value, or something more abstract like a variable binding.
+</p>
+<p>
+So scope is about <i>where</i> you can use something. CLtL defines two different kinds of scope:
+</p>
+<p>
+<b>Lexical scope</b> is usually the body of a single expression like <code>let</code> or <code>defun</code>.
+</p>
+<p>
+<b>Indefinite scope</b> is everything else, effectively the global set of symbols that exist in a program.
+</p>
+<p>
+In contrast, <b>extent</b> is about <i>when</i>: it&#8217;s the interval of time during which something may be used. CLtL defines two different kinds of extent:
+</p>
+<p>
+<b>Dynamic extent</b> refers to things that exist for a fixed period of time and are explicitly &#8220;destroyed&#8221; at the end of that period, usually when control returns to the code that created the thing.
+</p>
+<p>
+<b>Indefinite extent</b> is everything else: things that get created, passed around, and eventually garbage-collected.
+</p>
+<p>
+In any language with a garbage collector, most things have indefinite extent. You can create strings, lists, or hash tables and pass them around with impunity. When the garbage collector determines that you are done using something, it reclaims the memory. The process is, in most cases, completely transparent to you.
+</p>
+<p>
+But what about the so-called <b>dynamic scope</b>? The authors of CLtL have this to say:
+</p>
+<blockquote>
+<p>The term &#8220;dynamic scope&#8221; is a misnomer. Nevertheless it is both traditional and useful.
+</p>
+</blockquote>
+<p>
+They also define &#8220;dynamic scope&#8221; to be the combination of <i>indefinite scope</i> and <i>dynamic extent</i>. That is, things with dynamic scope are valid in any <i>place</i> in a program, but only for a limited <i>time</i>. In Common Lisp, these are called &#8220;special variables,&#8221; and are created with the macros <a href="http://www.lispworks.com/documentation/HyperSpec/Body/m_defpar.htm"><code>defparameter</code> and <code>defvar</code></a>.
+</p>
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1">Vars</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+So what does this have to do with Clojure? Clojure has these things called Vars. Every time you write <code>def</code> or <code>defn</code> or one of its variants in Clojure, you&#8217;re creating a Var.
+</p>
+<p>
+Vars have <i>indefinite scope</i>: no matter where you <code>def</code> a Var, it&#8217;s visible everywhere in the program.<sup><a class="footref" name="fnr.1" href="#fn.1">1</a></sup>
+</p>
+<p>
+Vars usually have <i>indefinite extent</i> as well. Usually. This is where things get tricky. Clojure, unlike Common Lisp, was designed for multi-threaded programs.<sup><a class="footref" name="fnr.2" href="#fn.2">2</a></sup> The meaning of <i>extent</i> gets a lot muddier in the face of multiple threads. Each thread has its own timeline, its own view of &#8220;now&#8221; which may or may not conform to any other thread&#8217;s view.
+</p>
+<p>
+In Clojure versions 1.2 and earlier, <b>all</b> Vars had dynamic scope by default, but this meant that there was a performance cost to look up the current dynamic binding of a Var on every function call. Leading up to 1.3, Rich Hickey experimented with allowing Vars to be declared <code>^:static</code>, before settling on static by default with <code>^:dynamic</code> as an option. You can still find <code>^:static</code> declarations littered through the Clojure source code. Maybe someday they&#8217;ll be useful again.
+</p>
+<p>
+The definition of &#8220;dynamic scope&#8221; in Clojure is even fuzzier than it is in Common Lisp. How do we define &#8220;extent&#8221; in the face of multiple threads, each potentially with its own thread-local binding? If a resource can be shared across multiple threads, we have to coordinate the cleanup of that resource. For example, if I open a socket and then hand it off to another piece of code, who is responsible for closing the socket?
+</p>
+<p>
+Resource management is one concurrency bugaboo that Clojure developers have not managed to crack. Various attempts have been made: you can see the artifacts in wiki and mailing list discussions of <a href="http://dev.clojure.org/display/design/Resource+Scopes">Resource Scopes</a>. So far, no solution has been found that doesn&#8217;t just shift the problem somewhere else.
+</p>
+<p>
+It ends up looking a bit like garbage collection: how do I track the path of every resource used by my program and ensure that it gets cleaned up at the appropriate time? But it&#8217;s even harder than that, because resources like file handles and sockets are much scarcer than memory: they need to be reclaimed as soon as possible. In a modern runtime like the JVM, garbage collection is stochastic: there&#8217;s no guarantee that it will happen at any particular time, or even that it will happen at all.
+</p>
+<p>
+To make matters worse, Clojure has laziness to contend with. It&#8217;s entirely possible to obtain a resource, start consuming it via a lazy sequence, and <i>never finish</i> consuming it.
+</p>
+</div>
+</div>
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2">The Wrong Solution</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+This brings me to one of my top <a href="http://c2.com/cgi/wiki?AntiPattern">anti-patterns</a> in Clojure: the Dynamically-Scoped Singleton Resource (DSSR).
+</p>
+<p>
+The DSSR is popular in libraries that depend on some external resource such as a socket, file, or database connection. It typically looks like this:
+</p>
+<pre class="src src-clojure">(<span class="org-keyword">ns</span> com.example.library)
+
+(<span class="org-keyword">def</span> <span class="org-constant">^:dynamic</span> <span class="org-function-name">*resource*</span>)
+
+(<span class="org-keyword">defn-</span> <span class="org-function-name">internal-procedure</span> []
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">... uses *resource* ...</span>
+  )
+
+(<span class="org-keyword">defn</span> <span class="org-function-name">public-api-function</span> [arg]
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">... calls internal-procedure ...</span>
+  )
+</pre>
+<p>
+That is, there is a single dynamic Var holding the &#8220;resource&#8221; on which the rest of the API operates. The DSSR is often accompanied by a <code>with-*</code> macro:
+</p>
+<pre class="src src-clojure">(<span class="org-keyword">defmacro</span> <span class="org-function-name">with-resource</span> [src &amp; body]
+  `(<span class="org-keyword">binding</span> [*resource* (acquire src)]
+     (<span class="org-keyword">try</span> ~@body
+       (<span class="org-keyword">finally</span>
+         (dispose *resource*)))))
+</pre>
+<p>
+This looks harmless enough. It&#8217;s practically a carbon copy of Clojure&#8217;s <code>with-open</code> macro, and it ensures that the resource will get cleaned up even if <code>body</code> throws an exception.
+</p>
+<p>
+The problem with this pattern, especially in libraries, is the constraints it imposes on any code that wants to use the library. The <code>with-resource</code> macro severely constrains what you can do in the <code>body</code>:
+</p>
+<p>
+<b>You can&#8217;t dispatch to another thread.</b> Say goodbye to Agents, Futures, thread pools, non-blocking I/O, or any other kind of asynchrony. The resource is only valid on the current thread.<sup><a class="footref" name="fnr.3" href="#fn.3">3</a></sup>
+</p>
+<p>
+<b>You can&#8217;t return a lazy sequence</b> backed by the resource because the resource will be destroyed as soon as <code>body</code> returns.
+</p>
+<p>
+<b>You can&#8217;t have more than one resource at a time.</b> Hence the &#8220;singleton&#8221; in the name of this pattern. Using a thread-bound Var throughout the API means that you can never operate on more than one instance of the resource in a single thread. Lots of apps need to work with multiple databases, which really sucks using this kind of library.
+</p>
+<p>
+The last problem with this pattern is a more subtle one: <b>hidden dependencies</b>. The public API functions, which have global scope, depend on the state (thread-local binding) of another Var with global scope. This dependency isn&#8217;t explicitly stated anywhere in the definition of those functions. That might not seem like such a big deal in small examples, and it isn&#8217;t. But as programs (and development teams) grow larger, it&#8217;s one additional piece of implicit knowledge that you have to keep in your head. If there are seventeen layers of function calls between the resource binding and its usage, how certain are you going to be that the resource has the right extent?
+</p>
+</div>
+</div>
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3">Friends Don&#8217;t Let Friends Use Dynamic Scope</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+The alternative is easy: don&#8217;t do it. Don&#8217;t try to &#8220;solve&#8221; resource management in every library.
+</p>
+<p>
+By all means, provide the functions to acquire and dispose of resources, but then let the application programmer decide what to do with them. Define API functions to take the resource as an argument.
+</p>
+<p>
+Applications can manage their own resources, and only the application programmer knows what the extent of those resources should be. Maybe you can pass it around as a value. Maybe you want to use dynamic binding after all. Maybe you want to stash it in a global state Var.<sup><a class="footref" name="fnr.4" href="#fn.4">4</a></sup> That&#8217;s for you to decide.
+</p>
+<p>
+<a href="http://datomic.com/">Datomic</a> is a good example to follow: it creates connection objects that have a lot of state attached to them &mdash; sockets, queues, and threads. But it says nothing about how you should manage the extent of those connections.<sup><a class="footref" name="fnr.5" href="#fn.5">5</a></sup> Most functions in the <a href="http://docs.datomic.com/clojure/index.html">Datomic API</a> take either a connection or a database (a value obtained from the connection) as an argument.
+</p>
+</div>
+</div>
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4">Safe Dynamic Scope</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+So dynamic scope is totally evil, right? Not totally. There are situations where dynamic scope can be helpful without causing the cascade of problems I described above.
+</p>
+<p>
+Remember that dynamic scope in Clojure is really <i>thread-local binding</i>. Therefore, it&#8217;s best suited to operations that are <i>confined to a single thread</i>. There are plenty of examples of this: most popular algorithms are single-threaded, after all. Consider the classic <a href="http://www.cs.engr.uky.edu/~lewis/essays/compilers/rec-des.html">recursive-descent parser</a>: you start with one function call at the top and you&#8217;re not done until that function returns. The entire operation happens on a single thread, in a single call stack. It has <b>dynamic extent</b>.
+</p>
+<p>
+I took advantage of this fact in a <a href="https://github.com/clojure/data.json">Clojure JSON parser</a>. There were a number of control flags that I needed to make available to all the functions. Rather than pass around extra arguments all over the place, I created <a href="https://github.com/clojure/data.json/blob/data.json-0.2.1/src/main/clojure/clojure/data/json.clj#L20-L22">private dynamic Vars</a> to hold them. Those Vars get <a href="https://github.com/clojure/data.json/blob/data.json-0.2.1/src/main/clojure/clojure/data/json.clj#L263-L265">bound in the entry-point</a> to the parser, based on options passed in as arguments to the public API function. The thread-local state never leaks out of the initial function call.
+</p>
+<p>
+As another example, the Clojure compiler, although written in Java, <a href="https://github.com/clojure/clojure/blob/clojure-1.5.1/src/jvm/clojure/lang/Compiler.java#L181-L203">uses dynamic Vars</a> to keep track of internal state.
+</p>
+<p>
+And what about our friend <code>with-open</code>? I said that the example <code>with-resource</code> macro was nearly a copy of it, but only nearly. <code>clojure.core/with-open</code> creates <b>lexical</b> (i.e. local) bindings. It still suffers from some limitations around what you can do in the body, but at least it doesn&#8217;t limit you to one resource at a time.
+</p>
+<p>
+Global state is the zombie in the closet of every Clojure program, about which I&#8217;ll have more to say in future posts. For now, I hope I&#8217;ve convinced you that dynamic scope is easily abused and has a lot of unintended consequences.
+</p>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+<p class="footnote"><sup><a class="footnum" name="fn.1" href="#fnr.1">1</a></sup> Technically, a Var is visible only <b>after</b> the point at which it was defined. This is significant with regard to the order of definitions, but Vars are still globally visible once they have been defined.
+</p>
+<p class="footnote"><sup><a class="footnum" name="fn.2" href="#fnr.2">2</a></sup> CLtL has this note embedded in the chapter on scope and extent: &#8220;Behind the assertion that dynamic extents nest properly is the assumption that there is only a single program or process. Common Lisp does not address the problems of multiprogramming (timesharing) or multiprocessing (more than one active processor) within a single Lisp environment.&#8221; Modern Common Lisp implementations have added multi-threading, but it remains absent from the language specification.
+</p>
+<p class="footnote"><sup><a class="footnum" name="fn.3" href="#fnr.3">3</a></sup> You can use <a href="http://clojure.github.com/clojure/clojure.core-api.html#clojure.core/bound-fn">bound-fn</a> to capture the bindings and pass them to another thread, but you still have the problem that the resource may be destroyed before the other thread is finished with it.
+</p>
+<p class="footnote"><sup><a class="footnum" name="fn.4" href="#fnr.4">4</a></sup> Not recommended, to be discussed in a future post.
+</p>
+<p class="footnote"><sup><a class="footnum" name="fn.5" href="#fnr.5">5</a></sup> There&#8217;s some caching of connection objects under the hood, but this is not relevant to the consumer.
+</p>
+</div>
+</div>
+</div>
+</div>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="perils-of-dynamic-scope.html" rel="bookmark"><time class="entry-date published" datetime="2013-03-29T08:00:52+00:00">March 29, 2013</time><time class="updated" datetime="2013-03-28T20:10:34+00:00">March 28, 2013</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../../tag/clojure.html" rel="tag">Clojure</a>, <a href="../../../tag/patterns.html" rel="tag">patterns</a>, <a href="../../../tag/scope.html" rel="tag">scope</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<div id="comments" class="comments-area">
+
+			<h2 class="comments-title">
+			11 thoughts on &ldquo;On the Perils of Dynamic Scope&rdquo;		</h2>
+
+		
+		<ol class="comment-list">
+					<li id="comment-45185" class="comment even thread-even depth-1">
+			<article id="div-comment-45185" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/9ea8a15519ff0886390d6c1bee472465?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/9ea8a15519ff0886390d6c1bee472465?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Mark</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="perils-of-dynamic-scope.html#comment-45185">
+							<time datetime="2013-03-29T09:01:37+00:00">
+								March 29, 2013 at 9:01 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>One point I don&#8217;t see here is the painful interactions between dynamic scope and lazyness. Like you mention for parsing, I&#8217;ved dynamic scope for passing around configuration information while creating tree like data structures, for example a webpage DOM. What I always forget, however, is that bound variables are not kept with the environment. A call to <code>map</code> will create a lazy sequence that will contain the lexical scope, but not the dynamic scope. When this seq is evaluated outside of the initial creation call stack, the bindings are lost. I&#8217;ve been bitten by this many times. Consequently, I&#8217;ve given up on lazyness in Clojure: it&#8217;s more of a headache than a feature for the kind of code I write.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-45186" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-45186" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/6dcf36ddd0aa73e04e125e3c10f6ff05?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/6dcf36ddd0aa73e04e125e3c10f6ff05?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://kriyative.github.com/' rel='external nofollow' class='url'>Ram Krishnan</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="perils-of-dynamic-scope.html#comment-45186">
+							<time datetime="2013-03-29T11:28:52+00:00">
+								March 29, 2013 at 11:28 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I take it when you say &#8220;You can’t have more than one resource at a time&#8221;, you&#8217;re not including the case where you can nest such `with-*` macros, i.e.,</p>
+<p><code><br />
+(def ^:dynamic *resource* nil)</p>
+<p>(with-resource res1<br />
+  (println :resource *resource*)<br />
+  (with-resource res2<br />
+    (println :resource *resource*))<br />
+  (println :resource "is back to" *resource*))<br />
+</code></p>
+<p>The use case for this pattern (or anti-pattern as it were) is one where there&#8217;s a thread local binding for a resource that needs to be properly released. It&#8217;s the create/release mechanism that the library is abstracting away. I&#8217;m not entirely sure why this is a bad thing, so long as the user understands the other tradeoffs related to thread boundaries and laziness.</p>
+<p>Your point about providing access to to the create/release mechanism (in addition to the `with-*`) is valuable. And, if the caller decides to take complete control of the resource management, at least the `with-*` serves as a reasonable documentation for what needs to be done.</p>
+<p>But, I worry about a statement like:</p>
+<p>&#8220;The alternative is easy: don’t do it. Don’t try to “solve” resource management in every library&#8221;</p>
+<p>because there are some who will take this as gospel, and decide that this kind of abstraction needs to be done away with altogether.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-45187" class="comment byuser comment-author-stuart bypostauthor even thread-even depth-1">
+			<article id="div-comment-45187" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='../../../index.html' rel='external nofollow' class='url'>Stuart</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="perils-of-dynamic-scope.html#comment-45187">
+							<time datetime="2013-03-29T11:36:49+00:00">
+								March 29, 2013 at 11:36 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hi Ram,</p>
+<p>Even when you nest different bindings of <code>*resource*</code>, you&#8217;re still limited by the API to using one at a time. You cannot interleave API calls targeting two different resources without adding a lot of extra code to swap the bindings at every step.</p>
+<p><i>&#8220;there are some who will &#8230; decide that this kind of abstraction needs to be done away with altogether.&#8221;</i></p>
+<p>That is my hope. :)</p>
+<p>-S</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-45191" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-45191" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/afe8dee86e7c664a293377e6aa199eae?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/afe8dee86e7c664a293377e6aa199eae?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://www.mikera.net/' rel='external nofollow' class='url'>Mike</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="perils-of-dynamic-scope.html#comment-45191">
+							<time datetime="2013-03-30T01:49:21+00:00">
+								March 30, 2013 at 1:49 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Great article. This whole point (the problems with dynamic scope) is part of what inspired me to start thinking about &#8220;The Environment as a Value&#8221; &#8211; ref my post on the clojure-dev list: <a href="https://groups.google.com/d/topic/clojure-dev/S8BawG7nzJA/discussion" rel="nofollow">https://groups.google.com/d/topic/clojure-dev/S8BawG7nzJA/discussion</a></p>
+<p>The other solution I&#8217;ve found to this is to use lots of closures (effectively embedding scope within functions) and compose them with HOFs. This works and is nicely functional, although it can get a bit messy and painful when you need to thread some new parameter through an existing call chain.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-45194" class="comment even thread-even depth-1">
+			<article id="div-comment-45194" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/fcd96c8e8def6c661504343bab63f8ed?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/fcd96c8e8def6c661504343bab63f8ed?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://qbits.cc/' rel='external nofollow' class='url'>mpenet</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="perils-of-dynamic-scope.html#comment-45194">
+							<time datetime="2013-03-30T15:47:47+00:00">
+								March 30, 2013 at 3:47 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>You are 100% right!<br />
+I too have thing against dynamic vars, it always felt impure (not ot mention less performant + all other problems you mentioned) and more of a burden than anything, when it can simply be replaced (in most cases) by function arguments.<br />
+I have yet to see one real world use case of deep nesting of with- macros that would really improve the code/readability too.</p>
+<p>As you said there are some use cases that are valid, but the sad part is the fact that it is advertised as &#8220;idiomatic&#8221; by a lot of people and some users will complain if you don&#8217;t provide that since it&#8217;s expected now&#8230;<br />
+An (sadly) some very good libraries rely on that as well. I just spent a good part of the day porting some code to one of these, the quality and functionalities are excellent, but you spend your time fighting these macros and end up dreaming about a simple arg+partial version of it.</p>
+<p> As a result I tend to provide both styles when I can, but it still feels like a stain in the code to be honest.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-45195" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-45195" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/879d673ea3313197be4d1b5bd5f3cdb9?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/879d673ea3313197be4d1b5bd5f3cdb9?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://thecomputersarewinning.com/' rel='external nofollow' class='url'>Ignacio Thayer</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="perils-of-dynamic-scope.html#comment-45195">
+							<time datetime="2013-03-30T20:30:40+00:00">
+								March 30, 2013 at 8:30 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Committing this sin is very convenient. The best way I&#8217;ve found to avoid this pattern is to inject dependencies/resources into a record or type that exposes the API (i think you also gave a related talk). I think most people don&#8217;t do this though because it&#8217;s considered too close to OO (?).  </p>
+<p>Out of curiosity &#8211; in your mind is having two versions of functions (one that uses the default resource and one that allows passing it in) just as gross?</p>
+<p>btw, clojure now does magic to propagate dynamic values to futures? or did I misunderstand above?</p>
+<p>user&gt; (def ^:dynamic *x*)<br />
+#&#8217;user/*x*<br />
+user&gt; (defmacro with-x [v &amp; body] `(binding [*x* ~v] (do ~@body)))<br />
+#&#8217;user/with-x<br />
+user&gt; (with-x 3 (future (Thread/sleep 2000) (println *x*)))<br />
+#<br />
+3</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-45199" class="comment even thread-even depth-1">
+			<article id="div-comment-45199" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/fcd96c8e8def6c661504343bab63f8ed?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/fcd96c8e8def6c661504343bab63f8ed?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://qbits.cc/' rel='external nofollow' class='url'>mpenet</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="perils-of-dynamic-scope.html#comment-45199">
+							<time datetime="2013-03-31T05:41:59+00:00">
+								March 31, 2013 at 5:41 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Another solution is to use kw args defaults, but that&#8217;s not usable for leading argument(s):</p>
+<p><code><br />
+(defn foo [x y }]<br />
+...)<br />
+</code></p>
+<p>About futures yes, there is a binding-conveyor-fn that does the magic: <a href="https://github.com/clojure/clojure/blob/master/src/clj/clojure/core.clj#L1828" rel="nofollow">https://github.com/clojure/clojure/blob/master/src/clj/clojure/core.clj#L1828</a></p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-45200" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-45200" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/fcd96c8e8def6c661504343bab63f8ed?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/fcd96c8e8def6c661504343bab63f8ed?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://qbits.cc/' rel='external nofollow' class='url'>mpenet</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="perils-of-dynamic-scope.html#comment-45200">
+							<time datetime="2013-03-31T05:45:02+00:00">
+								March 31, 2013 at 5:45 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>My code was cut in the middle, here is what I meant: <a href="https://www.refheap.com/paste/13144" rel="nofollow">https://www.refheap.com/paste/13144</a></p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-45204" class="comment byuser comment-author-stuart bypostauthor even thread-even depth-1">
+			<article id="div-comment-45204" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='../../../index.html' rel='external nofollow' class='url'>Stuart</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="perils-of-dynamic-scope.html#comment-45204">
+							<time datetime="2013-03-31T11:33:51+00:00">
+								March 31, 2013 at 11:33 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hi Ignacio,</p>
+<p>Yes, it is convenient. That&#8217;s part of the problem. :)</p>
+<p><i>&#8220;in your mind is having two versions of functions (one that uses the default resource and one that allows passing it in) just as gross?&#8221;</i></p>
+<p>I try to stay away from emotion-laden words like &#8220;gross,&#8221; but I do think that trying to provide multiple versions of the same API is more trouble than it&#8217;s worth. You&#8217;ll inevitably try some &#8220;clever&#8221; code tricks to avoid duplication, which are more likely to cause problems down the road.</p>
+<p>Instead, focus on making your API as <i>simple</i> as possible (see Rich Hickey&#8217;s talks on <a href="http://www.infoq.com/presentations/Simple-Made-Easy" rel="nofollow">Simple versus Easy</a>) then leave it up to consumers to add additional conveniences that suit their specific use cases.</p>
+<p>And yes, in recent versions of Clojure, dynamic bindings are &#8220;conveyed&#8221; to other threads. In Clojure 1.3 the implementation had a bug that caused a pretty serious memory leak. This was fixed in later releases. Even with binding conveyance, though, you still have the resource-extent and singleton problems I described.</p>
+<p>-S</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-45373" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-45373" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/03a9e38190ff8cf141bdc4390cb76161?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/03a9e38190ff8cf141bdc4390cb76161?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Cliff</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="perils-of-dynamic-scope.html#comment-45373">
+							<time datetime="2013-04-19T09:46:55+00:00">
+								April 19, 2013 at 9:46 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Great article Stuart, I have one question though.  I am just learning Clojure so pardon me if this is a dumb question.  What is your recommendation for long-lived code that needs to maintain some state internally that spans function calls?  An example might be some metric information about the service calls being made or some summary of the results returned on an API across all it&#8217;s clients.  In this case the state is long-lived and not tied to a specific function invocation.  Assuming that we&#8217;ve dealt with the multi-threading issues by some other means (STM,agents,refs,etc) , what&#8217;s the best way to declare/bind said vars?  </p>
+<p>I see this a more general problem because unlike parsing (which is a purely functional transformation), there is context &#8220;left over&#8221; here after a client call to the API function(s) that will be used in subsequent calls.  I know that the general recommendation is to avoid building an API that requires these semantics as much as possible, but I just don&#8217;t know else you would do it.  Thoughts?</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-45376" class="comment byuser comment-author-stuart bypostauthor even thread-even depth-1">
+			<article id="div-comment-45376" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='../../../index.html' rel='external nofollow' class='url'>Stuart</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="perils-of-dynamic-scope.html#comment-45376">
+							<time datetime="2013-04-19T12:49:11+00:00">
+								April 19, 2013 at 12:49 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hi Cliff,</p>
+<p>You can still support long-lived state with this technique. Each function can still take the state (ref, atom, agent) as a parameter and operate on it.</p>
+<p>As to where you keep the state between function calls, I hope to write more about it in the future. My general approach is to create an &#8220;instance&#8221; of my application which encapsulates all of its state, then pass that state around through explicit function arguments or closures. I not to have any state in global Vars, but sometimes deployment environments make that impossible to avoid.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+		
+	
+			<p class="no-comments">Comments are closed.</p>
+	
+	
+</div><!-- .comments-area -->
+
+	<nav class="navigation post-navigation" role="navigation">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="../../02/04/affordance-concision.html" rel="prev"><span class="meta-nav" aria-hidden="true">Previous</span> <span class="screen-reader-text">Previous post:</span> <span class="post-title">Affordance and Concision</span></a></div><div class="nav-next"><a href="../../06/04/my-clojure-workflow-reloaded.html" rel="next"><span class="meta-nav" aria-hidden="true">Next</span> <span class="screen-reader-text">Next post:</span> <span class="post-title">My Clojure Workflow, Reloaded</span></a></div></div>
+	</nav>
+	</main><!-- .site-main -->
+
+	
+</div><!-- .content-area -->
+
+
+	<aside id="secondary" class="sidebar widget-area" role="complementary">
+		<section id="search-3" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://stuartsierra.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+	</label>
+	<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</section><section id="text-4" class="widget widget_text">			<div class="textwidget"><ul>
+<li><a href="http://feeds2.feedburner.com/StuartSierra" title="Syndicate this site using RSS 2.0">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="../../../comments/feed" title="The latest comments to all posts in RSS">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+</ul>
+<ul>
+<li><a href="https://twitter.com/stuartsierra">Twitter</a></li>
+<li><a href="https://github.com/stuartsierra">GitHub</a></li>
+</ul></div>
+		</section><section id="tag-widget-2" class="widget TagWidget"><h2 class="widget-title">Clojure Do’s and Don’ts</h2><ul class = "posts-by-tag-list"><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-883"><a class = "posts-by-tag-item-title" href="../../../2015/08/25/clojure-donts-lazy-effects.html">Clojure Don’ts: Lazy Effects</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-877"><a class = "posts-by-tag-item-title" href="../../../2015/08/10/clojure-donts-redundant-map.html">Clojure Don’ts: Redundant map</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-870"><a class = "posts-by-tag-item-title" href="../../../2015/06/16/clojure-donts-single-branch-if.html">Clojure Don’ts: Single-branch if</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-854"><a class = "posts-by-tag-item-title" href="../../../2015/06/10/clojure-donts-heisenparameter.html">Clojure Don’ts: The Heisenparameter</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-849"><a class = "posts-by-tag-item-title" href="../../../2015/06/01/clojure-donts-optional-arguments-with-varargs.html">Clojure Don’ts: Optional Arguments with Varargs</a></li><li class="posts-by-tag-item Clojure do's and don'ts errors" id="posts-by-tag-item-836"><a class = "posts-by-tag-item-title" href="../../../2015/05/27/clojure-uncaught-exceptions.html">Clojure Do’s: Uncaught Exceptions</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-831"><a class = "posts-by-tag-item-title" href="../../../2015/05/17/clojure-record-constructors.html">Record Constructors</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-826"><a class = "posts-by-tag-item-title" href="../../../2015/05/10/clojure-namespace-aliases.html">Clojure Do’s: Namespace Aliases</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-820"><a class = "posts-by-tag-item-title" href="../../../2015/05/02/clojure-donts-isa.html">Clojure Don’ts: isa?</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-812"><a class = "posts-by-tag-item-title" href="../../../2015/04/26/clojure-donts-concat.html">Clojure Don’ts: Concat</a></li></ul></section>	</aside><!-- .sidebar .widget-area -->
+
+		</div><!-- .site-content -->
+
+		<footer id="colophon" class="site-footer" role="contentinfo">
+							<nav class="main-navigation" role="navigation" aria-label="Footer Primary Menu">
+					<div class="menu-main-menu-container"><ul id="menu-main-menu-1" class="primary-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../../../about-me.html">About Me</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../../../writing.html">Writing</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../../../presentations.html">Presentations</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../../../software.html">Software</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../../../contact.html">Contact</a></li>
+</ul></div>				</nav><!-- .main-navigation -->
+			
+			
+			<div class="site-info">
+								<span class="site-title"><a href="../../../index.html" rel="home">Digital Digressions by Stuart Sierra</a></span>
+				<a href="https://wordpress.org/">Proudly powered by WordPress</a>
+			</div><!-- .site-info -->
+		</footer><!-- .site-footer -->
+	</div><!-- .site-inner -->
+</div><!-- .site -->
+
+	<div style="display:none">
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	<div class="grofile-hash-map-9ea8a15519ff0886390d6c1bee472465">
+	</div>
+	<div class="grofile-hash-map-6dcf36ddd0aa73e04e125e3c10f6ff05">
+	</div>
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	<div class="grofile-hash-map-afe8dee86e7c664a293377e6aa199eae">
+	</div>
+	<div class="grofile-hash-map-fcd96c8e8def6c661504343bab63f8ed">
+	</div>
+	<div class="grofile-hash-map-879d673ea3313197be4d1b5bd5f3cdb9">
+	</div>
+	<div class="grofile-hash-map-03a9e38190ff8cf141bdc4390cb76161">
+	</div>
+	</div>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201635'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2016Sepaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../../../wp-content/plugins/jetpack/modules/wpgroho167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../wp-content/themes/twentysixteen/js/skip-link-focus-fix8de4.js?ver=20160816'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var screenReaderText = {"expand":"expand child menu","collapse":"collapse child menu"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../../../wp-content/themes/twentysixteen/js/functions8de4.js?ver=20160816'></script>
+<script type='text/javascript' src='../../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='https://stats.wp.com/e-201635.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.2.2',blog:'2702563',post:'710',tz:'-4',srv:'stuartsierra.com'} ]);
+	_stq.push([ 'clickTrackerInit', '2702563', '710' ]);
+</script>
+</body>
+
+<!-- Mirrored from stuartsierra.com/2013/03/29/perils-of-dynamic-scope by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 17:02:27 GMT -->
+</html>
+
+<!-- Dynamic page generated in 1.419 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 21:42:10 -->
+
+<!-- Compression = gzip -->

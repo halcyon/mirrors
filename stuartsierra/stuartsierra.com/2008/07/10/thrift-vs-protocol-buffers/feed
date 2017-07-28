@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Thrift vs. Protocol Buffers</title>
+	<atom:link href="https://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Facebook / Apache Thrift &#171; My Blog</title>
+		<link>https://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers/comment-page-1#comment-44470</link>
+		<dc:creator><![CDATA[Facebook / Apache Thrift &#171; My Blog]]></dc:creator>
+		<pubDate>Sun, 29 Apr 2012 23:56:15 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=170#comment-44470</guid>
+		<description><![CDATA[[...] http://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers http://en.wikipedia.org/wiki/Thrift_(protocol) Share this:TwitterFacebookLike this:LikeBe the first [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] <a href="http://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers" rel="nofollow">http://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers</a> <a href="http://en.wikipedia.org/wiki/Thrift_(protocol)" rel="nofollow">http://en.wikipedia.org/wiki/Thrift_(protocol)</a> Share this:TwitterFacebookLike this:LikeBe the first [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Diwaker</title>
+		<link>https://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers/comment-page-1#comment-44176</link>
+		<dc:creator><![CDATA[Diwaker]]></dc:creator>
+		<pubDate>Tue, 15 Mar 2011 06:48:39 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=170#comment-44176</guid>
+		<description><![CDATA[For the sake of completeness, I wanted to point folks to my attempts at improving the Thrift documentation:
+http://diwakergupta.github.com/thrift-missing-guide/]]></description>
+		<content:encoded><![CDATA[<p>For the sake of completeness, I wanted to point folks to my attempts at improving the Thrift documentation:<br />
+<a href="http://diwakergupta.github.com/thrift-missing-guide/" rel="nofollow">http://diwakergupta.github.com/thrift-missing-guide/</a></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Jim</title>
+		<link>https://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers/comment-page-1#comment-43101</link>
+		<dc:creator><![CDATA[Jim]]></dc:creator>
+		<pubDate>Mon, 19 Apr 2010 00:52:12 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=170#comment-43101</guid>
+		<description><![CDATA[It looks like a great library, but not much good if your dev environment is Visual Studio. Probably you&#039;d need something more Posix and cross-platform (perhaps MinGW). The library relies heavily on Posix threads, which are not available in win32 unless you&#039;re prepared to incorporate a GPL or LGPL library, and I&#039;m not. The protocol buffer library is cross-platform, but then again it doesn&#039;t include a transport mechanism and is therefore less powerful.]]></description>
+		<content:encoded><![CDATA[<p>It looks like a great library, but not much good if your dev environment is Visual Studio. Probably you&#8217;d need something more Posix and cross-platform (perhaps MinGW). The library relies heavily on Posix threads, which are not available in win32 unless you&#8217;re prepared to incorporate a GPL or LGPL library, and I&#8217;m not. The protocol buffer library is cross-platform, but then again it doesn&#8217;t include a transport mechanism and is therefore less powerful.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Google Protocol Buffers and other data interchange formats &#171; John&#39;s Blog</title>
+		<link>https://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers/comment-page-1#comment-43088</link>
+		<dc:creator><![CDATA[Google Protocol Buffers and other data interchange formats &#171; John&#39;s Blog]]></dc:creator>
+		<pubDate>Fri, 02 Apr 2010 07:25:28 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=170#comment-43088</guid>
+		<description><![CDATA[[...] recently became an Apache project. Nice stuff. Stuart Sierra has a nice comparison on his blog, Thrift vs. Protocol Buffers. Another worthy contender but not a big enough advantage to stop the internal momentum protobuf [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] recently became an Apache project. Nice stuff. Stuart Sierra has a nice comparison on his blog, Thrift vs. Protocol Buffers. Another worthy contender but not a big enough advantage to stop the internal momentum protobuf [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Installing Thrift on Snow Leopard</title>
+		<link>https://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers/comment-page-1#comment-42994</link>
+		<dc:creator><![CDATA[Installing Thrift on Snow Leopard]]></dc:creator>
+		<pubDate>Thu, 14 Jan 2010 19:53:08 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=170#comment-42994</guid>
+		<description><![CDATA[[...] If Thrift is still very new and lacks documentation &#8211; why bother learning it? Especially when there are more mature alternatives like Google&#8217;s Protocol Buffer and SOAP. The answer depends on your requirements. I write web-based financial applications. I use PHP as my server-side scripting language, and C++ for the heavy-lifting. As of this writing, Protocol Buffer does not support PHP, and the SOAP protocol has too much overhead for the high-speed finance world. Furthermore, I think Thrift has more potential than both alternatives and will gain in popularity as more people learn it. Also apparently Thrift was developed by Google engineers working at Facebook who missed using Protocol Buffer, so they re-built it and expanded its feature set. You can find more information on the differences between Thrift and Protocol Buffer at: http://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers. [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] If Thrift is still very new and lacks documentation &#8211; why bother learning it? Especially when there are more mature alternatives like Google&#8217;s Protocol Buffer and SOAP. The answer depends on your requirements. I write web-based financial applications. I use PHP as my server-side scripting language, and C++ for the heavy-lifting. As of this writing, Protocol Buffer does not support PHP, and the SOAP protocol has too much overhead for the high-speed finance world. Furthermore, I think Thrift has more potential than both alternatives and will gain in popularity as more people learn it. Also apparently Thrift was developed by Google engineers working at Facebook who missed using Protocol Buffer, so they re-built it and expanded its feature set. You can find more information on the differences between Thrift and Protocol Buffer at: <a href="http://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers" rel="nofollow">http://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers</a>. [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Thrift and Protocol Buffers performance in Java &#8211; Tim[后端技术]</title>
+		<link>https://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers/comment-page-1#comment-42967</link>
+		<dc:creator><![CDATA[Thrift and Protocol Buffers performance in Java &#8211; Tim[后端技术]]]></dc:creator>
+		<pubDate>Tue, 05 Jan 2010 13:55:43 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=170#comment-42967</guid>
+		<description><![CDATA[[...] There is another Thrift vs. Protocol Buffers compare non-performance [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] There is another Thrift vs. Protocol Buffers compare non-performance [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Anonymous</title>
+		<link>https://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers/comment-page-1#comment-42920</link>
+		<dc:creator><![CDATA[Anonymous]]></dc:creator>
+		<pubDate>Sun, 06 Dec 2009 12:51:05 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=170#comment-42920</guid>
+		<description><![CDATA[Check this out: http://code.google.com/p/thrift-protobuf-compare/wiki/Benchmarking]]></description>
+		<content:encoded><![CDATA[<p>Check this out: <a href="http://code.google.com/p/thrift-protobuf-compare/wiki/Benchmarking" rel="nofollow">http://code.google.com/p/thrift-protobuf-compare/wiki/Benchmarking</a></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Thrift vs Protocol Bufffers vs JSON &#124; MirthLab</title>
+		<link>https://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers/comment-page-1#comment-42501</link>
+		<dc:creator><![CDATA[Thrift vs Protocol Bufffers vs JSON &#124; MirthLab]]></dc:creator>
+		<pubDate>Mon, 01 Jun 2009 20:37:23 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=170#comment-42501</guid>
+		<description><![CDATA[[...] of this table was originally compiled by Stuart Sierra but has been edited to include additional information relevant to my own [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] of this table was originally compiled by Stuart Sierra but has been edited to include additional information relevant to my own [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: timyang</title>
+		<link>https://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers/comment-page-1#comment-42217</link>
+		<dc:creator><![CDATA[timyang]]></dc:creator>
+		<pubDate>Tue, 14 Apr 2009 08:03:35 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=170#comment-42217</guid>
+		<description><![CDATA[I have compared thrift and protobuf serialization performance in Java, thrift is 1.2-2 times faster than protobuf.
+
+http://timyang.net/programming/thrift-protocol-buffers-performance-java/]]></description>
+		<content:encoded><![CDATA[<p>I have compared thrift and protobuf serialization performance in Java, thrift is 1.2-2 times faster than protobuf.</p>
+<p><a href="http://timyang.net/programming/thrift-protocol-buffers-performance-java/" rel="nofollow">http://timyang.net/programming/thrift-protocol-buffers-performance-java/</a></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2008/07/10/thrift-vs-protocol-buffers/comment-page-1#comment-42203</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Mon, 06 Apr 2009 20:31:31 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=170#comment-42203</guid>
+		<description><![CDATA[&lt;em&gt;&quot;The license information is swapped in the table.&quot;&lt;/em&gt;
+
+Fixed. Thanks, Jacob.]]></description>
+		<content:encoded><![CDATA[<p><em>&#8220;The license information is swapped in the table.&#8221;</em></p>
+<p>Fixed. Thanks, Jacob.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.314 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:01:10 -->
+
+<!-- Compression = gzip -->

@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+
+<!-- Mirrored from nicklevine.org/contest/2003/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:28 GMT -->
+<head>
+
+<title>ILC 2003 Programming Contest</title>
+
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" link="#000099" vlink="#660066" alink="#FF0000">
+
+<div align="center">
+
+<p>
+<a href="http://www.ravenbrook.com/">Ravenbrook</a> /
+<a href="http://www.international-lisp-conference.org/">ILC 2003</a>
+</p>
+
+<hr />
+
+
+<h1>ILC 2003 Programming Contest</h1>
+
+<address>
+<a href="mailto:ndl@ravenbrook.com">Nick Levine</a>,
+<a href="http://www.ravenbrook.com/">Ravenbrook Limited</a>,
+2003-05-28
+</address>
+
+</div>
+
+<h2>The closing date for this contest was Saturday 2003-09-27. Many
+thanks to all those who entered.</h2>
+
+<p><strong>For "latest" (but before the closing date) news on the
+competition, and an FAQ of sorts, see <a href="#section-4">section
+4</a> below.</strong></p>
+
+<p><strong>For results of the competition, see the <a
+href="judges-report.txt">judges' report</a>. The <a
+href="entries/index.html">entries themselves</a> are also available: please
+start with the <a href="entries/readme.txt">readme</a> file which
+accompanies them.</strong></p>
+
+<h2><a id="section-1" name="section-1">1. Introduction</a></h2>
+
+<div align="center"><h3>Can you solve the "Last Piece Puzzle"? Can you solve it in lisp?</h3></div>
+
+<p>The <a
+href="http://www.blueopal.com.au/products/catalog/brain/html/lastpiece.html">"Last
+Piece Puzzle"</a> consists of <a href="#section-3.1">fourteen
+pieces</a> which have to be fitted into a <a
+href="#section-3.2">frame</a>. There are pictures on each piece but
+these give no help with the solution (each picture is fully contained
+within a single piece, and the pictures are rotated so that their
+orientation can't be used as a clue). The pieces interlock with each
+other and with the frame; if we ignore the slots and tabs then the
+frame is an 8x8 square and the pieces are <a
+href="http://mathworld.wolfram.com/Polyomino.html">polyominos</a>:
+nine pentominos, four tetrominos, one triomino. For the most part,
+slots and tabs alternate around both the frame and all the pieces, and
+all the slots and tabs are the same size and shape. There are two
+exceptions to this alternation of slots and tabs, and we'll come to
+these in a moment. If there were no exceptions then we would be able
+to fit the pieces in like this:</p>
+
+<div align="center"><img src="gifs/nosolve.gif" width="400"
+height="400"
+alt="example configuration of pieces, not actually possible because of the 'exceptions'"
+title="example configuration of pieces, not actually possible because of the 'exceptions'" /></div>
+
+<p>The two exceptions to the slot / tab alternation are coloured in
+the above diagram. They are:</p>
+
+<ul>
+<li><p>the frame has a slot where you'd expect a tab (this leaves a
+     gap between the frame and one of the pieces in this example,
+     coloured green here);</p></li>
+<li><p>the triomino has a tab where you'd expect a slot (this makes
+     two pieces overlap a little in the example, coloured red).</p></li>
+</ul>
+
+<p>As a result of the exceptions it turns out that we are constrained
+to place the triomino so that its unexpected tab fits into the frame's
+unexpected slot, thus:</p>
+
+<div align="center"><img src="gifs/starter.gif" width="400"
+height="400"
+alt="place the triomino in only posible position"
+title="place the triomino in only posible position" /></div>
+
+<p>Can you place the remaining thirteen pieces? Can you do it in
+lisp?</p>
+
+
+
+<h2><a id="section-2" name="section-2">2. Contest</a></h2>
+
+
+<p>The aim in this contest is for you to write a program, in <a
+href="http://www.lispworks.com/reference/HyperSpec/Front/index.htm">Common
+Lisp</a>, to solve the above puzzle, giving positions and orientations
+for each piece. </p>
+
+<p>By entering the contest, you are deemed to have accepted all of
+the following, so please read them carefully.</p>
+
+
+<ol>
+
+
+<li>
+    <p>The deadline for submissions will be noon EDT on Saturday
+    2003-09-27 (universal time 3273667200).</p>
+</li>
+
+
+<li>
+    <p>Entries may be submitted only by email, which should be sent to
+    ILC03-lisp-contest (at) alu (dot) org. The string
+    "ILC03-lisp-contest" should appear in the subject line. If such
+    email would be over 1 megabyte in length, please send instead a
+    short message to this address stating how your entry can be
+    acquired by some other electronic means (http / ftp, etc).</p>
+</li>
+
+
+<li>
+    <p>Prizes may be awarded in the following categories:</p>
+
+    <ul>
+
+      <li><p>first working answer to be submitted;</p></li>
+
+      <li><p>fastest running program -- this is a test of algorithm, not
+      of use of optimizations, therefore (a) no <a
+      href="http://www.lispworks.com/reference/HyperSpec/Body/d_type.htm">type
+      declarations</a> or <a
+      href="http://www.lispworks.com/reference/HyperSpec/Body/s_the.htm">the
+      forms</a> will be permitted and (b) the judges reserve the right
+      to run entries on the lisp implementation(s) of their choice;</p></li>
+
+      <li><p>most elegant algorithm;</p></li>
+
+      <li><p>most elegant use of lisp;</p></li>
+
+      <li><p>best use of really obscure lisp features;</p></li>
+
+      <li><p>contestants under the age of 21 on the first day of the <a
+      href="http://www.international-lisp-conference.org/">conference</a>;</p></li>
+
+      <li><p>best "added value".</p></li>
+
+    </ul>
+
+    <p>The judges reserve the rights (a) not to award a prize in any
+    category if they do not believe the standard of entries in that
+    category merits it, (b) to create additional prize categories
+    after the closing date for submissions and (c) to entertain
+    any suggestions, which are received before the deadline for
+    submissions, for other categories. </p>
+
+</li>
+
+
+<li>
+    <p>Names of prize winners will be announced at the conference, and
+    subsequently on this website.</p>
+</li>
+
+
+<li>
+    <p>The prizes will be tasteful medals of low scrap-metal value. As
+    if fame wasn't enough.</p>
+</li>
+
+
+<li>
+    <p>Entries are to consist of source code, plus sufficient
+    documentation (potentially in the form of comments) to allow the
+    judges to (a) build and run the program and (b) understand the
+    algorithm employed to solve the puzzle.</p>
+</li>
+
+
+<li>
+    <p>Please include with each entry a list of any sources
+    (e.g. publications, internet sites, etc) used to generate that
+    entry.</p>
+</li>
+
+
+<li>
+    <p>Team entries will be allowed. Please indicate with your entry
+    if this is a team effort, and name the particpants.</p>
+</li>
+
+
+<li>
+    <p>All entries will be tested on the same machine: a laptop
+    running Windows XP. If you intend to submit an entry which cannot
+    be run on this machine then you are advised to consult with the
+    judges beforehand. You may be responsible for bringing hardware to
+    the conference on which to demonstrate your entry, and - depending
+    on the speed of that hardware - your entry may not be eligible to
+    win a prize under the "fastest running program" category.</p>
+</li>
+
+
+<li>
+    <p>If you intend to submit an entry which is not written <a
+    href="http://www.lispworks.com/reference/HyperSpec/Body/26_glo_p.htm#portable">portably</a>
+    then you are advised to consult with the judges beforehand. The
+    judges will make reasonable efforts to obtain particular lisp
+    implementations on which to test entries, provided there is
+    sufficient justification for doing so. Use of an
+    implementation-specific UI will be considered to be a "sufficient
+    justification".</p>
+</li>
+
+
+<li>
+    <p>Employees of Blue Opal Australia Pty Ltd and of Ravenbrook
+    Limited, the judges, and the immediate families of all of these,
+    are not eligible to enter this contest.</p>
+</li>
+
+
+<li>
+    <p>The judges will be Nick Levine and Nicholas Barnes. The judges
+    can be contacted by email via ILC03-lisp-contest (at) alu (dot)
+    org. Include the string "ILC03-lisp-contest" in the subject
+    line. The judges' decision will be final in all matters, including
+    whether or not to enter into any correspondance.</p>
+</li>
+
+
+<li>
+    <p>Although each entry will remain the intellectual property of
+    the entrant, the judges may demonstrate and publish winning
+    entries at the conference, and may publish them in conference
+    proceedings and on this website. Entries must be licensed in such
+    a manner as to permit these activities freely..</p>
+</li>
+
+
+</ol>
+
+
+
+<h2><a id="section-3" name="section-3">3. Pieces and frame</a></h2>
+
+<p>Sketches of the fourteen pieces and the frame into which they must
+be fitted are reproduced below. Please note that these are only
+approximate representations. All pieces are made up of between three
+and five squares "stuck together"; all these squares are the same
+size; all tabs and slots are the same size and in the centre of an
+edge of one of the squares which comprise that piece. Once the
+triomino has been placed you can think of the frame as a chessboard
+(i.e. alternate black and white squares); of each piece as a small
+collection of  alternate black and white squares; and of your task as
+being to place the 13 remaining pieces such that black squares on the
+pieces are always and only placed onto black squares on the board.</p>
+
+
+<h3><a id="section-3.1" name="section-3.1">3.1. The pieces</a></h3>
+
+<p>For the purposes of identification, we have given each piece a name
+which you may or may not care to use. These names are all single
+characters: upper case alphabetic for the pentominos, lower case for
+the tetrominos, digit for the triomino.</p>
+
+<div align="center">
+  <img src="gifs/F5.gif" alt="piece F" />
+  <img src="gifs/J5.gif" alt="piece J" />
+  <img src="gifs/L5.gif" alt="piece L" />
+  <img src="gifs/N5.gif" alt="piece N" />
+  <img src="gifs/Q5.gif" alt="piece Q" />
+  <img src="gifs/S5.gif" alt="piece S" />
+  <img src="gifs/T5.gif" alt="piece T" />
+  <img src="gifs/W5.gif" alt="piece W" />
+  <img src="gifs/Z5.gif" alt="piece Z" />
+  <img src="gifs/j4.gif" alt="piece j" />
+  <img src="gifs/l4.gif" alt="piece l" />
+  <img src="gifs/s4.gif" alt="piece s" />
+  <img src="gifs/t4.gif" alt="piece t" />
+  <img src="gifs/3.gif"  alt="piece 3" />
+</div>
+
+
+<h3><a id="section-3.2" name="section-3.2">3.2. The frame</a></h3>
+
+<div align="center"><img src="gifs/frame.gif" width="400"
+height="400"
+alt="the frame" title="the frame" /></div>
+
+
+<h2><a id="section-4" name="section-4">4. Material added to this page since it was first posted</a></h2>
+
+<p>Last updated: $Date: 2014/04/27 $.</p>
+
+<ul>
+
+<li><p>The <a href="#section-2">rules</a> omit to mention that
+entrants in the "under 21" category will have to tell the judges that
+they're under 21, otherwise we won't know.</p></li>
+
+<li><p>We've been asked whether the pieces can be turned over. The
+answer is no: the pieces can be rotated only about an axis vertical to
+the paper / your screen.</p></li>
+
+<li><p>We've been asked whether a solution actually exists. The back
+of the puzzle, which counts as being in the "public domain", says:
+<cite>We guarantee it can be done...</cite></p></li>
+
+<li><p>We've been asked whether it's allowed to submit more than one
+entry. The answer is that you may submit more than one entry, but only
+your last submission (before the closing date) will be
+judged.</p></li>
+
+<li><p>We've been asked whether any entries have been received to
+date. The answer is that entries (plusp length) have been received but
+they have not been examined by the judges, therefore we cannot yet say
+whether anybody has yet qualified for any of the prizes.</p></li>
+
+<li><p>We've been asked to clarify the meaning of "fastest running
+program". This is to be defined as the total time, as measured by <a
+href="http://www.lispworks.com/reference/HyperSpec/Body/m_time.htm">time</a>,
+taken to read source, expand macros, compile code, load compiled code,
+and execute it. Plus anything else we forgot to mention here. The
+judges will take steps to integrate each entry into the implementation
+used for the timings, in such a way as to ensure a level playing field
+for each entry.</p></li>
+
+<li><p>There was an error in the figure, near the head of section 1,
+which illustrates an example configuration of the pieces. This
+configuration is not actually possible because of the two 'exceptions'
+to the slot / tab alternation rule. The original version of this
+figure (corrected on 2003-08-14) showed one piece (the triomino) in
+the wrong place, and as a result replaced the "Q" pentomino with
+another piece which is not part of the puzzle. This error, while
+confusing, does not materially affect the contest because the
+illustration was explicitly labelled as an invalid arrangment of
+pieces. (Nevertheless we apologise for any anxiety caused by
+it.) To correct the error, we made the following change, where "?" is
+used to denote the interloping piece:</p>
+
+<blockquote><pre>
+    JJJJLLLL     JJJJLLLL
+    NNsJL???     NNsJL3QQ
+    TNss??3j     TNss33Qj
+    TNNst33j -&gt;  TNNstQQj
+    TTWtttjj     TTWtttjj
+    TWWZZZll     TWWZZZll
+    WWSSFZZl     WWSSFZZl
+    SSSFFFFl     SSSFFFFl
+</pre></blockquote></li>
+
+</ul>
+
+
+
+<hr />
+
+<p><small>The "Last Piece Puzzle" is copyright (c) Blue Opal Australia
+Pty Ltd. None of the puzzle designs included in this website may be
+reproduced, by any means whatsoever, other than for purposes directly
+related to this contest.</small></p>
+
+<p><small>This document is copyright (c) Nick Levine 2003. All rights
+reserved. It is provided "as is", without any express or implied
+warranty. In no event will the author be held liable for any damages
+arising from the use of this document. You may make and use verbatim
+copies of this document for purposes directly related to this
+contest. You may not mirror this document or any of the images herein
+on another website. You may not charge anyone for the use of this
+document.</small></p>
+
+<p><small>"Windows" is a registered trademark of Microsoft
+Corporation. Other brand or product names are the registered
+trademarks or trademarks of their respective holders.</small></p>
+
+<div align="center">
+
+<p><code>$Id: //info.ravenbrook.com/user/ndl/lisp/contest/2003/index.html#1 $</code></p>
+
+<p>
+<a href="http://www.ravenbrook.com/">Ravenbrook</a> /
+<a href="http://www.international-lisp-conference.org/">ILC 2003</a>
+</p>
+
+<p>
+    <a href="http://validator.w3.org/check/referer">
+    <img src="valid-xhtml10.png"
+         alt="Valid XHTML 1.0!" height="31" width="88" /></a>
+</p>
+
+</div>
+
+</body>
+
+
+<!-- Mirrored from nicklevine.org/contest/2003/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:28 GMT -->
+</html>

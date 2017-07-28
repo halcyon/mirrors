@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Command-Line Intransigence</title>
+	<atom:link href="https://stuartsierra.com/2013/11/04/command-line-intransigence/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2013/11/04/command-line-intransigence</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Phil Hagelberg</title>
+		<link>https://stuartsierra.com/2013/11/04/command-line-intransigence/comment-page-1#comment-45849</link>
+		<dc:creator><![CDATA[Phil Hagelberg]]></dc:creator>
+		<pubDate>Tue, 05 Nov 2013 23:44:01 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=749#comment-45849</guid>
+		<description><![CDATA[&#062; Use Leiningen (or Maven, or Gradle, or whatever) just to download dependencies and bootstrap a REPL, then execute builds and releases from the REPL.
+
+This is an interesting idea. I would certainly like to do this with the test task; (once lein 3.0 rolls around) the existing implementation is basically a textbook example of the &quot;putting too much in a plugin&quot; problem I mentioned earlier; because tests run in the project process it should definitely be a library. The problem is it&#039;s basically just a big monkeypatch on clojure.test.
+
+I don&#039;t think it&#039;s as clear-cut for the jar or deploy tasks, especially since the deploy task brings in a nontrivial pile of deps which are likely to cause conflicts with existing project deps; JVM isolation in this case is actually quite valuable. But if you had unique nontrivial packaging requirements it could make sense in some cases.]]></description>
+		<content:encoded><![CDATA[<p>&gt; Use Leiningen (or Maven, or Gradle, or whatever) just to download dependencies and bootstrap a REPL, then execute builds and releases from the REPL.</p>
+<p>This is an interesting idea. I would certainly like to do this with the test task; (once lein 3.0 rolls around) the existing implementation is basically a textbook example of the &#8220;putting too much in a plugin&#8221; problem I mentioned earlier; because tests run in the project process it should definitely be a library. The problem is it&#8217;s basically just a big monkeypatch on clojure.test.</p>
+<p>I don&#8217;t think it&#8217;s as clear-cut for the jar or deploy tasks, especially since the deploy task brings in a nontrivial pile of deps which are likely to cause conflicts with existing project deps; JVM isolation in this case is actually quite valuable. But if you had unique nontrivial packaging requirements it could make sense in some cases.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Phil Hagelberg</title>
+		<link>https://stuartsierra.com/2013/11/04/command-line-intransigence/comment-page-1#comment-45847</link>
+		<dc:creator><![CDATA[Phil Hagelberg]]></dc:creator>
+		<pubDate>Tue, 05 Nov 2013 19:02:10 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=749#comment-45847</guid>
+		<description><![CDATA[People writing Leiningen plugins when they shouldn&#039;t is actually a really common problem. The best way to solve this problem is to write a `-main` function which you can invoke from the repl, and then if you want to expose it from the command line, write an alias that partially applies the `run` task like so:
+
+    :aliases {&quot;go&quot; [&quot;run&quot; &quot;-m&quot; &quot;myapp.start&quot;]}
+
+This will make `lein go fast` eval `(myapp.start/-main &quot;fast&quot;)` inside the context of your project.
+
+I should probably get around to blogging about this since it&#039;s not widely understood. There are still valid reasons to write a lein plugin if you need access to the project map for some reason, but people using it as a thin wrapper around `eval-in-project` need to cut that out.]]></description>
+		<content:encoded><![CDATA[<p>People writing Leiningen plugins when they shouldn&#8217;t is actually a really common problem. The best way to solve this problem is to write a `-main` function which you can invoke from the repl, and then if you want to expose it from the command line, write an alias that partially applies the `run` task like so:</p>
+<p>    :aliases {&#8220;go&#8221; [&#8220;run&#8221; &#8220;-m&#8221; &#8220;myapp.start&#8221;]}</p>
+<p>This will make `lein go fast` eval `(myapp.start/-main &#8220;fast&#8221;)` inside the context of your project.</p>
+<p>I should probably get around to blogging about this since it&#8217;s not widely understood. There are still valid reasons to write a lein plugin if you need access to the project map for some reason, but people using it as a thin wrapper around `eval-in-project` need to cut that out.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: henryw</title>
+		<link>https://stuartsierra.com/2013/11/04/command-line-intransigence/comment-page-1#comment-45846</link>
+		<dc:creator><![CDATA[henryw]]></dc:creator>
+		<pubDate>Tue, 05 Nov 2013 18:16:45 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=749#comment-45846</guid>
+		<description><![CDATA[on a related topic,  I wish I had a clojure shell I could use instead of a unix shell, this would be the place for everyday unix commands, like cd, grep and find. if clojure-function versions of those returned data structures instead of text streams, then piping stuff would be easier. 
+
+I have recently heard of eshell which may be something similar to what I&#039;m looking for, havent had a chance to sit down with it yet.]]></description>
+		<content:encoded><![CDATA[<p>on a related topic,  I wish I had a clojure shell I could use instead of a unix shell, this would be the place for everyday unix commands, like cd, grep and find. if clojure-function versions of those returned data structures instead of text streams, then piping stuff would be easier. </p>
+<p>I have recently heard of eshell which may be something similar to what I&#8217;m looking for, havent had a chance to sit down with it yet.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: jwhitlark</title>
+		<link>https://stuartsierra.com/2013/11/04/command-line-intransigence/comment-page-1#comment-45845</link>
+		<dc:creator><![CDATA[jwhitlark]]></dc:creator>
+		<pubDate>Tue, 05 Nov 2013 17:10:44 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=749#comment-45845</guid>
+		<description><![CDATA[Why not just do up a little drop-in to tools.cli that emulates the -f (execute function) -l (load code from file), and --eval.  It seems like that would give you the best of both worlds.]]></description>
+		<content:encoded><![CDATA[<p>Why not just do up a little drop-in to tools.cli that emulates the -f (execute function) -l (load code from file), and &#8211;eval.  It seems like that would give you the best of both worlds.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Franklin Chen</title>
+		<link>https://stuartsierra.com/2013/11/04/command-line-intransigence/comment-page-1#comment-45842</link>
+		<dc:creator><![CDATA[Franklin Chen]]></dc:creator>
+		<pubDate>Mon, 04 Nov 2013 14:51:36 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=749#comment-45842</guid>
+		<description><![CDATA[I&#039;m not a big Clojure user, but I too have been puzzled by repeatedly launching Leiningen, rather than entering a REPL and staying there. One thing that drew me to moving from Maven to SBT (even before I actually moved from Java to Scala for development in general) was that I can type &quot;sbt&quot; and then do stuff from the SBT console and stay there. Having stuff preloaded, and using SBT&#039;s incremental compilation and testing and other features, has been fairly pleasant.]]></description>
+		<content:encoded><![CDATA[<p>I&#8217;m not a big Clojure user, but I too have been puzzled by repeatedly launching Leiningen, rather than entering a REPL and staying there. One thing that drew me to moving from Maven to SBT (even before I actually moved from Java to Scala for development in general) was that I can type &#8220;sbt&#8221; and then do stuff from the SBT console and stay there. Having stuff preloaded, and using SBT&#8217;s incremental compilation and testing and other features, has been fairly pleasant.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2013/11/04/command-line-intransigence/comment-page-1#comment-45841</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Mon, 04 Nov 2013 14:30:55 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=749#comment-45841</guid>
+		<description><![CDATA[Luke,
+
+Totally agree that those are good reasons to have command-line entry points. I just don&#039;t want the command-line to be the &lt;em&gt;only&lt;/em&gt; entry point.]]></description>
+		<content:encoded><![CDATA[<p>Luke,</p>
+<p>Totally agree that those are good reasons to have command-line entry points. I just don&#8217;t want the command-line to be the <em>only</em> entry point.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Luke</title>
+		<link>https://stuartsierra.com/2013/11/04/command-line-intransigence/comment-page-1#comment-45840</link>
+		<dc:creator><![CDATA[Luke]]></dc:creator>
+		<pubDate>Mon, 04 Nov 2013 14:20:49 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=749#comment-45840</guid>
+		<description><![CDATA[Hm, can&#039;t say I agree.
+
+I think there are several very good reasons why your application&#039;s main &quot;entry points&quot; (including tests) should be accessible via the command line:
+
+1. It&#039;s easier to run them in CI.
+2. Its easier to script execution in a DevOps scenario
+3. Your program can be executed by people who don&#039;t know Clojure (or who aren&#039;t even developers)
+4. It makes the app more self-documenting about what the primary entry points are
+
+I agree to the extent that it makes sense to use the REPL *while developing*  a project, but I do think the projects external API should be exposed to command-line users, and lein is a straightforward way to do that.]]></description>
+		<content:encoded><![CDATA[<p>Hm, can&#8217;t say I agree.</p>
+<p>I think there are several very good reasons why your application&#8217;s main &#8220;entry points&#8221; (including tests) should be accessible via the command line:</p>
+<p>1. It&#8217;s easier to run them in CI.<br />
+2. Its easier to script execution in a DevOps scenario<br />
+3. Your program can be executed by people who don&#8217;t know Clojure (or who aren&#8217;t even developers)<br />
+4. It makes the app more self-documenting about what the primary entry points are</p>
+<p>I agree to the extent that it makes sense to use the REPL *while developing*  a project, but I do think the projects external API should be exposed to command-line users, and lein is a straightforward way to do that.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.282 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:58:30 -->
+
+<!-- Compression = gzip -->

@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+
+<!-- Mirrored from stuartsierra.com/2009/12/14/objects-are-not-adts by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 17:02:40 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+		<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+<title>Objects Are Not Abstract Data Types &#8211; Digital Digressions by Stuart Sierra</title>
+<link rel='dns-prefetch' href='http://s0.wp.com/'>
+<link rel='dns-prefetch' href='http://secure.gravatar.com/'>
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel='dns-prefetch' href='http://s.w.org/'>
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Comments Feed" href="../../../comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Objects Are Not Abstract Data Types Comments Feed" href="objects-are-not-adts/feed" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/stuartsierra.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.6"}};
+			!function(a,b,c){function d(a){var c,d,e,f,g,h=b.createElement("canvas"),i=h.getContext&&h.getContext("2d"),j=String.fromCharCode;if(!i||!i.fillText)return!1;switch(i.textBaseline="top",i.font="600 32px Arial",a){case"flag":return i.fillText(j(55356,56806,55356,56826),0,0),!(h.toDataURL().length<3e3)&&(i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,65039,8205,55356,57096),0,0),c=h.toDataURL(),i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,55356,57096),0,0),d=h.toDataURL(),c!==d);case"diversity":return i.fillText(j(55356,57221),0,0),e=i.getImageData(16,16,1,1).data,f=e[0]+","+e[1]+","+e[2]+","+e[3],i.fillText(j(55356,57221,55356,57343),0,0),e=i.getImageData(16,16,1,1).data,g=e[0]+","+e[1]+","+e[2]+","+e[3],f!==g;case"simple":return i.fillText(j(55357,56835),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode8":return i.fillText(j(55356,57135),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode9":return i.fillText(j(55358,56631),0,0),0!==i.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity","unicode9"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='twentysixteen-jetpack-css'  href='../../../wp-content/plugins/jetpack/modules/theme-tools/compat/twentysixteen3a05.css?ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-fonts-css'  href='https://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%2C900%2C400italic%2C700italic%2C900italic%7CMontserrat%3A400%2C700%7CInconsolata%3A400&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../../wp-content/plugins/jetpack/_inc/genericons/genericons/genericons128b.css?ver=3.1' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-style-css'  href='../../../wp-content/themes/twentysixteen/style167b.css?ver=4.6' type='text/css' media='all' />
+<!--[if lt IE 10]>
+<link rel='stylesheet' id='twentysixteen-ie-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentysixteen-ie8-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie8.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='twentysixteen-ie7-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie7.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='../../../wp-content/plugins/jetpack/css/jetpack3a05.css?ver=4.2.2' type='text/css' media='all' />
+<script type='text/javascript' src='../../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://stuartsierra.com/wp-content/themes/twentysixteen/js/html5.js?ver=3.7.3'></script>
+<![endif]-->
+<link rel='https://api.w.org/' href='../../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../../wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Impedence Mismatch' href='../../10/27/impedence-mismatch.html' />
+<link rel='next' title='First Steps With Clojure &#038; Swing' href='../../../2010/01/02/first-steps-with-clojure-swing.html' />
+<meta name="generator" content="WordPress 4.6" />
+<link rel="canonical" href="objects-are-not-adts.html" />
+<link rel='shortlink' href='https://wp.me/pbl3J-5q' />
+<link rel="alternate" type="application/json+oembed" href="../../../wp-json/oembed/1.0/embed2d38.json?url=https%3A%2F%2Fstuartsierra.com%2F2009%2F12%2F14%2Fobjects-are-not-adts" />
+<link rel="alternate" type="text/xml+oembed" href="../../../wp-json/oembed/1.0/embeda80d?url=https%3A%2F%2Fstuartsierra.com%2F2009%2F12%2F14%2Fobjects-are-not-adts&amp;format=xml" />
+
+<link rel='dns-prefetch' href='http://v0.wordpress.com/'>
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Objects Are Not Abstract Data Types" />
+<meta property="og:url" content="https://stuartsierra.com/2009/12/14/objects-are-not-adts" />
+<meta property="og:description" content="I was lucky enough to see a talk by Barbara Liskov, the grande dame of computer science. The talk was titled &#8220;The Power of Abstraction,&#8221; and it covered Liskov&#8217;s work on programmin…" />
+<meta property="article:published_time" content="2009-12-14T19:39:18+00:00" />
+<meta property="article:modified_time" content="2010-01-14T21:02:50+00:00" />
+<meta property="og:site_name" content="Digital Digressions by Stuart Sierra" />
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary" />
+</head>
+
+<body class="single single-post postid-336 single-format-standard">
+<div id="page" class="site">
+	<div class="site-inner">
+		<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+		<header id="masthead" class="site-header" role="banner">
+			<div class="site-header-main">
+				<div class="site-branding">
+					
+											<p class="site-title"><a href="../../../index.html" rel="home">Digital Digressions by Stuart Sierra</a></p>
+											<p class="site-description">From programming to everything else</p>
+									</div><!-- .site-branding -->
+
+									<button id="menu-toggle" class="menu-toggle">Menu</button>
+
+					<div id="site-header-menu" class="site-header-menu">
+													<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Primary Menu">
+								<div class="menu-main-menu-container"><ul id="menu-main-menu" class="primary-menu"><li id="menu-item-635" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../../../about-me.html">About Me</a></li>
+<li id="menu-item-633" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../../../writing.html">Writing</a></li>
+<li id="menu-item-634" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../../../presentations.html">Presentations</a></li>
+<li id="menu-item-636" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../../../software.html">Software</a></li>
+<li id="menu-item-637" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../../../contact.html">Contact</a></li>
+</ul></div>							</nav><!-- .main-navigation -->
+						
+											</div><!-- .site-header-menu -->
+							</div><!-- .site-header-main -->
+
+											<div class="header-image">
+					<a href="../../../index.html" rel="home">
+						<img src="../../../wp-content/uploads/2015/12/header.jpg" srcset="https://stuartsierra.com/wp-content/uploads/2015/12/header-300x70.jpg 300w, https://stuartsierra.com/wp-content/uploads/2015/12/header-768x179.jpg 768w, https://stuartsierra.com/wp-content/uploads/2015/12/header-1024x239.jpg 1024w, https://stuartsierra.com/wp-content/uploads/2015/12/header.jpg 1200w" sizes="(max-width: 709px) 85vw, (max-width: 909px) 81vw, (max-width: 1362px) 88vw, 1200px" width="1200" height="280" alt="Digital Digressions by Stuart Sierra">
+					</a>
+				</div><!-- .header-image -->
+					</header><!-- .site-header -->
+
+		<div id="content" class="site-content">
+
+<div id="primary" class="content-area">
+	<main id="main" class="site-main" role="main">
+		
+<article id="post-336" class="post-336 post type-post status-publish format-standard hentry category-programming tag-clojure tag-oop">
+	<header class="entry-header">
+		<h1 class="entry-title">Objects Are Not Abstract Data Types</h1>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>I was lucky enough to see a talk by Barbara Liskov, the grande dame of computer science.  The talk was titled &#8220;The Power of Abstraction,&#8221; and it covered Liskov&#8217;s work on programming languages in the 1970s and 1980s, primarily a language called CLU.</p>
+<p><strong>Update 1/14/2010:</strong> Video of the same talk is available here: <a href="http://www.infoq.com/presentations/liskov-power-of-abstraction">OOPSLA Keynote: The Power Of Abstraction</a></p>
+<p>CLU had a number of interesting features that were ahead of its time &#8212; heap-based garbage collection, typed exceptions, and iterators.  Many of these features made their way into object-oriented languages such as Java.  But CLU itself is not object-oriented.</p>
+<p>Object-oriented languages, Liskov said, tend to conflate the concrete representation of a type with the interface used to access it.  Think of a classic Java class in an introductory OOP text.  The class contains both instance fields and methods to manipulate them.  Even though the fields are private, the interface is tied to a specific implementation.  You can&#8217;t substitute a different implementation, not even by subclassing.</p>
+<p>CLU provides separate structures for fields and methods.  Fields are defined in <em>types</em>, which are more or less like C structs.  Methods are defined in <em>clusters</em>, from which the name CLU derives.  A cluster is a named set of method implementations, associated with one particular type.  Users only work with clusters, not types.  A cluster may be substituted by a another cluster that implements the same methods.</p>
+<p>Why is this interesting now?  Because we&#8217;re just catching up to where Liskov was in the seventies.  Modern Java designs often favor interface-based APIs with no concrete inheritance and no public constructors.</p>
+<p>This is even more interesting to me, because <a href="http://clojure.org/">my favorite programming language</a> will soon have features very similar to CLU&#8217;s types and clusters.  The &#8220;new&#8221; branch of Clojure defines two new abstractions: <a href="http://www.assembla.com/wiki/show/clojure/Datatypes">datatypes</a> and <a href="http://www.assembla.com/wiki/show/clojure/Protocols">protocols</a>.</p>
+<p>A <em>protocol</em> is a set of function signatures, with no implementation.  Conceptually, it&#8217;s similar to a Java interface.  You could use a protocol to define an API to model some real-world object, such as Employee, Department, etc.</p>
+<p>A <em>datatype</em> is a set of named fields, with optional type declarations.  Conceptually, it&#8217;s similar to a C struct.  However, a datatype can also declare support for any number of protocols, and supply methods to implement those protocols.  For example, Clojure will probably have a <em>Countable</em> protocol with a single method <em>count</em>.  Clojure datatypes like Lists and Vectors can provide their own implementations of <em>count</em>.  At that level, the datatype is like a concrete class implementing several interfaces.</p>
+<p>What&#8217;s really cool is that you can <em>extend</em> protocols for existing types, even Java classes.  So, for example, we could implement <em>Countable</em> for java.lang.String by writing a <em>count</em> method that calls String.length().  This means you can create new protocols for Java classes that you do not control.  This is like <em>interface injection</em>, a proposed but as-yet unimplemented feature for Java.</p>
+<p>Protocol method calls are dispatched dynamically based on the type of their first argument, very similar to (and at the same speed as) Java method calls.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="objects-are-not-adts.html" rel="bookmark"><time class="entry-date published" datetime="2009-12-14T15:39:18+00:00">December 14, 2009</time><time class="updated" datetime="2010-01-14T17:02:50+00:00">January 14, 2010</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../../tag/clojure.html" rel="tag">Clojure</a>, <a href="../../../tag/oop.html" rel="tag">OOP</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<div id="comments" class="comments-area">
+
+			<h2 class="comments-title">
+			18 thoughts on &ldquo;Objects Are Not Abstract Data Types&rdquo;		</h2>
+
+		
+		<ol class="comment-list">
+					<li id="comment-42925" class="comment even thread-even depth-1">
+			<article id="div-comment-42925" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/1f45f43333468e8d302301665e250938?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/1f45f43333468e8d302301665e250938?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Julian Morrison</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="objects-are-not-adts.html#comment-42925">
+							<time datetime="2009-12-14T14:28:44+00:00">
+								December 14, 2009 at 2:28 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>The new Go language has an even simpler solution. Types that are just storage, methods attached to type names (alias the type and you can create completely different methods), and interfaces that don&#8217;t need to be explicitly implemented or injected &#8211; they just apply retroactively and automatically to any type that supports the listed methods.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42926" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-42926" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/71c1027d2483fe242b0affc5e59df647?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/71c1027d2483fe242b0affc5e59df647?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Jonathan Allen</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="objects-are-not-adts.html#comment-42926">
+							<time datetime="2009-12-14T14:28:54+00:00">
+								December 14, 2009 at 2:28 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>We already tried that, it was called COM. If you really want to play that game try out VB 4 thru 6. During that era VB would allow any object to implement any other object&#8217;s interface. We gladly gave that up for a Java-like class system because, in no uncertain terms, it sucked.</p>
+<p>Take a step back and think about this would mean for version 2 of your application. What would happen if you wanted to add another function to a protocol? You either break all the classes implementing that protocol or you go the COM routes and start including version numbers in your protocol names.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42927" class="comment even thread-even depth-1">
+			<article id="div-comment-42927" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/f291e86cb1fda78aa37b1eedc8213130?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/f291e86cb1fda78aa37b1eedc8213130?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Ali</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="objects-are-not-adts.html#comment-42927">
+							<time datetime="2009-12-14T14:29:01+00:00">
+								December 14, 2009 at 2:29 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>It seems that Deftypes and protocols will change how one programs in clojure. If that is correct, are there any articles or tutorials for someone who is still going through the Book or just finished it on how to make use of them (unlearn stuff in the book to use them)?</p>
+<p>Also, is it correct that deftypes and protocols will help someone who cannot think except in object to make the transition to analyse problems and design programs (in clojure) in a functional way?</p>
+<p>Thanks</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42922" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-42922" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo avatar-default' height='42' width='42' />						<b class="fn">OA</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="objects-are-not-adts.html#comment-42922">
+							<time datetime="2009-12-14T17:08:54+00:00">
+								December 14, 2009 at 5:08 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>You might want to check out Haskell if you haven&#8217;t already, as almost everything you&#8217;ve just talked about has been core to the way Haskell has been defined.</p>
+<p>Cheers,<br />
+OA</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42923" class="comment byuser comment-author-stuart bypostauthor even thread-even depth-1">
+			<article id="div-comment-42923" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='../../../index.html' rel='external nofollow' class='url'>Stuart</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="objects-are-not-adts.html#comment-42923">
+							<time datetime="2009-12-14T17:15:19+00:00">
+								December 14, 2009 at 5:15 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>OA: Yes, Haskell classes are quite similar, and I think Clojure&#8217;s design was influenced by Haskell.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42930" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-42930" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/2f77d206112701e54baed0e92e3888c5?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/2f77d206112701e54baed0e92e3888c5?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">James Swift</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="objects-are-not-adts.html#comment-42930">
+							<time datetime="2009-12-14T17:29:05+00:00">
+								December 14, 2009 at 5:29 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>If you haven&#8217;t already, you might like to read this essay &#8220;On Understanding Data Abstraction, Revisited&#8221;</p>
+<p><a href="http://www.cs.utexas.edu/~wcook/Drafts/2009/essay.pdf" rel="nofollow">http://www.cs.utexas.edu/~wcook/Drafts/2009/essay.pdf</a></p>
+<p>regards,<br />
+James</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42928" class="comment byuser comment-author-stuart bypostauthor even thread-even depth-1">
+			<article id="div-comment-42928" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='../../../index.html' rel='external nofollow' class='url'>Stuart</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="objects-are-not-adts.html#comment-42928">
+							<time datetime="2009-12-14T19:41:08+00:00">
+								December 14, 2009 at 7:41 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Jonathan Allen writes: <em>&#8220;What would happen if you wanted to add another function to a protocol?&#8221;</em></p>
+<p>It remains to be seen in practice.  But my answer is: you don&#8217;t.  You create a new protocol with the new method, and add implementations of that method for the datatypes/classes that need it.  Protocols are much more flexible than classes in this way.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42929" class="comment byuser comment-author-stuart bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-42929" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='../../../index.html' rel='external nofollow' class='url'>Stuart</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="objects-are-not-adts.html#comment-42929">
+							<time datetime="2009-12-14T19:44:41+00:00">
+								December 14, 2009 at 7:44 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Ali writes: <em>&#8220;are there any articles or tutorials for someone who is still going through the Book or just finished it on how to make use of them (unlearn stuff in the book to use them)?&#8221;</em></p>
+<p>Not yet.  The implementation of datatypes and protocols is still being developed.  I&#8217;m sure that once it is finished there will be a raft of articles describing how to use it.</p>
+<p>Probably the only thing you will have to unlearn is defstruct, which will be replaced with deftype.</p>
+<p>Protocols should provide a good migration path from object-oriented to functional design.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42931" class="comment even thread-even depth-1">
+			<article id="div-comment-42931" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/6a4d5b7581cc3d5189b4e195a243b7d3?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/6a4d5b7581cc3d5189b4e195a243b7d3?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Noel Grandin</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="objects-are-not-adts.html#comment-42931">
+							<time datetime="2009-12-15T03:48:12+00:00">
+								December 15, 2009 at 3:48 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>So this proposal is basically a restricted Java class and a Java interface?</p>
+<p>Which is not a surprising choice &#8211; James Gosling has said that he would have liked to make Java&#8217;s original type system interface based, but they ran out of time to do the necessary research.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42933" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-42933" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/cfb541839e42dec39f23a8a4ab8eb762?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/cfb541839e42dec39f23a8a4ab8eb762?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">polypus</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="objects-are-not-adts.html#comment-42933">
+							<time datetime="2009-12-15T13:55:33+00:00">
+								December 15, 2009 at 1:55 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>&#8220;Not yet. The implementation of datatypes and protocols is still being developed. I’m sure that once it is finished there will be a raft of articles describing how to use it.&#8221;</p>
+<p>any idea what the ETA is on this?</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42934" class="comment byuser comment-author-stuart bypostauthor even thread-even depth-1">
+			<article id="div-comment-42934" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='../../../index.html' rel='external nofollow' class='url'>Stuart</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="objects-are-not-adts.html#comment-42934">
+							<time datetime="2009-12-15T13:58:50+00:00">
+								December 15, 2009 at 1:58 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>polypus wrote: <em>&#8220;any idea what the ETA is on this?&#8221;</em></p>
+<p>Don&#8217;t hold your breath.  I&#8217;m guessing it will be 2-3 months from now.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42935" class="comment byuser comment-author-stuart bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-42935" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='../../../index.html' rel='external nofollow' class='url'>Stuart</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="objects-are-not-adts.html#comment-42935">
+							<time datetime="2009-12-15T14:02:15+00:00">
+								December 15, 2009 at 2:02 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Noel Grandin wrote: <em>&#8220;So this proposal is basically a restricted Java class and a Java interface?&#8221;</em></p>
+<p>Not really restricted, because you can do all the same things you can do with Java classes/interfaces.  Just a different approach, and more flexible because you can modify datatypes/protocols dynamically.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42936" class="comment byuser comment-author-stuart bypostauthor even thread-even depth-1">
+			<article id="div-comment-42936" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='../../../index.html' rel='external nofollow' class='url'>Stuart</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="objects-are-not-adts.html#comment-42936">
+							<time datetime="2009-12-15T14:06:19+00:00">
+								December 15, 2009 at 2:06 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>James Swift: Yes, I&#8217;ve read that. Rich Hickey mentioned it in connection with his work on datatypes/protocols in Clojure.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42938" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-42938" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/adbded51b8e416d4b3a73867f8009786?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/adbded51b8e416d4b3a73867f8009786?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">banq</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="objects-are-not-adts.html#comment-42938">
+							<time datetime="2009-12-16T04:04:48+00:00">
+								December 16, 2009 at 4:04 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>just like Mixin  in AOP</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42941" class="comment even thread-even depth-1">
+			<article id="div-comment-42941" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/ad53912145b5a0e733f225da22d63aea?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/ad53912145b5a0e733f225da22d63aea?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://www.cs.utexas.edu/users/wcook/' rel='external nofollow' class='url'>William Cook</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="objects-are-not-adts.html#comment-42941">
+							<time datetime="2009-12-18T15:20:23+00:00">
+								December 18, 2009 at 3:20 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I wrote the article “On Understanding Data Abstraction, Revisited” mentioned above. I also responded to Liskov when she presented her talk at OOPSLA a few days before my presentation. In my article I completely refute Liskov&#8217;s negative comments about object-oriented programing. I identify a notion of pure OO in which only *interfaces* are used as types. In this approach, there is no conflation of &#8220;concrete representation of a type with the interface used to access it&#8221;. The problem comes from using classes as types. The overall point of my article is:<br />
+* CLU introduced the idea of user-defined abstract data types (ADT)<br />
+* Objects are NOT abstract data types (they are fundamentally different)<br />
+* Java supports a blend of ADT and object-oriented programming<br />
+   (but the ADT support is weak)<br />
+* Abstract data types and objects both have advantages and disadvantages<br />
+   Adding ADT forms to Java will improve some things, but make other things worse. Be careful!<br />
+* Haskell type classes are a form of abstract data type (but without much information hiding)<br />
+Once you get the pure form of both concepts clear, then the various hybrids are easy to recognize. Unfortunately, most people only know Java, which is a mixed up hash of both forms, so using Java as your foundation leads to confusion. I&#8217;m sorry my article is not quite as accessible as I had hoped it would be. Since there seems to be so much interest in the topic, I&#8217;m thinking about writing something that is easier to digest.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-42945" class="pingback odd alt thread-odd thread-alt depth-1">
+			<div class="comment-body">
+				Pingback: <a href='http://www.atalasoft.com/cs/blogs/rickm/archive/2009/12/21/f-discoveries-this-week-12-21-2009.aspx' rel='external nofollow' class='url'>Rick Minerich's Development Wonderland : F# Discoveries This Week 12/21/2009</a> 			</div>
+</li><!-- #comment-## -->
+		<li id="comment-42995" class="comment even thread-even depth-1">
+			<article id="div-comment-42995" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo avatar-default' height='42' width='42' />						<b class="fn">Yo</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="objects-are-not-adts.html#comment-42995">
+							<time datetime="2010-01-14T22:12:35+00:00">
+								January 14, 2010 at 10:12 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Scala solves all of this via traits.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-43013" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-43013" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/3999367fe7a27fd53f4f27ed24c2ac54?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/3999367fe7a27fd53f4f27ed24c2ac54?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://iron9light.wordpress.com/' rel='external nofollow' class='url'>IL</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="objects-are-not-adts.html#comment-43013">
+							<time datetime="2010-01-15T18:28:17+00:00">
+								January 15, 2010 at 6:28 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Sounds like erlang behavior but no dynamic dispatching.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+		
+	
+			<p class="no-comments">Comments are closed.</p>
+	
+	
+</div><!-- .comments-area -->
+
+	<nav class="navigation post-navigation" role="navigation">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="../../10/27/impedence-mismatch.html" rel="prev"><span class="meta-nav" aria-hidden="true">Previous</span> <span class="screen-reader-text">Previous post:</span> <span class="post-title">Impedence Mismatch</span></a></div><div class="nav-next"><a href="../../../2010/01/02/first-steps-with-clojure-swing.html" rel="next"><span class="meta-nav" aria-hidden="true">Next</span> <span class="screen-reader-text">Next post:</span> <span class="post-title">First Steps With Clojure &#038; Swing</span></a></div></div>
+	</nav>
+	</main><!-- .site-main -->
+
+	
+</div><!-- .content-area -->
+
+
+	<aside id="secondary" class="sidebar widget-area" role="complementary">
+		<section id="search-3" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://stuartsierra.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+	</label>
+	<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</section><section id="text-4" class="widget widget_text">			<div class="textwidget"><ul>
+<li><a href="http://feeds2.feedburner.com/StuartSierra" title="Syndicate this site using RSS 2.0">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="../../../comments/feed" title="The latest comments to all posts in RSS">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+</ul>
+<ul>
+<li><a href="https://twitter.com/stuartsierra">Twitter</a></li>
+<li><a href="https://github.com/stuartsierra">GitHub</a></li>
+</ul></div>
+		</section><section id="tag-widget-2" class="widget TagWidget"><h2 class="widget-title">Clojure Do’s and Don’ts</h2><ul class = "posts-by-tag-list"><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-883"><a class = "posts-by-tag-item-title" href="../../../2015/08/25/clojure-donts-lazy-effects.html">Clojure Don’ts: Lazy Effects</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-877"><a class = "posts-by-tag-item-title" href="../../../2015/08/10/clojure-donts-redundant-map.html">Clojure Don’ts: Redundant map</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-870"><a class = "posts-by-tag-item-title" href="../../../2015/06/16/clojure-donts-single-branch-if.html">Clojure Don’ts: Single-branch if</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-854"><a class = "posts-by-tag-item-title" href="../../../2015/06/10/clojure-donts-heisenparameter.html">Clojure Don’ts: The Heisenparameter</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-849"><a class = "posts-by-tag-item-title" href="../../../2015/06/01/clojure-donts-optional-arguments-with-varargs.html">Clojure Don’ts: Optional Arguments with Varargs</a></li><li class="posts-by-tag-item Clojure do's and don'ts errors" id="posts-by-tag-item-836"><a class = "posts-by-tag-item-title" href="../../../2015/05/27/clojure-uncaught-exceptions.html">Clojure Do’s: Uncaught Exceptions</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-831"><a class = "posts-by-tag-item-title" href="../../../2015/05/17/clojure-record-constructors.html">Record Constructors</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-826"><a class = "posts-by-tag-item-title" href="../../../2015/05/10/clojure-namespace-aliases.html">Clojure Do’s: Namespace Aliases</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-820"><a class = "posts-by-tag-item-title" href="../../../2015/05/02/clojure-donts-isa.html">Clojure Don’ts: isa?</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-812"><a class = "posts-by-tag-item-title" href="../../../2015/04/26/clojure-donts-concat.html">Clojure Don’ts: Concat</a></li></ul></section>	</aside><!-- .sidebar .widget-area -->
+
+		</div><!-- .site-content -->
+
+		<footer id="colophon" class="site-footer" role="contentinfo">
+							<nav class="main-navigation" role="navigation" aria-label="Footer Primary Menu">
+					<div class="menu-main-menu-container"><ul id="menu-main-menu-1" class="primary-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../../../about-me.html">About Me</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../../../writing.html">Writing</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../../../presentations.html">Presentations</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../../../software.html">Software</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../../../contact.html">Contact</a></li>
+</ul></div>				</nav><!-- .main-navigation -->
+			
+			
+			<div class="site-info">
+								<span class="site-title"><a href="../../../index.html" rel="home">Digital Digressions by Stuart Sierra</a></span>
+				<a href="https://wordpress.org/">Proudly powered by WordPress</a>
+			</div><!-- .site-info -->
+		</footer><!-- .site-footer -->
+	</div><!-- .site-inner -->
+</div><!-- .site -->
+
+	<div style="display:none">
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	<div class="grofile-hash-map-1f45f43333468e8d302301665e250938">
+	</div>
+	<div class="grofile-hash-map-71c1027d2483fe242b0affc5e59df647">
+	</div>
+	<div class="grofile-hash-map-f291e86cb1fda78aa37b1eedc8213130">
+	</div>
+	<div class="grofile-hash-map-d41d8cd98f00b204e9800998ecf8427e">
+	</div>
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	<div class="grofile-hash-map-2f77d206112701e54baed0e92e3888c5">
+	</div>
+	<div class="grofile-hash-map-6a4d5b7581cc3d5189b4e195a243b7d3">
+	</div>
+	<div class="grofile-hash-map-cfb541839e42dec39f23a8a4ab8eb762">
+	</div>
+	<div class="grofile-hash-map-adbded51b8e416d4b3a73867f8009786">
+	</div>
+	<div class="grofile-hash-map-ad53912145b5a0e733f225da22d63aea">
+	</div>
+	<div class="grofile-hash-map-3999367fe7a27fd53f4f27ed24c2ac54">
+	</div>
+	</div>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201635'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2016Sepaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../../../wp-content/plugins/jetpack/modules/wpgroho167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../wp-content/themes/twentysixteen/js/skip-link-focus-fix8de4.js?ver=20160816'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var screenReaderText = {"expand":"expand child menu","collapse":"collapse child menu"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../../../wp-content/themes/twentysixteen/js/functions8de4.js?ver=20160816'></script>
+<script type='text/javascript' src='../../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='https://stats.wp.com/e-201635.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.2.2',blog:'2702563',post:'336',tz:'-4',srv:'stuartsierra.com'} ]);
+	_stq.push([ 'clickTrackerInit', '2702563', '336' ]);
+</script>
+</body>
+
+<!-- Mirrored from stuartsierra.com/2009/12/14/objects-are-not-adts by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 17:02:41 GMT -->
+</html>
+
+<!-- Dynamic page generated in 0.485 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:59:47 -->
+
+<!-- Compression = gzip -->

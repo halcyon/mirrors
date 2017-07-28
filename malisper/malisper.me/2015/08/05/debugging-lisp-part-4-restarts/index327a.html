@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns#">
+
+<!-- Mirrored from malisper.me/2015/08/05/debugging-lisp-part-4-restarts/?replytocom=331 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:47:28 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Debugging Lisp Part 4: Restarts - Macrology</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="../../../../xmlrpc.php">
+
+
+<!-- This site is optimized with the Yoast SEO plugin v3.4.2 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="robots" content="noindex,follow"/>
+<link rel="canonical" href="index.html" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Debugging Lisp Part 4: Restarts - Macrology" />
+<meta property="og:description" content="This is part four of Debugging Lisp. Here are the previous parts on recompilation, inspecting, and class redefinition. The next post on miscellaneous debugging techniques can be found here. Many languages provide error handling as two distinct parts, throw and catch. Throw is the part that detects something has gone wrong and in some way signals that &hellip;" />
+<meta property="og:url" content="index.html" />
+<meta property="og:site_name" content="Macrology" />
+<meta property="article:section" content="Debugging Lisp" />
+<meta property="article:published_time" content="2015-08-05T04:00:03-05:00" />
+<meta property="article:modified_time" content="2016-01-04T12:25:34-05:00" />
+<meta property="og:updated_time" content="2016-01-04T12:25:34-05:00" />
+<meta property="og:image" content="../../../../wp-content/uploads/2015/08/ezgif.com-optimize-3.gif" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:description" content="This is part four of Debugging Lisp. Here are the previous parts on recompilation, inspecting, and class redefinition. The next post on miscellaneous debugging techniques can be found here. Many languages provide error handling as two distinct parts, throw and catch. Throw is the part that detects something has gone wrong and in some way signals that [&hellip;]" />
+<meta name="twitter:title" content="Debugging Lisp Part 4: Restarts - Macrology" />
+<meta name="twitter:image" content="../../../../wp-content/uploads/2015/08/ezgif.com-optimize-3.gif" />
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Feed" href="../../../../feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Comments Feed" href="../../../../comments/feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Debugging Lisp Part 4: Restarts Comments Feed" href="feed/index.html" />
+<link rel='stylesheet' id='scrawl-style-css'  href='../../../../wp-content/themes/scrawl-wpcom/style167b.css?ver=4.6' type='text/css' media='all' />
+<link rel='stylesheet' id='scrawl-fonts-css'  href='https://fonts.googleapis.com/css?family=Lora:400,700|Merriweather:400italic,400,700,700italic&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../../../wp-content/themes/scrawl-wpcom/fonts/genericons6de8.css?ver=3.3' type='text/css' media='all' />
+<script type='text/javascript' src='../../../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<link rel='https://api.w.org/' href='../../../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../../../wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+<link rel='shortlink' href='../../../../indexfef8.html?p=401' />
+<meta name='robots' content='noindex,follow' />
+<link rel="alternate" type="application/json+oembed" href="../../../../wp-json/oembed/1.0/embed65b6.json?url=http%3A%2F%2Fmalisper.me%2F2015%2F08%2F05%2Fdebugging-lisp-part-4-restarts%2F" />
+<link rel="alternate" type="text/xml+oembed" href="../../../../wp-json/oembed/1.0/embed75bb?url=http%3A%2F%2Fmalisper.me%2F2015%2F08%2F05%2Fdebugging-lisp-part-4-restarts%2F&amp;format=xml" />
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-63547056-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<style type="text/css" id="syntaxhighlighteranchor"></style>
+
+<script type="text/javascript">
+  window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var n=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(n?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var o=document.getElementsByTagName("script")[0];o.parentNode.insertBefore(a,o);for(var r=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["clearEventProperties","identify","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=r(p[c])};
+    heap.load("931515525");
+</script>
+</head>
+
+<body class="single single-post postid-401 single-format-standard">
+	<button class="menu-toggle x">
+		<span class="lines"></span>
+		<span class="screen-reader-text">Primary Menu</span>
+	</button>
+	<div class="slide-menu">
+				
+		<h1 class="site-title"><a href="../../../../index.html" rel="home">Macrology</a></h1>
+		<h2 class="site-description">Case Studies in Lisp Macros</h2>
+		
+				
+				
+			<div id="secondary" class="widget-area" role="complementary">
+		<aside id="search-2" class="widget widget_search"><form role="search" method="get" class="search-form" action="http://malisper.me/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form></aside><aside id="pages-3" class="widget widget_pages"><h1 class="widget-title">Pages</h1>		<ul>
+			<li class="page_item page-item-55"><a href="../../../../about-me/index.html">About Michael Malis</a></li>
+<li class="page_item page-item-44"><a href="../../../../about-this-site-2/index.html">About This Site</a></li>
+		</ul>
+		</aside><aside id="nav_menu-3" class="widget widget_nav_menu"><h1 class="widget-title">Contact Me</h1><div class="menu-contact-me-container"><ul id="menu-contact-me" class="menu"><li id="menu-item-60" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-60"><a href="mailto:michaelmalis2@gmail.com">Email</a></li>
+<li id="menu-item-58" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-58"><a href="https://github.com/malisper">Github</a></li>
+<li id="menu-item-59" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-59"><a href="https://news.ycombinator.com/user?id=malisper">Hacker News</a></li>
+</ul></div></aside><aside id="archives-2" class="widget widget_archive"><h1 class="widget-title">Archives</h1>		<ul>
+			<li><a href='../../../../2016/06/index.html'>June 2016</a></li>
+	<li><a href='../../../../2016/04/index.html'>April 2016</a></li>
+	<li><a href='../../../../2016/01/index.html'>January 2016</a></li>
+	<li><a href='../../../12/index.html'>December 2015</a></li>
+	<li><a href='../../../11/index.html'>November 2015</a></li>
+	<li><a href='../../../10/index.html'>October 2015</a></li>
+	<li><a href='../../../09/index.html'>September 2015</a></li>
+	<li><a href='../../index.html'>August 2015</a></li>
+	<li><a href='../../../07/index.html'>July 2015</a></li>
+	<li><a href='../../../06/index.html'>June 2015</a></li>
+	<li><a href='../../../05/index.html'>May 2015</a></li>
+		</ul>
+		</aside><aside id="categories-2" class="widget widget_categories"><h1 class="widget-title">Categories</h1>		<ul>
+	<li class="cat-item cat-item-2"><a href="../../../../category/basics/index.html" title="These are basic Lisp macros that should be trivial to understand.">Basic Macros</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="../../../../category/intermediate-macros/index.html" >Intermediate Macros</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="../../../../category/advanced-macros/index.html" >Advanced Macros</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="../../../../category/debugging-common-lisp/index.html" >Debugging Lisp</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="../../../../category/loops-in-lisp/index.html" >Loops in Lisp</a>
+</li>
+		</ul>
+</aside>	</div><!-- #secondary -->
+	</div><!-- .slide-menu -->
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<header id="masthead" class="site-header" role="banner">
+
+		<div class="site-branding">
+						<h1 class="site-title"><a href="../../../../index.html" rel="home">Macrology</a></h1>
+		</div>
+
+	</header><!-- #masthead -->
+
+	
+	
+	<div id="content" class="site-content">
+
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			<article id="post-401" class="post-401 post type-post status-publish format-standard hentry category-debugging-common-lisp">
+			<header class="entry-header">
+			<h1 class="entry-title">Debugging Lisp Part 4: Restarts</h1>		</header><!-- .entry-header -->
+		<div class="entry-content">
+		<p><em>This is part four of Debugging Lisp. Here are the previous parts on <a href="../../../07/07/debugging-lisp-part-1-recompilation/index.html">recompilation</a>, <a href="../../../07/14/debugging-lisp-part-2-inspecting/index.html">inspecting</a>, and <a href="../../../07/22/debugging-lisp-part-3-redefining-classes/index.html">class redefinition</a>. The next post on miscellaneous debugging techniques can be found <a href="../../19/debugging-lisp-part-5-miscellaneous/index.html">here</a>.</em></p>
+<p>Many languages provide error handling as two distinct parts, throw and catch. Throw is the part that detects something has gone wrong and in some way signals that an error has occurred. In the process, throw creates an exception object which contains information about the problem. The other part, catch, takes the exception object signaled by throw and attempts to recover from the error.</p>
+<p>The issue with throw/catch is that throw acts like an unconditional goto to the catch part. Because of this, all of the state information that is available when throw is used that is not given to the exception object is lost. This becomes problematic if the code that catches the error wants to use some information about what happened when the error occurred in order to recover.</p>
+<p>As an example, let&#8217;s say you are implementing a library which takes several files and parses a list of numbers from each one. One way to implement this library is as two functions. The first function, <strong>read-file</strong>, will read the contents of a single file and return a list of the results. The second, <strong>read-files</strong>, will take a list of files and return a list of the contents of each one. Here is what the code for those two functions might look like if they did not have any error handling:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun read-file (file)
+  (with-open-file (in file :direction :input)
+    (loop for line = (read-line in nil in)
+          until (eq in line)
+          collect (parse-integer line))))
+
+(defun read-files (files)
+  (loop for file in files
+        collect (read-file file)))
+</pre>
+<p>To test the library you have two files. The first file contains the numbers 5, 10, 15, 20, 25 and the second contains 5, 10, 15, 20, a, 30, 40. In order to make sure your library handles errors properly, you decided to put a line which is just &#8220;a&#8221; in the second file. As it stands, <strong>parse-integer</strong> will signal an error when it comes across this line. To make testing the library easy, you have stored a list containing the pathnames of the two files in the variable <em>*files*</em>. Here is what happens when you try running the library on the two files:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(read-files *files*)
+
+=&gt; ERROR
+</pre>
+<p>An error occurred due to the &#8220;a&#8221; in the second file. As the designer of the library you have to decide what should happen when a situation like this one comes up. Below are several different options you could choose from if your language only provided catch/throw.</p>
+<p>Your first option is to just skip the entry that caused the error. To do this, you could use <strong>handler-case</strong>, Common Lisp&#8217;s version of catch:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun read-file (file)
+  (with-open-file (in file :direction :input)
+    (loop for line = (read-line in nil in)
+          until (eq in line)
+          when (handler-case (parse-integer line)
+                 ;; C is the name being used to
+                 ;; refer to the exception object.
+                 (error (c)
+                   (declare (ignore c))
+                   nil))
+          collect it)))
+
+(read-files *files*)
+
+=&gt; ((5 10 15 20 25) (5 10 15 20 30 40))
+</pre>
+<p>Another option is to provide a dynamic variable<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='#easy-footnote-bottom-1' title='A dynamic variable is basically a global variable that can be shadowed. When a dynamic variable is shadowed, any reference to it refers to the new binding. Once execution leaves the form that shadowed the dynamic variable, the dynamic variable reverts back to its previous binding.'><sup>1</sup></a></span> which the user of the library can use to specify a value to be used in place of the malformed entry:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defvar *malformed-value* nil)
+
+(defun read-file (file)
+  (with-open-file (in file :direction :input)
+    (loop for line = (read-line in nil in)
+          until (eq in line)
+          when (handler-case (parse-integer line)
+                 (error (c)
+                   (declare (ignore c))
+                   *malformed-value*))
+          collect it)))
+
+(let ((*malformed-value* :malformed))
+  (read-files *files*))
+
+=&gt; ((5 10 15 20 25) (5 10 15 20 :MALFORMED 30 40))
+</pre>
+<p>A third option is to have <strong>read-files</strong> catch the error and skip the entire file with the malformed entry:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun read-files (files)
+  (loop for file in files
+        when (handler-case (read-file file)
+               (error (c)
+                 (declare (ignore c))
+                 nil))
+        collect it))
+
+(read-files *files*)
+
+=&gt; ((5 10 15 20 25))
+</pre>
+<p>Your last option is to let the user of the library handle the exception themselves:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(handler-case (read-files *files*)
+  (error (c) (do-something)))
+</pre>
+<p>To the user, this last option is somewhat useful because it gives them some flexibility into how the error is handled. As mentioned above, the problem with doing this is that it becomes difficult for the user to properly recover from the error. If the user just wanted to skip the one corrupted file, there is no easy way to for them to do that due to the fact that by the time their error handling code is ran, execution would have left <strong>read-files</strong>. This means all of the state information, such as the remaining files that need to be read from, is completely lost by the time their code catches the exception.</p>
+<p>Another problem with catch/throw is that of the four possible ways above you could handle the problem, you only get to choose one of them. Any one of them is in conflict with all of the others. Again, this is because throw acts like goto. Once you decide where you are jumping to, you have no control over what happens next. And, if you let the user handle the error themselves, they have no easy way to handle the error gracefully since all of the state information is lost.</p>
+<p>This is where restarts come in. In Common Lisp, catch is provided as two separate pieces: handlers and restarts. A handler is bound by the user of the library in order to specify what should happen when an exception is thrown and a restart is defined by the library in order to provide a recovery option to the user. If you are using a language that supports restarts, you could implement the first three options above as restarts. Then when a user is using the library, they will get to select which of those restarts they want to have run when an error occurs. If they do not want to use any of the restarts, they can run their own code instead. Here is the code for the file reading library, but reimplemented to support three different restarts, one for each of the first three ways to handle errors.</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun ask (string)
+  (princ string *query-io*)
+  (read *query-io*))
+
+(defun read-file (file)
+  (with-open-file (in file :direction :input)
+    (loop for line = (read-line in nil in)
+          until (eq in line)
+          when (restart-case (parse-integer line)
+                 (use-value (value)
+                   :report &quot;Use a new value.&quot;
+                   :interactive (lambda ()
+                                  (list (ask &quot;Value: &quot;)))
+                   value)
+                 (skip-entry ()
+                   :report &quot;Skip the entry.&quot;
+                   nil))
+          collect it)))
+
+(defun read-files (files)
+  (loop for file in files
+        when (restart-case (read-file file)
+               (skip-file ()
+                 :report &quot;Skip the entire file.&quot;
+                 nil))
+        collect it))
+
+;;; The three functions below are predefined
+;;; handlers for the most common ways the user
+;;; will interact with the restarts.
+(defun skip-entry (c)
+  (declare (ignore c))
+  (invoke-restart 'skip-entry))
+
+(defun skip-file  (c)
+  (declare (ignore c))
+  (invoke-restart 'skip-file))
+
+(defun use-value-handler (value)
+  (lambda (c)
+    (declare (ignore c))
+    (invoke-restart 'use-value value)))
+</pre>
+<p>A restart is defined with the macro <strong>restart-case</strong>, and invoked by the function <strong>invoke-restart</strong>. This is a bit of a simplification, but invoking a restart is effectively equivalent to jumping to the body of the restart <em>from where the error was signaled</em>. This means that all of the state stored on the stack before the restart was established is still available when the restart is invoked. This gives the user of the library much finer grained control over what happens when an error is thrown.</p>
+<p>To specify what should happen, all the user needs to do is use the macro <strong>handler-bind</strong>. <strong>Handler-bind</strong> takes an error type and a handler (which should be a function) to call when an error of that type is thrown. The handler can then call <strong>invoke-restart</strong> in order to invoke one of the restarts provided by the library. As part of the library, there is one handler per restart provided, since those are the most common kinds of handlers. Here is what happens when each of the handlers are used when running the library on the two test files:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(handler-bind ((error #'skip-entry))
+  (read-files files*))
+
+=&gt; ((5 10 15 20 25) (5 10 15 20 30 40))
+
+(handler-bind ((error #'skip-file))
+  (read-files files*))
+
+=&gt; ((5 10 15 20 25))
+
+(handler-bind ((error (use-value-handler 0)))
+  (read-files files*))
+
+=&gt; ((5 10 15 20 25) (5 10 15 20 0 30 40))
+</pre>
+<p>The really cool thing about restarts is what happens when the user doesn&#8217;t handle the error. When this happens they will enter the Slime Debugger. From there they will be given a list of the restarts that are available to them and they will be able to invoke them as if the error had been handled in the first place! Here is what happens when a user doesn&#8217;t handle the error, and then invokes the skip-entry restart on the fly:</p>
+<p>&nbsp;</p>
+<p><a href="../../../../wp-content/uploads/2015/08/ezgif.com-optimize-3.gif"><img class="aligncenter wp-image-678" src="../../../../wp-content/uploads/2015/08/ezgif.com-optimize-3.gif" alt="ezgif.com-optimize (3)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>What&#8217;s really cool about this is that this &#8220;interactive restarting&#8221; can use it to implement breakpoints! As I said in Part 1, Common Lisp provides breakpoints as a function &#8220;<b>break</b>&#8221; instead of as a feature of the editor. Here is code that could be used to implement <strong>break</strong>:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun break (&amp;optional (format-control &quot;Break&quot;)
+              &amp;rest format-arguments)
+   (with-simple-restart (continue &quot;Return from BREAK.&quot;)
+     (let ((*debugger-hook* nil))
+       (invoke-debugger
+         (make-condition 'simple-condition
+           :format-control   format-control
+           :format-arguments format-arguments))))
+   nil)
+</pre>
+<p>The code for <strong>break</strong> works by signalling an error while providing a &#8220;continue&#8221; restart. This means that as soon as the function <strong>break</strong> is called, you will enter the debugger with a restart available which will continue normal execution. Exactly what a breakpoint actually is.</p>
+<p>Restarts are another fantastic part of debugging Common Lisp. They give you better control over what happens when an error occurs. And, if your code doesn&#8217;t handle the error itself, you can still recover the process by using an interactive restart.</p>
+<ol class="easy-footnotes-wrapper"><li class="easy-footnote-single"><span id="easy-footnote-bottom-1" class="easy-footnote-margin-adjust"></span>A dynamic variable is basically a global variable that can be shadowed. When a dynamic variable is shadowed, any reference to it refers to the new binding. Once execution leaves the form that shadowed the dynamic variable, the dynamic variable reverts back to its previous binding.<a class="easy-footnote-to-top" href="#easy-footnote-1"></a></li></ol>			</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="index.html" rel="bookmark"><time class="entry-date published" datetime="2015-08-05T04:00:03+00:00">August 5, 2015</time><time class="updated" datetime="2016-01-04T12:25:34+00:00">January 4, 2016</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../../../author/malisper/index.html">malisper</a></span></span><span class="category-links"> in <a href="../../../../category/debugging-common-lisp/index.html" rel="category tag">Debugging Lisp</a></span>			<span class="secondary-entry-meta">
+								<span class="comments-link"><a href="index.html#comments">5</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+			
+	<nav class="navigation post-navigation" role="navigation">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="../../../07/22/debugging-lisp-part-3-redefining-classes/index.html" rel="prev"><span class="title">Previous post</span>Debugging Lisp Part 3: Redefining Classes</a></div><div class="nav-next"><a href="../../19/debugging-lisp-part-5-miscellaneous/index.html" rel="next"><span class="title">Next post</span>Debugging Lisp Part 5: Miscellaneous</a></div></div>
+	</nav>
+			
+<div id="comments" class="comments-area">
+
+	
+			<h2 class="comments-title">
+			5 thoughts on &ldquo;<span>Debugging Lisp Part 4: Restarts</span>&rdquo;		</h2>
+
+		<ol class="comment-list">
+					<li id="comment-331" class="comment even thread-even depth-1">
+			<article id="div-comment-331" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://1.gravatar.com/avatar/a1877223afeed608ecd7069d2dc3d729?s=64&amp;d=mm&amp;r=g' srcset='http://1.gravatar.com/avatar/a1877223afeed608ecd7069d2dc3d729?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">Abbe</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-331">
+							<time datetime="2015-08-05T08:48:10+00:00">
+								August 5, 2015 at 8:48 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Of all the tutorials/articles on Common Lisp conditions/restarts system this one IMHO is pretty easy to understand.</p>
+<p>Thanks for explaining it from the point-of-view of throw/catch, makes one see the awesomeness of it.</p>
+<p>Looking forward to read more of your articles.</p>
+<p>Thank you for taking time to write them.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='index327a.html?replytocom=331#respond' onclick='return addComment.moveForm( "div-comment-331", "331", "respond", "401" )' aria-label='Reply to Abbe'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-332" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-332" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://1.gravatar.com/avatar/4adeef4094cef099575b60cec053d382?s=64&amp;d=mm&amp;r=g' srcset='http://1.gravatar.com/avatar/4adeef4094cef099575b60cec053d382?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn"><a href='http://www.nklein.com/' rel='external nofollow' class='url'>Patrick Stein</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-332">
+							<time datetime="2015-08-05T09:59:24+00:00">
+								August 5, 2015 at 9:59 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I just purchased two other Lisp books through leanpub.  I think the materials in this series of blog posts would make a nice short epub (except that the animated images wouldn&#8217;t work as nicely).  Anyhow&#8230; the point is&#8230; give me some way to pay for this.  :)</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='index5b55.html?replytocom=332#respond' onclick='return addComment.moveForm( "div-comment-332", "332", "respond", "401" )' aria-label='Reply to Patrick Stein'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-333" class="comment even thread-even depth-1 parent">
+			<article id="div-comment-333" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://1.gravatar.com/avatar/47db13b8ce89bdb2dcec9d0405a75ed8?s=64&amp;d=mm&amp;r=g' srcset='http://1.gravatar.com/avatar/47db13b8ce89bdb2dcec9d0405a75ed8?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn"><a href='https://mordocai.net/' rel='external nofollow' class='url'>Christopher Carpenter</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-333">
+							<time datetime="2015-08-05T14:30:49+00:00">
+								August 5, 2015 at 2:30 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>As someone who is currently using ruby everyday and learning clojure, this(and your other tutorials) makes me wish it was easier to make a business case to use common lisp in my industry (web development).</p>
+<p>I suppose I can still do common lisp in my freetime&#8230;</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='index16e2.html?replytocom=333#respond' onclick='return addComment.moveForm( "div-comment-333", "333", "respond", "401" )' aria-label='Reply to Christopher Carpenter'>Reply</a></div>			</article><!-- .comment-body -->
+<ol class="children">
+		<li id="comment-337" class="comment odd alt depth-2">
+			<article id="div-comment-337" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://0.gravatar.com/avatar/090e47a8599d667ca1513224bd57fbc7?s=64&amp;d=mm&amp;r=g' srcset='http://0.gravatar.com/avatar/090e47a8599d667ca1513224bd57fbc7?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">Rekumaru</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-337">
+							<time datetime="2015-08-12T21:35:16+00:00">
+								August 12, 2015 at 9:35 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>(I use both CL and Clojure in web development. I prefer CL)</p>
+<p>here is a business case: 30 years from now the Common Lisp code will still run as long as you use an ANSI compliant implementation. Common Lisp as a standard is frozen and won&#8217;t be changing again &#8230; if ever, which is a good thing.</p>
+<p>In terms of web development using Common Lisp &#8211; it&#8217;s tools and libraries are on par or more mature then Clojure tools or libraries. CL-WHO generates dynamic html5 (or any other html),  PARENSCRIPT generates javascript, as for web frameworks you have CAVEMAN2 and others.  DRAKMA handles http requests and such, CXML parses xml. If you need python wsgi or ruby rack &#8211; Clack provides that functionality for Common Lisp. If you  need fastCGI there is a Common lisp binding for that. And of course you can use any javascript libraries including AngularJS(or Angularjs2) or Jquery with PARENSCRIPT and CL-WHO.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='index6c49.html?replytocom=337#respond' onclick='return addComment.moveForm( "div-comment-337", "337", "respond", "401" )' aria-label='Reply to Rekumaru'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+		<li id="comment-338" class="comment even thread-odd thread-alt depth-1">
+			<article id="div-comment-338" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://0.gravatar.com/avatar/00701dbf35a1c98a620e72dd8b33ecd6?s=64&amp;d=mm&amp;r=g' srcset='http://0.gravatar.com/avatar/00701dbf35a1c98a620e72dd8b33ecd6?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn"><a href='http://www.lateralt.net/' rel='external nofollow' class='url'>Ricardo</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-338">
+							<time datetime="2015-08-15T09:42:25+00:00">
+								August 15, 2015 at 9:42 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>These tutorials are fantastic! While there are great Common Lisp resources and documentation over the web, most of them are a bit harsh on beginners, not making the examples clear or concrete enough. These short examples and screencasts convey much more _useful_ information in such a small space.</p>
+<p>And the page looks good too. It&#8217;s unusual for Common Lisp tutorials to be so slick. Good job!</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='indexcd4a.html?replytocom=338#respond' onclick='return addComment.moveForm( "div-comment-338", "338", "respond", "401" )' aria-label='Reply to Ricardo'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+		
+	
+	
+					<div id="respond" class="comment-respond">
+			<h3 id="reply-title" class="comment-reply-title">Leave a Reply to <a href="#comment-331">Abbe</a> <small><a rel="nofollow" id="cancel-comment-reply-link" title="Cancel reply" href="index.html#respond"><span class="screen-reader-text">Cancel reply</span></a></small></h3>				<form action="http://malisper.me/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
+					<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" aria-required="true" required="required"></textarea></p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" aria-required='true' required='required' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" aria-required='true' required='required' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='401' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='331' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="25ed4f43d4" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="132"/></p>				</form>
+					</div><!-- #respond -->
+		
+</div><!-- #comments -->
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="site-info">
+			<a href="http://wordpress.org/">Proudly powered by WordPress</a>
+			<span class="sep"> ~ </span>
+			Theme: Scrawl by <a href="https://wordpress.com/themes/" rel="designer">WordPress.com</a>.		</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type='text/javascript' src='../../../../wp-content/plugins/akismet/_inc/form2d73.html?ver=3.1.11'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushPlain09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore09b1.css?ver=3.0.9b";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeEclipse09b1.css?ver=3.0.9b";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+<link rel='stylesheet' id='qtipstyles-css'  href='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='easyfootnotescss-css'  href='../../../../wp-content/plugins/easy-footnotes/assets/easy-footnotes167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='dashicons-css'  href='../../../../wp-includes/css/dashicons.min167b.css?ver=4.6' type='text/css' media='all' />
+<script type='text/javascript' src='../../../../wp-content/themes/scrawl-wpcom/js/scrawld56c.js?ver=20150309'></script>
+<script type='text/javascript' src='../../../../wp-content/themes/scrawl-wpcom/js/skip-link-focus-fix08e0.js?ver=20130115'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/comment-reply.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/imagesloaded.min55a0.js?ver=3.2.0'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtipcall167b.js?ver=4.6'></script>
+
+</body>
+
+<!-- Mirrored from malisper.me/2015/08/05/debugging-lisp-part-4-restarts/?replytocom=331 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:47:28 GMT -->
+</html>
+<!-- Dynamic page generated in 0.092 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:24:06 -->

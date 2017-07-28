@@ -1,0 +1,22 @@
+(in-package "CL-USER")
+
+ ;; $Id: //info.ravenbrook.com/user/ndl/lisp/claude/claude-1.0.2/mumble/src/defsys.lisp#1 $
+
+(eval-when (compile load eval)
+  (pushnew :mumble *features*))
+
+(require "asdf")
+
+(push (pathname-location (current-pathname "../claude/" nil)) asdf:*central-registry*)
+
+(asdf:load-system :claude)
+
+(defsystem mumble ()
+  :members (
+            )
+  :rules ((:compile :all
+                    (:requires (:compile :previous)))
+          (:compile :all
+                    (:requires (:load :previous)))))
+
+

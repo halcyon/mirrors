@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from practicaltypography.com/opentype-features.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 17:01:22 GMT -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript">
+if (navigator.appVersion.indexOf("Win")!=-1) {
+    document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-a.css" />');
+} else if (navigator.appVersion.indexOf("Mac")!=-1) {
+    if (navigator.userAgent.match(/iPad/i) != null) {
+        document.write('<link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="fonts/equity-b.css" type="text/css" />');
+        document.write('<link rel="stylesheet" media="only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2)" type="text/css" href="fonts/equity-a.css" />');
+    } else {
+        document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-b.css" />');
+    }
+} else {
+    document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-a.css" />');
+}
+
+</script>
+
+<title>OpenType features | Butterick’s Practical Typography</title>
+<link rel="stylesheet" type="text/css" media="all" href="styles.css" />
+<link rel="stylesheet" type="text/css" media="all" href="fonts/1406-fonts.css" />
+<meta name="format-detection" content="telephone=no">
+
+
+
+
+
+<script type="text/javascript">
+var isFirefox = typeof InstallTrigger !== 'undefined';
+if (isFirefox) {
+document.write('<link rel="stylesheet" type="text/css" media="all" href="firefox.css" />');
+}
+var isChromium = window.chrome,
+    winNav = window.navigator,
+    vendorName = winNav.vendor,
+    isOpera = winNav.userAgent.indexOf("OPR") > -1,
+    isIEedge = winNav.userAgent.indexOf("Edge") > -1,
+    isIOSChrome = winNav.userAgent.match("CriOS");
+if(isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isIEedge == false) {
+   // is Google Chrome or Opera
+   document.write('<link rel="stylesheet" type="text/css" media="all" href="chrome.css" />');
+}
+</script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-19281911-7']);
+  _gaq.push(['_setDomainName', 'practicaltypography.com']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+
+<body>
+<div class="content"><div id="doc"><title-block><topic>OpenType features</topic><short-rule>Font support + application support</short-rule></title-block><p><first-use>Open­Type</first-use> is a font for­mat in­vented in the late ’90s by Mi­crosoft and Adobe, and later adopted by Ap­ple. A ma­jor goal of Open­Type was to pro­vide bet­ter sup­port for in­ter­na­tional lan­guages and writ­ing sys­tems than its pre­de­ces­sors (Post­Script and <span class="no-hyphens">TrueType).</span></p><p>To do this, Open­Type in­cludes lay­out fea­tures—com­monly known as <first-use>Open­Type fea­tures</first-use>—that al­low fonts to spec­ify al­ter­nate let­ter­forms, and rules for how they should be in­serted into the text. These fea­tures are manda­tory for han­dling lan­guages like Ara­bic and <span class="no-hyphens">Urdu.</span></p><p>They’re not manda­tory in Eng­lish. But as a side ef­fect, Open­Type lay­out fea­tures have al­lowed type de­sign­ers to add lux­u­ries to their fonts—like <a href="alternate-figures.html" class="xref">al­ter­nate fig­ures</a>, <a href="small-caps.html" class="xref">small caps</a>, <a href="ligatures.html" class="xref">lig­a­tures</a>, <a href="ordinals.html" class="xref">or­di­nals</a>, and frac­tions—that had pre­vi­ously been dif­fi­cult or im­pos­si­ble. That’s the good <span class="no-hyphens">news.</span></p><aside>Open­Type fea­tures aren’t manda­tory. An Open­Type-for­mat font can have any num­ber of fea­tures, in­clud­ing <span class="no-hyphens">none.</span></aside><p>The bad news is that merely adding an Open­Type fea­ture to a font doesn’t make it avail­able to font users. Rather, the type­set­ting ap­pli­ca­tion also has to sup­port the fea­ture. Even though many Open­Type-en­hanced fonts are avail­able to­day, soft­ware com­pa­nies have been slow to up­grade their <span class="no-hyphens">applications.</span></p><p>This bit of back­ground just sets the stage for the an­noy­ing truth—that Open­Type fea­tures can add a lot of ty­po­graphic so­phis­ti­ca­tion to your doc­u­ment, but you can only use a given fea­ture if it’s sup­ported by both the font <em>and</em> the <span class="no-hyphens">application.</span></p><p>If you’re still in­ter­ested in us­ing Open­Type fea­tures, some <span class="no-hyphens">tips.</span></p><ol><li><p>De­sign­ers of pro­fes­sional fonts (see <a href="font-recommendations.html" class="xref">font rec­om­men­da­tions</a>) will have down­load­able spec­i­men sheets that show you which Open­Type fea­tures are sup­ported by their <span class="no-hyphens">fonts.</span></p></li><li><p>On the ap­pli­ca­tion side, the best over­all Open­Type fea­ture sup­port is found in pro­fes­sional page-lay­out ap­pli­ca­tions like Adobe In­De­sign, Adobe Il­lus­tra­tor, and Quark <span class="no-hyphens">Xpress.</span></p></li><li><p>All ma­jor desk­top web browsers sup­port Open­Type fea­tures. Sup­port is spot­tier among mo­bile web <span class="no-hyphens">browsers.</span></p></li><li><p>Re­cent ver­sions of Mi­crosoft Word (≥ 2010 for Win­dows, ≥ 2011 for Mac) sup­port a lim­ited set of Open­Type fea­tures (lig­a­tures, al­ter­nate fig­ures, and styl­is­tic sets). But Ex­cel and Pow­er­Point don’t sup­port any. If you think this is ironic and a lit­tle sad given that Mi­crosoft in­tro­duced the Open­Type for­mat in 1996, me <span class="no-hyphens">too.</span></p></li></ol><div class="howto"><div class="howto-name">How to activate OpenType features</div><p><program>Word</program> Right-click in the text and se­lect <ui>Font</ui> from the menu. Click the <ui>Advanced</ui> tab. The <ui>OpenType Features</ui> panel is in the mid­dle, and sup­ports <a href="ligatures.html" class="xref">lig­a­tures</a>, <a href="alternate-figures.html" class="xref">al­ter­nate fig­ures</a>, and styl­is­tic <span class="no-hyphens">sets.</span></p><p><program>Pages</program> <ui>Font</ui> panel (⌘ + t) → gear icon → <ui>Typography</ui>. This will open a panel show­ing you the Open­Type fea­tures in the cur­rent <span class="no-hyphens">font.</span></p><p><program>CSS</program> In the­ory, <code>font-fea­ture-set­tings</code> fol­lowed by a list of fea­tures. Sup­port is in­com­plete, how­ever, so browser pre­fixes <a href="http://caniuse.com/#search=font-feature-settings">are still <span class="no-hyphens">required.</span></a></p></div></div><a id="links"></a><div style="height:1em"></div><ul class="children"></ul></div>
+
+
+<!-- top nav -->
+<div class="nav-outer" id="top"><a href="index-2.html#toc"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="up"><a href="text-formatting.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="prev"><a href="mixing-fonts.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="next"><a href="times-new-roman.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="bottom"><div class="nav-inner"><div id="navtable">
+
+<div id="left">
+
+<a class="xref box-link" href="mixing-fonts.html"><span class="arrow">←</span>&nbsp;mixing fonts</a></div>
+
+
+<div id="center-left"><a class="xref box-link" href="index-2.html#toc">top</a></div>
+
+<div id="center-right"><a class="xref box-link" href="text-formatting.html#links">Chapter</a></div>
+
+<div id="right">
+<a class="xref box-link" href="times-new-roman.html">Times New Roman&nbsp;<span class="arrow">→</span></a></div>
+
+
+
+</div></div></div> 
+
+</body>
+
+<!-- Mirrored from practicaltypography.com/opentype-features.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 17:01:22 GMT -->
+</html>
+
+<!-- © 2013–16 Matthew Butterick -->
+

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.stuartsierra</groupId>
+  <artifactId>lazytest-parent</artifactId>
+  <version>1.2.3</version>
+  <versioning>
+    <release>1.2.3</release>
+    <versions>
+      <version>1.2.3</version>
+    </versions>
+    <lastUpdated>20101128143237</lastUpdated>
+  </versioning>
+</metadata>

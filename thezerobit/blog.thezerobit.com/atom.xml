@@ -1,0 +1,1239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[the zero bit stream]]></title>
+  <link href="http://blog.thezerobit.com/atom.xml" rel="self"/>
+  <link href="http://blog.thezerobit.com/"/>
+  <updated>2015-08-23T12:32:42-07:00</updated>
+  <id>http://blog.thezerobit.com/</id>
+  <author>
+    <name><![CDATA[Stephen A. Goss]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[The Flow of Code]]></title>
+    <link href="http://blog.thezerobit.com/2014/06/05/the-flow-of-code.html"/>
+    <updated>2014-06-05T00:00:00-07:00</updated>
+    <id>http://blog.thezerobit.com/2014/06/05/the-flow-of-code</id>
+    <content type="html"><![CDATA[<p>Here is a very simple piece of code that could be from any number of programming languages:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">X</span> <span class="o">=</span> <span class="nx">somefunction</span><span class="p">(</span><span class="nx">Expression</span><span class="p">);</span></code></pre></div>
+
+
+<p>An explanation of how this code is evaluated (assuming strict evaluation) might be something like this, &ldquo;Expression is evaluated and then passed to somefunction. The value returned from the function is bound to X.&rdquo; Right to left. This is unfortunate because we read from left to right. A few programming languages and environments treat left-to-right reading of code as an opportunity to structure the flow of data in a way that aids in comprehension and almost all have some tricks to simulate this in various ways, but none seem to fully embrace it in a practical way. I think we should.</p>
+
+<!--more-->
+
+
+<p>Shell programming with pipes is the most immediately recognizable environment for programming with data flowing left to right. Here is a silly example which abuses the <code>cat</code> command to achieve this flow:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">cat robots.txt <span class="p">|</span> sort <span class="p">|</span> grep <span class="s2">&quot;login&quot;</span></code></pre></div>
+
+
+<p>The &ldquo;correct&rdquo; way to write this according to pedants is this:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sort &lt; robots.txt <span class="p">|</span> grep <span class="s2">&quot;login&quot;</span></code></pre></div>
+
+
+<p>I always write my shell scripts the first way because you can follow the flow of data literally from left to right and it makes sense. You can also compose the functions (commands in this case, really, which act like functions on streams of bytes) and move them around more easily.</p>
+
+<p>Forth and related concatenative programming languages actually use this left to right flow, each element being a function which takes a stack and returns a new stack. Here is some code to do some very simple math and print the result:</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="mi">1</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="o">.</span></code></pre></div>
+
+
+<p>The evaluation of that code is something like &ldquo;Push 1 on the stack. Push 2 on the stack. Pop the top two values off the stack, add them and push the result. Push 3 on the stack. Pop the top two values off the stack, multiply them and push the result. Print the top value of the stack.&rdquo; Evaluation is left to right and the code is extremely succinct. The problem with Forth (and similar languages) is that longer and more complicated functions are difficult to read; you have to keep track of the stack in your head and what each value in the stack might represent (a whole bunch of unlabeled intermediate values which are lexically removed from where they are consumed). The value resulting from one operation will be used by another operation later on without any visual way to know this other than carefully considering the effects of the intermediate stack operations. That said, Joy, a concatenative language in the Forth tradition, is on my list of languages to learn.</p>
+
+<p>All C-like languages have the capability of building so-called fluent interfaces, where the object methods return objects such that operations can be chained from left to right using the dot (.) or arrow (->) operator. Here is a made-up example:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">myObject</span><span class="p">.</span><span class="nx">operation1</span><span class="p">().</span><span class="nx">operation2</span><span class="p">(</span><span class="nx">param</span><span class="p">).</span><span class="nx">operation3</span><span class="p">()</span></code></pre></div>
+
+
+<p>Of course, the word &ldquo;fluent&rdquo; shares etymology and meaning with &ldquo;flow.&rdquo; When I am working with languages in this family (pretty much 100% of the time when working for money) I tend to gravitate towards libraries with fluent interfaces. Even when I should be writing SQL, I’m generally writing code in a fluent interface that generates actual SQL queries behind the scenes. jQuery is a JavaScript library with a fluent interface that is used on a majority of JavaScript enabled websites. I believe it is, in part, the fluent nature of the interface that made it so popular. It also worked nicely to hide many browser differences and incompatibilities. Remember that when jQuery appeared, plenty of other libraries dealt with browser differences, but none had as nice a programming interface.</p>
+
+<p>Lisps have the power of macros to rearrange the structure of code before evaluation. Clojure creates something of a fluent interface with the threading macros (not related to execution threads). The (->) macro allows this code:</p>
+
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">last </span><span class="p">(</span><span class="nb">second </span><span class="p">(</span><span class="nb">first </span><span class="nv">object</span><span class="p">)</span> <span class="nv">param</span><span class="p">))</span></code></pre></div>
+
+
+<p>to be written like this:</p>
+
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">-&gt; </span><span class="nv">object</span> <span class="nb">first </span><span class="p">(</span><span class="nb">second </span><span class="nv">param</span><span class="p">)</span> <span class="nv">last</span><span class="p">)</span></code></pre></div>
+
+
+<p>There are limitations with this model as the language was not designed around this concept so while the (->) macro threads the values through the first argument of the functions, the (->>) macro threads the values through the last argument of each function and therefore they are only useful if you are working with an API designed to support one or the other. Clojure also has the doto macro which allows ugly, imperative Java APIs like this:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">object</span><span class="o">.</span><span class="na">foo</span><span class="o">();</span>
+<span class="n">object</span><span class="o">.</span><span class="na">bar</span><span class="o">(</span><span class="n">param</span><span class="o">);</span>
+<span class="n">object</span><span class="o">.</span><span class="na">baz</span><span class="o">();</span></code></pre></div>
+
+
+<p>To be consumed in Clojure like this:</p>
+
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">doto </span><span class="nv">object</span> <span class="p">(</span><span class="nf">.foo</span><span class="p">)</span> <span class="p">(</span><span class="nf">.bar</span> <span class="nv">param</span><span class="p">)</span> <span class="p">(</span><span class="nf">.baz</span><span class="p">))</span></code></pre></div>
+
+
+<p>The functional language F# that came from Microsoft Research comes with the forward pipe operator (|>) which is defined thus:</p>
+
+<div class="highlight"><pre><code class="language-fsharp" data-lang="fsharp"><span class="k">let</span> <span class="o">(|&gt;)</span> <span class="n">x</span> <span class="n">f</span> <span class="o">=</span> <span class="n">f</span> <span class="n">x</span></code></pre></div>
+
+
+<p>All it does is take the value on the left and apply it to the function on the right. F# allows partial application and operators are left associative so this code:</p>
+
+<div class="highlight"><pre><code class="language-fsharp" data-lang="fsharp"><span class="n">third</span> <span class="o">(</span><span class="n">second</span> <span class="n">param</span> <span class="o">(</span><span class="n">first</span> <span class="n">value</span><span class="o">))</span></code></pre></div>
+
+
+<p>Can be rewritten like this, creating a nice flow:</p>
+
+<div class="highlight"><pre><code class="language-fsharp" data-lang="fsharp"><span class="n">value</span> <span class="o">|&gt;</span> <span class="n">first</span> <span class="o">|&gt;</span> <span class="n">second</span> <span class="n">param</span> <span class="o">|&gt;</span> <span class="n">third</span></code></pre></div>
+
+
+<p>In Haskell the (|>) operator can be defined in exactly the same way as F# and appears to work the same way (with lazy evaluation). However, a discussion of Haskell in incomplete if you aren’t talking about monads. Consider that the second law of monads is this:</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="nf">return</span> <span class="n">x</span> <span class="o">&gt;&gt;=</span> <span class="n">f</span> <span class="ow">=</span> <span class="n">f</span> <span class="n">x</span></code></pre></div>
+
+
+<p>If we combine this with the Identity monad which doesn’t really do anything useful (like ordering a burrito without the tortilla), we should be able to use the bind operator (>>=) to get the effect of switching the order of function application and hence have our values flow through the functions from left to right. To reduce confusion, let’s give &ldquo;return&rdquo; a better name:</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kr">let</span> <span class="n">burrito</span> <span class="n">x</span> <span class="ow">=</span> <span class="n">return</span> <span class="n">x</span></code></pre></div>
+
+
+<p>Here is a function for adding ingredients that can chain this way:</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kr">let</span> <span class="n">addIngredient</span> <span class="n">i</span> <span class="n">x</span> <span class="ow">=</span> <span class="n">burrito</span> <span class="p">(</span><span class="n">x</span> <span class="o">++</span> <span class="s">&quot; &quot;</span> <span class="o">++</span> <span class="n">i</span><span class="p">)</span></code></pre></div>
+
+
+<p>Now we can do this:</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="nf">burrito</span> <span class="s">&quot;beans&quot;</span> <span class="o">&gt;&gt;=</span> <span class="n">addIngredient</span> <span class="s">&quot;cheese&quot;</span> <span class="o">&gt;&gt;=</span> <span class="n">addIngredient</span> <span class="s">&quot;rice&quot;</span></code></pre></div>
+
+
+<p>Which produces the value &ldquo;beans cheese rice&rdquo;; more evidence that Haskell is the greatest programming language in the world and monads can do anything. That would be great if it were the whole story, but Haskell has as a strange motto, &ldquo;Avoid Success at All Costs!&rdquo;, and the preferred way to write monadic code is with the &ldquo;do&rdquo; notation which breaks the flow and looks a lot like drab, imperative code.</p>
+
+<p>Prolog is interesting because a clause in Prolog has two interpretations, the logical meaning and the resolution which is left to right. Consider this Prolog predicate (a predicate is similar to a function):</p>
+
+<div class="highlight"><pre><code class="language-prolog" data-lang="prolog"><span class="nf">happy</span><span class="p">(</span><span class="nv">X</span><span class="p">)</span> <span class="p">:-</span> <span class="nf">healthy</span><span class="p">(</span><span class="nv">X</span><span class="p">),</span><span class="o">not</span><span class="p">(</span><span class="nf">incarcerated</span><span class="p">(</span><span class="nv">X</span><span class="p">)),</span><span class="nf">wealthy</span><span class="p">(</span><span class="nv">X</span><span class="p">).</span></code></pre></div>
+
+
+<p>The logical meaning of this predicate is something like &ldquo;X is happy if X is healthy, and X is not incarcerated, and X is wealthy.&rdquo; The way it is resolved is more like, &ldquo;check if X is healthy, if not fail, if so check if X is incarcerated, if so fail, if not check if X is wealthy, if so succeed.&rdquo; The (:-) is pronounced &ldquo;if&rdquo; and represents logical implication (it is supposed to resemble an arrow pointing to the left) and the comma (,) is pronounced &ldquo;and&rdquo; and represents logical conjunction. Conjunctions are checked left to right and the associated predicates are called much like functions. Some predicates can have side effects. For example the &ldquo;write&rdquo; predicate prints the value passed to it, and then succeeds deterministically.</p>
+
+<p>Predicates are nondeterministic which means they may succeed or fail (no further predicates in the conjunction are called on failure) or may succeed multiple times, re-binding variables passed to it in different ways. However, if you stick to deterministic predicates (those that are guaranteed to succeed once and only once) you can write code that reads and executes left to right. Also, starting a line with (:-) is a way to call predicates in a Prolog script. The following Prolog program prints &ldquo;22&rdquo;:</p>
+
+<div class="highlight"><pre><code class="language-prolog" data-lang="prolog"><span class="nf">double</span><span class="p">(</span><span class="nv">In</span><span class="p">,</span> <span class="nv">Out</span><span class="p">)</span> <span class="p">:-</span> <span class="nv">Out</span> <span class="o">is</span> <span class="nv">In</span> <span class="o">+</span> <span class="nv">In</span><span class="p">.</span>
+<span class="nf">plus2</span><span class="p">(</span><span class="nv">In</span><span class="p">,</span> <span class="nv">Out</span><span class="p">)</span> <span class="p">:-</span> <span class="nv">Out</span> <span class="o">is</span> <span class="nv">In</span> <span class="o">+</span> <span class="mi">2</span> <span class="p">.</span>
+<span class="p">:-</span> <span class="nf">double</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="nv">X</span><span class="p">),</span><span class="nf">plus2</span><span class="p">(</span><span class="nv">X</span><span class="p">,</span> <span class="nv">Y</span><span class="p">),</span><span class="nf">write</span><span class="p">(</span><span class="nv">Y</span><span class="p">).</span></code></pre></div>
+
+
+<p>This works because the &ldquo;is&rdquo; operator evaluates the structure on the right side according to mathematical rules and unifies it with the left side. If the left side is a variable, this works a bit like binding or assignment. This can get tedious if you are stringing a lot of predicates together, since you have to come up with names for each output/input variable combination:</p>
+
+<div class="highlight"><pre><code class="language-prolog" data-lang="prolog"><span class="p">:-</span> <span class="nf">double</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="nv">X</span><span class="p">),</span><span class="nf">plus2</span><span class="p">(</span><span class="nv">X</span><span class="p">,</span> <span class="nv">Y</span><span class="p">),</span><span class="nf">plus2</span><span class="p">(</span><span class="nv">Y</span><span class="p">,</span> <span class="nv">Z</span><span class="p">),</span><span class="nf">double</span><span class="p">(</span><span class="nv">Z</span><span class="p">,</span> <span class="nv">W</span><span class="p">),</span><span class="nf">write</span><span class="p">(</span><span class="nv">W</span><span class="p">).</span></code></pre></div>
+
+
+<p>Fortunately, there is a thing called Definite Clause Grammar (DCG) which is actually designed to help parse lists easily but it assumes that you are going to combine a bunch of predicates that take an input and output variable as the last two parameters, passing the output of one to the input of the next one, and elides all of that. It uses the (&ndash;>) operator instead of (:-). This bit of code is roughly equivalent to the last, both print &ldquo;48&rdquo;:</p>
+
+<div class="highlight"><pre><code class="language-prolog" data-lang="prolog"><span class="nf">double_plus_good</span> <span class="o">--&gt;</span> <span class="s-Atom">double</span><span class="p">,</span><span class="s-Atom">plus2</span><span class="p">,</span><span class="s-Atom">plus2</span><span class="p">,</span><span class="s-Atom">double</span><span class="p">.</span>
+<span class="p">:-</span> <span class="nf">double_plus_good</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="nv">X</span><span class="p">),</span><span class="nf">write</span><span class="p">(</span><span class="nv">X</span><span class="p">).</span></code></pre></div>
+
+
+<p>I submit that most programmers end up coercing the languages they work in into a left to right flow style because it is natural. An algorithm is a series of steps to produce a calculation, like a recipe. Programming is encoding algorithms, so it is natural to want to view them as steps. While this may sound like imperative style, it is entirely orthogonal. The steps in an algorithm can (and most often should) be pure functions, even if the language does not enforce it.</p>
+
+<p>I propose a programming language that is built around this left to right flow like Forth and friends (minus the stack manipulation). Here is some code in a version of my imaginary language:</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="s">&quot;localhost:customerdb&quot;</span> <span class="n">getDatabase</span> <span class="p">(</span><span class="n">get</span> <span class="s">&quot;people&quot;</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">PeopleRecords</span>
+<span class="s">&quot;output.log&quot;</span> <span class="n">getFile</span> <span class="n">recordParse</span> <span class="ow">-&gt;</span> <span class="kt">LogRecords</span>
+<span class="kt">PeopleRecords</span> <span class="p">(</span><span class="s">&quot;customer&quot;</span> <span class="ow">=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">(</span><span class="n">project</span> <span class="s">&quot;cookie&quot;</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">CustCookies</span>
+<span class="kt">LogRecords</span> <span class="p">(</span><span class="s">&quot;cookie&quot;</span> <span class="kr">in</span> <span class="kt">CustCookies</span><span class="p">)</span> <span class="n">count</span> <span class="ow">-&gt;</span> <span class="kt">CustomerHits</span>
+<span class="kt">LogRecords</span> <span class="n">count</span> <span class="ow">-&gt;</span> <span class="kt">AllHits</span>
+<span class="kt">CustomerHits</span> <span class="p">(</span><span class="n">divBy</span> <span class="kt">AllHits</span><span class="p">)</span> <span class="n">print</span></code></pre></div>
+
+
+<p>Each new line starts with a value, and then that value gets passed through successive functions which return new values (at least that is the semantics of it, evaluation could occur in many ways and the compiler/runtime could optimize in any number of ways). Functions start with a lower case character, locally bound values start with upper case letter and all names are camel cased, though these conventions are arbitrary. The arrow operator (->) signifies binding the value returned from previous function to a name. Functions which have parameters are enclosed with those parameters in parentheses and may be infix as in the case of (=) and &ldquo;in&rdquo;. Nothing is nested more than 1 level. I believe nesting of all kinds to be a source of confusion and complexity that hinders reading code, although I admit there are benefits, too, like terse code and the power of closures. There is no invisible stack to keep track of. The types are mostly obvious and easily inferred. PeopleRecords and LogRecords are of a different internal type (handle to database table with constraints and handle to parsed log file) but have the same interface (conceptual model) which is &ldquo;bag of records.&rdquo; The code reads from left to right, top to bottom.</p>
+
+<p>Some other things that I didn’t address are function definition and code branching (conditionals, switch, etc), record types, interfaces. I think pattern matching in the function head would be sufficient for all branching. Disallowing other types of branching within a function could improve code readability dramatically. Record types could have a F#-style type provider mechanism. Go’s statically duck-typed interface system is nice. That combined with multimethod dispatch, pattern matching and generic/abstract types could solve the so-called expression problem and most use cases. Most of these details are unrelated to the main feature, and are matters of taste or practicality.</p>
+
+<p>If you have any thoughts on this, tweet me.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Python 3 Is Killing Python]]></title>
+    <link href="http://blog.thezerobit.com/2014/05/25/python-3-is-killing-python.html"/>
+    <updated>2014-05-25T00:00:00-07:00</updated>
+    <id>http://blog.thezerobit.com/2014/05/25/python-3-is-killing-python</id>
+    <content type="html"><![CDATA[<p>Python 3 is easily the worst thing to happen to the Python community. I remember when I first used Python, I had been spending a lot of time in C++ land, and Python was like a revelation. I could open up a text editor and have a working program in seconds or minutes, not hours or days. I remember when Python 2.5 came out with a lot of neat new language features. I love Python, but I acknowledge that it has weaknesses, but that’s OK, all programming languages do. Its strengths are what make it interesting. While Python 3 has some tiny, incremental improvements over Python 2, it has lost many of Python 2&rsquo;s strengths.</p>
+
+<!--more-->
+
+
+<p>One of the great strengths of Python 2 is the long tail of 3rd party libraries to do, well, just about anything. Python 3 doesn’t have this. Yes, a lot of libraries have been ported, but ten times as many have not, and are not trivial to port. For example, you have a need to parse X, where X is something nontrivial to parse and not extremely common like YAML or JSON. There is a good chance that a parser has already been written for X in Python 2 and has not been ported to Python 3. Additionally, given the fundamental differences between Python 2&rsquo;s byte string (str) and Python 3&rsquo;s byte string (bytes), it will not be easy to port, in fact, it will be difficult to port and will require quite a bit of trickery to port it in such a way as to maintain Python 2 and Python 3 compatibility. So, you have a few choices, write your app in Python 2 (a deprecated language) quickly, port the library (and all its dependencies) which will take ten times as long, or use a different programming language that also has a long tail of libraries, but doesn’t suffer the Python 2 / 3 problem. Choice #2 is obviously not popular, because if it was, we’d have a lot of Python 3 apps in production, and much of the long tail of Python 2 libraries would be ported. Neither of those things is true. People either continue to write software in Python 2 or they pick another language that did not shoot itself in the face.</p>
+
+<p>Another great strength of Python 2 was that programs written in it would almost always run on the next version of Python without much alteration. If your company runs on software written in Python 2 (as many do) it will cost you a great deal of money to port it to Python 3, because your requirements file is probably quite large and stuffed with all manner of libraries that have not been ported. There is no sane business reason to spend 100s of thousands of dollars or millions of dollars worth of engineering time to port to Python 3. You might as well ask someone to port their entire codebase to Ruby. Except, that would be cheaper. Now, if you are going to have to rewrite your software either way, would you choose Python 3? No.</p>
+
+<p>Popular libraries that support Python 2 and 3 are almost all written in a subset of the languages that runs on both platforms. SQLAlchemy, one of my favorite Python libraries, does this well. Django does this, too, but not so well. This subset language, which I will call Python X, is not fun to use, requires weird hacks, and generally is less powerful than either Python 2 or Python 3. How fun is it to port existing Python 2 libraries to Python X? Not fun at all which is sad because fun used to be what made Python so great.</p>
+
+<p>Python 2, sadly, has been deprecated. Python 3 languishes in disuse. The changes in Python 3 are small. Not much was gained, yet much was lost. For the past several months, I have been building applications and services in Python 3. I’m not blown away by it. It is very similar to writing software in Python 2, except that there is a much smaller pool of 3rd party libraries available. There’s really nothing amazing here. The Python community was supposed to be moving to Python 3 over the past few years, but it has become increasingly obvious that people are moving to new languages (or old languages rediscovered). Some of these languages have great features, like powerful type systems, pattern matching, better performance, better threading and concurrency, simpler FFI, nicer lambdas, and so on.</p>
+
+<p>One solution is to fork Python 2.7, and continue developing the language, adding features in a backwards compatible way so large, unportable (due to financial constraints) Python 2 applications can continue to evolve and improve and bring value to the people and companies that invested so much time developing them. This is the correct thing to do (actually, it would be best if Guido and other leaders in the Python community did this officially instead of forcing a fork). Features from Python 3 that can be backported to Python 2 should be, and a Python 2.8 release should be made. Those few who have actually spent time to write new software in pure Python 3 can use a tool like 3to2 to bring Python 2.8 compatibility.</p>
+
+<p>There are perhaps other solutions, but reviving Python 2 seems to me to be the correct thing to do. The Python 2 revival will not happen officially because those in charge of such things have shown disdain for users of Python 2. If the community does not rally and revive Python 2, Python 3 will after many years become the standard Python and many libraries will be ported (though most will certainly never) and many investments will be lost. The community will, by that time, have shrunk dramatically, and lost its former glory. People will move on.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Beautiful Quicksort in Common Lisp]]></title>
+    <link href="http://blog.thezerobit.com/2012/09/01/beautiful-quicksort-in-common-lisp.html"/>
+    <updated>2012-09-01T00:00:00-07:00</updated>
+    <id>http://blog.thezerobit.com/2012/09/01/beautiful-quicksort-in-common-lisp</id>
+    <content type="html"><![CDATA[<p>Disclaimer: This is Quicksort, just not one you&rsquo;d use in
+production. You can see it does twice as many comparisons as necessary,
+or much worse if it encounters a pre-sorted list. The list manipulation
+(via ++ or APPEND) is doing more work and using more memory than
+necessary, even for a purely functional implementation.</p>
+
+<!--more-->
+
+
+<h3>Quicksort in Haskell vs. Common Lisp</h3>
+
+<p>Haskell apologists often cite how Haskell code is terse and expressive.
+I&rsquo;ve used Haskell a bit, and while I do not find its syntax very
+friendly, it is quite powerful. (As a side note, I really like Standard
+ML, and I wish I could transplant its eagerness and impurity into
+Haskell.) Common Lisp is a master of multi-paradigm programming and it
+wears the functional hat pretty well, too. So, let&rsquo;s see how it stands
+up against Haskell.</p>
+
+<p>The canonical &ldquo;beautiful&rdquo; Haskell function is the quicksort. Here it is:</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="nf">quicksort</span> <span class="ow">::</span> <span class="kt">Ord</span> <span class="n">a</span> <span class="ow">=&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="ow">-&gt;</span> <span class="p">[</span><span class="n">a</span><span class="p">]</span>
+<span class="nf">quicksort</span> <span class="kt">[]</span>     <span class="ow">=</span> <span class="kt">[]</span>
+<span class="nf">quicksort</span> <span class="p">(</span><span class="n">p</span><span class="kt">:</span><span class="n">xs</span><span class="p">)</span> <span class="ow">=</span> <span class="p">(</span><span class="n">quicksort</span> <span class="n">lesser</span><span class="p">)</span> <span class="o">++</span> <span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">++</span> <span class="p">(</span><span class="n">quicksort</span> <span class="n">greater</span><span class="p">)</span>
+    <span class="kr">where</span>
+        <span class="n">lesser</span>  <span class="ow">=</span> <span class="n">filter</span> <span class="p">(</span><span class="o">&lt;</span> <span class="n">p</span><span class="p">)</span> <span class="n">xs</span>
+        <span class="n">greater</span> <span class="ow">=</span> <span class="n">filter</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="n">p</span><span class="p">)</span> <span class="n">xs</span></code></pre></div>
+
+
+<p>I gotta admit, that&rsquo;s a pretty good one. Let&rsquo;s see what it looks like in
+Common Lisp.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">quicksort</span> <span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">when</span> <span class="nb">list</span>
+    <span class="p">(</span><span class="nb">destructuring-bind</span> <span class="p">(</span><span class="nv">p</span> <span class="o">.</span> <span class="nv">xs</span><span class="p">)</span> <span class="nb">list</span>
+      <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">lesser</span> <span class="p">(</span><span class="nb">remove-if-not</span> <span class="p">(</span><span class="k">lambda</span> <span class="p">(</span><span class="nv">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">&lt;</span> <span class="nv">x</span> <span class="nv">p</span><span class="p">))</span> <span class="nv">xs</span><span class="p">))</span>
+            <span class="p">(</span><span class="nv">greater</span> <span class="p">(</span><span class="nb">remove-if-not</span> <span class="p">(</span><span class="k">lambda</span> <span class="p">(</span><span class="nv">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">&gt;=</span> <span class="nv">x</span> <span class="nv">p</span><span class="p">))</span> <span class="nv">xs</span><span class="p">)))</span>
+        <span class="p">(</span><span class="nb">append</span> <span class="p">(</span><span class="nv">quicksort</span> <span class="nv">lesser</span><span class="p">)</span> <span class="p">(</span><span class="nb">list</span> <span class="nv">p</span><span class="p">)</span> <span class="p">(</span><span class="nv">quicksort</span> <span class="nv">greater</span><span class="p">))))))</span></code></pre></div>
+
+
+<p>I probably wouldn&rsquo;t write it this way, but this is the closest
+approximation of what the Haskell function is doing. Let&rsquo;s break it down
+into pieces and show which parts correspond in the two examples.</p>
+
+<p>The Haskell code is using pattern matching to deal with the
+empty list case, and destructuring to split the list into head and tail.</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="nf">quicksort</span> <span class="kt">[]</span>     <span class="ow">=</span> <span class="kt">[]</span>
+<span class="nf">quicksort</span> <span class="p">(</span><span class="n">p</span><span class="kt">:</span><span class="n">xs</span><span class="p">)</span> <span class="ow">=</span> <span class="n">expr</span></code></pre></div>
+
+
+<p>The Common Lisp code is using WHEN on the input (which returns NIL for an
+empty list and otherwise evaluates the expression) and is using
+DESTRUCTURING-BIND to split the list into head and tail.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">when</span> <span class="nb">list</span>
+  <span class="p">(</span><span class="nb">destructuring-bind</span> <span class="p">(</span><span class="nv">p</span> <span class="o">.</span> <span class="nv">xs</span><span class="p">)</span> <span class="nb">list</span>
+    <span class="nv">expr</span><span class="p">))</span></code></pre></div>
+
+
+<p>Haskell uses &ldquo;where&rdquo; to bind local variable in an expression:</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="o">...</span> <span class="ow">=</span> <span class="n">expr</span>
+    <span class="kr">where</span>
+        <span class="n">binding_a</span> <span class="ow">=</span> <span class="n">expr_a</span>
+        <span class="n">binding_b</span> <span class="ow">=</span> <span class="n">expr_b</span></code></pre></div>
+
+
+<p>Common Lisp uses LET to bind local variables in an expression:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">binding-a</span> <span class="nv">expr-a</span><span class="p">)</span>
+      <span class="p">(</span><span class="nv">binding-b</span> <span class="nv">expr-b</span><span class="p">)</span>
+  <span class="nv">expr</span><span class="p">)</span></code></pre></div>
+
+
+<p>Haskell uses partial application of the comparison functions with
+&ldquo;filter&rdquo; to filter the lists.</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="nf">lesser</span>  <span class="ow">=</span> <span class="n">filter</span> <span class="p">(</span><span class="o">&lt;</span> <span class="n">p</span><span class="p">)</span> <span class="n">xs</span>
+<span class="nf">greater</span> <span class="ow">=</span> <span class="n">filter</span> <span class="p">(</span><span class="o">&gt;=</span> <span class="n">p</span><span class="p">)</span> <span class="n">xs</span></code></pre></div>
+
+
+<p>Common Lisp uses lambdas to construct the filtering closures and
+REMOVE-IF-NOT which is essentially equivalent to Haskell&rsquo;s &ldquo;filter&rdquo;.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nv">lesser</span> <span class="p">(</span><span class="nb">remove-if-not</span> <span class="p">(</span><span class="k">lambda</span> <span class="p">(</span><span class="nv">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">&lt;</span> <span class="nv">x</span> <span class="nv">p</span><span class="p">))</span> <span class="nv">xs</span><span class="p">))</span>
+<span class="p">(</span><span class="nv">greater</span> <span class="p">(</span><span class="nb">remove-if-not</span> <span class="p">(</span><span class="k">lambda</span> <span class="p">(</span><span class="nv">x</span><span class="p">)</span> <span class="p">(</span><span class="nb">&gt;=</span> <span class="nv">x</span> <span class="nv">p</span><span class="p">))</span> <span class="nv">xs</span><span class="p">))</span></code></pre></div>
+
+
+<h3>Even Terser</h3>
+
+<p>OK, but there&rsquo;s an even shorter, one-line Haskell quicksort.</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="nf">qsort</span> <span class="p">(</span><span class="n">p</span><span class="kt">:</span><span class="n">xs</span><span class="p">)</span> <span class="ow">=</span> <span class="n">qsort</span> <span class="p">[</span><span class="n">x</span> <span class="o">|</span> <span class="n">x</span><span class="ow">&lt;-</span><span class="n">xs</span><span class="p">,</span> <span class="n">x</span><span class="o">&lt;</span><span class="n">p</span><span class="p">]</span> <span class="o">++</span> <span class="p">[</span><span class="n">p</span><span class="p">]</span> <span class="o">++</span> <span class="n">qsort</span> <span class="p">[</span><span class="n">x</span> <span class="o">|</span> <span class="n">x</span><span class="ow">&lt;-</span><span class="n">xs</span><span class="p">,</span> <span class="n">x</span><span class="o">&gt;=</span><span class="n">p</span><span class="p">]</span></code></pre></div>
+
+
+<p>Let&rsquo;s ignore for now the fact that using 1 and 2 letter variables is a
+very silly way to write &ldquo;shorter&rdquo; code. What&rsquo;s great about this
+solution, though, is the use of list comprehensions. Common Lisp doesn&rsquo;t
+have list comprehensions, but it doesn&rsquo;t matter because it has
+mother-flipping macros, and we can add list comprehensions.</p>
+
+<p>Now, I could pull in a library that gives list comprehensions, but
+wouldn&rsquo;t it be funner to write the macro right here?</p>
+
+<p>I&rsquo;m not going to build a general replacement for all Haskell list
+comprehensions, just the ones here. I see 4 parts, the value, a binding,
+a list, and a test. Here&rsquo;s my first shot at a list comprehension macro:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defmacro</span> <span class="nv">@</span> <span class="p">(</span><span class="nv">value</span> <span class="nv">bind</span> <span class="nb">list</span> <span class="nv">test</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">newlist</span> <span class="p">(</span><span class="nb">gensym</span><span class="p">)))</span>
+    <span class="o">`</span><span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="o">,</span><span class="nv">newlist</span> <span class="no">nil</span><span class="p">))</span>
+       <span class="p">(</span><span class="nb">dolist</span> <span class="p">(</span><span class="o">,</span><span class="nv">bind</span> <span class="o">,</span><span class="nb">list</span><span class="p">)</span>
+         <span class="p">(</span><span class="nb">when</span> <span class="o">,</span><span class="nv">test</span>
+           <span class="p">(</span><span class="nb">push</span> <span class="o">,</span><span class="nv">value</span> <span class="o">,</span><span class="nv">newlist</span><span class="p">)))</span>
+       <span class="p">(</span><span class="nb">nreverse</span> <span class="o">,</span><span class="nv">newlist</span><span class="p">))))</span></code></pre></div>
+
+
+<p>I selected the @ symbol because it&rsquo;s short and sweet, and mainly just
+short. The Haskell folks seem to think 1-letter names are the bees
+knees, so there you go. A quick test:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="c1">;; Something like this in Haskell: [x*2 | x&lt;-[1, 2, 3, 4, 5, 6, 7], x&gt;3]</span>
+<span class="p">(</span><span class="nv">@</span> <span class="p">(</span><span class="nb">*</span> <span class="mi">2</span> <span class="nv">x</span><span class="p">)</span> <span class="nv">x</span> <span class="p">(</span><span class="nb">list</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">7</span><span class="p">)</span> <span class="p">(</span><span class="nb">&gt;</span> <span class="nv">x</span> <span class="mi">3</span><span class="p">))</span>
+<span class="c1">;;-&gt; (8 10 12 14)</span></code></pre></div>
+
+
+<p>In case you don&rsquo;t know how DEFMACRO works, it takes the input forms,
+unevaluated and returns a list which is evaluated it its place. You can
+debug macros to see the intermediate form by just doing the
+transformation with MACROEXPAND:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">macroexpand</span> <span class="o">&#39;</span><span class="p">(</span><span class="nv">@</span> <span class="p">(</span><span class="nb">*</span> <span class="mi">2</span> <span class="nv">x</span><span class="p">)</span> <span class="nv">x</span> <span class="p">(</span><span class="nb">list</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">7</span><span class="p">)</span> <span class="p">(</span><span class="nb">&gt;</span> <span class="nv">x</span> <span class="mi">3</span><span class="p">)))</span>
+<span class="p">(</span><span class="nv">LET</span> <span class="p">((</span><span class="ss">#:G791</span> <span class="no">NIL</span><span class="p">))</span>
+  <span class="p">(</span><span class="nv">DOLIST</span> <span class="p">(</span><span class="nv">X</span> <span class="p">(</span><span class="nv">LIST</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span> <span class="mi">6</span> <span class="mi">7</span><span class="p">))</span> <span class="p">(</span><span class="nv">WHEN</span> <span class="p">(</span><span class="nb">&gt;</span> <span class="nv">X</span> <span class="mi">3</span><span class="p">)</span> <span class="p">(</span><span class="nv">PUSH</span> <span class="p">(</span><span class="nb">*</span> <span class="mi">2</span> <span class="nv">X</span><span class="p">)</span> <span class="ss">#:G791</span><span class="p">)))</span>
+  <span class="p">(</span><span class="nv">NREVERSE</span> <span class="ss">#:G791</span><span class="p">))</span></code></pre></div>
+
+
+<p>Alright, armed with our new list comprehension macro, let&rsquo;s write our
+super-short quicksort:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">qsort</span> <span class="p">(</span><span class="nv">l</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">when</span> <span class="nv">l</span> <span class="p">(</span><span class="nb">destructuring-bind</span> <span class="p">(</span><span class="nv">p</span> <span class="o">.</span> <span class="nv">xs</span><span class="p">)</span> <span class="nv">l</span>
+            <span class="p">(</span><span class="nb">append</span> <span class="p">(</span><span class="nv">qsort</span> <span class="p">(</span><span class="nv">@</span> <span class="nv">x</span> <span class="nv">x</span> <span class="nv">xs</span> <span class="p">(</span><span class="nb">&lt;</span> <span class="nv">x</span> <span class="nv">p</span><span class="p">)))</span> <span class="p">(</span><span class="nb">list</span> <span class="nv">p</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nv">qsort</span> <span class="p">(</span><span class="nv">@</span> <span class="nv">x</span> <span class="nv">x</span> <span class="nv">xs</span> <span class="p">(</span><span class="nb">&gt;=</span> <span class="nv">x</span> <span class="nv">p</span><span class="p">)))))))</span></code></pre></div>
+
+
+<p>That&rsquo;s pretty good. I still have to use WHEN to deal with the null case
+which Haskell seems to auto-magically handle, and I still have to use
+DESTRUCTURING-BIND explicitly. I think it holds up to Haskell&rsquo;s qsort.</p>
+
+<h3>More Generic</h3>
+
+<p>Oh, I know, the Haskell qsort function applies to lists of any Ord type,
+which is to say, any type that can be ordered (or at least implements
+the proper interface) (disclaimer: I don&rsquo;t pretend to know Haskell-speak
+when it comes to Classes, Types, Typeclasses, etc. I got it wrong, I
+don&rsquo;t care.). Common Lisp ships with CLOS which provides the ability to
+create generic methods, but it doesn&rsquo;t really ship with many implemented
+interfaces. That could be considered a shortcoming in the language, but
+more properly, it is a shortcoming in libraries. You can easily define
+generic methods and implement them on all the types you might want to
+sort, even types from other packages and libraries.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defgeneric</span> <span class="nv">lt</span> <span class="p">(</span><span class="nb">some</span> <span class="nv">other</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb">defmethod</span> <span class="nv">lt</span> <span class="p">((</span><span class="nb">some</span> <span class="nc">number</span><span class="p">)</span> <span class="p">(</span><span class="nv">other</span> <span class="nc">number</span><span class="p">))</span> <span class="p">(</span><span class="nb">&lt;</span> <span class="nb">some</span> <span class="nv">other</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb">defmethod</span> <span class="nv">lt</span> <span class="p">((</span><span class="nb">some</span> <span class="nb">string</span><span class="p">)</span> <span class="p">(</span><span class="nv">other</span> <span class="nb">string</span><span class="p">))</span> <span class="p">(</span><span class="nb">string&lt;</span> <span class="nb">some</span> <span class="nv">other</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb">defun</span> <span class="nv">qsort</span> <span class="p">(</span><span class="nv">l</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">when</span> <span class="nv">l</span> <span class="p">(</span><span class="nb">destructuring-bind</span> <span class="p">(</span><span class="nv">p</span> <span class="o">.</span> <span class="nv">xs</span><span class="p">)</span> <span class="nv">l</span>
+            <span class="p">(</span><span class="nb">append</span> <span class="p">(</span><span class="nv">qsort</span> <span class="p">(</span><span class="nv">@</span> <span class="nv">x</span> <span class="nv">x</span> <span class="nv">xs</span> <span class="p">(</span><span class="nv">lt</span> <span class="nv">x</span> <span class="nv">p</span><span class="p">)))</span> <span class="p">(</span><span class="nb">list</span> <span class="nv">p</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nv">qsort</span> <span class="p">(</span><span class="nv">@</span> <span class="nv">x</span> <span class="nv">x</span> <span class="nv">xs</span> <span class="p">(</span><span class="nb">not</span> <span class="p">(</span><span class="nv">lt</span> <span class="nv">x</span> <span class="nv">p</span><span class="p">))))))))</span>
+
+<span class="p">(</span><span class="nv">qsort</span> <span class="p">(</span><span class="nb">list</span> <span class="s">&quot;this&quot;</span> <span class="s">&quot;is&quot;</span> <span class="s">&quot;only&quot;</span> <span class="s">&quot;a&quot;</span> <span class="s">&quot;test&quot;</span><span class="p">))</span>
+<span class="c1">;;-&gt; (&quot;a&quot; &quot;is&quot; &quot;only&quot; &quot;test&quot; &quot;this&quot;)</span>
+
+<span class="p">(</span><span class="nv">qsort</span> <span class="p">(</span><span class="nb">list</span> <span class="m">12/11</span> <span class="mf">-1.09</span> <span class="mi">3000</span><span class="p">))</span>
+<span class="c1">;;-&gt; (-1.09 12/11 3000)</span></code></pre></div>
+
+
+<p>So we can be significantly generic with Common Lisp, too. No, it doesn&rsquo;t
+have Haskell&rsquo;s compile time type-checking goodness (or badness, however
+you want to slice it), it is a fundamentally dynamically typed language.
+But I think it matches Haskell in expressivity, and what it lacks in
+terse syntax, it makes up for with flexibility through macros, generic
+methods, and dynamism.</p>
+
+<p>In conclusion: I love Haskell, please don&rsquo;t shoot me. Also, Common Lisp
+is pretty neat, too. Both are definitely worth learning and excellent
+tools for functional programming.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Concurrency in Common Lisp With ChanL]]></title>
+    <link href="http://blog.thezerobit.com/2012/08/26/concurrency-in-common-lisp-with-chanl.html"/>
+    <updated>2012-08-26T00:00:00-07:00</updated>
+    <id>http://blog.thezerobit.com/2012/08/26/concurrency-in-common-lisp-with-chanl</id>
+    <content type="html"><![CDATA[<p>Rob Pike did a great <a href="http://www.youtube.com/watch?v=HmxnCEa8Ctw">talk</a>
+at Google on concurrency in Newsqueak. The gist of it is that you spawn
+concurrent tasks in separate lightweight processes and synchronize by
+communicating through channels. That stuff worked its way into the
+programming language Go.  After seeing that video I wanted to try it out
+myself in Common Lisp, of course. It turns out there is a
+Quicklisp-installable library called
+<a href="https://github.com/sykopomp/chanl">ChanL</a> that provides just that
+functionality. I don&rsquo;t know how lightweight the threads are, but the
+interface is similar.</p>
+
+<!--more-->
+
+
+<p>A simple, but effective example of using channels is to perform a number
+of IO-bound tasks in parallel, such as retrieving several web pages.
+It&rsquo;s surprisingly simple to do in parallel. To start, I&rsquo;ll define a
+little timing macro:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defmacro</span> <span class="nv">time-it</span> <span class="p">(</span><span class="k">&amp;body</span> <span class="nv">body</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">start-time</span> <span class="p">(</span><span class="nb">gensym</span><span class="p">)))</span>
+    <span class="o">`</span><span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="o">,</span><span class="nv">start-time</span> <span class="p">(</span><span class="nb">get-internal-real-time</span><span class="p">)))</span>
+       <span class="o">,@</span><span class="nv">body</span>
+       <span class="p">(</span><span class="nb">format</span> <span class="no">t</span> <span class="s">&quot;Runtime: ~a milliseconds.~%&quot;</span> <span class="p">(</span><span class="nb">-</span> <span class="p">(</span><span class="nb">get-internal-real-time</span><span class="p">)</span> <span class="o">,</span><span class="nv">start-time</span><span class="p">)))))</span></code></pre></div>
+
+
+<p>Then, let&rsquo;s load the ChanL library and Drakma (for simple HTTP requests)
+using quicklisp:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nv">ql:quickload</span> <span class="s">&quot;drakma&quot;</span><span class="p">)</span>
+<span class="p">(</span><span class="nv">ql:quickload</span> <span class="s">&quot;chanl&quot;</span><span class="p">)</span></code></pre></div>
+
+
+<p>Our example set of URLs:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defparameter</span> <span class="vg">*urls*</span>
+  <span class="p">(</span><span class="nb">list</span>
+    <span class="s">&quot;http://blog.thezerobit.com/&quot;</span>
+    <span class="s">&quot;http://quicklisp.org/&quot;</span>
+    <span class="s">&quot;http://www.cliki.net/index&quot;</span>
+    <span class="s">&quot;http://sbcl.org/&quot;</span>
+    <span class="p">))</span></code></pre></div>
+
+
+<p>Now, here&rsquo;s a function that performs a single HTTP request and times it.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">do-request</span> <span class="p">(</span><span class="nv">url</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">start-time</span> <span class="p">(</span><span class="nb">get-internal-real-time</span><span class="p">)))</span>
+    <span class="p">(</span><span class="nb">format</span> <span class="no">t</span> <span class="s">&quot;Starting request: ~a~%&quot;</span> <span class="nv">url</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">drakma:http-request</span> <span class="nv">url</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">elapsed</span> <span class="p">(</span><span class="nb">-</span> <span class="p">(</span><span class="nb">get-internal-real-time</span><span class="p">)</span> <span class="nv">start-time</span><span class="p">)))</span>
+      <span class="p">(</span><span class="nb">format</span> <span class="no">t</span> <span class="s">&quot;Completed request in ~a ms: ~a~%&quot;</span> <span class="nv">elapsed</span> <span class="nv">url</span><span class="p">))))</span></code></pre></div>
+
+
+<p>This is what you might do without concurrency if we wanted to perform
+these HTTP requests:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nv">time-it</span> <span class="p">(</span><span class="nb">dolist</span> <span class="p">(</span><span class="nv">url</span> <span class="vg">*urls*</span><span class="p">)</span>
+           <span class="p">(</span><span class="nv">do-request</span> <span class="nv">url</span><span class="p">)))</span>
+<span class="c1">;; Starting request: http://blog.thezerobit.com/</span>
+<span class="c1">;; Completed request in 616 ms: http://blog.thezerobit.com/</span>
+<span class="c1">;; Starting request: http://quicklisp.org/</span>
+<span class="c1">;; Completed request in 819 ms: http://quicklisp.org/</span>
+<span class="c1">;; Starting request: http://www.cliki.net/index</span>
+<span class="c1">;; Completed request in 429 ms: http://www.cliki.net/index</span>
+<span class="c1">;; Starting request: http://sbcl.org/</span>
+<span class="c1">;; Completed request in 291 ms: http://sbcl.org/</span>
+<span class="c1">;; Runtime: 2155 milliseconds.</span></code></pre></div>
+
+
+<p>It takes over 2 seconds to make all these requests in serial fashion.
+There may be a way to queue up these requests in parallel with the
+Drakma library, but instead we&rsquo;ll just use the ChanL library. Let&rsquo;s
+define a function, like DO-REQUEST that instead of printing its progress
+will send messages over a channel.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">do-request-chan</span> <span class="p">(</span><span class="nv">url</span> <span class="nv">chan</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">start-time</span> <span class="p">(</span><span class="nb">get-internal-real-time</span><span class="p">)))</span>
+    <span class="p">(</span><span class="nv">chanl:send</span> <span class="nv">chan</span> <span class="p">(</span><span class="nb">format</span> <span class="no">nil</span> <span class="s">&quot;Starting request: ~a~%&quot;</span> <span class="nv">url</span><span class="p">))</span>
+    <span class="p">(</span><span class="nv">drakma:http-request</span> <span class="nv">url</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">elapsed</span> <span class="p">(</span><span class="nb">-</span> <span class="p">(</span><span class="nb">get-internal-real-time</span><span class="p">)</span> <span class="nv">start-time</span><span class="p">)))</span>
+      <span class="p">(</span><span class="nv">chanl:send</span> <span class="nv">chan</span>
+                  <span class="p">(</span><span class="nb">format</span> <span class="no">nil</span> <span class="s">&quot;Completed request in ~a ms: ~a~%&quot;</span> <span class="nv">elapsed</span> <span class="nv">url</span><span class="p">)))))</span></code></pre></div>
+
+
+<p>We can use the PEXEC call to spawn separate processes for each HTTP
+request and then wait for the 8 messages to come in on the channel we
+create to synchronize.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nv">time-it</span>
+  <span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">chan</span> <span class="p">(</span><span class="nb">make-instance</span> <span class="ss">&#39;chanl:channel</span><span class="p">)))</span>
+    <span class="p">(</span><span class="nb">dolist</span> <span class="p">(</span><span class="nv">url</span> <span class="vg">*urls*</span><span class="p">)</span>
+      <span class="p">(</span><span class="nv">chanl:pexec</span> <span class="p">()</span> <span class="p">(</span><span class="nv">do-request-chan</span> <span class="nv">url</span> <span class="nv">chan</span><span class="p">)))</span>
+    <span class="p">(</span><span class="nb">dotimes</span> <span class="p">(</span><span class="nv">x</span> <span class="mi">8</span><span class="p">)</span>
+      <span class="p">(</span><span class="nb">format</span> <span class="no">t</span> <span class="p">(</span><span class="nv">chanl:recv</span> <span class="nv">chan</span><span class="p">)))))</span>
+<span class="c1">;; Starting request: http://blog.thezerobit.com/</span>
+<span class="c1">;; Starting request: http://quicklisp.org/</span>
+<span class="c1">;; Starting request: http://sbcl.org/</span>
+<span class="c1">;; Starting request: http://www.cliki.net/index</span>
+<span class="c1">;; Completed request in 291 ms: http://blog.thezerobit.com/</span>
+<span class="c1">;; Completed request in 302 ms: http://www.cliki.net/index</span>
+<span class="c1">;; Completed request in 306 ms: http://sbcl.org/</span>
+<span class="c1">;; Completed request in 703 ms: http://quicklisp.org/</span>
+<span class="c1">;; Runtime: 703 milliseconds.</span></code></pre></div>
+
+
+<p>Here, the whole operation takes only as long as the longest single
+request and the overhead of spawning separate threads is negligible
+compared to the time saved by making these requests concurrently. It is
+important to note that, by default, the channels are not buffered so
+calls to SEND will block until there&rsquo;s a RECV called on the same channel
+in a different thread. ChanL also provides buffered channels and some
+other goodies which I haven&rsquo;t touched on here.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Lazy Sequences in Common Lisp]]></title>
+    <link href="http://blog.thezerobit.com/2012/07/28/lazy-sequences-in-common-lisp.html"/>
+    <updated>2012-07-28T00:00:00-07:00</updated>
+    <id>http://blog.thezerobit.com/2012/07/28/lazy-sequences-in-common-lisp</id>
+    <content type="html"><![CDATA[<h3>0. Delayed Evaluation with Closures</h3>
+
+<p><a href="http://blog.thezerobit.com/2012/07/21/immutable-persistent-data-structures-in-common-lisp.html">Last week</a>
+I expressed some anti-lazy sentiment, or at least it was perceived as
+such. Really, I am just not a fan of laziness by default. Common Lisp is
+decidedly not lazy by default, but it is easy to defer or avoid
+computation with closures. With macros, we can add it to the language in
+an easy-to-use form.</p>
+
+<!--more-->
+
+
+<p>Common Lisp is not a lazy language, but it is easy enough to add lazy
+sequences. We can model them after the normal list which is constructed
+piecemeal with the cons operator. The following recursive function
+builds a list of numbers counting down to 0 using cons.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">countdown</span> <span class="p">(</span><span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">&gt;=</span> <span class="nv">n</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">cons</span> <span class="nv">n</span> <span class="p">(</span><span class="nv">countdown</span> <span class="p">(</span><span class="nb">1-</span> <span class="nv">n</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="nv">countdown</span> <span class="mi">10</span><span class="p">)</span>
+<span class="c1">;;--&gt; (10 9 8 7 6 5 4 3 2 1 0)</span>
+
+<span class="p">(</span><span class="nb">reduce</span> <span class="nf">#&#39;</span><span class="nb">+</span> <span class="p">(</span><span class="nv">countdown</span> <span class="mi">100</span><span class="p">))</span>
+<span class="c1">;;--&gt; 5050</span></code></pre></div>
+
+
+<p>This is a common pattern, but there are some shortcomings. First of all,
+it&rsquo;s not a tail recursive function, so this call will always build the
+stack since tail call optimization or tail recursion elimination does
+not apply, and will do so linearly with the argument n. Also, it
+constructs the entire list. You may want this list of numbers, but you
+don&rsquo;t need all of them right away sitting in memory. In the example
+above, the call to reduce gets a full list of 101 elements, from 100 to
+0 before processing. Depending on the length of the sequence, a
+different algorithm might work better.</p>
+
+<p>One way (of many) to construct lazy sequences in Common Lisp is to store
+the CDR (second part) of the CONS cell as a thunk, or a closure that
+takes no argument and computes the next CONS in the list.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">lazy-countdown</span> <span class="p">(</span><span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">&gt;=</span> <span class="nv">n</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">cons</span> <span class="nv">n</span> <span class="p">(</span><span class="k">lambda</span> <span class="p">()</span> <span class="p">(</span><span class="nv">lazy-countdown</span> <span class="p">(</span><span class="nb">1-</span> <span class="nv">n</span><span class="p">))))))</span>
+
+<span class="p">(</span><span class="nv">lazy-countdown</span> <span class="mi">10</span><span class="p">)</span>
+<span class="c1">;;--&gt; (10 . #&lt;CCL:COMPILED-LEXICAL-CLOSURE (:INTERNAL LAZY-COUNTDOWN) #x30200F59400F&gt;)</span></code></pre></div>
+
+
+<p>We can grab the first element of the lazy list with CAR per normal, but
+to get the next CONS cell, we need a version of CDR which FUNCALLs the
+thunk. That will call LAZY-COUNTDOWN which will return another CONS
+cell.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">lazy-cdr</span> <span class="p">(</span><span class="nv">lazylist</span><span class="p">)</span> <span class="p">(</span><span class="nb">funcall</span> <span class="p">(</span><span class="nb">cdr</span> <span class="nv">lazylist</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nv">lazy-cdr</span> <span class="p">(</span><span class="nv">lazy-countdown</span> <span class="mi">10</span><span class="p">))</span>
+<span class="c1">;;--&gt; (9 . #&lt;CCL:COMPILED-LEXICAL-CLOSURE (:INTERNAL LAZY-COUNTDOWN) #x30200F55B7BF&gt;)</span></code></pre></div>
+
+
+<p>So far, so good. Now we need a version of REDUCE which uses LAZY-CDR
+instead of CDR, and can reduce a lazy list for us.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">lazy-reduce</span> <span class="p">(</span><span class="nv">f</span> <span class="nv">lazylist</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">labels</span> <span class="p">((</span><span class="nv">inner-reduce</span> <span class="p">(</span><span class="nv">lazylist</span> <span class="nv">acc</span><span class="p">)</span>
+             <span class="p">(</span><span class="k">if</span> <span class="nv">lazylist</span>
+               <span class="p">(</span><span class="nv">inner-reduce</span> <span class="p">(</span><span class="nv">lazy-cdr</span> <span class="nv">lazylist</span><span class="p">)</span> <span class="p">(</span><span class="nb">funcall</span> <span class="nv">f</span> <span class="nv">acc</span> <span class="p">(</span><span class="nb">car</span> <span class="nv">lazylist</span><span class="p">)))</span>
+               <span class="nv">acc</span><span class="p">)))</span>
+    <span class="p">(</span><span class="nv">inner-reduce</span> <span class="p">(</span><span class="nv">lazy-cdr</span> <span class="nv">lazylist</span><span class="p">)</span> <span class="p">(</span><span class="nb">car</span> <span class="nv">lazylist</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="nv">lazy-reduce</span> <span class="nf">#&#39;</span><span class="nb">+</span> <span class="p">(</span><span class="nv">lazy-countdown</span> <span class="mi">1000</span><span class="p">))</span>
+<span class="c1">;;--&gt; 500500</span></code></pre></div>
+
+
+<h3>1. Use CLOS and Macros for a Nice Interface</h3>
+
+<p>In order to use this pattern easily, we will create a nice interface.
+We&rsquo;ll package up the lazy list into its own class, which I will call
+LCONS and use a macro of the same name to construct lazy lists by
+automatically wrapping the second argument in a thunk.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defclass</span> <span class="nv">lcons</span> <span class="p">()</span>
+  <span class="p">((</span><span class="nv">val</span> <span class="ss">:initarg</span> <span class="ss">:val</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nb">defmacro</span> <span class="nv">lcons</span> <span class="p">(</span><span class="nv">head</span> <span class="nv">tail</span><span class="p">)</span>
+  <span class="o">`</span><span class="p">(</span><span class="nb">make-instance</span> <span class="ss">&#39;lcons</span>
+                  <span class="ss">:val</span> <span class="p">(</span><span class="nb">cons</span> <span class="o">,</span><span class="nv">head</span> <span class="p">(</span><span class="k">lambda</span> <span class="p">()</span> <span class="o">,</span><span class="nv">tail</span><span class="p">))))</span></code></pre></div>
+
+
+<p>For our interface, I am going to use methods HEAD, TAIL and EMPTY? to
+approximate CAR, CDR, and NULL and make them compatible with normal
+lists.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defgeneric</span> <span class="nv">empty?</span> <span class="p">(</span><span class="nv">lcons</span><span class="p">))</span>
+<span class="p">(</span><span class="nb">defgeneric</span> <span class="nv">head</span> <span class="p">(</span><span class="nv">lcons</span><span class="p">))</span>
+<span class="p">(</span><span class="nb">defgeneric</span> <span class="nv">tail</span> <span class="p">(</span><span class="nv">lcons</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb">defmethod</span> <span class="nv">empty?</span> <span class="p">((</span><span class="nv">lcons</span> <span class="nv">lcons</span><span class="p">))</span>
+  <span class="no">nil</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb">defmethod</span> <span class="nv">empty?</span> <span class="p">((</span><span class="nv">lcons</span> <span class="nb">list</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb">null</span> <span class="nv">lcons</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb">defmethod</span> <span class="nv">head</span> <span class="p">((</span><span class="nv">lcons</span> <span class="nv">lcons</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb">car</span> <span class="p">(</span><span class="nb">slot-value</span> <span class="nv">lcons</span> <span class="ss">&#39;val</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nb">defmethod</span> <span class="nv">head</span> <span class="p">((</span><span class="nv">lcons</span> <span class="nb">list</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb">car</span> <span class="nv">lcons</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb">defmethod</span> <span class="nv">tail</span> <span class="p">((</span><span class="nv">lcons</span> <span class="nv">lcons</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb">funcall</span> <span class="p">(</span><span class="nb">cdr</span> <span class="p">(</span><span class="nb">slot-value</span> <span class="nv">lcons</span> <span class="ss">&#39;val</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="nb">defmethod</span> <span class="nv">tail</span> <span class="p">((</span><span class="nv">lcons</span> <span class="nb">list</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb">cdr</span> <span class="nv">lcons</span><span class="p">))</span></code></pre></div>
+
+
+<p>Now, we can redefine LAZY-COUNTDOWN, just the same as the original
+COUNTDOWN but use LCONS instead of CONS.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">countdown</span> <span class="p">(</span><span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">&gt;=</span> <span class="nv">n</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">cons</span> <span class="nv">n</span> <span class="p">(</span><span class="nv">countdown</span> <span class="p">(</span><span class="nb">1-</span> <span class="nv">n</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="nb">car</span> <span class="p">(</span><span class="nb">cdr</span> <span class="p">(</span><span class="nv">countdown</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="c1">;;--&gt; 9</span>
+
+<span class="p">(</span><span class="nb">defun</span> <span class="nv">lazy-countdown</span> <span class="p">(</span><span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">&gt;=</span> <span class="nv">n</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">lcons</span> <span class="nv">n</span> <span class="p">(</span><span class="nv">countdown</span> <span class="p">(</span><span class="nb">1-</span> <span class="nv">n</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="nv">head</span> <span class="p">(</span><span class="nv">tail</span> <span class="p">(</span><span class="nv">lazy-countdown</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="c1">;;--&gt; 9</span></code></pre></div>
+
+
+<p>Now, we can define functions to do things that are normally only for
+regular lists that work with lazy lists, also. A good candidate is
+MAPCAR. Here&rsquo;s a version that works with lazy lists:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">lmapcar</span> <span class="p">(</span><span class="nv">f</span> <span class="k">&amp;rest</span> <span class="nv">lists</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">notany</span> <span class="nf">#&#39;</span><span class="nv">empty?</span> <span class="nv">lists</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">lcons</span> <span class="p">(</span><span class="nb">apply</span> <span class="nv">f</span> <span class="p">(</span><span class="nb">mapcar</span> <span class="nf">#&#39;</span><span class="nv">head</span> <span class="nv">lists</span><span class="p">))</span>
+           <span class="p">(</span><span class="nb">apply</span> <span class="nf">#&#39;</span><span class="nv">lmapcar</span> <span class="nv">f</span> <span class="p">(</span><span class="nb">mapcar</span> <span class="nf">#&#39;</span><span class="nv">tail</span> <span class="nv">lists</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="nv">head</span> <span class="p">(</span><span class="nv">lmapcar</span> <span class="nf">#&#39;</span><span class="nb">+</span> <span class="p">(</span><span class="nv">lazy-countdown</span> <span class="mi">10</span><span class="p">)</span> <span class="p">(</span><span class="nv">countdown</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="c1">;;--&gt; 20</span></code></pre></div>
+
+
+<p>Notice that LMAPCAR is lazy, too. It returns an LCONS (lazy list). In
+this way we can build up a collection of functions just like the normal
+functions on lists in Common Lisp, but ones that take and return lazy
+lists.</p>
+
+<p>Just like lazy sequences in other languages, these sequences can be
+infinite. Here&rsquo;s a function INTEGERS which builds an infinite lazy list
+of integers.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">integers</span> <span class="p">(</span><span class="nv">n</span><span class="p">)</span> <span class="p">(</span><span class="nv">lcons</span> <span class="nv">n</span> <span class="p">(</span><span class="nv">integers</span> <span class="p">(</span><span class="nb">1+</span> <span class="nv">n</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="nv">head</span> <span class="p">(</span><span class="nv">tail</span> <span class="p">(</span><span class="nv">tail</span> <span class="p">(</span><span class="nv">integers</span> <span class="mi">0</span><span class="p">))))</span>
+<span class="c1">;;--&gt; 2</span></code></pre></div>
+
+
+<p>I have encoded this into a project which is available on github:
+<a href="https://github.com/deliciousrobots/slow-jam">slow-jam</a> . It is the
+above code with a few extra functions that take and/or return lazy
+sequences. Here are a few examples of things you can do with the
+library:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="c1">;; infinite sequences that print nicely on the REPL</span>
+<span class="p">(</span><span class="nv">range</span><span class="p">)</span>
+<span class="c1">;;--&gt; (0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 ETC...)</span>
+
+<span class="p">(</span><span class="nv">take</span> <span class="mi">10</span> <span class="p">(</span><span class="nv">range</span><span class="p">))</span>
+<span class="c1">;;--&gt; (0 1 2 3 4 5 6 7 8 9)</span>
+
+<span class="c1">;; FILTER is lazy</span>
+<span class="p">(</span><span class="nv">take</span> <span class="mi">5</span> <span class="p">(</span><span class="nv">filter</span> <span class="nf">#&#39;</span><span class="nb">evenp</span> <span class="p">(</span><span class="nv">range</span><span class="p">)))</span>
+<span class="p">(</span><span class="mi">0</span> <span class="mi">2</span> <span class="mi">4</span> <span class="mi">6</span> <span class="mi">8</span><span class="p">)</span></code></pre></div>
+
+
+<p>One advantage of this approach is that the tail of the lazy list is
+never cached which means that, unless you use the TO-LIST function
+provided in the library to turn a lazy list into a normal list, all the
+elements of your lazylists (except the first) can be garbage collected.
+These lists never take much permanent memory. The downside is that
+results are not cached, and you may end up recalculating the same list
+elements more than once. For that reason, these lists should be built in
+using side-effect-free functions. If you do want to cache the contents
+of a lazy list, just call TO-LIST which returns real list and keep a
+reference to that.</p>
+
+<p>This is just one implementation of lazy sequences in Common Lisp. It is
+partially inspired by Clojure, Haskell, and SICP. If you like the
+<a href="https://github.com/deliciousrobots/slow-jam">slow-jam</a> library and want
+it to be better, report an issue or make a pull request at github.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Immutable Persistent Data Structures in Common Lisp]]></title>
+    <link href="http://blog.thezerobit.com/2012/07/21/immutable-persistent-data-structures-in-common-lisp.html"/>
+    <updated>2012-07-21T00:00:00-07:00</updated>
+    <id>http://blog.thezerobit.com/2012/07/21/immutable-persistent-data-structures-in-common-lisp</id>
+    <content type="html"><![CDATA[<h3>0. The Rationale</h3>
+
+<p>Clojure, Scala, and Haskell (and other languages) have recently brought the
+idea of immutable (and persistent) data structures into some amount of
+popularity. This is not a new idea, by any means, as Lisp has always
+supported this with its list structure, which is essentially a linked
+list. In Common Lisp and Scheme, lists are actually mutable but in
+practice, this is rarely a problem because it is generally considered
+bad form to go around mutating lists except under certain circumstances.
+Most Lisp books, tutorials and references encourage using lists in a
+functional style (that is, assuming and treating them as immutable
+structures).</p>
+
+<!--more-->
+
+
+<p>In Clojure, the big three data structures are the hashmap, vector, and set,
+which each come with their own literal syntax. Clojure also has normal lispy
+lists, too with language enforced immutability. These immutable data structures
+can be approximated with normal lists in Common Lisp with the caveat that they
+don&rsquo;t retain the more efficient performance characteristics of Clojure&rsquo;s data
+structures. There are a few libraries for Common Lisp which provide these
+structures with similar time and space complexity as Clojure&rsquo;s implementations.
+The one that I recommend is <a href="http://common-lisp.net/project/fset/">FSet</a> which,
+according to the Wayback Machine, has been around since at latest 2007.</p>
+
+<p>What&rsquo;s the point of learning to use these data structures in Common Lisp? Isn&rsquo;t
+Clojure better? Well, in a lot of ways, Clojure <em>is</em> a better language and
+environment, but in a lot of ways, Common Lisp is better, too. I enjoy using
+both languages. I&rsquo;m not quite lucky enough to have a day-job that allows me
+write much code in a Lisp, so I use it for fun. Therefore, my criteria for
+languages that are fun tend to push me toward Common Lisp. I generally use SBCL
+or ClozureCL as implementations which are native (not bound the the JVM) and
+have a much faster startup time and interact easier with native libraries. I
+don&rsquo;t care much for the JVM, and I prefer native libraries to JVM libraries,
+which are themselves, often just JNI wrappers on native code.
+Tracebacks in SBCL and CCL are much easier to read than what you get with
+Clojure. I also prefer non-lazy to lazy.</p>
+
+<p>An aside on laziness: I like the idea of lazy collections, or iterators, or
+generators, or streams (from SICP). They can be useful for certain
+constructions, but they don&rsquo;t really enable anything amazing that you can&rsquo;t do
+otherwise, just with a slightly different algorithm. It&rsquo;s slower. Every
+implementation of Standard ML (not lazy) I&rsquo;ve tried has varied from just being
+somewhat to several times faster than Haskell where all computation is lazy. I
+think setting up all that delayed computation is expensive, and the only way I
+found to make Haskell perform within the same ball park as Standard ML, was to
+add hints here and there to get computations to go ahead and happen instead of
+building a stack of thunks. I don&rsquo;t have to encourage Standard ML to do a
+computation, it just does it. Same with Common Lisp. Life is much simpler and
+faster when computations just happen and nothing is lazy by default.</p>
+
+<p>So, Clojure has its advantages. One of those is a slight reduction in the
+number of parens with certain standard Lisp constructions like LET and COND.
+Also, the collection literals are nice. Clojure is a Lisp-1, so the shared
+namespace is generally better than Lisp-2&rsquo;s like Common Lisp. Even so, there
+are nice things about split function namespace, that is that you don&rsquo;t have to
+worry about shadowing built in functions. This is a problem in languages with a
+single namespece. I don&rsquo;t know how many programs in Python I&rsquo;ve seen that
+shadow the built in &ldquo;id&rdquo; function. It turns out that&rsquo;s a really popular name
+for a database column, and hence a variable name. In Common Lisp, you can name
+your variable &ldquo;list&rdquo; even through there is a standard function called &ldquo;list&rdquo;,
+none of this &ldquo;lst&rdquo; crap.</p>
+
+<p>TLDR; It&rsquo;s all a matter of taste, but for me Common Lisp is just a little more
+fun to hack in than Clojure.</p>
+
+<h3>1. The List</h3>
+
+<p>I&rsquo;ll try to keep this short. A Common Lisp list is a linked list constructed of
+CONS cells. Each CONS has two parts the CAR and the CDR. The CAR generally
+contains a list element and the CDR contains the next CONS cell, or NIL,
+signifying the end of the list. An empty list is the same as NIL.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="c1">;; contruct a list with a single element, the keyword symbol :x</span>
+<span class="p">(</span><span class="nb">cons</span> <span class="ss">:x</span> <span class="no">nil</span><span class="p">)</span>
+<span class="c1">;;--&gt; (:x)</span>
+
+<span class="c1">;; alternately:</span>
+<span class="p">(</span><span class="nb">list</span> <span class="ss">:x</span><span class="p">)</span>
+<span class="c1">;;--&gt; (:x)</span>
+
+<span class="c1">;; or with quoting (bypass evaluation):</span>
+<span class="p">(</span><span class="k">quote</span> <span class="p">(</span><span class="ss">:x</span><span class="p">))</span>
+<span class="c1">;;--&gt; (:x)</span>
+
+<span class="c1">;; shorthand for quoting is a single quote mark</span>
+<span class="o">&#39;</span><span class="p">(</span><span class="ss">:x</span><span class="p">)</span>
+<span class="c1">;;--&gt; (:x)</span>
+
+<span class="c1">;; CAR and CDR extract the cells of the CONS</span>
+<span class="p">(</span><span class="nb">car</span> <span class="o">&#39;</span><span class="p">(</span><span class="ss">:x</span><span class="p">))</span>
+<span class="c1">;;--&gt; :x</span>
+<span class="p">(</span><span class="nb">cdr</span> <span class="o">&#39;</span><span class="p">(</span><span class="ss">:x</span><span class="p">))</span>
+<span class="c1">;;--&gt; NIL</span>
+
+<span class="c1">;; A list of three elements:</span>
+<span class="p">(</span><span class="nb">cons</span> <span class="ss">:x</span> <span class="p">(</span><span class="nb">cons</span> <span class="ss">:y</span> <span class="p">(</span><span class="nb">cons</span> <span class="ss">:z</span> <span class="no">nil</span><span class="p">)))</span>
+<span class="c1">;;--&gt; (:x :y :z)</span>
+<span class="c1">;; Also: (list :x :y :z) or &#39;(:x :y :z)</span></code></pre></div>
+
+
+<p>So the way to use lists as an immutable, persistent data structure is that you
+can construct a new list with an element added to the front of the list without
+affecting the original, and the &ldquo;tail&rdquo; of the list is shared. Also, you can get
+the list minus the front element, just by taking the CDR of the list.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="k">let</span> <span class="p">((</span><span class="nv">our-list</span> <span class="p">(</span><span class="nb">list</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">)))</span>
+  <span class="p">(</span><span class="nb">list</span>
+    <span class="p">(</span><span class="nb">cons</span> <span class="mi">0</span> <span class="nv">our-list</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">cons</span> <span class="mi">1</span> <span class="nv">our-list</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">cdr</span> <span class="nv">our-list</span><span class="p">)</span>
+    <span class="nv">our-list</span><span class="p">))</span>
+<span class="c1">;;--&gt; ((0 1 2 3) (1 1 2 3) (2 3) (1 2 3))</span></code></pre></div>
+
+
+<p>In that example I took a list and first constructed a new list by adding a 0 to
+the front, then another new list by adding a 1 to the front, then I got a list
+without the first element, and then the original list, unscathed. No list was
+mutated and no space was wasted, as all these lists share the same last 2 or 3
+CONS cells.</p>
+
+<h3>2. Vector / SEQ</h3>
+
+<p>Of course, you might want to do something other than have an ordered sequence
+with the ability to add or remove elements to the front. In Clojure, you&rsquo;ve got
+the vector, which is an ordered sequence that allows you to add or remove
+elements anywhere in the list, and lookup arbitrary elements in O(log n) time
+and with shared structure. You can do the same thing in Common Lisp with normal
+lists but some of the operations will take O(n) time complexity and some
+operations will return a brand new list with no shared structure. Let&rsquo;s start
+with that and then show how to get Clojure-style complexity characteristics
+with the SEQ collection provided by the FSet library. For small enough
+sequences you might just want to use normal lists, and avoid the FSet
+dependency.</p>
+
+<p>In none of the following examples is any collection mutated, instead the value
+of the expression must be captured and used instead of the original, so when I
+say &ldquo;drop an element&rdquo;, I really mean &ldquo;return a new collection without an
+element&rdquo;, etc.</p>
+
+<p>You can remove an element from the end of a list with BUTLAST, a funny sounding
+function which basically creates a whole new list minus the last element. You
+can also specify a number of elements to remove from the end of the list.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">butlast</span> <span class="p">(</span><span class="nb">list</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span><span class="p">))</span>
+<span class="c1">;;--&gt; (1 2)</span>
+
+<span class="p">(</span><span class="nb">butlast</span> <span class="p">(</span><span class="nb">list</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span><span class="p">)</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c1">;;--&gt; (1 2 3)</span></code></pre></div>
+
+
+<p>You can get the NTH element of a list:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">nth</span> <span class="mi">0</span> <span class="p">(</span><span class="nb">list</span> <span class="mi">1</span> <span class="mi">2</span> <span class="mi">3</span> <span class="mi">4</span> <span class="mi">5</span><span class="p">))</span>
+<span class="c1">;;--&gt; 1</span></code></pre></div>
+
+
+<p>You can take a slice of a list with SUBSEQ:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">subseq</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span> <span class="ss">:d</span><span class="p">)</span> <span class="mi">1</span> <span class="mi">3</span><span class="p">)</span>
+<span class="c1">;;--&gt; (:B :C)</span></code></pre></div>
+
+
+<p>Or drop the first n elements with NTHCDR:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">nthcdr</span> <span class="mi">4</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span> <span class="ss">:d</span> <span class="ss">:e</span> <span class="ss">:f</span><span class="p">))</span>
+<span class="c1">;;--&gt; (:E :F)</span></code></pre></div>
+
+
+<p>If you want to drop or add or change an element from the middle of the list you
+might have to write or use one these simple functions to do that:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">drop-nth</span> <span class="p">(</span><span class="nv">n</span> <span class="nb">list</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">append</span> <span class="p">(</span><span class="nb">subseq</span> <span class="nb">list</span> <span class="mi">0</span> <span class="nv">n</span><span class="p">)</span> <span class="p">(</span><span class="nb">nthcdr</span> <span class="p">(</span><span class="nb">1+</span> <span class="nv">n</span><span class="p">)</span> <span class="nb">list</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nv">drop-nth</span> <span class="mi">3</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span> <span class="ss">:d</span> <span class="ss">:e</span> <span class="ss">:f</span><span class="p">))</span>
+<span class="c1">;;--&gt; (:A :B :C :E :F)</span>
+
+<span class="p">(</span><span class="nb">defun</span> <span class="nv">add-nth</span> <span class="p">(</span><span class="nv">n</span> <span class="nv">elem</span> <span class="nb">list</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">append</span> <span class="p">(</span><span class="nb">subseq</span> <span class="nb">list</span> <span class="mi">0</span> <span class="nv">n</span><span class="p">)</span> <span class="p">(</span><span class="nb">cons</span> <span class="nv">elem</span> <span class="p">(</span><span class="nb">nthcdr</span> <span class="nv">n</span> <span class="nb">list</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="nv">add-nth</span> <span class="mi">3</span> <span class="ss">:bar</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span> <span class="ss">:d</span> <span class="ss">:e</span> <span class="ss">:f</span><span class="p">))</span>
+<span class="c1">;;--&gt; (:A :B :C :BAR :D :E :F)</span>
+
+<span class="p">(</span><span class="nb">defun</span> <span class="nv">set-nth</span> <span class="p">(</span><span class="nv">n</span> <span class="nv">elem</span> <span class="nb">list</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">append</span> <span class="p">(</span><span class="nb">subseq</span> <span class="nb">list</span> <span class="mi">0</span> <span class="nv">n</span><span class="p">)</span> <span class="p">(</span><span class="nb">cons</span> <span class="nv">elem</span> <span class="p">(</span><span class="nb">nthcdr</span> <span class="p">(</span><span class="nb">1+</span> <span class="nv">n</span><span class="p">)</span> <span class="nb">list</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="nv">set-nth</span> <span class="mi">3</span> <span class="ss">:foo</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span> <span class="ss">:d</span> <span class="ss">:e</span><span class="p">))</span>
+<span class="c1">;;--&gt; (:A :B :C :FOO :E)</span></code></pre></div>
+
+
+<p>Now if you want the tree-structured, persistent version of that, use FSet&rsquo;s
+SEQ. If you are using Quicklisp (which I hope you are), you can load up FSet
+in the REPL like this:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nv">ql:quickload</span> <span class="ss">:fset</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">in-package</span> <span class="ss">:fset-user</span><span class="p">)</span></code></pre></div>
+
+
+<p>There is a function, EMPTY-SEQ that creates an empty SEQ, and there&rsquo;s a macro
+SEQ which can be used to construct a SEQ with multiple elements:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nv">empty-seq</span><span class="p">)</span>
+<span class="c1">;;--&gt; #[ ]</span>
+
+<span class="p">(</span><span class="nv">seq</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span>
+<span class="c1">;;--&gt; #[ :A :B :C ] ;; this is how FSet pretty-prints sequences in the REPL</span></code></pre></div>
+
+
+<p>You can get the first or last or nth element with FIRST, LAST and @:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">first</span> <span class="p">(</span><span class="nv">seq</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">))</span>
+<span class="c1">;;--&gt; :A</span>
+
+<span class="p">(</span><span class="nb">last</span> <span class="p">(</span><span class="nv">seq</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">))</span>
+<span class="c1">;;--&gt; :C</span>
+
+<span class="p">(</span><span class="nv">@</span> <span class="p">(</span><span class="nv">seq</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c1">;;--&gt; :B</span></code></pre></div>
+
+
+<p>You can add or remove elements at the beginning or end of sequence with
+WITH-FIRST, WITH-LAST, LESS-FIRST, and LESS-LAST:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nv">with-first</span> <span class="p">(</span><span class="nv">seq</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="ss">:foo</span><span class="p">)</span>
+<span class="c1">;;--&gt; #[ :FOO :A :B :C ]</span>
+
+<span class="p">(</span><span class="nv">with-last</span> <span class="p">(</span><span class="nv">seq</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="ss">:foo</span><span class="p">)</span>
+<span class="c1">;;--&gt; #[ :A :B :C :FOO ]</span>
+
+<span class="p">(</span><span class="nv">less-first</span> <span class="p">(</span><span class="nv">seq</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">))</span>
+<span class="c1">;;--&gt; #[ :B :C ]</span>
+
+<span class="p">(</span><span class="nv">less-last</span> <span class="p">(</span><span class="nv">seq</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">))</span>
+<span class="c1">;;--&gt; #[ :A :B ]</span></code></pre></div>
+
+
+<p>You can replace an element, drop an element, or insert an element at a
+particular index with WITH, INSERT and LESS:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nv">with</span> <span class="p">(</span><span class="nv">seq</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="mi">1</span> <span class="ss">:foo</span><span class="p">)</span>
+<span class="c1">;;--&gt; #[ :A :FOO :C ]</span>
+
+<span class="p">(</span><span class="nv">insert</span> <span class="p">(</span><span class="nv">seq</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="mi">1</span> <span class="ss">:foo</span><span class="p">)</span>
+<span class="c1">;;--&gt; #[ :A :FOO :B :C ]</span>
+
+<span class="p">(</span><span class="nv">less</span> <span class="p">(</span><span class="nv">seq</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c1">;;--&gt; #[ :A :C ]</span></code></pre></div>
+
+
+<h3>2. Set</h3>
+
+<p>In Common Lisp lists are also used to emulate sets. Not all operations
+will have the optimum time complexity, but it&rsquo;s generally adequate for
+most purposes.</p>
+
+<p>Common Lisp has various equality functions: EQ, EQL, EQUAL, and EQUALP. I will
+not summarize them here, but for the sake of consistency with Clojure, we&rsquo;ll
+probably want to consider two elements to be equal with EQUALP. Many Common
+Lisp functions take an optional :TEST parameter to specify which equality test
+function to use. All of the set theory related functions do.</p>
+
+<p>To test if a value is present in a set (really, just a list that we&rsquo;re treating
+as a set), there is the MEMBER function. It will return NIL if the value is not
+present (which is the only &ldquo;false&rdquo; value in Common Lisp) or the subset of the
+list starting with that value (which will be treated as &ldquo;true&rdquo; in conditional
+statements, etc) if it is present.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">member</span> <span class="ss">:a</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="ss">:test</span> <span class="nf">#&#39;</span><span class="nb">equalp</span><span class="p">)</span>
+<span class="c1">;;--&gt; (:A :B :C)</span>
+<span class="p">(</span><span class="nb">member</span> <span class="ss">:d</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="ss">:test</span> <span class="nf">#&#39;</span><span class="nb">equalp</span><span class="p">)</span>
+<span class="c1">;;--&gt; NIL</span>
+<span class="p">(</span><span class="nb">member</span> <span class="o">&#39;</span><span class="p">(</span><span class="s">&quot;asdf&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nb">list</span> <span class="o">&#39;</span><span class="p">(</span><span class="s">&quot;asdf&quot;</span><span class="p">)</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="ss">:test</span> <span class="nf">#&#39;</span><span class="nb">equalp</span><span class="p">)</span>
+<span class="c1">;;--&gt; ((&quot;asdf&quot;) :B :C)</span></code></pre></div>
+
+
+<p>You can get the union or intersection of two sets with UNION and INTERSECTION:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">union</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:d</span> <span class="ss">:e</span> <span class="ss">:a</span><span class="p">)</span> <span class="ss">:test</span> <span class="nf">#&#39;</span><span class="nb">equalp</span><span class="p">)</span>
+<span class="c1">;;--&gt; (:C :B :D :E :A)</span>
+<span class="p">(</span><span class="nb">intersection</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:d</span> <span class="ss">:e</span> <span class="ss">:a</span> <span class="ss">:b</span><span class="p">)</span> <span class="ss">:test</span> <span class="nf">#&#39;</span><span class="nb">equalp</span><span class="p">)</span>
+<span class="c1">;;--&gt; (:B :A)</span></code></pre></div>
+
+
+<p>You can get all the elements from one list that do not exist in another list
+with SET-DIFFERENCE.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">set-difference</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:d</span> <span class="ss">:e</span> <span class="ss">:a</span> <span class="ss">:b</span><span class="p">)</span> <span class="ss">:test</span> <span class="nf">#&#39;</span><span class="nb">equalp</span><span class="p">)</span>
+<span class="c1">;;--&gt; (:C)</span></code></pre></div>
+
+
+<p>You can even check if a set is a subset of another set with SUBSETP.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">subsetp</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:d</span> <span class="ss">:e</span> <span class="ss">:a</span> <span class="ss">:b</span><span class="p">)</span> <span class="ss">:test</span> <span class="nf">#&#39;</span><span class="nb">equalp</span><span class="p">)</span>
+<span class="c1">;;--&gt; NIL</span>
+
+<span class="p">(</span><span class="nb">subsetp</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:d</span> <span class="ss">:e</span> <span class="ss">:c</span> <span class="ss">:a</span> <span class="ss">:b</span><span class="p">)</span> <span class="ss">:test</span> <span class="nf">#&#39;</span><span class="nb">equalp</span><span class="p">)</span>
+<span class="c1">;;--&gt; T</span></code></pre></div>
+
+
+<p>The set of elements that exist in only one of two sets is constructed with
+SET-EXCLUSIVE-OR.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">set-exclusive-or</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:d</span> <span class="ss">:e</span> <span class="ss">:a</span> <span class="ss">:b</span><span class="p">)</span> <span class="ss">:test</span> <span class="nf">#&#39;</span><span class="nb">equalp</span><span class="p">)</span>
+<span class="c1">;;--&gt; (:E :D :C)</span></code></pre></div>
+
+
+<p>Adding and removing elements from a list is accomplished with CONS and REMOVE:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">cons</span> <span class="ss">:foo</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:a</span> <span class="ss">:b</span><span class="p">))</span>
+<span class="c1">;;--&gt; (:foo :a :b)</span>
+
+<span class="p">(</span><span class="nb">remove</span> <span class="s">&quot;elem&quot;</span> <span class="p">(</span><span class="nb">list</span> <span class="s">&quot;foo&quot;</span> <span class="s">&quot;bar&quot;</span> <span class="s">&quot;elem&quot;</span><span class="p">)</span> <span class="ss">:test</span> <span class="nf">#&#39;</span><span class="nb">equalp</span><span class="p">)</span>
+<span class="c1">;;--&gt; (&quot;foo&quot; &quot;bar&quot;)</span></code></pre></div>
+
+
+<p>It&rsquo;s clear that Common Lisp was designed to use lists as sets when necessary,
+but under certain conditions you might want to use a more efficient
+implementation (say if you wanted to do a lot of membership tests in a larger
+set, and would benefit from O(log n) membership test instead of O(n)) you can
+use FSet&rsquo;s SET. You can construct an empty set with EMPTY-SET or pre-populate
+with the SET macro (which shadows the archaic and generally unused SET function
+built into Common Lisp).</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nv">empty-set</span><span class="p">)</span>
+<span class="c1">;;--&gt; #{ }</span>
+
+<span class="p">(</span><span class="nb">set</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span>
+<span class="c1">;;--&gt; #{ :A :B :C }</span></code></pre></div>
+
+
+<p>The FSet library comes with an equality function that is used automatically:
+EQUAL?. It is slightly better than EQUALP in that it will find two sets equal
+that are equivalent sets (same for other FSet collections).:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">equalp</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:b</span> <span class="ss">:c</span> <span class="ss">:a</span><span class="p">))</span>
+<span class="no">NIL</span>
+
+<span class="p">(</span><span class="nv">equal?</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:b</span> <span class="ss">:c</span> <span class="ss">:a</span><span class="p">))</span>
+<span class="no">T</span></code></pre></div>
+
+
+<p>Membership is tested with CONTAINS?:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nv">contains?</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="ss">:a</span><span class="p">)</span>
+<span class="c1">;;--&gt; T</span>
+
+<span class="p">(</span><span class="nv">contains?</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="ss">:d</span><span class="p">)</span>
+<span class="c1">;;--&gt; NIL</span></code></pre></div>
+
+
+<p>UNION, INTERSECTION, and SET-DIFFERENCE work as expected:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">union</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:a</span> <span class="ss">:b</span><span class="p">)</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">))</span>
+<span class="c1">;;--&gt; #{ :A :B :C }</span>
+
+<span class="p">(</span><span class="nb">intersection</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:a</span> <span class="ss">:b</span><span class="p">)</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">))</span>
+<span class="c1">;;--&gt; #{ :B }</span>
+
+<span class="p">(</span><span class="nb">set-difference</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:a</span> <span class="ss">:b</span><span class="p">)</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">))</span>
+<span class="c1">;;--&gt; #{ :A }</span></code></pre></div>
+
+
+<p>Two tests exist: SUBSET? and DISJOINT?.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nv">subset?</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:a</span> <span class="ss">:b</span><span class="p">)</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:b</span> <span class="ss">:c</span> <span class="ss">:a</span><span class="p">))</span>
+<span class="c1">;;--&gt; T</span>
+
+<span class="p">(</span><span class="nv">subset?</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:d</span> <span class="ss">:b</span><span class="p">)</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:b</span> <span class="ss">:c</span> <span class="ss">:a</span><span class="p">))</span>
+<span class="c1">;;--&gt; NIL</span>
+
+<span class="p">(</span><span class="nv">disjoint?</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:a</span> <span class="ss">:b</span><span class="p">)</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:c</span> <span class="ss">:d</span><span class="p">))</span>
+<span class="c1">;;--&gt; T</span>
+
+<span class="p">(</span><span class="nv">disjoint?</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:c</span> <span class="ss">:d</span><span class="p">))</span>
+<span class="c1">;;--&gt; NIL</span></code></pre></div>
+
+
+<p>Adding and removing elements from a SET is accomplished with WITH and LESS:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nv">with</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="ss">:a</span><span class="p">)</span>
+<span class="c1">;;--&gt; #{ :A :B :C }</span>
+
+<span class="p">(</span><span class="nv">less</span> <span class="p">(</span><span class="nb">set</span> <span class="ss">:a</span> <span class="ss">:b</span> <span class="ss">:c</span><span class="p">)</span> <span class="ss">:a</span><span class="p">)</span>
+<span class="c1">;;--&gt; #{ :B :C }</span></code></pre></div>
+
+
+<h3>3. Map</h3>
+
+<p>There are two ways lists are used in Common Lisp to create mapping collections.</p>
+
+<p>The plist is just a list with every two elements representing a key and a
+value. It has one useful function, GETF which uses EQ for key equality and no
+way to use any other comparison, making it only useful for using symbols for
+keys:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">getf</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:name</span> <span class="s">&quot;Steve&quot;</span> <span class="ss">:age</span> <span class="mi">33</span><span class="p">)</span> <span class="ss">:name</span><span class="p">)</span>
+<span class="c1">;;--&gt; &quot;Steve&quot;</span>
+
+<span class="p">(</span><span class="nb">getf</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:name</span> <span class="s">&quot;Steve&quot;</span> <span class="ss">:age</span> <span class="mi">33</span><span class="p">)</span> <span class="ss">:weight</span><span class="p">)</span>
+<span class="c1">;;--&gt; NIL</span>
+
+<span class="p">(</span><span class="nb">getf</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:name</span> <span class="s">&quot;Steve&quot;</span> <span class="ss">:age</span> <span class="mi">33</span><span class="p">)</span> <span class="ss">:weight</span> <span class="s">&quot;some default&quot;</span><span class="p">)</span>
+<span class="c1">;;--&gt; &quot;some default&quot;</span></code></pre></div>
+
+
+<p>Mappings can be changed or added by appending a key/value pair to the front of
+the list since GETF searches from the front:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">getf</span> <span class="p">(</span><span class="nb">append</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:name</span> <span class="s">&quot;Stephen&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:name</span> <span class="s">&quot;Steve&quot;</span> <span class="ss">:age</span> <span class="mi">33</span><span class="p">))</span> <span class="ss">:name</span><span class="p">)</span>
+<span class="c1">;;--&gt; &quot;Stephen&quot;</span></code></pre></div>
+
+
+<p>You could easily build a repertoire of functions to do all the common
+operations you might want with plists, but there is another form called the
+alist which comes with a better set of operations built in. An alist is a list
+of cons cells with the key in the CAR and value in the CDR. When you have a
+CONS cell with a non-list in the CDR, it is called a dotted list and looks like
+this: <code>(car . cdr)</code>. Alists can be constructed in a variety of ways:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">list</span> <span class="p">(</span><span class="nb">cons</span> <span class="ss">:key</span> <span class="s">&quot;val&quot;</span><span class="p">)</span> <span class="p">(</span><span class="nb">cons</span> <span class="ss">:other-key</span> <span class="s">&quot;other-val&quot;</span><span class="p">))</span>
+<span class="c1">;;--&gt; ((:KEY . &quot;val&quot;) (:OTHER-KEY . &quot;other-val&quot;))</span>
+
+<span class="o">&#39;</span><span class="p">((</span><span class="ss">:key</span> <span class="o">.</span> <span class="s">&quot;val&quot;</span><span class="p">)</span> <span class="p">(</span><span class="ss">:other-key</span> <span class="o">.</span> <span class="s">&quot;other-val&quot;</span><span class="p">))</span>
+<span class="c1">;;--&gt; ((:KEY . &quot;val&quot;) (:OTHER-KEY . &quot;other-val&quot;))</span>
+
+<span class="p">(</span><span class="nb">pairlis</span> <span class="p">(</span><span class="nb">list</span> <span class="ss">:key1</span> <span class="ss">:key2</span> <span class="ss">:key3</span><span class="p">)</span> <span class="p">(</span><span class="nb">list</span> <span class="s">&quot;val1&quot;</span> <span class="s">&quot;val2&quot;</span> <span class="s">&quot;val3&quot;</span><span class="p">))</span>
+<span class="c1">;;--&gt; ((:KEY3 . &quot;val3&quot;) (:KEY2 . &quot;val2&quot;) (:KEY1 . &quot;val1&quot;))</span></code></pre></div>
+
+
+<p>The lookup function for alists is ASSOC which takes the :TEST parameter for key
+equality though it returns the entire matching CONS cell, not just the value.
+You can use CDR to extract the value.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">assoc</span> <span class="ss">:key</span> <span class="o">&#39;</span><span class="p">((</span><span class="ss">:key</span> <span class="o">.</span> <span class="s">&quot;val&quot;</span><span class="p">)</span> <span class="p">(</span><span class="ss">:other-key</span> <span class="o">.</span> <span class="s">&quot;other-val&quot;</span><span class="p">))</span> <span class="ss">:test</span> <span class="nf">#&#39;</span><span class="nb">equalp</span><span class="p">)</span>
+<span class="c1">;;--&gt; (:KEY . &quot;val&quot;)</span>
+
+<span class="p">(</span><span class="nb">cdr</span> <span class="p">(</span><span class="nb">assoc</span> <span class="ss">:other-key</span> <span class="o">&#39;</span><span class="p">((</span><span class="ss">:key</span> <span class="o">.</span> <span class="s">&quot;val&quot;</span><span class="p">)</span> <span class="p">(</span><span class="ss">:other-key</span> <span class="o">.</span> <span class="s">&quot;other-val&quot;</span><span class="p">))</span> <span class="ss">:test</span> <span class="nf">#&#39;</span><span class="nb">equalp</span><span class="p">))</span>
+<span class="c1">;;--&gt; &quot;other-val&quot;</span>
+
+<span class="p">(</span><span class="nb">assoc</span> <span class="ss">:missing-key</span> <span class="o">&#39;</span><span class="p">((</span><span class="ss">:key</span> <span class="o">.</span> <span class="s">&quot;val&quot;</span><span class="p">)</span> <span class="p">(</span><span class="ss">:other-key</span> <span class="o">.</span> <span class="s">&quot;other-val&quot;</span><span class="p">))</span> <span class="ss">:test</span> <span class="nf">#&#39;</span><span class="nb">equalp</span><span class="p">)</span>
+<span class="c1">;;--&gt; NIL</span></code></pre></div>
+
+
+<p>Like plists, key/val pairs can be added to alists by adding them to the front
+of the list. There is a helper function for this called ACONS:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">acons</span> <span class="s">&quot;foo&quot;</span> <span class="s">&quot;bar&quot;</span> <span class="o">&#39;</span><span class="p">((</span><span class="s">&quot;baz&quot;</span> <span class="o">.</span> <span class="s">&quot;val&quot;</span><span class="p">)))</span>
+<span class="c1">;;--&gt; ((&quot;foo&quot; . &quot;bar&quot;) (&quot;baz&quot; . &quot;val&quot;))</span></code></pre></div>
+
+
+<p>There&rsquo;s no builtin function to remove keys from an alist, but we can write one
+easily enough:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">alist-remove</span> <span class="p">(</span><span class="nv">alist</span> <span class="nv">key</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb">remove-if</span> <span class="nf">#&#39;</span><span class="p">(</span><span class="k">lambda</span> <span class="p">(</span><span class="nv">cell</span><span class="p">)</span> <span class="p">(</span><span class="nb">equalp</span> <span class="nv">key</span> <span class="p">(</span><span class="nb">car</span> <span class="nv">cell</span><span class="p">)))</span> <span class="nv">alist</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nv">alist-remove</span> <span class="o">&#39;</span><span class="p">((</span><span class="ss">:a</span> <span class="o">.</span> <span class="mi">100</span><span class="p">)</span> <span class="p">(</span><span class="ss">:b</span> <span class="o">.</span> <span class="mi">200</span><span class="p">))</span> <span class="ss">:a</span><span class="p">)</span>
+<span class="c1">;;--&gt; ((:B . 200))</span></code></pre></div>
+
+
+<p>Alists are probably an 80% solution, which is plenty for most situations, but
+FSet&rsquo;s maps are quite nice and give you that O(log n) lookup and update time
+complexity with the structural sharing that we&rsquo;ve grown to love. I&rsquo;ve found
+them as useful as Clojure&rsquo;s hashmaps. Like the other collections, there&rsquo;s a
+function EMPTY-MAP that&rsquo;s self explanatory and a macro MAP for constructing
+larger maps:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nv">empty-map</span><span class="p">)</span>
+<span class="c1">;;--&gt; #{| |}</span>
+
+<span class="p">(</span><span class="nb">map</span> <span class="p">(</span><span class="ss">:a</span> <span class="mi">100</span><span class="p">)</span> <span class="p">(</span><span class="ss">:b</span> <span class="mi">200</span><span class="p">))</span>
+<span class="c1">;;--&gt; #{| (:A 100) (:B 200) |}</span></code></pre></div>
+
+
+<p>Like SETs, elements can be added or removed or accessed from FSet MAP
+collections with WITH, LESS and @.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nv">with</span> <span class="p">(</span><span class="nb">map</span> <span class="p">(</span><span class="ss">:a</span> <span class="mi">100</span><span class="p">))</span> <span class="ss">:b</span> <span class="mi">200</span><span class="p">)</span>
+<span class="c1">;;--&gt; #{| (:A 100) (:B 200) |}</span>
+
+<span class="p">(</span><span class="nv">less</span> <span class="p">(</span><span class="nb">map</span> <span class="p">(</span><span class="ss">:a</span> <span class="mi">100</span><span class="p">)</span> <span class="p">(</span><span class="ss">:c</span> <span class="mi">200</span><span class="p">))</span> <span class="ss">:c</span><span class="p">)</span>
+<span class="c1">;;--&gt; #{| (:A 100) |}</span>
+
+<span class="p">(</span><span class="nv">@</span> <span class="p">(</span><span class="nb">map</span> <span class="p">(</span><span class="ss">:a</span> <span class="mi">100</span><span class="p">)</span> <span class="p">(</span><span class="ss">:c</span> <span class="mi">200</span><span class="p">))</span> <span class="ss">:c</span><span class="p">)</span>
+<span class="c1">;;--&gt; 200</span></code></pre></div>
+
+
+<h3>4. Conclusion w/bonus Feature</h3>
+
+<p>I only scratched the surface with the FSet library. There are more functions
+than the ones I listed and some of the ones I describe actually return multiple
+values, for example to signify if a key is present in case you are storing NIL
+as values, etc. I recommend the <a href="http://common-lisp.net/project/fset/Site/FSet-Tutorial.html">FSet
+Tutorial</a> for more
+details.</p>
+
+<p>Lists in Common Lisp are really quite versatile and can approximate most other
+structures for limited sizes. The nice thing about the FSet library is that it
+always puts the collection as the first argument, so it is amenable to
+Clojure&rsquo;s threading macro: -> which I will translate here for your benefit into
+Common Lisp:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defmacro</span> <span class="nv">-&gt;</span> <span class="p">(</span><span class="nv">x</span> <span class="k">&amp;optional</span> <span class="p">(</span><span class="nv">form</span> <span class="no">nil</span> <span class="nv">form-supplied-p</span><span class="p">)</span> <span class="k">&amp;rest</span> <span class="nv">more</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if</span> <span class="nv">form-supplied-p</span>
+    <span class="p">(</span><span class="k">if</span> <span class="nv">more</span>
+      <span class="o">`</span><span class="p">(</span><span class="nv">-&gt;</span> <span class="p">(</span><span class="nv">-&gt;</span> <span class="o">,</span><span class="nv">x</span> <span class="o">,</span><span class="nv">form</span><span class="p">)</span> <span class="o">,@</span><span class="nv">more</span><span class="p">)</span>
+      <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">listp</span> <span class="nv">form</span><span class="p">)</span>
+        <span class="o">`</span><span class="p">(</span><span class="o">,</span><span class="p">(</span><span class="nb">car</span> <span class="nv">form</span><span class="p">)</span> <span class="o">,</span><span class="nv">x</span> <span class="o">,@</span><span class="p">(</span><span class="nb">cdr</span> <span class="nv">form</span><span class="p">))</span>
+        <span class="p">(</span><span class="nb">list</span> <span class="nv">form</span> <span class="nv">x</span><span class="p">)))</span>
+    <span class="nv">x</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nv">-&gt;</span> <span class="p">(</span><span class="nv">empty-map</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">with</span> <span class="ss">:a</span> <span class="mi">100</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">with</span> <span class="ss">:b</span> <span class="mi">200</span><span class="p">)</span>
+  <span class="p">(</span><span class="nv">less</span> <span class="ss">:a</span><span class="p">))</span>
+<span class="c1">;;--&gt; #{| (:B 200) |}</span></code></pre></div>
+
+
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Why I&#8217;m Using ClojureScript</title>
+	<atom:link href="https://stuartsierra.com/2012/06/16/why-im-using-clojurescript/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2012/06/16/why-im-using-clojurescript</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2012/06/16/why-im-using-clojurescript/comment-page-1#comment-44562</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Tue, 19 Jun 2012 17:21:42 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=629#comment-44562</guid>
+		<description><![CDATA[Joseph- The point of the &quot;Hello World&quot; example is not to compare ClojureScript to JavaScript, but to compare ClojureScript &lt;em&gt;with the Google Closure Libraries&lt;/em&gt; to JavaScript &lt;em&gt;with a common library such as jQuery&lt;/em&gt;. I was addressing Elise Huard&#039;s complaint (later retracted) that using ClojureScript forces you to include all of the Google Closure Libraries in your application.
+
+The smallest possible download size for a JavaScript program &lt;em&gt;using jQuery&lt;/em&gt; is 32K. The Google Closure Libraries, uncompressed, are many megabytes in size, but anything you don&#039;t use will be eliminated from the application download. 
+
+The &quot;Hello World&quot; program in ClojureScript contains a lot of code besides just &quot;Hello World,&quot; mostly because the ClojureScript compiler is emitting that code in such a way that the Google Closure Compiler has trouble optimizing it. So right now, the smallest ClojureScript program compiles to about 18K. I am hopeful that the ClojureScript compiler will improve to take better advantage of the Google Closure Compiler&#039;s optimizations, thereby shrinking the size of the average compiled ClojureScript program.]]></description>
+		<content:encoded><![CDATA[<p>Joseph- The point of the &#8220;Hello World&#8221; example is not to compare ClojureScript to JavaScript, but to compare ClojureScript <em>with the Google Closure Libraries</em> to JavaScript <em>with a common library such as jQuery</em>. I was addressing Elise Huard&#8217;s complaint (later retracted) that using ClojureScript forces you to include all of the Google Closure Libraries in your application.</p>
+<p>The smallest possible download size for a JavaScript program <em>using jQuery</em> is 32K. The Google Closure Libraries, uncompressed, are many megabytes in size, but anything you don&#8217;t use will be eliminated from the application download. </p>
+<p>The &#8220;Hello World&#8221; program in ClojureScript contains a lot of code besides just &#8220;Hello World,&#8221; mostly because the ClojureScript compiler is emitting that code in such a way that the Google Closure Compiler has trouble optimizing it. So right now, the smallest ClojureScript program compiles to about 18K. I am hopeful that the ClojureScript compiler will improve to take better advantage of the Google Closure Compiler&#8217;s optimizations, thereby shrinking the size of the average compiled ClojureScript program.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Joseph Wilk</title>
+		<link>https://stuartsierra.com/2012/06/16/why-im-using-clojurescript/comment-page-1#comment-44561</link>
+		<dc:creator><![CDATA[Joseph Wilk]]></dc:creator>
+		<pubDate>Tue, 19 Jun 2012 16:23:56 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=629#comment-44561</guid>
+		<description><![CDATA[&quot;jQuery 1.7.2 is 33K, minified and gzipped. Caching doesn’t always save you. “Hello World” in ClojureScript, optimized and gzipped, is 18K&quot;
+
+I&#039;m confused by this point. Are you comparing the file size of &quot;Hello world&quot; and jQuery?
+If you are that does not seem like a very fair comparison, jQuery has a little more functionality than &#039;hello world&#039;. Comparing a ClojureScript file mirroring the functionality of jQuery and comparing would be a fairer comparison. 
+
+Or saying:
+
+Hello World in Clojurescript is 18K. Hello World in javascript is 22 bytes.]]></description>
+		<content:encoded><![CDATA[<p>&#8220;jQuery 1.7.2 is 33K, minified and gzipped. Caching doesn’t always save you. “Hello World” in ClojureScript, optimized and gzipped, is 18K&#8221;</p>
+<p>I&#8217;m confused by this point. Are you comparing the file size of &#8220;Hello world&#8221; and jQuery?<br />
+If you are that does not seem like a very fair comparison, jQuery has a little more functionality than &#8216;hello world&#8217;. Comparing a ClojureScript file mirroring the functionality of jQuery and comparing would be a fairer comparison. </p>
+<p>Or saying:</p>
+<p>Hello World in Clojurescript is 18K. Hello World in javascript is 22 bytes.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2012/06/16/why-im-using-clojurescript/comment-page-1#comment-44559</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Sun, 17 Jun 2012 14:51:08 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=629#comment-44559</guid>
+		<description><![CDATA[Axel- I don&#039;t &quot;miss&quot; anything in JavaScript, I just avoid it. :)]]></description>
+		<content:encoded><![CDATA[<p>Axel- I don&#8217;t &#8220;miss&#8221; anything in JavaScript, I just avoid it. :)</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Axel Rauschmayer</title>
+		<link>https://stuartsierra.com/2012/06/16/why-im-using-clojurescript/comment-page-1#comment-44557</link>
+		<dc:creator><![CDATA[Axel Rauschmayer]]></dc:creator>
+		<pubDate>Sun, 17 Jun 2012 09:55:19 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=629#comment-44557</guid>
+		<description><![CDATA[Great to read a thoughtful analysis of “JavaScript versus language X”. What do you miss most when programming in the large in JavaScript? Note that a module system such as [1] is very helpful here.
+
+[1] http://requirejs.org/]]></description>
+		<content:encoded><![CDATA[<p>Great to read a thoughtful analysis of “JavaScript versus language X”. What do you miss most when programming in the large in JavaScript? Note that a module system such as [1] is very helpful here.</p>
+<p>[1] <a href="http://requirejs.org/" rel="nofollow">http://requirejs.org/</a></p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.270 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:59:27 -->
+
+<!-- Compression = gzip -->

@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+
+<!-- Mirrored from blog.thezerobit.com/2012/07/28/lazy-sequences-in-common-lisp.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:24:57 GMT -->
+<head>
+  <meta charset="utf-8">
+  <title>Lazy Sequences in Common Lisp - the zero bit stream</title>
+  <meta name="author" content="Stephen A. Goss">
+
+  
+  <meta name="description" content="0. Delayed Evaluation with Closures Last week
+I expressed some anti-lazy sentiment, or at least it was perceived as
+such. Really, I am just not a fan &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="lazy-sequences-in-common-lisp.html">
+  <link href="../../../favicon.png" rel="icon">
+  <link href="../../../stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="../../../atom.xml" rel="alternate" title="the zero bit stream" type="application/atom+xml">
+  <script src="../../../javascripts/modernizr-2.0.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="../../../javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="../../../index.html">the zero bit stream</a></h1>
+  
+    <h2>programmer things</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="../../../atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://duckduckgo.com/" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.thezerobit.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="../../../index.html">Blog</a></li>
+  <li><a href="../../../blog/archives/index.html">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Lazy Sequences in Common Lisp</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2012-07-28T00:00:00-07:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h3>0. Delayed Evaluation with Closures</h3>
+
+<p><a href="../21/immutable-persistent-data-structures-in-common-lisp.html">Last week</a>
+I expressed some anti-lazy sentiment, or at least it was perceived as
+such. Really, I am just not a fan of laziness by default. Common Lisp is
+decidedly not lazy by default, but it is easy to defer or avoid
+computation with closures. With macros, we can add it to the language in
+an easy-to-use form.</p>
+
+<!--more-->
+
+
+<p>Common Lisp is not a lazy language, but it is easy enough to add lazy
+sequences. We can model them after the normal list which is constructed
+piecemeal with the cons operator. The following recursive function
+builds a list of numbers counting down to 0 using cons.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">countdown</span> <span class="p">(</span><span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">&gt;=</span> <span class="nv">n</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">cons</span> <span class="nv">n</span> <span class="p">(</span><span class="nv">countdown</span> <span class="p">(</span><span class="nb">1-</span> <span class="nv">n</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="nv">countdown</span> <span class="mi">10</span><span class="p">)</span>
+<span class="c1">;;--&gt; (10 9 8 7 6 5 4 3 2 1 0)</span>
+
+<span class="p">(</span><span class="nb">reduce</span> <span class="nf">#&#39;</span><span class="nb">+</span> <span class="p">(</span><span class="nv">countdown</span> <span class="mi">100</span><span class="p">))</span>
+<span class="c1">;;--&gt; 5050</span></code></pre></div>
+
+
+<p>This is a common pattern, but there are some shortcomings. First of all,
+it&rsquo;s not a tail recursive function, so this call will always build the
+stack since tail call optimization or tail recursion elimination does
+not apply, and will do so linearly with the argument n. Also, it
+constructs the entire list. You may want this list of numbers, but you
+don&rsquo;t need all of them right away sitting in memory. In the example
+above, the call to reduce gets a full list of 101 elements, from 100 to
+0 before processing. Depending on the length of the sequence, a
+different algorithm might work better.</p>
+
+<p>One way (of many) to construct lazy sequences in Common Lisp is to store
+the CDR (second part) of the CONS cell as a thunk, or a closure that
+takes no argument and computes the next CONS in the list.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">lazy-countdown</span> <span class="p">(</span><span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">&gt;=</span> <span class="nv">n</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">cons</span> <span class="nv">n</span> <span class="p">(</span><span class="k">lambda</span> <span class="p">()</span> <span class="p">(</span><span class="nv">lazy-countdown</span> <span class="p">(</span><span class="nb">1-</span> <span class="nv">n</span><span class="p">))))))</span>
+
+<span class="p">(</span><span class="nv">lazy-countdown</span> <span class="mi">10</span><span class="p">)</span>
+<span class="c1">;;--&gt; (10 . #&lt;CCL:COMPILED-LEXICAL-CLOSURE (:INTERNAL LAZY-COUNTDOWN) #x30200F59400F&gt;)</span></code></pre></div>
+
+
+<p>We can grab the first element of the lazy list with CAR per normal, but
+to get the next CONS cell, we need a version of CDR which FUNCALLs the
+thunk. That will call LAZY-COUNTDOWN which will return another CONS
+cell.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">lazy-cdr</span> <span class="p">(</span><span class="nv">lazylist</span><span class="p">)</span> <span class="p">(</span><span class="nb">funcall</span> <span class="p">(</span><span class="nb">cdr</span> <span class="nv">lazylist</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nv">lazy-cdr</span> <span class="p">(</span><span class="nv">lazy-countdown</span> <span class="mi">10</span><span class="p">))</span>
+<span class="c1">;;--&gt; (9 . #&lt;CCL:COMPILED-LEXICAL-CLOSURE (:INTERNAL LAZY-COUNTDOWN) #x30200F55B7BF&gt;)</span></code></pre></div>
+
+
+<p>So far, so good. Now we need a version of REDUCE which uses LAZY-CDR
+instead of CDR, and can reduce a lazy list for us.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">lazy-reduce</span> <span class="p">(</span><span class="nv">f</span> <span class="nv">lazylist</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">labels</span> <span class="p">((</span><span class="nv">inner-reduce</span> <span class="p">(</span><span class="nv">lazylist</span> <span class="nv">acc</span><span class="p">)</span>
+             <span class="p">(</span><span class="k">if</span> <span class="nv">lazylist</span>
+               <span class="p">(</span><span class="nv">inner-reduce</span> <span class="p">(</span><span class="nv">lazy-cdr</span> <span class="nv">lazylist</span><span class="p">)</span> <span class="p">(</span><span class="nb">funcall</span> <span class="nv">f</span> <span class="nv">acc</span> <span class="p">(</span><span class="nb">car</span> <span class="nv">lazylist</span><span class="p">)))</span>
+               <span class="nv">acc</span><span class="p">)))</span>
+    <span class="p">(</span><span class="nv">inner-reduce</span> <span class="p">(</span><span class="nv">lazy-cdr</span> <span class="nv">lazylist</span><span class="p">)</span> <span class="p">(</span><span class="nb">car</span> <span class="nv">lazylist</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="nv">lazy-reduce</span> <span class="nf">#&#39;</span><span class="nb">+</span> <span class="p">(</span><span class="nv">lazy-countdown</span> <span class="mi">1000</span><span class="p">))</span>
+<span class="c1">;;--&gt; 500500</span></code></pre></div>
+
+
+<h3>1. Use CLOS and Macros for a Nice Interface</h3>
+
+<p>In order to use this pattern easily, we will create a nice interface.
+We&rsquo;ll package up the lazy list into its own class, which I will call
+LCONS and use a macro of the same name to construct lazy lists by
+automatically wrapping the second argument in a thunk.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defclass</span> <span class="nv">lcons</span> <span class="p">()</span>
+  <span class="p">((</span><span class="nv">val</span> <span class="ss">:initarg</span> <span class="ss">:val</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nb">defmacro</span> <span class="nv">lcons</span> <span class="p">(</span><span class="nv">head</span> <span class="nv">tail</span><span class="p">)</span>
+  <span class="o">`</span><span class="p">(</span><span class="nb">make-instance</span> <span class="ss">&#39;lcons</span>
+                  <span class="ss">:val</span> <span class="p">(</span><span class="nb">cons</span> <span class="o">,</span><span class="nv">head</span> <span class="p">(</span><span class="k">lambda</span> <span class="p">()</span> <span class="o">,</span><span class="nv">tail</span><span class="p">))))</span></code></pre></div>
+
+
+<p>For our interface, I am going to use methods HEAD, TAIL and EMPTY? to
+approximate CAR, CDR, and NULL and make them compatible with normal
+lists.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defgeneric</span> <span class="nv">empty?</span> <span class="p">(</span><span class="nv">lcons</span><span class="p">))</span>
+<span class="p">(</span><span class="nb">defgeneric</span> <span class="nv">head</span> <span class="p">(</span><span class="nv">lcons</span><span class="p">))</span>
+<span class="p">(</span><span class="nb">defgeneric</span> <span class="nv">tail</span> <span class="p">(</span><span class="nv">lcons</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb">defmethod</span> <span class="nv">empty?</span> <span class="p">((</span><span class="nv">lcons</span> <span class="nv">lcons</span><span class="p">))</span>
+  <span class="no">nil</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb">defmethod</span> <span class="nv">empty?</span> <span class="p">((</span><span class="nv">lcons</span> <span class="nb">list</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb">null</span> <span class="nv">lcons</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb">defmethod</span> <span class="nv">head</span> <span class="p">((</span><span class="nv">lcons</span> <span class="nv">lcons</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb">car</span> <span class="p">(</span><span class="nb">slot-value</span> <span class="nv">lcons</span> <span class="ss">&#39;val</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nb">defmethod</span> <span class="nv">head</span> <span class="p">((</span><span class="nv">lcons</span> <span class="nb">list</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb">car</span> <span class="nv">lcons</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb">defmethod</span> <span class="nv">tail</span> <span class="p">((</span><span class="nv">lcons</span> <span class="nv">lcons</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb">funcall</span> <span class="p">(</span><span class="nb">cdr</span> <span class="p">(</span><span class="nb">slot-value</span> <span class="nv">lcons</span> <span class="ss">&#39;val</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="nb">defmethod</span> <span class="nv">tail</span> <span class="p">((</span><span class="nv">lcons</span> <span class="nb">list</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb">cdr</span> <span class="nv">lcons</span><span class="p">))</span></code></pre></div>
+
+
+<p>Now, we can redefine LAZY-COUNTDOWN, just the same as the original
+COUNTDOWN but use LCONS instead of CONS.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">countdown</span> <span class="p">(</span><span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">&gt;=</span> <span class="nv">n</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">cons</span> <span class="nv">n</span> <span class="p">(</span><span class="nv">countdown</span> <span class="p">(</span><span class="nb">1-</span> <span class="nv">n</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="nb">car</span> <span class="p">(</span><span class="nb">cdr</span> <span class="p">(</span><span class="nv">countdown</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="c1">;;--&gt; 9</span>
+
+<span class="p">(</span><span class="nb">defun</span> <span class="nv">lazy-countdown</span> <span class="p">(</span><span class="nv">n</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">&gt;=</span> <span class="nv">n</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">lcons</span> <span class="nv">n</span> <span class="p">(</span><span class="nv">countdown</span> <span class="p">(</span><span class="nb">1-</span> <span class="nv">n</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="nv">head</span> <span class="p">(</span><span class="nv">tail</span> <span class="p">(</span><span class="nv">lazy-countdown</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="c1">;;--&gt; 9</span></code></pre></div>
+
+
+<p>Now, we can define functions to do things that are normally only for
+regular lists that work with lazy lists, also. A good candidate is
+MAPCAR. Here&rsquo;s a version that works with lazy lists:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">lmapcar</span> <span class="p">(</span><span class="nv">f</span> <span class="k">&amp;rest</span> <span class="nv">lists</span><span class="p">)</span>
+  <span class="p">(</span><span class="k">if</span> <span class="p">(</span><span class="nb">notany</span> <span class="nf">#&#39;</span><span class="nv">empty?</span> <span class="nv">lists</span><span class="p">)</span>
+    <span class="p">(</span><span class="nv">lcons</span> <span class="p">(</span><span class="nb">apply</span> <span class="nv">f</span> <span class="p">(</span><span class="nb">mapcar</span> <span class="nf">#&#39;</span><span class="nv">head</span> <span class="nv">lists</span><span class="p">))</span>
+           <span class="p">(</span><span class="nb">apply</span> <span class="nf">#&#39;</span><span class="nv">lmapcar</span> <span class="nv">f</span> <span class="p">(</span><span class="nb">mapcar</span> <span class="nf">#&#39;</span><span class="nv">tail</span> <span class="nv">lists</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="nv">head</span> <span class="p">(</span><span class="nv">lmapcar</span> <span class="nf">#&#39;</span><span class="nb">+</span> <span class="p">(</span><span class="nv">lazy-countdown</span> <span class="mi">10</span><span class="p">)</span> <span class="p">(</span><span class="nv">countdown</span> <span class="mi">10</span><span class="p">)))</span>
+<span class="c1">;;--&gt; 20</span></code></pre></div>
+
+
+<p>Notice that LMAPCAR is lazy, too. It returns an LCONS (lazy list). In
+this way we can build up a collection of functions just like the normal
+functions on lists in Common Lisp, but ones that take and return lazy
+lists.</p>
+
+<p>Just like lazy sequences in other languages, these sequences can be
+infinite. Here&rsquo;s a function INTEGERS which builds an infinite lazy list
+of integers.</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="p">(</span><span class="nb">defun</span> <span class="nv">integers</span> <span class="p">(</span><span class="nv">n</span><span class="p">)</span> <span class="p">(</span><span class="nv">lcons</span> <span class="nv">n</span> <span class="p">(</span><span class="nv">integers</span> <span class="p">(</span><span class="nb">1+</span> <span class="nv">n</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="nv">head</span> <span class="p">(</span><span class="nv">tail</span> <span class="p">(</span><span class="nv">tail</span> <span class="p">(</span><span class="nv">integers</span> <span class="mi">0</span><span class="p">))))</span>
+<span class="c1">;;--&gt; 2</span></code></pre></div>
+
+
+<p>I have encoded this into a project which is available on github:
+<a href="https://github.com/deliciousrobots/slow-jam">slow-jam</a> . It is the
+above code with a few extra functions that take and/or return lazy
+sequences. Here are a few examples of things you can do with the
+library:</p>
+
+<div class="highlight"><pre><code class="language-cl" data-lang="cl"><span class="c1">;; infinite sequences that print nicely on the REPL</span>
+<span class="p">(</span><span class="nv">range</span><span class="p">)</span>
+<span class="c1">;;--&gt; (0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 ETC...)</span>
+
+<span class="p">(</span><span class="nv">take</span> <span class="mi">10</span> <span class="p">(</span><span class="nv">range</span><span class="p">))</span>
+<span class="c1">;;--&gt; (0 1 2 3 4 5 6 7 8 9)</span>
+
+<span class="c1">;; FILTER is lazy</span>
+<span class="p">(</span><span class="nv">take</span> <span class="mi">5</span> <span class="p">(</span><span class="nv">filter</span> <span class="nf">#&#39;</span><span class="nb">evenp</span> <span class="p">(</span><span class="nv">range</span><span class="p">)))</span>
+<span class="p">(</span><span class="mi">0</span> <span class="mi">2</span> <span class="mi">4</span> <span class="mi">6</span> <span class="mi">8</span><span class="p">)</span></code></pre></div>
+
+
+<p>One advantage of this approach is that the tail of the lazy list is
+never cached which means that, unless you use the TO-LIST function
+provided in the library to turn a lazy list into a normal list, all the
+elements of your lazylists (except the first) can be garbage collected.
+These lists never take much permanent memory. The downside is that
+results are not cached, and you may end up recalculating the same list
+elements more than once. For that reason, these lists should be built in
+using side-effect-free functions. If you do want to cache the contents
+of a lazy list, just call TO-LIST which returns real list and keep a
+reference to that.</p>
+
+<p>This is just one implementation of lazy sequences in Common Lisp. It is
+partially inspired by Clojure, Haskell, and SICP. If you like the
+<a href="https://github.com/deliciousrobots/slow-jam">slow-jam</a> library and want
+it to be better, report an issue or make a pull request at github.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Stephen A. Goss</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2012-07-28T00:00:00-07:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>12:00 am</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.thezerobit.com/2012/07/28/lazy-sequences-in-common-lisp.html" data-via="thezerobit" data-counturl="http://blog.thezerobit.com/2012/07/28/lazy-sequences-in-common-lisp.html" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="../21/immutable-persistent-data-structures-in-common-lisp.html" title="Previous Post: Immutable Persistent Data Structures in Common Lisp">&laquo; Immutable Persistent Data Structures in Common Lisp</a>
+      
+      
+        <a class="basic-alignment right" href="../../08/26/concurrency-in-common-lisp-with-chanl.html" title="Next Post: Concurrency in Common Lisp with ChanL">Concurrency in Common Lisp with ChanL &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="../../../2014/06/05/the-flow-of-code.html">The Flow of Code</a>
+      </li>
+    
+      <li class="post">
+        <a href="../../../2014/05/25/python-3-is-killing-python.html">Python 3 Is Killing Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="../../09/01/beautiful-quicksort-in-common-lisp.html">Beautiful Quicksort in Common Lisp</a>
+      </li>
+    
+      <li class="post">
+        <a href="../../08/26/concurrency-in-common-lisp-with-chanl.html">Concurrency in Common Lisp With ChanL</a>
+      </li>
+    
+      <li class="post">
+        <a href="lazy-sequences-in-common-lisp.html">Lazy Sequences in Common Lisp</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>About Me</h1>
+  <p><a href="http://twitter.com/thezerobit">@thezerobit</a> on Twitter.</p>
+  <p>Email is <strong>steveth45</strong> at <strong>gmail</strong>.</p>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/thezerobit">@thezerobit</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '../../../javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'thezerobit',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="../../../javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Stephen A. Goss -
+  <span class="credit">Powered by <a href="http://octopress.org/">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+
+<!-- Mirrored from blog.thezerobit.com/2012/07/28/lazy-sequences-in-common-lisp.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:24:57 GMT -->
+</html>

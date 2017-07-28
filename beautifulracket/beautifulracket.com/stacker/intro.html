@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/stacker/intro.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:46:27 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Make a language in one hour: stacker</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;make-a-language-in-one-hour-stacker&quot;)"></div><h1 anchor="make-a-language-in-one-hour-stacker" id="make-a-language-in-one-hour-stacker" hyphens="none">Make a language in one hour: <span class="my-code" decode="exclude">stacker</span></h1></div><ul class="siblinks"><li><a class="here" href="intro.html">1&emsp;intro</a></li><li><a href="why-make-languages.html">2&emsp;why make lan­guages</a></li><li><a href="setup.html">3&emsp;setup</a></li><li><a href="the-reader.html">4&emsp;the reader</a></li><li><a href="the-expander.html">5&emsp;the expander</a></li><li><a href="recap.html">6&emsp;recap</a></li><li><a href="source-listing.html">7&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_OmZOv&quot;)"></div><p id="a_OmZOv">Let’s make <span class="my-code" decode="exclude">stacker</span>, a pro­gram­ming lan­guage that acts as a stack-based cal­cu­la­tor:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_xOird&quot;)"></div><div class="highlight-container" id="a_xOird"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang reader stacker-demo/stacker<br/>4<br/>8<br/>+<br/>3<br/>*</div><div class="highlight" form="false" id="a_TUEhs"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">reader</span> <span class="n">stacker-demo/stacker</span>
+<span class="mi">4</span>
+<span class="mi">8</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span>
+<span class="mi">3</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_xM97S&quot;)"></div><p id="a_xM97S">Our <span class="my-code" decode="exclude">stacker</span> lan­guage main­tains a <a class="glossary" href="../appendix/glossary.html#stack"><span class="glossary-link-text">stack</span></a> of <a class="glossary" href="../appendix/glossary.html#argument"><span class="glossary-link-text">argu­ments</span></a>, which starts out empty. Each line of the pro­gram rep­re­sents a new argu­ment for the stack. If it’s a num­ber, it’s sim­ply pushed onto the top of the stack. But if it’s an oper­a­tor—either <span class="my-code" decode="exclude">+</span> or <span class="my-code" decode="exclude">*</span>—then the top two argu­ments from the stack are popped off, and replaced with the result of apply­ing the oper­a­tor (mean­ing <span class="my-code" decode="exclude">arg1 + arg2</span> or <span class="my-code" decode="exclude">arg1 * arg2</span>). So this sam­ple pro­gram means <span class="my-code" decode="exclude">3 * (8 + 4)</span>, and when it runs, the result is:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_mw772&quot;)"></div><div class="highlight-container" id="a_mw772"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">36</div><div class="highlight" form="false" id="a_2jsOx"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre><span class="mi">36</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_vuGvp&quot;)"></div><p id="a_vuGvp">The stack is imple­mented with a <a class="glossary" href="../appendix/glossary.html#list"><span class="glossary-link-text">list</span></a>, the basic data struc­ture of Racket. By con­ven­tion, the top of our stack will cor­re­spond to the left side of a Racket list. Let’s visu­al­ize how the stack changes after each instruc­tion, using the rules described above:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_RbhKb&quot;)"></div><div class="highlight-container" id="a_RbhKb"><div id="code_45" form="false" decode="exclude" style="font-size:0;width:0;height:0">; (list)<br/>4 ; (list 4)<br/>8 ; (list 8 4)<br/>+ ; (list + 8 4) becomes (list 12)<br/>3 ; (list 3 12)<br/>* ; (list * 3 12) becomes (list 36)</div><div class="highlight" form="false" id="a_q4j0p"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="source"><pre><span class="c1">; (list)</span>
+<span class="mi">4</span> <span class="c1">; (list 4)</span>
+<span class="mi">8</span> <span class="c1">; (list 8 4)</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span> <span class="c1">; (list + 8 4) becomes (list 12)</span>
+<span class="mi">3</span> <span class="c1">; (list 3 12)</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span> <span class="c1">; (list * 3 12) becomes (list 36)</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk2" data-clipboard-target="#code_45" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_xbHM6&quot;)"></div><div class="highlight-container" id="a_xbHM6"><div id="code_46" form="false" decode="exclude" style="font-size:0;width:0;height:0">36 ; top value of (list 36)</div><div class="highlight" form="false" id="a_qlvqc"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre><span class="mi">36</span> <span class="c1">; top value of (list 36)</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk3" data-clipboard-target="#code_46" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_lPTAm&quot;)"></div><p id="a_lPTAm">Easy, right? If this seems like a weird way to do math, it’s called <a class=" ext" href="http://www.calculator.org/rpn.aspx">Reverse Pol­ish Nota­tion</a>, and it has a long his­tory in cal­cu­lat­ing machines.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Tbc89&quot;)"></div><p id="a_Tbc89">Though <span class="my-code" decode="exclude">stacker</span> is sim­ple, it will give us a gen­tle intro­duc­tion to Racket, includ­ing a tour of its lan­guage-mak­ing work­flow. Every lan­guage project will fol­low the same basic steps.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_DEUoe&quot;)"></div><p id="a_DEUoe"><span class="my-code" decode="exclude">stacker</span> will also get us think­ing about the idea of a “lit­tle lan­guage” made for a spe­cial­ized pur­pose—known as a <a class="glossary" href="../appendix/glossary.html#domain-specific-language"><span class="glossary-link-text">domain-spe­cific lan­guage</span></a> or <a class="glossary" href="../appendix/glossary.html#dsl"><span class="glossary-link-text">DSL</span></a>. We can make gen­eral-pur­pose lan­guages with Racket—and <a href="../basic/index.html">later on</a>, we will. But lan­guages don’t have to do every­thing. DSLs are valu­able because they can be tai­lored to the prob­lem at hand. And if you’ve pro­grammed for a lit­tle while, it’s likely you’ve <a href="../appendix/domain-specific-languages.html">already used DSLs</a>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;prerequisites&quot;)"></div><h3 anchor="prerequisites" class="subhead" id="prerequisites"><a href="#prerequisites">Pre­req­ui­sites</a></h3></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_h3DRK&quot;)"></div><p id="a_h3DRK">Some gen­eral pro­gram­ming expe­ri­ence is assumed.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_SpcOE&quot;)"></div><p id="a_SpcOE">No expe­ri­ence with Racket, Scheme, or Lisp is assumed.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_6QDrj&quot;)"></div><p id="a_6QDrj">Install Racket and the <span class="my-code" decode="exclude">beautiful-racket</span> pack­age as described in <a href="../setup.html">Setup</a>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Usk5H&quot;)"></div><p id="a_Usk5H">Make sure your Racket instal­la­tion works by try­ing the sam­ple below. Click the “copy to clip­board” icon in the upper-right cor­ner of the code sam­ple. Paste it into a new DrRacket win­dow, and click <em>Run</em>. (If a code sam­ple doesn’t already have a <span class="my-code" decode="exclude">#lang</span> line at the top, it’s pre­sumed to use the Beau­ti­ful Racket lan­guage, <span class="my-code" decode="exclude">#lang br</span>.)</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_xOird6&quot;)"></div><div class="highlight-container" id="a_xOird6"><div id="code_47" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang reader stacker-demo/stacker<br/>4<br/>8<br/>+<br/>3<br/>*</div><div class="highlight" form="false" id="a_TUEhs4"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">reader</span> <span class="n">stacker-demo/stacker</span>
+<span class="mi">4</span>
+<span class="mi">8</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span>
+<span class="mi">3</span>
+<span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk5" data-clipboard-target="#code_47" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_OsVhN&quot;)"></div><p id="a_OsVhN">The result should be:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_mw7729&quot;)"></div><div class="highlight-container" id="a_mw7729"><div id="code_48" form="false" decode="exclude" style="font-size:0;width:0;height:0">36</div><div class="highlight" form="false" id="a_2jsOx7"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre><span class="mi">36</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk8" data-clipboard-target="#code_48" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_hn7wA&quot;)"></div><p id="a_hn7wA">If so, we can con­tinue.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a class="here" href="intro.html">1&emsp;intro</a></li><li><a href="why-make-languages.html">2&emsp;why make lan­guages</a></li><li><a href="setup.html">3&emsp;setup</a></li><li><a href="the-reader.html">4&emsp;the reader</a></li><li><a href="the-expander.html">5&emsp;the expander</a></li><li><a href="recap.html">6&emsp;recap</a></li><li><a href="source-listing.html">7&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="../why-you-should-pay.html">← prev</a>
+    <a class="nav-right" href="why-make-languages.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+
+<!-- Mirrored from stuartsierra.com/tag/lisp/page/5 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 17:01:20 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+		<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+<title>Lisp &#8211; Page 5 &#8211; Digital Digressions by Stuart Sierra</title>
+<link rel='dns-prefetch' href='http://s0.wp.com/'>
+<link rel='dns-prefetch' href='http://secure.gravatar.com/'>
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel='dns-prefetch' href='http://s.w.org/'>
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Comments Feed" href="../../../comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Lisp Tag Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/stuartsierra.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.6"}};
+			!function(a,b,c){function d(a){var c,d,e,f,g,h=b.createElement("canvas"),i=h.getContext&&h.getContext("2d"),j=String.fromCharCode;if(!i||!i.fillText)return!1;switch(i.textBaseline="top",i.font="600 32px Arial",a){case"flag":return i.fillText(j(55356,56806,55356,56826),0,0),!(h.toDataURL().length<3e3)&&(i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,65039,8205,55356,57096),0,0),c=h.toDataURL(),i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,55356,57096),0,0),d=h.toDataURL(),c!==d);case"diversity":return i.fillText(j(55356,57221),0,0),e=i.getImageData(16,16,1,1).data,f=e[0]+","+e[1]+","+e[2]+","+e[3],i.fillText(j(55356,57221,55356,57343),0,0),e=i.getImageData(16,16,1,1).data,g=e[0]+","+e[1]+","+e[2]+","+e[3],f!==g;case"simple":return i.fillText(j(55357,56835),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode8":return i.fillText(j(55356,57135),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode9":return i.fillText(j(55358,56631),0,0),0!==i.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity","unicode9"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='twentysixteen-jetpack-css'  href='../../../wp-content/plugins/jetpack/modules/theme-tools/compat/twentysixteen3a05.css?ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-fonts-css'  href='https://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%2C900%2C400italic%2C700italic%2C900italic%7CMontserrat%3A400%2C700%7CInconsolata%3A400&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../../wp-content/plugins/jetpack/_inc/genericons/genericons/genericons128b.css?ver=3.1' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-style-css'  href='../../../wp-content/themes/twentysixteen/style167b.css?ver=4.6' type='text/css' media='all' />
+<!--[if lt IE 10]>
+<link rel='stylesheet' id='twentysixteen-ie-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentysixteen-ie8-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie8.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='twentysixteen-ie7-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie7.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='../../../wp-content/plugins/jetpack/css/jetpack3a05.css?ver=4.2.2' type='text/css' media='all' />
+<script type='text/javascript' src='../../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://stuartsierra.com/wp-content/themes/twentysixteen/js/html5.js?ver=3.7.3'></script>
+<![endif]-->
+<link rel='https://api.w.org/' href='../../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../../wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+
+<link rel='dns-prefetch' href='http://v0.wordpress.com/'>
+</head>
+
+<body class="archive paged tag tag-lisp tag-4 paged-5 tag-paged-5 hfeed">
+<div id="page" class="site">
+	<div class="site-inner">
+		<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+		<header id="masthead" class="site-header" role="banner">
+			<div class="site-header-main">
+				<div class="site-branding">
+					
+											<p class="site-title"><a href="../../../index.html" rel="home">Digital Digressions by Stuart Sierra</a></p>
+											<p class="site-description">From programming to everything else</p>
+									</div><!-- .site-branding -->
+
+									<button id="menu-toggle" class="menu-toggle">Menu</button>
+
+					<div id="site-header-menu" class="site-header-menu">
+													<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Primary Menu">
+								<div class="menu-main-menu-container"><ul id="menu-main-menu" class="primary-menu"><li id="menu-item-635" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../../../about-me.html">About Me</a></li>
+<li id="menu-item-633" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../../../writing.html">Writing</a></li>
+<li id="menu-item-634" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../../../presentations.html">Presentations</a></li>
+<li id="menu-item-636" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../../../software.html">Software</a></li>
+<li id="menu-item-637" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../../../contact.html">Contact</a></li>
+</ul></div>							</nav><!-- .main-navigation -->
+						
+											</div><!-- .site-header-menu -->
+							</div><!-- .site-header-main -->
+
+											<div class="header-image">
+					<a href="../../../index.html" rel="home">
+						<img src="../../../wp-content/uploads/2015/12/header.jpg" srcset="https://stuartsierra.com/wp-content/uploads/2015/12/header-300x70.jpg 300w, https://stuartsierra.com/wp-content/uploads/2015/12/header-768x179.jpg 768w, https://stuartsierra.com/wp-content/uploads/2015/12/header-1024x239.jpg 1024w, https://stuartsierra.com/wp-content/uploads/2015/12/header.jpg 1200w" sizes="(max-width: 709px) 85vw, (max-width: 909px) 81vw, (max-width: 1362px) 88vw, 1200px" width="1200" height="280" alt="Digital Digressions by Stuart Sierra">
+					</a>
+				</div><!-- .header-image -->
+					</header><!-- .site-header -->
+
+		<div id="content" class="site-content">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			<header class="page-header">
+				<h1 class="page-title">Tag: Lisp</h1>			</header><!-- .page-header -->
+
+			
+<article id="post-27" class="post-27 post type-post status-publish format-standard hentry category-programming tag-java tag-lisp">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2006/06/11/broken-binary-searches.html" rel="bookmark">Broken Binary Searches Oh My!</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>So it turns out that <a href="http://googleresearch.blogspot.com/2006/06/extra-extra-read-all-about-it-nearly.html">nearly every binary search algorithm is broken</a>.  Why?  Fixed-sized integers, a holdover from machine programming that still lingers in supposedly modern languages like Java.  LtU&#8217;ers are <a href="http://lambda-the-ultimate.org/node/1549">haggling</a> to decide if it&#8217;s a type error, a bad data structure, a language defect, a failure of correctness proofs, or just a bug.  <a href="http://patricklogan.blogspot.com/2006/06/integers.html">Lispers are talking smugly</a> about their automatic fixnum-to-bignum conversion.</p>
+<p>Of course, even Common Lisp arbitrarily limits the size of arrays.  On my 64-bit SBCL, it&#8217;s a little over one quintillion, or (assuming one-byte array elements) one <a href="http://en.wikipedia.org/wiki/Exabyte">exabyte</a>.  That&#8217;s a bigger array than even Google is likely to need in the near future.  But I think it&#8217;s valid to ask why code should be limited by anything except the hardware it&#8217;s running on.</p>
+<p>So here&#8217;s my take on the whole issue: Yes, Java/C++/C suck.  But a mathmatically perfect computer will never be built.  Every premature optimization is just a concession to the reality of chips and electrons.  Computer Science likes to believe it&#8217;s pure Mathematics, but Engineering will always be there to keep it humble.  Double-check those proofs, and then start running tests.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2006/06/11/broken-binary-searches.html" rel="bookmark"><time class="entry-date published" datetime="2006-06-11T02:46:48+00:00">June 11, 2006</time><time class="updated" datetime="2006-06-12T10:15:18+00:00">June 12, 2006</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../java.html" rel="tag">Java</a>, <a href="../../lisp.html" rel="tag">Lisp</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-26" class="post-26 post type-post status-publish format-standard hentry category-programming tag-lisp tag-perl tag-world-wide-web">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2006/06/06/static-dynamic-pages.html" rel="bookmark">Static-Dynamic Pages</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Despite all of the AJAX/Web 2.0 hype, the fact remains that most web pages are mostly static.  The most efficient way to serve static pages is unquestionably to store them as static files on a file-based web server such as Apache.  I add new pages to this site once every few days at most, but I&#8217;m still using a framework (WordPress) that requires the server to execute dozens of lines of PHP code and make several database calls for <em>every</em> page request.  This seems like a tremendous waste, even though it makes it very easy for me, the maintainer, to add new content whenever I want to.</p>
+<p>In the past, I built this site and others by writing programs (usually shell scripts calling an XSLT processor on a series of stylesheets) to generate static HTML from content stored in XML source files.  Unfortunately, this method made it difficult or impossible to update <em>only</em> the content that had changed, so I ended up regenerating the entire site every time I updated one page.  For a small site this was not a problem, but as the site grew larger it was cumbersome.</p>
+<p>On a commercial site I experimented with a variation on this process: I still stored content in XML source files, but did not generate any HTML until it was requested.  If an HTTP request came in for a file that did not exist on the server, an .htaccess directive would call a Perl script that generated the requested page and then saved it as a file at the original requested URL.  Then on the <em>next</em> request for that URL, Apache would simply serve that file.  To update a page, all I had to do was modify the source file and delete the &#8220;cached&#8221; HTML file.</p>
+<p>This caching technique proved very reliable, and meant I did not have to worry much about the efficiency of my HTML-generation code.  I could simulate &#8220;dynamic&#8221; pages that changed on a schedule by setting up a cron job that would delete the cached HTML file on a regular basis.  By adding some directory prefixes and URL rewriting, I was even able to simulate a kind of session tracking without cookies or hidden form fields.</p>
+<p>So getting back to my blog, why can&#8217;t it use the same technique?  Store the content in a database, yes, but never render anything more than once.  (In programming, this would be called <a href="http://en.wikipedia.org/wiki/Memoization">memoization</a>.)  If one change would affect many pages, simply flag those pages as out-of-date and regenerate them when they are requested.</p>
+<p>On a related note, someone on comp.lang.lisp suggested that Kenny Tilton&#8217;s <a href="http://common-lisp.net/project/cells/">Cells</a> dataflow extension to Common Lisp might be useful for web applications.  I hope to have some time to explore something along these lines using Cells as a front-end to output static HTML files.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2006/06/06/static-dynamic-pages.html" rel="bookmark"><time class="entry-date published" datetime="2006-06-06T21:37:13+00:00">June 6, 2006</time><time class="updated" datetime="2006-06-06T21:38:27+00:00">June 6, 2006</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../lisp.html" rel="tag">Lisp</a>, <a href="../../perl.html" rel="tag">Perl</a>, <a href="../../world-wide-web.html" rel="tag">World Wide Web</a></span><span class="comments-link"><a href="../../../2006/06/06/static-dynamic-pages.html#comments">1 Comment<span class="screen-reader-text"> on Static-Dynamic Pages</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-25" class="post-25 post type-post status-publish format-standard hentry category-programming tag-lisp">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2006/06/06/pushing-to-lists.html" rel="bookmark">Pushing to Lists</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Fiddling with some Common Lisp code a few weeks ago, I needed to push items onto the end of a list.  After thinking for a moment, I wrote this:</p>
+<pre>
+(defun push-end (object place)
+  (nconc place (list object))
+</pre>
+<p>Since I was fiddling in LispWorks at the time, I discovered that LispWorks already defines its own <code>push-end</code> as a macro which works like this:</p>
+<pre>
+CL-USER> (macroexpand '(push-end object place))
+(LET* ((#:ITEM563 OBJECT))
+  (LET* ((#:NEW-VALUE562 (APPEND PLACE (LIST #:ITEM563))))
+    (SETQ PLACE #:NEW-VALUE562)))
+</pre>
+<p>Leaving aside the peculiar nested <code>let*</code> and gensyms, this is still very different.  Redefining my function as <code>my-push-end</code>, here are the differences:</p>
+<p>Both destructively modify their second argument:</p>
+<pre>
+(defvar *x* '(a b c))
+
+(push-end 'd *x*)  -->  (A B C D)
+*x*  -->  (A B C D)
+
+(my-push-end 'e *x*)  -->  (A B C D E)
+*x*  -->  (A B C D E)
+</pre>
+<p>My version also works on quoted lists, but LispWorks&#8217; version does not:</p>
+<pre>
+(my-push-end 'd '(a b c))  -->  (A B C D)
+
+(push-end 'd '(a b c))
+  -->  Error: Couldn't find a setf expansion for (QUOTE (A B C)).
+</pre>
+<p>But LispWorks&#8217; version correctly handles temporary bindings, whereas mine does not:</p>
+<pre>
+(let ((temp-x *x*))
+  (push-end 'f temp-x))  -->  (A B C D E F)
+*x*  -->  (A B C D E)
+
+(let ((temp-x *x*))
+  (my-push-end 'f temp-x))  -->  (A B C D E F)
+*x*  -->  (A B C D E F)
+</pre>
+<p>This explains why <code>push</code> is implemented using <code>setf</code> instead of <code>nconc</code>, and why LispWorks&#8217; <code>push-end</code> is implemented the same way.  The only way to ensure that these macros handle temporary variables correctly is to operate only on <em>bindings</em> and not touch their list values directly.  </p>
+<p>Of course, operating directly on lists with <code>nconc</code> is slightly more efficient, so in situations without global variables it might be preferable.  However, in complex code, subtle bugs might emerge from modifying lists.  A good compiler should optimize away the extra assignments in the <code>push-end</code> macro when they aren&#8217;t needed.  In LispWorks, I ran:</p>
+<pre>
+(disassemble #'my-push-end)  -->  16 lines of assembler
+
+;; must wrap the macro in a lambda to disassemble:
+(disassemble #'(lambda (obj place) (push-end obj place)))
+  -->  20 lines of assembler
+</pre>
+<p>So my function requires four fewer assembly instructions than LispWorks&#8217; macro.  Perhaps in some extremely list-intensive code that would make a difference, but for anything else I&#8217;d go with the slightly safer macro.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2006/06/06/pushing-to-lists.html" rel="bookmark"><time class="entry-date published" datetime="2006-06-06T01:06:01+00:00">June 6, 2006</time><time class="updated" datetime="2006-06-06T10:06:48+00:00">June 6, 2006</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../lisp.html" rel="tag">Lisp</a></span><span class="comments-link"><a href="../../../2006/06/06/pushing-to-lists.html#comments">2 Comments<span class="screen-reader-text"> on Pushing to Lists</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-23" class="post-23 post type-post status-publish format-standard hentry category-programming tag-lisp">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2006/06/03/idiomatic-macros.html" rel="bookmark">Idiomatic Macros for Common Lisp</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Every programming language has idioms&#8211;patterns used so frequently that they are almost considered part of the language itself.  (See these <a href="http://dept-info.labri.fr/~strandh/Teaching/MTP/Common/Strandh-Tutorial/idioms.html">C idioms</a> for examples.)  Common Lisp, with almost unlimited possibilities for syntax, depends more heavily on idioms to remain comprehensible.  Some examples are <code>defsomething</code> or <code>define-something</code> for definitions, <code>something-p</code> for predicate tests, and <code>make-something</code> for constructors.</p>
+<p><a href="http://bioinformatics.nyu.edu/~marcoxa/">Marco Antoniotti</a> created a clever macro package called <a href="http://common-lisp.net/project/definer/">DEFINER</a> that codifies the most common of these, definitions, into a single macro with consistent syntax for any object that is being defined.  With DEFINER, all definitions can be made with a single macro: <code>def</code>, which is followed by a symbol specifying what is being defined.  So <code>defun</code> becomes <code>def&nbsp;function</code>, <code>defvar</code> becomes <code>def&nbsp;var</code>, and <code>define-condition</code> becomes <code>def&nbsp;condition</code>.</p>
+<p>Of course, this is Lisp, so <code>def</code> can be turned on itself to produce new definition forms with <code>def&nbsp;definer</code>.  New <code>def</code> forms can then be created that follow the same syntactic pattern of:</p>
+<pre>(def <em>type-of-thing name properties...</em>)</pre>
+<p>As Marco writes, DEFINER &#8220;makes it possible to homogeneize a natural programming practice followed by several CL programmers.&#8221;</p>
+<p>I say, why not extend this practice to other idioms?  Here&#8217;s a list of other Common Lisp idioms I think could be well-served by the same sort of homogeneization:</p>
+<dl>
+<dt>with</dt>
+<dd>Use <code>with <em>thing</em></code> to delimit the scope of certain things&#8211;local variables, special variables, functions, open files, etc.  Then <code>let</code> becomes <code>with&nbsp;lexicals</code>, <code>labels</code> becomes <code>with&nbsp;functions</code>, and <code>with-open-file</code> becomes <code>with&nbsp;file</code>.</dd>
+<dt>make</dt>
+<dd>A generic constructor for any anonymous (unnamed) object.  This could ensure that all object constructors follow a predictable pattern after <code>make&nbsp;instance</code>, and turns <code>lambda</code> into the infinitely more readable <code>make&nbsp;function</code>.  Also begs the question of why one can&#8217;t create anonymous classes.</dd>
+<dt>is</dt>
+<dd>A generic predicate, borrowed from the <a href="http://common-lisp.net/project/bese/FiveAM.html">FiveAM</a> testing framework.  Should alway return a boolean true/false value.  Gives us the more readable <code>is&nbsp;even</code> instead of <code>evenp</code>.</dd>
+<dt>equal</dt>
+<dd>Replace Lisp&#8217;s scattering of equality predicates&#8211;<code>eq</code>, <code>eql</code>, <code>equal</code>, <code>equalp</code>, <code>=</code>, <code>string=</code>, etc.&#8211;with forms like <code>equal&nbsp;object</code>, <code>equal&nbsp;contents</code>, <code>equal&nbsp;number</code>, and <code>equal&nbsp;string</code>.  One could alternately use <code>is&nbsp;equal</code>, although that looks odd in English grammar.</dd>
+<dt>as</dt>
+<dd>A generic type converter.  Makes it more obvious, for example, when <code>string</code> is being used as a type specifier and when as a coercion function.  Also makes it very easy to define new converters between types, assuming these are implemented as generic functions.
+</dd>
+<dt>get</dt>
+<dd>Generic accessor.  Replaces both primitives like <code>car</code> as well as object-related functions like <code>slot-value</code>.</dd>
+<dt>set</dt>
+<dd>Replacement for <code>setf</code>.  Every <code>get</code> form should have a corresponding <code>set</code>.  Primitives like <code>rplacd</code> become <code>set&nbsp;cdr</code>.</dd>
+</dl>
+<p>And of course, to top it off we would want <code>def&nbsp;with</code>, <code>def&nbsp;maker</code>, <code>def&nbsp;is</code>, <code>def&nbsp;equality</code>, and <code>def&nbsp;as</code>. And while we&#8217;re at it, <code>def&nbsp;idiom</code>!</p>
+<p>The point of all this is to make code more readable.  One can reduce the 978 Common Lisp symbols to pairs of symbols, the first naming the general category of operation and the second specifying the exact operation within that category.</p>
+<p>When examining unfamiliar code that uses these idiomatic macros, a programmer can look at the categorical names to get a rough idea of what is happening even without knowing about the specific functions being used.  This can make Common Lisp more manageable without sacrificing any of its expressiveness.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2006/06/03/idiomatic-macros.html" rel="bookmark"><time class="entry-date published" datetime="2006-06-03T22:10:35+00:00">June 3, 2006</time><time class="updated" datetime="2006-06-11T15:50:12+00:00">June 11, 2006</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../lisp.html" rel="tag">Lisp</a></span><span class="comments-link"><a href="../../../2006/06/03/idiomatic-macros.html#comments">1 Comment<span class="screen-reader-text"> on Idiomatic Macros for Common Lisp</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-20" class="post-20 post type-post status-publish format-standard hentry category-programming tag-lisp">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2006/05/21/types-are-not-classes.html" rel="bookmark">Types Are Not Classes, But Why?</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>In Common Lisp, you can&#8217;t do this:</p>
+<pre>
+(defgeneric g (x))
+(defmethod g ((x (and integer (satisfies evenp))) ...)
+</pre>
+<p>Because <code>(and integer ...)</code> is not a class.  It is a valid <em>type specifier</em> and thus could be used in declarations, but it cannot be used in a method argument list.</p>
+<p>It&#8217;s fairly easy to see why this is the case: allowing compound type specifiers in method argument lists effectively means creating anonymous classes on-the-fly, which would play havoc with the type hierarchies on which method dispatch depends.</p>
+<p>But why can&#8217;t we unify types and classes?  Every CLOS class has a corresponding type of the same name, and the built-in types are also classes.  Furthermore, it is fairly obvious that <code>(and integer (satisfies evenp))</code> is a sub-type of <code>integer</code>, so why not go ahead and treat it like a class that inherits from <code>integer</code>?</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2006/05/21/types-are-not-classes.html" rel="bookmark"><time class="entry-date published" datetime="2006-05-21T11:19:58+00:00">May 21, 2006</time><time class="updated" datetime="2006-05-22T11:21:02+00:00">May 22, 2006</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../lisp.html" rel="tag">Lisp</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-21" class="post-21 post type-post status-publish format-standard hentry category-programming tag-lisp">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2006/05/04/a-textual-captcha-in-lisp.html" rel="bookmark">A Textual CAPTCHA in Lisp</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Playing with the first in a (hopefully ongoing) series of <a href="http://common-lisp.net/project/quiz/">Common Lisp Quizzes</a>, I wrote a simple text-only CAPTCHA (completely automated public Turing test to tell computers and humans apart).  My solution and others are posted at <a href="http://common-lisp.net/project/quiz/quizzes/quiz1/quiz1.html">CL Quiz #1</a>.</p>
+<p><code>CAPTCHA> (generate-captcha)<br />
+"You started out with forty-nine Lisp Machines.  Not through any fault of your own, you lost three Lisp Machines.  Years later, when you were reflecting on this whole sordid process, you counted up how many you had.  What was the result?"<br />
+"46"</code></p>
+<p>As per the suggestion in the quiz problem, I used CL&#8217;s <code>format "~r"</code> to make up simple arithmetic questions.  To make it harder for a computer to parse, I embedded the questions in complex sentences selected from stored lists.  The results are at least hard enough that the Google Calculator can&#8217;t solve them, but even a modest AI with language capabilities would likely have little trouble.</p>
+<p>This and discussions on the CL-Quiz mailing list got me thinking about CAPTCHAs in general.  They&#8217;re really an unwinnable proposition.  In order to check that a given answer is correct, it must be possible to solve the test algorithmically.  Given that, it&#8217;s only a matter of time before someone writes an algorithm to solve it.  Most CAPTCHAs in common use rely on adding enough &#8220;noise&#8221; to the image, sound, or text to confuse a computer, but as computer pattern-recognition abilities get better, the necessary noise level reaches the point that humans get confused as well.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2006/05/04/a-textual-captcha-in-lisp.html" rel="bookmark"><time class="entry-date published" datetime="2006-05-04T18:49:25+00:00">May 4, 2006</time><time class="updated" datetime="2006-05-04T15:51:10+00:00">May 4, 2006</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../lisp.html" rel="tag">Lisp</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-12" class="post-12 post type-post status-publish format-standard hentry category-programming tag-language tag-lisp">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2006/04/20/programming-by-linguists-2.html" rel="bookmark">Programming by Linguists II</a></h2>	</header><!-- .entry-header -->
+
+				<div class="entry-summary">
+				<p>Given the task of designing a programming language, which must be exactly defined for engineering purposes, what would a linguist &#8212; as opposed to a mathemetician &#8212; do?</p>
+			</div><!-- .entry-summary -->
+		
+	
+	<div class="entry-content">
+		<p>Given the task of designing a programming language, which must be exactly defined for engineering purposes, what would a linguist &#8212; as opposed to a mathemetician &#8212; do?</p>
+<p>The first step would probably be to define parts of speech.  Most programming languages really have only two parts of speech: nouns (variables) and verbs (functions).  Named or keyword arguments might count as adverbs, and object properties are often treated like adjectives, but they are not used the same way as in real languages, where they can completely change the meaning of the words they modify.</p>
+<p>Next comes grammar: sentence structure, connecting words.  Again, despite the complexity of their punctuation rules (which a linguist would classify as mechanics, not grammar) most programming has a very simple grammar.  We have statements, which correspond to sentences; and expressions, which are usually mathematical.  (Lisp does away with the former, and as a result is much less like natural languages, a barrier to understanding that contributes to its obscurity.)</p>
+<p>The third and most complicated step would probably be defining vocabulary, i.e. coming up with names for everything.  Programmers are notoriously bad at this.  One can hardly blame them for not being linguists themselves, but I think computer science ought to include at least some basic theory of naming.  One difficulty is the usual requirement that every name used in a single program be unique.  Scoped namespaces alleviate some of the trouble, but it is still difficult to come up with names that are both distinct enough to have an obvious meaning and concise enough to be convenient.  Lisp&#8217;s panoply of car/cdr functions (cadr, cdar, caadr, caddr, &#8230;) might win the prize for the worst name choices.  One also encounters library functions with exceedingly long names such as <code>libfooRemoveAllFoosFromBaz</code>.  (Even with nested scopes and object-oriented programming, this example would probably be written as <code>Foo.Baz.foos.removeAll</code>, which is not much better.)</p>
+<p>Vocabulary for a programming language typically includes both the core language and a set of standard libraries.  One flaw with nearly all programming languages, Lisp being the notable exception, is the demarcation between the &#8220;core&#8221; language and its libraries.  In all but a few highly specialized languages, libraries will comprise the meat of almost every program.  In the linguistic analogy, one could almost say that the core of a language is its grammar, while the libraries are its vocabulary.</p>
+<p>It is tempting to assume that human languages have infinite precision.  That is, they can express any concept that the mind can conceieve of.  This is not entirely true.  There are many documented examples of concepts that exist in one language but for which there is no adequate word, sometimes not even a combination of words, in another language.  Much of what are considered &#8220;cultural differences&#8221; are caused by different vocabularies that define the set of concepts that can be expressed, and therefore understood, by different cultures.</p>
+<p>The fact that nearly every programming language draws its words from English makes things harder still.  English is terribly dependent on context for meaning, using the same simple words to express many different concepts.  For example, consider the verb <em>to put</em>, whose English definition fills a full dictionary page.  Add to this the habit of almost all languages of using compound phrases to name single concepts.  German habitually mashes these phrases together to make new words, but names like &#8220;ListOfPrimeNumbers&#8221; feel awkward in English.</p>
+<p>So vocabulary is difficult every way around.  Of course, linguists are rarely consulted when new English words are being invented, although they will decide whether those words appear in a dictionary.  In naming functions, invented words would be a barrier to comprehension.  And yet, it is difficult to find existing words to identify the many operations which have no direct relevance to the problem at hand but which are nonetheless necessary to help the computer do its job.  Think of prototypes, declarations, typecasts, and conversions.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2006/04/20/programming-by-linguists-2.html" rel="bookmark"><time class="entry-date published" datetime="2006-04-20T20:36:16+00:00">April 20, 2006</time><time class="updated" datetime="2006-04-20T10:39:36+00:00">April 20, 2006</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../language.html" rel="tag">Language</a>, <a href="../../lisp.html" rel="tag">Lisp</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-13" class="post-13 post type-post status-publish format-standard hentry category-programming tag-lisp">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../../../2006/04/15/oh-those-hyphens.html" rel="bookmark">Oh, Those Hyphens!</a></h2>	</header><!-- .entry-header -->
+
+				<div class="entry-summary">
+				<p>Why does Lisp use hyphens instead of underscores or CamelCase? [Read more&#8230;]</p>
+			</div><!-- .entry-summary -->
+		
+	
+	<div class="entry-content">
+		<p>Lisp differs from almost every other programming language on Earth by using hyphens in its function/variable names.  C/Perl/Java/etc. programmers, who can only use hypens for subtraction, like to argue about the relative merits of NamesWithCamelCaseInThem, which are hard to read, or names_with_lots_of_underscores_in_them, which are hard to type.  What the debaters rarely mention, it seems, is that neither style is particularly logical.</p>
+<p>When you define a function or variable name, you are effectively defining a new word in the vocabulary of your program.  Most Western languages allow the definition of &#8220;compound words&#8221; composed of multiple words.  In normal language, these compound words are occasionally mashed together (e.g. &#8220;weekend,&#8221; &#8220;weblog&#8221;) but more often left separate (e.g. &#8220;dining room,&#8221; &#8220;miles per hour&#8221;).</p>
+<p>No programming language parser has yet been written that can understand compound words with spaces in them, so we have to compromise.  Western languages, English in particular, already have a compromise in place: they use hypens to form compound words which would be awkward to write as single words or as separate ones (e.g. &#8220;all-inclusive,&#8221; &#8220;president-elect&#8221;).</p>
+<p>So Lisp&#8217;s hyphenated names are not only easier to read than CamelCase and easier to type than underscores, they are actually the most logical choice for creating new compound words.  Yet another example of Lisp&#8217;s innate superiority. ;)</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../../../2006/04/15/oh-those-hyphens.html" rel="bookmark"><time class="entry-date published" datetime="2006-04-15T12:07:29+00:00">April 15, 2006</time><time class="updated" datetime="2006-06-04T10:06:50+00:00">June 4, 2006</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../lisp.html" rel="tag">Lisp</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+	<nav class="navigation pagination" role="navigation">
+		<h2 class="screen-reader-text">Posts navigation</h2>
+		<div class="nav-links"><a class="prev page-numbers" href="4.html">Previous page</a>
+<a class='page-numbers' href='../index.html'><span class="meta-nav screen-reader-text">Page </span>1</a>
+<span class="page-numbers dots">&hellip;</span>
+<a class='page-numbers' href='4.html'><span class="meta-nav screen-reader-text">Page </span>4</a>
+<span class='page-numbers current'><span class="meta-nav screen-reader-text">Page </span>5</span></div>
+	</nav>
+		</main><!-- .site-main -->
+	</div><!-- .content-area -->
+
+
+	<aside id="secondary" class="sidebar widget-area" role="complementary">
+		<section id="search-3" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://stuartsierra.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+	</label>
+	<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</section><section id="text-4" class="widget widget_text">			<div class="textwidget"><ul>
+<li><a href="http://feeds2.feedburner.com/StuartSierra" title="Syndicate this site using RSS 2.0">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="../../../comments/feed" title="The latest comments to all posts in RSS">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+</ul>
+<ul>
+<li><a href="https://twitter.com/stuartsierra">Twitter</a></li>
+<li><a href="https://github.com/stuartsierra">GitHub</a></li>
+</ul></div>
+		</section><section id="tag-widget-2" class="widget TagWidget"><h2 class="widget-title">Clojure Do’s and Don’ts</h2><ul class = "posts-by-tag-list"><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-883"><a class = "posts-by-tag-item-title" href="../../../2015/08/25/clojure-donts-lazy-effects.html">Clojure Don’ts: Lazy Effects</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-877"><a class = "posts-by-tag-item-title" href="../../../2015/08/10/clojure-donts-redundant-map.html">Clojure Don’ts: Redundant map</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-870"><a class = "posts-by-tag-item-title" href="../../../2015/06/16/clojure-donts-single-branch-if.html">Clojure Don’ts: Single-branch if</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-854"><a class = "posts-by-tag-item-title" href="../../../2015/06/10/clojure-donts-heisenparameter.html">Clojure Don’ts: The Heisenparameter</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-849"><a class = "posts-by-tag-item-title" href="../../../2015/06/01/clojure-donts-optional-arguments-with-varargs.html">Clojure Don’ts: Optional Arguments with Varargs</a></li><li class="posts-by-tag-item Clojure do's and don'ts errors" id="posts-by-tag-item-836"><a class = "posts-by-tag-item-title" href="../../../2015/05/27/clojure-uncaught-exceptions.html">Clojure Do’s: Uncaught Exceptions</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-831"><a class = "posts-by-tag-item-title" href="../../../2015/05/17/clojure-record-constructors.html">Record Constructors</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-826"><a class = "posts-by-tag-item-title" href="../../../2015/05/10/clojure-namespace-aliases.html">Clojure Do’s: Namespace Aliases</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-820"><a class = "posts-by-tag-item-title" href="../../../2015/05/02/clojure-donts-isa.html">Clojure Don’ts: isa?</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-812"><a class = "posts-by-tag-item-title" href="../../../2015/04/26/clojure-donts-concat.html">Clojure Don’ts: Concat</a></li></ul></section>	</aside><!-- .sidebar .widget-area -->
+
+		</div><!-- .site-content -->
+
+		<footer id="colophon" class="site-footer" role="contentinfo">
+							<nav class="main-navigation" role="navigation" aria-label="Footer Primary Menu">
+					<div class="menu-main-menu-container"><ul id="menu-main-menu-1" class="primary-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../../../about-me.html">About Me</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../../../writing.html">Writing</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../../../presentations.html">Presentations</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../../../software.html">Software</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../../../contact.html">Contact</a></li>
+</ul></div>				</nav><!-- .main-navigation -->
+			
+			
+			<div class="site-info">
+								<span class="site-title"><a href="../../../index.html" rel="home">Digital Digressions by Stuart Sierra</a></span>
+				<a href="https://wordpress.org/">Proudly powered by WordPress</a>
+			</div><!-- .site-info -->
+		</footer><!-- .site-footer -->
+	</div><!-- .site-inner -->
+</div><!-- .site -->
+
+	<div style="display:none">
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	</div>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201635'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2016Sepaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../../../wp-content/plugins/jetpack/modules/wpgroho167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../wp-content/themes/twentysixteen/js/skip-link-focus-fix8de4.js?ver=20160816'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var screenReaderText = {"expand":"expand child menu","collapse":"collapse child menu"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../../../wp-content/themes/twentysixteen/js/functions8de4.js?ver=20160816'></script>
+<script type='text/javascript' src='../../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='https://stats.wp.com/e-201635.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.2.2',blog:'2702563',post:'0',tz:'-4',srv:'stuartsierra.com'} ]);
+	_stq.push([ 'clickTrackerInit', '2702563', '0' ]);
+</script>
+</body>
+
+<!-- Mirrored from stuartsierra.com/tag/lisp/page/5 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 17:01:21 GMT -->
+</html>
+
+<!-- Dynamic page generated in 0.360 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:58:23 -->
+
+<!-- Compression = gzip -->

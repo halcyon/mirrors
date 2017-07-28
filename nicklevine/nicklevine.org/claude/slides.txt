@@ -1,0 +1,594 @@
+;; $Id: //info.ravenbrook.com/project/chart/talk/2014-02-17/els14/demo/slides.txt#6 $
+;;
+;; Slides for paper presented at the 7th European Lisp Symposium,
+;; Paris, 2014-05-05
+
+CLAUDE
+
+The Common Lisp
+      Audience Expansion Toolkit
+
+Nick Levine
+ndl@ravenbrook.com
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+The Common Lisp
+      Audience Expansion Toolkit
+
+www.nicklevine.org/claude
+
+* Slides & (updated) paper
+* Full documentation
+* Download
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass-external graph (chart:graph)
+  ())
+
+(defun-external (new-graph :result-type object)
+    ()
+  (make-instance 'graph))
+
+# Python
+>>> from pyChart import chart
+>>> chart.Graph()
+<Chart Graph handle=0x20053748>
+>>>
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+Origins
+
+* Ravenbrook Chart
+* Native interface (CL)
+* How many possible users, ever?
+
+* We're going to need a
+   Larger Audience
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+In search of that Larger Audience...
+
+* Make CL library available to non-lispers
+
+* Save image as a DLL
+
+* Export "interface functions"
+
+* Share objects, somehow
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+* CLAUDE-SETUP for configuration
+   - consistent lisp-to-C naming
+   - slightly cool use for ~/ format directive
+
+* Build script (2 modes)
+
+* C header file
+
+* Examples in C & Python
+
+* Documentation (Lisp; C / Python)
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+One Major Annoyance
+
+* Necessary that lisp image can be
+   saved as a DLL.
+
+* Supported by: ABCL, ACL, ECL, LW.
+
+* This is unfortunate.
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+Motivation
+
+* Abstract out work I did for
+   Chart Desktop
+
+* Simplify export of lisp libraries
+
+* Reduce effort of co-ordinating facing
+   foreign-language interfaces
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+Considerations
+
+* Shared memory
+  - Objects
+  - Sequences
+
+* Allocation
+
+* Recycling
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+Considerations
+
+* Elegance (in lisp, at least)
+
+* Symmetry of concepts
+
+* High data throughput
+
+* Error handling
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass-external graph (chart:graph)
+  ())
+
+(defun-external (new-graph :result-type object)
+    ()
+  (make-instance 'graph))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass-external graph (chart:graph)
+  ())
+
+(defun-external (new-graph :result-type object)
+    ()
+  (make-instance 'graph))
+
+# C
+
+chart_handle_t graph;
+chart_new_graph(&graph);
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass-external graph (chart:graph)
+  ())
+
+(defun-external (new-graph :result-type object)
+    ()
+  (make-instance 'graph))
+
+# Python
+>>> from pyChart import chart
+>>> chart.Graph()
+<Chart Graph handle=0x20053748>
+>>>
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmacro defclass-external
+          (name superclasses slots
+                &rest class-options)
+  (unless (find 'object superclasses)
+    (setf superclasses (append superclasses
+                               '(object))))
+  `(progn
+     (fli:define-foreign-type ,name
+         (&key allow-null)
+       `(object :type ',',name
+                :allow-null ,allow-null))
+     (defclass ,name ,superclasses ,slots
+       ,@class-options)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass object ()
+  ((wrapper :accessor object-wrapper)))
+
+(fli:define-foreign-converter object
+    (&key allow-null type) (object address)
+  :foreign-type ':uint32
+  :foreign-to-lisp `(unbox ,address
+                           :allow-null ,allow-null
+                           :type ,type)
+  :lisp-to-foreign `(box ,object
+                         :allow-null ,allow-null))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defstruct wrapper
+  object)
+
+;; Debugging aid (mostly)
+(defvar *wrappers* (make-hash-table))
+
+(defmethod initialize-instance :after
+    ((self object) &key)
+  (let* ((wrapper (sys:in-static-area
+                    (make-wrapper object)))
+         (address (sys:object-address wrapper)))
+    (setf (gethash wrapper *wrappers*) address
+          (object-wrapper self) wrapper)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Wrapper's address is passed externally
+;; and is used to retrieve the object
+
+(defun unbox (address)
+  ;; plus some checking...
+  (let ((wrapper
+         (sys:pointer-from-address address)))
+    (wrapper-object wrapper)))
+
+(defmethod box ((self object))
+  ;; plus more checking...
+  (let ((wrapper (object-wrapper self)))
+    (sys:object-address wrapper)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+_objects = {}
+
+class object():
+    def __init__(self, handle):
+        _objects[handle] = self
+        self.handle = handle
+
+    def box(self):
+        return self.handle
+
+def unbox(handle):
+    return _objects[handle]
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+>>> unbox(0x20053838)
+<Chart Node handle=0x20053838>
+>>> chart.describe_nodes([_])
+[(<Chart Graph handle=0x20053748>,
+  [], u'Hello World!')]
+>>>
+
+CLAUDE 17 > (unbox #x20053838)
+#<Chart Node handle=0x20053838>
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+CLAUDE 17 > (unbox #x20053838)
+#<Chart Node handle=0x20053838>
+
+CLAUDE 18 > (describe *)
+
+#<Chart Node handle=0x20053838> is a CHART:NODE
+WRAPPER #<WRAPPER Node 2005383B>
+GRAPH #<Chart Graph handle=0x20053748>
+LABEL "Hello World!"
+EDGES NIL
+
+CLAUDE 19 >
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+The smallprint
+
+* These are library objects, so may
+   only be generated by the library.
+
+* Objects are passed to the application;
+   the library must retain them safely.
+
+* Only the application can say when an
+   object is to be deleted.
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun-external (remove-objects
+                 :result-type
+                 (array object :call 'discard))
+                ((array (array object)))
+  (remove-duplicates
+   (loop for object in array
+         append
+         (remove-object object))))
+
+;; Specialise me!
+(defun-external remove-object ((self object))
+  (list self))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defmethod discard ((self object))
+  (let* ((wrapper (shiftf (object-wrapper self)
+                          nil))
+         (address (sys:object-address wrapper)))
+    (setf (wrapper-object wrapper) nil)
+    (remhash address *wrappers*)
+    wrapper))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+class object():
+    ...
+    def _discard(self):
+        handle = self.handle
+        del _objects[handle]
+        self.handle = None
+
+def remove_objects(objects):
+    boxed = map(box, objects)
+    boxed_invalids = lib.remove_objects(boxed)
+    invalids = map(unbox, boxed_invalids)
+    for invalid in invalids:
+        invalid._discard()
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+>>> g=chart.Graph()
+>>> g
+<Chart Graph handle=0x20053748>
+>>> chart.remove_objects([g])
+>>> g
+<Chart discarded Graph>
+>>>
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+* Record
+
+  Sequence: length and types determined by context
+
+   - Two integers representing a co-ordinate pair
+   - An object, a co-ordinate pair, and a string
+
+* Array
+
+ Sequence: all same type, length not fixed
+
+ - Internally, a record with length prepended
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(array object)
+
+(record (object
+         (array object)
+         ustring
+         ustring))
+
+(array (record (object
+                (array object)
+                ustring
+                ustring)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+The smallprint
+
+* Either party may generate a sequence
+
+* If it was the application, then CLAUDE will copy
+   the sequence (and so the application need not
+   retain the sequence in memory)
+
+* If it was the library, then CLAUDE will retain
+   the sequence until the application explicitly
+   frees it
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+"Never before has anyone dared utter words of that tongue here..."
+
+"I do not ask for pardon... for this Speech may yet be heard in
+ every corner of the West!"
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+  chart_array_t data, result;
+
+  data = (chart_array_t)alloca(chart_array_size(2));
+  data->length = 2;
+  data->values[0].handle = object_0;
+  data->values[1].handle = object_1;
+
+  chart_remove_objects(&result, data);
+  for (i = 0; i < result->length; i++) {
+    discard(result->values[i].handle);
+  }
+
+  chart_free(result);
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun-external (return-object
+                 :result-type object)
+    ((object object))
+  object)
+
+(defun-external (graph-nodes
+                 :result-type (array object))
+    ((graph graph))
+  (chart:graph-nodes graph))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun-external (new-nodes
+                 :result-type (array object))
+    ((graph graph)
+     (descriptions (array
+                    (record (ustring
+                             ustring)))))
+  (loop for (label text) in descriptions
+        collect
+        (chart:make-node graph
+                         :label label
+                         :text text)))
+
+;; Throughput!
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+defun-external
+
+* Complicated macroexpansion
+
+* Defines a lisp function
+* Defines a "foreign callable" which invokes the lisp
+* Arranges that external name will be exported from
+   the DLL
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+defun-external
+
+* Functions return a result code:
+
+    0 is good
+   -1 is bad
+
+* Return values are passed by writing into a pointer
+   argument
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+def check(func, *args):
+    result = func(*args)
+    if result != OK:
+        raise ChartError()
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+def val(func):
+    def invoker(*args):
+        pointer = ctypes.c_void_p()
+        check(func,
+              ctypes.byref(pointer), *args)
+        return pointer.value
+    return invoker
+
+def void(func):
+    def invoker(*args):
+        check(func, *args)
+    return invoker
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+def lib.set_callbacks(object, callbacks):
+    dll_fn = dll.capi_set_callbacks
+    invoke.void(dll_fn)(object, callbacks)
+
+def set_callbacks(object, callbacks):
+    c_tuples = map(callback_tuple, callbacks)
+    records = map(construct, c_tuples)
+    array = pack(records)
+    boxed = object.box() if object else None
+    lib.set_callbacks(boxed, array)
+
+def callback_tuple ((name, function)):
+    return ((c_string(name), function or 0),)
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun-external set-callbacks
+    ((manager (manager :allow-null t))
+     (callbacks (array
+                 (record (ustring uint)))))
+  ...)
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun report-error ()
+  (with-foreign-object (pstring :pointer)
+     (if (ok (dll.last-error pstring))
+         (let ((string (mem-ref pstring :string)))
+           (if string
+               (let ((pointer (mem-ref pstring
+                                       :pointer)))
+                 (if (ok (dll.free pointer))
+                     (error string)
+                   (also-cannot-free string)))
+             (there-was-no-error)))
+       (error-reporting-the-error))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+Error Handling
+
+* User never sees a lisp debugger
+
+* Full backtraces available to application
+
+* Bunch of Condition System tactics
+
+* Applies in particular to argument
+    translation
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defparameter *last-point* nil)
+(defun draw-line (pane x y)
+  (let ((previous (shiftf *last-point* (list x y))))
+    (when previous
+      (destructuring-bind (last-x last-y)
+          previous
+        (gp:draw-line pane last-x last-y x y)))))
+
+(defun draw-string (pane x y)
+  (gp:draw-string pane (lisp-implementation-type) x y))
+
+(defparameter pane (make-instance 'capi:output-pane))
+
+(setf (capi:output-pane-input-model pane)
+      '(((:button-1 :release) draw-line)
+        ((:button-3 :release) draw-string)))
+
+(capi:contain pane)
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+* In this demo, the application was also CL.
+
+* In general it won't be.
+
+* When lisp talks to C you go for the lowest
+   common denominator.
+
+* When lisp talks to lisp you aim for the highest
+   common factor.
+
+* This is not the interface I'd use for linking
+   two different lisps.
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Connecting and Disconnecting
+   close
+   init
+
+;; Error Handling
+   last-error
+   raise-error
+
+;; Memory
+   free
+   remove-objects
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Callbacks
+   set-callbacks
+
+;; Objects and Communication Tests
+   invoke-return-object
+   new-object
+   request-error
+   return-array
+   return-object
+
+;; Miscellaneous
+   version
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+The Common Lisp
+      Audience Expansion Toolkit
+
+Nick Levine
+ndl@ravenbrook.com
+
+www.nicklevine.org/claude

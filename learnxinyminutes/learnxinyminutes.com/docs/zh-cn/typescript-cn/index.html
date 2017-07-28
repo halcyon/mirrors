@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/zh-cn/typescript-cn/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:36:03 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn TypeScript in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../../css/normalize.css">
+        <link rel="stylesheet" href="../../../css/main.css">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fzh-cn%2Ftypescript-cn%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3DTypeScript">
+        分享此页
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">X分钟速成Y</a></h2>
+  <h2>其中 Y=TypeScript</h2>
+  
+    <p class="filelink">
+    源代码下载：
+    <a href="../../files/learntypescript-cn.ts">learntypescript-cn.ts</a>
+    </p>
+  
+  <div id="doc">
+    <p>TypeScript是一门为开发大型JavaScript应用而设计的语言。TypeScript在JavaScript的基础上增加了类、模块、接口、泛型和静态类型（可选）等常见的概念。它是JavaScript的一个超集：所有JavaScript代码都是有效的TypeScript代码，所以任何JavaScript项目都可以无缝引入TypeScript. TypeScript编译器会把TypeScript代码编译成JavaScript代码。</p>
+
+<p>本文只关注TypeScript额外增加的区别于<a href="../javascript-cn/index.html">JavaScript</a>的语法，.</p>
+
+<p>如需测试TypeScript编译器，你可以在<a href="http://www.typescriptlang.org/Playground">Playground</a>码代码，它会自动编译成JavaScript代码然后直接显示出来。</p>
+<pre class="highlight javascript"><code><span class="c1">// TypeScript有三种基本类型</span>
+<span class="kd">var</span> <span class="nx">isDone</span><span class="err">:</span> <span class="kr">boolean</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">lines</span><span class="err">:</span> <span class="nx">number</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">name</span><span class="err">:</span> <span class="nx">string</span> <span class="o">=</span> <span class="s2">"Anders"</span><span class="p">;</span>
+
+<span class="c1">// 如果不知道是什么类型，可以使用"any"(任意)类型</span>
+<span class="kd">var</span> <span class="nx">notSure</span><span class="err">:</span> <span class="nx">any</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="nx">notSure</span> <span class="o">=</span> <span class="s2">"maybe a string instead"</span><span class="p">;</span>
+<span class="nx">notSure</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// 亦可，定义为布尔型</span>
+
+<span class="c1">// 对于集合的声明, 有类型化数组和泛型数组</span>
+<span class="kd">var</span> <span class="nx">list</span><span class="err">:</span> <span class="nx">number</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+<span class="c1">// 另外一种，使用泛型数组</span>
+<span class="kd">var</span> <span class="nx">list</span><span class="err">:</span> <span class="nb">Array</span><span class="o">&lt;</span><span class="nx">number</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+
+<span class="c1">// 枚举：</span>
+<span class="kr">enum</span> <span class="nx">Color</span> <span class="p">{</span><span class="nx">Red</span><span class="p">,</span> <span class="nx">Green</span><span class="p">,</span> <span class="nx">Blue</span><span class="p">};</span>
+<span class="kd">var</span> <span class="nx">c</span><span class="err">:</span> <span class="nx">Color</span> <span class="o">=</span> <span class="nx">Color</span><span class="p">.</span><span class="nx">Green</span><span class="p">;</span>
+
+<span class="c1">// 最后，"void"用于函数没有任何返回的特殊情况下</span>
+<span class="kd">function</span> <span class="nx">bigHorribleAlert</span><span class="p">()</span><span class="err">:</span> <span class="k">void</span> <span class="p">{</span>
+  <span class="nx">alert</span><span class="p">(</span><span class="s2">"I'm a little annoying box!"</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// 函数是"第一等公民"(first class citizens), 支持使用箭头表达式和类型推断</span>
+
+<span class="c1">// 以下是相等的，TypeScript编译器会把它们编译成相同的JavaScript代码</span>
+<span class="kd">var</span> <span class="nx">f1</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="na">i</span><span class="p">:</span> <span class="nx">number</span><span class="p">):</span> <span class="nx">number</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">i</span> <span class="o">*</span> <span class="nx">i</span><span class="p">;</span> <span class="p">}</span>
+<span class="c1">// 返回推断类型的值</span>
+<span class="kd">var</span> <span class="nx">f2</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="na">i</span><span class="p">:</span> <span class="nx">number</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">i</span> <span class="o">*</span> <span class="nx">i</span><span class="p">;</span> <span class="p">}</span>
+<span class="kd">var</span> <span class="nx">f3</span> <span class="o">=</span> <span class="p">(</span><span class="na">i</span><span class="p">:</span> <span class="nx">number</span><span class="p">):</span> <span class="nx">number</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">i</span> <span class="o">*</span> <span class="nx">i</span><span class="p">;</span> <span class="p">}</span>
+<span class="c1">// 返回推断类型的值</span>
+<span class="kd">var</span> <span class="nx">f4</span> <span class="o">=</span> <span class="p">(</span><span class="na">i</span><span class="p">:</span> <span class="nx">number</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">i</span> <span class="o">*</span> <span class="nx">i</span><span class="p">;</span> <span class="p">}</span>
+<span class="c1">// 返回推断类型的值, 单行程式可以不需要return关键字和大括号</span>
+<span class="kd">var</span> <span class="nx">f5</span> <span class="o">=</span> <span class="p">(</span><span class="na">i</span><span class="p">:</span> <span class="nx">number</span><span class="p">)</span> <span class="o">=&gt;</span>  <span class="nx">i</span> <span class="o">*</span> <span class="nx">i</span><span class="p">;</span>
+
+<span class="c1">// 接口是结构化的，任何具有这些属性的对象都与该接口兼容</span>
+<span class="kr">interface</span> <span class="nx">Person</span> <span class="p">{</span>
+  <span class="nl">name</span><span class="p">:</span> <span class="nx">string</span><span class="p">;</span>
+  <span class="c1">// 可选属性，使用"?"标识</span>
+  <span class="nx">age</span><span class="p">?:</span> <span class="nx">number</span><span class="p">;</span>
+  <span class="c1">// 函数</span>
+  <span class="nx">move</span><span class="p">():</span> <span class="k">void</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 实现"Person"接口的对象，当它有了"name"和"move"方法之后可被视为一个"Person"</span>
+<span class="kd">var</span> <span class="na">p</span><span class="p">:</span> <span class="nx">Person</span> <span class="o">=</span> <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Bobby"</span><span class="p">,</span> <span class="na">move</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{}</span> <span class="p">};</span>
+<span class="c1">// 带了可选参数的对象</span>
+<span class="kd">var</span> <span class="na">validPerson</span><span class="p">:</span> <span class="nx">Person</span> <span class="o">=</span> <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Bobby"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span> <span class="na">move</span><span class="p">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{}</span> <span class="p">};</span>
+<span class="c1">// 因为"age"不是"number"类型所以这不是一个"Person"</span>
+<span class="kd">var</span> <span class="na">invalidPerson</span><span class="p">:</span> <span class="nx">Person</span> <span class="o">=</span> <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="s2">"Bobby"</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="kc">true</span> <span class="p">};</span>
+
+<span class="c1">// 接口同样可以描述一个函数的类型</span>
+<span class="kr">interface</span> <span class="nx">SearchFunc</span> <span class="p">{</span>
+  <span class="p">(</span><span class="na">source</span><span class="p">:</span> <span class="nx">string</span><span class="p">,</span> <span class="na">subString</span><span class="p">:</span> <span class="nx">string</span><span class="p">):</span> <span class="kr">boolean</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">// 参数名并不重要，参数类型才是重要的</span>
+<span class="kd">var</span> <span class="na">mySearch</span><span class="p">:</span> <span class="nx">SearchFunc</span><span class="p">;</span>
+<span class="nx">mySearch</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="na">src</span><span class="p">:</span> <span class="nx">string</span><span class="p">,</span> <span class="na">sub</span><span class="p">:</span> <span class="nx">string</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">src</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="nx">sub</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 类 - 成员默认为公共的(public)</span>
+<span class="kr">class</span> <span class="nx">Point</span> <span class="p">{</span>
+  <span class="c1">// 属性</span>
+  <span class="nl">x</span><span class="p">:</span> <span class="nx">number</span><span class="p">;</span>
+
+  <span class="c1">// 构造器 - 这里面的public/private关键字会为属性生成样板代码和初始化值</span>
+  <span class="c1">// 这个例子中，y会被同x一样定义，不需要额外代码</span>
+  <span class="c1">// 同样支持默认值</span>
+
+  <span class="nx">constructor</span><span class="p">(</span><span class="na">x</span><span class="p">:</span> <span class="nx">number</span><span class="p">,</span> <span class="kr">public</span> <span class="na">y</span><span class="p">:</span> <span class="nx">number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">x</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="c1">// 函数</span>
+  <span class="nx">dist</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">x</span> <span class="o">*</span> <span class="k">this</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">y</span> <span class="o">*</span> <span class="k">this</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span> <span class="p">}</span>
+
+  <span class="c1">// 静态成员</span>
+  <span class="kr">static</span> <span class="nx">origin</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Point</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">p1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Point</span><span class="p">(</span><span class="mi">10</span> <span class="p">,</span><span class="mi">20</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">p2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Point</span><span class="p">(</span><span class="mi">25</span><span class="p">);</span> <span class="c1">//y为0</span>
+
+<span class="c1">// 继承</span>
+<span class="kr">class</span> <span class="nx">Point3D</span> <span class="kr">extends</span> <span class="nx">Point</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="na">x</span><span class="p">:</span> <span class="nx">number</span><span class="p">,</span> <span class="na">y</span><span class="p">:</span> <span class="nx">number</span><span class="p">,</span> <span class="kr">public</span> <span class="na">z</span><span class="p">:</span> <span class="nx">number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">super</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">);</span> <span class="c1">// 必须显式调用父类的构造器</span>
+  <span class="p">}</span>
+
+  <span class="c1">// 重写</span>
+  <span class="nx">dist</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="kr">super</span><span class="p">.</span><span class="nx">dist</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">d</span> <span class="o">*</span> <span class="nx">d</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">z</span> <span class="o">*</span> <span class="k">this</span><span class="p">.</span><span class="nx">z</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 模块, "."可以作为子模块的分隔符</span>
+<span class="nx">module</span> <span class="nx">Geometry</span> <span class="p">{</span>
+  <span class="kr">export</span> <span class="kr">class</span> <span class="nx">Square</span> <span class="p">{</span>
+    <span class="nx">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="na">sideLength</span><span class="p">:</span> <span class="nx">number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="p">}</span>
+    <span class="nx">area</span><span class="p">()</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">pow</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">sideLength</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">s1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Geometry</span><span class="p">.</span><span class="nx">Square</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+
+<span class="c1">// 引入模块并定义本地别名</span>
+<span class="kr">import</span> <span class="nx">G</span> <span class="o">=</span> <span class="nx">Geometry</span><span class="p">;</span>
+
+<span class="kd">var</span> <span class="nx">s2</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">G</span><span class="p">.</span><span class="nx">Square</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+
+<span class="c1">// 泛型</span>
+<span class="c1">// 类</span>
+<span class="kr">class</span> <span class="nx">Tuple</span><span class="o">&lt;</span><span class="nx">T1</span><span class="p">,</span> <span class="nx">T2</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="kr">public</span> <span class="na">item1</span><span class="p">:</span> <span class="nx">T1</span><span class="p">,</span> <span class="kr">public</span> <span class="na">item2</span><span class="p">:</span> <span class="nx">T2</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 接口</span>
+<span class="kr">interface</span> <span class="nx">Pair</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="na">item1</span><span class="p">:</span> <span class="nx">T</span><span class="p">;</span>
+  <span class="nl">item2</span><span class="p">:</span> <span class="nx">T</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// 以及函数</span>
+<span class="kd">var</span> <span class="nx">pairToTuple</span> <span class="o">=</span> <span class="kd">function</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">(</span><span class="na">p</span><span class="p">:</span> <span class="nx">Pair</span><span class="o">&lt;</span><span class="nx">T</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nx">Tuple</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nx">item1</span><span class="p">,</span> <span class="nx">p</span><span class="p">.</span><span class="nx">item2</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">tuple</span> <span class="o">=</span> <span class="nx">pairToTuple</span><span class="p">({</span> <span class="na">item1</span><span class="p">:</span><span class="s2">"hello"</span><span class="p">,</span> <span class="na">item2</span><span class="p">:</span><span class="s2">"world"</span><span class="p">});</span>
+
+<span class="c1">// 引用定义文件</span>
+<span class="c1">// &lt;reference path="jquery.d.ts" /&gt;</span>
+
+<span class="c1">// 模板字符串(使用反引号的字符串)</span>
+<span class="c1">// 嵌入变量的模板字符串</span>
+<span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="s1">'Tyrone'</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">greeting</span> <span class="o">=</span> <span class="err">`</span><span class="nx">Hi</span> <span class="nx">$</span><span class="p">{</span><span class="nx">name</span><span class="p">},</span> <span class="nx">how</span> <span class="nx">are</span> <span class="nx">you</span><span class="p">?</span><span class="err">`</span>
+<span class="c1">// 有多行内容的模板字符串</span>
+<span class="kd">var</span> <span class="nx">multiline</span> <span class="o">=</span> <span class="err">`</span><span class="nx">This</span> <span class="nx">is</span> <span class="nx">an</span> <span class="nx">example</span>
+<span class="nx">of</span> <span class="nx">a</span> <span class="nx">multiline</span> <span class="nx">string</span><span class="err">`</span><span class="p">;</span>
+
+</code></pre>
+
+<h2>参考资料</h2>
+
+<ul>
+<li><a href="http://www.typescriptlang.org/">TypeScript官网</a></li>
+<li><a href="http://go.microsoft.com/fwlink/?LinkId=267238">TypeScript语言规范说明书(pdf)</a></li>
+<li><a href="http://channel9.msdn.com/posts/Anders-Hejlsberg-Introducing-TypeScript">Anders Hejlsberg - TypeScript介绍</a></li>
+<li><a href="https://github.com/Microsoft/TypeScript">GitHub源码</a></li>
+<li><a href="http://definitelytyped.org/">Definitely Typed - 类型定义仓库</a></li>
+</ul>
+
+    <hr>
+    <p>有建议？或者发现什么错误？在Github上<a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">开一个issue</a>，或者你自己也可以写一个pull request！
+    </p>
+    <p class="contributed">
+    原著Philippe Vlérick，并由<a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/zh-cn/typescript-cn.html.markdown">0个好心人</a>修改。
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="https://github.com/pvlerick">Philippe Vlérick</a>
+      
+    
+    </p>
+
+    <p>
+    
+      Translated by:
+      
+        <a href="https://github.com/shawnzhang009">Shawn Zhang</a>
+      
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/zh-cn/typescript-cn/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:36:04 GMT -->
+</html>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Run Your Own Maven Repository With Nothing but an FTP Server</title>
+	<atom:link href="https://stuartsierra.com/2009/09/08/run-your-own-maven-repository/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2009/09/08/run-your-own-maven-repository</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Mani</title>
+		<link>https://stuartsierra.com/2009/09/08/run-your-own-maven-repository/comment-page-1#comment-44631</link>
+		<dc:creator><![CDATA[Mani]]></dc:creator>
+		<pubDate>Thu, 23 Aug 2012 13:47:41 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=306#comment-44631</guid>
+		<description><![CDATA[Hi Stuart,
+
+What you mentioned is works perfectly. Now we want to use ftp repository instead of http from the server location. is there a way to do it...? can you please help in this. How maven can handle the ftp type repository instead of http...?]]></description>
+		<content:encoded><![CDATA[<p>Hi Stuart,</p>
+<p>What you mentioned is works perfectly. Now we want to use ftp repository instead of http from the server location. is there a way to do it&#8230;? can you please help in this. How maven can handle the ftp type repository instead of http&#8230;?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Dependency Management - Digital Digressions by Stuart Sierra</title>
+		<link>https://stuartsierra.com/2009/09/08/run-your-own-maven-repository/comment-page-1#comment-44191</link>
+		<dc:creator><![CDATA[Dependency Management - Digital Digressions by Stuart Sierra]]></dc:creator>
+		<pubDate>Wed, 01 Jun 2011 19:08:59 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=306#comment-44191</guid>
+		<description><![CDATA[[...] If you want others to be able to build your project without having to go through these manual steps, you need your own public Maven repository to which you can upload files. Hosting a Maven repository isn&#8217;t hard: all you need is a web server. [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] If you want others to be able to build your project without having to go through these manual steps, you need your own public Maven repository to which you can upload files. Hosting a Maven repository isn&#8217;t hard: all you need is a web server. [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Hosting Maven Repos on Github &#124; cemerick</title>
+		<link>https://stuartsierra.com/2009/09/08/run-your-own-maven-repository/comment-page-1#comment-43199</link>
+		<dc:creator><![CDATA[Hosting Maven Repos on Github &#124; cemerick]]></dc:creator>
+		<pubDate>Tue, 24 Aug 2010 20:45:18 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=306#comment-43199</guid>
+		<description><![CDATA[[...] to get set up and maintain.  There&#8217;s a raft of other free Maven repository servers, using plain-Jane FTP, and various recipes on the &#8216;nets to serve up a Hudson instance&#8217;s local Maven [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] to get set up and maintain.  There&#8217;s a raft of other free Maven repository servers, using plain-Jane FTP, and various recipes on the &#8216;nets to serve up a Hudson instance&#8217;s local Maven [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Hosting Maven Repos with Github &#124; cemerick</title>
+		<link>https://stuartsierra.com/2009/09/08/run-your-own-maven-repository/comment-page-1#comment-43197</link>
+		<dc:creator><![CDATA[Hosting Maven Repos with Github &#124; cemerick]]></dc:creator>
+		<pubDate>Tue, 24 Aug 2010 18:13:58 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=306#comment-43197</guid>
+		<description><![CDATA[[...] to get set up and maintain.  There&#8217;s a raft of other free Maven repository servers, using plain-Jane FTP, and various recipes on the &#8216;nets to serve up a Hudson instance&#8217;s local Maven [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] to get set up and maintain.  There&#8217;s a raft of other free Maven repository servers, using plain-Jane FTP, and various recipes on the &#8216;nets to serve up a Hudson instance&#8217;s local Maven [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Anil</title>
+		<link>https://stuartsierra.com/2009/09/08/run-your-own-maven-repository/comment-page-1#comment-43100</link>
+		<dc:creator><![CDATA[Anil]]></dc:creator>
+		<pubDate>Sat, 17 Apr 2010 22:38:54 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=306#comment-43100</guid>
+		<description><![CDATA[Thanks. Works perfect. And migration between the server is swift.
+
+The best part is, a five dollars host gator account serves excellent :).
+
+Only complaint i have so far is unlike artifactory, the eclipse maven is unable to pull older version to suggest while editing the pom file.]]></description>
+		<content:encoded><![CDATA[<p>Thanks. Works perfect. And migration between the server is swift.</p>
+<p>The best part is, a five dollars host gator account serves excellent :).</p>
+<p>Only complaint i have so far is unlike artifactory, the eclipse maven is unable to pull older version to suggest while editing the pom file.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2009/09/08/run-your-own-maven-repository/comment-page-1#comment-42810</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Sat, 17 Oct 2009 14:49:17 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=306#comment-42810</guid>
+		<description><![CDATA[I don&#039;t know. You could put it in a parent POM, but that still has to be deployed to a public repository. Maybe ask the Maven mailing list.]]></description>
+		<content:encoded><![CDATA[<p>I don&#8217;t know. You could put it in a parent POM, but that still has to be deployed to a public repository. Maybe ask the Maven mailing list.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Seba</title>
+		<link>https://stuartsierra.com/2009/09/08/run-your-own-maven-repository/comment-page-1#comment-42806</link>
+		<dc:creator><![CDATA[Seba]]></dc:creator>
+		<pubDate>Sat, 17 Oct 2009 04:39:37 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=306#comment-42806</guid>
+		<description><![CDATA[Is there a way to hide the distributionManagement stuff? maybe putting it on some other pom. I wouldn&#039;t like to show the details of the deploy path in a public pom.]]></description>
+		<content:encoded><![CDATA[<p>Is there a way to hide the distributionManagement stuff? maybe putting it on some other pom. I wouldn&#8217;t like to show the details of the deploy path in a public pom.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.276 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:58:37 -->
+
+<!-- Compression = gzip -->

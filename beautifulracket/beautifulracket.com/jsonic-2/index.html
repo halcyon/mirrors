@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/jsonic-2/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:41 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Level up: jsonic revisited</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;level-up-jsonic-revisited&quot;)"></div><h1 anchor="level-up-jsonic-revisited" id="level-up-jsonic-revisited" hyphens="none">Level up: <span class="my-code" decode="exclude">jsonic</span> revisited</h1></div><ul class="siblinks"><li><a class="here" href="intro.html">1&emsp;intro</a></li><li><a href="setup.html">2&emsp;setup</a></li><li><a href="contracts.html">3&emsp;con­tracts</a></li><li><a href="unit-tests.html">4&emsp;unit tests</a></li><li><a href="source-locations.html">5&emsp;source loca­tions</a></li><li><a href="drracket-integration.html">6&emsp;drracket inte­gra­tion</a></li><li><a href="syntax-coloring.html">7&emsp;syn­tax col­or­ing</a></li><li><a href="indenting.html">8&emsp;indent­ing</a></li><li><a href="toolbar-buttons.html">9&emsp;tool­bar but­tons</a></li><li><a href="recap.html">10&emsp;recap</a></li><li><a href="source-listing.html">11&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_AbBj9&quot;)"></div><p id="a_AbBj9">As a junior JSON engi­neer at Mega­Corp, you find that your new <a href="../jsonic/index.html"><span class="my-code" decode="exclude">jsonic</span></a> lan­guage has tripled your pro­duc­tiv­ity. Just in time—your annual review is com­ing up in two months. You fig­ure you’ll be in a great posi­tion to ask for a pro­mo­tion and a raise.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_CZm4u&quot;)"></div><p id="a_CZm4u">But at the end of the fourth day, you get an email from your boss. “We need to talk. I’ll stop by your cube.”</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_f0yLB&quot;)"></div><p id="a_f0yLB">Wow—you weren’t expect­ing her to notice so quickly!</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_GENPl&quot;)"></div><p id="a_GENPl">Your boss arrives. She drops a piece of paper onto your desk. “This is a pro­duc­tiv­ity chart of the 50 JSON engi­neers who work for me. Does any­thing look strange to you?”</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ezd49&quot;)"></div><p id="a_ezd49">You see one line, labeled with your employee num­ber, that has recently hockey-sticked above all the oth­ers.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Jvrvv&quot;)"></div><p id="a_Jvrvv">“Well,” you say with grand mod­esty, “I’ve always felt that my great­est flaw is work­ing too hard—”</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_SwV1e&quot;)"></div><p id="a_SwV1e">Your boss sighs. “Oh please, not that one again. Look—you need to tell me what’s going on here.”</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_LlLyC&quot;)"></div><p id="a_LlLyC">You sense an oppor­tu­nity. You open your lap­top. You explain that you invented a DSL called <a href="../jsonic/index.html"><span class="my-code" decode="exclude">jsonic</span></a>. You demo the lan­guage in DrRacket. You wait as your boss stud­ies the screen.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_NL0tA&quot;)"></div><p id="a_NL0tA">“OK, so here’s the deal,” she says. “This is a cute toy. But if you want to keep using it, you need to work through the week­end to bring it up to Mega­Corp stan­dards, so we can deploy it to the rest of the team start­ing on Mon­day.”</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Yyyrt&quot;)"></div><p id="a_Yyyrt">You see your pro­duc­tiv­ity advan­tage fad­ing, and with it your raise. “But I really just made it for me—”</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_3SEiR&quot;)"></div><p id="a_3SEiR">She cuts you off. “Check your employ­ment con­tract. It belongs to us now.”<br/>She then explains what needs to be added:</p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ELdAu&quot;)"></div><p id="a_ELdAu">“All major func­tions need <a href="contracts.html">con­tracts</a> and <a href="unit-tests.html">unit tests</a> to ensure code safety.”</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_JyJiI&quot;)"></div><p id="a_JyJiI">“<a href="source-locations.html">Source loca­tions</a> need to be tracked cor­rectly.”</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ir98b&quot;)"></div><p id="a_ir98b">“If DrRacket is the IDE, then it needs to have <a href="syntax-coloring.html">syn­tax col­or­ing</a> and <a href="indenting.html">indent­ing</a> for ease of use. Also a <a href="toolbar-buttons.html">but­ton</a> for insert­ing expres­sions.”</p></div></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ObsjP&quot;)"></div><p id="a_ObsjP">“Have a super week­end!” she adds as she walks away. “I’m look­ing for­ward to work­ing on a <a href="../wires/index.html">pro­gram­ming puz­zle</a>.”</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a class="here" href="intro.html">1&emsp;intro</a></li><li><a href="setup.html">2&emsp;setup</a></li><li><a href="contracts.html">3&emsp;con­tracts</a></li><li><a href="unit-tests.html">4&emsp;unit tests</a></li><li><a href="source-locations.html">5&emsp;source loca­tions</a></li><li><a href="drracket-integration.html">6&emsp;drracket inte­gra­tion</a></li><li><a href="syntax-coloring.html">7&emsp;syn­tax col­or­ing</a></li><li><a href="indenting.html">8&emsp;indent­ing</a></li><li><a href="toolbar-buttons.html">9&emsp;tool­bar but­tons</a></li><li><a href="recap.html">10&emsp;recap</a></li><li><a href="source-listing.html">11&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="../jsonic/source-listing.html">← prev</a>
+    <a class="nav-right" href="setup.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

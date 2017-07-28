@@ -1,0 +1,119 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/solutions/solutions-5.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:57 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Solutions to exercises in lecture 5</title>
+</head>
+<body>
+
+<center><b><font size=+3>Solutions to exercises from "lecture notes 5"</font></b></center>
+
+<p><br>
+<br>
+<br>
+<p><tt>(defun dolist-adder (list)</tt>
+<br><tt>&nbsp; (let* ((total 0))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dolist (number list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (incf total number))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; total))</tt>
+<p><tt>(defun dotimes-factorial (number)</tt>
+<br><tt>&nbsp; (let* ((factorial 1))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dotimes (i number)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (setf factorial (* factorial (1+
+i))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; factorial))</tt>
+<p><tt>(defun recursive-length (list)</tt>
+<br><tt>&nbsp; (if list</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (1+ (recursive-length (cdr list)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; 0))</tt>
+<p><tt>(defun recursive-copy-list (list)</tt>
+<br><tt>&nbsp; (if list</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (cons (car list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(recursive-copy-list (cdr list)))))</tt>
+<p><tt>(defun recursive-reverse (list &amp;optional reverse)</tt>
+<br><tt>&nbsp; (if list</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (recursive-reverse (cdr list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(cons (car list) reverse))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; reverse))</tt>
+<p><tt>(defun iterative-length (list)</tt>
+<br><tt>&nbsp; (let* ((length 0))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dolist (x list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (incf length))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; length))</tt>
+<p><tt>(defun iterative-copy-list (list)</tt>
+<br><tt>&nbsp; (let* ((copy nil))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dolist (x list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (push x copy))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (reverse copy)))</tt>
+<p><tt>;; the above is close enough to (defun copy-list (list) (reverse</tt>
+<br><tt>;; (reverse list))) that I don't like it. I suppose the following
+will</tt>
+<br><tt>;; do (and is probably very close to the actual implementation),
+but</tt>
+<br><tt>;; it's fairly revolting for beginners...</tt>
+<p><tt>(defun iterative-copy-list (list)</tt>
+<br><tt>&nbsp; (if list</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (let* ((stub (cons nil nil))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(last stub))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (dolist (x list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (setf (cdr
+last) (cons x nil)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+last (cdr last)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (cdr stub))))</tt>
+<p><tt>(defun mapcar-type-of (list)</tt>
+<br><tt>&nbsp; (mapcar 'type-of list))</tt>
+<p><tt>(defun dolist-type-of (list)</tt>
+<br><tt>&nbsp; (let* ((new-list nil))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dolist (thing list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (push (type-of thing) new-list))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (reverse new-list)))</tt>
+<p><tt>(defun dotty (list)</tt>
+<br><tt>&nbsp; (mapc 'print-one-dot list))</tt>
+<p><tt>(defun print-one-dot (thing)</tt>
+<br><tt>&nbsp; (format t "."))</tt>
+<p><tt>;;; The "make sure you understand it" examples</tt>
+<p><tt>(defun sum-two-numbers (x y)</tt>
+<br><tt>&nbsp; (+ x y))</tt>
+<p><tt>(defun sum-first-two-members-of-list (some-list)</tt>
+<br><tt>&nbsp; (+ (first some-list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (second some-list)))</tt>
+<p><tt>(defun sum-all-members-of-list (some-list)</tt>
+<br><tt>&nbsp; (dolist-adder some-list)) ; see above</tt>
+<p><tt>(defun filter-for-negative (some-list)</tt>
+<br><tt>&nbsp; (let* ((filtered-list nil))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dolist (number some-list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (when (minusp number)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (push number filtered-list)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (reverse filtered-list)))</tt>
+<p>&nbsp;If you have tried the exercises, looked at the solutions and still
+do not understand what's going on, I am available for consultation at the
+times advertised on my office door. Bring your code with you in BOTH the
+following forms:
+<ul>
+<li>
+Logbook containing printout (nothing handwritten please)</li>
+
+<li>
+file on floppy</li>
+</ul>
+&nbsp;
+<div align=right>
+<br><a href="mailto:ndl@ravenbrook.com">Nick Levine</a>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+last modified 2000-11-01
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Copyright (C) Nick Levine 1999. All rights reserved.
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/solutions/solutions-5.html#2 $</div>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/solutions/solutions-5.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:57 GMT -->
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+ 
+<!-- Mirrored from nicklevine.org/jfli/jfli/?C=M;O=A by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:24:36 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=ISO-8859-1" /><!-- /Added by HTTrack -->
+<head>
+  <title>Index of /jfli/jfli</title>
+ </head>
+ <body>
+<h1>Index of /jfli/jfli</h1>
+  <table>
+   <tr><th valign="top"><img src="../../icons/blank.gif" alt="[ICO]"></th><th><a href="indexb70a.html?C=N;O=A">Name</a></th><th><a href="index72c9.html?C=M;O=D">Last modified</a></th><th><a href="indexbfec.html?C=S;O=A">Size</a></th><th><a href="index30b5.html?C=D;O=A">Description</a></th></tr>
+   <tr><th colspan="5"><hr></th></tr>
+<tr><td valign="top"><img src="../../icons/back.gif" alt="[PARENTDIR]"></td><td><a href="../index.html">Parent Directory</a>       </td><td>&nbsp;</td><td align="right">  - </td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../../icons/folder.gif" alt="[DIR]"></td><td><a href="com/index.html">com/</a>                   </td><td align="right">2008-05-06 12:07  </td><td align="right">  - </td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../../../www.nicklevine.org/icons/text.gif" alt="[TXT]"></td><td><a href="CPL.TXT">CPL.TXT</a>                </td><td align="right">2014-06-14 11:16  </td><td align="right"> 11K</td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../../icons/unknown.gif" alt="[   ]"></td><td><a href="build-java-classes.html">build-java-classes.lisp</a></td><td align="right">2014-06-14 11:16  </td><td align="right">7.5K</td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../../icons/unknown.gif" alt="[   ]"></td><td><a href="defsys.html">defsys.lisp</a>            </td><td align="right">2014-06-14 11:16  </td><td align="right">462 </td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../../icons/folder.gif" alt="[DIR]"></td><td><a href="docs/index.html">docs/</a>                  </td><td align="right">2014-06-14 11:16  </td><td align="right">  - </td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../../icons/folder.gif" alt="[DIR]"></td><td><a href="examples/index.html">examples/</a>              </td><td align="right">2014-06-14 11:16  </td><td align="right">  - </td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../../icons/unknown.gif" alt="[   ]"></td><td><a href="jfli.jar">jfli.jar</a>               </td><td align="right">2014-06-14 11:16  </td><td align="right">801 </td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../../icons/unknown.gif" alt="[   ]"></td><td><a href="jfli.html">jfli.lisp</a>              </td><td align="right">2014-06-14 11:16  </td><td align="right"> 57K</td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../../icons/unknown.gif" alt="[   ]"></td><td><a href="jni.html">jni.lisp</a>               </td><td align="right">2014-06-14 11:16  </td><td align="right"> 65K</td><td>&nbsp;</td></tr>
+<tr><td valign="top"><img src="../../icons/unknown.gif" alt="[   ]"></td><td><a href="process.html">process.lisp</a>           </td><td align="right">2014-06-14 11:16  </td><td align="right">3.1K</td><td>&nbsp;</td></tr>
+   <tr><th colspan="5"><hr></th></tr>
+</table>
+<pre>
+       JFLI - a Java Foreign Language Interface for Common Lisp
+       ========================================================
+
+                             Version 0.2
+
+
+1. License
+
+The use and distribution terms for this software are covered by the
+Common Public License 1.0, which can be found in the file CPL.TXT at
+the root of this distribution. By using this software in any fashion,
+you are agreeing to be bound by the terms of this license. You must
+not remove this notice, or any other, from this software.
+
+
+2. Documentation
+
+See the file docs/jfli.html
+
+
+3. History
+
+jfli was written by Rich Hickey in 2004. It was updated by Nick Levine
+in 2008.
+
+The original version was "unnumbered", so let's retrospectively call
+that 0.1, which makes the current version 0.2.
+
+What's changed in 0.2:
+
+ - a nunber of significant memory leaks have been plugged
+
+ - there's better support for system building
+
+ - configurable exception handling
+
+ - JFLI package now exports box-int, unbox-int (as documented) -- it
+   previously exported box-integer, unbox-integer which did nothing
+
+ - *pvm* and *penv* are now defvars, so you can reload jni.lisp
+
+ - documentation reflects all API-visible changes plus some minor
+   cleanups
+
+
+4. Known problems in 0.2:
+
+ - Threading is one area of jfli which needs more attention. The JNI
+   call DetachCurrentThread has proved most problematic (SEGVs in
+   foriegn code, random corruption in Java internals and heaven only
+   knows what else) and so we need another solution to prevent used
+   threads from "leaking". The solution proposed, to recycle lisp
+   threads rather than letting them go, is implemented in the file
+   process.lisp which can be used as a standalone facility
+   independently of the jfli.
+
+ - There have been problems with callbacks into lisp: crashes
+   attributed to multiple simultaneous invocation of the callback.
+
+ - jfli treats null characters as string terminators even though Java
+   does not.
+
+ - Defect affecting only 32-bit x86 platforms running Linux, FreeBSD
+   or Mac OS X (not Windows). Fixed in LispWorks 5.1; patched (for LWL
+   5.0 anyway) under Lisp Support Call #35725.
+
+   Occurances of java.lang.NullPointerException,
+   java.lang.ArrayIndexOutOfBoundsException, etc which have no
+   explanation even after reading Sun Java sources.
+
+   This turns out to be caused by a bug in the FLI, which can leave
+   the CPU's direction flag set incorrectly in some cases. When the
+   direction flag is set incorrectly, some optimized memory copying
+   routines will corrupt adjacent objects.
+
+
+jfli copyright 2004 (c) Rich Hickey. All rights reserved.
+Updates copyright 2008 (c) Nick Levine. All rights reserved.
+</pre>
+</body>
+<!-- Mirrored from nicklevine.org/jfli/jfli/?C=M;O=A by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:24:36 GMT -->
+</html>

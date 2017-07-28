@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Syntactic Pipelines</title>
+	<atom:link href="https://stuartsierra.com/2012/05/16/syntactic-pipelines/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2012/05/16/syntactic-pipelines</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: When (Not) to Write a Macro &#124; Digital Digressions by Stuart Sierra</title>
+		<link>https://stuartsierra.com/2012/05/16/syntactic-pipelines/comment-page-1#comment-44632</link>
+		<dc:creator><![CDATA[When (Not) to Write a Macro &#124; Digital Digressions by Stuart Sierra]]></dc:creator>
+		<pubDate>Wed, 12 Sep 2012 13:18:14 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=624#comment-44632</guid>
+		<description><![CDATA[[...] few months ago I wrote an article called Syntactic Pipelines, about a style of programming (in Clojure) in which each function takes and returns a map with [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] few months ago I wrote an article called Syntactic Pipelines, about a style of programming (in Clojure) in which each function takes and returns a map with [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: lsh</title>
+		<link>https://stuartsierra.com/2012/05/16/syntactic-pipelines/comment-page-1#comment-44630</link>
+		<dc:creator><![CDATA[lsh]]></dc:creator>
+		<pubDate>Tue, 14 Aug 2012 16:44:25 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=624#comment-44630</guid>
+		<description><![CDATA[I came across this post by accident. I&#039;m coming from the Python world and in Django the http middleware behaves just like these pipes, which was something I was trying to implement in Clojure - however you pull it off much more cleverly. I&#039;m just learning macros (from Practical Clojure, your book no less) but for your case where you want conditional pipelines evaluated I wrangled this:
+
+&lt;code&gt;
+(defmacro branch [pred &#038; body]
+    `(fn [x#]
+        (if (~pred x#) (-&#062; x# ~@body) x#)))
+&lt;/code&gt;
+
+I&#039;m still playing with it, and at first blush it seems to be working:
+
+&lt;code&gt;
+(defpipeline compute
+    step1
+    ((branch some-check 
+        substep1 substep2 substep3))
+    step2)
+&lt;/code&gt;
+
+There is that *ugly* double parenthesis though. It&#039;s pretty simplistic, but hopefully a shortcut for another, future, reader.
+
+Thanks for the post and thank you very much for your work on Practical Clojure.]]></description>
+		<content:encoded><![CDATA[<p>I came across this post by accident. I&#8217;m coming from the Python world and in Django the http middleware behaves just like these pipes, which was something I was trying to implement in Clojure &#8211; however you pull it off much more cleverly. I&#8217;m just learning macros (from Practical Clojure, your book no less) but for your case where you want conditional pipelines evaluated I wrangled this:</p>
+<p><code><br />
+(defmacro branch [pred &amp; body]<br />
+    `(fn [x#]<br />
+        (if (~pred x#) (-&gt; x# ~@body) x#)))<br />
+</code></p>
+<p>I&#8217;m still playing with it, and at first blush it seems to be working:</p>
+<p><code><br />
+(defpipeline compute<br />
+    step1<br />
+    ((branch some-check<br />
+        substep1 substep2 substep3))<br />
+    step2)<br />
+</code></p>
+<p>There is that *ugly* double parenthesis though. It&#8217;s pretty simplistic, but hopefully a shortcut for another, future, reader.</p>
+<p>Thanks for the post and thank you very much for your work on Practical Clojure.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: fogus: Clojure Obscura</title>
+		<link>https://stuartsierra.com/2012/05/16/syntactic-pipelines/comment-page-1#comment-44614</link>
+		<dc:creator><![CDATA[fogus: Clojure Obscura]]></dc:creator>
+		<pubDate>Mon, 09 Jul 2012 16:54:11 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=624#comment-44614</guid>
+		<description><![CDATA[[...] Pipelining [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] Pipelining [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Sergio Bossa</title>
+		<link>https://stuartsierra.com/2012/05/16/syntactic-pipelines/comment-page-1#comment-44500</link>
+		<dc:creator><![CDATA[Sergio Bossa]]></dc:creator>
+		<pubDate>Sun, 20 May 2012 10:06:53 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=624#comment-44500</guid>
+		<description><![CDATA[Right, missed that: thanks for clarifying!]]></description>
+		<content:encoded><![CDATA[<p>Right, missed that: thanks for clarifying!</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2012/05/16/syntactic-pipelines/comment-page-1#comment-44495</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Sat, 19 May 2012 19:29:15 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=624#comment-44495</guid>
+		<description><![CDATA[Sergio: You can already supply your own map-manipulation functions: that&#039;s why the &lt;code&gt;return&lt;/code&gt; macro has the original &lt;code&gt;body&lt;/code&gt; as the &quot;else&quot; clause in the &lt;code&gt;case&lt;/code&gt; expression: if the expression given to &lt;code&gt;return&lt;/code&gt; isn&#039;t one of the predefined keywords, it&#039;s just included verbatim.]]></description>
+		<content:encoded><![CDATA[<p>Sergio: You can already supply your own map-manipulation functions: that&#8217;s why the <code>return</code> macro has the original <code>body</code> as the &#8220;else&#8221; clause in the <code>case</code> expression: if the expression given to <code>return</code> isn&#8217;t one of the predefined keywords, it&#8217;s just included verbatim.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Sergio Bossa</title>
+		<link>https://stuartsierra.com/2012/05/16/syntactic-pipelines/comment-page-1#comment-44494</link>
+		<dc:creator><![CDATA[Sergio Bossa]]></dc:creator>
+		<pubDate>Sat, 19 May 2012 19:19:44 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=624#comment-44494</guid>
+		<description><![CDATA[Very nice piece of work, look forward to see it on GitHub ;)
+
+Just one improvement imho: I&#039;d personally prefer if users could provide their own map manipulation functions rather than just relying on predefined ones; what do you think?]]></description>
+		<content:encoded><![CDATA[<p>Very nice piece of work, look forward to see it on GitHub ;)</p>
+<p>Just one improvement imho: I&#8217;d personally prefer if users could provide their own map manipulation functions rather than just relying on predefined ones; what do you think?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2012/05/16/syntactic-pipelines/comment-page-1#comment-44493</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Sat, 19 May 2012 18:16:06 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=624#comment-44493</guid>
+		<description><![CDATA[Dmitri: It&#039;s not an explicit return call (which Clojure does not support) I just chose the name &lt;code&gt;return&lt;/code&gt; because that&#039;s where you put the code that manipulates the return value of the function. As I said, the &lt;code&gt;return&lt;/code&gt; macro always has to be in tail position anyway.
+
+There is no actual difference between [1] and [1&#039;] or between [2] and [2&#039;]. Which you prefer is a matter of taste. My purpose in writing the macros was simply to demonstrate that macros can be used to formalize a repeated syntactic pattern. I&#039;m not sure I&#039;d even use these macros myself, unless I felt like they really added to the clarity of the code.
+
+One other possibility, which I failed to mention in the article, is that abstracting this pattern into macros could allow alternate implementations. For example, perhaps the macros could be made clever enough to use only local variables and omit the map parameter altogether for better performance. I don&#039;t actually know if this is possible in this case, but it&#039;s interesting to think about.]]></description>
+		<content:encoded><![CDATA[<p>Dmitri: It&#8217;s not an explicit return call (which Clojure does not support) I just chose the name <code>return</code> because that&#8217;s where you put the code that manipulates the return value of the function. As I said, the <code>return</code> macro always has to be in tail position anyway.</p>
+<p>There is no actual difference between [1] and [1&#8242;] or between [2] and [2&#8242;]. Which you prefer is a matter of taste. My purpose in writing the macros was simply to demonstrate that macros can be used to formalize a repeated syntactic pattern. I&#8217;m not sure I&#8217;d even use these macros myself, unless I felt like they really added to the clarity of the code.</p>
+<p>One other possibility, which I failed to mention in the article, is that abstracting this pattern into macros could allow alternate implementations. For example, perhaps the macros could be made clever enough to use only local variables and omit the map parameter altogether for better performance. I don&#8217;t actually know if this is possible in this case, but it&#8217;s interesting to think about.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Dmitri</title>
+		<link>https://stuartsierra.com/2012/05/16/syntactic-pipelines/comment-page-1#comment-44492</link>
+		<dc:creator><![CDATA[Dmitri]]></dc:creator>
+		<pubDate>Sat, 19 May 2012 17:45:34 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=624#comment-44492</guid>
+		<description><![CDATA[[edited for code formatting -S]
+
+Shouldn&#039;t side-effecty stuff like logging be isolated from functions containing transformation logic? Are explicit return calls idiomatic in clojure? How does [1] really differs from [1&#039;], and [2] from [2&#039;]? I&#039;m not sure which is shorter.
+
+&lt;pre&gt;[1]
+(defpipe compute-step2 [delta]
+  (return
+   (assoc-in [:x :y] 42)
+   (:update delta * 2)
+   (:set gamma (+ delta 100))))
+
+[1&#039;]
+(defn compute-step2 [{:keys [delta] :as m}]
+  (-&#062; m
+      (assoc-in [:x :y] 42)
+      (update-in [:delta] * 2)
+      (assoc :gamma (+ delta 100))))
+
+[2]
+(defpipeline compute
+  compute-step1
+  compute-step2)
+
+[2&#039;]
+(def compute (comp compute-step2 compute-step1))&lt;/pre&gt;]]></description>
+		<content:encoded><![CDATA[<p>[edited for code formatting -S]</p>
+<p>Shouldn&#8217;t side-effecty stuff like logging be isolated from functions containing transformation logic? Are explicit return calls idiomatic in clojure? How does [1] really differs from [1&#8242;], and [2] from [2&#8242;]? I&#8217;m not sure which is shorter.</p>
+<pre>[1]
+(defpipe compute-step2 [delta]
+  (return
+   (assoc-in [:x :y] 42)
+   (:update delta * 2)
+   (:set gamma (+ delta 100))))
+
+[1']
+(defn compute-step2 [{:keys [delta] :as m}]
+  (-&gt; m
+      (assoc-in [:x :y] 42)
+      (update-in [:delta] * 2)
+      (assoc :gamma (+ delta 100))))
+
+[2]
+(defpipeline compute
+  compute-step1
+  compute-step2)
+
+[2']
+(def compute (comp compute-step2 compute-step1))</pre>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2012/05/16/syntactic-pipelines/comment-page-1#comment-44484</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Thu, 17 May 2012 15:24:23 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=624#comment-44484</guid>
+		<description><![CDATA[Brian: re. having `return` automatically included in `defpipe`: that would make the macro implementation simpler, but would prevent you from putting anything else in the function body. I wanted `defpipe` functions to be able to do all the things real functions can do, including conditional branching and side effects. For example:
+
+&lt;pre&gt;(defpipe foo [a b]
+  (log &quot;This is foo&quot;)
+  (if (&lt; a 100)
+    (return (:update b + 100))
+    (return)))&lt;/pre&gt;]]></description>
+		<content:encoded><![CDATA[<p>Brian: re. having `return` automatically included in `defpipe`: that would make the macro implementation simpler, but would prevent you from putting anything else in the function body. I wanted `defpipe` functions to be able to do all the things real functions can do, including conditional branching and side effects. For example:</p>
+<pre>(defpipe foo [a b]
+  (log "This is foo")
+  (if (< a 100)
+    (return (:update b + 100))
+    (return)))</pre>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2012/05/16/syntactic-pipelines/comment-page-1#comment-44483</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Thu, 17 May 2012 15:12:03 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=624#comment-44483</guid>
+		<description><![CDATA[Mike: Yes, it is slightly monadic in character. I&#039;ve never been convinced of the utility of monads outside of strictly pure functional languages like Haskell, but that may be simply because I&#039;ve never understood them.]]></description>
+		<content:encoded><![CDATA[<p>Mike: Yes, it is slightly monadic in character. I&#8217;ve never been convinced of the utility of monads outside of strictly pure functional languages like Haskell, but that may be simply because I&#8217;ve never understood them.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.292 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:02:24 -->
+
+<!-- Compression = gzip -->

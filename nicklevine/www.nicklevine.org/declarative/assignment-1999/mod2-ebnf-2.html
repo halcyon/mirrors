@@ -1,0 +1,827 @@
+(defparse compilation-module
+  (choice program-module
+          definition-module
+          implementation-module))
+
+(defparse program-module
+  (ordered "MODULE"
+           module-identifier
+           (optional protection)
+           semicolon
+           import-lists
+           module-block
+           module-identifier
+           period))
+
+(defparse module-identifier
+  identifier)
+
+(defparse protection
+  (ordered left-bracket
+           protection-expression
+           right-bracket))
+
+(defparse protection-expression
+  constant-expression)
+
+(defparse definition-module
+  (ordered "DEFINITION"
+           "MODULE"
+           module-identifier
+           semicolon
+           import-lists
+           definitions
+           "END"
+           module-identifier
+           period))
+
+(defparse implementation-module
+  (ordered "IMPLEMENTATION"
+           "MODULE"
+           module-identifier
+           (optional protection)
+           semicolon
+           import-lists
+           module-block
+           module-identifier
+           period))
+
+(defparse import-lists
+  (repeated import-list))
+
+(defparse import-list
+  (choice simple-import
+          unqualified-import))
+
+(defparse simple-import
+  (ordered "IMPORT"
+           identifier-list
+           semicolon))
+
+(defparse unqualified-import
+  (ordered "FROM"
+           module-identifier
+           "IMPORT"
+           identifier-list
+           semicolon))
+
+(defparse export-list
+  (choice unqualified-export
+          qualified-export))
+
+(defparse unqualified-export
+  (ordered "EXPORT"
+           identifier-list
+           semicolon))
+
+(defparse qualified-export
+  (ordered "EXPORT"
+           "QUALIFIED"
+           identifier-list
+           semicolon))
+
+(defparse qualified-identifier
+  (ordered (repeated (ordered module-identifier
+                              period))
+           identifier))
+
+(defparse definitions
+  (repeated definition))
+
+(defparse definition
+  (choice (ordered "CONST"
+                   (repeated (ordered constant-declaration 
+                                      semicolon)))
+          (ordered "TYPE"
+                   (repeated (ordered type-definition 
+                                      semicolon)))
+          (ordered "VAR"
+                   (repeated (ordered variable-declaration
+                                      semicolon)))
+          procedure-heading
+          semicolon))
+
+(defparse procedure-heading
+  (choice proper-procedure-heading
+          function-procedure-heading))
+
+(defparse type-definition
+  (choice type-declaration
+          opaque-type-definition))
+
+(defparse opaque-type-definition
+  identifier)
+
+(defparse proper-procedure-heading
+  (ordered "PROCEDURE"
+           procedure-identifier
+           (optional formal-parameters)))
+
+(defparse formal-parameters
+  (ordered left-parenthesis
+           (optional formal-parameter-list)
+           right-parenthesis))
+
+(defparse formal-parameter-list
+  (ordered formal-parameter
+           (repeated (ordered semicolon
+                              formal-parameter))))
+
+(defparse function-procedure-heading
+  (ordered "PROCEDURE"
+           procedure-identifier
+           formal-parameters
+           colon
+           function-result-type))
+
+(defparse function-result-type
+  type-identifier)
+
+(defparse formal-parameter
+  (choice value-parameter-specification
+          variable-parameter-specification))
+
+(defparse value-parameter-specification
+  (ordered identifier-list
+           colon
+           formal-type))
+
+(defparse variable-parameter-specification
+  (ordered "VAR"
+           identifier-list
+           colon
+           formal-type))
+
+(defparse declarations
+  (repeated one-declaration))
+
+(defparse one-declaration
+  (choice (ordered "CONST"
+                   (ordered constant-declaration
+                            semicolon)
+                   (repeated (ordered constant-declaration
+                                      semicolon)))
+          (ordered "TYPE"
+                    (ordered type-declaration
+                             semicolon)
+                   (repeated (ordered type-declaration
+                                      semicolon)))
+          (ordered "VAR"
+                   (ordered variable-declaration
+                            semicolon)
+                   (repeated (ordered variable-declaration
+                                      semicolon)))
+          (ordered procedure-declaration
+                   semicolon)
+          (ordered local-module-declaration
+                   semicolon)
+          empty-declaration))
+
+(defparse empty-declaration
+  (choice "CONST"
+          "TYPE"
+          "VAR"))
+
+(defparse constant-declaration
+  (ordered identifier
+           equals
+           constant-expression))
+
+(defparse type-declaration
+  (ordered identifier
+           equals
+           type-denoter))
+
+(defparse variable-declaration
+  (ordered variable-identifier-list
+           colon
+           type-denoter))
+
+(defparse variable-identifier-list
+  (ordered identifier
+           (optional machine-address)
+           (repeated (ordered comma
+                              identifier
+                              (optional machine-address)))))
+
+(defparse machine-address
+  (ordered left-bracket
+           value-of-address-type
+           right-bracket))
+
+(defparse value-of-address-type
+  constant-expression)
+
+(defparse procedure-declaration
+  (choice proper-procedure-declaration
+          function-procedure-declaration))
+
+(defparse proper-procedure-declaration
+  (ordered proper-procedure-heading
+           semicolon
+           (choice (ordered proper-procedure-block
+                            procedure-identifier)
+                   "FORWARD")))
+
+(defparse procedure-identifier
+  identifier)
+
+(defparse function-procedure-declaration
+  (ordered function-procedure-heading
+           semicolon
+           (choice (ordered function-procedure-block
+                            procedure-identifier)
+                   "FORWARD")))
+
+(defparse local-module-declaration
+  (ordered "MODULE"
+           module-identifier
+           (optional protection)
+           semicolon
+           import-lists
+           (optional export-list)
+           module-block
+           module-identifier))
+
+(defparse type-denoter
+  (choice type-identifier
+          new-type))
+
+(defparse ordinal-type-denoter
+  (choice ordinal-type-identifier
+          new-ordinal-type))
+
+(defparse type-identifier
+  qualified-identifier)
+
+(defparse ordinal-type-identifier
+  type-identifier)
+
+(defparse new-type
+  (choice new-ordinal-type
+          procedure-type
+          array-type
+          record-type))
+
+(defparse new-ordinal-type
+  (choice enumeration-type
+          subrange-type))
+
+(defparse enumeration-type
+  (ordered left-parenthesis
+           identifier-list
+           right-parenthesis))
+
+(defparse identifier-list
+  (ordered identifier
+           (repeated (ordered comma
+                              identifier))))
+
+(defparse subrange-type
+  (ordered (optional range-type)
+           left-bracket
+           constant-expression
+           ellipsis
+           constant-expression
+           right-bracket))
+
+(defparse range-type
+  ordinal-type-identifier)
+
+(defparse procedure-type
+  (choice proper-procedure-type
+          function-procedure-type))
+
+(defparse proper-procedure-type
+  (ordered "PROCEDURE"
+           (optional (ordered left-parenthesis
+                              (optional formal-parameter-type-list)
+                              right-parenthesis))))
+
+(defparse function-procedure-type
+  (ordered "PROCEDURE"
+           left-parenthesis
+           (optional formal-parameter-type-list)
+           right-parenthesis
+           colon
+           function-result-type))
+
+(defparse formal-parameter-type-list
+  (ordered formal-parameter-type
+           (repeated (ordered comma
+                              formal-parameter-type))))
+
+(defparse formal-parameter-type
+  (choice variable-formal-type
+          value-formal-type))
+
+(defparse variable-formal-type
+  (ordered "VAR"
+           formal-type))
+
+(defparse value-formal-type
+  formal-type)
+
+(defparse formal-type
+  (choice type-identifier
+          open-array-formal-type))
+
+(defparse open-arr  (ordered "ARRAY"
+           "OF"
+           (repeated (ordered "ARRAY"
+                              "OF"))
+           type-identifier))
+
+(defparse array-type
+  (ordered "ARRAY"
+           index-type
+           (repeated (ordered comma
+                              index-type))
+           "OF"
+           component-type))
+
+(defparse index-type
+  ordinal-type-denoter)
+
+(defparse component-type
+  type-denoter)
+
+(defparse record-type
+  (ordered "RECORD"
+           field-list
+           "END"))
+
+(defparse field-list
+  (ordered fields
+           (repeated (ordered semicolon
+                              fields))))
+
+(defparse fields
+  (optional (choice fixed-fields 
+                    variant-fields)))
+
+(defparse fixed-fields
+  (ordered identifier-list
+           colon
+           field-type))
+
+(defparse field-type
+  type-denoter)
+
+(defparse variant-fields
+  (ordered "CASE"
+           (optional tag-identifier)
+           colon
+           tag-type
+           "OF"
+           variant-list
+           "END"))
+
+(defparse tag-identifier
+  identifier)
+
+(defparse tag-type
+  ordinal-type-identifier)
+
+(defparse variant-list
+  (ordered variant
+           (repeated (ordered case-separator
+                              variant))
+           (optional variant-else-part)))
+
+(defparse variant-else-part
+  (ordered "ELSE"
+           field-list))
+
+(defparse variant
+  (optional (ordered variant-label-list
+                     colon field-list)))
+
+(defparse variant-label-list
+  (ordered variant-label
+           (repeated (ordered comma
+                              variant-label))))
+
+(defparse variant-label
+  (ordered constant-expression
+           (optional (ordered ellipsis
+                              constant-expression))))
+
+(defparse proper-procedure-block
+  (ordered declarations
+           (optional procedure-body)
+           "END"))
+
+(defparse procedure-body
+  (ordered "BEGIN"
+           block-body))
+
+(defparse function-procedure-block
+  (ordered declarations
+           function-body
+           "END"))
+
+(defparse function-body
+  (ordered "BEGIN"
+           block-body))
+
+(defparse module-block
+  (ordered declarations
+           (optional module-body)
+           "END"))
+
+(defparse module-body
+  (ordered initialization-body
+           (optional finalization-body)))
+
+(defparse initialization-body
+  (ordered "BEGIN"
+           block-body))
+
+(defparse finalization-body
+  (ordered "FINALLY"
+           block-body))
+
+(defparse block-body
+  (ordered normal-part
+           (optional (ordered "EXCEPT"
+                              exceptional-part))))
+
+(defparse normal-part
+  statement-ordered)
+
+(defparse exceptional-part
+  statement-ordered)
+
+(defparse statement
+  (choice assignment-statement
+          return-statement
+          retry-statement
+          with-statement
+          if-statement
+          case-statement
+          while-statement
+          repeat-statement
+          loop-statement
+          exit-statement
+          for-statement
+          procedure-call
+          ;;empty-statement   ; commented out as does not work
+          ))
+
+(defparse statement-ordered
+  (ordered statement
+           (repeated (ordered semicolon
+                              statement))))
+
+(defparse empty-statement
+  (ordered))
+
+(defparse assignment-statement
+  (ordered variable-designator
+           assignment-operator
+           expression))
+
+(defparse procedure-call
+  (ordered procedure-designator
+           (optional actual-parameters)))
+
+(defparse procedure-designator
+  value-designator)
+
+(defparse return-statement
+  (choice simple-return-statement
+          function-return-statement))
+
+(defparse simple-return-statement
+  "RETURN")
+
+(defparse function-return-statement
+  (ordered "RETURN"
+           expression))
+
+(defparse retry-statement
+  "RETRY")
+
+(defparse with-statement
+  (ordered "WITH"
+           record-designator
+           "DO"
+           statement-ordered
+           "END"))
+
+(defparse record-designator
+  (choice variable-designator
+          value-designator))
+
+(defparse if-statement
+  (ordered guarded-statements
+           (optional if-else-part)
+           "END"))
+
+(defparse guarded-statements
+  (ordered "IF"
+           boolean-expression
+           "THEN"
+           statement-ordered
+           (repeated (ordered "ELSIF"
+                              boolean-expression
+                              "THEN"
+                              statement-ordered))))
+
+(defparse if-else-part
+  (ordered "ELSE"
+           statement-ordered))
+
+(defparse boolean-expression
+  expression)
+
+(defparse case-statement
+  (ordered "CASE"
+           case-selector
+           "OF"
+           case-list
+           "END"))
+
+(defparse case-selector
+  ordinal-expression)
+
+(defparse case-list
+  (ordered case-alternative
+           (repeated (ordered case-separator
+                              case-alternative))
+           (optional case-else-part)))
+
+(defparse case-else-part
+  (ordered "ELSE"
+           statement-ordered))
+
+(defparse case-alternative
+  (optional (ordered case-label-list
+                     colon
+                     statement-ordered)))
+
+(defparse case-label-list
+  (ordered case-label
+           (repeated (ordered comma
+                              case-label))))
+
+(defparse case-label
+  (ordered constant-expression
+           (optional (ordered ellipsis
+                              constant-expression))))
+
+(defparse while-statement
+  (ordered "WHILE"
+           boolean-expression
+           "DO"
+           statement-ordered
+           "END"))
+
+(defparse repeat-statement
+  (ordered "REPEAT"
+           statement-ordered
+           "UNTIL"
+           boolean-expression))
+
+(defparse loop-statement
+  (ordered "LOOP"
+           statement-ordered
+           "END"))
+
+(defparse exit-statement
+  "EXIT")
+
+(defparse for-statement
+  (ordered "FOR"
+           control-variable-identifier
+           assignment-operator
+           initial-value
+           "TO"
+           final-value
+           (optional (ordered "BY"
+                              step-size))
+           "DO"
+           statement-ordered
+           "END"))
+
+(defparse control-variable-identifier
+  identifier)
+
+(defparse initial-value
+  ordinal-expression)
+
+(defparse final-value
+  ordinal-expression)
+
+(defparse step-size
+  constant-expression)
+
+(defparse variable-designator
+  (ordered entire-designator
+           (repeated (choice indexed-part
+                             selected-part))))
+
+(defparse entire-designator
+  qualified-identifier)
+
+(defparse selected-designator
+  (ordered record-variable-designator
+           period
+           field-identifier))
+
+(defparse record-variable-designator
+  variable-designator)
+
+(defparse field-identifier
+  identifier)
+
+(defparse expression
+  (ordered simple-expression
+           (optional (ordered relational-operator
+                              simple-expression))))
+
+(defparse simple-expression
+  (ordered (optional sign)
+           term
+           (repeated (ordered term-operator
+                              term))))
+
+(defparse term
+  (ordered factor
+           (repeated (ordered factor-operator
+                              factor))))
+
+(defparse factor
+  (choice (ordered left-parenthesis 
+                   expression
+                   right-parenthesis)
+          (ordered logical-negation-operator
+                   factor)
+          function-call
+          value-designator
+          value-constructor
+          constant-literal))
+
+(defparse ordinal-expression
+  expression)
+
+(defparse relational-operator
+  (choice equals-operator
+          inequality-operator
+          less-than-operator
+          greater-than-operator
+          less-than-or-equal-operator
+          greater-than-or-equal-operator))
+
+(defparse term-operator
+  (choice plus-operator
+          minus-operator
+          logical-disjunction-operator))
+
+(defparse factor-operator
+  (choice multiplication-operator
+          division-operator
+          rem-operator
+          div-operator
+          mod-operator
+          logical-conjunction-operator))
+
+(defparse value-designator
+  (ordered entire-value
+           (repeated (choice indexed-part
+                             selected-part))))
+
+(defparse entire-value
+  qualified-identifier)
+
+(defparse indexed-part
+  (ordered left-bracket
+           index-expression
+           (repeated (ordered comma
+                              index-expression))
+           right-bracket))
+
+(defparse index-expression
+  ordinal-expression)
+
+(defparse selected-part
+  (ordered period
+           field-identifier))
+
+(defparse function-call
+  (ordered function-designator
+           actual-parameters))
+
+(defparse function-designator
+  value-designator)
+
+(defparse value-constructor
+  (choice array-constructor
+          record-constructor))
+
+(defparse array-constructor
+  (ordered array-type-identifier
+           array-constructed-value))
+
+(defparse array-type-identifier
+  type-identifier)
+
+(defparse array-constructed-value
+  (ordered left-brace
+           repeated-structure-component
+           (repeated (ordered comma
+                              repeated-structure-component))
+           right-brace))
+
+(defparse repeated-structure-component
+  (ordered structure-component
+           (optional (ordered "BY"
+                              repetition-factor))))
+
+(defparse repetition-factor
+  constant-expression)
+
+(defparse structure-component
+  (choice expression
+          array-constructed-value
+          record-constructed-value))
+
+(defparse record-constructor
+  (ordered record-type-identifier
+           record-constructed-value))
+
+(defparse record-type-identifier
+  type-identifier)
+
+(defparse record-constructed-value
+  (ordered left-brace
+           (optional (ordered structure-component
+                              (repeated (ordered comma
+                                                 structure-component))))
+           right-brace))
+
+(defparse constant-literal
+  (choice real-literal
+          whole-number-literal
+          string-literal))
+
+(defparse constant-expression
+  expression)
+
+(defparse actual-parameters
+  (ordered left-parenthesis
+           (optional actual-parameter-list)
+           right-parenthesis))
+
+(defparse actual-parameter-list
+  (ordered actual-parameter
+           (repeated (ordered comma
+                              actual-parameter))))
+
+(defparse actual-parameter
+  (choice variable-designator
+          expression
+          type-parameter))
+
+(defparse type-parameter
+  type-identifier)
+
+(defparse sign
+  (choice plus-operator
+          minus-operator))
+
+;; these were missing from the bnf so I took a "best guess" and added
+;; them by hand 
+
+(defparse logical-negation-operator "NOT")
+(defparse rem-operator "REM")
+(defparse case-separator "|")
+(defparse div-operator "DIV")
+(defparse mod-operator "MOD")
+(defparse equals-operator "=")
+(defparse logical-conjunction-operator "AND")
+(defparse inequality-operator "<>")
+(defparse comma ",")
+(defparse ellipsis "...")
+(defparse left-bracket "[")
+(defparse less-than-operator "<")
+(defparse assignment-operator ":=")
+(defparse greater-than-operator ">")
+(defparse right-bracket "]")
+(defparse less-than-or-equal-operator "<=")
+(defparse left-parenthesis "(")
+(defparse colon ":")
+(defparse greater-than-or-equal-operator ">=")
+(defparse right-parenthesis ")")
+(defparse semicolon ";")
+(defparse plus-operator "+")
+(defparse period ".")
+(defparse minus-operator "-")
+(defparse logical-disjunction-operator "OR")
+(defparse equals "=")
+(defparse left-brace "{")
+(defparse multiplication-operator "*")
+(defparse right-brace "}")
+(defparse set-intersection-operator ">>")
+(defparse division-operator "/")

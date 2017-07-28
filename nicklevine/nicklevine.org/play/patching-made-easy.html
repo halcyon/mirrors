@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<!-- $Id: //info.ravenbrook.com/user/ndl/lisp/play/patching-made-easy.html#1 $ -->
+
+
+<!-- Mirrored from nicklevine.org/play/patching-made-easy.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:22 GMT -->
+<head><title>Patching made easy - lisp wins again</title></head>
+<body>
+<div align="center"><h1>Patching made easy - lisp wins again</h1>
+
+  <h3>Nick Levine<br />Ravenbrook Limited</h3>
+  <h6>(Occasional sponsors of mid-morning cookies at lisp conferences since 2009)</h6>
+</div>
+
+<p>This is a concatenation of the slides from
+my <a href="http://www.international-lisp-conference.org/2009/lightning">lightning
+talk</a> at
+  <a href="http://www.international-lisp-conference.org/2009">ILC 2009</a></p>
+
+<ul>
+
+<li><p>This isn't going to be rocket science</p></li>
+
+<li><p>Just the observation that lisp carries a lot of ordinary magic
+    which can add significant value to the user</p></li>
+
+<li><p>And here's an example: Lisp fasls make convenient patches for
+end users</p></li>
+
+<li><p>In my application each release comes with an empty "patches"
+directory</p>
+
+    <ul>
+
+    <li><p>Sorry, no time now to tell you anything about this
+    application...</p></li>
+
+    <li><p>... except that it's released as a "level-0 delivered
+	LispWorks application" &mdash; meaning it's all of Common Lisp
+	apart from compile-file</p></li>
+
+    <li><p>... and, though not relevant to this talk, it's a text
+    processing engine</p></li>
+
+    </ul>
+</li>
+
+<li><p>If the user drops fasls into that directory the application
+will load them</p>
+
+  <ul><li><p>... on startup - but that could be different</p></li></ul>
+</li>
+
+<li><p>Really simple to use</p></li>
+
+<li><p>Nimble: 10k fasl with minimal QA vs 30M full installer for new
+    release</p></li>
+
+<li><p>If a fix comes from LispWorks support it's still a fasl and the
+    same distribution procedure applies</p></li>
+
+<li><p>Caveat: the simplicity of this system depends on trust. I
+happen to trust this bunch of users not to shoot themselves.</p></li>
+
+</ul>
+
+<p>Here's (most of) the original patch loader.</p>
+
+<pre>
+(defun load-patches ()
+  (when-let (patch-files (directory
+			  (installation-pathname "patches/*.fsl")))
+    ;;
+    ;; stuff cut out here - see next slide
+    ;;
+    (dolist (patch patch-files)
+      (load patch))))
+</pre>
+
+<p>Almost good enough &mdash; the above would have been something of a
+blunt stick &mdash;</p>
+
+<ul>
+<li><p>it loads everything</p></li>
+<li><p>in order over which one has no control</p></li>
+
+</ul>
+
+<p>Here's what I did about that (deployed and worked fine for first 30
+  patches)</p>
+
+<pre>
+(defun load-patches ()
+  (catch 'load-patches
+    (when-let (patch-files (directory
+                            (installation-pathname "patches/*.fsl")))
+      (when-let (revoke (find-if (lambda (patch)
+                                   (pathname-match-p patch "revoke"))
+                                 patch-files))
+        (setf patch-files (cons revoke (remove revoke patch-files))))
+      (dolist (patch patch-files)
+        (load patch)))))
+</pre>
+
+<p>Solution: choose a special name and if a file with that name is
+  present load it first.</p>
+
+<p>Note the catch tag.</p>
+
+<p>I didn't know when I wrote this whether I'd ever need anything more
+  sophisticated and if so what. When the time came, the above gave me
+  sufficient control over loading order that more complex behaviour
+  could be bootstrapped as a "revoke" patch &mdash; rewrite
+  load-patches and call the new one instead.</p>
+
+<p>Here's the current version:</p>
+
+<pre>
+(defun load-patches ()
+  (let ((*redefinition-action* nil))
+    (catch 'load-patches
+      (macrolet ((fasl-file (name) (format () "~a.~a" name sys:*binary-file-type*)))
+        (when-let (patch-files (directory (installation-pathname (fasl-file "patches/*"))))
+          (setf patch-files
+                (sort patch-files
+                      (lambda (first second)
+                        (or (pathname-match-p first (fasl-file "revoke"))
+                            (and (pathname-match-p first (fasl-file "revoke-*"))
+                                 (not (pathname-match-p second (fasl-file "revoke-*"))))))))
+          (let ((all-revoked nil)
+                (revoked-count 0)
+                (loaded-count 0))
+            (dolist (patch patch-files)
+              (let ((enough-name (make-pathname :type nil
+                                                :defaults (enough-installation-namestring patch))))
+                (if (loop for revoked in all-revoked thereis (pathname-match-p patch revoked))
+                    (progn
+                      (log-message :debug "Revoking patch ~a" enough-name)
+                      (incf revoked-count))
+                  (let ((more-revoked (catch 'revoke-patches
+                                        (log-message :debug "Loading patch ~a" enough-name)
+                                        (load patch))))
+                    (when (consp more-revoked)
+                      (setf all-revoked (append more-revoked all-revoked)))
+                    (incf loaded-count)))))
+            (log-message :notice "Loaded ~d patch~@[~a~]~@[, revoked ~d~]."
+                         loaded-count
+                         (when (> loaded-count 1) "es")
+                         (when (plusp revoked-count) revoked-count)))))))
+</pre>
+
+<p>And here's how you revoke a patch:</p>
+
+<pre>
+(in-package "PROFILER-PLUS")
+
+;;               REVOKE-BUILD-GLOBAL-ENVIRONMENT.LISP
+;;           Nick Levine, Ravenbrook Limited, 2008-10-21
+;;
+;;
+;; The purpose of this document is to patch Profiler 6.0.0, revoking
+;; patch build-global-environment.lisp
+;;
+;; This patch accompanies patch file build-global-environment-redux.lisp.
+
+
+(throw 'revoke-patches
+       '("build-global-environment"))
+
+</pre>
+
+<p>Why revoke?</p>
+
+<ul>
+
+<li><p>defect in original patch</p></li>
+
+<li><p>when the user gets it they change their mind about what they wanted</p></li>
+
+<li><p>two independent changes required to same definition</p></li>
+
+</ul>
+
+<hr />
+<small><p>Copyright (c) 2009 Nick Levine.</p>
+
+<p>This document is provided "as is", without any express or implied
+warranty.  In no event will the author be held liable for any damages
+arising from the use of this document.  You may make and distribute
+verbatim copies of this document provided that you do not charge a fee
+for this document or for its distribution.
+</p></small>
+
+</body>
+
+<!-- Mirrored from nicklevine.org/play/patching-made-easy.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:22 GMT -->
+</html>
+

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+
+<!-- Mirrored from stuartsierra.com/2013/11/04/command-line-intransigence by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:58:30 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+		<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+<title>Command-Line Intransigence &#8211; Digital Digressions by Stuart Sierra</title>
+<link rel='dns-prefetch' href='http://s0.wp.com/'>
+<link rel='dns-prefetch' href='http://secure.gravatar.com/'>
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel='dns-prefetch' href='http://s.w.org/'>
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Comments Feed" href="../../../comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Command-Line Intransigence Comments Feed" href="command-line-intransigence/feed" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/stuartsierra.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.6"}};
+			!function(a,b,c){function d(a){var c,d,e,f,g,h=b.createElement("canvas"),i=h.getContext&&h.getContext("2d"),j=String.fromCharCode;if(!i||!i.fillText)return!1;switch(i.textBaseline="top",i.font="600 32px Arial",a){case"flag":return i.fillText(j(55356,56806,55356,56826),0,0),!(h.toDataURL().length<3e3)&&(i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,65039,8205,55356,57096),0,0),c=h.toDataURL(),i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,55356,57096),0,0),d=h.toDataURL(),c!==d);case"diversity":return i.fillText(j(55356,57221),0,0),e=i.getImageData(16,16,1,1).data,f=e[0]+","+e[1]+","+e[2]+","+e[3],i.fillText(j(55356,57221,55356,57343),0,0),e=i.getImageData(16,16,1,1).data,g=e[0]+","+e[1]+","+e[2]+","+e[3],f!==g;case"simple":return i.fillText(j(55357,56835),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode8":return i.fillText(j(55356,57135),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode9":return i.fillText(j(55358,56631),0,0),0!==i.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity","unicode9"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='twentysixteen-jetpack-css'  href='../../../wp-content/plugins/jetpack/modules/theme-tools/compat/twentysixteen3a05.css?ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-fonts-css'  href='https://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%2C900%2C400italic%2C700italic%2C900italic%7CMontserrat%3A400%2C700%7CInconsolata%3A400&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../../wp-content/plugins/jetpack/_inc/genericons/genericons/genericons128b.css?ver=3.1' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-style-css'  href='../../../wp-content/themes/twentysixteen/style167b.css?ver=4.6' type='text/css' media='all' />
+<!--[if lt IE 10]>
+<link rel='stylesheet' id='twentysixteen-ie-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentysixteen-ie8-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie8.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='twentysixteen-ie7-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie7.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='../../../wp-content/plugins/jetpack/css/jetpack3a05.css?ver=4.2.2' type='text/css' media='all' />
+<script type='text/javascript' src='../../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://stuartsierra.com/wp-content/themes/twentysixteen/js/html5.js?ver=3.7.3'></script>
+<![endif]-->
+<link rel='https://api.w.org/' href='../../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../../wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Lifecycle Composition' href='../../09/15/lifecycle-composition.html' />
+<link rel='next' title='Parallel Processing with core.async' href='../../12/08/parallel-processing-with-core-async.html' />
+<meta name="generator" content="WordPress 4.6" />
+<link rel="canonical" href="command-line-intransigence.html" />
+<link rel='shortlink' href='https://wp.me/pbl3J-c5' />
+<link rel="alternate" type="application/json+oembed" href="../../../wp-json/oembed/1.0/embed7702.json?url=https%3A%2F%2Fstuartsierra.com%2F2013%2F11%2F04%2Fcommand-line-intransigence" />
+<link rel="alternate" type="text/xml+oembed" href="../../../wp-json/oembed/1.0/embed8c3f?url=https%3A%2F%2Fstuartsierra.com%2F2013%2F11%2F04%2Fcommand-line-intransigence&amp;format=xml" />
+
+<link rel='dns-prefetch' href='http://v0.wordpress.com/'>
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Command-Line Intransigence" />
+<meta property="og:url" content="https://stuartsierra.com/2013/11/04/command-line-intransigence" />
+<meta property="og:description" content="In the early days of Clojure, I was skeptical of Clojure-specific build tools like Lancet, Leiningen, and Cake. Why would Clojure, a part of the Java ecosystem, need its own build tool when there w…" />
+<meta property="article:published_time" content="2013-11-04T13:32:33+00:00" />
+<meta property="article:modified_time" content="2014-01-01T17:05:19+00:00" />
+<meta property="og:site_name" content="Digital Digressions by Stuart Sierra" />
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary" />
+</head>
+
+<body class="single single-post postid-749 single-format-standard">
+<div id="page" class="site">
+	<div class="site-inner">
+		<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+		<header id="masthead" class="site-header" role="banner">
+			<div class="site-header-main">
+				<div class="site-branding">
+					
+											<p class="site-title"><a href="../../../index.html" rel="home">Digital Digressions by Stuart Sierra</a></p>
+											<p class="site-description">From programming to everything else</p>
+									</div><!-- .site-branding -->
+
+									<button id="menu-toggle" class="menu-toggle">Menu</button>
+
+					<div id="site-header-menu" class="site-header-menu">
+													<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Primary Menu">
+								<div class="menu-main-menu-container"><ul id="menu-main-menu" class="primary-menu"><li id="menu-item-635" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../../../about-me.html">About Me</a></li>
+<li id="menu-item-633" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../../../writing.html">Writing</a></li>
+<li id="menu-item-634" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../../../presentations.html">Presentations</a></li>
+<li id="menu-item-636" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../../../software.html">Software</a></li>
+<li id="menu-item-637" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../../../contact.html">Contact</a></li>
+</ul></div>							</nav><!-- .main-navigation -->
+						
+											</div><!-- .site-header-menu -->
+							</div><!-- .site-header-main -->
+
+											<div class="header-image">
+					<a href="../../../index.html" rel="home">
+						<img src="../../../wp-content/uploads/2015/12/header.jpg" srcset="https://stuartsierra.com/wp-content/uploads/2015/12/header-300x70.jpg 300w, https://stuartsierra.com/wp-content/uploads/2015/12/header-768x179.jpg 768w, https://stuartsierra.com/wp-content/uploads/2015/12/header-1024x239.jpg 1024w, https://stuartsierra.com/wp-content/uploads/2015/12/header.jpg 1200w" sizes="(max-width: 709px) 85vw, (max-width: 909px) 81vw, (max-width: 1362px) 88vw, 1200px" width="1200" height="280" alt="Digital Digressions by Stuart Sierra">
+					</a>
+				</div><!-- .header-image -->
+					</header><!-- .site-header -->
+
+		<div id="content" class="site-content">
+
+<div id="primary" class="content-area">
+	<main id="main" class="site-main" role="main">
+		
+<article id="post-749" class="post-749 post type-post status-publish format-standard hentry category-programming tag-build-tools tag-clojure tag-java tag-lisp tag-maven tag-workflow">
+	<header class="entry-header">
+		<h1 class="entry-title">Command-Line Intransigence</h1>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p> In the early days of Clojure, I was skeptical of Clojure-specific build tools like <a href="https://github.com/stuarthalloway/lancet">Lancet</a>, <a href="http://leiningen.org/">Leiningen</a>, and <a href="https://github.com/flatland/cake">Cake</a>. Why would Clojure, a part of the Java ecosystem, need its own build tool when there were already so many Java-based tools? </p>
+<p> At the time, I thought <a href="http://maven.apache.org/">Maven</a> was the last word in build tooling. Early Leiningen felt like a thin wrapper around Maven for people with an inconsolable allergy to XML. Maven was the <i>serious</i> build tool, with a rich declarative model for describing dependency relationships among software artifacts. That model was imperfect, but it worked well enough to power one of the largest <a href="http://search.maven.org/">repositories</a> of open-source software on the planet. </p>
+<p> But things change. Leiningen has evolved rapidly. Maven has also evolved, but more slowly, and the promised <a href="http://maven.40175.n5.nabble.com/What-happened-to-Polyglot-Maven-td5715529.html">non-XML POM syntax</a> (&#8220;polyglot Maven&#8221;) has not materialized. </p>
+<p> Meanwhile, I learned <a href="http://nealford.com/memeagora/2013/01/22/why_everyone_eventually_hates_maven.html">why everyone eventually hates Maven</a>, through the experience of crafting custom Maven builds for two large-ish projects: the Clojure language and its contributed libraries. It was a challenge to satisfy the (often conflicting) requirements of developers, continuous integration, source repositories, and the public Maven repository network. Even with the help of <a href="http://www.sonatype.com/resources/books">Maven books</a> from <a href="http://www.sonatype.com/">Sonatype</a>, it took months of trial and error and nearly all my &#8220;open-source&#8221; time to get everything working. </p>
+<p> At the end of this process I discovered, to my dismay, that I was the only one who understood it. As my colleague Stuart Halloway put it, &#8220;Maven breeds heroes.&#8221; For end-users and developers, there&#8217;s a nice interface: Clojure-contrib library authors can literally <a href="http://dev.clojure.org/display/community/How+to+Make+Releases">click a button</a> to make a release. But behind that button are so many steps and moving parts (Git, Hudson, Maven, Nexus, GPG, and all the Maven plugins) that even I can barely remember how it all works. I never wanted to be the XML hero. </p>
+<p> So I have come around to Leiningen, and even incorporate it into my Clojure development <a href="http://thinkrelevance.com/blog/2013/06/04/clojure-workflow-reloaded">workflow</a>. It&#8217;s had some bumps, as one might expect from a fast-moving open-source project with lots of contributors, but most of the time it does what I need and doesn&#8217;t get in the way. </p>
+<p> What puzzles me, however, is the stubbornness of developers who want to do <i>everything</i> via Leiningen. Some days it seems like every new tool or development utility for Clojure comes wrapped up in a Leiningen plugin so it can be invoked at the command line. I don&#8217;t get it. When you have a Clojure REPL, why would you limit yourself to the UNIX shell? </p>
+<p> I think this habit comes partly from scripting languages, which were born at the command line, and still live there to a great extent. But it puzzled me a bit even in Ruby: if it takes 3 seconds to for <code>rake</code> to load your 5000-line Rails app, do you really want to use <code>rake</code> for critical administrative tasks like database migrations? <a href="http://ruby-doc.org/docs/ProgrammingRuby/html/irb.html">IRB</a> <a href="http://stackoverflow.com/a/5673496">is not a REPL</a> in the Lisp sense, but it&#8217;s a pretty good interactive shell. I&#8217;d rather work with a large Ruby app in IRB than via <code>rake</code>. </p>
+<p> <a href="https://github.com/technomancy/leiningen/wiki/Faster">Start-up time</a> remains a major concern for Leiningen, and its contributors have gone to great lengths (sometimes <a href="https://github.com/technomancy/leiningen/pull/1230">too far</a>) to ameliorate it. Why not just avoid the problem altogether? Start Leiningen once and then work at the REPL. Admittedly, this takes some discipline and careful application design, but on my own projects I&#8217;ve gotten to the point where I only need to launch Leiningen once a day. Occasionally I make a mistake and get my application into such a borked state that the only remedy is restarting the JVM, but those occasions are rare. </p>
+<p> I pretty much use Leiningen for just three things: 1) getting dependencies, 2) building JARs, and 3) launching REPLs. Once I have a REPL I can do my real work: running my application, testing, and profiling. The feedback cycles are faster and the debugging options much richer than what I can get on the command-line. </p>
+<p> &#8220;Build plugins,&#8221; for Leiningen or Maven or any other tool, always suffer from running in a different environment from the code they are building. But isn&#8217;t one of the central tenets of Lisp that the compiler is <i>part of</i> your application? There isn&#8217;t really a sharp boundary between &#8220;build&#8221; code and &#8220;application&#8221; code. It&#8217;s all just code. </p>
+<p> I used to write little &#8220;command-line interfaces&#8221; for running tests, builds, deployments, and so on. Now I&#8217;m more likely to just put those functions in a Clojure namespace and call them from the REPL. Sometimes I wonder: why not go further? Use Leiningen (or Maven, or Gradle, or whatever) just to download dependencies and bootstrap a REPL, then execute builds and releases <i>from the REPL</i>. </p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="command-line-intransigence.html" rel="bookmark"><time class="entry-date published" datetime="2013-11-04T08:32:33+00:00">November 4, 2013</time><time class="updated" datetime="2014-01-01T12:05:19+00:00">January 1, 2014</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../../tag/build-tools.html" rel="tag">build tools</a>, <a href="../../../tag/clojure.html" rel="tag">Clojure</a>, <a href="../../../tag/java.html" rel="tag">Java</a>, <a href="../../../tag/lisp.html" rel="tag">Lisp</a>, <a href="../../../tag/maven.html" rel="tag">Maven</a>, <a href="../../../tag/workflow.html" rel="tag">workflow</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<div id="comments" class="comments-area">
+
+			<h2 class="comments-title">
+			7 thoughts on &ldquo;Command-Line Intransigence&rdquo;		</h2>
+
+		
+		<ol class="comment-list">
+					<li id="comment-45840" class="comment even thread-even depth-1">
+			<article id="div-comment-45840" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/00ac463e1534de6c3a7bbe42365286cd?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/00ac463e1534de6c3a7bbe42365286cd?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Luke</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="command-line-intransigence.html#comment-45840">
+							<time datetime="2013-11-04T09:20:49+00:00">
+								November 4, 2013 at 9:20 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hm, can&#8217;t say I agree.</p>
+<p>I think there are several very good reasons why your application&#8217;s main &#8220;entry points&#8221; (including tests) should be accessible via the command line:</p>
+<p>1. It&#8217;s easier to run them in CI.<br />
+2. Its easier to script execution in a DevOps scenario<br />
+3. Your program can be executed by people who don&#8217;t know Clojure (or who aren&#8217;t even developers)<br />
+4. It makes the app more self-documenting about what the primary entry points are</p>
+<p>I agree to the extent that it makes sense to use the REPL *while developing*  a project, but I do think the projects external API should be exposed to command-line users, and lein is a straightforward way to do that.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-45841" class="comment byuser comment-author-stuart bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-45841" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='../../../index.html' rel='external nofollow' class='url'>Stuart</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="command-line-intransigence.html#comment-45841">
+							<time datetime="2013-11-04T09:30:55+00:00">
+								November 4, 2013 at 9:30 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Luke,</p>
+<p>Totally agree that those are good reasons to have command-line entry points. I just don&#8217;t want the command-line to be the <em>only</em> entry point.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-45842" class="comment even thread-even depth-1">
+			<article id="div-comment-45842" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/f8a7ccb41af2422d10599464b96cf034?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/f8a7ccb41af2422d10599464b96cf034?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://franklinchen.com/' rel='external nofollow' class='url'>Franklin Chen</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="command-line-intransigence.html#comment-45842">
+							<time datetime="2013-11-04T09:51:36+00:00">
+								November 4, 2013 at 9:51 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I&#8217;m not a big Clojure user, but I too have been puzzled by repeatedly launching Leiningen, rather than entering a REPL and staying there. One thing that drew me to moving from Maven to SBT (even before I actually moved from Java to Scala for development in general) was that I can type &#8220;sbt&#8221; and then do stuff from the SBT console and stay there. Having stuff preloaded, and using SBT&#8217;s incremental compilation and testing and other features, has been fairly pleasant.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-45845" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-45845" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/621e08756ee4fbf0ea5b4c483358bc09?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/621e08756ee4fbf0ea5b4c483358bc09?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">jwhitlark</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="command-line-intransigence.html#comment-45845">
+							<time datetime="2013-11-05T12:10:44+00:00">
+								November 5, 2013 at 12:10 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Why not just do up a little drop-in to tools.cli that emulates the -f (execute function) -l (load code from file), and &#8211;eval.  It seems like that would give you the best of both worlds.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-45846" class="comment even thread-even depth-1">
+			<article id="div-comment-45846" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/7a68273a86ec19d39fe77648efa6a3cc?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/7a68273a86ec19d39fe77648efa6a3cc?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">henryw</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="command-line-intransigence.html#comment-45846">
+							<time datetime="2013-11-05T13:16:45+00:00">
+								November 5, 2013 at 1:16 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>on a related topic,  I wish I had a clojure shell I could use instead of a unix shell, this would be the place for everyday unix commands, like cd, grep and find. if clojure-function versions of those returned data structures instead of text streams, then piping stuff would be easier. </p>
+<p>I have recently heard of eshell which may be something similar to what I&#8217;m looking for, havent had a chance to sit down with it yet.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-45847" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-45847" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/22788ec68b2aee512f8f4c5d8ae819ae?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/22788ec68b2aee512f8f4c5d8ae819ae?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://technomancy.us/' rel='external nofollow' class='url'>Phil Hagelberg</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="command-line-intransigence.html#comment-45847">
+							<time datetime="2013-11-05T14:02:10+00:00">
+								November 5, 2013 at 2:02 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>People writing Leiningen plugins when they shouldn&#8217;t is actually a really common problem. The best way to solve this problem is to write a `-main` function which you can invoke from the repl, and then if you want to expose it from the command line, write an alias that partially applies the `run` task like so:</p>
+<p>    :aliases {&#8220;go&#8221; [&#8220;run&#8221; &#8220;-m&#8221; &#8220;myapp.start&#8221;]}</p>
+<p>This will make `lein go fast` eval `(myapp.start/-main &#8220;fast&#8221;)` inside the context of your project.</p>
+<p>I should probably get around to blogging about this since it&#8217;s not widely understood. There are still valid reasons to write a lein plugin if you need access to the project map for some reason, but people using it as a thin wrapper around `eval-in-project` need to cut that out.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-45849" class="comment even thread-even depth-1">
+			<article id="div-comment-45849" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/22788ec68b2aee512f8f4c5d8ae819ae?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/22788ec68b2aee512f8f4c5d8ae819ae?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://technomancy.us/' rel='external nofollow' class='url'>Phil Hagelberg</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="command-line-intransigence.html#comment-45849">
+							<time datetime="2013-11-05T18:44:01+00:00">
+								November 5, 2013 at 6:44 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>&gt; Use Leiningen (or Maven, or Gradle, or whatever) just to download dependencies and bootstrap a REPL, then execute builds and releases from the REPL.</p>
+<p>This is an interesting idea. I would certainly like to do this with the test task; (once lein 3.0 rolls around) the existing implementation is basically a textbook example of the &#8220;putting too much in a plugin&#8221; problem I mentioned earlier; because tests run in the project process it should definitely be a library. The problem is it&#8217;s basically just a big monkeypatch on clojure.test.</p>
+<p>I don&#8217;t think it&#8217;s as clear-cut for the jar or deploy tasks, especially since the deploy task brings in a nontrivial pile of deps which are likely to cause conflicts with existing project deps; JVM isolation in this case is actually quite valuable. But if you had unique nontrivial packaging requirements it could make sense in some cases.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+		
+	
+			<p class="no-comments">Comments are closed.</p>
+	
+	
+</div><!-- .comments-area -->
+
+	<nav class="navigation post-navigation" role="navigation">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="../../09/15/lifecycle-composition.html" rel="prev"><span class="meta-nav" aria-hidden="true">Previous</span> <span class="screen-reader-text">Previous post:</span> <span class="post-title">Lifecycle Composition</span></a></div><div class="nav-next"><a href="../../12/08/parallel-processing-with-core-async.html" rel="next"><span class="meta-nav" aria-hidden="true">Next</span> <span class="screen-reader-text">Next post:</span> <span class="post-title">Parallel Processing with core.async</span></a></div></div>
+	</nav>
+	</main><!-- .site-main -->
+
+	
+</div><!-- .content-area -->
+
+
+	<aside id="secondary" class="sidebar widget-area" role="complementary">
+		<section id="search-3" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://stuartsierra.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+	</label>
+	<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</section><section id="text-4" class="widget widget_text">			<div class="textwidget"><ul>
+<li><a href="http://feeds2.feedburner.com/StuartSierra" title="Syndicate this site using RSS 2.0">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="../../../comments/feed" title="The latest comments to all posts in RSS">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+</ul>
+<ul>
+<li><a href="https://twitter.com/stuartsierra">Twitter</a></li>
+<li><a href="https://github.com/stuartsierra">GitHub</a></li>
+</ul></div>
+		</section><section id="tag-widget-2" class="widget TagWidget"><h2 class="widget-title">Clojure Do’s and Don’ts</h2><ul class = "posts-by-tag-list"><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-883"><a class = "posts-by-tag-item-title" href="../../../2015/08/25/clojure-donts-lazy-effects.html">Clojure Don’ts: Lazy Effects</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-877"><a class = "posts-by-tag-item-title" href="../../../2015/08/10/clojure-donts-redundant-map.html">Clojure Don’ts: Redundant map</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-870"><a class = "posts-by-tag-item-title" href="../../../2015/06/16/clojure-donts-single-branch-if.html">Clojure Don’ts: Single-branch if</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-854"><a class = "posts-by-tag-item-title" href="../../../2015/06/10/clojure-donts-heisenparameter.html">Clojure Don’ts: The Heisenparameter</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-849"><a class = "posts-by-tag-item-title" href="../../../2015/06/01/clojure-donts-optional-arguments-with-varargs.html">Clojure Don’ts: Optional Arguments with Varargs</a></li><li class="posts-by-tag-item Clojure do's and don'ts errors" id="posts-by-tag-item-836"><a class = "posts-by-tag-item-title" href="../../../2015/05/27/clojure-uncaught-exceptions.html">Clojure Do’s: Uncaught Exceptions</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-831"><a class = "posts-by-tag-item-title" href="../../../2015/05/17/clojure-record-constructors.html">Record Constructors</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-826"><a class = "posts-by-tag-item-title" href="../../../2015/05/10/clojure-namespace-aliases.html">Clojure Do’s: Namespace Aliases</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-820"><a class = "posts-by-tag-item-title" href="../../../2015/05/02/clojure-donts-isa.html">Clojure Don’ts: isa?</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-812"><a class = "posts-by-tag-item-title" href="../../../2015/04/26/clojure-donts-concat.html">Clojure Don’ts: Concat</a></li></ul></section>	</aside><!-- .sidebar .widget-area -->
+
+		</div><!-- .site-content -->
+
+		<footer id="colophon" class="site-footer" role="contentinfo">
+							<nav class="main-navigation" role="navigation" aria-label="Footer Primary Menu">
+					<div class="menu-main-menu-container"><ul id="menu-main-menu-1" class="primary-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../../../about-me.html">About Me</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../../../writing.html">Writing</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../../../presentations.html">Presentations</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../../../software.html">Software</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../../../contact.html">Contact</a></li>
+</ul></div>				</nav><!-- .main-navigation -->
+			
+			
+			<div class="site-info">
+								<span class="site-title"><a href="../../../index.html" rel="home">Digital Digressions by Stuart Sierra</a></span>
+				<a href="https://wordpress.org/">Proudly powered by WordPress</a>
+			</div><!-- .site-info -->
+		</footer><!-- .site-footer -->
+	</div><!-- .site-inner -->
+</div><!-- .site -->
+
+	<div style="display:none">
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	<div class="grofile-hash-map-00ac463e1534de6c3a7bbe42365286cd">
+	</div>
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	<div class="grofile-hash-map-f8a7ccb41af2422d10599464b96cf034">
+	</div>
+	<div class="grofile-hash-map-621e08756ee4fbf0ea5b4c483358bc09">
+	</div>
+	<div class="grofile-hash-map-7a68273a86ec19d39fe77648efa6a3cc">
+	</div>
+	<div class="grofile-hash-map-22788ec68b2aee512f8f4c5d8ae819ae">
+	</div>
+	</div>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201635'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2016Sepaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../../../wp-content/plugins/jetpack/modules/wpgroho167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../wp-content/themes/twentysixteen/js/skip-link-focus-fix8de4.js?ver=20160816'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var screenReaderText = {"expand":"expand child menu","collapse":"collapse child menu"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../../../wp-content/themes/twentysixteen/js/functions8de4.js?ver=20160816'></script>
+<script type='text/javascript' src='../../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='https://stats.wp.com/e-201635.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.2.2',blog:'2702563',post:'749',tz:'-4',srv:'stuartsierra.com'} ]);
+	_stq.push([ 'clickTrackerInit', '2702563', '749' ]);
+</script>
+</body>
+
+<!-- Mirrored from stuartsierra.com/2013/11/04/command-line-intransigence by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:58:31 GMT -->
+</html>
+
+<!-- Dynamic page generated in 0.360 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 01:31:15 -->
+
+<!-- Compression = gzip -->

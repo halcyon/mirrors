@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/graceful-degradation-as-a-first-response-in-emergencies by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:53 GMT -->
+<head>
+    <title> Graceful degradation as a first response in emergencies </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="graceful-degradation-as-a-first-response-in-emergencies.html">
+    <meta property="og:title" content="Graceful degradation as a first response in emergencies">
+    <meta property="og:description" content="A few days ago, I asked you to work through a thought experiment that was meant to simulate a minor emergency situation. Here's a quick recap of the scenario, in case you missed the last email or need...">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Graceful degradation as a first response in emergencies" />
+	<meta name="twitter:description" content="A few days ago, I asked you to work through a thought experiment that was meant to simulate a minor emergency situation. Here's a quick recap of the scenario, in case you missed the last email or need" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> April 17, 2016 </div>
+            <h1 class="subject"> Graceful degradation as a first response in emergencies </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> <div>A few days ago, I asked you to work through a thought experiment that was meant to simulate a minor emergency situation.&nbsp;Here&#39;s a quick recap of the scenario, in case you missed the last email or need a reminder:</div>
+
+<blockquote>
+<div>You&#39;re building a website&nbsp;that&nbsp;helps people find nearby yard sales. The site&nbsp;gets mentioned in very popular newsletter, and suddenly there is a huge increase in traffic.&nbsp;This unexpected surge of requests causes&nbsp;a server-side reverse geocoding operation to fail, which in turn results in all visits to the site&#39;s homepage failing with a 500 error.<br>
+<br>
+With a giant flood of exception reports coming in and a broken website, your goal is to get things back to a stable state as quickly as possible, hopefully in time to make sure that at least some of the visitors who are arriving via the newsletter link end up having a good first impression of the site.</div>
+</blockquote>
+The temptation is strong in this situation to think about how to fix what&#39;s broken: the reverse geocoding operation. Some teams would go farther than that -- jumping into the &quot;who&quot; and &quot;why&quot; of the problem to seek some sort of root cause before responding. None of this is helpful in a crisis situation. But thinking clearly under pressure isn&#39;t easy, so it happens often.<br>
+<br>
+Instead, a better question is &quot;what happens if we temporarily disable the broken piece of functionality?&quot; That question doesn&#39;t always yield great results, but in many cases it&#39;s the shortest path to getting a system up and running again.<br>
+<br>
+In this particular case, reverse geocoding was only in use to turn a lat/long coordinate back into a human readable place name to pre-fill a search box. Turning it off would mean that the visitors would still see a map centered on whatever location their IP/browser location services provided, but that the search box would be empty rather than showing the place name that the lat/long coordinates had resolved to.<br>
+<br>
+The worst case scenario? That the visitor would see a map showing a location they aren&#39;t familiar with or didn&#39;t actually want to see, then they&#39;d type their city/state into the search box and things would work as normal. In other words, the reverse geolocation feature was a matter of convenience and UX, not a core piece of functionality on the critical path. Disabling it would have minimal impact.<br>
+<br>
+Is there a risk in disabling functionality, particularly under pressure? Absolutely! But risk is relative, and a site that is completely down is already in about as bad of a state as it can get.<br>
+<br>
+If&nbsp;disabling the feature doesn&#39;t work... then you will have only lost a small amount of time and can go back to the drawing board.<br>
+<br>
+The next step would probably be even more coarse-grained efforts to get things back to a stable state, like throwing up a temporary page with a friendly apology to visitors and an invitation to come back again soon (bonus points for linking a social media account or including an email form). At a minimum, a temporary landing page would clearly communicate the status of the site, and it would also take the strain off of the overwhelmed resources: both the reverse geocoding API and the exception reporting system.<br>
+<br>
+The moment that things have stabilized, the conversation can begin about a proper fix. In this particular case, it&#39;s probably to move the reverse geocoding calls to the client side, which may even be a very easy change to make. But it&#39;s much better to find out the answer to that question<em> after&nbsp;you&#39;ve ended the state of emergency</em>, because then you&#39;ll be able to think and communicate much more clearly.<br>
+<br>
+Yes, this is an obvious and even quite a boring answer. But we often forget to default to graceful degradation in a crisis situation simply because it feels like a hack, or because we think that we have an idea for a real solution that will &quot;only take five minutes&quot; -- and that&#39;s where we get ourselves into trouble.<br>
+<br>
+If you&#39;re looking to get the most out of this exercise, here&#39;s another thing you can try:<br>
+<br>
+<strong>Take one project that you&#39;re currently maintaining, and then in a staging or development environment, introduce a breaking failure into one of its features. Then without &quot;fixing&quot; the broken feature, try to find a way to restore as much system functionality as possible by working around or hiding the problem with no more than 10-15 minutes of work.</strong><br>
+<br>
+If you repeat that exercise a few times, you may eventually come across some code that&#39;s hard to gracefully degrade, and that&#39;s a sign that you&#39;ve either identified some part of your system that is poorly designed, or that you&#39;ve identified a hot spot on the critical path of your application. In either case, it should provide you with some useful information about the overall health and safety of the systems you&#39;re maintaining.<br>
+<br>
+Hope you enjoyed this essay, and happy hacking!<br>
+-greg<br>
+<br>
+PS: To the many folks who responded to my last email, thanks so much! You gave me plenty of interesting things to think about.&nbsp; </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="on-time-estimation.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="making-decisions-under-pressure.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/graceful-degradation-as-a-first-response-in-emergencies by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:53 GMT -->
+</html>

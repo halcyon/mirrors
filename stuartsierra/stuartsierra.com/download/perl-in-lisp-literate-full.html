@@ -1,0 +1,2710 @@
+<!-- this file was generated automatically by noweave; better not edit it-->
+<html>
+<!-- Mirrored from stuartsierra.com/download/perl-in-lisp-literate-full.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 17:00:12 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head><title>perl-in-lisp.nw</title></head><body><!-- -*- mode: noweb; noweb-code-mode: lisp-mode -*--->
+
+
+
+<p>
+<h1><a name=toc1>Perl in Lisp 0.1</a></h1>
+<address>by Stuart Sierra</address>
+<!--title goes here--><p>
+<h2><a name=toc2>Abstract</a></h2><blockquote>
+This document describes the source code of a Common Lisp interface to
+the Perl 5 API.  It consists two layers: 1. CFFI definitions for the C
+API of Perl and 2. a Lisp library on top of them that offers
+convenient entry points to evaluate strings of Perl code, call Perl
+functions, and convert Perl data types to and from their Common Lisp
+equivalents.
+<p>
+This is a beta release.  Some parts are incomplete, but the overall
+package is usable.
+<p>
+This documentation was generated with Noweb and LaTeX.
+</blockquote>
+<p>
+<p>
+<tableofcontents>
+<ul compact>
+<li><a href="#toc2">Abstract</a></li>
+<li><a href="#toc3">Introduction</a></li>
+<li><a href="#toc4">The Perl API</a></li>
+<li><a href="#toc5">Perl API Primitive Types</a></li>
+<li><a href="#toc6">The Perl Interpreter</a></li>
+  <ul compact>
+  <li><a href="#toc7">Initializing the Interpreter</a></li>
+  <li><a href="#toc8">Destroying the Perl Interpreter</a></li>
+  <li><a href="#toc9">Maintaining the Interpreter</a></li>
+  </ul>
+<li><a href="#toc10">Perl Scalars</a></li>
+  <ul compact>
+  <li><a href="#toc11">Creating Scalars</a></li>
+  <li><a href="#toc12">Scalar Reference Counting</a></li>
+  <li><a href="#toc13">Determining the Type of Scalars</a></li>
+  <li><a href="#toc14">Converting Scalars to C Types</a></li>
+  <li><a href="#toc15">Setting the Value of Scalars</a></li>
+  <li><a href="#toc16">Accessing Scalars By Name</a></li>
+  </ul>
+<li><a href="#toc17">Perl Arrays</a></li>
+<li><a href="#toc18">Perl Hash Tables</a></li>
+<li><a href="#toc19">Perl References</a></li>
+<li><a href="#toc20">Manipulating the Perl Stack</a></li>
+  <ul compact>
+  <li><a href="#toc21">A Digression on Pointers</a></li>
+  <li><a href="#toc22">The Stack Pointer</a></li>
+  <li><a href="#toc23">Pushing Arguments Onto the Stack</a></li>
+  <li><a href="#toc24">Popping Values Off the Stack</a></li>
+  <li><a href="#toc25">Scope and Temporary Variables</a></li>
+  <li><a href="#toc26">Using the Perl Stack</a></li>
+  </ul>
+<li><a href="#toc27">Calling Perl Functions</a></li>
+  <ul compact>
+  <li><a href="#toc28">Perl Calling Contexts</a></li>
+  <li><a href="#toc29">Public Interface</a></li>
+  </ul>
+<li><a href="#toc30">Evaluating Perl Code</a></li>
+<li><a href="#toc31">Loading Perl Modules</a></li>
+<li><a href="#toc32">Automatic Type Conversions</a></li>
+<li><a href="#toc33">Packages</a></li>
+<li><a href="#toc34">ASDF System Definition</a></li>
+<li><a href="#toc35">Output Files</a></li>
+<li><a href="#toc36">Development Aids</a></li>
+  <ul compact>
+  <li><a href="#toc37">Makefile</a></li>
+  <li><a href="#toc38">List of All Code Chunks</a></li>
+  <li><a href="#toc39">Symbol Index</a></li>
+  </ul>
+<li><a href="#toc40">License (LLGPL)</a></li>
+</ul>
+</tableofcontents>
+<p>
+
+<h2><a name=toc3>Introduction</a></h2>
+<p>
+This document is a ``literate program,'' containing both its source
+code and full documentation of that source code.  The Makefile in
+Section <a href="#makefile">[-&gt;]</a> produces two output files.  The first,
+<code>perlapi.lisp</code>, defines the <code><a href="#NWD1m">perl-api</a></code> package, which contains
+CFFI definitions for the Perl C API.  The second, <code>perl-in.lisp</code>,
+defines the <code>perl-in-lisp</code> package, which exports Lisp functions
+that provide convenient ways to use Perl from Common Lisp.
+<p>
+
+Unit tests for both packages are defined with the Lisp-Unit testing
+framework.
+<p>
+
+<h2><a name=toc4><a name="NWD1">The Perl API</a></a></h2>
+<p>
+On Unix/Linux, the Perl library is called simply ``libperl'' and this
+is sufficient for CFFI to find it.  On Windows, I do not know where
+the Perl DLL file will be located or what it will be called.  This
+code should work fine on Windows, but you will need to alter this
+chunk to tell CFFI where the Perl DLL file is located.
+<p>
+<pre><a name="NWVrt5m-4czokD-1" href="#NWD1"><dfn>&lt;Libperl foreign library definition&gt;=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b>
+(define-foreign-library libperl
+  (t (:default &quot;libperl&quot;)))
+
+(use-foreign-library libperl)
+</pre><p>
+
+Most of the public Perl API is implemented as C preprocessor macros.
+Obviously, those macros cannot be called through a foreign function
+interface.  There are two possible ways to proceed here.  One could
+write a small library of C code to wrap the API macros in functions,
+and that's exactly what I did in early versions of this library.  This
+proved tricky to compile and awkward to use.  So I decided to dig into
+the Perl source and find the underlying functions those macros call.
+Then I can reimplement the macros in Lisp.
+<p>
+
+
+<h2><a name=toc5><a name="NWD2">Perl API Primitive Types</a></a></h2>
+<p>
+The Perl API defines abbreviations for common C types.  They are
+copied here to make the FFI definitions match the C source.  <code>I32</code>,
+<code>U32</code>, <code>IV</code>, and <code>UV</code> are, usually, all 32-bit integers.
+<code>I32</code> is actually 64 bits on Crays.  If this code ever gets run on a
+Cray, I will eat my keyboard.
+<p>
+<pre><a name="NWVrt5m-S5zrq-1" href="#NWD2"><dfn>&lt;Perl API Types&gt;=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[D<a href="#NWD3">-&gt;</a>]</b>
+(defctype :i32 :int32)
+(defctype :u32 :uint32)
+</pre><p>
+
+<a name="NWD3">A more difficult problem is the width of </a><code>IV</code> (signed integer) and
+<code>UV</code> (unsigned).  They are usually 32 bits, but could be 64 bits on
+some architectures.  I do not know how to determine this without
+crawling through the preprocessed Perl source, so I cheat and assume
+32 bits.  This is a bad thing and should be fixed.
+<p>
+<pre><a name="NWVrt5m-S5zrq-2" href="#NWD2"><dfn>&lt;Perl API Types&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD2">&lt;-</a>D<a href="#NWD4">-&gt;</a>]</b>
+(defctype :iv  :int32)
+(defctype :uv  :uint32)
+</pre><p>
+
+<code><a name="NWD4">NV</a></code> is always a <code>double</code>.  <code>PV</code> is always a <code>char*</code>, although
+Perl PV strings may contain NULL characters and may not be
+NULL-terminated like proper C strings, so we cannot treat them as CFFI
+<code>:string</code> types.
+<p>
+<pre><a name="NWVrt5m-S5zrq-3" href="#NWD2"><dfn>&lt;Perl API Types&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD3">&lt;-</a>D<a href="#NWD5">-&gt;</a>]</b>
+(defctype :nv  :double)
+(defctype :pv  :pointer) ; char*
+</pre><p>
+
+<code><a name="NWD5">STRLEN</a></code> is a typedef, like the traditional <code>size_t</code>, for an
+unsigned integer type that can hold the length of the largest string
+Perl can handle.  Again, this can vary by platform, so I cheat and
+assume 32 bits.  Bad me.
+<p>
+<pre><a name="NWVrt5m-S5zrq-4" href="#NWD2"><dfn>&lt;Perl API Types&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD4">&lt;-</a>D<a href="#NWD6">-&gt;</a>]</b>
+(defctype :strlen :uint32)
+</pre><p>
+
+
+
+
+<h2><a name=toc6><a name="NWD6">The Perl Interpreter</a></a></h2>
+<p>
+We treat the interpreter as an opaque void pointer; there is no need
+to access its memory directly.
+<p>
+<pre><a name="NWVrt5m-S5zrq-5" href="#NWD2"><dfn>&lt;Perl API Types&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD5">&lt;-</a>D<a href="#NWDH">-&gt;</a>]</b>
+(defctype :interpreter :pointer :translate-p nil)
+</pre><p>
+
+
+<h3><a name=toc7><a name="NWD7">Initializing the Interpreter</a></a></h3>
+<p>
+There are four Perl API functions necessary to set up the Perl
+interpreter, <code>perl_alloc</code>, <code>perl_construct</code>, <code>perl_parse</code>, and
+<code>perl_run</code>.  Despite what the perlembed man page says, my tests
+indicate that the <code>PERL_SYS_INIT3</code> macro is not actually necessary
+for running an embedded interpreter.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-1" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[D<a href="#NWDC">-&gt;</a>]</b>
+(defcfun &quot;perl_alloc&quot; :interpreter)
+
+(defcfun &quot;perl_construct&quot; :void
+  (interpreter :interpreter))
+
+(defcfun &quot;perl_parse&quot; :void
+  (interpreter :interpreter)
+  (xsinit :pointer)
+  (argc :int)
+  (argv :pointer)
+  (env :pointer))
+
+(defcfun &quot;perl_run&quot; :int
+  (interpreter :interpreter))
+</pre><blockquote>Defines <a href="#NWI-perl-alloc"><code>perl-alloc</code></a>, <a href="#NWI-perl-construct"><code>perl-construct</code></a>, <a href="#NWI-perl-parse"><code>perl-parse</code></a>, <a href="#NWI-perl-run"><code>perl-run</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-1" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[D<a href="#NWVrt5m-27XOJn-2">-&gt;</a>]</b>
+#:<a href="#NWD7">perl-alloc</a> #:<a href="#NWD7">perl-construct</a> #:<a href="#NWD7">perl-parse</a> #:<a href="#NWD7">perl-run</a>
+</pre><p>
+
+<a name="NWD8">We can wrap up the complete process necessary to initialize the</a>
+interpreter in a single function.  It returns the pointer to the
+interpreter instance.  This pointer will be needed later to destroy
+the interpreter and free the memory.
+<p>
+
+<pre><a name="NWVrt5m-1o4ddw-1" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[D<a href="#NWDE">-&gt;</a>]</b>
+(defun <a href="#NWD8">make-interpreter</a> ()
+  (let ((interpreter (<a href="#NWD7">perl-alloc</a>))
+        (arguments (foreign-alloc :pointer :count 3)))
+    (<a href="#NWD7">perl-construct</a> interpreter)
+    <a name="NWVrt5m-1o4ddw-1-u1" href="#NWDA"><i>&lt;Create Command-Line Argument Array&gt;</i></a>
+    (<a href="#NWD7">perl-parse</a> interpreter (null-pointer)
+                3 arguments (null-pointer))
+    <a name="NWVrt5m-1o4ddw-1-u2" href="#NWDB"><i>&lt;Start Interpreter Running&gt;</i></a>
+    interpreter))
+</pre><blockquote>Defines <a href="#NWI-make-interpreter"><code>make-interpreter</code></a> (links are to index).<p>
+</blockquote><p>
+
+
+<code><a name="NWD9" href="#NWD7">perl-parse</a></code> receives an array of strings, which in a normal Perl
+executable would be the command-line arguments.  To run an embedded
+interpreter, we need to pass three arguments: an empty string, <code>-e</code>,
+and <code>0</code>.  These are similar to the arguments that would be used when
+calling snippets of Perl code from a shell.  Initializing this as a C
+<code>char**</code> array looks like this (copied from the perlembed man page):
+<p>
+<pre><a name="NWVrt5m-4f6clT-1" href="#NWD9"><dfn>&lt;Embedding Command Line Arguments In C&gt;=</dfn></a>
+char *embedding[] = { &quot;&quot;, &quot;-e&quot;, &quot;0&quot; };
+</pre><p>
+
+<a name="NWDA">But in CFFI-speak it's a little more complicated.  The </a><code>let</code> in the
+function above allocates a foreign array, <code>arguments</code>, of pointers.
+Then we create the three strings:
+<p>
+<pre><a name="NWVrt5m-10LZ9N-1" href="#NWDA"><dfn>&lt;Create Command-Line Argument Array&gt;=</dfn></a> <b>(<a href="#NWD8">&lt;-U</a>)</b>
+(setf (mem-aref arguments :pointer 0) (foreign-string-alloc &quot;&quot;))
+(setf (mem-aref arguments :pointer 1) (foreign-string-alloc &quot;-e&quot;))
+(setf (mem-aref arguments :pointer 2) (foreign-string-alloc &quot;0&quot;))
+</pre><p>
+
+<a name="NWDB">To start the interpreter, we call </a><code>perl_run</code>, which returns zero on
+success.  Any other return value signals a critical error.
+<p>
+<pre><a name="NWVrt5m-gJNle-1" href="#NWDB"><dfn>&lt;Start Interpreter Running&gt;=</dfn></a> <b>(<a href="#NWD8">&lt;-U</a>)</b>
+(let ((run (<a href="#NWD7">perl-run</a> interpreter)))
+  (unless (zerop run)
+    (error &quot;perl_run failed (return value: ~A)&quot; run)))
+</pre><p>
+
+<h3><a name=toc8><a name="NWDC">Destroying the Perl Interpreter</a></a></h3>
+<p>
+There are separate Perl API functions to shut down the interpreter,
+<code>perl_destruct</code>, and free its memory, <code>perl_free</code>.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-2" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD7">&lt;-</a>D<a href="#NWDD">-&gt;</a>]</b>
+(defcfun &quot;perl_destruct&quot; :void
+  (interpreter :interpreter))
+
+(defcfun &quot;perl_free&quot; :void
+  (interpreter :interpreter))
+</pre><blockquote>Defines <a href="#NWI-perl-destruct"><code>perl-destruct</code></a>, <a href="#NWI-perl-free"><code>perl-free</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-2" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-1">&lt;-</a>D<a href="#NWVrt5m-27XOJn-3">-&gt;</a>]</b>
+#:<a href="#NWDC">perl-destruct</a> #:<a href="#NWDC">perl-free</a>
+</pre><p>
+
+<a name="NWDD">To ensure that these functions really clean out all the memory used by</a>
+Perl, we have to set the global variable <code>PL_perl_destruct_level</code> to
+one.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-3" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDC">&lt;-</a>D<a href="#NWDJ">-&gt;</a>]</b>
+(defcvar &quot;PL_perl_destruct_level&quot; :i32)
+</pre><blockquote>Defines <a href="#NWI-*pl-perl-destruct-level*"><code>*pl-perl-destruct-level*</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-3" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-2">&lt;-</a>D<a href="#NWVrt5m-27XOJn-4">-&gt;</a>]</b>
+#:*pl-<a href="#NWDC">perl-destruct</a>-level*
+</pre><p>
+
+<a name="NWDE">We wrap the whole process in a single function, which takes as its argument</a>
+the pointer returned by <code><a href="#NWD8">make-interpreter</a></code>.
+<p>
+<pre><a name="NWVrt5m-1o4ddw-2" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWD8">&lt;-</a>D<a href="#NWDG">-&gt;</a>]</b>
+(defun <a href="#NWDE">destroy-interpreter</a> (interpreter)
+  (setf *pl-<a href="#NWDC">perl-destruct</a><a href="#NWDD">-level*</a> 1)
+  (<a href="#NWDC">perl-destruct</a> interpreter)
+  (<a href="#NWDC">perl-free</a> interpreter))
+</pre><blockquote>Defines <a href="#NWI-destroy-interpreter"><code>destroy-interpreter</code></a> (links are to index).<p>
+</blockquote><p>
+
+
+<h3><a name=toc9>Maintaining the Interpreter</a></h3>
+<p>
+<a name="NWDF">We store the pointer to the Perl interpreter instance as a private</a>
+(non-exported) global variable.  Two functions will be exported to
+start and stop the interpreter.  They are safe to call at any time;
+<code><a href="#NWVrt5m-1lDiwO-1">start-perl</a></code> will do nothing if the interpreter is already running
+and <code><a href="#NWVrt5m-1lDiwO-1">stop-perl</a></code> will do nothing if the interpreter is <em>not</em>
+running.  Both functions explicitly return nothing with <code>(values)</code>
+so that no potentially confusing return values will be printed at the
+REPL.
+<p>
+<pre><a name="NWVrt5m-4ARxif-1" href="#NWDF"><dfn>&lt;Wrapper Library Globals&gt;=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[D<a href="#NWDS">-&gt;</a>]</b>
+(defvar <a href="#NWDF">*perl-interpreter*</a> nil)
+</pre><blockquote>Defines <a href="#NWI-*perl-interpreter*"><code>*perl-interpreter*</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-1lDiwO-1" href="#NWVrt5m-1lDiwO-1"><dfn>&lt;Wrapper Library Public Functions&gt;=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[D<a href="#NWD1b">-&gt;</a>]</b>
+(defun <a href="#NWVrt5m-1lDiwO-1">start-perl</a> ()
+  (unless <a href="#NWDF">*perl-interpreter*</a>
+    (setq <a href="#NWDF">*perl-interpreter*</a> (<a href="#NWD8">make-interpreter</a>)))
+  (values))
+
+(defun <a href="#NWVrt5m-1lDiwO-1">stop-perl</a> ()
+  (when <a href="#NWDF">*perl-interpreter*</a>
+    (<a href="#NWDE">destroy-interpreter</a> <a href="#NWDF">*perl-interpreter*</a>)
+    (setq <a href="#NWDF">*perl-interpreter*</a> nil))
+  (values))
+</pre><blockquote>Defines <a href="#NWI-start-perl"><code>start-perl</code></a>, <a href="#NWI-stop-perl"><code>stop-perl</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-G4qVi-1" href="#NWVrt5m-G4qVi-1"><dfn>&lt;Wrapper Library Exports&gt;=</dfn></a> <b>(<a href="#NWVrt5m-VeUxt-1">U-&gt;</a>)</b> <b>[D<a href="#NWVrt5m-G4qVi-2">-&gt;</a>]</b>
+#:<a href="#NWVrt5m-1lDiwO-1">start-perl</a> #:<a href="#NWVrt5m-1lDiwO-1">stop-perl</a>
+</pre><p>
+
+<a name="NWDG">To make this code idiot-proof, we will ensure that a Perl interpreter</a>
+is running before calling any of the API functions.  We can define a
+function, <code><a href="#NWDG">need-perl</a></code>, to be called a the top of every function that
+needs the interpreter.  Since this function will be called very often,
+we declare it <code>inline</code>.
+<p>
+<pre><a name="NWVrt5m-1o4ddw-3" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWDE">&lt;-</a>D<a href="#NWDO">-&gt;</a>]</b>
+(declaim (inline <a href="#NWDG">need-perl</a>))
+
+(defun <a href="#NWDG">need-perl</a> ()
+  (unless <a href="#NWDF">*perl-interpreter*</a> (<a href="#NWVrt5m-1lDiwO-1">start-perl</a>)))
+</pre><blockquote>Defines <a href="#NWI-need-perl"><code>need-perl</code></a> (links are to index).<p>
+</blockquote><p>
+
+
+
+
+
+<h2><a name=toc10><a name="NWDH">Perl Scalars</a></a></h2>
+<p>
+A Perl scalar value (abbreviated SV) can be a number, a string, or a
+reference.  At the API level, i.e. not in Perl source code, it may
+also contain a pointer to other values, such as arrays and hashes.
+<p>
+<pre><a name="NWVrt5m-S5zrq-6" href="#NWD2"><dfn>&lt;Perl API Types&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD6">&lt;-</a>D<a href="#NWDI">-&gt;</a>]</b>
+(defctype <a href="#NWDH">:sv</a> :pointer)
+</pre><blockquote>Defines <a href="#NWI-:sv"><code>:sv</code></a> (links are to index).<p>
+</blockquote><p>
+
+<a name="NWDI">We will usually interact with scalars as opaque pointers, but it may</a>
+be occasionally useful to have access to parts of their structure,
+particularly the reference count.
+<p>
+<pre><a name="NWVrt5m-S5zrq-7" href="#NWD2"><dfn>&lt;Perl API Types&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDH">&lt;-</a>D<a href="#NWDQ">-&gt;</a>]</b>
+(defcstruct sv
+  (any :pointer)
+  (<a href="#NWDO">refcnt</a> :uint32)
+  (flags :uint32))
+</pre><p>
+
+<pre><a name="NWVrt5m-27XOJn-4" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-3">&lt;-</a>D<a href="#NWVrt5m-27XOJn-5">-&gt;</a>]</b>
+#<a href="#NWDH">:sv</a> #:any #:<a href="#NWDO">refcnt</a> #:flags
+</pre><p>
+
+<h3><a name=toc11><a name="NWDJ">Creating Scalars</a></a></h3>
+<p>
+<code>Perl_newSV</code> creates a generic, empty scalar with the supplied
+number of bytes of storage space allocated.  It sets the scalar's
+reference count to one, as do all of the ``shortcut'' functions below.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-4" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDD">&lt;-</a>D<a href="#NWDK">-&gt;</a>]</b>
+(defcfun &quot;Perl_newSV&quot; <a href="#NWDH">:sv</a>
+  (size :strlen))
+</pre><blockquote>Defines <a href="#NWI-perl-newsv"><code>perl-newsv</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-5" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-4">&lt;-</a>D<a href="#NWVrt5m-27XOJn-6">-&gt;</a>]</b>
+#:<a href="#NWDJ">perl-newsv</a>
+</pre><p>
+
+<a name="NWDK">There are  ``shortcut'' functions for creating new scalars</a>
+with numeric values:
+<p>
+<pre><a name="NWVrt5m-2xmHUS-5" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDJ">&lt;-</a>D<a href="#NWDL">-&gt;</a>]</b>
+(defcfun &quot;Perl_newSViv&quot; <a href="#NWDH">:sv</a>
+  (int :iv))
+
+(defcfun &quot;Perl_newSVuv&quot; <a href="#NWDH">:sv</a>
+  (uint :uv))
+
+(defcfun &quot;Perl_newSVnv&quot; <a href="#NWDH">:sv</a>
+  (double :nv))
+</pre><blockquote>Defines <a href="#NWI-perl-newsviv"><code>perl-newsviv</code></a>, <a href="#NWI-perl-newsvnv"><code>perl-newsvnv</code></a>, <a href="#NWI-perl-newsvuv"><code>perl-newsvuv</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-6" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-5">&lt;-</a>D<a href="#NWVrt5m-27XOJn-7">-&gt;</a>]</b>
+#:<a href="#NWDK">perl-newsviv</a> #:<a href="#NWDK">perl-newsvuv</a> #:<a href="#NWDK">perl-newsvnv</a>
+</pre><p>
+
+<a name="NWDL">There are two functions for creating scalars from strings.  Both take</a>
+the length of the string as an argument, but <code>Perl_newSVpv</code> will
+automatically calculate the length if it is given as zero.
+<code>Perl_newSVpvn</code>, which does not perform this check, is recommended
+as more efficient.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-6" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDK">&lt;-</a>D<a href="#NWDM">-&gt;</a>]</b>
+(defcfun &quot;Perl_newSVpv&quot; <a href="#NWDH">:sv</a>
+  (string :string)
+  (length :strlen)) ; automatically computed if zero
+
+(defcfun &quot;Perl_newSVpvn&quot; <a href="#NWDH">:sv</a>
+  (string :string)
+  (length :strlen)) ; NOT automatically computed
+</pre><blockquote>Defines <a href="#NWI-perl-newsvpv"><code>perl-newsvpv</code></a>, <a href="#NWI-perl-newsvpvn"><code>perl-newsvpvn</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-7" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-6">&lt;-</a>D<a href="#NWVrt5m-27XOJn-8">-&gt;</a>]</b>
+#:<a href="#NWDL">perl-newsvpv</a> #:<a href="#NWDL">perl-newsvpvn</a>
+</pre><p>
+
+<a name="NWDM">To copy existing scalars:</a>
+<p>
+<pre><a name="NWVrt5m-2xmHUS-7" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDL">&lt;-</a>D<a href="#NWDN">-&gt;</a>]</b>
+(defcfun &quot;Perl_newSVsv&quot; <a href="#NWDH">:sv</a>
+  (scalar <a href="#NWDH">:sv</a>))
+</pre><blockquote>Defines <a href="#NWI-perl-newsvsv"><code>perl-newsvsv</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-8" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-7">&lt;-</a>D<a href="#NWVrt5m-27XOJn-9">-&gt;</a>]</b>
+#:<a href="#NWDM">perl-newsvsv</a>
+</pre><p>
+
+
+<h3><a name=toc12><a name="NWDN">Scalar Reference Counting</a></a></h3>
+<p>
+Perl's garbage collection works by reference counting.  In Perl code,
+this is invisible, but when using the C interface we must explicitly
+increment and decrement the reference counts of the variables we use.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-8" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDM">&lt;-</a>D<a href="#NWDU">-&gt;</a>]</b>
+(defcfun &quot;Perl_sv_newref&quot; <a href="#NWDH">:sv</a>
+  (scalar <a href="#NWDH">:sv</a>))
+
+(defcfun &quot;Perl_sv_free&quot; :void
+  (scalar <a href="#NWDH">:sv</a>))
+</pre><blockquote>Defines <a href="#NWI-perl-sv-free"><code>perl-sv-free</code></a>, <a href="#NWI-perl-sv-newref"><code>perl-sv-newref</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-9" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-8">&lt;-</a>D<a href="#NWVrt5m-27XOJn-A">-&gt;</a>]</b>
+#:<a href="#NWDN">perl-sv-newref</a> #:<a href="#NWDN">perl-sv-free</a>
+</pre><p>
+
+<code><a name="NWDO" href="#NWDN">perl-sv-newref</a></code> will increment the reference count of the scalar;
+<code><a href="#NWDN">perl-sv-free</a></code> will decrement the reference count and, if it drops
+to zero, clear the scalar and deallocate all its memory.
+<p>
+We can also get a scalar's reference count directly from its structure:
+<p>
+<pre><a name="NWVrt5m-1o4ddw-4" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWDG">&lt;-</a>D<a href="#NWVrt5m-1o4ddw-5">-&gt;</a>]</b>
+(defun <a href="#NWDO">refcnt</a> (scalar)
+  (foreign-slot-value scalar 'sv 'refcnt))
+</pre><blockquote>Defines <a href="#NWI-refcnt"><code>refcnt</code></a> (links are to index).<p>
+</blockquote><p>
+
+
+<a name="NWDP">Testing the reference count functions.</a>
+<p>
+<pre><a name="NWVrt5m-3Afyvm-1" href="#NWDP"><dfn>&lt;Wrapper Library Tests&gt;=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[D<a href="#NWDT">-&gt;</a>]</b>
+(define-test refcnts
+  (let ((s (<a href="#NWDJ">perl-newsv</a> 0)))
+    (assert-equal 1 (<a href="#NWDO">refcnt</a> s))
+    (assert-equal 2 (<a href="#NWDO">refcnt</a> (<a href="#NWDN">perl-sv-newref</a> s)))
+    (<a href="#NWDN">perl-sv-free</a> s)
+    (assert-equal 1 (<a href="#NWDO">refcnt</a> s))
+    (<a href="#NWDN">perl-sv-free</a> s)
+    (assert-equal 0 (<a href="#NWDO">refcnt</a> s))))
+</pre><p>
+
+Technically the scalar gets deallocated from memory at the
+<a name="NWDQ">next-to-last line of that test, but the structure survives long enough</a>
+for the final =0 test to pass.
+<p>
+
+<h3><a name=toc13>Determining the Type of Scalars</a></h3>
+<p>
+Since scalars can contain multiple types of values, we need tests to
+determine what they actually are.
+<p>
+<pre><a name="NWVrt5m-S5zrq-8" href="#NWD2"><dfn>&lt;Perl API Types&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDI">&lt;-</a>D<a href="#NWDg">-&gt;</a>]</b>
+(defcenum <a href="#NWDQ">svtype</a>
+  :null ; undef
+  :iv   ; Scalar (integer)
+  :nv   ; Scalar (double float)
+  :rv   ; Scalar (reference)
+  :pv   ; Scalar (string)
+  :pviv ; a pointer to an IV (used in hashes)
+  :pvnv ; a pointer to an NV (used in hashes)
+  :pvmg ; blessed or magical scalar
+  :pvbm ; ??
+  :pvlv ; ??
+  :pvav ; Array
+  :pvhv ; Hash
+  :pvcv ; Code reference
+  :pvgv ; typeglob (possibly a file handle)
+  :pvfm ; ??
+  :pvio ; an I/O handle?
+  )
+</pre><blockquote>Defines <a href="#NWI-svtype"><code>svtype</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-A" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-9">&lt;-</a>D<a href="#NWVrt5m-27XOJn-B">-&gt;</a>]</b>
+#:<a href="#NWDQ">svtype</a>
+</pre><p>
+
+<a name="NWDR">Type checking of scalars is implemented in the Perl API with macros</a>
+that directly access bits of the SV structure.  Copied from <code>sv.h</code>
+in the Perl source, they are:
+<p>
+<pre><a name="NWVrt5m-3fu7zq-1" href="#NWDR"><dfn>&lt;SvTYPE macros in C&gt;=</dfn></a>
+#define SVTYPEMASK 0xff
+#define SvTYPE(sv) ((sv)-&gt;sv_flags &amp; SVTYPEMASK)
+</pre><p>
+
+<a name="NWDS">In Lisp, these become:</a>
+<p>
+<pre><a name="NWVrt5m-4ARxif-2" href="#NWDF"><dfn>&lt;Wrapper Library Globals&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWDF">&lt;-</a>D]</b>
+(defvar <a href="#NWDS">*sv-type-mask*</a> #Xff)
+</pre><blockquote>Defines <a href="#NWI-*sv-type-mask*"><code>*sv-type-mask*</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-1o4ddw-5" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWDO">&lt;-</a>D<a href="#NWDX">-&gt;</a>]</b>
+(defun <a href="#NWDQ">svtype</a> (scalar)
+  (foreign-enum-keyword
+   'svtype
+   (logand (foreign-slot-value scalar 'sv 'flags)
+           <a href="#NWDS">*sv-type-mask*</a>)))
+</pre><blockquote>Defines <a href="#NWI-svtype"><code>svtype</code></a> (links are to index).<p>
+</blockquote><p>
+
+<a name="NWDT">Here are tests for the most common types:</a>
+<p>
+<pre><a name="NWVrt5m-3Afyvm-2" href="#NWDP"><dfn>&lt;Wrapper Library Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWDP">&lt;-</a>D<a href="#NWDY">-&gt;</a>]</b>
+(define-test sv-type
+  (assert-eq :null (<a href="#NWDQ">svtype</a> (<a href="#NWDJ">perl-newsv</a> 0)))
+  (assert-eq :iv   (<a href="#NWDQ">svtype</a> (<a href="#NWDK">perl-newsviv</a> 100)))
+  (assert-eq :nv   (<a href="#NWDQ">svtype</a> (<a href="#NWDK">perl-newsvnv</a> 3.14d0)))
+  (assert-eq :rv   (<a href="#NWDQ">svtype</a> (<a href="#NWD18">perl-newrv</a> (<a href="#NWDJ">perl-newsv</a> 0))))
+  (assert-eq :pv   (<a href="#NWDQ">svtype</a> (<a href="#NWDL">perl-newsvpv</a> &quot;hello&quot; 0)))
+  (assert-eq :pvav (<a href="#NWDQ">svtype</a> (<a href="#NWDh">perl-newav</a>)))
+  (assert-eq :pvhv (<a href="#NWDQ">svtype</a> (<a href="#NWVrt5m-2xmHUS-S">perl-newhv</a>))))
+</pre><p>
+
+
+<h3><a name=toc14><a name="NWDU">Converting Scalars to C Types</a></a></h3>
+<p>
+<code>Perl_sv_true</code> returns the boolean value (automatically converted
+from an integer to <code>t</code> or <code>nil</code> by CFFI's <code>:boolean</code> type) of
+the scalar by the Perl definition of a boolean.  In Perl, the value
+<code>undef</code>, the number 0, the string ``0'', and the empty string are
+all false; anything else is true.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-9" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDN">&lt;-</a>D<a href="#NWDV">-&gt;</a>]</b>
+(defcfun &quot;Perl_sv_true&quot; :boolean
+  (scalar <a href="#NWDH">:sv</a>))
+</pre><blockquote>Defines <a href="#NWI-perl-sv-true"><code>perl-sv-true</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-B" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-A">&lt;-</a>D<a href="#NWVrt5m-27XOJn-C">-&gt;</a>]</b>
+#:<a href="#NWDU">perl-sv-true</a>
+</pre><p>
+
+<pre><a name="NWVrt5m-2cLXcv-1" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[D<a href="#NWVrt5m-2cLXcv-2">-&gt;</a>]</b>
+(define-test scalars-true-false
+  (assert-true (pointerp (<a href="#NWDJ">perl-newsv</a> 0)))
+  (assert-equal nil (<a href="#NWDU">perl-sv-true</a> (<a href="#NWDJ">perl-newsv</a> 0)))
+  (assert-equal t (<a href="#NWDU">perl-sv-true</a> (<a href="#NWDK">perl-newsviv</a> 5))))
+</pre><p>
+
+<a name="NWDV">Three functions convert scalars to numeric types.  These functions</a>
+will attempt to coerce the scalar to an IV (signed integer), UV
+(unsigned integer), or NV (double float), respectively.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-A" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDU">&lt;-</a>D<a href="#NWDW">-&gt;</a>]</b>
+(defcfun &quot;Perl_sv_2iv&quot; :iv
+  (scalar <a href="#NWDH">:sv</a>))
+
+(defcfun &quot;Perl_sv_2uv&quot; :uv
+  (scalar <a href="#NWDH">:sv</a>))
+
+(defcfun &quot;Perl_sv_2nv&quot; :nv
+  (scalar <a href="#NWDH">:sv</a>))
+</pre><blockquote>Defines <a href="#NWI-perl-sv-2iv"><code>perl-sv-2iv</code></a>, <a href="#NWI-perl-sv-2nv"><code>perl-sv-2nv</code></a>, <a href="#NWI-perl-sv-2uv"><code>perl-sv-2uv</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-C" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-B">&lt;-</a>D<a href="#NWVrt5m-27XOJn-D">-&gt;</a>]</b>
+#:<a href="#NWDV">perl-sv-2iv</a> #:<a href="#NWDV">perl-sv-2uv</a> #:<a href="#NWDV">perl-sv-2nv</a>
+</pre><p>
+
+<pre><a name="NWVrt5m-2cLXcv-2" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2cLXcv-1">&lt;-</a>D<a href="#NWVrt5m-2cLXcv-3">-&gt;</a>]</b>
+(define-test new-scalar-integers
+  (assert-equal t (<a href="#NWDU">perl-sv-true</a> (<a href="#NWDK">perl-newsviv</a> -256)))
+  (assert-equal t (<a href="#NWDU">perl-sv-true</a> (<a href="#NWDK">perl-newsvuv</a> 17)))
+  (assert-equal nil (<a href="#NWDU">perl-sv-true</a> (<a href="#NWDK">perl-newsviv</a> 0)))
+  (assert-equal nil (<a href="#NWDU">perl-sv-true</a> (<a href="#NWDK">perl-newsvuv</a> 0)))
+  (assert-equal -256 (<a href="#NWDV">perl-sv-2iv</a> (<a href="#NWDK">perl-newsviv</a> -256)))
+  (assert-equal 17 (<a href="#NWDV">perl-sv-2uv</a> (<a href="#NWDK">perl-newsvuv</a> 17))))
+
+(define-test new-scalar-floats
+  (assert-equal nil (<a href="#NWDU">perl-sv-true</a> (<a href="#NWDK">perl-newsvnv</a> 0d0)))
+  (assert-equal t (<a href="#NWDU">perl-sv-true</a> (<a href="#NWDK">perl-newsvnv</a> 3.1459d0)))
+  (assert-equal 3.1459d0 (<a href="#NWDV">perl-sv-2nv</a> (<a href="#NWDK">perl-newsvnv</a> 3.1459d0))))
+</pre><p>
+
+In the Perl API documentation, scalars are normally converted to
+strings with the <code>SvPV</code> macro, which first checks if the scalar is
+actually storing a string and, if it is, returns a pointer directly to
+that string.  If it is not, it uses <code>Perl_sv_2pv_flags</code> to coerce
+the scalar into a string.
+<p>
+However, <code>Perl_sv_2pv_flags</code> returns a bogus pointer when called on
+a scalar which already contains string, so it will not work as a
+<a name="NWDW">functional substitute for </a><code>SvPV</code>.  Instead, we must use
+<code>Perl_sv_pvn_force_flags</code>, which works for both string and
+non-string scalars.
+<p>
+The <code>flags</code> in the name refers to a bitfield argument.  I do not
+know what all of the flags are for; they are simply included here for
+completeness.  <code>SV_GMAGIC</code> is the standard recommended flag for use
+when converting scalars to strings.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-B" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDV">&lt;-</a>D<a href="#NWDa">-&gt;</a>]</b>
+(defbitfield <a href="#NWDW">sv-flags</a>
+  (:immediate-unref 1)
+  (:gmagic 2)
+  (:cow-drop-pv 4) ; Unused in Perl 5.8.x
+  (:utf8-no-encoding 8)
+  (:nosteal 16))
+
+(defcfun &quot;Perl_sv_pvn_force_flags&quot; :pointer
+  (scalar <a href="#NWDH">:sv</a>)
+  (length :pointer) ; STRLEN*
+  (flags :i32))
+</pre><blockquote>Defines <a href="#NWI-perl-sv-pvn-force-flags"><code>perl-sv-pvn-force-flags</code></a>, <a href="#NWI-sv-flags"><code>sv-flags</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-D" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-C">&lt;-</a>D<a href="#NWVrt5m-27XOJn-E">-&gt;</a>]</b>
+#<a href="#NWDH">:sv</a><a href="#NWDW">-flags</a> #:<a href="#NWDW">perl-sv-pvn-force-flags</a>
+</pre><p>
+
+<a name="NWDX">Converting scalars to strings is a complicated by the fact that Perl</a>
+strings can contain NULL characters, so <code>foreign-string-to-lisp</code>
+must be called with <code>null-terminated-p</code> set to <code>nil</code>.  The length
+of the string comes from the <code>length</code> pointer passed to
+<code>Perl_sv_pvn_force_flags</code>.
+<p>
+Does this leak memory when new strings are created?  I'm sure I don't
+know.
+<p>
+<pre><a name="NWVrt5m-1o4ddw-6" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-1o4ddw-5">&lt;-</a>D<a href="#NWDc">-&gt;</a>]</b>
+(defun <a href="#NWDX">string-from-sv</a> (sv)
+  (with-foreign-object (length :strlen)
+    (foreign-string-to-lisp
+        (<a href="#NWDW">perl-sv-pvn-force-flags</a> sv length
+                                 (foreign-bitfield-value
+                                  'sv-flags '(:gmagic)))
+        (mem-ref length :strlen)
+        nil))) ; null-teminated-p
+</pre><blockquote>Defines <a href="#NWI-string-from-sv"><code>string-from-sv</code></a> (links are to index).<p>
+</blockquote><p>
+
+<a name="NWDY">Note that this does not handle UTF8 (Perl's preferred flavor of</a>
+Unicode) strings.  Unicode and Lisp is whole can of worms that I don't
+want to deal with yet.
+<p>
+Some tests for strings:
+<p>
+<pre><a name="NWVrt5m-3Afyvm-3" href="#NWDP"><dfn>&lt;Wrapper Library Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWDT">&lt;-</a>D<a href="#NWDZ">-&gt;</a>]</b>
+(define-test new-scalar-strings-of-numbers
+  (assert-equal nil (<a href="#NWDU">perl-sv-true</a> (<a href="#NWDL">perl-newsvpv</a> &quot;0&quot; 0)))
+  (assert-equal &quot;0&quot; (<a href="#NWDX">string-from-sv</a> (<a href="#NWDK">perl-newsviv</a> 0)))
+  (assert-equal &quot;-256&quot; (<a href="#NWDX">string-from-sv</a> (<a href="#NWDK">perl-newsviv</a> -256)))
+  (assert-equal &quot;3.14&quot; (<a href="#NWDX">string-from-sv</a> (<a href="#NWDK">perl-newsvnv</a> 3.14d0))))
+
+(define-test new-scalar-strings-to-booleans
+  (assert-equal t (<a href="#NWDU">perl-sv-true</a> (<a href="#NWDL">perl-newsvpv</a> &quot;foo&quot; 0)))
+  (assert-equal t (<a href="#NWDU">perl-sv-true</a> (<a href="#NWDL">perl-newsvpvn</a> &quot;foo&quot; 3)))
+  (assert-equal t (<a href="#NWDU">perl-sv-true</a> (<a href="#NWDL">perl-newsvpv</a> &quot;1&quot; 0)))
+  (assert-equal nil (<a href="#NWDU">perl-sv-true</a> (<a href="#NWDL">perl-newsvpv</a> &quot;&quot; 0)))
+  (assert-equal nil (<a href="#NWDU">perl-sv-true</a> (<a href="#NWDL">perl-newsvpv</a> &quot;0&quot; 0))))
+
+(define-test new-scalar-strings
+  (assert-true (pointerp (<a href="#NWDL">perl-newsvpv</a> &quot;hello&quot; 0)))
+  (assert-equal &quot;hello&quot; (<a href="#NWDX">string-from-sv</a> (<a href="#NWDL">perl-newsvpv</a> &quot;hello&quot; 0)))
+  (assert-equal &quot;good&quot; (<a href="#NWDX">string-from-sv</a> (<a href="#NWDL">perl-newsvpvn</a> &quot;goodbye&quot; 4))))
+</pre><p>
+
+<a name="NWDZ">We can also test that we can use strings containing NULL characters,</a>
+which are allowed in both Perl and Lisp but not in C.  The Perl
+character-escape syntax <code>\00</code> will insert a NULL character in an
+interpolated string.  (We have to escape the backslash to insert it in
+a Lisp string, giving us <code>\\00</code>.)  We can create the equivalent
+string in Lisp by treating a string like an array and modifying one
+character.
+<p>
+<pre><a name="NWVrt5m-3Afyvm-4" href="#NWDP"><dfn>&lt;Wrapper Library Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWDY">&lt;-</a>D<a href="#NWVrt5m-3Afyvm-5">-&gt;</a>]</b>
+(define-test string-containing-null
+  (assert-equal (let ((string (copy-seq &quot;abcde&quot;)))
+                  (setf (aref string 2) (code-char 0))
+                  string) ; &quot;ab&quot; + NULL + &quot;de&quot;
+                (<a href="#NWDX">string-from-sv</a> (<a href="#NWD1c">perl-eval-pv</a> &quot;qq{ab\\00de}&quot; 0))))
+</pre><p>
+
+<a name="NWDa">Lastly, we can access a named scalar with </a><code>Perl_get_sv</code>.
+If the named scalar does not exist and <code>create</code> is true, a new
+scalar will be created.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-C" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDW">&lt;-</a>D<a href="#NWDb">-&gt;</a>]</b>
+(defcfun &quot;Perl_get_sv&quot; <a href="#NWDH">:sv</a>
+  (name :string)
+  (create :boolean))
+</pre><blockquote>Defines <a href="#NWI-perl-get-sv"><code>perl-get-sv</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-E" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-D">&lt;-</a>D<a href="#NWVrt5m-27XOJn-F">-&gt;</a>]</b>
+#:<a href="#NWDa">perl-get-sv</a>
+</pre><p>
+
+<pre><a name="NWVrt5m-2cLXcv-3" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2cLXcv-2">&lt;-</a>D<a href="#NWVrt5m-2cLXcv-4">-&gt;</a>]</b>
+(define-test create-named-scalars
+  (let ((x (<a href="#NWDa">perl-get-sv</a> &quot;foo&quot; t)))
+    (<a href="#NWDb">perl-sv-setsv-flags</a> x (<a href="#NWDK">perl-newsviv</a> 1)
+                         (foreign-bitfield-value
+                          'sv-flags '(:gmagic)))
+    (assert-equal t (<a href="#NWDU">perl-sv-true</a>
+                     (<a href="#NWDa">perl-get-sv</a> &quot;foo&quot; nil)))))
+</pre><p>
+
+
+
+<h3><a name=toc15><a name="NWDb">Setting the Value of Scalars</a></a></h3>
+<p>
+The standard API function for copying the value of one scalar to
+another scalar is <code>Perl_sv_setsv_flags</code>.  The flags argument is
+<code><a href="#NWDW">sv-flags</a></code>, defined above.  The recommended standard flag is
+<code>SV_GMAGIC</code>.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-D" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDa">&lt;-</a>D<a href="#NWDd">-&gt;</a>]</b>
+(defcfun &quot;Perl_sv_setsv_flags&quot; :void
+  (destination <a href="#NWDH">:sv</a>)
+  (source <a href="#NWDH">:sv</a>)
+  (flags :i32))
+</pre><blockquote>Defines <a href="#NWI-perl-sv-setsv-flags"><code>perl-sv-setsv-flags</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-F" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-E">&lt;-</a>D<a href="#NWVrt5m-27XOJn-G">-&gt;</a>]</b>
+#:<a href="#NWDb">perl-sv-setsv-flags</a>
+</pre><p>
+
+<pre><a name="NWVrt5m-2cLXcv-4" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2cLXcv-3">&lt;-</a>D<a href="#NWDl">-&gt;</a>]</b>
+(define-test sv-setsv
+  (let ((x (<a href="#NWDJ">perl-newsv</a> 0))
+        (y (<a href="#NWDK">perl-newsviv</a> 55)))
+    (<a href="#NWDb">perl-sv-setsv-flags</a> x y (foreign-bitfield-value
+                              'sv-flags '(:gmagic)))
+    (assert-equal 55 (<a href="#NWDV">perl-sv-2iv</a> x))))
+</pre><p>
+
+<a name="NWDc">We can abstract away the foreign bitfield:</a>
+<p>
+<pre><a name="NWVrt5m-1o4ddw-7" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWDX">&lt;-</a>D<a href="#NWDe">-&gt;</a>]</b>
+(defun <a href="#NWDc">set-sv</a> (destination source &amp;rest flags)
+  (<a href="#NWDb">perl-sv-setsv-flags</a> destination source
+                       (foreign-bitfield-value
+                        'sv-flags flags)))
+</pre><blockquote>Defines <a href="#NWI-set-sv"><code>set-sv</code></a> (links are to index).<p>
+</blockquote><p>
+
+<a name="NWDd">There are also shortcut functions for C types.  The </a><code>_mg</code> suffix
+means that these functions correctly handle `set' magic (i.e. tied
+variables).
+<p>
+<pre><a name="NWVrt5m-2xmHUS-E" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDb">&lt;-</a>D<a href="#NWDh">-&gt;</a>]</b>
+(defcfun &quot;Perl_sv_setiv_mg&quot; :void
+  (destination <a href="#NWDH">:sv</a>)
+  (source :iv))
+(defcfun &quot;Perl_sv_setuv_mg&quot; :void
+  (destination <a href="#NWDH">:sv</a>)
+  (source :uv))
+(defcfun &quot;Perl_sv_setnv_mg&quot; :void
+  (destination <a href="#NWDH">:sv</a>)
+  (source :nv))
+(defcfun &quot;Perl_sv_setpv_mg&quot; :void
+  (destination <a href="#NWDH">:sv</a>)
+  (source :string)
+  (length :strlen)) ; automatically calculated if 0
+(defcfun &quot;Perl_sv_setpvn_mg&quot; :void
+  (destination <a href="#NWDH">:sv</a>)
+  (source :string)
+  (length :strlen)) ; NOT automatically calculated
+</pre><blockquote>Defines <a href="#NWI-perl-sv-setiv-mg"><code>perl-sv-setiv-mg</code></a>, <a href="#NWI-perl-sv-setnv-mg"><code>perl-sv-setnv-mg</code></a>, <a href="#NWI-perl-sv-setpv-mg"><code>perl-sv-setpv-mg</code></a>, <a href="#NWI-perl-sv-setpvn-mg"><code>perl-sv-setpvn-mg</code></a>, <a href="#NWI-perl-sv-setuv-mg"><code>perl-sv-setuv-mg</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-G" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-F">&lt;-</a>D<a href="#NWVrt5m-27XOJn-H">-&gt;</a>]</b>
+#:<a href="#NWDd">perl-sv-setiv-mg</a> #:<a href="#NWDd">perl-sv-setuv-mg</a> #:<a href="#NWDd">perl-sv-setnv-mg</a>
+#:<a href="#NWDd">perl-sv-setpv-mg</a> #:<a href="#NWDd">perl-sv-setpvn-mg</a>
+</pre><p>
+
+<pre><a name="NWVrt5m-3Afyvm-5" href="#NWDP"><dfn>&lt;Wrapper Library Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWDZ">&lt;-</a>D<a href="#NWDf">-&gt;</a>]</b>
+(define-test sv-set-iv-uv-nv-pv
+  (let ((x (<a href="#NWDJ">perl-newsv</a> 0)))
+    (<a href="#NWDd">perl-sv-setiv-mg</a> x -256)
+    (assert-equal -256 (<a href="#NWDV">perl-sv-2iv</a> x))
+    (<a href="#NWDd">perl-sv-setuv-mg</a> x 88)
+    (assert-equal 88 (<a href="#NWDV">perl-sv-2uv</a> x))
+    (<a href="#NWDd">perl-sv-setnv-mg</a> x 3.1459d0)
+    (assert-equal 3.1459d0 (<a href="#NWDV">perl-sv-2nv</a> x))
+    (<a href="#NWDd">perl-sv-setpv-mg</a> x &quot;hello&quot; 0)
+    (assert-equal &quot;hello&quot; (<a href="#NWDX">string-from-sv</a> x))
+    (<a href="#NWDd">perl-sv-setpvn-mg</a> x &quot;goodbye&quot; 4)
+    (assert-equal &quot;good&quot; (<a href="#NWDX">string-from-sv</a> x))))
+</pre><p>
+
+
+<h3><a name=toc16>Accessing Scalars By Name</a></h3>
+<p>
+<a name="NWDe">We can also access and/or create a scalar variable by its name.  If</a>
+the named variable does not exist, it will be automatically created.
+I am not allowing the passing of any value other than <code>t</code> to the
+<code>create</code> argument of <code><a href="#NWDa">perl-get-sv</a></code> because it is not obvious what
+we should do when the given name does not exist: signal an error or
+return a null pointer?  To keep it simple I use a form that will
+always succeed.
+<p>
+<pre><a name="NWVrt5m-1o4ddw-8" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWDc">&lt;-</a>D<a href="#NWDj">-&gt;</a>]</b>
+(defun <a href="#NWDe">get-scalar-by-name</a> (name)
+  (<a href="#NWDG">need-perl</a>)
+  (<a href="#NWDa">perl-get-sv</a> name t))
+</pre><blockquote>Defines <a href="#NWI-get-scalar-by-name"><code>get-scalar-by-name</code></a> (links are to index).<p>
+</blockquote><p>
+
+<a name="NWDf">For reasons I cannot divine, a variable must be created with</a>
+<code><a href="#NWDa">perl-get-sv</a></code> before being used in an <code>eval</code> context in order to
+be later accessed without causing a memory fault.  I think it has
+something to do with the Perl garbage collector.
+<p>
+<pre><a name="NWVrt5m-3Afyvm-6" href="#NWDP"><dfn>&lt;Wrapper Library Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-3Afyvm-5">&lt;-</a>D<a href="#NWVrt5m-3Afyvm-7">-&gt;</a>]</b>
+(define-test <a href="#NWDe">get-scalar-by-name</a>
+  (let ((x (<a href="#NWDe">get-scalar-by-name</a> &quot;nines&quot;)))
+    (declare (ignore x))
+    (<a href="#NWD1c">perl-eval-pv</a> &quot;$nines = 999;&quot; nil)
+    (assert-equal
+     999
+     (<a href="#NWDV">perl-sv-2uv</a>
+      (<a href="#NWDe">get-scalar-by-name</a> &quot;nines&quot;)))))
+</pre><p>
+
+<!--$ -->
+
+
+
+<h2><a name=toc17><a name="NWDg">Perl Arrays</a></a></h2>
+<p>
+A Perl array (type <code>AV*</code>) is actually an ``upgraded'' scalar that
+points to a C array of other scalars.  
+<p>
+<pre><a name="NWVrt5m-S5zrq-9" href="#NWD2"><dfn>&lt;Perl API Types&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDQ">&lt;-</a>D<a href="#NWDy">-&gt;</a>]</b>
+(defctype :av :pointer)
+</pre><p>
+
+<a name="NWDh">Creating a new array:</a>
+<p>
+<pre><a name="NWVrt5m-2xmHUS-F" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDd">&lt;-</a>D<a href="#NWDi">-&gt;</a>]</b>
+(defcfun &quot;Perl_newAV&quot; :av)
+</pre><blockquote>Defines <a href="#NWI-perl-newav"><code>perl-newav</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-H" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-G">&lt;-</a>D<a href="#NWVrt5m-27XOJn-I">-&gt;</a>]</b>
+#:<a href="#NWDh">perl-newav</a>
+</pre><p>
+
+<a name="NWDi">To get the SV at a given index </a><code>key</code> in an array:
+<p>
+<pre><a name="NWVrt5m-2xmHUS-G" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDh">&lt;-</a>D<a href="#NWDk">-&gt;</a>]</b>
+(defcfun &quot;Perl_av_fetch&quot; :pointer
+  (array :av)
+  (key :i32)
+  (create :boolean))
+</pre><blockquote>Defines <a href="#NWI-perl-av-fetch"><code>perl-av-fetch</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-I" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-H">&lt;-</a>D<a href="#NWVrt5m-27XOJn-J">-&gt;</a>]</b>
+#:<a href="#NWDi">perl-av-fetch</a>
+</pre><p>
+
+<a name="NWDj">If </a><code>create</code> is true, then the function will grow the array to
+include the given index.  <code>Perl_av_fetch</code> has a return type of
+<code>SV**</code>.  We must derefernce the pointer to get at the regular
+<code>SV*</code>, but first we have to check that it is not NULL.  A wrapper
+function takes care of this, and returns <code>nil</code> if the pointer was
+NULL.
+<p>
+<pre><a name="NWVrt5m-1o4ddw-9" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWDe">&lt;-</a>D<a href="#NWDw">-&gt;</a>]</b>
+(defun <a href="#NWDj">av-fetch-sv</a> (array key create)
+  (let ((ptr (<a href="#NWDi">perl-av-fetch</a> array key create)))
+    (if (null-pointer-p ptr) nil
+      (mem-ref ptr :pointer))))
+</pre><blockquote>Defines <a href="#NWI-av-fetch-sv"><code>av-fetch-sv</code></a> (links are to index).<p>
+</blockquote><p>
+
+<a name="NWDk">To store a value in an array:</a>
+<p>
+<pre><a name="NWVrt5m-2xmHUS-H" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDi">&lt;-</a>D<a href="#NWDm">-&gt;</a>]</b>
+(defcfun &quot;Perl_av_store&quot; :pointer
+  (array :av)
+  (key :i32)
+  (scalar <a href="#NWDH">:sv</a>))
+</pre><blockquote>Defines <a href="#NWI-perl-av-store"><code>perl-av-store</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-J" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-I">&lt;-</a>D<a href="#NWVrt5m-27XOJn-K">-&gt;</a>]</b>
+#:<a href="#NWDk">perl-av-store</a>
+</pre><p>
+
+From <code>av.c</code>: ``The return value will be NULL if the operation failed
+or if the value did not need to be actually stored within the array
+(as in the case of tied arrays). Otherwise it can be dereferenced to
+get the original <code>SV*</code>.  Note that the caller is responsible for
+suitably incrementing the reference count of <code>val</code> before the call,
+<a name="NWDl">and decrementing it if the function returned NULL.''</a>
+<p>
+I'm not going to write a wrapper function here, because whether or not
+we actually want to decrement the reference count depends on the
+reason we're creating the array in the first place---if we're
+initializing a new array with newly-created scalars, there's no reason
+to increment the reference count on the scalars before storing them in
+the array.
+<p>
+<pre><a name="NWVrt5m-2cLXcv-5" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2cLXcv-4">&lt;-</a>D<a href="#NWVrt5m-2cLXcv-6">-&gt;</a>]</b>
+(define-test array-store-fetch
+  (let ((a (<a href="#NWDh">perl-newav</a>)))
+    (<a href="#NWDk">perl-av-store</a> a 3 (<a href="#NWDK">perl-newsviv</a> -17))
+    (assert-equal -17 (<a href="#NWDV">perl-sv-2iv</a> (perl-in-lisp::<a href="#NWDj">av-fetch-sv</a> a 3 nil)))))
+</pre><p>
+
+<a name="NWDm">To empty an array (does not free the memory):</a>
+<p>
+<pre><a name="NWVrt5m-2xmHUS-I" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDk">&lt;-</a>D<a href="#NWDn">-&gt;</a>]</b>
+(defcfun &quot;Perl_av_clear&quot; :void
+  (array :av))
+</pre><blockquote>Defines <a href="#NWI-perl-av-clear"><code>perl-av-clear</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-K" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-J">&lt;-</a>D<a href="#NWVrt5m-27XOJn-L">-&gt;</a>]</b>
+#:<a href="#NWDm">perl-av-clear</a>
+</pre><p>
+
+<pre><a name="NWVrt5m-2cLXcv-6" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWDl">&lt;-</a>D<a href="#NWVrt5m-2cLXcv-7">-&gt;</a>]</b>
+(define-test av-clear
+  (let ((a (<a href="#NWDh">perl-newav</a>)))
+    (<a href="#NWDk">perl-av-store</a> a 0 (<a href="#NWDK">perl-newsviv</a> 34))
+    (<a href="#NWDm">perl-av-clear</a> a)
+    (assert-equal nil (perl-in-lisp::<a href="#NWDj">av-fetch-sv</a> a 0 nil))))
+</pre><p>
+
+<a name="NWDn">To undefine an array and free its memory;</a>
+<p>
+<pre><a name="NWVrt5m-2xmHUS-J" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDm">&lt;-</a>D<a href="#NWDo">-&gt;</a>]</b>
+(defcfun &quot;Perl_av_undef&quot; :void
+  (array :av))
+</pre><blockquote>Defines <a href="#NWI-perl-av-undef"><code>perl-av-undef</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-L" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-K">&lt;-</a>D<a href="#NWVrt5m-27XOJn-M">-&gt;</a>]</b>
+#:<a href="#NWDn">perl-av-undef</a>
+</pre><p>
+
+<a name="NWDo">To push a scalar onto the end of the array, automatically enlarging it</a>
+if necessary:
+<p>
+<pre><a name="NWVrt5m-2xmHUS-K" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDn">&lt;-</a>D<a href="#NWDp">-&gt;</a>]</b>
+(defcfun &quot;Perl_av_push&quot; :void
+  (array :av)
+  (scalar <a href="#NWDH">:sv</a>))
+</pre><blockquote>Defines <a href="#NWI-perl-av-push"><code>perl-av-push</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-M" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-L">&lt;-</a>D<a href="#NWVrt5m-27XOJn-N">-&gt;</a>]</b>
+#:<a href="#NWDo">perl-av-push</a>
+</pre><p>
+
+
+<a name="NWDp">And pop a scalar off the end:</a>
+<p>
+<pre><a name="NWVrt5m-2xmHUS-L" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDo">&lt;-</a>D<a href="#NWDq">-&gt;</a>]</b>
+(defcfun &quot;Perl_av_pop&quot; <a href="#NWDH">:sv</a>
+  (array :av))
+</pre><blockquote>Defines <a href="#NWI-perl-av-pop"><code>perl-av-pop</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-N" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-M">&lt;-</a>D<a href="#NWVrt5m-27XOJn-O">-&gt;</a>]</b>
+#:<a href="#NWDp">perl-av-pop</a>
+</pre><p>
+
+
+<pre><a name="NWVrt5m-2cLXcv-7" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2cLXcv-6">&lt;-</a>D<a href="#NWVrt5m-2cLXcv-8">-&gt;</a>]</b>
+(define-test av-push-pop
+  (let ((a (<a href="#NWDh">perl-newav</a>)))
+    (<a href="#NWDo">perl-av-push</a> a (<a href="#NWDL">perl-newsvpv</a> &quot;a&quot; 0))
+    (<a href="#NWDo">perl-av-push</a> a (<a href="#NWDL">perl-newsvpv</a> &quot;b&quot; 0))
+    (assert-equal &quot;b&quot; (perl-in-lisp::<a href="#NWDX">string-from-sv</a> (<a href="#NWDp">perl-av-pop</a> a)))
+    (assert-equal &quot;a&quot; (perl-in-lisp::<a href="#NWDX">string-from-sv</a> (<a href="#NWDp">perl-av-pop</a> a)))))
+</pre><p>
+
+<a name="NWDq">To ``unshift'' an array, i.e. to add </a><code>undef</code> values to the
+beginning of the array:
+<p>
+<pre><a name="NWVrt5m-2xmHUS-M" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDp">&lt;-</a>D<a href="#NWDr">-&gt;</a>]</b>
+(defcfun &quot;Perl_av_unshift&quot; :void
+  (array :av)
+  (count :i32))
+</pre><blockquote>Defines <a href="#NWI-perl-av-unshift"><code>perl-av-unshift</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-O" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-N">&lt;-</a>D<a href="#NWVrt5m-27XOJn-P">-&gt;</a>]</b>
+#:<a href="#NWDq">perl-av-unshift</a>
+</pre><p>
+
+
+<pre><a name="NWVrt5m-2cLXcv-8" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2cLXcv-7">&lt;-</a>D<a href="#NWVrt5m-2cLXcv-9">-&gt;</a>]</b>
+(define-test av-unshift
+  (let ((a (<a href="#NWDh">perl-newav</a>)))
+    (<a href="#NWDq">perl-av-unshift</a> a 10)
+    (assert-equal 9 (<a href="#NWDs">perl-av-len</a> a))))
+</pre><p>
+
+<a name="NWDr">To shift an SV off the beginning of the array:</a>
+<p>
+<pre><a name="NWVrt5m-2xmHUS-N" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDq">&lt;-</a>D<a href="#NWDs">-&gt;</a>]</b>
+(defcfun &quot;Perl_av_shift&quot; <a href="#NWDH">:sv</a>
+  (array :av))
+</pre><blockquote>Defines <a href="#NWI-perl-av-shift"><code>perl-av-shift</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-P" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-O">&lt;-</a>D<a href="#NWVrt5m-27XOJn-Q">-&gt;</a>]</b>
+#:<a href="#NWDr">perl-av-shift</a>
+</pre><p>
+
+
+<pre><a name="NWVrt5m-2cLXcv-9" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2cLXcv-8">&lt;-</a>D<a href="#NWVrt5m-2cLXcv-A">-&gt;</a>]</b>
+(define-test av-shift
+  (let ((a (<a href="#NWDh">perl-newav</a>)))
+    (<a href="#NWDo">perl-av-push</a> a (<a href="#NWDL">perl-newsvpv</a> &quot;a&quot; 0))
+    (<a href="#NWDo">perl-av-push</a> a (<a href="#NWDL">perl-newsvpv</a> &quot;b&quot; 0))
+    (assert-equal &quot;a&quot; (perl-in-lisp::<a href="#NWDX">string-from-sv</a> (<a href="#NWDr">perl-av-shift</a> a)))
+    (assert-equal &quot;b&quot; (perl-in-lisp::<a href="#NWDX">string-from-sv</a> (<a href="#NWDr">perl-av-shift</a> a )))))
+</pre><p>
+
+
+<a name="NWDs">To get the highest index of the array, or -1 if the array is empty:</a>
+<p>
+<pre><a name="NWVrt5m-2xmHUS-O" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDr">&lt;-</a>D<a href="#NWDt">-&gt;</a>]</b>
+(defcfun &quot;Perl_av_len&quot; :i32
+  (array :av))
+</pre><blockquote>Defines <a href="#NWI-perl-av-len"><code>perl-av-len</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-Q" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-P">&lt;-</a>D<a href="#NWVrt5m-27XOJn-R">-&gt;</a>]</b>
+#:<a href="#NWDs">perl-av-len</a>
+</pre><p>
+
+
+<pre><a name="NWVrt5m-2cLXcv-A" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2cLXcv-9">&lt;-</a>D<a href="#NWVrt5m-2cLXcv-B">-&gt;</a>]</b>
+(define-test av-len
+  (let ((a (<a href="#NWDh">perl-newav</a>)))
+    (<a href="#NWDo">perl-av-push</a> a (<a href="#NWDJ">perl-newsv</a> 0))
+    (<a href="#NWDo">perl-av-push</a> a (<a href="#NWDJ">perl-newsv</a> 0))
+    (<a href="#NWDo">perl-av-push</a> a (<a href="#NWDJ">perl-newsv</a> 0))
+    (assert-equal 2 (<a href="#NWDs">perl-av-len</a> a))))
+</pre><p>
+
+<a name="NWDt">To ensure that an array contains elements indexed at least up to </a><code>fill</code>:
+<p>
+<pre><a name="NWVrt5m-2xmHUS-P" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDs">&lt;-</a>D<a href="#NWDu">-&gt;</a>]</b>
+(defcfun &quot;Perl_av_fill&quot; :void
+  (array :av)
+  (fill :i32))
+</pre><blockquote>Defines <a href="#NWI-perl-av-fill"><code>perl-av-fill</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-R" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-Q">&lt;-</a>D<a href="#NWVrt5m-27XOJn-S">-&gt;</a>]</b>
+#:<a href="#NWDt">perl-av-fill</a>
+</pre><p>
+
+
+<pre><a name="NWVrt5m-2cLXcv-B" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2cLXcv-A">&lt;-</a>D<a href="#NWVrt5m-2cLXcv-C">-&gt;</a>]</b>
+(define-test av-fill
+  (let ((a (<a href="#NWDh">perl-newav</a>)))
+    (<a href="#NWDt">perl-av-fill</a> a 3)
+    (assert-equal 3 (<a href="#NWDs">perl-av-len</a> a))))
+</pre><p>
+
+
+<a name="NWDu">To delete the element at index </a><code>key</code> from an array:
+<p>
+<pre><a name="NWVrt5m-2xmHUS-Q" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDt">&lt;-</a>D<a href="#NWDv">-&gt;</a>]</b>
+(defcfun &quot;Perl_av_delete&quot; <a href="#NWDH">:sv</a>
+  (array :av)
+  (key :i32)
+  (flags :i32))
+</pre><blockquote>Defines <a href="#NWI-perl-av-delete"><code>perl-av-delete</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-S" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-R">&lt;-</a>D<a href="#NWVrt5m-27XOJn-T">-&gt;</a>]</b>
+#:<a href="#NWDu">perl-av-delete</a>
+</pre><p>
+
+
+<code><a name="NWDv">flags</a></code> may be <code>:discard</code> from <code><a href="#NWD1U">perl-call-flags</a></code>, in which
+case the SV element is freed and NULL is returned.
+<p>
+To test if an element at index <code>key</code> has been initialized:
+<p>
+<pre><a name="NWVrt5m-2xmHUS-R" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDu">&lt;-</a>D<a href="#NWVrt5m-2xmHUS-S">-&gt;</a>]</b>
+(defcfun &quot;Perl_av_exists&quot; :boolean
+  (array :av)
+  (key :i32))
+</pre><blockquote>Defines <a href="#NWI-perl-av-exists"><code>perl-av-exists</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-T" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-S">&lt;-</a>D<a href="#NWVrt5m-27XOJn-U">-&gt;</a>]</b>
+#:<a href="#NWDv">perl-av-exists</a>
+</pre><p>
+
+<a name="NWDw">We can make </a><code><a href="#NWDw">perl-aref</a></code> behave like Lisp's <code>aref</code>.  Given an array
+and an index into that array, return the scalar at that index.  This
+will not correctly handle references or arrays of arrays.  
+Perl's array access function can potentially return a NULL pointer,
+which gets translated to <code>nil</code> by <code><a href="#NWDj">av-fetch-sv</a></code>.
+<p>
+<pre><a name="NWVrt5m-1o4ddw-A" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWDj">&lt;-</a>D<a href="#NWDx">-&gt;</a>]</b>
+(defun <a href="#NWDw">perl-aref</a> (array index)
+  (<a href="#NWDG">need-perl</a>)
+  (<a href="#NWVrt5m-1o4ddw-T">lisp-from-perl</a> (<a href="#NWDj">av-fetch-sv</a> array index t)))
+</pre><blockquote>Defines <a href="#NWI-perl-aref"><code>perl-aref</code></a>, <a href="#NWI-perl-array"><code>perl-array</code></a> (links are to index).<p>
+</blockquote><p>
+
+<a name="NWDx">The scalar returned is the same scalar as the one stored in the array,</a>
+not a copy.  So the normal scalar setting functions will work on the
+return value of <code><a href="#NWDw">perl-aref</a></code>, and we do not need another function to
+store a value in an array.
+<p>
+Finally, to convert a complete Perl array into the equivalent Lisp
+list, we have:
+<p>
+<pre><a name="NWVrt5m-1o4ddw-B" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWDw">&lt;-</a>D<a href="#NWD16">-&gt;</a>]</b>
+(defun <a href="#NWDx">list-from-av</a> (av)
+  (loop for i from 0 upto (<a href="#NWDs">perl-av-len</a> av)
+        collecting (<a href="#NWDw">perl-aref</a> av i)))
+</pre><blockquote>Defines <a href="#NWI-list-from-av"><code>list-from-av</code></a> (links are to index).<p>
+</blockquote><p>
+
+
+
+<h2><a name=toc18><a name="NWDy">Perl Hash Tables</a></a></h2>
+<p>
+A Perl hash table, noted in code as <code>%name</code>, always uses strings
+as keys.
+<p>
+Creating a new hash:
+<p>
+<pre><a name="NWVrt5m-S5zrq-A" href="#NWD2"><dfn>&lt;Perl API Types&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDg">&lt;-</a>D<a href="#NWD15">-&gt;</a>]</b>
+(defctype :hv :pointer)
+</pre><p>
+
+<pre><a name="NWVrt5m-2xmHUS-S" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDv">&lt;-</a>D<a href="#NWDz">-&gt;</a>]</b>
+(defcfun &quot;Perl_newHV&quot; :hv)
+</pre><blockquote>Defines <a href="#NWI-perl-newhv"><code>perl-newhv</code></a> (links are to index).<p>
+</blockquote><p>
+<pre><a name="NWVrt5m-27XOJn-U" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-T">&lt;-</a>D<a href="#NWVrt5m-27XOJn-V">-&gt;</a>]</b>
+#:<a href="#NWVrt5m-2xmHUS-S">perl-newhv</a>
+</pre><p>
+
+
+<a name="NWDz">Storing a value in it: </a>
+<p>
+<pre><a name="NWVrt5m-2xmHUS-T" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2xmHUS-S">&lt;-</a>D<a href="#NWD10">-&gt;</a>]</b>
+(defcfun &quot;Perl_hv_store&quot; :pointer ; SV**
+  (hash :hv)
+  (key :string)
+  (key-length :u32)
+  (value <a href="#NWDH">:sv</a>)
+  (precomputed-hash-value :u32))
+</pre><blockquote>Defines <a href="#NWI-perl-hv-store"><code>perl-hv-store</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-V" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-U">&lt;-</a>D<a href="#NWVrt5m-27XOJn-W">-&gt;</a>]</b>
+#:<a href="#NWDz">perl-hv-store</a>
+</pre><p>
+
+
+<code><a name="NWD10">key-length</a></code> <em>must</em> be given as it is not automatically
+calculated.  <code>value</code>'s reference count is <em>not</em>
+automatically incremented.
+<p>
+Retrieving a value:
+<p>
+<pre><a name="NWVrt5m-2xmHUS-U" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDz">&lt;-</a>D<a href="#NWD11">-&gt;</a>]</b>
+(defcfun &quot;Perl_hv_fetch&quot; :pointer ; SV**
+  (hash :hv)
+  (key :string)
+  (key-length :u32)
+  (lvalue :i32))
+</pre><blockquote>Defines <a href="#NWI-perl-hv-fetch"><code>perl-hv-fetch</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-W" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-V">&lt;-</a>D<a href="#NWVrt5m-27XOJn-X">-&gt;</a>]</b>
+#:<a href="#NWD10">perl-hv-fetch</a>
+</pre><p>
+
+
+<a name="NWD11">To check if a hash table entry exists:</a>
+<p>
+<pre><a name="NWVrt5m-2xmHUS-V" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD10">&lt;-</a>D<a href="#NWD12">-&gt;</a>]</b>
+(defcfun &quot;Perl_hv_exists&quot; :boolean
+  (hash :hv)
+  (key :string)
+  (key-length :u32))
+</pre><blockquote>Defines <a href="#NWI-perl-hv-exists"><code>perl-hv-exists</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-X" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-W">&lt;-</a>D<a href="#NWVrt5m-27XOJn-Y">-&gt;</a>]</b>
+#:<a href="#NWD11">perl-hv-exists</a>
+</pre><p>
+
+
+<a name="NWD12">To delete the entry:</a>
+<p>
+<pre><a name="NWVrt5m-2xmHUS-W" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD11">&lt;-</a>D<a href="#NWD13">-&gt;</a>]</b>
+(defcfun &quot;Perl_hv_delete&quot; :pointer ; SV**
+  (hash :hv)
+  (key :string)
+  (key-length :u32)
+  (flags :i32))
+</pre><blockquote>Defines <a href="#NWI-perl-hv-delete"><code>perl-hv-delete</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-Y" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-X">&lt;-</a>D<a href="#NWVrt5m-27XOJn-Z">-&gt;</a>]</b>
+#:<a href="#NWD12">perl-hv-delete</a>
+</pre><p>
+
+
+<a name="NWD13">If </a><code>flags</code> does <em>not</em> include <code>:discard</code> from
+<code><a href="#NWD1U">perl-call-flags</a></code> then <code>hv_delete</code> will create and return a mortal
+copy of the deleted value.
+<p>
+To delete all the entries in a hash without deleting the hash itself:
+<p>
+<pre><a name="NWVrt5m-2xmHUS-X" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD12">&lt;-</a>D<a href="#NWD14">-&gt;</a>]</b>
+(defcfun &quot;Perl_hv_clear&quot; :void
+  (hash :hv))
+</pre><blockquote>Defines <a href="#NWI-perl-hv-clear"><code>perl-hv-clear</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-Z" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-Y">&lt;-</a>D<a href="#NWVrt5m-27XOJn-a">-&gt;</a>]</b>
+#:<a href="#NWD13">perl-hv-clear</a>
+</pre><p>
+
+
+<a name="NWD14">And to delete both the entries and the hash itself:</a>
+<p>
+<pre><a name="NWVrt5m-2xmHUS-Y" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD13">&lt;-</a>D<a href="#NWVrt5m-2xmHUS-Z">-&gt;</a>]</b>
+(defcfun &quot;Perl_hv_undef&quot; :void
+  (hash :hv))
+</pre><blockquote>Defines <a href="#NWI-perl-hv-undef"><code>perl-hv-undef</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-a" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-Z">&lt;-</a>D<a href="#NWVrt5m-27XOJn-b">-&gt;</a>]</b>
+#:<a href="#NWD14">perl-hv-undef</a>
+</pre><p>
+
+
+<a name="NWD15">Other functions return complete key/value hash structures, or allow</a>
+SVs to be used as keys, but I believe these are unnecessary for this
+implementation.
+<p>
+
+To copy hash tables into Lisp data structures, we will need to be able
+to iterate over them.  The Perl API provides the following routines
+for this purpose.
+<p>
+<pre><a name="NWVrt5m-S5zrq-B" href="#NWD2"><dfn>&lt;Perl API Types&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWDy">&lt;-</a>D<a href="#NWD19">-&gt;</a>]</b>
+(defctype :he :pointer
+  :documentation &quot;An entry in a Perl hash table&quot;)
+</pre><p>
+
+<pre><a name="NWVrt5m-2xmHUS-Z" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD14">&lt;-</a>D<a href="#NWD18">-&gt;</a>]</b>
+;; initialize an iterator for the hash
+(defcfun &quot;Perl_hv_iterinit&quot; :i32 ; returns # of hash entries
+  (hash :hv))
+
+;; advance to the next hash entry
+(defcfun &quot;Perl_hv_iternext&quot; :he
+  (hash :hv))
+
+;; get the key of the hash entry
+(defcfun &quot;Perl_hv_iterkey&quot; :pointer ; char*, may contain NULL
+  (hash-entry :he)
+  (key-length :pointer)) ; I32*, length of the char*
+
+;; same as above but creates new mortal SV to hold the key
+(defcfun &quot;Perl_hv_iterkeysv&quot; <a href="#NWDH">:sv</a>
+  (hash-entry :he))
+
+;; get the value of the hash entry
+(defcfun &quot;Perl_hv_iterval&quot; <a href="#NWDH">:sv</a>
+  (hash :hv)
+  (hash-entry :he))
+</pre><blockquote>Defines <a href="#NWI-perl-hv-iterinit"><code>perl-hv-iterinit</code></a>, <a href="#NWI-perl-hv-iterkey"><code>perl-hv-iterkey</code></a>, <a href="#NWI-perl-hv-iterkeysv"><code>perl-hv-iterkeysv</code></a>, <a href="#NWI-perl-hv-iternext"><code>perl-hv-iternext</code></a>, <a href="#NWI-perl-hv-iterval"><code>perl-hv-iterval</code></a> (links are to index).<p>
+</blockquote><p>
+<pre><a name="NWVrt5m-27XOJn-b" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-a">&lt;-</a>D<a href="#NWVrt5m-27XOJn-c">-&gt;</a>]</b>
+#:<a href="#NWVrt5m-2xmHUS-Z">perl-hv-iterinit</a> #:<a href="#NWVrt5m-2xmHUS-Z">perl-hv-iternext</a> #:<a href="#NWVrt5m-2xmHUS-Z">perl-hv-iterkey</a>
+#:<a href="#NWVrt5m-2xmHUS-Z">perl-hv-iterkeysv</a> #:<a href="#NWVrt5m-2xmHUS-Z">perl-hv-iterval</a>
+</pre><p>
+
+<a name="NWD16">With these four functions, we can make a function to convert a Perl</a>
+hash table to a Lisp hash table.
+<p>
+<pre><a name="NWVrt5m-1o4ddw-C" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWDx">&lt;-</a>D<a href="#NWD17">-&gt;</a>]</b>
+(defun <a href="#NWD16">hash-from-hv</a> (perl-hash)
+  (<a href="#NWD1Q">perl-scope</a> ;; because SVs may be mortal copies
+   (let ((lisp-hash (make-hash-table :test #'equal))
+         (size (<a href="#NWVrt5m-2xmHUS-Z">perl-hv-iterinit</a> perl-hash)))
+     (loop repeat size
+           do (let ((entry (<a href="#NWVrt5m-2xmHUS-Z">perl-hv-iternext</a> perl-hash)))
+                (setf (gethash (<a href="#NWDX">string-from-sv</a> ; does not work w/ <a href="#NWVrt5m-1o4ddw-T">lisp-from-perl</a>, why?
+                                (<a href="#NWVrt5m-2xmHUS-Z">perl-hv-iterkeysv</a> entry))
+                               lisp-hash)
+                      (<a href="#NWVrt5m-1o4ddw-T">lisp-from-perl</a>
+                       (<a href="#NWVrt5m-2xmHUS-Z">perl-hv-iterval</a> perl-hash entry)))))
+     lisp-hash)))
+</pre><blockquote>Defines <a href="#NWI-hash-from-hv"><code>hash-from-hv</code></a> (links are to index).<p>
+</blockquote><p>
+
+<a name="NWD17">And convert a Lisp hash table to a Perl hash table.</a>
+<p>
+<pre><a name="NWVrt5m-1o4ddw-D" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWD16">&lt;-</a>D<a href="#NWVrt5m-1o4ddw-E">-&gt;</a>]</b>
+(defun <a href="#NWD17">hv-from-hash</a> (lisp-hash)
+  (let ((perl-hash (<a href="#NWVrt5m-2xmHUS-S">perl-newhv</a>)))
+    (maphash #'(lambda (key value)
+                 (let ((string-key (string key)))
+                   (with-foreign-string
+                    (cstring string-key)
+                    (<a href="#NWDz">perl-hv-store</a> perl-hash
+                                   cstring
+                                   (length string-key)
+                                   (<a href="#NWD1k">perl-from-lisp</a> value)
+                                   0))))
+             lisp-hash)
+    perl-hash))
+</pre><blockquote>Defines <a href="#NWI-hv-from-hash"><code>hv-from-hash</code></a> (links are to index).<p>
+</blockquote><p>
+
+
+
+<h2><a name=toc19><a name="NWD18">Perl References</a></a></h2>
+<p>
+A Perl reference is a scalar that points to
+something---anything---else.  References are created with 
+<code>newRV</code>, which increments the reference count of the source object,
+and <code>newRV_noinc</code>, which does not.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-a" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2xmHUS-Z">&lt;-</a>D<a href="#NWD1F">-&gt;</a>]</b>
+(defcfun &quot;Perl_newRV&quot; <a href="#NWDH">:sv</a>
+  (thing <a href="#NWDH">:sv</a>))
+
+(defcfun &quot;Perl_newRV_noinc&quot; <a href="#NWDH">:sv</a>
+  (thing <a href="#NWDH">:sv</a>))
+</pre><blockquote>Defines <a href="#NWI-perl-newrv"><code>perl-newrv</code></a>, <a href="#NWI-perl-newrv-noinc"><code>perl-newrv-noinc</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-c" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-b">&lt;-</a>D<a href="#NWVrt5m-27XOJn-d">-&gt;</a>]</b>
+#:<a href="#NWD18">perl-newrv</a> #:<a href="#NWD18">perl-newrv</a><a href="#NWD18">-noinc</a>
+</pre><p>
+
+<a name="NWD19">The Perl API dereferences with a macro, so we have to do it by</a>
+digging into the RV/SV structure.
+<p>
+<pre><a name="NWVrt5m-S5zrq-C" href="#NWD2"><dfn>&lt;Perl API Types&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD15">&lt;-</a>D]</b>
+(defcstruct xrv
+  (rv <a href="#NWDH">:sv</a>))
+</pre><p>
+
+<pre><a name="NWVrt5m-27XOJn-d" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-c">&lt;-</a>D<a href="#NWVrt5m-27XOJn-e">-&gt;</a>]</b>
+#:xrv #:rv
+</pre><p>
+
+<pre><a name="NWVrt5m-1o4ddw-E" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWD17">&lt;-</a>D<a href="#NWVrt5m-1o4ddw-F">-&gt;</a>]</b>
+(defun <a href="#NWVrt5m-1o4ddw-E">deref-rv</a> (ref)
+  (foreign-slot-value (foreign-slot-value ref 'sv 'any)
+                      'xrv 'rv))
+</pre><blockquote>Defines <a href="#NWI-deref-rv"><code>deref-rv</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-2cLXcv-C" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2cLXcv-B">&lt;-</a>D<a href="#NWVrt5m-2cLXcv-D">-&gt;</a>]</b>
+(define-test references
+  (let ((s (<a href="#NWDJ">perl-newsv</a> 0)))
+    (assert-equality #'pointer-eq s
+                     (<a href="#NWVrt5m-1o4ddw-E">deref-rv</a> (<a href="#NWD18">perl-newrv</a> s)))))
+</pre><p>
+
+<pre><a name="NWVrt5m-2cLXcv-D" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2cLXcv-C">&lt;-</a>D<a href="#NWD1O">-&gt;</a>]</b>
+(define-test reference-to-array
+  (let ((a (<a href="#NWDh">perl-newav</a>)))
+    (assert-equality #'pointer-eq a
+                     (<a href="#NWVrt5m-1o4ddw-E">deref-rv</a> (<a href="#NWD18">perl-newrv</a> a)))))
+</pre><p>
+
+
+<h2><a name=toc20>Manipulating the Perl Stack</a></h2>
+<p>
+It's a dirty job, but we have to do it.  The only way to pass
+arguments to and return values from functions is to manipulate the
+Perl stack directly.  Ugh.  Here goes.
+<p>
+<h3><a name=toc21>A Digression on Pointers</a></h3>
+<p>
+In order to manipulate the Perl stack, we need to modify the values of
+several global pointers---not the values the they point to, but the
+addresses stored in the pointers themselves.  However, CFFI's
+<code>:pointer</code> type is immutable; once a foreign variable is
+<code>defcvar</code>ed as a <code>:pointer</code>, one cannot modify the address it
+<a name="NWD1A">contains.</a>
+<p>
+However, foreign variables declared as integers <em>can</em> be modified
+under CFFI, and in C, pointers are just integers with some additional
+type information.  The only question is which integer type to use,
+since pointers can be different sizes on different platforms.  I
+cannot cheat here; this has to be correct.  Fortunately, CFFI already
+knows the answer.
+<p>
+<pre><a name="NWVrt5m-2O7yu7-1" href="#NWD1A"><dfn>&lt;Determine Pointer Size&gt;=</dfn></a> <b>(<a href="#NWD1E">U-&gt;</a>)</b>
+(defvar <a href="#NWD1A">*pointer-size*</a>
+  (foreign-type-size :pointer)
+  &quot;The size of a pointer on the current platform, in bytes.&quot;)
+</pre><blockquote>Defines <a href="#NWI-*pointer-size*"><code>*pointer-size*</code></a> (links are to index).<p>
+</blockquote><p>
+
+<a name="NWD1B">On this basis, we can create a new ``pointer-as-integer'' type.  I</a>
+will name this new type <code><a href="#NWD1B">:address</a></code>.  (This may need to be wrapped in
+an <code>eval-when</code>.)
+<p>
+<pre><a name="NWVrt5m-4MKCDv-1" href="#NWD1B"><dfn>&lt;:address Type&gt;=</dfn></a> <b>(<a href="#NWD1E">U-&gt;</a>)</b>
+(ecase <a href="#NWD1A">*pointer-size*</a>
+  (1 (defctype <a href="#NWD1B">:address</a> :uint8))   ; unlikely
+  (2 (defctype <a href="#NWD1B">:address</a> :uint16))  ; possible
+  (4 (defctype <a href="#NWD1B">:address</a> :uint32))  ; most common
+  (8 (defctype <a href="#NWD1B">:address</a> :uint64))) ; possible
+</pre><blockquote>Defines <a href="#NWI-:address"><code>:address</code></a> (links are to index).<p>
+</blockquote><p>
+
+Since <code><a href="#NWD1B">:address</a></code> is just another name for an integer, CFFI's
+definitions for <code>setf</code> and its ilk will work correctly.  Arithmetic
+<a name="NWD1C">between addresses will also work correctly.</a>
+<p>
+C's <code>++</code> and <code>--</code> operators increment and decrement pointers
+by the correct number of bytes, so stack operations can be succintly
+written as <code>*++stack=object</code> or similar.  But Lisp's <code>incf</code> will
+always increment by one unless given a different value.  To avoid
+mistakes, I will define two macros to increment and decrement an
+address by the size of a pointer.
+<p>
+<pre><a name="NWVrt5m-1klVa-1" href="#NWD1C"><dfn>&lt;Macros for Using :address&gt;=</dfn></a> <b>(<a href="#NWD1E">U-&gt;</a>)</b> <b>[D<a href="#NWD1D">-&gt;</a>]</b>
+(defmacro <a href="#NWD1C">address-incf</a> (address &amp;optional (n 1))
+  `(incf ,address (* ,n <a href="#NWD1A">*pointer-size*</a>)))
+
+(defmacro <a href="#NWD1C">address-decf</a> (address &amp;optional (n 1))
+  `(decf ,address (* ,n <a href="#NWD1A">*pointer-size*</a>)))
+</pre><blockquote>Defines <a href="#NWI-address-decf"><code>address-decf</code></a>, <a href="#NWI-address-incf"><code>address-incf</code></a> (links are to index).<p>
+</blockquote><p>
+
+<a name="NWD1D">Lastly, we will need to access the value the address points to.  We</a>
+can create an abbreviation that fills the same role as C's <code>*</code>
+operator.
+<p>
+<pre><a name="NWVrt5m-1klVa-2" href="#NWD1C"><dfn>&lt;Macros for Using :address&gt;+=</dfn></a> <b>(<a href="#NWD1E">U-&gt;</a>)</b> <b>[<a href="#NWD1C">&lt;-</a>D]</b>
+(defmacro <a href="#NWD1D">address-ref</a> (address type)
+  `(mem-ref (make-pointer ,address) ,type))
+</pre><blockquote>Defines <a href="#NWI-address-ref"><code>address-ref</code></a> (links are to index).<p>
+</blockquote><p>
+
+
+Since this is a macro, CFFI's <code>(setf (mem-ref ...))</code> magic still
+<a name="NWD1E">works.  This allows stack operations such as:</a>
+<p>
+<code>(setf (<a href="#NWD1D">address-ref</a> (<a href="#NWD1C">address-incf</a> x) ...))</code>
+<p>
+which is equivalent to <code>*++x = ...</code> in C.
+<p>
+I will wrap this functionality in its own package, since it is not
+directly related to Perl.
+<p>
+<pre><a name="NWVrt5m-gsMcs-1" href="#NWD1E"><dfn>&lt;address.lisp&gt;=</dfn></a>
+;;; address.lisp -- CFFI extension to allow mutable pointers
+
+<a name="NWVrt5m-gsMcs-1-u1" href="#NWD1q"><i>&lt;License Header&gt;</i></a>
+
+(in-package :common-lisp-user)
+
+(defpackage :cffi-address
+  (:use :common-lisp :cffi)
+  (:export #<a href="#NWD1B">:address</a><a href="#NWD1C">-incf</a> #<a href="#NWD1B">:address</a><a href="#NWD1C">-decf</a> #<a href="#NWD1B">:address</a><a href="#NWD1D">-ref</a>))
+
+(in-package :cffi-address)
+
+<a name="NWVrt5m-gsMcs-1-u2" href="#NWD1A"><i>&lt;Determine Pointer Size&gt;</i></a>
+<a name="NWVrt5m-gsMcs-1-u3" href="#NWD1B"><i>&lt;:address Type&gt;</i></a>
+<a name="NWVrt5m-gsMcs-1-u4" href="#NWD1C"><i>&lt;Macros for Using :address&gt;</i></a>
+</pre><p>
+
+
+<h3><a name=toc22>The Stack Pointer</a></h3>
+<p>
+<a name="NWD1F">The Perl API uses a series of macros to create and manipulate a local</a>
+copy of the stack pointer stored in the global variable
+<code>PL_stack_sp</code>, of type <code>SV**</code>.  The local pointer is declared and
+given its initial value with the <code>dSP</code> macro.
+<p>
+The only reason I can see for the local copy is so that it can be
+optimized with the C <code>register</code> keyword.  For our purposes, it will
+be simpler to manipulate the global variable directly.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-b" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD18">&lt;-</a>D<a href="#NWD1H">-&gt;</a>]</b>
+(defcvar &quot;PL_stack_sp&quot; <a href="#NWD1B">:address</a>)
+</pre><blockquote>Defines <a href="#NWI-*pl-stack-sp*"><code>*pl-stack-sp*</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-e" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-d">&lt;-</a>D<a href="#NWVrt5m-27XOJn-f">-&gt;</a>]</b>
+#:*pl-stack-sp*
+</pre><p>
+
+Then we can translate the <code>PUSHMARK</code> and <code>PUTBACK</code> macros, used to
+keep track of the number of parameters being pushed onto the stack in
+a function call.  I don't claim to understand exactly what these two
+<a name="NWD1G">macros do; I'm just transcribing their definitions into Lisp.  Thep</a>
+<code>PL_*</code> variables have different definitions in different parts of
+the Perl API source.  They are macros, but they appear as symbols
+in the object code, so I am hoping it is possible to use them
+directly.
+<p>
+Here is the C definition of <code>PUSHMARK</code>, from <code>pp.h</code> in the Perl
+source:
+<p>
+<pre><a name="NWVrt5m-4fe9h8-1" href="#NWD1G"><dfn>&lt;<code>PUSHMARK</code> macro in C&gt;=</dfn></a>
+#define PUSHMARK(p) if (++PL_markstack_ptr == PL_markstack_max) \
+                        markstack_grow();                       \
+                    *PL_markstack_ptr = (p) - PL_stack_base
+</pre><p>
+
+<a name="NWD1H">Translated to Lisp, using global variables, this becomes:</a>
+<p>
+<pre><a name="NWVrt5m-2xmHUS-c" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD1F">&lt;-</a>D<a href="#NWD1J">-&gt;</a>]</b>
+(defcvar &quot;PL_markstack_ptr&quot; <a href="#NWD1B">:address</a>)  ; *pl-markstack-ptr*
+(defcvar &quot;PL_markstack_max&quot; <a href="#NWD1B">:address</a>)  ; *pl-markstack-max*
+(defcvar &quot;PL_stack_base&quot; <a href="#NWD1B">:address</a>)     ; *pl-stack-base*
+(defcfun &quot;Perl_markstack_grow&quot; :void)  ; (perl-markstack-grow)
+</pre><p>
+
+<pre><a name="NWVrt5m-27XOJn-f" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-e">&lt;-</a>D<a href="#NWVrt5m-27XOJn-g">-&gt;</a>]</b>
+#:*pl-markstack-ptr* #:*pl-markstack-max* #:*pl-stack-base* #:perl-markstack-grow
+</pre><p>
+
+<pre><a name="NWVrt5m-1o4ddw-F" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-1o4ddw-E">&lt;-</a>D<a href="#NWVrt5m-1o4ddw-G">-&gt;</a>]</b>
+(defun <a href="#NWVrt5m-1o4ddw-F">pushmark</a> ()
+  (when (= (<a href="#NWD1C">address-incf</a> *pl-markstack-ptr*) *pl-markstack-max*)
+    (perl-markstack-grow))
+  (setf (<a href="#NWD1D">address-ref</a> *pl-markstack-ptr* <a href="#NWD1B">:address</a>)
+        (- <a href="#NWD1F">*pl-stack-sp*</a> *pl-stack-base*)))
+</pre><blockquote>Defines <a href="#NWI-pushmark"><code>pushmark</code></a> (links are to index).<p>
+</blockquote><p>
+
+If you try to call a function with arguments without first calling
+<code><a href="#NWVrt5m-1o4ddw-F">pushmark</a></code>, Perl dies violently with an ``Out of memory!'' error and
+takes Lisp down with it.
+<p>
+The <code>PUTBACK</code> macro's purpose purpose in C is to reset the global
+stack pointer to the value of the local copy.  Since we are working
+<a name="NWD1I">directly with the global pointer, we can omit </a><code>PUTBACK</code>.
+<p>
+
+<h3><a name=toc23>Pushing Arguments Onto the Stack</a></h3>
+<p>
+The <code>XPUSHs</code> macro in the Perl API is used to push new scalar values
+onto the Perl stack.  The first thing it does is extend the stack if
+necessary, using the <code>EXTEND</code> macro, which looks like this:
+<p>
+<pre><a name="NWVrt5m-5SrDl-1" href="#NWD1I"><dfn>&lt;<code>EXTEND</code> macro in C&gt;=</dfn></a>
+#define EXTEND(p,n) STMT_START { if (PL_stack_max - p &lt; (int)(n)) { \
+                                 sp = stack_grow(sp,p, (int) (n));  \
+                               } } STMT_END
+</pre><p>
+
+<a name="NWD1J">The </a><code>STMT_START</code> and <code>STMT_END</code> do nothing; they are macros used
+by the Perl source to prevent certain C compiler warnings.
+<p>
+We replace this with a Lisp function that serves the same purpose.
+Since we are treating <code>PL_stack_sp</code> as an <code><a href="#NWD1B">:address</a></code>, we must
+declare the <code>Perl_stack_grow</code> function to return an <code><a href="#NWD1B">:address</a></code>
+(instead of a <code>:pointer</code>) as well.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-d" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD1H">&lt;-</a>D<a href="#NWD1P">-&gt;</a>]</b>
+(defcvar &quot;PL_stack_max&quot; <a href="#NWD1B">:address</a>)
+(defcfun &quot;Perl_stack_grow&quot; <a href="#NWD1B">:address</a>
+  (sp <a href="#NWD1B">:address</a>) (p <a href="#NWD1B">:address</a>) (n :uint))
+</pre><p>
+
+<pre><a name="NWVrt5m-27XOJn-g" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-f">&lt;-</a>D<a href="#NWVrt5m-27XOJn-h">-&gt;</a>]</b>
+#:*pl-stack-max* #:perl-stack-grow
+</pre><p>
+
+<pre><a name="NWVrt5m-1o4ddw-G" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-1o4ddw-F">&lt;-</a>D<a href="#NWD1L">-&gt;</a>]</b>
+(defun <a href="#NWVrt5m-1o4ddw-G">ensure-room-on-stack</a> (n)
+  (when (&lt; (- *pl-stack-max* <a href="#NWD1F">*pl-stack-sp*</a>) n)
+    (setf <a href="#NWD1F">*pl-stack-sp*</a>
+          (perl-stack-grow <a href="#NWD1F">*pl-stack-sp*</a> <a href="#NWD1F">*pl-stack-sp*</a> n))))
+</pre><blockquote>Defines <a href="#NWI-ensure-room-on-stack"><code>ensure-room-on-stack</code></a> (links are to index).<p>
+</blockquote><p>
+
+<a name="NWD1K">The </a><code>XPUSHs</code> macro looks like this:
+<p>
+<pre><a name="NWVrt5m-3ajg63-1" href="#NWD1K"><dfn>&lt;<code>XPUSHs</code> macro in C&gt;=</dfn></a>
+#define XPUSHs(s) STMT_START { EXTEND(sp,1); (*++sp = (s)); } STMT_END
+</pre><p>
+
+<a name="NWD1L">Now we can define an equivalent to </a><code>XPUSHs</code>.
+<p>
+<pre><a name="NWVrt5m-1o4ddw-H" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-1o4ddw-G">&lt;-</a>D<a href="#NWD1N">-&gt;</a>]</b>
+(defun <a href="#NWD1L">pushs</a> (scalar)
+  &quot;Push a scalar value (a pointer) onto the Perl stack.&quot;
+  (<a href="#NWVrt5m-1o4ddw-G">ensure-room-on-stack</a> 1) ; EXTEND
+  (setf (<a href="#NWD1D">address-ref</a> (<a href="#NWD1C">address-incf</a> <a href="#NWD1F">*pl-stack-sp*</a>) <a href="#NWD1B">:address</a>)
+        (pointer-address scalar)))
+</pre><blockquote>Defines <a href="#NWI-pushs"><code>pushs</code></a> (links are to index).<p>
+</blockquote><p>
+
+
+<h3><a name=toc24><a name="NWD1M">Popping Values Off the Stack</a></a></h3>
+<p>
+Popping a scalar value off the Perl stack is, thankfully, much
+simpler.
+<p>
+The C macro is:
+<p><pre><a name="NWVrt5m-1mSCQR-1" href="#NWD1M"><dfn>&lt;<code>POPs</code> macro in C&gt;=</dfn></a>
+#define POPs (*sp--)
+</pre><p>
+
+<a name="NWD1N">Which becomes, in Lisp:</a>
+<p>
+<pre><a name="NWVrt5m-1o4ddw-I" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWD1L">&lt;-</a>D<a href="#NWD1S">-&gt;</a>]</b>
+(defun <a href="#NWD1N">pops</a> ()
+  &quot;Pop a scalar pointer off the Perl stack.&quot;
+  (prog1
+      (<a href="#NWD1D">address-ref</a> <a href="#NWD1F">*pl-stack-sp*</a> :pointer)
+    (<a href="#NWD1C">address-decf</a> <a href="#NWD1F">*pl-stack-sp*</a>)))
+</pre><blockquote>Defines <a href="#NWI-pops"><code>pops</code></a> (links are to index).<p>
+</blockquote><p>
+
+<a name="NWD1O">Phew.  Let's test that, shall we?  We will check that pushing a value</a>
+on to the stack and popping it off gives back the same value, and
+check that the stack pointer is in the same place after the operation
+as it was before.
+<p>
+<pre><a name="NWVrt5m-2cLXcv-E" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2cLXcv-D">&lt;-</a>D<a href="#NWD1R">-&gt;</a>]</b>
+(define-test push-and-pop-one-scalar
+  (let ((x (<a href="#NWDJ">perl-newsv</a> 0))
+        (old-stack-address <a href="#NWD1F">*pl-stack-sp*</a>))
+    (<a href="#NWD1L">pushs</a> x)
+    (assert-equality #'pointer-eq x
+                     (<a href="#NWD1D">address-ref</a> <a href="#NWD1F">*pl-stack-sp*</a> :pointer))
+    (assert-equality #'pointer-eq x (<a href="#NWD1N">pops</a>))
+    (assert-equal old-stack-address <a href="#NWD1F">*pl-stack-sp*</a>)))
+</pre><p>
+
+
+
+<h3><a name=toc25>Scope and Temporary Variables</a></h3>
+<p>
+When creating temporary variables to place on the stack as function
+arguments, we must define a scope for those variables to live in, and
+free their memory when we are finished with them.  The Perl API
+provides a set of four macros for this purpose, described in perlcall:
+<code>ENTER</code> and <code>SAVETMPS</code> begin a new scope for local variables, and
+<code>FREETMPS</code> and <code>LEAVE</code> end the scope.  Within that scope, local
+<a name="NWD1P">variables must be declared ``mortal'' with the </a><code>sv_2mortal()</code>
+function.  We can imitate all of this in Lisp.
+<p>
+Normally, the <code>SAVETMPS</code> and <code>FREETMPS</code> macros fiddle with a
+``temporary value stack'' to avoid calling <code>free_tmps</code> if not
+necessary.  To keep it simple, we will always call <code>free_tmps</code>.
+This does no harm and should not be a major performance drain.  As a
+result of this simplification, we can completely omit <code>SAVETMPS</code>.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-e" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD1J">&lt;-</a>D<a href="#NWD1T">-&gt;</a>]</b>
+(defcfun &quot;Perl_push_scope&quot; :void) ; ENTER
+(defcfun &quot;Perl_free_tmps&quot; :void)  ; FREETMPS
+(defcfun &quot;Perl_pop_scope&quot; :void)  ; LEAVE
+(defcfun &quot;Perl_sv_2mortal&quot; <a href="#NWDH">:sv</a>
+  (scalar <a href="#NWDH">:sv</a>))
+</pre><blockquote>Defines <a href="#NWI-perl-free-tmps"><code>perl-free-tmps</code></a>, <a href="#NWI-perl-pop-scope"><code>perl-pop-scope</code></a>, <a href="#NWI-perl-push-scope"><code>perl-push-scope</code></a>, <a href="#NWI-perl-sv-2mortal"><code>perl-sv-2mortal</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-h" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-g">&lt;-</a>D<a href="#NWVrt5m-27XOJn-i">-&gt;</a>]</b>
+#:<a href="#NWD1P">perl-push-scope</a> #:<a href="#NWDC">perl-free</a><a href="#NWD1P">-tmps</a> #:<a href="#NWD1P">perl-pop-scope</a> #:<a href="#NWD1P">perl-sv-2mortal</a>
+</pre><p>
+
+<a name="NWD1Q">Nowe we can create a Lisp macro that neatly packages up the process of</a>
+creating a Perl scoping block.
+<p>
+<pre><a name="NWVrt5m-NgcSH-1" href="#NWD1Q"><dfn>&lt;Wrapper Library Macros&gt;=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b>
+(defmacro <a href="#NWD1Q">perl-scope</a> (&amp;body body)
+  (let ((return-symbol (gensym)))
+    `(progn 
+       (<a href="#NWD1P">perl-push-scope</a>)  ; ENTER
+       ;; SAVETMPS omitted
+       (let ((,return-symbol (progn ,@body))) ; execute body
+         (<a href="#NWDC">perl-free</a><a href="#NWD1P">-tmps</a>) ; FREETMPS
+         (<a href="#NWD1P">perl-pop-scope</a>) ; LEAVE
+         ,return-symbol))))
+</pre><blockquote>Defines <a href="#NWI-perl-scope"><code>perl-scope</code></a> (links are to index).<p>
+</blockquote><p>
+
+<a name="NWD1R">The </a><code>let</code> in the middle allows us to return values from the
+<code>body</code>, which we will want to do when we start calling Perl
+functions.
+<p>
+We can test the scope by making sure that a scalar declared ``mortal''
+inside the scope has its reference count set to zero outside of the
+scope.
+<p>
+<pre><a name="NWVrt5m-2cLXcv-F" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWD1O">&lt;-</a>D<a href="#NWVrt5m-2cLXcv-G">-&gt;</a>]</b>
+(define-test <a href="#NWD1Q">perl-scope</a>
+  (let ((x))
+    (<a href="#NWD1Q">perl-scope</a>
+     (setf x (<a href="#NWDK">perl-newsviv</a> 999))
+     (<a href="#NWD1P">perl-sv-2mortal</a> x)
+     (assert-equal 999 (<a href="#NWDV">perl-sv-2iv</a> x))
+     ;; still within the scope block:
+     (assert-equal 1 (foreign-slot-value x 'sv 'refcnt)))
+    ;; outside the scope block here:
+    (assert-equal 0 (foreign-slot-value x 'sv 'refcnt))))
+</pre><p>
+
+<h3><a name=toc26><a name="NWD1S">Using the Perl Stack</a></a></h3>
+<p>
+<pre><a name="NWVrt5m-1o4ddw-J" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWD1N">&lt;-</a>D<a href="#NWVrt5m-1o4ddw-K">-&gt;</a>]</b>
+(defun <a href="#NWD1S">push-mortals-on-stack</a> (args)
+  (loop for arg in args
+        do (<a href="#NWD1L">pushs</a> (<a href="#NWD1P">perl-sv-2mortal</a> (<a href="#NWD1k">perl-from-lisp</a> arg)))))
+</pre><blockquote>Defines <a href="#NWI-push-mortals-on-stack"><code>push-mortals-on-stack</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-1o4ddw-K" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWD1S">&lt;-</a>D<a href="#NWD1X">-&gt;</a>]</b>
+(defun <a href="#NWVrt5m-1o4ddw-K">get-from-stack</a> (n)
+  (nreverse (loop repeat n
+                  collecting (<a href="#NWVrt5m-1o4ddw-T">lisp-from-perl</a> (<a href="#NWD1N">pops</a>)))))
+
+(defun <a href="#NWVrt5m-1o4ddw-K">get-stack-values</a> (n)
+  (values-list (<a href="#NWVrt5m-1o4ddw-K">get-from-stack</a> n)))
+</pre><blockquote>Defines <a href="#NWI-get-from-stack"><code>get-from-stack</code></a>, <a href="#NWI-get-stack-values"><code>get-stack-values</code></a> (links are to index).<p>
+</blockquote><p>
+
+
+<pre><a name="NWVrt5m-3Afyvm-7" href="#NWDP"><dfn>&lt;Wrapper Library Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWDf">&lt;-</a>D<a href="#NWVrt5m-3Afyvm-8">-&gt;</a>]</b>
+(define-test stack
+  (let ((things (list 1 2 &quot;hello&quot; -27)))
+    (<a href="#NWD1Q">perl-scope</a>
+     (<a href="#NWD1S">push-mortals-on-stack</a> things)
+     (assert-equal things (<a href="#NWVrt5m-1o4ddw-K">get-from-stack</a> (length things))))))
+</pre><p>
+
+
+
+
+<h2><a name=toc27>Calling Perl Functions</a></h2>
+<p>
+<a name="NWD1T">THIS SECTION INCOMPLETE.</a>
+<p>
+Calling Perl functions (or subroutines, as Perl calls them) always
+boils down to a single function, <code>Perl_call_sv</code>, which takes a
+scalar argument which can be a the name of function (a string) or an
+anonymous function reference.  All parameter passing to and from the
+Perl function is done on the Perl stack.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-f" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD1P">&lt;-</a>D<a href="#NWD1U">-&gt;</a>]</b>
+(defcfun &quot;Perl_call_sv&quot; :i32
+  (name <a href="#NWDH">:sv</a>)
+  (flags :i32))
+</pre><blockquote>Defines <a href="#NWI-perl-call-sv"><code>perl-call-sv</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-i" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-h">&lt;-</a>D<a href="#NWD1V">-&gt;</a>]</b>
+#:<a href="#NWD1T">perl-call-sv</a>
+</pre><p>
+
+<a name="NWD1U">The second argument is a bitfield specifying the type of function to</a>
+call, the context (array, scalar, or void) in which to call it, and
+how to handle errors.  Here are the values, copied from Perl's
+<code>cop.h</code> along with their documenting comments.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-g" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD1T">&lt;-</a>D<a href="#NWD1W">-&gt;</a>]</b>
+(defbitfield <a href="#NWD1U">perl-call-flags</a>
+  (:scalar   0)  ; call in scalar context
+  (:array    1)  ; call in array context
+  (:void   128)  ; call in void context (no return values)
+  (:discard  2)  ; Call FREETMPS.
+  (:eval     4)  ; Assume `eval {}' around subroutine call.
+  (:noargs   8)  ; Don't construct a @_ array.
+  (:keeperr 16)  ; Append errors to $@, don't overwrite it.
+  (:nodebug 32)  ; Disable debugging at toplevel.
+  (:method  64)) ; Calling method. 
+</pre><blockquote>Defines <a href="#NWI-perl-call-flags"><code>perl-call-flags</code></a> (links are to index).<p>
+</blockquote><p>
+
+<!-- $-->
+
+<a name="NWD1V">*</a>
+<pre><a name="NWVrt5m-27XOJn-j" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-i">&lt;-</a>D<a href="#NWVrt5m-27XOJn-k">-&gt;</a>]</b>
+#:<a href="#NWD1U">perl-call-flags</a>
+</pre><p>
+
+<a name="NWD1W">A shortcut exists that takes a C string as its argument instead of a</a>
+scalar:
+<p>
+<pre><a name="NWVrt5m-2xmHUS-h" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD1U">&lt;-</a>D<a href="#NWD1c">-&gt;</a>]</b>
+(defcfun &quot;Perl_call_pv&quot; :i32
+  (name :string)
+  (flags :i32))
+</pre><blockquote>Defines <a href="#NWI-perl-call-pv"><code>perl-call-pv</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-k" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWD1V">&lt;-</a>D<a href="#NWVrt5m-27XOJn-l">-&gt;</a>]</b>
+#:<a href="#NWD1W">perl-call-pv</a>
+</pre><p>
+
+<pre><a name="NWVrt5m-2cLXcv-G" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWD1R">&lt;-</a>D<a href="#NWVrt5m-2cLXcv-H">-&gt;</a>]</b>
+(define-test <a href="#NWD1W">perl-call-pv</a>
+  (assert-equal 1  ; 1 value was return on the stack
+                (progn
+                  (<a href="#NWD1c">perl-eval-pv</a> 
+&quot;sub meaning_of_life { print \&quot;\\nThis should be forty-two: \&quot;,
+ $_[0], \&quot;\\n\&quot;; return $_[0]; }&quot; t)
+                  (<a href="#NWVrt5m-1o4ddw-F">pushmark</a>)
+                  (<a href="#NWD1L">pushs</a> (<a href="#NWD1P">perl-sv-2mortal</a> (<a href="#NWDK">perl-newsviv</a> 42)))
+                  (<a href="#NWD1W">perl-call-pv</a> &quot;meaning_of_life&quot;
+                                (foreign-bitfield-value
+                                 'perl-call-flags
+                                 '(:scalar)))))
+  (assert-equal 42 (<a href="#NWDV">perl-sv-2iv</a> (<a href="#NWD1N">pops</a>))))
+</pre><p>
+
+<!--$-->
+
+
+<a name="NWD1X">We can abstract out the foreign bitfield with a function.  We will</a>
+export this function so that libraries that use this library will not
+need to import any symbols from CFFI.  Here, <code>flags</code> should be a
+list.
+<p>
+<pre><a name="NWVrt5m-1o4ddw-L" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-1o4ddw-K">&lt;-</a>D<a href="#NWD1Z">-&gt;</a>]</b>
+(defun <a href="#NWD1X">perl-call-scalar</a> (scalar flags)
+  (<a href="#NWD1T">perl-call-sv</a> scalar (foreign-bitfield-value
+                         'perl-call-flags flags)))
+
+(defun <a href="#NWD1X">perl-call-function</a> (name flags)
+  (<a href="#NWD1W">perl-call-pv</a> name (foreign-bitfield-value
+                         'perl-call-flags flags)))
+</pre><blockquote>Defines <a href="#NWI-perl-call-function"><code>perl-call-function</code></a>, <a href="#NWI-perl-call-scalar"><code>perl-call-scalar</code></a> (links are to index).<p>
+</blockquote><p>
+<pre><a name="NWVrt5m-2cLXcv-H" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2cLXcv-G">&lt;-</a>D<a href="#NWVrt5m-2cLXcv-I">-&gt;</a>]</b>
+(define-test <a href="#NWD1X">perl-call-function</a>
+  (assert-equal 1 (progn
+                    (<a href="#NWD1c">perl-eval-pv</a> 
+&quot;sub meaning_of_life { print \&quot;\\nThis should be forty-two: \&quot;,
+ $_[0], \&quot;\\n\&quot;; return $_[0]; }&quot; t)
+                    (<a href="#NWVrt5m-1o4ddw-F">pushmark</a>)
+                    (<a href="#NWD1L">pushs</a> (<a href="#NWD1P">perl-sv-2mortal</a> (<a href="#NWDK">perl-newsviv</a> 42)))
+                    (<a href="#NWD1X">perl-call-function</a> &quot;meaning_of_life&quot; '(:scalar))))
+  (assert-equal 42 (<a href="#NWDV">perl-sv-2iv</a> (<a href="#NWD1N">pops</a>))))
+</pre><p>
+
+
+
+
+<h3><a name=toc28><a name="NWD1Y">Perl Calling Contexts</a></a></h3>
+<p>
+Users of this library should not have to worry about the special flags
+used when calling Perl functions from C.  However, we can't entirely
+shield them from Perl's notion of calling contexts.  Perl functions
+can be called in <em>scalar context</em>, <em>list context</em>, or
+<em>void context</em>.  The interpreter determines the context based on
+how the return value of the function is used.  For example:
+<p>
+<pre><a name="NWVrt5m-27spZt-1" href="#NWD1Y"><dfn>&lt;sample Perl code&gt;=</dfn></a>
+my $scalar = func();  # called in scalar context
+my @array = func();  # called in list context
+func();  # called in void context (return value not used)
+</pre><p>
+
+<!-- $-->
+
+In this example, <code>func</code> may return entirely different values in each
+of the contexts in which it is called.  We cannot recreate this
+behavior in Lisp without doing ghastly things to syntax and functional
+purity.
+<p>
+Furthermore, in Perl the number 5 is indestinguishable from
+the string ``5''---both are scalars.  Lisp is dynamically typed, but
+not that dynamic; it does has <em>some</em> modesty.
+<p>
+The simplest albeit not the prettiest way out of this dilemma is to
+force the user to specify the type of the return value.  Thus, in the
+<code><a href="#NWD1i">eval-perl</a></code>, <code><a href="#NWD1b">call-perl</a></code>, and <code><a href="#NWD1b">call-perl</a>-method</code> functions,
+below, the first argument specifies the return type.
+<p>
+An argument of <code>nil</code> will call the function in void context and will
+return nothing.  Most functions will behave the same way in a void
+context as they do in scalar context, they simply discard their return
+value.
+<p>
+The following arguments will call the function in a scalar context:
+<p>
+<ul>
+
+<li><code>:integer</code>
+<p>
+<li><code>:float</code> -- a double-precision float
+<p>
+<li><code>:string</code>
+<p>
+<li><code>:object</code> -- a Perl object reference, opaque to Lisp
+<p>
+<li><code>t</code> -- automatically chooses the best representation, in
+the same order of preference as they are listed above, but always
+in scalar context
+<p>
+</ul>
+
+
+The following arguments will call the function in a list context:
+<p>
+<ul>
+
+<li><code>:list</code> -- a Lisp list
+<p>
+<li><code>:array</code> -- a Lisp array
+<p>
+<li><code>:alist</code> -- a Lisp association list (actual returned value
+must be recognizable as a Perl hash table)
+<p>
+<li><code>:hash</code> -- a Lisp hash table (actual returned value
+must be recognizable as a Perl hash table)
+<p>
+</ul>
+
+Note that Perl does not have an explicit ``hash context'' for calling
+functions.  Perl functions that return a hash table actually return a
+list in the form ``key1, value1, key2, value2.''  Assigning this list
+<a name="NWD1Z">to a Perl hash variable causes it to be interpreted as a hash table.</a>
+Again, Lisp is not quite <em>that</em> dynamic, so we must specify the
+result type.
+<p>
+
+The following function will return the correct flag, <code>:void</code>,
+<code>:scalar</code>, or <code>:array</code>, to use when calling Perl, based on the
+given return type.
+<p>
+<pre><a name="NWVrt5m-1o4ddw-M" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWD1X">&lt;-</a>D<a href="#NWVrt5m-1o4ddw-N">-&gt;</a>]</b>
+(defun <a href="#NWD1Z">context-from-type</a> (type)
+  (cond
+   ((null type) :void)
+   ((find type '(:integer :float :string t)) :scalar)
+   ((find type '(:list :array :alist :hash)) :array)
+   (t (error &quot;No Perl calling context for type ~a&quot; type))))
+</pre><blockquote>Defines <a href="#NWI-context-from-type"><code>context-from-type</code></a> (links are to index).<p>
+</blockquote><p>
+
+
+<pre><a name="NWVrt5m-1o4ddw-N" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWD1Z">&lt;-</a>D<a href="#NWD1a">-&gt;</a>]</b>
+(defun <a href="#NWVrt5m-1o4ddw-N">calling-flags</a> (type methodp)
+  (let ((flags (list :eval (<a href="#NWD1Z">context-from-type</a> type))))
+    (when methodp (push :method flags))
+    flags))
+</pre><blockquote>Defines <a href="#NWI-calling-flags"><code>calling-flags</code></a> (links are to index).<p>
+</blockquote><p>
+
+
+<a name="NWD1a">NOT CORRECTLY IMPLEMENTED YET:</a>
+<p>
+<pre><a name="NWVrt5m-1o4ddw-O" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-1o4ddw-N">&lt;-</a>D<a href="#NWD1h">-&gt;</a>]</b>
+(defun <a href="#NWD1a">get-stack-by-type</a> (type count)
+  (declare (ignore type)) ;; fix me
+  (<a href="#NWVrt5m-1o4ddw-K">get-stack-values</a> count))
+</pre><blockquote>Defines <a href="#NWI-get-stack-by-type"><code>get-stack-by-type</code></a> (links are to index).<p>
+</blockquote><p>
+
+
+<h3><a name=toc29><a name="NWD1b">Public Interface</a></a></h3>
+<p>
+THIS NEEDS TO BE REDESIGNED.
+<p>
+We cannot use <code>:discard</code> in the calling flags because that would
+destroy the return value before we can use it (discovered by trial and
+error).
+<p>
+<pre><a name="NWVrt5m-1lDiwO-2" href="#NWVrt5m-1lDiwO-1"><dfn>&lt;Wrapper Library Public Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-1lDiwO-1">&lt;-</a>D<a href="#NWD1j">-&gt;</a>]</b>
+(defun <a href="#NWD1b">call-perl</a> (function return-type methodp &amp;rest args)
+  (<a href="#NWDG">need-perl</a>)
+  (<a href="#NWD1Q">perl-scope</a> 
+   (<a href="#NWVrt5m-1o4ddw-F">pushmark</a>)
+   (<a href="#NWD1S">push-mortals-on-stack</a> args)
+   (<a href="#NWD1a">get-stack-by-type</a>
+    return-type
+    (funcall (if (stringp function) #'perl-call-function
+               ;; either a scalar string or a code reference
+               #'perl-call-scalar)
+             function
+             (<a href="#NWVrt5m-1o4ddw-N">calling-flags</a> return-type methodp)))))
+</pre><blockquote>Defines <a href="#NWI-call-perl"><code>call-perl</code></a> (links are to index).<p>
+</blockquote><p>
+
+
+<pre><a name="NWVrt5m-G4qVi-2" href="#NWVrt5m-G4qVi-1"><dfn>&lt;Wrapper Library Exports&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-VeUxt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-G4qVi-1">&lt;-</a>D<a href="#NWVrt5m-G4qVi-3">-&gt;</a>]</b>
+#:<a href="#NWD1b">call-perl</a>
+</pre><p>
+
+
+<pre><a name="NWVrt5m-3Afyvm-8" href="#NWDP"><dfn>&lt;Wrapper Library Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-3Afyvm-7">&lt;-</a>D<a href="#NWVrt5m-3Afyvm-9">-&gt;</a>]</b>
+(define-test <a href="#NWD1b">call-perl</a>
+  (<a href="#NWD1i">eval-perl</a> &quot;use CGI;&quot;)
+  (assert-equal &quot;&lt;p&gt;Hello, 1999&lt;/p&gt;&quot;
+                (<a href="#NWD1b">call-perl</a> &quot;CGI::p&quot; :string nil &quot;Hello,&quot; 1999)))
+</pre><p>
+
+
+
+
+
+
+<h2><a name=toc30>Evaluating Perl Code</a></h2>
+<p>
+We can evaluate arbitrary strings of Perl code with the
+<code><a name="NWD1c">Perl_eval_pv</a></code> function.  Its first argument is a string of Perl
+code, which may be an expression, a semicolon-terminated statement, or
+multiple semicolon-separated statements.  The second argument is a
+boolean specifying whether or not the process should die if a Perl
+error occurs.
+<p>
+<code>Perl_eval_pv</code> always returns a single scalar as its result, so the
+given statements or expressions will be evaluated in scalar context.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-i" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD1W">&lt;-</a>D<a href="#NWD1g">-&gt;</a>]</b>
+(defcfun &quot;Perl_eval_pv&quot; <a href="#NWDH">:sv</a>
+  (code :string)
+  (die-on-error :boolean))
+</pre><blockquote>Defines <a href="#NWI-perl-eval-pv"><code>perl-eval-pv</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-l" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-k">&lt;-</a>D<a href="#NWVrt5m-27XOJn-m">-&gt;</a>]</b>
+#:<a href="#NWD1c">perl-eval-pv</a>
+
+</pre><pre><a name="NWVrt5m-2cLXcv-I" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2cLXcv-H">&lt;-</a>D<a href="#NWD1d">-&gt;</a>]</b>
+(define-test eval-pv-expressions
+  (assert-equal 7 (<a href="#NWDV">perl-sv-2iv</a> (<a href="#NWD1c">perl-eval-pv</a> &quot;3 + 4&quot; nil)))
+  (assert-equal &quot;7&quot; (perl-in-lisp::<a href="#NWDX">string-from-sv</a> (<a href="#NWD1c">perl-eval-pv</a> &quot;3 + 4&quot; nil)))
+  (assert-equal &quot;olleh&quot; (perl-in-lisp::<a href="#NWDX">string-from-sv</a>
+                         (<a href="#NWD1c">perl-eval-pv</a> &quot;reverse 'hello'&quot; nil))))
+</pre><p>
+
+<a name="NWD1d">Anything that can go in a normal Perl script can be used in</a>
+<code>Perl_eval_pv</code>: you can load other modules, create variables, and
+declare packages.
+<p>
+<pre><a name="NWVrt5m-2cLXcv-J" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2cLXcv-I">&lt;-</a>D<a href="#NWD1e">-&gt;</a>]</b>
+(define-test eval-pv-multi-statement
+  (assert-equal &quot;&lt;p align=\&quot;center\&quot;&gt;Hello, world!&lt;/p&gt;&quot;
+                (perl-in-lisp::<a href="#NWDX">string-from-sv</a>
+                 (<a href="#NWD1c">perl-eval-pv</a> &quot;
+package PerlInLisp::Tests;
+use CGI;
+my $cgi = new CGI;
+$cgi-&gt;p({align=&gt;'center'}, 'Hello, world!');&quot; nil))))
+</pre><p>
+
+<a name="NWD1e">Note that a single call to </a><code>Perl_eval_pv</code> defines a block of Perl
+scope.  Local variables declared with <code>my</code> will not retain their
+value between calls.
+<p>
+<pre><a name="NWVrt5m-2cLXcv-K" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWD1d">&lt;-</a>D<a href="#NWD1f">-&gt;</a>]</b>
+(define-test eval-pv-local-scope
+  (assert-equal 385 (<a href="#NWDV">perl-sv-2uv</a> (<a href="#NWD1c">perl-eval-pv</a> &quot;my $x = 385&quot; nil)))
+  (assert-equal 0 (<a href="#NWDV">perl-sv-2uv</a> (<a href="#NWD1c">perl-eval-pv</a> &quot;$x&quot; nil))))
+</pre><p>
+
+<a name="NWD1f">To keep values between calls, you must use package-global variables.</a>
+<p>
+<pre><a name="NWVrt5m-2cLXcv-L" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWD1e">&lt;-</a>D<a href="#NWVrt5m-2cLXcv-M">-&gt;</a>]</b>
+(define-test eval-pv-global-scope
+  (assert-equal 200 (<a href="#NWDV">perl-sv-2uv</a> (<a href="#NWD1c">perl-eval-pv</a> &quot;$var = 200&quot; nil)))
+  (assert-equal 200 (<a href="#NWDV">perl-sv-2uv</a> (<a href="#NWD1c">perl-eval-pv</a> &quot;$var&quot; nil))))
+</pre><p>
+
+
+<code><a name="NWD1g">Perl_eval_pv</a></code> is actually only a shortcut for the more general
+<code>Perl_eval_sv</code>, which takes the code argument as a scalar.  Its
+second argument is the same set of flags as those used by
+<code>Perl_call_sv</code>.  Also like <code>call_sv</code>, its integer return value is
+the number of result values placed on the Perl stack.
+<p>
+<pre><a name="NWVrt5m-2xmHUS-j" href="#NWD7"><dfn>&lt;CFFI Definitions&gt;+=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b> <b>[<a href="#NWD1c">&lt;-</a>D]</b>
+(defcfun &quot;Perl_eval_sv&quot; :i32
+  (code <a href="#NWDH">:sv</a>)
+  (flags :i32))
+</pre><blockquote>Defines <a href="#NWI-perl-eval-sv"><code>perl-eval-sv</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-27XOJn-m" href="#NWVrt5m-27XOJn-1"><dfn>&lt;perl-api Exports&gt;+=</dfn></a> <b>(<a href="#NWD1m">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-27XOJn-l">&lt;-</a>D]</b>
+#:<a href="#NWD1g">perl-eval-sv</a>
+</pre><p>
+
+<pre><a name="NWVrt5m-2cLXcv-M" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWD1f">&lt;-</a>D<a href="#NWVrt5m-2cLXcv-N">-&gt;</a>]</b>
+(define-test eval-sv
+  (assert-equal 1 (<a href="#NWD1g">perl-eval-sv</a> (<a href="#NWDL">perl-newsvpv</a> &quot;20 + 7&quot; 0)
+                                (foreign-bitfield-value
+                                 'perl-call-flags
+                                 '(:scalar :eval))))
+  (assert-equal 27 (<a href="#NWDV">perl-sv-2iv</a> (<a href="#NWD1N">pops</a>))))
+</pre><p>
+
+<a name="NWD1h">We can abstract away the bitfield here just as with the </a><code>perl-call</code>
+functions.
+<p>
+<pre><a name="NWVrt5m-1o4ddw-P" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWD1a">&lt;-</a>D<a href="#NWD1i">-&gt;</a>]</b>
+(defun <a href="#NWD1h">perl-eval-scalar</a> (scalar flags)
+  (<a href="#NWD1g">perl-eval-sv</a> scalar (foreign-bitfield-value
+                        'perl-call-flags flags)))
+</pre><blockquote>Defines <a href="#NWI-perl-eval-scalar"><code>perl-eval-scalar</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-2cLXcv-N" href="#NWVrt5m-2cLXcv-1"><dfn>&lt;API Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-2cLXcv-M">&lt;-</a>D]</b>
+(define-test <a href="#NWD1h">perl-eval-scalar</a>
+  (assert-equal 1 (<a href="#NWD1h">perl-eval-scalar</a> (<a href="#NWDL">perl-newsvpv</a> &quot;33+1&quot; 0) '(:scalar)))
+  (assert-equal 34 (<a href="#NWDV">perl-sv-2iv</a> (<a href="#NWD1N">pops</a>))))
+</pre><p>
+
+
+<a name="NWD1i">This wrapper function will evaluate the given string of Perl code in scalar</a>
+context, returning whatever that code returns, automatically converted
+to the most likely Lisp type.
+<p>
+<pre><a name="NWVrt5m-1o4ddw-Q" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWD1h">&lt;-</a>D<a href="#NWD1k">-&gt;</a>]</b>
+(defun <a href="#NWD1i">eval-perl</a> (code)
+  (<a href="#NWDG">need-perl</a>)
+  (<a href="#NWD1Q">perl-scope</a>
+   (<a href="#NWVrt5m-1o4ddw-K">get-stack-values</a>
+    (<a href="#NWD1h">perl-eval-scalar</a> (<a href="#NWD1P">perl-sv-2mortal</a> (<a href="#NWDL">perl-newsvpv</a> code 0))
+                      '(:scalar :eval)))))
+</pre><blockquote>Defines <a href="#NWI-eval-perl"><code>eval-perl</code></a> (links are to index).<p>
+</blockquote><p>
+
+
+<pre><a name="NWVrt5m-3Afyvm-9" href="#NWDP"><dfn>&lt;Wrapper Library Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-3Afyvm-8">&lt;-</a>D<a href="#NWVrt5m-3Afyvm-A">-&gt;</a>]</b>
+(define-test <a href="#NWD1i">eval-perl</a>
+  (assert-equal 7 (<a href="#NWD1i">eval-perl</a> &quot;3+4&quot;))
+  (assert-equal &quot;abcdef&quot; (<a href="#NWD1i">eval-perl</a> &quot;'abc' . 'def'&quot;))
+  (assert-equal '(1 2 3) (<a href="#NWD1i">eval-perl</a> &quot;[1, 2, 3];&quot;)))
+
+(define-test <a href="#NWD1i">eval-perl</a>-with-hash
+  (let ((hash
+         (<a href="#NWD1i">eval-perl</a>
+          &quot;{aa =&gt; 1, bb =&gt; 3.14, cc =&gt; 'hello'};&quot;)))
+    (assert-true (hash-table-p hash))
+    (assert-equal 1 (gethash &quot;aa&quot; hash))
+    (assert-true (&lt; 3.13 (gethash &quot;bb&quot; hash) 3.15))
+    (assert-equal &quot;hello&quot; (gethash &quot;cc&quot; hash))
+    ))
+
+(define-test <a href="#NWD1i">eval-perl</a>-creating-hash
+  (let ((hash (make-hash-table)))
+    (setf (gethash 'key1 hash) &quot;one&quot;)
+    (setf (gethash 'key2 hash) &quot;two&quot;)
+    (setf (gethash 'key3 hash) &quot;three&quot;)
+    (let ((new-hash (<a href="#NWVrt5m-1o4ddw-T">lisp-from-perl</a> (<a href="#NWD1k">perl-from-lisp</a> hash))))
+      (assert-true (hash-table-p new-hash))
+      (assert-equal &quot;one&quot; (gethash &quot;KEY1&quot; new-hash))
+      (assert-equal &quot;two&quot; (gethash &quot;KEY2&quot; new-hash))
+      (assert-equal &quot;three&quot; (gethash &quot;KEY3&quot; new-hash)))))
+</pre><p>
+
+
+
+
+
+<h2><a name=toc31><a name="NWD1j">Loading Perl Modules</a></a></h2>
+<p>
+The Perl API provides the <code>load_module</code> function as an equivalent to
+the <code>use</code> directive in Perl code.  I could never make it work
+correctly, and it seems to require a module version number anyway.  As
+a simpler alternative, evaluate a standard Perl <code>use</code> statement in
+an <code><a href="#NWD1i">eval-perl</a></code>.
+<p>
+<pre><a name="NWVrt5m-1lDiwO-3" href="#NWVrt5m-1lDiwO-1"><dfn>&lt;Wrapper Library Public Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWD1b">&lt;-</a>D]</b>
+(defun <a href="#NWD1j">use-perl-module</a> (name &amp;optional version)
+  (<a href="#NWD1i">eval-perl</a> (format nil &quot;use ~A ~@[~A~];&quot; name version)))
+</pre><blockquote>Defines <a href="#NWI-use-perl-module"><code>use-perl-module</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-G4qVi-3" href="#NWVrt5m-G4qVi-1"><dfn>&lt;Wrapper Library Exports&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-VeUxt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-G4qVi-2">&lt;-</a>D]</b>
+#:<a href="#NWD1j">use-perl-module</a>
+</pre><p>
+
+
+
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+
+
+
+<h2><a name=toc32>Automatic Type Conversions</a></h2>
+<p>
+<a name="NWD1k">It would be really useful to have generic functions that would convert</a>
+automatically between appropriate types.  Perl arrays can become Lisp
+lists, hash tables can be hashes, and so on.
+<p>
+Here I follow the slightly out-of-fashion Hungarian notation of naming
+conversion functions ``x FROM y'' rather than ``y TO x.'' I find the
+former easier to read, because it puts the type name closest to the
+object that is of that type.
+<p>
+<pre><a name="NWVrt5m-1o4ddw-R" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWD1i">&lt;-</a>D<a href="#NWD1l">-&gt;</a>]</b>
+(defgeneric <a href="#NWD1k">perl-from-lisp</a> (value))
+
+(defmethod <a href="#NWD1k">perl-from-lisp</a> ((value integer))
+  (<a href="#NWDG">need-perl</a>)
+  (cond
+   ((and (&lt;= 0 value 4294967295)) ;; 32-bit unsigned integers
+    (<a href="#NWDK">perl-newsvuv</a> value))
+   ((and (&gt; 0 value -2147483648)) ;; 32-bit signed integers
+    (<a href="#NWDK">perl-newsviv</a> value))
+   (t (error &quot;Integer value out of range for Perl;
+BigInts not supported&quot;))))
+
+(defmethod <a href="#NWD1k">perl-from-lisp</a> ((value float))
+  (<a href="#NWDG">need-perl</a>)
+  (<a href="#NWDK">perl-newsvnv</a>
+   ;; ensure VALUE is a double-float
+   (float value 1.0d0)))
+
+(defmethod <a href="#NWD1k">perl-from-lisp</a> ((value string))
+  (<a href="#NWDG">need-perl</a>)
+  (<a href="#NWDL">perl-newsvpv</a> value 0))
+
+(defmethod <a href="#NWD1k">perl-from-lisp</a> ((value list))
+  (let ((a (<a href="#NWDh">perl-newav</a>)))
+    (loop for i in value
+          ;; Perl's &quot;push&quot; pushes to the *end* of the array
+          do (<a href="#NWDo">perl-av-push</a> a (<a href="#NWD1k">perl-from-lisp</a> i)))
+    a))
+
+(defmethod <a href="#NWD1k">perl-from-lisp</a> ((value hash-table))
+  (<a href="#NWD17">hv-from-hash</a> value))
+</pre><blockquote>Defines <a href="#NWI-perl-from-lisp"><code>perl-from-lisp</code></a> (links are to index).<p>
+</blockquote><p>
+
+
+<a name="NWD1l">While the Perl API uses </a><code>&amp;PL_sv_undef</code> to indicate an <code>undef</code>
+value, the recommended way to add undefined values to arrays and
+hashes is to create a new empty scalar.
+<p>
+<pre><a name="NWVrt5m-1o4ddw-S" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWD1k">&lt;-</a>D<a href="#NWVrt5m-1o4ddw-T">-&gt;</a>]</b>
+(defmethod <a href="#NWD1k">perl-from-lisp</a> ((value null)) ; NIL isn't a class; NULL is
+  (<a href="#NWDJ">perl-newsv</a> 0))
+</pre><p>
+
+<pre><a name="NWVrt5m-1o4ddw-T" href="#NWD8"><dfn>&lt;Wrapper Library Internal Functions&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b> <b>[<a href="#NWD1l">&lt;-</a>D]</b>
+(defun <a href="#NWVrt5m-1o4ddw-T">lisp-from-perl</a> (p)
+  (ecase (<a href="#NWDQ">svtype</a> p)
+    (:null nil)
+    (:iv (<a href="#NWDV">perl-sv-2iv</a> p))
+    (:nv (<a href="#NWDV">perl-sv-2nv</a> p))
+    (:rv (<a href="#NWVrt5m-1o4ddw-T">lisp-from-perl</a> (<a href="#NWVrt5m-1o4ddw-E">deref-rv</a> p)))
+    (:pv (<a href="#NWDX">string-from-sv</a> p))
+    (:pviv (cffi:mem-ref p :iv))
+    (:pvnv (cffi:mem-ref p :nv))
+    (:pvmg (error &quot;Blessed or magical scalars not supported yet&quot;))
+    (:pvav (<a href="#NWDx">list-from-av</a> p))
+    (:pvhv (<a href="#NWD16">hash-from-hv</a> p))))
+</pre><blockquote>Defines <a href="#NWI-lisp-from-perl"><code>lisp-from-perl</code></a> (links are to index).<p>
+</blockquote><p>
+
+<pre><a name="NWVrt5m-3Afyvm-A" href="#NWDP"><dfn>&lt;Wrapper Library Tests&gt;+=</dfn></a> <b>(<a href="#NWVrt5m-1wKeGt-1">U-&gt;</a>)</b> <b>[<a href="#NWVrt5m-3Afyvm-9">&lt;-</a>D]</b>
+(define-test <a href="#NWVrt5m-1o4ddw-T">lisp-from-perl</a>-scalars
+  (assert-equal 42 (<a href="#NWVrt5m-1o4ddw-T">lisp-from-perl</a> (<a href="#NWD1k">perl-from-lisp</a> 42)))
+  (assert-equal &quot;Hello, world!&quot;
+                (<a href="#NWVrt5m-1o4ddw-T">lisp-from-perl</a> (<a href="#NWD1k">perl-from-lisp</a> &quot;Hello, world!&quot;)))
+  (assert-true
+   ;; we can't get exact equality from floats
+   (&lt; 3.14589 (<a href="#NWVrt5m-1o4ddw-T">lisp-from-perl</a> (<a href="#NWD1k">perl-from-lisp</a> 3.1459)) 3.14591))
+  (assert-equal nil (<a href="#NWVrt5m-1o4ddw-T">lisp-from-perl</a> (<a href="#NWD1k">perl-from-lisp</a> nil))))
+</pre><p>
+
+
+
+
+
+
+
+
+
+<h2><a name=toc33><a name="NWD1m">Packages</a></a></h2>
+<p>
+<pre><a name="NWVrt5m-3whRcq-1" href="#NWD1m"><dfn>&lt;perl-api Package Definition&gt;=</dfn></a> <b>(<a href="#NWD1o">U-&gt;</a>)</b>
+;;;; perlapi.lisp - CFFI definitions for the Perl C API
+
+<a name="NWVrt5m-3whRcq-1-u1" href="#NWD1q"><i>&lt;License Header&gt;</i></a>
+
+(cl:in-package :common-lisp-user)
+
+(defpackage :<a href="#NWD1m">perl-api</a>
+  (:use :common-lisp :cffi :cffi-address)
+  (:export <a name="NWVrt5m-3whRcq-1-u2" href="#NWVrt5m-27XOJn-1"><i>&lt;perl-api Exports&gt;</i></a>))
+
+(in-package :<a href="#NWD1m">perl-api</a>)
+</pre><blockquote>Defines <a href="#NWI-perl-api"><code>perl-api</code></a> (links are to index).<p>
+</blockquote><p>
+
+
+<pre><a name="NWVrt5m-VeUxt-1" href="#NWVrt5m-VeUxt-1"><dfn>&lt;perl-in-lisp Package Definition&gt;=</dfn></a> <b>(<a href="#NWVrt5m-ScKbO-1">U-&gt;</a>)</b>
+;;;; Perl-in.lisp - Lisp interface to the Perl API
+
+<a name="NWVrt5m-VeUxt-1-u1" href="#NWD1q"><i>&lt;License Header&gt;</i></a>
+
+(cl:in-package :common-lisp-user)
+
+(defpackage :perl-in-lisp
+  (:use :common-lisp :cffi :cffi-address :<a href="#NWD1m">perl-api</a>)
+  (:nicknames :perl)
+  (:export <a name="NWVrt5m-VeUxt-1-u2" href="#NWVrt5m-G4qVi-1"><i>&lt;Wrapper Library Exports&gt;</i></a>))
+
+(in-package :perl-in-lisp)
+</pre><p>
+
+
+<h2><a name=toc34><a name="NWD1n">ASDF System Definition</a></a></h2>
+<p>
+<pre><a name="NWVrt5m-1hPmHy-1" href="#NWD1n"><dfn>&lt;perl-in-lisp.asd&gt;=</dfn></a>
+;;;; perl-in-lisp.asd - ASDF definition for a Lisp interface to Perl
+
+<a name="NWVrt5m-1hPmHy-1-u1" href="#NWD1q"><i>&lt;License Header&gt;</i></a>
+
+(defpackage :perl-in-lisp.system
+  (:documentation &quot;ASDF system package for PERL-IN-LISP.&quot;)
+  (:use :common-lisp :asdf))
+
+(in-package :perl-in-lisp.system)
+
+(defsystem :perl-in-lisp
+  :components ((:static-file &quot;perl-in-lisp.asd&quot;)
+               (:module :src
+                        :serial t
+                        :components ((:file &quot;address&quot;)
+                                     (:file &quot;perlapi&quot;)
+                                     (:file &quot;perl-in&quot;))))
+  :depends-on (:cffi))
+
+
+(defsystem :perl-in-lisp.test
+  :components ((:module :tests
+                        :serial t
+                        :components ((:file &quot;lisp-unit&quot;)
+                                     (:file &quot;tests&quot;))))
+  :depends-on (:perl-in-lisp))
+
+
+(defmethod perform ((op asdf:test-op) (system (eql (find-system :perl-in-lisp))))
+  (asdf:oos 'asdf:load-op :perl-in-lisp.test)
+  (format t &quot;Tests loaded.
+Change to package PERL-IN-LISP and execute
+(RUN-TESTS) to run all tests.&quot;))
+
+</pre><p>
+
+
+
+<h2><a name=toc35><a name="NWD1o">Output Files</a></a></h2>
+<p>
+<pre><a name="NWVrt5m-2QxT4N-1" href="#NWD1o"><dfn>&lt;perlapi.lisp&gt;=</dfn></a>
+<a name="NWVrt5m-2QxT4N-1-u1" href="#NWD1m"><i>&lt;perl-api Package Definition&gt;</i></a>
+<a name="NWVrt5m-2QxT4N-1-u2" href="#NWD1"><i>&lt;Libperl foreign library definition&gt;</i></a>
+<a name="NWVrt5m-2QxT4N-1-u3" href="#NWD2"><i>&lt;Perl API Types&gt;</i></a>
+<a name="NWVrt5m-2QxT4N-1-u4" href="#NWD7"><i>&lt;CFFI Definitions&gt;</i></a>
+</pre><p>
+
+<pre><a name="NWVrt5m-ScKbO-1" href="#NWVrt5m-ScKbO-1"><dfn>&lt;perl-in.lisp&gt;=</dfn></a>
+<a name="NWVrt5m-ScKbO-1-u1" href="#NWVrt5m-VeUxt-1"><i>&lt;perl-in-lisp Package Definition&gt;</i></a>
+<a name="NWVrt5m-ScKbO-1-u2" href="#NWDF"><i>&lt;Wrapper Library Globals&gt;</i></a>
+<a name="NWVrt5m-ScKbO-1-u3" href="#NWD1Q"><i>&lt;Wrapper Library Macros&gt;</i></a>
+<a name="NWVrt5m-ScKbO-1-u4" href="#NWD8"><i>&lt;Wrapper Library Internal Functions&gt;</i></a>
+<a name="NWVrt5m-ScKbO-1-u5" href="#NWVrt5m-1lDiwO-1"><i>&lt;Wrapper Library Public Functions&gt;</i></a>
+</pre><p>
+
+<pre><a name="NWVrt5m-1wKeGt-1" href="#NWVrt5m-1wKeGt-1"><dfn>&lt;tests.lisp&gt;=</dfn></a>
+;;;; tests.lisp -- Unit tests (with Lisp-Unit) for Perl-in-Lisp
+
+<a name="NWVrt5m-1wKeGt-1-u1" href="#NWD1q"><i>&lt;License Header&gt;</i></a>
+
+(in-package :common-lisp-user)
+
+;; (defpackage :perl-in-lisp.test
+;;   (:use :common-lisp :perl-in-lisp :<a href="#NWD1m">perl-api</a>
+;;      :lisp-unit :cffi :cffi-address)
+;;   (:export #:run-tests)
+
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (use-package :lisp-unit :perl-in-lisp))
+
+(in-package :perl-in-lisp)
+<a name="NWVrt5m-1wKeGt-1-u2" href="#NWVrt5m-2cLXcv-1"><i>&lt;API Tests&gt;</i></a>
+<a name="NWVrt5m-1wKeGt-1-u3" href="#NWDP"><i>&lt;Wrapper Library Tests&gt;</i></a>
+</pre><p>
+
+
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+
+<h2><a name=toc36>Development Aids</a></h2>
+<p>
+
+
+<h3><a name=toc37>Makefile</a></h3><a name="makefile"><b>[*]</b></a>
+<p>
+Edit this Makefile as needed, then extract it with the following
+command:
+<p>
+<code>notangle -t8 perl-in-lisp.nw &gt;Makefile</code>
+<p>
+To generate the source code and documentation (DVI) run <code>make</code>.
+<p>
+The other defined makefile targets are:
+<p>
+<code>doc</code> --- only generate the documentation
+<p>
+<code><a name="NWD1p">code</a></code> --- only extract the source code
+<p>
+<code>pdf</code> --- generate PDF documentation instead of DVI (requires
+pdflatex)
+<p>
+<code>html</code> --- generate HTML documentation
+<p>
+To re-extract this Makefile, run <code>make remake</code>.
+<p>
+<pre><a name="NWVrt5m-1p0Y9w-1" href="#NWD1p"><dfn>&lt;*&gt;=</dfn></a>
+SHELL=/bin/sh
+TANGLE=notangle
+WEAVE=noweave
+LATEX=latex
+PDFLATEX=pdflatex
+ENSURE_DIR=mkdir -p
+FASLS=*.fasl *.fas *.lib *.x86f
+
+all: code doc
+
+code: perl-in-lisp.nw
+        $(ENSURE_DIR) src tests
+        $(TANGLE) -Rperl-in-lisp.asd  perl-in-lisp.nw &gt;perl-in-lisp.asd
+        $(TANGLE) -Raddress.lisp  perl-in-lisp.nw &gt;src/address.lisp
+        $(TANGLE) -Rperlapi.lisp  perl-in-lisp.nw &gt;src/perlapi.lisp
+        $(TANGLE) -Rperl-in.lisp perl-in-lisp.nw &gt;src/perl-in.lisp
+        $(TANGLE) -Rtests.lisp  perl-in-lisp.nw &gt;tests/tests.lisp
+
+doc: perl-in-lisp.nw
+        $(ENSURE_DIR) doc
+        $(WEAVE) -t8 -latex -delay -index perl-in-lisp.nw &gt;doc/perl-in-lisp.tex
+        # run latex twice to get references right
+        cd doc; $(LATEX) perl-in-lisp.tex; $(LATEX) perl-in-lisp.tex
+
+# pdf depends on doc to ensure latex was already run once to generate
+# references and table of contents
+pdf: doc
+        cd doc; $(PDFLATEX) perl-in-lisp.tex
+
+html: perl-in-lisp.nw
+        $(WEAVE) -index -html -filter l2h perl-in-lisp.nw | htmltoc &gt;doc/perl-in-lisp.html
+
+remake: perl-in-lisp.nw
+        $(TANGLE) -t8 perl-in-lisp.nw &gt;Makefile
+
+clean: 
+        rm -f *~ *.out $(FASLS)
+        cd src; rm -f $(FASLS)
+        cd tests; rm -f $(FASLS)
+        cd doc; rm -f *.aux *.log *.tex *.toc
+
+dist: remake code doc html clean
+        cd doc; rm -f *.dvi *.pdf
+</pre><p>
+
+<!--$-->
+
+<!--|-->
+
+<h3><a name=toc38>List of All Code Chunks</a></h3>
+<p>
+This list is automatically generated by Noweb.
+<p>
+<nowebchunks>
+<h3><a name=toc39>Symbol Index</a></h3>
+<p>
+This list is automatically generated by Noweb.  The underlined number
+<a name="NWD1q">after each symbol specifies the page and code chunk on which that</a>
+symbol is defined; other numbers specify pages and chunks where that
+symbol is used.<p><br>
+<nowebindex>
+
+<h2><a name=toc40>License (LLGPL)</a></h2>
+<p>
+<pre><a name="NWVrt5m-n9O9F-1" href="#NWD1q"><dfn>&lt;License Header&gt;=</dfn></a> <b>(<a href="#NWD1E">&lt;-U</a> <a href="#NWD1m">&lt;-U</a> <a href="#NWVrt5m-VeUxt-1">&lt;-U</a> <a href="#NWD1n">&lt;-U</a> <a href="#NWVrt5m-1wKeGt-1">&lt;-U</a>)</b>
+;;; Copyright 2006 Stuart Sierra
+
+;;; This program is free software; you can redistribute it and/or
+;;; modify it under the terms of the Lisp Lesser GNU General Public
+;;; License (LLGPL) published by Franz, Inc., available at
+;;; http://opensource.franz.com/preamble.html
+
+;;; This program is distributed in the hope that it will be useful,
+;;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;;; Lesser GNU General Public License for more details.
+</pre><p>
+
+
+
+<a name="NWD1r">*</a>
+
+
+<ul>
+<li><a href="#NWD1p"><i>&lt;*&gt;</i></a>: <a href="#NWD1p">D1</a>
+<li><a href="#NWD1B"><i>&lt;:address Type&gt;</i></a>: <a href="#NWD1B">D1</a>, <a href="#NWD1E">U2</a>
+<li><a href="#NWD1I"><i>&lt;<code>EXTEND</code> macro in C&gt;</i></a>: <a href="#NWD1I">D1</a>
+<li><a href="#NWD1M"><i>&lt;<code>POPs</code> macro in C&gt;</i></a>: <a href="#NWD1M">D1</a>
+<li><a href="#NWD1G"><i>&lt;<code>PUSHMARK</code> macro in C&gt;</i></a>: <a href="#NWD1G">D1</a>
+<li><a href="#NWD1K"><i>&lt;<code>XPUSHs</code> macro in C&gt;</i></a>: <a href="#NWD1K">D1</a>
+<li><a href="#NWD1E"><i>&lt;address.lisp&gt;</i></a>: <a href="#NWD1E">D1</a>
+<li><a href="#NWVrt5m-2cLXcv-1"><i>&lt;API Tests&gt;</i></a>: <a href="#NWVrt5m-2cLXcv-1">D1</a>, <a href="#NWVrt5m-2cLXcv-2">D2</a>, <a href="#NWVrt5m-2cLXcv-3">D3</a>, <a href="#NWVrt5m-2cLXcv-4">D4</a>, <a href="#NWDl">D5</a>, <a href="#NWVrt5m-2cLXcv-6">D6</a>, <a href="#NWVrt5m-2cLXcv-7">D7</a>, <a href="#NWVrt5m-2cLXcv-8">D8</a>, <a href="#NWVrt5m-2cLXcv-9">D9</a>, <a href="#NWVrt5m-2cLXcv-A">D10</a>, <a href="#NWVrt5m-2cLXcv-B">D11</a>, <a href="#NWVrt5m-2cLXcv-C">D12</a>, <a href="#NWVrt5m-2cLXcv-D">D13</a>, <a href="#NWD1O">D14</a>, <a href="#NWD1R">D15</a>, <a href="#NWVrt5m-2cLXcv-G">D16</a>, <a href="#NWVrt5m-2cLXcv-H">D17</a>, <a href="#NWVrt5m-2cLXcv-I">D18</a>, <a href="#NWD1d">D19</a>, <a href="#NWD1e">D20</a>, <a href="#NWD1f">D21</a>, <a href="#NWVrt5m-2cLXcv-M">D22</a>, <a href="#NWVrt5m-2cLXcv-N">D23</a>, <a href="#NWVrt5m-1wKeGt-1">U24</a>
+<li><a href="#NWD7"><i>&lt;CFFI Definitions&gt;</i></a>: <a href="#NWD7">D1</a>, <a href="#NWDC">D2</a>, <a href="#NWDD">D3</a>, <a href="#NWDJ">D4</a>, <a href="#NWDK">D5</a>, <a href="#NWDL">D6</a>, <a href="#NWDM">D7</a>, <a href="#NWDN">D8</a>, <a href="#NWDU">D9</a>, <a href="#NWDV">D10</a>, <a href="#NWDW">D11</a>, <a href="#NWDa">D12</a>, <a href="#NWDb">D13</a>, <a href="#NWDd">D14</a>, <a href="#NWDh">D15</a>, <a href="#NWDi">D16</a>, <a href="#NWDk">D17</a>, <a href="#NWDm">D18</a>, <a href="#NWDn">D19</a>, <a href="#NWDo">D20</a>, <a href="#NWDp">D21</a>, <a href="#NWDq">D22</a>, <a href="#NWDr">D23</a>, <a href="#NWDs">D24</a>, <a href="#NWDt">D25</a>, <a href="#NWDu">D26</a>, <a href="#NWDv">D27</a>, <a href="#NWVrt5m-2xmHUS-S">D28</a>, <a href="#NWDz">D29</a>, <a href="#NWD10">D30</a>, <a href="#NWD11">D31</a>, <a href="#NWD12">D32</a>, <a href="#NWD13">D33</a>, <a href="#NWD14">D34</a>, <a href="#NWVrt5m-2xmHUS-Z">D35</a>, <a href="#NWD18">D36</a>, <a href="#NWD1F">D37</a>, <a href="#NWD1H">D38</a>, <a href="#NWD1J">D39</a>, <a href="#NWD1P">D40</a>, <a href="#NWD1T">D41</a>, <a href="#NWD1U">D42</a>, <a href="#NWD1W">D43</a>, <a href="#NWD1c">D44</a>, <a href="#NWD1g">D45</a>, <a href="#NWD1o">U46</a>
+<li><a href="#NWDA"><i>&lt;Create Command-Line Argument Array&gt;</i></a>: <a href="#NWD8">U1</a>, <a href="#NWDA">D2</a>
+<li><a href="#NWD1A"><i>&lt;Determine Pointer Size&gt;</i></a>: <a href="#NWD1A">D1</a>, <a href="#NWD1E">U2</a>
+<li><a href="#NWD9"><i>&lt;Embedding Command Line Arguments In C&gt;</i></a>: <a href="#NWD9">D1</a>
+<li><a href="#NWD1"><i>&lt;Libperl foreign library definition&gt;</i></a>: <a href="#NWD1">D1</a>, <a href="#NWD1o">U2</a>
+<li><a href="#NWD1q"><i>&lt;License Header&gt;</i></a>: <a href="#NWD1E">U1</a>, <a href="#NWD1m">U2</a>, <a href="#NWVrt5m-VeUxt-1">U3</a>, <a href="#NWD1n">U4</a>, <a href="#NWVrt5m-1wKeGt-1">U5</a>, <a href="#NWD1q">D6</a>
+<li><a href="#NWD1C"><i>&lt;Macros for Using :address&gt;</i></a>: <a href="#NWD1C">D1</a>, <a href="#NWD1D">D2</a>, <a href="#NWD1E">U3</a>
+<li><a href="#NWD2"><i>&lt;Perl API Types&gt;</i></a>: <a href="#NWD2">D1</a>, <a href="#NWD3">D2</a>, <a href="#NWD4">D3</a>, <a href="#NWD5">D4</a>, <a href="#NWD6">D5</a>, <a href="#NWDH">D6</a>, <a href="#NWDI">D7</a>, <a href="#NWDQ">D8</a>, <a href="#NWDg">D9</a>, <a href="#NWDy">D10</a>, <a href="#NWD15">D11</a>, <a href="#NWD19">D12</a>, <a href="#NWD1o">U13</a>
+<li><a href="#NWVrt5m-27XOJn-1"><i>&lt;perl-api Exports&gt;</i></a>: <a href="#NWVrt5m-27XOJn-1">D1</a>, <a href="#NWVrt5m-27XOJn-2">D2</a>, <a href="#NWVrt5m-27XOJn-3">D3</a>, <a href="#NWVrt5m-27XOJn-4">D4</a>, <a href="#NWVrt5m-27XOJn-5">D5</a>, <a href="#NWVrt5m-27XOJn-6">D6</a>, <a href="#NWVrt5m-27XOJn-7">D7</a>, <a href="#NWVrt5m-27XOJn-8">D8</a>, <a href="#NWVrt5m-27XOJn-9">D9</a>, <a href="#NWVrt5m-27XOJn-A">D10</a>, <a href="#NWVrt5m-27XOJn-B">D11</a>, <a href="#NWVrt5m-27XOJn-C">D12</a>, <a href="#NWVrt5m-27XOJn-D">D13</a>, <a href="#NWVrt5m-27XOJn-E">D14</a>, <a href="#NWVrt5m-27XOJn-F">D15</a>, <a href="#NWVrt5m-27XOJn-G">D16</a>, <a href="#NWVrt5m-27XOJn-H">D17</a>, <a href="#NWVrt5m-27XOJn-I">D18</a>, <a href="#NWVrt5m-27XOJn-J">D19</a>, <a href="#NWVrt5m-27XOJn-K">D20</a>, <a href="#NWVrt5m-27XOJn-L">D21</a>, <a href="#NWVrt5m-27XOJn-M">D22</a>, <a href="#NWVrt5m-27XOJn-N">D23</a>, <a href="#NWVrt5m-27XOJn-O">D24</a>, <a href="#NWVrt5m-27XOJn-P">D25</a>, <a href="#NWVrt5m-27XOJn-Q">D26</a>, <a href="#NWVrt5m-27XOJn-R">D27</a>, <a href="#NWVrt5m-27XOJn-S">D28</a>, <a href="#NWVrt5m-27XOJn-T">D29</a>, <a href="#NWVrt5m-27XOJn-U">D30</a>, <a href="#NWVrt5m-27XOJn-V">D31</a>, <a href="#NWVrt5m-27XOJn-W">D32</a>, <a href="#NWVrt5m-27XOJn-X">D33</a>, <a href="#NWVrt5m-27XOJn-Y">D34</a>, <a href="#NWVrt5m-27XOJn-Z">D35</a>, <a href="#NWVrt5m-27XOJn-a">D36</a>, <a href="#NWVrt5m-27XOJn-b">D37</a>, <a href="#NWVrt5m-27XOJn-c">D38</a>, <a href="#NWVrt5m-27XOJn-d">D39</a>, <a href="#NWVrt5m-27XOJn-e">D40</a>, <a href="#NWVrt5m-27XOJn-f">D41</a>, <a href="#NWVrt5m-27XOJn-g">D42</a>, <a href="#NWVrt5m-27XOJn-h">D43</a>, <a href="#NWVrt5m-27XOJn-i">D44</a>, <a href="#NWD1V">D45</a>, <a href="#NWVrt5m-27XOJn-k">D46</a>, <a href="#NWVrt5m-27XOJn-l">D47</a>, <a href="#NWVrt5m-27XOJn-m">D48</a>, <a href="#NWD1m">U49</a>
+<li><a href="#NWD1m"><i>&lt;perl-api Package Definition&gt;</i></a>: <a href="#NWD1m">D1</a>, <a href="#NWD1o">U2</a>
+<li><a href="#NWVrt5m-VeUxt-1"><i>&lt;perl-in-lisp Package Definition&gt;</i></a>: <a href="#NWVrt5m-VeUxt-1">D1</a>, <a href="#NWVrt5m-ScKbO-1">U2</a>
+<li><a href="#NWD1n"><i>&lt;perl-in-lisp.asd&gt;</i></a>: <a href="#NWD1n">D1</a>
+<li><a href="#NWVrt5m-ScKbO-1"><i>&lt;perl-in.lisp&gt;</i></a>: <a href="#NWVrt5m-ScKbO-1">D1</a>
+<li><a href="#NWD1o"><i>&lt;perlapi.lisp&gt;</i></a>: <a href="#NWD1o">D1</a>
+<li><a href="#NWD1Y"><i>&lt;sample Perl code&gt;</i></a>: <a href="#NWD1Y">D1</a>
+<li><a href="#NWDB"><i>&lt;Start Interpreter Running&gt;</i></a>: <a href="#NWD8">U1</a>, <a href="#NWDB">D2</a>
+<li><a href="#NWDR"><i>&lt;SvTYPE macros in C&gt;</i></a>: <a href="#NWDR">D1</a>
+<li><a href="#NWVrt5m-1wKeGt-1"><i>&lt;tests.lisp&gt;</i></a>: <a href="#NWVrt5m-1wKeGt-1">D1</a>
+<li><a href="#NWVrt5m-G4qVi-1"><i>&lt;Wrapper Library Exports&gt;</i></a>: <a href="#NWVrt5m-G4qVi-1">D1</a>, <a href="#NWVrt5m-G4qVi-2">D2</a>, <a href="#NWVrt5m-G4qVi-3">D3</a>, <a href="#NWVrt5m-VeUxt-1">U4</a>
+<li><a href="#NWDF"><i>&lt;Wrapper Library Globals&gt;</i></a>: <a href="#NWDF">D1</a>, <a href="#NWDS">D2</a>, <a href="#NWVrt5m-ScKbO-1">U3</a>
+<li><a href="#NWD8"><i>&lt;Wrapper Library Internal Functions&gt;</i></a>: <a href="#NWD8">D1</a>, <a href="#NWDE">D2</a>, <a href="#NWDG">D3</a>, <a href="#NWDO">D4</a>, <a href="#NWVrt5m-1o4ddw-5">D5</a>, <a href="#NWDX">D6</a>, <a href="#NWDc">D7</a>, <a href="#NWDe">D8</a>, <a href="#NWDj">D9</a>, <a href="#NWDw">D10</a>, <a href="#NWDx">D11</a>, <a href="#NWD16">D12</a>, <a href="#NWD17">D13</a>, <a href="#NWVrt5m-1o4ddw-E">D14</a>, <a href="#NWVrt5m-1o4ddw-F">D15</a>, <a href="#NWVrt5m-1o4ddw-G">D16</a>, <a href="#NWD1L">D17</a>, <a href="#NWD1N">D18</a>, <a href="#NWD1S">D19</a>, <a href="#NWVrt5m-1o4ddw-K">D20</a>, <a href="#NWD1X">D21</a>, <a href="#NWD1Z">D22</a>, <a href="#NWVrt5m-1o4ddw-N">D23</a>, <a href="#NWD1a">D24</a>, <a href="#NWD1h">D25</a>, <a href="#NWD1i">D26</a>, <a href="#NWD1k">D27</a>, <a href="#NWD1l">D28</a>, <a href="#NWVrt5m-1o4ddw-T">D29</a>, <a href="#NWVrt5m-ScKbO-1">U30</a>
+<li><a href="#NWD1Q"><i>&lt;Wrapper Library Macros&gt;</i></a>: <a href="#NWD1Q">D1</a>, <a href="#NWVrt5m-ScKbO-1">U2</a>
+<li><a href="#NWVrt5m-1lDiwO-1"><i>&lt;Wrapper Library Public Functions&gt;</i></a>: <a href="#NWVrt5m-1lDiwO-1">D1</a>, <a href="#NWD1b">D2</a>, <a href="#NWD1j">D3</a>, <a href="#NWVrt5m-ScKbO-1">U4</a>
+<li><a href="#NWDP"><i>&lt;Wrapper Library Tests&gt;</i></a>: <a href="#NWDP">D1</a>, <a href="#NWDT">D2</a>, <a href="#NWDY">D3</a>, <a href="#NWDZ">D4</a>, <a href="#NWVrt5m-3Afyvm-5">D5</a>, <a href="#NWDf">D6</a>, <a href="#NWVrt5m-3Afyvm-7">D7</a>, <a href="#NWVrt5m-3Afyvm-8">D8</a>, <a href="#NWVrt5m-3Afyvm-9">D9</a>, <a href="#NWVrt5m-3Afyvm-A">D10</a>, <a href="#NWVrt5m-1wKeGt-1">U11</a>
+</ul>
+<ul>
+<li><a name="NWI-*perl-interpreter*" href="#NWDF">*perl-interpreter*</a>: <a href="#NWDF">D1</a>, <a href="#NWVrt5m-1lDiwO-1">U2</a>, <a href="#NWDG">U3</a>
+<li><a name="NWI-*pl-perl-destruct-level*" href="#NWDD">*pl-perl-destruct-level*</a>: <a href="#NWDD">D1</a>, <a href="#NWDE">U2</a>
+<li><a name="NWI-*pl-stack-sp*" href="#NWD1F">*pl-stack-sp*</a>: <a href="#NWD1F">D1</a>, <a href="#NWVrt5m-1o4ddw-F">U2</a>, <a href="#NWVrt5m-1o4ddw-G">U3</a>, <a href="#NWD1L">U4</a>, <a href="#NWD1N">U5</a>, <a href="#NWD1O">U6</a>
+<li><a name="NWI-*pointer-size*" href="#NWD1A">*pointer-size*</a>: <a href="#NWD1A">D1</a>, <a href="#NWD1B">U2</a>, <a href="#NWD1C">U3</a>
+<li><a name="NWI-*sv-type-mask*" href="#NWDS">*sv-type-mask*</a>: <a href="#NWDS">D1</a>, <a href="#NWVrt5m-1o4ddw-5">U2</a>
+<li><a name="NWI-:address" href="#NWD1B">:address</a>: <a href="#NWD1B">D1</a>, <a href="#NWD1E">U2</a>, <a href="#NWD1F">U3</a>, <a href="#NWD1H">U4</a>, <a href="#NWVrt5m-1o4ddw-F">U5</a>, <a href="#NWD1J">U6</a>, <a href="#NWD1L">U7</a>
+<li><a name="NWI-:sv" href="#NWDH">:sv</a>: <a href="#NWDH">D1</a>, <a href="#NWVrt5m-27XOJn-4">U2</a>, <a href="#NWDJ">U3</a>, <a href="#NWDK">U4</a>, <a href="#NWDL">U5</a>, <a href="#NWDM">U6</a>, <a href="#NWDN">U7</a>, <a href="#NWDU">U8</a>, <a href="#NWDV">U9</a>, <a href="#NWDW">U10</a>, <a href="#NWVrt5m-27XOJn-D">U11</a>, <a href="#NWDa">U12</a>, <a href="#NWDb">U13</a>, <a href="#NWDd">U14</a>, <a href="#NWDk">U15</a>, <a href="#NWDo">U16</a>, <a href="#NWDp">U17</a>, <a href="#NWDr">U18</a>, <a href="#NWDu">U19</a>, <a href="#NWDz">U20</a>, <a href="#NWVrt5m-2xmHUS-Z">U21</a>, <a href="#NWD18">U22</a>, <a href="#NWD19">U23</a>, <a href="#NWD1P">U24</a>, <a href="#NWD1T">U25</a>, <a href="#NWD1c">U26</a>, <a href="#NWD1g">U27</a>
+<li><a name="NWI-address-decf" href="#NWD1C">address-decf</a>: <a href="#NWD1C">D1</a>, <a href="#NWD1E">U2</a>, <a href="#NWD1N">U3</a>
+<li><a name="NWI-address-incf" href="#NWD1C">address-incf</a>: <a href="#NWD1C">D1</a>, <a href="#NWD1E">U2</a>, <a href="#NWVrt5m-1o4ddw-F">U3</a>, <a href="#NWD1L">U4</a>
+<li><a name="NWI-address-ref" href="#NWD1D">address-ref</a>: <a href="#NWD1D">D1</a>, <a href="#NWD1E">U2</a>, <a href="#NWVrt5m-1o4ddw-F">U3</a>, <a href="#NWD1L">U4</a>, <a href="#NWD1N">U5</a>, <a href="#NWD1O">U6</a>
+<li><a name="NWI-av-fetch-sv" href="#NWDj">av-fetch-sv</a>: <a href="#NWDj">D1</a>, <a href="#NWDl">U2</a>, <a href="#NWVrt5m-2cLXcv-6">U3</a>, <a href="#NWDw">U4</a>
+<li><a name="NWI-call-perl" href="#NWD1b">call-perl</a>: <a href="#NWD1b">D1</a>, <a href="#NWVrt5m-G4qVi-2">U2</a>, <a href="#NWVrt5m-3Afyvm-8">U3</a>
+<li><a name="NWI-calling-flags" href="#NWVrt5m-1o4ddw-N">calling-flags</a>: <a href="#NWVrt5m-1o4ddw-N">D1</a>, <a href="#NWD1b">U2</a>
+<li><a name="NWI-context-from-type" href="#NWD1Z">context-from-type</a>: <a href="#NWD1Z">D1</a>, <a href="#NWVrt5m-1o4ddw-N">U2</a>
+<li><a name="NWI-deref-rv" href="#NWVrt5m-1o4ddw-E">deref-rv</a>: <a href="#NWVrt5m-1o4ddw-E">D1</a>, <a href="#NWVrt5m-2cLXcv-C">U2</a>, <a href="#NWVrt5m-2cLXcv-D">U3</a>, <a href="#NWVrt5m-1o4ddw-T">U4</a>
+<li><a name="NWI-destroy-interpreter" href="#NWDE">destroy-interpreter</a>: <a href="#NWDE">D1</a>, <a href="#NWVrt5m-1lDiwO-1">U2</a>
+<li><a name="NWI-ensure-room-on-stack" href="#NWVrt5m-1o4ddw-G">ensure-room-on-stack</a>: <a href="#NWVrt5m-1o4ddw-G">D1</a>, <a href="#NWD1L">U2</a>
+<li><a name="NWI-eval-perl" href="#NWD1i">eval-perl</a>: <a href="#NWVrt5m-3Afyvm-8">U1</a>, <a href="#NWD1i">D2</a>, <a href="#NWVrt5m-3Afyvm-9">U3</a>, <a href="#NWD1j">U4</a>
+<li><a name="NWI-get-from-stack" href="#NWVrt5m-1o4ddw-K">get-from-stack</a>: <a href="#NWVrt5m-1o4ddw-K">D1</a>, <a href="#NWVrt5m-3Afyvm-7">U2</a>
+<li><a name="NWI-get-scalar-by-name" href="#NWDe">get-scalar-by-name</a>: <a href="#NWDe">D1</a>, <a href="#NWDf">U2</a>
+<li><a name="NWI-get-stack-by-type" href="#NWD1a">get-stack-by-type</a>: <a href="#NWD1a">D1</a>, <a href="#NWD1b">U2</a>
+<li><a name="NWI-get-stack-values" href="#NWVrt5m-1o4ddw-K">get-stack-values</a>: <a href="#NWVrt5m-1o4ddw-K">D1</a>, <a href="#NWD1a">U2</a>, <a href="#NWD1i">U3</a>
+<li><a name="NWI-hash-from-hv" href="#NWD16">hash-from-hv</a>: <a href="#NWD16">D1</a>, <a href="#NWVrt5m-1o4ddw-T">U2</a>
+<li><a name="NWI-hv-from-hash" href="#NWD17">hv-from-hash</a>: <a href="#NWD17">D1</a>, <a href="#NWD1k">U2</a>
+<li><a name="NWI-lisp-from-perl" href="#NWVrt5m-1o4ddw-T">lisp-from-perl</a>: <a href="#NWDw">U1</a>, <a href="#NWD16">U2</a>, <a href="#NWVrt5m-1o4ddw-K">U3</a>, <a href="#NWVrt5m-3Afyvm-9">U4</a>, <a href="#NWVrt5m-1o4ddw-T">D5</a>, <a href="#NWVrt5m-3Afyvm-A">U6</a>
+<li><a name="NWI-list-from-av" href="#NWDx">list-from-av</a>: <a href="#NWDx">D1</a>, <a href="#NWVrt5m-1o4ddw-T">U2</a>
+<li><a name="NWI-make-interpreter" href="#NWD8">make-interpreter</a>: <a href="#NWD8">D1</a>, <a href="#NWVrt5m-1lDiwO-1">U2</a>
+<li><a name="NWI-need-perl" href="#NWDG">need-perl</a>: <a href="#NWDG">D1</a>, <a href="#NWDe">U2</a>, <a href="#NWDw">U3</a>, <a href="#NWD1b">U4</a>, <a href="#NWD1i">U5</a>, <a href="#NWD1k">U6</a>
+<li><a name="NWI-perl-alloc" href="#NWD7">perl-alloc</a>: <a href="#NWD7">D1</a>, <a href="#NWVrt5m-27XOJn-1">U2</a>, <a href="#NWD8">U3</a>
+<li><a name="NWI-perl-api" href="#NWD1m">perl-api</a>: <a href="#NWD1m">D1</a>, <a href="#NWVrt5m-VeUxt-1">U2</a>, <a href="#NWVrt5m-1wKeGt-1">U3</a>
+<li><a name="NWI-perl-aref" href="#NWDw">perl-aref</a>: <a href="#NWDw">D1</a>, <a href="#NWDx">U2</a>
+<li><a name="NWI-perl-array" href="#NWDw">perl-array</a>: <a href="#NWDw">D1</a>
+<li><a name="NWI-perl-av-clear" href="#NWDm">perl-av-clear</a>: <a href="#NWDm">D1</a>, <a href="#NWVrt5m-27XOJn-K">U2</a>, <a href="#NWVrt5m-2cLXcv-6">U3</a>
+<li><a name="NWI-perl-av-delete" href="#NWDu">perl-av-delete</a>: <a href="#NWDu">D1</a>, <a href="#NWVrt5m-27XOJn-S">U2</a>
+<li><a name="NWI-perl-av-exists" href="#NWDv">perl-av-exists</a>: <a href="#NWDv">D1</a>, <a href="#NWVrt5m-27XOJn-T">U2</a>
+<li><a name="NWI-perl-av-fetch" href="#NWDi">perl-av-fetch</a>: <a href="#NWDi">D1</a>, <a href="#NWVrt5m-27XOJn-I">U2</a>, <a href="#NWDj">U3</a>
+<li><a name="NWI-perl-av-fill" href="#NWDt">perl-av-fill</a>: <a href="#NWDt">D1</a>, <a href="#NWVrt5m-27XOJn-R">U2</a>, <a href="#NWVrt5m-2cLXcv-B">U3</a>
+<li><a name="NWI-perl-av-len" href="#NWDs">perl-av-len</a>: <a href="#NWVrt5m-2cLXcv-8">U1</a>, <a href="#NWDs">D2</a>, <a href="#NWVrt5m-27XOJn-Q">U3</a>, <a href="#NWVrt5m-2cLXcv-A">U4</a>, <a href="#NWVrt5m-2cLXcv-B">U5</a>, <a href="#NWDx">U6</a>
+<li><a name="NWI-perl-av-pop" href="#NWDp">perl-av-pop</a>: <a href="#NWDp">D1</a>, <a href="#NWVrt5m-27XOJn-N">U2</a>, <a href="#NWVrt5m-2cLXcv-7">U3</a>
+<li><a name="NWI-perl-av-push" href="#NWDo">perl-av-push</a>: <a href="#NWDo">D1</a>, <a href="#NWVrt5m-27XOJn-M">U2</a>, <a href="#NWVrt5m-2cLXcv-7">U3</a>, <a href="#NWVrt5m-2cLXcv-9">U4</a>, <a href="#NWVrt5m-2cLXcv-A">U5</a>, <a href="#NWD1k">U6</a>
+<li><a name="NWI-perl-av-shift" href="#NWDr">perl-av-shift</a>: <a href="#NWDr">D1</a>, <a href="#NWVrt5m-27XOJn-P">U2</a>, <a href="#NWVrt5m-2cLXcv-9">U3</a>
+<li><a name="NWI-perl-av-store" href="#NWDk">perl-av-store</a>: <a href="#NWDk">D1</a>, <a href="#NWVrt5m-27XOJn-J">U2</a>, <a href="#NWDl">U3</a>, <a href="#NWVrt5m-2cLXcv-6">U4</a>
+<li><a name="NWI-perl-av-undef" href="#NWDn">perl-av-undef</a>: <a href="#NWDn">D1</a>, <a href="#NWVrt5m-27XOJn-L">U2</a>
+<li><a name="NWI-perl-av-unshift" href="#NWDq">perl-av-unshift</a>: <a href="#NWDq">D1</a>, <a href="#NWVrt5m-27XOJn-O">U2</a>, <a href="#NWVrt5m-2cLXcv-8">U3</a>
+<li><a name="NWI-perl-call-flags" href="#NWD1U">perl-call-flags</a>: <a href="#NWD1U">D1</a>, <a href="#NWD1V">U2</a>
+<li><a name="NWI-perl-call-function" href="#NWD1X">perl-call-function</a>: <a href="#NWD1X">D1</a>, <a href="#NWVrt5m-2cLXcv-H">U2</a>
+<li><a name="NWI-perl-call-pv" href="#NWD1W">perl-call-pv</a>: <a href="#NWD1W">D1</a>, <a href="#NWVrt5m-27XOJn-k">U2</a>, <a href="#NWVrt5m-2cLXcv-G">U3</a>, <a href="#NWD1X">U4</a>
+<li><a name="NWI-perl-call-scalar" href="#NWD1X">perl-call-scalar</a>: <a href="#NWD1X">D1</a>
+<li><a name="NWI-perl-call-sv" href="#NWD1T">perl-call-sv</a>: <a href="#NWD1T">D1</a>, <a href="#NWVrt5m-27XOJn-i">U2</a>, <a href="#NWD1X">U3</a>
+<li><a name="NWI-perl-construct" href="#NWD7">perl-construct</a>: <a href="#NWD7">D1</a>, <a href="#NWVrt5m-27XOJn-1">U2</a>, <a href="#NWD8">U3</a>
+<li><a name="NWI-perl-destruct" href="#NWDC">perl-destruct</a>: <a href="#NWDC">D1</a>, <a href="#NWVrt5m-27XOJn-2">U2</a>, <a href="#NWVrt5m-27XOJn-3">U3</a>, <a href="#NWDE">U4</a>
+<li><a name="NWI-perl-eval-pv" href="#NWD1c">perl-eval-pv</a>: <a href="#NWDZ">U1</a>, <a href="#NWDf">U2</a>, <a href="#NWVrt5m-2cLXcv-G">U3</a>, <a href="#NWVrt5m-2cLXcv-H">U4</a>, <a href="#NWD1c">D5</a>, <a href="#NWVrt5m-27XOJn-l">U6</a>, <a href="#NWVrt5m-2cLXcv-I">U7</a>, <a href="#NWD1d">U8</a>, <a href="#NWD1e">U9</a>, <a href="#NWD1f">U10</a>
+<li><a name="NWI-perl-eval-scalar" href="#NWD1h">perl-eval-scalar</a>: <a href="#NWD1h">D1</a>, <a href="#NWVrt5m-2cLXcv-N">U2</a>, <a href="#NWD1i">U3</a>
+<li><a name="NWI-perl-eval-sv" href="#NWD1g">perl-eval-sv</a>: <a href="#NWD1g">D1</a>, <a href="#NWVrt5m-27XOJn-m">U2</a>, <a href="#NWVrt5m-2cLXcv-M">U3</a>, <a href="#NWD1h">U4</a>
+<li><a name="NWI-perl-free" href="#NWDC">perl-free</a>: <a href="#NWDC">D1</a>, <a href="#NWVrt5m-27XOJn-2">U2</a>, <a href="#NWDE">U3</a>, <a href="#NWVrt5m-27XOJn-h">U4</a>, <a href="#NWD1Q">U5</a>
+<li><a name="NWI-perl-free-tmps" href="#NWD1P">perl-free-tmps</a>: <a href="#NWD1P">D1</a>, <a href="#NWVrt5m-27XOJn-h">U2</a>, <a href="#NWD1Q">U3</a>
+<li><a name="NWI-perl-from-lisp" href="#NWD1k">perl-from-lisp</a>: <a href="#NWD17">U1</a>, <a href="#NWD1S">U2</a>, <a href="#NWVrt5m-3Afyvm-9">U3</a>, <a href="#NWD1k">D4</a>, <a href="#NWD1l">U5</a>, <a href="#NWVrt5m-3Afyvm-A">U6</a>
+<li><a name="NWI-perl-get-sv" href="#NWDa">perl-get-sv</a>: <a href="#NWDa">D1</a>, <a href="#NWVrt5m-27XOJn-E">U2</a>, <a href="#NWVrt5m-2cLXcv-3">U3</a>, <a href="#NWDe">U4</a>
+<li><a name="NWI-perl-hv-clear" href="#NWD13">perl-hv-clear</a>: <a href="#NWD13">D1</a>, <a href="#NWVrt5m-27XOJn-Z">U2</a>
+<li><a name="NWI-perl-hv-delete" href="#NWD12">perl-hv-delete</a>: <a href="#NWD12">D1</a>, <a href="#NWVrt5m-27XOJn-Y">U2</a>
+<li><a name="NWI-perl-hv-exists" href="#NWD11">perl-hv-exists</a>: <a href="#NWD11">D1</a>, <a href="#NWVrt5m-27XOJn-X">U2</a>
+<li><a name="NWI-perl-hv-fetch" href="#NWD10">perl-hv-fetch</a>: <a href="#NWD10">D1</a>, <a href="#NWVrt5m-27XOJn-W">U2</a>
+<li><a name="NWI-perl-hv-iterinit" href="#NWVrt5m-2xmHUS-Z">perl-hv-iterinit</a>: <a href="#NWVrt5m-2xmHUS-Z">D1</a>, <a href="#NWVrt5m-27XOJn-b">U2</a>, <a href="#NWD16">U3</a>
+<li><a name="NWI-perl-hv-iterkey" href="#NWVrt5m-2xmHUS-Z">perl-hv-iterkey</a>: <a href="#NWVrt5m-2xmHUS-Z">D1</a>, <a href="#NWVrt5m-27XOJn-b">U2</a>
+<li><a name="NWI-perl-hv-iterkeysv" href="#NWVrt5m-2xmHUS-Z">perl-hv-iterkeysv</a>: <a href="#NWVrt5m-2xmHUS-Z">D1</a>, <a href="#NWVrt5m-27XOJn-b">U2</a>, <a href="#NWD16">U3</a>
+<li><a name="NWI-perl-hv-iternext" href="#NWVrt5m-2xmHUS-Z">perl-hv-iternext</a>: <a href="#NWVrt5m-2xmHUS-Z">D1</a>, <a href="#NWVrt5m-27XOJn-b">U2</a>, <a href="#NWD16">U3</a>
+<li><a name="NWI-perl-hv-iterval" href="#NWVrt5m-2xmHUS-Z">perl-hv-iterval</a>: <a href="#NWVrt5m-2xmHUS-Z">D1</a>, <a href="#NWVrt5m-27XOJn-b">U2</a>, <a href="#NWD16">U3</a>
+<li><a name="NWI-perl-hv-store" href="#NWDz">perl-hv-store</a>: <a href="#NWDz">D1</a>, <a href="#NWVrt5m-27XOJn-V">U2</a>, <a href="#NWD17">U3</a>
+<li><a name="NWI-perl-hv-undef" href="#NWD14">perl-hv-undef</a>: <a href="#NWD14">D1</a>, <a href="#NWVrt5m-27XOJn-a">U2</a>
+<li><a name="NWI-perl-newav" href="#NWDh">perl-newav</a>: <a href="#NWDT">U1</a>, <a href="#NWDh">D2</a>, <a href="#NWVrt5m-27XOJn-H">U3</a>, <a href="#NWDl">U4</a>, <a href="#NWVrt5m-2cLXcv-6">U5</a>, <a href="#NWVrt5m-2cLXcv-7">U6</a>, <a href="#NWVrt5m-2cLXcv-8">U7</a>, <a href="#NWVrt5m-2cLXcv-9">U8</a>, <a href="#NWVrt5m-2cLXcv-A">U9</a>, <a href="#NWVrt5m-2cLXcv-B">U10</a>, <a href="#NWVrt5m-2cLXcv-D">U11</a>, <a href="#NWD1k">U12</a>
+<li><a name="NWI-perl-newhv" href="#NWVrt5m-2xmHUS-S">perl-newhv</a>: <a href="#NWDT">U1</a>, <a href="#NWVrt5m-2xmHUS-S">D2</a>, <a href="#NWVrt5m-27XOJn-U">U3</a>, <a href="#NWD17">U4</a>
+<li><a name="NWI-perl-newrv" href="#NWD18">perl-newrv</a>: <a href="#NWDT">U1</a>, <a href="#NWD18">D2</a>, <a href="#NWVrt5m-27XOJn-c">U3</a>, <a href="#NWVrt5m-2cLXcv-C">U4</a>, <a href="#NWVrt5m-2cLXcv-D">U5</a>
+<li><a name="NWI-perl-newrv-noinc" href="#NWD18">perl-newrv-noinc</a>: <a href="#NWD18">D1</a>, <a href="#NWVrt5m-27XOJn-c">U2</a>
+<li><a name="NWI-perl-newsv" href="#NWDJ">perl-newsv</a>: <a href="#NWDJ">D1</a>, <a href="#NWVrt5m-27XOJn-5">U2</a>, <a href="#NWDP">U3</a>, <a href="#NWDT">U4</a>, <a href="#NWVrt5m-2cLXcv-1">U5</a>, <a href="#NWVrt5m-2cLXcv-4">U6</a>, <a href="#NWVrt5m-3Afyvm-5">U7</a>, <a href="#NWVrt5m-2cLXcv-A">U8</a>, <a href="#NWVrt5m-2cLXcv-C">U9</a>, <a href="#NWD1O">U10</a>, <a href="#NWD1l">U11</a>
+<li><a name="NWI-perl-newsviv" href="#NWDK">perl-newsviv</a>: <a href="#NWDK">D1</a>, <a href="#NWVrt5m-27XOJn-6">U2</a>, <a href="#NWDT">U3</a>, <a href="#NWVrt5m-2cLXcv-1">U4</a>, <a href="#NWVrt5m-2cLXcv-2">U5</a>, <a href="#NWDY">U6</a>, <a href="#NWVrt5m-2cLXcv-3">U7</a>, <a href="#NWVrt5m-2cLXcv-4">U8</a>, <a href="#NWDl">U9</a>, <a href="#NWVrt5m-2cLXcv-6">U10</a>, <a href="#NWD1R">U11</a>, <a href="#NWVrt5m-2cLXcv-G">U12</a>, <a href="#NWVrt5m-2cLXcv-H">U13</a>, <a href="#NWD1k">U14</a>
+<li><a name="NWI-perl-newsvnv" href="#NWDK">perl-newsvnv</a>: <a href="#NWDK">D1</a>, <a href="#NWVrt5m-27XOJn-6">U2</a>, <a href="#NWDT">U3</a>, <a href="#NWVrt5m-2cLXcv-2">U4</a>, <a href="#NWDY">U5</a>, <a href="#NWD1k">U6</a>
+<li><a name="NWI-perl-newsvpv" href="#NWDL">perl-newsvpv</a>: <a href="#NWDL">D1</a>, <a href="#NWVrt5m-27XOJn-7">U2</a>, <a href="#NWDT">U3</a>, <a href="#NWDY">U4</a>, <a href="#NWVrt5m-2cLXcv-7">U5</a>, <a href="#NWVrt5m-2cLXcv-9">U6</a>, <a href="#NWVrt5m-2cLXcv-M">U7</a>, <a href="#NWVrt5m-2cLXcv-N">U8</a>, <a href="#NWD1i">U9</a>, <a href="#NWD1k">U10</a>
+<li><a name="NWI-perl-newsvpvn" href="#NWDL">perl-newsvpvn</a>: <a href="#NWDL">D1</a>, <a href="#NWVrt5m-27XOJn-7">U2</a>, <a href="#NWDY">U3</a>
+<li><a name="NWI-perl-newsvsv" href="#NWDM">perl-newsvsv</a>: <a href="#NWDM">D1</a>, <a href="#NWVrt5m-27XOJn-8">U2</a>
+<li><a name="NWI-perl-newsvuv" href="#NWDK">perl-newsvuv</a>: <a href="#NWDK">D1</a>, <a href="#NWVrt5m-27XOJn-6">U2</a>, <a href="#NWVrt5m-2cLXcv-2">U3</a>, <a href="#NWD1k">U4</a>
+<li><a name="NWI-perl-parse" href="#NWD7">perl-parse</a>: <a href="#NWD7">D1</a>, <a href="#NWVrt5m-27XOJn-1">U2</a>, <a href="#NWD8">U3</a>
+<li><a name="NWI-perl-pop-scope" href="#NWD1P">perl-pop-scope</a>: <a href="#NWD1P">D1</a>, <a href="#NWVrt5m-27XOJn-h">U2</a>, <a href="#NWD1Q">U3</a>
+<li><a name="NWI-perl-push-scope" href="#NWD1P">perl-push-scope</a>: <a href="#NWD1P">D1</a>, <a href="#NWVrt5m-27XOJn-h">U2</a>, <a href="#NWD1Q">U3</a>
+<li><a name="NWI-perl-run" href="#NWD7">perl-run</a>: <a href="#NWD7">D1</a>, <a href="#NWVrt5m-27XOJn-1">U2</a>, <a href="#NWDB">U3</a>
+<li><a name="NWI-perl-scope" href="#NWD1Q">perl-scope</a>: <a href="#NWD16">U1</a>, <a href="#NWD1Q">D2</a>, <a href="#NWD1R">U3</a>, <a href="#NWVrt5m-3Afyvm-7">U4</a>, <a href="#NWD1b">U5</a>, <a href="#NWD1i">U6</a>
+<li><a name="NWI-perl-sv-2iv" href="#NWDV">perl-sv-2iv</a>: <a href="#NWDV">D1</a>, <a href="#NWVrt5m-27XOJn-C">U2</a>, <a href="#NWVrt5m-2cLXcv-2">U3</a>, <a href="#NWVrt5m-2cLXcv-4">U4</a>, <a href="#NWVrt5m-3Afyvm-5">U5</a>, <a href="#NWDl">U6</a>, <a href="#NWD1R">U7</a>, <a href="#NWVrt5m-2cLXcv-G">U8</a>, <a href="#NWVrt5m-2cLXcv-H">U9</a>, <a href="#NWVrt5m-2cLXcv-I">U10</a>, <a href="#NWVrt5m-2cLXcv-M">U11</a>, <a href="#NWVrt5m-2cLXcv-N">U12</a>, <a href="#NWVrt5m-1o4ddw-T">U13</a>
+<li><a name="NWI-perl-sv-2mortal" href="#NWD1P">perl-sv-2mortal</a>: <a href="#NWD1P">D1</a>, <a href="#NWVrt5m-27XOJn-h">U2</a>, <a href="#NWD1R">U3</a>, <a href="#NWD1S">U4</a>, <a href="#NWVrt5m-2cLXcv-G">U5</a>, <a href="#NWVrt5m-2cLXcv-H">U6</a>, <a href="#NWD1i">U7</a>
+<li><a name="NWI-perl-sv-2nv" href="#NWDV">perl-sv-2nv</a>: <a href="#NWDV">D1</a>, <a href="#NWVrt5m-27XOJn-C">U2</a>, <a href="#NWVrt5m-2cLXcv-2">U3</a>, <a href="#NWVrt5m-3Afyvm-5">U4</a>, <a href="#NWVrt5m-1o4ddw-T">U5</a>
+<li><a name="NWI-perl-sv-2uv" href="#NWDV">perl-sv-2uv</a>: <a href="#NWDV">D1</a>, <a href="#NWVrt5m-27XOJn-C">U2</a>, <a href="#NWVrt5m-2cLXcv-2">U3</a>, <a href="#NWVrt5m-3Afyvm-5">U4</a>, <a href="#NWDf">U5</a>, <a href="#NWD1e">U6</a>, <a href="#NWD1f">U7</a>
+<li><a name="NWI-perl-sv-free" href="#NWDN">perl-sv-free</a>: <a href="#NWDN">D1</a>, <a href="#NWVrt5m-27XOJn-9">U2</a>, <a href="#NWDP">U3</a>
+<li><a name="NWI-perl-sv-newref" href="#NWDN">perl-sv-newref</a>: <a href="#NWDN">D1</a>, <a href="#NWVrt5m-27XOJn-9">U2</a>, <a href="#NWDP">U3</a>
+<li><a name="NWI-perl-sv-pvn-force-flags" href="#NWDW">perl-sv-pvn-force-flags</a>: <a href="#NWDW">D1</a>, <a href="#NWVrt5m-27XOJn-D">U2</a>, <a href="#NWDX">U3</a>
+<li><a name="NWI-perl-sv-setiv-mg" href="#NWDd">perl-sv-setiv-mg</a>: <a href="#NWDd">D1</a>, <a href="#NWVrt5m-27XOJn-G">U2</a>, <a href="#NWVrt5m-3Afyvm-5">U3</a>
+<li><a name="NWI-perl-sv-setnv-mg" href="#NWDd">perl-sv-setnv-mg</a>: <a href="#NWDd">D1</a>, <a href="#NWVrt5m-27XOJn-G">U2</a>, <a href="#NWVrt5m-3Afyvm-5">U3</a>
+<li><a name="NWI-perl-sv-setpv-mg" href="#NWDd">perl-sv-setpv-mg</a>: <a href="#NWDd">D1</a>, <a href="#NWVrt5m-27XOJn-G">U2</a>, <a href="#NWVrt5m-3Afyvm-5">U3</a>
+<li><a name="NWI-perl-sv-setpvn-mg" href="#NWDd">perl-sv-setpvn-mg</a>: <a href="#NWDd">D1</a>, <a href="#NWVrt5m-27XOJn-G">U2</a>, <a href="#NWVrt5m-3Afyvm-5">U3</a>
+<li><a name="NWI-perl-sv-setsv-flags" href="#NWDb">perl-sv-setsv-flags</a>: <a href="#NWVrt5m-2cLXcv-3">U1</a>, <a href="#NWDb">D2</a>, <a href="#NWVrt5m-27XOJn-F">U3</a>, <a href="#NWVrt5m-2cLXcv-4">U4</a>, <a href="#NWDc">U5</a>
+<li><a name="NWI-perl-sv-setuv-mg" href="#NWDd">perl-sv-setuv-mg</a>: <a href="#NWDd">D1</a>, <a href="#NWVrt5m-27XOJn-G">U2</a>, <a href="#NWVrt5m-3Afyvm-5">U3</a>
+<li><a name="NWI-perl-sv-true" href="#NWDU">perl-sv-true</a>: <a href="#NWDU">D1</a>, <a href="#NWVrt5m-27XOJn-B">U2</a>, <a href="#NWVrt5m-2cLXcv-1">U3</a>, <a href="#NWVrt5m-2cLXcv-2">U4</a>, <a href="#NWDY">U5</a>, <a href="#NWVrt5m-2cLXcv-3">U6</a>
+<li><a name="NWI-pops" href="#NWD1N">pops</a>: <a href="#NWD1N">D1</a>, <a href="#NWD1O">U2</a>, <a href="#NWVrt5m-1o4ddw-K">U3</a>, <a href="#NWVrt5m-2cLXcv-G">U4</a>, <a href="#NWVrt5m-2cLXcv-H">U5</a>, <a href="#NWVrt5m-2cLXcv-M">U6</a>, <a href="#NWVrt5m-2cLXcv-N">U7</a>
+<li><a name="NWI-push-mortals-on-stack" href="#NWD1S">push-mortals-on-stack</a>: <a href="#NWD1S">D1</a>, <a href="#NWVrt5m-3Afyvm-7">U2</a>, <a href="#NWD1b">U3</a>
+<li><a name="NWI-pushmark" href="#NWVrt5m-1o4ddw-F">pushmark</a>: <a href="#NWVrt5m-1o4ddw-F">D1</a>, <a href="#NWVrt5m-2cLXcv-G">U2</a>, <a href="#NWVrt5m-2cLXcv-H">U3</a>, <a href="#NWD1b">U4</a>
+<li><a name="NWI-pushs" href="#NWD1L">pushs</a>: <a href="#NWD1L">D1</a>, <a href="#NWD1O">U2</a>, <a href="#NWD1S">U3</a>, <a href="#NWVrt5m-2cLXcv-G">U4</a>, <a href="#NWVrt5m-2cLXcv-H">U5</a>
+<li><a name="NWI-refcnt" href="#NWDO">refcnt</a>: <a href="#NWDI">U1</a>, <a href="#NWVrt5m-27XOJn-4">U2</a>, <a href="#NWDO">D3</a>, <a href="#NWDP">U4</a>
+<li><a name="NWI-set-sv" href="#NWDc">set-sv</a>: <a href="#NWDc">D1</a>
+<li><a name="NWI-start-perl" href="#NWVrt5m-1lDiwO-1">start-perl</a>: <a href="#NWVrt5m-1lDiwO-1">D1</a>, <a href="#NWVrt5m-G4qVi-1">U2</a>, <a href="#NWDG">U3</a>
+<li><a name="NWI-stop-perl" href="#NWVrt5m-1lDiwO-1">stop-perl</a>: <a href="#NWVrt5m-1lDiwO-1">D1</a>, <a href="#NWVrt5m-G4qVi-1">U2</a>
+<li><a name="NWI-string-from-sv" href="#NWDX">string-from-sv</a>: <a href="#NWDX">D1</a>, <a href="#NWDY">U2</a>, <a href="#NWDZ">U3</a>, <a href="#NWVrt5m-3Afyvm-5">U4</a>, <a href="#NWVrt5m-2cLXcv-7">U5</a>, <a href="#NWVrt5m-2cLXcv-9">U6</a>, <a href="#NWD16">U7</a>, <a href="#NWVrt5m-2cLXcv-I">U8</a>, <a href="#NWD1d">U9</a>, <a href="#NWVrt5m-1o4ddw-T">U10</a>
+<li><a name="NWI-sv-flags" href="#NWDW">sv-flags</a>: <a href="#NWDW">D1</a>, <a href="#NWVrt5m-27XOJn-D">U2</a>
+<li><a name="NWI-svtype" href="#NWDQ">svtype</a>: <a href="#NWDQ">D1</a>, <a href="#NWVrt5m-27XOJn-A">U2</a>, <a href="#NWVrt5m-1o4ddw-5">D3</a>, <a href="#NWDT">U4</a>, <a href="#NWVrt5m-1o4ddw-T">U5</a>
+<li><a name="NWI-use-perl-module" href="#NWD1j">use-perl-module</a>: <a href="#NWD1j">D1</a>, <a href="#NWVrt5m-G4qVi-3">U2</a>
+</ul>
+</body>
+<!-- Mirrored from stuartsierra.com/download/perl-in-lisp-literate-full.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 17:00:12 GMT -->
+</html>
+

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns#">
+
+<!-- Mirrored from malisper.me/2015/07/14/debugging-lisp-part-2-inspecting/?replytocom=201 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:47:26 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Debugging Lisp Part 2: Inspecting - Macrology</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="../../../../xmlrpc.php">
+
+
+<!-- This site is optimized with the Yoast SEO plugin v3.4.2 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="robots" content="noindex,follow"/>
+<link rel="canonical" href="index.html" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Debugging Lisp Part 2: Inspecting - Macrology" />
+<meta property="og:description" content="This is part 2 of Debugging Lisp. If you haven&#8217;t read part 1 on dynamic recompilation, you can find it here. For the next post in the series on redefining classes, click here. In this post I am going to discuss another tool used for debugging Common Lisp &#8211; the Slime Inspector. The Slime inspector &hellip;" />
+<meta property="og:url" content="index.html" />
+<meta property="og:site_name" content="Macrology" />
+<meta property="article:section" content="Debugging Lisp" />
+<meta property="article:published_time" content="2015-07-14T16:12:12-05:00" />
+<meta property="article:modified_time" content="2016-01-04T12:23:08-05:00" />
+<meta property="og:updated_time" content="2016-01-04T12:23:08-05:00" />
+<meta property="og:image" content="../../../../wp-content/uploads/2015/07/ezgif.com-optimize-5.gif" />
+<meta property="og:image" content="../../../../wp-content/uploads/2015/07/ezgif.com-optimize-7.gif" />
+<meta property="og:image" content="../../../../wp-content/uploads/2015/07/ezgif.com-crop-5.gif" />
+<meta property="og:image" content="../../../../wp-content/uploads/2015/07/ezgif.com-crop-4.gif" />
+<meta property="og:image" content="../../../../wp-content/uploads/2015/07/ezgif.com-optimize-8.gif" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:description" content="This is part 2 of Debugging Lisp. If you haven&#8217;t read part 1 on dynamic recompilation, you can find it here. For the next post in the series on redefining classes, click here. In this post I am going to discuss another tool used for debugging Common Lisp &#8211; the Slime Inspector. The Slime inspector [&hellip;]" />
+<meta name="twitter:title" content="Debugging Lisp Part 2: Inspecting - Macrology" />
+<meta name="twitter:image" content="../../../../wp-content/uploads/2015/07/ezgif.com-optimize-5.gif" />
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Feed" href="../../../../feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Comments Feed" href="../../../../comments/feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Debugging Lisp Part 2: Inspecting Comments Feed" href="feed/index.html" />
+<link rel='stylesheet' id='scrawl-style-css'  href='../../../../wp-content/themes/scrawl-wpcom/style167b.css?ver=4.6' type='text/css' media='all' />
+<link rel='stylesheet' id='scrawl-fonts-css'  href='https://fonts.googleapis.com/css?family=Lora:400,700|Merriweather:400italic,400,700,700italic&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../../../wp-content/themes/scrawl-wpcom/fonts/genericons6de8.css?ver=3.3' type='text/css' media='all' />
+<script type='text/javascript' src='../../../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<link rel='https://api.w.org/' href='../../../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../../../wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+<link rel='shortlink' href='../../../../index9982.html?p=492' />
+<meta name='robots' content='noindex,follow' />
+<link rel="alternate" type="application/json+oembed" href="../../../../wp-json/oembed/1.0/embed7422.json?url=http%3A%2F%2Fmalisper.me%2F2015%2F07%2F14%2Fdebugging-lisp-part-2-inspecting%2F" />
+<link rel="alternate" type="text/xml+oembed" href="../../../../wp-json/oembed/1.0/embed8a24?url=http%3A%2F%2Fmalisper.me%2F2015%2F07%2F14%2Fdebugging-lisp-part-2-inspecting%2F&amp;format=xml" />
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-63547056-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<style type="text/css" id="syntaxhighlighteranchor"></style>
+
+<script type="text/javascript">
+  window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var n=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(n?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var o=document.getElementsByTagName("script")[0];o.parentNode.insertBefore(a,o);for(var r=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["clearEventProperties","identify","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=r(p[c])};
+    heap.load("931515525");
+</script>
+</head>
+
+<body class="single single-post postid-492 single-format-standard">
+	<button class="menu-toggle x">
+		<span class="lines"></span>
+		<span class="screen-reader-text">Primary Menu</span>
+	</button>
+	<div class="slide-menu">
+				
+		<h1 class="site-title"><a href="../../../../index.html" rel="home">Macrology</a></h1>
+		<h2 class="site-description">Case Studies in Lisp Macros</h2>
+		
+				
+				
+			<div id="secondary" class="widget-area" role="complementary">
+		<aside id="search-2" class="widget widget_search"><form role="search" method="get" class="search-form" action="http://malisper.me/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form></aside><aside id="pages-3" class="widget widget_pages"><h1 class="widget-title">Pages</h1>		<ul>
+			<li class="page_item page-item-55"><a href="../../../../about-me/index.html">About Michael Malis</a></li>
+<li class="page_item page-item-44"><a href="../../../../about-this-site-2/index.html">About This Site</a></li>
+		</ul>
+		</aside><aside id="nav_menu-3" class="widget widget_nav_menu"><h1 class="widget-title">Contact Me</h1><div class="menu-contact-me-container"><ul id="menu-contact-me" class="menu"><li id="menu-item-60" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-60"><a href="mailto:michaelmalis2@gmail.com">Email</a></li>
+<li id="menu-item-58" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-58"><a href="https://github.com/malisper">Github</a></li>
+<li id="menu-item-59" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-59"><a href="https://news.ycombinator.com/user?id=malisper">Hacker News</a></li>
+</ul></div></aside><aside id="archives-2" class="widget widget_archive"><h1 class="widget-title">Archives</h1>		<ul>
+			<li><a href='../../../../2016/06/index.html'>June 2016</a></li>
+	<li><a href='../../../../2016/04/index.html'>April 2016</a></li>
+	<li><a href='../../../../2016/01/index.html'>January 2016</a></li>
+	<li><a href='../../../12/index.html'>December 2015</a></li>
+	<li><a href='../../../11/index.html'>November 2015</a></li>
+	<li><a href='../../../10/index.html'>October 2015</a></li>
+	<li><a href='../../../09/index.html'>September 2015</a></li>
+	<li><a href='../../../08/index.html'>August 2015</a></li>
+	<li><a href='../../index.html'>July 2015</a></li>
+	<li><a href='../../../06/index.html'>June 2015</a></li>
+	<li><a href='../../../05/index.html'>May 2015</a></li>
+		</ul>
+		</aside><aside id="categories-2" class="widget widget_categories"><h1 class="widget-title">Categories</h1>		<ul>
+	<li class="cat-item cat-item-2"><a href="../../../../category/basics/index.html" title="These are basic Lisp macros that should be trivial to understand.">Basic Macros</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="../../../../category/intermediate-macros/index.html" >Intermediate Macros</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="../../../../category/advanced-macros/index.html" >Advanced Macros</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="../../../../category/debugging-common-lisp/index.html" >Debugging Lisp</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="../../../../category/loops-in-lisp/index.html" >Loops in Lisp</a>
+</li>
+		</ul>
+</aside>	</div><!-- #secondary -->
+	</div><!-- .slide-menu -->
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<header id="masthead" class="site-header" role="banner">
+
+		<div class="site-branding">
+						<h1 class="site-title"><a href="../../../../index.html" rel="home">Macrology</a></h1>
+		</div>
+
+	</header><!-- #masthead -->
+
+	
+	
+	<div id="content" class="site-content">
+
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			<article id="post-492" class="post-492 post type-post status-publish format-standard hentry category-debugging-common-lisp">
+			<header class="entry-header">
+			<h1 class="entry-title">Debugging Lisp Part 2: Inspecting</h1>		</header><!-- .entry-header -->
+		<div class="entry-content">
+		<p><em>This is part 2 of Debugging Lisp. If you haven&#8217;t read part 1 on dynamic recompilation, you can find it <a href="../../07/debugging-lisp-part-1-recompilation/index.html">here</a>. For the next post in the series on redefining classes, click <a href="../../22/debugging-lisp-part-3-redefining-classes/index.html">here</a>.</em></p>
+<p>In this post I am going to discuss another tool used for debugging Common Lisp &#8211; the Slime Inspector. The Slime inspector makes it possible to manipulate objects directly from the repl. You can do many different things with it, including clicking on objects to look at their contents and being able to copy and paste objects in order to reuse them in future function calls.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='#easy-footnote-bottom-1' title='Technically these aren&#8217;t features of the Inspector, they are features of &#8220;Presentations&#8221;. The Inspector is just the part that lets you look inside of the objects.'><sup>1</sup></a></span> Let&#8217;s say you have the following point class:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defclass point ()
+  ((x :accessor point-x :initarg :x :initform 0)
+   (y :accessor point-y :initarg :y :initform 0)))
+</pre>
+<p>If you were to make an instance of the above class:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(make-instance 'point :x 10 :y 20)
+</pre>
+<p>You can then right click on it and click on the &#8220;inspect&#8221; option, or just use the Emacs shortcut &#8220;C-c C-v TAB&#8221; to peek inside the object:</p>
+<p>&nbsp;</p>
+<p><a href="../../../../wp-content/uploads/2015/07/ezgif.com-optimize-5.gif"><img class="aligncenter wp-image-501" src="../../../../wp-content/uploads/2015/07/ezgif.com-optimize-5.gif" alt="ezgif.com-optimize (5)" width="600" height="329" /></a></p>
+<p>&nbsp;</p>
+<p>This will show you the current values of all of the instance variables of the object. Not only can you look at the object&#8217;s instance variables, you can modify them as well. Note that the power comes from being able to do all of this from within the debugger at runtime.</p>
+<p>&nbsp;</p>
+<p><a href="../../../../wp-content/uploads/2015/07/ezgif.com-optimize-7.gif"><img class="aligncenter wp-image-510" src="../../../../wp-content/uploads/2015/07/ezgif.com-optimize-7.gif" alt="ezgif.com-optimize (7)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>To make sure that the value of that object was actually changed, you can copy and paste the point object and then call the <strong>point-x</strong> function on it.</p>
+<p>&nbsp;</p>
+<p><a href="../../../../wp-content/uploads/2015/07/ezgif.com-crop-5.gif"><img class="aligncenter wp-image-522" src="../../../../wp-content/uploads/2015/07/ezgif.com-crop-5.gif" alt="ezgif.com-crop (5)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>One more really cool tool that hooks into the Inspector is the Slime Trace Dialog. The Slime Trace Dialog is like ordinary trace, but it also allows for inspection on the objects that were passed to or returned from the traced functions. For example, let&#8217;s say you are writing a tail call optimized function, <strong>sum</strong>, that sums all of the numbers in a list.</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun sum (xs &amp;optional (acc 0))
+  (if (null xs)
+      acc
+      (sum (cdr xs) (+ (car xs) acc))))
+
+(sum '(1 2 3))
+=&gt; 6
+</pre>
+<p>You can toggle the use the Slime Trace Dialog to trace <strong>sum</strong> by typing the shortcut &#8220;C-c M-t&#8221; and then typing in the name of function, &#8220;<strong>sum</strong>”. After tracing it and running the code, you can press &#8220;C-c T&#8221; to enter the interactive Trace Dialog buffer. From there you can press &#8220;G&#8221; to refresh it and obtain the most recent trace.</p>
+<p>&nbsp;</p>
+<p><a href="../../../../wp-content/uploads/2015/07/ezgif.com-crop-4.gif"><img class="aligncenter wp-image-512" src="../../../../wp-content/uploads/2015/07/ezgif.com-crop-4.gif" alt="ezgif.com-crop (4)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>The trace will look like the output from ordinary trace, except it will have some addition goodies. As I said above you can inspect all of the arguments and return values. You can also hide/show branches of the trace tree in order to make it easier to find what you are looking for.</p>
+<p>&nbsp;</p>
+<p><a href="../../../../wp-content/uploads/2015/07/ezgif.com-optimize-8.gif"><img class="aligncenter wp-image-513" src="../../../../wp-content/uploads/2015/07/ezgif.com-optimize-8.gif" alt="ezgif.com-optimize (8)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>The Slime Trace Dialog is invaluable when you have code which is passing lots of objects around and you aren&#8217;t exactly sure what the value of each variable in each object is. You can just use the Slime Trace Dialog and have it keep track of all of the information for you.</p>
+<p>All in all, the Slime Inspector is another amazing part of the Common Lisp debugging tool set. It comes in handy when the program crashes and you are unaware of the current state of the program. When combined with the rest of the features for debugging Common Lisp, the Slime Inspector is just incredible.</p>
+<ol class="easy-footnotes-wrapper"><li class="easy-footnote-single"><span id="easy-footnote-bottom-1" class="easy-footnote-margin-adjust"></span>Technically these aren&#8217;t features of the Inspector, they are features of &#8220;Presentations&#8221;. The Inspector is just the part that lets you look inside of the objects.<a class="easy-footnote-to-top" href="#easy-footnote-1"></a></li></ol>			</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="index.html" rel="bookmark"><time class="entry-date published" datetime="2015-07-14T16:12:12+00:00">July 14, 2015</time><time class="updated" datetime="2016-01-04T12:23:08+00:00">January 4, 2016</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../../../author/malisper/index.html">malisper</a></span></span><span class="category-links"> in <a href="../../../../category/debugging-common-lisp/index.html" rel="category tag">Debugging Lisp</a></span>			<span class="secondary-entry-meta">
+								<span class="comments-link"><a href="index.html#comments">8</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+			
+	<nav class="navigation post-navigation" role="navigation">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="../../07/debugging-lisp-part-1-recompilation/index.html" rel="prev"><span class="title">Previous post</span>Debugging Lisp Part 1: Recompilation</a></div><div class="nav-next"><a href="../../22/debugging-lisp-part-3-redefining-classes/index.html" rel="next"><span class="title">Next post</span>Debugging Lisp Part 3: Redefining Classes</a></div></div>
+	</nav>
+			
+<div id="comments" class="comments-area">
+
+	
+			<h2 class="comments-title">
+			8 thoughts on &ldquo;<span>Debugging Lisp Part 2: Inspecting</span>&rdquo;		</h2>
+
+		<ol class="comment-list">
+					<li id="comment-174" class="comment even thread-even depth-1">
+			<article id="div-comment-174" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://1.gravatar.com/avatar/a80062d1e4abc37684b2e7c20ff7ffc0?s=64&amp;d=mm&amp;r=g' srcset='http://1.gravatar.com/avatar/a80062d1e4abc37684b2e7c20ff7ffc0?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">David Hodge</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-174">
+							<time datetime="2015-07-15T04:21:34+00:00">
+								July 15, 2015 at 4:21 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>a really good set of posts.  I have learnt something new from each. I hope you keep it up!</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='indexa68c.html?replytocom=174#respond' onclick='return addComment.moveForm( "div-comment-174", "174", "respond", "492" )' aria-label='Reply to David Hodge'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-194" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-194" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://1.gravatar.com/avatar/df5f050ff459fbd9bf9764100dbef746?s=64&amp;d=mm&amp;r=g' srcset='http://1.gravatar.com/avatar/df5f050ff459fbd9bf9764100dbef746?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">Smith Dhumbumroong</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-194">
+							<time datetime="2015-07-17T07:37:39+00:00">
+								July 17, 2015 at 7:37 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Superb article. Very informative.</p>
+<p>I have used inspector before, but I didn&#8217;t knew that you could use the trace dialog together with the inspector like this. More people should know about the presentations &amp; debugging feature of SLIME.</p>
+<p>Thank you for writing this series of posts. Looking forward to the next entry!</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='indexc978.html?replytocom=194#respond' onclick='return addComment.moveForm( "div-comment-194", "194", "respond", "492" )' aria-label='Reply to Smith Dhumbumroong'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-196" class="comment even thread-even depth-1">
+			<article id="div-comment-196" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://0.gravatar.com/avatar/ce6f116fee50e0c7680fabb40a33bb6c?s=64&amp;d=mm&amp;r=g' srcset='http://0.gravatar.com/avatar/ce6f116fee50e0c7680fabb40a33bb6c?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">Matthew Henderson</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-196">
+							<time datetime="2015-07-17T19:43:30+00:00">
+								July 17, 2015 at 7:43 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thanks for another excellent post.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='index8dd1.html?replytocom=196#respond' onclick='return addComment.moveForm( "div-comment-196", "196", "respond", "492" )' aria-label='Reply to Matthew Henderson'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-201" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-201" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://0.gravatar.com/avatar/3d5bd47f9edb40c4eee3e9bae3aa5f27?s=64&amp;d=mm&amp;r=g' srcset='http://0.gravatar.com/avatar/3d5bd47f9edb40c4eee3e9bae3aa5f27?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">Andrew Kirkpatrick</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-201">
+							<time datetime="2015-07-18T04:37:37+00:00">
+								July 18, 2015 at 4:37 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>In the latest slime (2.14) a left mouse click does what you might expect in the inspector. Previously a middle (or mouse wheel) click was necessary to drill down into a field/property.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='index6fb6.html?replytocom=201#respond' onclick='return addComment.moveForm( "div-comment-201", "201", "respond", "492" )' aria-label='Reply to Andrew Kirkpatrick'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-246" class="comment even thread-even depth-1 parent">
+			<article id="div-comment-246" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://2.gravatar.com/avatar/b62f50178144765ee03bf8770382b6bd?s=64&amp;d=mm&amp;r=g' srcset='http://2.gravatar.com/avatar/b62f50178144765ee03bf8770382b6bd?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">slime-beginner</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-246">
+							<time datetime="2015-07-22T08:46:33+00:00">
+								July 22, 2015 at 8:46 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>A great post to start the day with! I have one related question though. If I have a running lisp image on a remote machine, what provision(s) should I have in place to connect to it so that I will be able to apply the magical tricks describe above? Run swank in it? Or are there other standard ways to connect to running lisp images.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='index223d.html?replytocom=246#respond' onclick='return addComment.moveForm( "div-comment-246", "246", "respond", "492" )' aria-label='Reply to slime-beginner'>Reply</a></div>			</article><!-- .comment-body -->
+<ol class="children">
+		<li id="comment-248" class="comment byuser comment-author-malisper bypostauthor odd alt depth-2">
+			<article id="div-comment-248" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://2.gravatar.com/avatar/2587b67431f9cc2a998a25e42e2d172d?s=64&amp;d=mm&amp;r=g' srcset='http://2.gravatar.com/avatar/2587b67431f9cc2a998a25e42e2d172d?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">malisper</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-248">
+							<time datetime="2015-07-22T10:01:22+00:00">
+								July 22, 2015 at 10:01 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>You should be able to follow the instructions <a href="https://common-lisp.net/project/slime/doc/html/Connecting-to-a-remote-lisp.html#Connecting-to-a-remote-lisp" rel="nofollow">here</a> in order to set up an image you can connect to.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='index18e6.html?replytocom=248#respond' onclick='return addComment.moveForm( "div-comment-248", "248", "respond", "492" )' aria-label='Reply to malisper'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+		<li id="comment-2805" class="comment even thread-odd thread-alt depth-1 parent">
+			<article id="div-comment-2805" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://1.gravatar.com/avatar/48ac2860ab67ba3dbfd79a6814205535?s=64&amp;d=mm&amp;r=g' srcset='http://1.gravatar.com/avatar/48ac2860ab67ba3dbfd79a6814205535?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">Antonio Juan</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-2805">
+							<time datetime="2016-02-12T14:03:06+00:00">
+								February 12, 2016 at 2:03 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Hi thanks for this nice tutorial, I have a problem When I follow this I get the following error:</p>
+<p>CL-USER&gt; (make-instance &#8216;point :x 10 :y 20)<br />
+#<br />
+CL-USER&gt; (point-x #)<br />
+; Evaluation aborted on #.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='index6d4e.html?replytocom=2805#respond' onclick='return addComment.moveForm( "div-comment-2805", "2805", "respond", "492" )' aria-label='Reply to Antonio Juan'>Reply</a></div>			</article><!-- .comment-body -->
+<ol class="children">
+		<li id="comment-2858" class="comment byuser comment-author-malisper bypostauthor odd alt depth-2">
+			<article id="div-comment-2858" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://2.gravatar.com/avatar/2587b67431f9cc2a998a25e42e2d172d?s=64&amp;d=mm&amp;r=g' srcset='http://2.gravatar.com/avatar/2587b67431f9cc2a998a25e42e2d172d?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">malisper</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-2858">
+							<time datetime="2016-02-13T13:54:31+00:00">
+								February 13, 2016 at 1:54 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>You should ask this on Stackoverfow.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='indexd3f0.html?replytocom=2858#respond' onclick='return addComment.moveForm( "div-comment-2858", "2858", "respond", "492" )' aria-label='Reply to malisper'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+		
+	
+	
+					<div id="respond" class="comment-respond">
+			<h3 id="reply-title" class="comment-reply-title">Leave a Reply to <a href="#comment-201">Andrew Kirkpatrick</a> <small><a rel="nofollow" id="cancel-comment-reply-link" title="Cancel reply" href="index.html#respond"><span class="screen-reader-text">Cancel reply</span></a></small></h3>				<form action="http://malisper.me/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
+					<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" aria-required="true" required="required"></textarea></p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" aria-required='true' required='required' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" aria-required='true' required='required' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='492' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='201' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="08b0044188" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="199"/></p>				</form>
+					</div><!-- #respond -->
+		
+</div><!-- #comments -->
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="site-info">
+			<a href="http://wordpress.org/">Proudly powered by WordPress</a>
+			<span class="sep"> ~ </span>
+			Theme: Scrawl by <a href="https://wordpress.com/themes/" rel="designer">WordPress.com</a>.		</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type='text/javascript' src='../../../../wp-content/plugins/akismet/_inc/form2d73.html?ver=3.1.11'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushPlain09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore09b1.css?ver=3.0.9b";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeEclipse09b1.css?ver=3.0.9b";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+<link rel='stylesheet' id='qtipstyles-css'  href='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='easyfootnotescss-css'  href='../../../../wp-content/plugins/easy-footnotes/assets/easy-footnotes167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='dashicons-css'  href='../../../../wp-includes/css/dashicons.min167b.css?ver=4.6' type='text/css' media='all' />
+<script type='text/javascript' src='../../../../wp-content/themes/scrawl-wpcom/js/scrawld56c.js?ver=20150309'></script>
+<script type='text/javascript' src='../../../../wp-content/themes/scrawl-wpcom/js/skip-link-focus-fix08e0.js?ver=20130115'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/comment-reply.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/imagesloaded.min55a0.js?ver=3.2.0'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtipcall167b.js?ver=4.6'></script>
+
+</body>
+
+<!-- Mirrored from malisper.me/2015/07/14/debugging-lisp-part-2-inspecting/?replytocom=201 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:47:26 GMT -->
+</html>
+<!-- Dynamic page generated in 0.093 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:24:02 -->

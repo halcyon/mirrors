@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Design Philosophies of Developer Tools</title>
+	<atom:link href="https://stuartsierra.com/2011/08/30/design-philosophies-of-developer-tools/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2011/08/30/design-philosophies-of-developer-tools</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2011/08/30/design-philosophies-of-developer-tools/comment-page-1#comment-44271</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Wed, 31 Aug 2011 14:20:06 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=565#comment-44271</guid>
+		<description><![CDATA[Christian said: &lt;em&gt;&quot;Given that the JVM has no fork, how does your universal plugin comment fit with Clojure?&quot;&lt;/em&gt;
+
+It doesn&#039;t. And that&#039;s the problem with every extant build management tool for Clojure.
+
+Clojure does have first-class functions, which are easier to compose than any plugin architecture. But Clojure functions don&#039;t provide a way to isolate different environments, making them less appropriate for something like a build tool.]]></description>
+		<content:encoded><![CDATA[<p>Christian said: <em>&#8220;Given that the JVM has no fork, how does your universal plugin comment fit with Clojure?&#8221;</em></p>
+<p>It doesn&#8217;t. And that&#8217;s the problem with every extant build management tool for Clojure.</p>
+<p>Clojure does have first-class functions, which are easier to compose than any plugin architecture. But Clojure functions don&#8217;t provide a way to isolate different environments, making them less appropriate for something like a build tool.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Christian Romney</title>
+		<link>https://stuartsierra.com/2011/08/30/design-philosophies-of-developer-tools/comment-page-1#comment-44270</link>
+		<dc:creator><![CDATA[Christian Romney]]></dc:creator>
+		<pubDate>Wed, 31 Aug 2011 11:09:35 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=565#comment-44270</guid>
+		<description><![CDATA[Wow, I love your last two points. One question, though. Given that the JVM has no fork, how does your universal plugin comment fit with Clojure?]]></description>
+		<content:encoded><![CDATA[<p>Wow, I love your last two points. One question, though. Given that the JVM has no fork, how does your universal plugin comment fit with Clojure?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Christian Romney</title>
+		<link>https://stuartsierra.com/2011/08/30/design-philosophies-of-developer-tools/comment-page-1#comment-44269</link>
+		<dc:creator><![CDATA[Christian Romney]]></dc:creator>
+		<pubDate>Wed, 31 Aug 2011 11:05:15 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=565#comment-44269</guid>
+		<description><![CDATA[There&#039;s a quote from Alan Perlis I keep reading on all the Clojure blogs about the number of functions that operate on a data structure. It seems directly applicable to Git. Admittedly, Git has more than one data structure. I would consider a &quot;diff&quot; a data structure in addition to the internal changeset representation. But I&#039;m not sure I would label its design tight coupling–a term with a highly negative connotation that is usually used to describe one module&#039;s dependence on another. Rather, all of Git&#039;s &quot;modules&quot; seem to depend on a few data structures, and higher-level (porcelain) freely mixes and matches lower-level APIs (plumbing) to provide complex functionality. And most of these porcelain commands input/output &quot;diffs&quot;. It&#039;s a really interesting architecture, which seems loosely coupled to me. I&#039;d love to read your thoughts on this. Great post–thanks for writing it.]]></description>
+		<content:encoded><![CDATA[<p>There&#8217;s a quote from Alan Perlis I keep reading on all the Clojure blogs about the number of functions that operate on a data structure. It seems directly applicable to Git. Admittedly, Git has more than one data structure. I would consider a &#8220;diff&#8221; a data structure in addition to the internal changeset representation. But I&#8217;m not sure I would label its design tight coupling–a term with a highly negative connotation that is usually used to describe one module&#8217;s dependence on another. Rather, all of Git&#8217;s &#8220;modules&#8221; seem to depend on a few data structures, and higher-level (porcelain) freely mixes and matches lower-level APIs (plumbing) to provide complex functionality. And most of these porcelain commands input/output &#8220;diffs&#8221;. It&#8217;s a really interesting architecture, which seems loosely coupled to me. I&#8217;d love to read your thoughts on this. Great post–thanks for writing it.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Karol</title>
+		<link>https://stuartsierra.com/2011/08/30/design-philosophies-of-developer-tools/comment-page-1#comment-44268</link>
+		<dc:creator><![CDATA[Karol]]></dc:creator>
+		<pubDate>Wed, 31 Aug 2011 10:18:06 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=565#comment-44268</guid>
+		<description><![CDATA[Good points. Simplicity first.]]></description>
+		<content:encoded><![CDATA[<p>Good points. Simplicity first.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Devin Walters</title>
+		<link>https://stuartsierra.com/2011/08/30/design-philosophies-of-developer-tools/comment-page-1#comment-44265</link>
+		<dc:creator><![CDATA[Devin Walters]]></dc:creator>
+		<pubDate>Wed, 31 Aug 2011 03:58:51 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=565#comment-44265</guid>
+		<description><![CDATA[Thought provoking and appreciated. Solid conclusions from subtle patterns.]]></description>
+		<content:encoded><![CDATA[<p>Thought provoking and appreciated. Solid conclusions from subtle patterns.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.267 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:01:27 -->
+
+<!-- Compression = gzip -->

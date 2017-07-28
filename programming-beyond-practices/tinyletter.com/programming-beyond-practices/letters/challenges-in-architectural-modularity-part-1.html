@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/challenges-in-architectural-modularity-part-1 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:00 GMT -->
+<head>
+    <title> Challenges in architectural modularity, Part 1 </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="challenges-in-architectural-modularity-part-1.html">
+    <meta property="og:title" content="Challenges in architectural modularity, Part 1">
+    <meta property="og:description" content="I'd like to have a conversation about software architecture, and in particular how high level design choices can impact the modularity of a system.">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Challenges in architectural modularity, Part 1" />
+	<meta name="twitter:description" content="I'd like to have a conversation about software architecture, and in particular how high level design choices can impact the modularity of a system" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> September 24, 2015 </div>
+            <h1 class="subject"> Challenges in architectural modularity, Part 1 </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> <div>I&#39;d like to have a conversation about software architecture, and in particular how high&nbsp;level design choices can impact the modularity of a system.&nbsp;<br>
+<br>
+To get us&nbsp;into the right mindset, I&#39;ve listed three problems for you to think through. &nbsp;Enjoy!<br>
+&nbsp;
+<hr><br>
+<strong>PROBLEM #1</strong><br>
+<br>
+You&#39;re building a fancy enterprise management system for a logistics company. It has lots of different reports and data entry mechanisms and fancy analysis features, and it&#39;s the stuff of dreams for SERIOUS BUSINESS types.<br>
+<br>
+Some careful thought has been put into the architecture and underlying data model for this system -- so far, all of the data imports have been done either by dumping and loading data from old SQL databases in one-off batches, or imported from CSV and Excel files. There are well defined rules for normalizing the data, and so even if the import processes are&nbsp;hairy,&nbsp;it&#39;s easy to work with the post processed data. For a while, all is well.<br>
+<br>
+Suddenly, things get a lot more complicated. A new cost estimation system you&#39;re building needs access to mileage calculations from a truck routing system. The software that the business currently relies on for this purpose is costly, and they&#39;ve gotten very dependent on it. For the time being, there&#39;s no real option to stop using this system, so you&#39;ll need to work with it. &nbsp;<br>
+<br>
+It was built before the concept of web APIs existed, so there&#39;s no easy HTTP interface to work with. It runs only on Windows, and its only integration is a COM interface. It is not very stable, and can fail in erratic ways on occasion. It sometimes leaks memory. In other words, it&#39;s a bad dream.<br>
+<br>
+You need to be able to interact with this truck routing system in real time, by passing in queries entered via the Rails app. The truck routing system will fail in all sorts of strange ways when the inputs are invalid, some of which you can catch in advance, but many of which you&#39;ll need to interpret obscure error codes and parse failure messages to work with meaningfully.<br>
+<br>
+How do you go about integrating this new data source into your fancy Rails enterprisey system? Keep in mind, the Rails app is running on a Linux server, and you have no interest in moving it to a Windows desktop for the sole purpose of integrating this piece of software.<br>
+&nbsp;
+<hr><br>
+<strong>PROBLEM #2</strong><br>
+<br>
+You have an absolutely ancient payroll management system that was built a decade ago and hasn&#39;t been touched since then. Although you could in theory still make changes to it because you have the source code and access to the production server it runs on, setting up the entire toolchain and using it day to day would almost feel like stepping through a dark and dingy timewarp. You&#39;d spend as much time remembering the tooling and practices of 2005 as you would doing productive work.<br>
+<br>
+The maintenance budget for this company is tiny, but some new reporting tools would really benefit the business. If you had access to the data from the old payroll system, it would only take you a few hours to build them out.<br>
+<br>
+How do you build this new reporting system with ten hours of effort or less? How would you set things up so that it will be easy to do similar reporting work in the future?<br>
+&nbsp;
+<hr><br>
+<strong>PROBLEM #3</strong><br>
+<br>
+You&#39;ve got another enterprisey Rails application running on Heroku, and it&#39;s a greenfield project that&#39;s been built with maintainability in mind.<br>
+<br>
+A new set of requirements suddenly becomes urgent, which involves building a schedule auditor and constraint solver for planning employee shifts. The rules for how to implement this system are easy to understand, but the data sources are terribly complex.<br>
+<br>
+One data source is a web application that implements a general scheduling calendar. This is a system where employee shifts are entered, and its easy to see at a glance who is working where. &nbsp;The application has a &quot;REST&quot; API, which is actually not at all a REST API, and seems to implement some individual developer&#39;s unique take on what a web service ought to look like. It is very unstable, and can time out, take five minutes to respond occasionally, or just send back invalid data whenever it feels like it.<br>
+<br>
+Another data source is an ancient clinic management system, which in theory does not have a direct interface for getting at its data. However, it does use SQL Server 2000 as its data store, and the schema structure is understandable enough to get useful information out of it. Aside from the occasional deadlocks (which sometimes are caught, and other times aren&#39;t), you can get at all the data you need in the appointment book.<br>
+<br>
+But there is more to the puzzle, because even though production employees can have their shifts validated by looking for patient appointments, that doesn&#39;t give you all the information you need. The rest of this is stored as metadata on various specially named appointments, which means that you need to look for, parse, and otherwise massage these weird records as well.<br>
+<br>
+Processing this data will require you to work with patient information, which you&#39;d rather not load into your Rails application running on Heroku without careful thought. The schedule constraint system doesn&#39;t actually need to work directly with appointment data, but that data does need to be pre-processed somewhere to determine whether or not someone needs a shift assigned for any given day.<br>
+<br>
+Given the medical context, you can assume that remote access to the clinic management system over the internet would not be a good idea without careful thought. However, sending sanitized data from the company&#39;s network out to the internet is fine.<br>
+<br>
+What do you imagine the data import process would look like for this system? Keep in mind that your goal would be to have your Rails application know as little as possible about these other systems, and that it&#39;s absolutely necessary to prevent a failure in the import process from causing instability in the&nbsp;web application.<br>
+&nbsp;
+<hr><br>
+Spend a few minutes working through each of these examples, then consider what each of them have in common with one another.<br>
+<br>
+I will share my own solutions in a couple days, but I&#39;d love to hear your thoughts and questions between now and then. Hit that reply button and sned some ideas along, please!<br>
+<br>
+-greg</div>
+
+<div>&nbsp;</div> </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="sweeping-complexity-under-the-rug-challenges-in-architectural-modularity-part-ii.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="strategic-vs-tactical-decision-making.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/challenges-in-architectural-modularity-part-1 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:00 GMT -->
+</html>

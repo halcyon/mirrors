@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<!-- $Id: //info.ravenbrook.com/user/ndl/lisp/claude/index.html#8 $ -->
+
+
+<!-- Mirrored from nicklevine.org/claude/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:14 GMT -->
+<head>
+
+<title>CLAUDE AND CLAUDE-SETUP</title>
+
+  <meta name="Author" content="Nick Levine">
+  <meta name="Copyright" content="Copyright (c) Nick Levine 2014. All rights reserved.">
+  <meta name="Publisher" content="Nick Levine">
+  <meta name="Robots" content="index">
+  <meta name="Description" content="CLAUDE is a toolkit which exports libraries written in Common Lisp, so that applications being developed in other languages can access them.">
+  <meta name="Keywords" content="Common Lisp, Interoperability, Distributed Objects, Software Libraries">
+
+<style type="text/css">
+   <!--
+          a {color: #006699; text-decoration: none; font-weight: bold}
+          body, td, th {background: white; color: black}
+   -->
+  </style>
+
+</head>
+
+<body>
+
+<div align="center">
+<h1>CLAUDE AND CLAUDE-SETUP</h1>
+<table><tr><td width="700">
+
+<p><strong>CLAUDE</strong> (the <cite>Common Lisp Library Audience
+Expansion</cite> Toolkit) exports libraries written in Common Lisp, so
+that applications being developed in other languages can access them.
+CLAUDE co-operates with foreign runtimes in the management of CLOS
+objects, records, arrays and more primitive types. Lisp macros make
+the task of exporting a library simple and elegant; template
+documentation along with C headers and sample code files relieve some
+of the burden of explaining such exports to the application
+programmer.</p>
+
+<p><strong>CLAUDE-SETUP</strong> configures CLAUDE for your
+library.</p>
+
+<h3>Rapid Example</h3>
+
+<pre><blockquote>(defclass-external frob ()
+  ())
+
+(defun-external (new-frob :result-type object) ()
+  (make-instance 'frob))</blockquote></pre>
+
+<p>and then in Python...</p>
+
+<pre><blockquote>&gt;&gt;&gt; claude.Frob()
+&lt;Claude Frob handle=0x200538b0&gt;
+&gt;&gt;&gt;</blockquote></pre>
+
+<h3>Take a Closer Look</h3>
+
+<ul>
+  <li><p><a href="claude-1.0.2/manual/index.html">Full documentation</a></p></li>
+  
+  <li><p><a href="claude-1.0.2.zip">Download</a> &mdash; release 1.0.2</p></li>
+
+  <li><cite>CLAUDE &mdash; The Common Lisp Library Audience Expansion Toolkit</cite>
+    (<a href="http://www.european-lisp-symposium.org/">7th European
+      Lisp Symposium</a>, Paris, May 2014)
+    <ul>
+      <li><a href="paper.pdf">Paper</a></li>
+      <li><a href="slides.txt">Slides</a></li>
+    </ul>
+  </li>
+</ul>
+
+</td></tr></table>
+</div>
+</body>
+
+
+<!-- Mirrored from nicklevine.org/claude/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:14 GMT -->
+</html>
+

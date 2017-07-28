@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns#">
+
+<!-- Mirrored from malisper.me/2016/04/13/loops-in-lisp-part-4-series/?replytocom=3698 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:46:54 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loops in Lisp Part 4: Series - Macrology</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="../../../../xmlrpc.php">
+
+
+<!-- This site is optimized with the Yoast SEO plugin v3.4.2 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="robots" content="noindex,follow"/>
+<link rel="canonical" href="index.html" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Loops in Lisp Part 4: Series - Macrology" />
+<meta property="og:description" content="This is part four of Loops in Lisp. Follow one of the following links for part one, two, or three). One of the many advantages of programming in a functional style (by this, I mean manipulating your data through the operations, map, fold, and filter) is that your program winds up being made up a bunch of tiny and &hellip;" />
+<meta property="og:url" content="index.html" />
+<meta property="og:site_name" content="Macrology" />
+<meta property="article:section" content="Advanced Macros" />
+<meta property="article:published_time" content="2016-04-13T03:06:36-05:00" />
+<meta property="article:modified_time" content="2016-04-14T03:44:39-05:00" />
+<meta property="og:updated_time" content="2016-04-14T03:44:39-05:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:description" content="This is part four of Loops in Lisp. Follow one of the following links for part one, two, or three). One of the many advantages of programming in a functional style (by this, I mean manipulating your data through the operations, map, fold, and filter) is that your program winds up being made up a bunch of tiny and [&hellip;]" />
+<meta name="twitter:title" content="Loops in Lisp Part 4: Series - Macrology" />
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Feed" href="../../../../feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Comments Feed" href="../../../../comments/feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Loops in Lisp Part 4: Series Comments Feed" href="feed/index.html" />
+<link rel='stylesheet' id='scrawl-style-css'  href='../../../../wp-content/themes/scrawl-wpcom/style167b.css?ver=4.6' type='text/css' media='all' />
+<link rel='stylesheet' id='scrawl-fonts-css'  href='https://fonts.googleapis.com/css?family=Lora:400,700|Merriweather:400italic,400,700,700italic&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../../../wp-content/themes/scrawl-wpcom/fonts/genericons6de8.css?ver=3.3' type='text/css' media='all' />
+<script type='text/javascript' src='../../../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<link rel='https://api.w.org/' href='../../../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../../../wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+<link rel='shortlink' href='../../../../index8c47.html?p=1366' />
+<meta name='robots' content='noindex,follow' />
+<link rel="alternate" type="application/json+oembed" href="../../../../wp-json/oembed/1.0/embedc14a.json?url=http%3A%2F%2Fmalisper.me%2F2016%2F04%2F13%2Floops-in-lisp-part-4-series%2F" />
+<link rel="alternate" type="text/xml+oembed" href="../../../../wp-json/oembed/1.0/embeddacc?url=http%3A%2F%2Fmalisper.me%2F2016%2F04%2F13%2Floops-in-lisp-part-4-series%2F&amp;format=xml" />
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-63547056-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<style type="text/css" id="syntaxhighlighteranchor"></style>
+
+<script type="text/javascript">
+  window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var n=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(n?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var o=document.getElementsByTagName("script")[0];o.parentNode.insertBefore(a,o);for(var r=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["clearEventProperties","identify","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=r(p[c])};
+    heap.load("931515525");
+</script>
+</head>
+
+<body class="single single-post postid-1366 single-format-standard">
+	<button class="menu-toggle x">
+		<span class="lines"></span>
+		<span class="screen-reader-text">Primary Menu</span>
+	</button>
+	<div class="slide-menu">
+				
+		<h1 class="site-title"><a href="../../../../index.html" rel="home">Macrology</a></h1>
+		<h2 class="site-description">Case Studies in Lisp Macros</h2>
+		
+				
+				
+			<div id="secondary" class="widget-area" role="complementary">
+		<aside id="search-2" class="widget widget_search"><form role="search" method="get" class="search-form" action="http://malisper.me/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form></aside><aside id="pages-3" class="widget widget_pages"><h1 class="widget-title">Pages</h1>		<ul>
+			<li class="page_item page-item-55"><a href="../../../../about-me/index.html">About Michael Malis</a></li>
+<li class="page_item page-item-44"><a href="../../../../about-this-site-2/index.html">About This Site</a></li>
+		</ul>
+		</aside><aside id="nav_menu-3" class="widget widget_nav_menu"><h1 class="widget-title">Contact Me</h1><div class="menu-contact-me-container"><ul id="menu-contact-me" class="menu"><li id="menu-item-60" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-60"><a href="mailto:michaelmalis2@gmail.com">Email</a></li>
+<li id="menu-item-58" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-58"><a href="https://github.com/malisper">Github</a></li>
+<li id="menu-item-59" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-59"><a href="https://news.ycombinator.com/user?id=malisper">Hacker News</a></li>
+</ul></div></aside><aside id="archives-2" class="widget widget_archive"><h1 class="widget-title">Archives</h1>		<ul>
+			<li><a href='../../../06/index.html'>June 2016</a></li>
+	<li><a href='../../index.html'>April 2016</a></li>
+	<li><a href='../../../01/index.html'>January 2016</a></li>
+	<li><a href='../../../../2015/12/index.html'>December 2015</a></li>
+	<li><a href='../../../../2015/11/index.html'>November 2015</a></li>
+	<li><a href='../../../../2015/10/index.html'>October 2015</a></li>
+	<li><a href='../../../../2015/09/index.html'>September 2015</a></li>
+	<li><a href='../../../../2015/08/index.html'>August 2015</a></li>
+	<li><a href='../../../../2015/07/index.html'>July 2015</a></li>
+	<li><a href='../../../../2015/06/index.html'>June 2015</a></li>
+	<li><a href='../../../../2015/05/index.html'>May 2015</a></li>
+		</ul>
+		</aside><aside id="categories-2" class="widget widget_categories"><h1 class="widget-title">Categories</h1>		<ul>
+	<li class="cat-item cat-item-2"><a href="../../../../category/basics/index.html" title="These are basic Lisp macros that should be trivial to understand.">Basic Macros</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="../../../../category/intermediate-macros/index.html" >Intermediate Macros</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="../../../../category/advanced-macros/index.html" >Advanced Macros</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="../../../../category/debugging-common-lisp/index.html" >Debugging Lisp</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="../../../../category/loops-in-lisp/index.html" >Loops in Lisp</a>
+</li>
+		</ul>
+</aside>	</div><!-- #secondary -->
+	</div><!-- .slide-menu -->
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<header id="masthead" class="site-header" role="banner">
+
+		<div class="site-branding">
+						<h1 class="site-title"><a href="../../../../index.html" rel="home">Macrology</a></h1>
+		</div>
+
+	</header><!-- #masthead -->
+
+	
+	
+	<div id="content" class="site-content">
+
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			<article id="post-1366" class="post-1366 post type-post status-publish format-standard hentry category-advanced-macros category-loops-in-lisp">
+			<header class="entry-header">
+			<h1 class="entry-title">Loops in Lisp Part 4: Series</h1>		</header><!-- .entry-header -->
+		<div class="entry-content">
+		<p><em>This is part four of Loops in Lisp. Follow one of the following links for part <a href="../../../../2015/11/24/loops-lisp-part-1-goto/index.html">one</a>, <a href="../../../../2015/12/15/loops-in-lisp-part-2-loop/index.html">two</a>, or <a href="../../../01/12/loops-in-lisp-part-3-iterate/index.html">three</a>).</em></p>
+<p>One of the many advantages of programming in a functional style (by this, I mean manipulating your data through the operations, map, fold, and filter) is that your program winds up being made up a bunch of tiny and composable pieces. Since each piece is so small, usually only a few lines each, it becomes trivial to unit test the entire program. Additionally, it is easy to express new features as just the composition of several existing functions. One disadvantage of programming through map and friends, is that there is fairly large time penalty for allocating the intermediate results. For example, every time filter is called on a list, a new list needs to be allocated. These costs add up pretty quickly and can make a functional program much slower than its imperative equivalent.</p>
+<p>One solution to this problem is laziness. Instead of allocating a new list every time an operation is performed on a list, you instead keep track of all of the transformations made on the list. Then when you fold over the list, you perform all of the transformations as you are folding over it. By doing this, you don&#8217;t need to allocate intermediate lists. Although laziness doesn&#8217;t allocate any intermediate lists, there is still a small cost for keeping track of the laziness. An alternative solution that makes functional programming just as fast as imperative programming is provided by the Series library.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='#easy-footnote-bottom-1' title='The technique used by Series is sometimes referred to as &#8220;stream fusion&#8221;.'><sup>1</sup></a></span> Series lets you write your program in a functional style without <em>any</em> runtime penalty at all!</p>
+<p>Personally, the Series library is my favorite example of the magic that can be pulled off with macros. In short, Series works by taking your functional code and compiling it down into a single loop. In this loop, there is one step per transformation performed on the original list. The loop iterates over the values of the original sequence on at a time. On each iteration, the loop takes a single element, performs all of the transformations performed on the list on that single element, and then accumulates that value into the result according to the folding operation. This loop requires no additional memory allocation at runtime, and their is no time penalty either! As an example, here is a program that sums the first N squares, written using Series:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun integers ()
+  &quot;Returns a 'series' of all of the natural numbers.&quot;
+  (declare (optimizable-series-function))
+  (scan-range :from 1))
+
+(defun squares ()
+  &quot;Returns a 'series' of all of the square numbers.&quot;
+  (declare (optimizable-series-function))
+  (map-fn t 
+          (lambda (x) (* x x)) 
+          (integers)))
+
+(defun sum-squares (n)
+  &quot;Returns the sum of the first N square numbers.&quot;
+  (collect-sum (subseries (squares) 0 n)))
+
+(sum-squares 10)
+=&gt; 385
+</pre>
+<p>The above code certainly looks functional, there are no side effects in sight. Now let&#8217;s look at the code generated by Series. Here is what the macroexpansion of <strong>collect-sum</strong> looks like:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(common-lisp:let* ((#:out-969 n))
+  (common-lisp:let ((#:numbers-966
+                     (coerce-maybe-fold (- 1 1) 'number))
+                    #:items-967
+                    (#:index-965 -1)
+                    (#:sum-959 0))
+    (declare (type number #:numbers-966)
+             (type (integer -1) #:index-965)
+             (type number #:sum-959))
+    (tagbody
+       #:ll-970
+       (setq #:numbers-966
+             (+ #:numbers-966
+                (coerce-maybe-fold 1 'number)))
+       (setq #:items-967
+             ((lambda (x) (* x x)) #:numbers-966))
+       (incf #:index-965)
+       (locally
+          (declare (type nonnegative-integer #:index-965))
+         (if (&gt;= #:index-965 #:out-969)
+             (go end))
+         (if (&lt; #:index-965 0)
+             (go #:ll-970)))
+       (setq #:sum-959 (+ #:sum-959 #:items-967))
+       (go #:ll-970)
+     end)
+    #:sum-959))
+</pre>
+<p>What series does it looks at the entire lifetime of the sequence from its creation until it is folded. It uses this information to build the above loop which simultaneously generates the original sequence, maps over it, filters elements out of it, and folds it into the final result. Here is the breakdown of the expansion. Lines 1-9 are just initialization. They define all of the variables the loop will be using and set them to their starting values. The important variables to keep track of are #:NUMBERS-966, #:ITEMS-967, and #:SUM-959. As the code &#8220;iterates&#8221; over the original sequence, #:NUMBERS-966 is the value of the original sequence, #:ITEMS-967 is the square of that value, and #:SUM-959 is the sum of the squares so far. The rest of the code is the actual loop.</p>
+<p>The loop first takes #:NUMBERS-966, the previous value of the sequence, and increments it in order to set it to current value of the sequence (since the sequence is the range from 1 to infinity). Next the loop takes the square of #:NUMBERS-966 to get the ith square number and stores that in #:ITEMS-967. Then the loop checks if it ha taken more than N elements out of the sequence, and if so, terminates. Finally the loop takes the value in #:ITEMS-967 and accumulates that into #:SUM-959.</p>
+<p>Although the imperative version is equivalent to the original functional code, it is much faster than the functional code if the functional code were to allocate intermediate results or use laziness. This idea of turning transformations on a list into a loop doesn&#8217;t just work for this simple example, it also works for much more complicated programs. I just find it incredible that Series is able to take such pretty code and compile it into code that is extremely fast.</p>
+<ol class="easy-footnotes-wrapper"><li class="easy-footnote-single"><span id="easy-footnote-bottom-1" class="easy-footnote-margin-adjust"></span>The technique used by Series is sometimes referred to as &#8220;stream fusion&#8221;.<a class="easy-footnote-to-top" href="#easy-footnote-1"></a></li></ol>			</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="index.html" rel="bookmark"><time class="entry-date published" datetime="2016-04-13T03:06:36+00:00">April 13, 2016</time><time class="updated" datetime="2016-04-14T03:44:39+00:00">April 14, 2016</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../../../author/malisper/index.html">malisper</a></span></span><span class="category-links"> in <a href="../../../../category/advanced-macros/index.html" rel="category tag">Advanced Macros</a>, <a href="../../../../category/loops-in-lisp/index.html" rel="category tag">Loops in Lisp</a></span>			<span class="secondary-entry-meta">
+								<span class="comments-link"><a href="index.html#comments">4</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+			
+	<nav class="navigation post-navigation" role="navigation">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="../../../01/12/loops-in-lisp-part-3-iterate/index.html" rel="prev"><span class="title">Previous post</span>Loops in Lisp Part 3: Iterate</a></div><div class="nav-next"><a href="../../20/writing-self-referential-programs/index.html" rel="next"><span class="title">Next post</span>How to Generate Self-Referential Programs</a></div></div>
+	</nav>
+			
+<div id="comments" class="comments-area">
+
+	
+			<h2 class="comments-title">
+			4 thoughts on &ldquo;<span>Loops in Lisp Part 4: Series</span>&rdquo;		</h2>
+
+		<ol class="comment-list">
+					<li id="comment-3687" class="comment even thread-even depth-1 parent">
+			<article id="div-comment-3687" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://1.gravatar.com/avatar/ac60f6325be64029aa6b76d337e67889?s=64&amp;d=mm&amp;r=g' srcset='http://1.gravatar.com/avatar/ac60f6325be64029aa6b76d337e67889?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">Mauricio Fernandez</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-3687">
+							<time datetime="2016-04-13T09:15:19+00:00">
+								April 13, 2016 at 9:15 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I think in line 17 of the first code snippet in your post you were supposed to call (sum-squares 10) unless sum-series is something defined inside the series library, I don&#8217;t really know it, but sum-series seems to nob be defined anywhere.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='indexe20f.html?replytocom=3687#respond' onclick='return addComment.moveForm( "div-comment-3687", "3687", "respond", "1366" )' aria-label='Reply to Mauricio Fernandez'>Reply</a></div>			</article><!-- .comment-body -->
+<ol class="children">
+		<li id="comment-3698" class="comment byuser comment-author-malisper bypostauthor odd alt depth-2">
+			<article id="div-comment-3698" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://2.gravatar.com/avatar/2587b67431f9cc2a998a25e42e2d172d?s=64&amp;d=mm&amp;r=g' srcset='http://2.gravatar.com/avatar/2587b67431f9cc2a998a25e42e2d172d?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">malisper</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-3698">
+							<time datetime="2016-04-14T03:46:03+00:00">
+								April 14, 2016 at 3:46 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>The function was supposed to be <code>sum-squares</code>, not <code>sum-series</code>.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='indexe812.html?replytocom=3698#respond' onclick='return addComment.moveForm( "div-comment-3698", "3698", "respond", "1366" )' aria-label='Reply to malisper'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+		<li id="comment-3694" class="comment even thread-odd thread-alt depth-1 parent">
+			<article id="div-comment-3694" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://1.gravatar.com/avatar/a1877223afeed608ecd7069d2dc3d729?s=64&amp;d=mm&amp;r=g' srcset='http://1.gravatar.com/avatar/a1877223afeed608ecd7069d2dc3d729?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">Ashish</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-3694">
+							<time datetime="2016-04-14T03:09:04+00:00">
+								April 14, 2016 at 3:09 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thanks for writing this articles, noticed following typo though:</p>
+<p><code>s/(sum-series/(sum-squares/</code></p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='index84ab.html?replytocom=3694#respond' onclick='return addComment.moveForm( "div-comment-3694", "3694", "respond", "1366" )' aria-label='Reply to Ashish'>Reply</a></div>			</article><!-- .comment-body -->
+<ol class="children">
+		<li id="comment-3697" class="comment byuser comment-author-malisper bypostauthor odd alt depth-2">
+			<article id="div-comment-3697" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://2.gravatar.com/avatar/2587b67431f9cc2a998a25e42e2d172d?s=64&amp;d=mm&amp;r=g' srcset='http://2.gravatar.com/avatar/2587b67431f9cc2a998a25e42e2d172d?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">malisper</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-3697">
+							<time datetime="2016-04-14T03:45:22+00:00">
+								April 14, 2016 at 3:45 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Fixed. Thanks.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='index35e1.html?replytocom=3697#respond' onclick='return addComment.moveForm( "div-comment-3697", "3697", "respond", "1366" )' aria-label='Reply to malisper'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+		
+	
+	
+					<div id="respond" class="comment-respond">
+			<h3 id="reply-title" class="comment-reply-title">Leave a Reply to <a href="#comment-3698">malisper</a> <small><a rel="nofollow" id="cancel-comment-reply-link" title="Cancel reply" href="index.html#respond"><span class="screen-reader-text">Cancel reply</span></a></small></h3>				<form action="http://malisper.me/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
+					<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" aria-required="true" required="required"></textarea></p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" aria-required='true' required='required' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" aria-required='true' required='required' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='1366' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='3698' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="5c737a1429" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="34"/></p>				</form>
+					</div><!-- #respond -->
+		
+</div><!-- #comments -->
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="site-info">
+			<a href="http://wordpress.org/">Proudly powered by WordPress</a>
+			<span class="sep"> ~ </span>
+			Theme: Scrawl by <a href="https://wordpress.com/themes/" rel="designer">WordPress.com</a>.		</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type='text/javascript' src='../../../../wp-content/plugins/akismet/_inc/form2d73.html?ver=3.1.11'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushPlain09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore09b1.css?ver=3.0.9b";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeEclipse09b1.css?ver=3.0.9b";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+<link rel='stylesheet' id='qtipstyles-css'  href='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='easyfootnotescss-css'  href='../../../../wp-content/plugins/easy-footnotes/assets/easy-footnotes167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='dashicons-css'  href='../../../../wp-includes/css/dashicons.min167b.css?ver=4.6' type='text/css' media='all' />
+<script type='text/javascript' src='../../../../wp-content/themes/scrawl-wpcom/js/scrawld56c.js?ver=20150309'></script>
+<script type='text/javascript' src='../../../../wp-content/themes/scrawl-wpcom/js/skip-link-focus-fix08e0.js?ver=20130115'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/comment-reply.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/imagesloaded.min55a0.js?ver=3.2.0'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtipcall167b.js?ver=4.6'></script>
+
+</body>
+
+<!-- Mirrored from malisper.me/2016/04/13/loops-in-lisp-part-4-series/?replytocom=3698 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:46:54 GMT -->
+</html>
+<!-- Dynamic page generated in 0.081 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:23:28 -->

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Getting Places</title>
+	<atom:link href="http://malisper.me/2015/09/22/getting-places/feed/" rel="self" type="application/rss+xml" />
+	<link>http://malisper.me/2015/09/22/getting-places/</link>
+	<description>Case Studies in Lisp Macros</description>
+	<lastBuildDate>Thu, 14 Apr 2016 08:46:03 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Christophe</title>
+		<link>http://malisper.me/2015/09/22/getting-places/#comment-681</link>
+		<dc:creator><![CDATA[Christophe]]></dc:creator>
+		<pubDate>Thu, 24 Sep 2015 08:38:11 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=270#comment-681</guid>
+		<description><![CDATA[Nice. Thanks for formatting my code.]]></description>
+		<content:encoded><![CDATA[<p>Nice. Thanks for formatting my code.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: malisper</title>
+		<link>http://malisper.me/2015/09/22/getting-places/#comment-674</link>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+		<pubDate>Wed, 23 Sep 2015 17:41:15 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=270#comment-674</guid>
+		<description><![CDATA[I plan on covering a very similar macro in one of my next posts.]]></description>
+		<content:encoded><![CDATA[<p>I plan on covering a very similar macro in one of my next posts.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Christophe</title>
+		<link>http://malisper.me/2015/09/22/getting-places/#comment-668</link>
+		<dc:creator><![CDATA[Christophe]]></dc:creator>
+		<pubDate>Wed, 23 Sep 2015 09:28:35 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=270#comment-668</guid>
+		<description><![CDATA[Nice article. Here is another example I wrote when learning get-setf-expansion, adapted with your symbol names. If you sometimes write this:
+
+[code]
+(or (gethash k h nil) (setf (gethash k h) form))
+[/code]
+
+You may want to factor this into:
+
+[code]
+(ensure-hash k h form)
+[/code]
+
+You can do a normal macro:
+
+[code]
+(defmacro ensure-hash (key hash-table default-form)
+  (with-gensyms ($key $hash-table $v $foundp $value)
+    `(let ((,$key ,key)
+           (,$hash-table ,hash-table))
+       (multiple-value-bind (,$v ,$foundp) (gethash ,$key ,$hash-table)
+         (if ,$foundp
+             (values ,$v t)
+             (let ((,$value ,default-form))
+               (setf (gethash ,$key ,$hash-table) ,$value)
+               (values ,$value nil)))))))
+[/code]
+
+Or, with the get-setf-expansion:
+
+[code]
+(defmacro ensure-hash (key hash-table default-form &#038;environment env)
+  (with-gensyms ($v $f)
+    (multiple-value-bind (temps exprs stores store-expr access-expr)
+        (get-setf-expansion `(gethash ,key ,hash-table) env)
+      `(let* (,@(mapcar #&#039;list temps exprs))
+         (multiple-value-bind (,$v ,$f) ,access-expr
+           (if ,$f (values ,$v t)
+               (let ((,(car stores) ,default-form))
+                 ,store-expr
+                 (values ,(car stores) nil))))))))
+[/code]
+
+The resulting code is a little more compact.]]></description>
+		<content:encoded><![CDATA[<p>Nice article. Here is another example I wrote when learning get-setf-expansion, adapted with your symbol names. If you sometimes write this:</p>
+<pre class="brush: plain; title: ; notranslate">
+(or (gethash k h nil) (setf (gethash k h) form))
+</pre>
+<p>You may want to factor this into:</p>
+<pre class="brush: plain; title: ; notranslate">
+(ensure-hash k h form)
+</pre>
+<p>You can do a normal macro:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defmacro ensure-hash (key hash-table default-form)
+  (with-gensyms ($key $hash-table $v $foundp $value)
+    `(let ((,$key ,key)
+           (,$hash-table ,hash-table))
+       (multiple-value-bind (,$v ,$foundp) (gethash ,$key ,$hash-table)
+         (if ,$foundp
+             (values ,$v t)
+             (let ((,$value ,default-form))
+               (setf (gethash ,$key ,$hash-table) ,$value)
+               (values ,$value nil)))))))
+</pre>
+<p>Or, with the get-setf-expansion:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defmacro ensure-hash (key hash-table default-form &amp;environment env)
+  (with-gensyms ($v $f)
+    (multiple-value-bind (temps exprs stores store-expr access-expr)
+        (get-setf-expansion `(gethash ,key ,hash-table) env)
+      `(let* (,@(mapcar #'list temps exprs))
+         (multiple-value-bind (,$v ,$f) ,access-expr
+           (if ,$f (values ,$v t)
+               (let ((,(car stores) ,default-form))
+                 ,store-expr
+                 (values ,(car stores) nil))))))))
+</pre>
+<p>The resulting code is a little more compact.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.038 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:23:37 -->

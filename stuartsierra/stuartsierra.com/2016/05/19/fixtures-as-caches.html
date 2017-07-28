@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+
+<!-- Mirrored from stuartsierra.com/2016/05/19/fixtures-as-caches by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:56:13 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+		<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+<title>Fixtures as Caches &#8211; Digital Digressions by Stuart Sierra</title>
+<link rel='dns-prefetch' href='http://s0.wp.com/'>
+<link rel='dns-prefetch' href='http://secure.gravatar.com/'>
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel='dns-prefetch' href='http://s.w.org/'>
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Comments Feed" href="../../../comments/feed" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/stuartsierra.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.6"}};
+			!function(a,b,c){function d(a){var c,d,e,f,g,h=b.createElement("canvas"),i=h.getContext&&h.getContext("2d"),j=String.fromCharCode;if(!i||!i.fillText)return!1;switch(i.textBaseline="top",i.font="600 32px Arial",a){case"flag":return i.fillText(j(55356,56806,55356,56826),0,0),!(h.toDataURL().length<3e3)&&(i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,65039,8205,55356,57096),0,0),c=h.toDataURL(),i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,55356,57096),0,0),d=h.toDataURL(),c!==d);case"diversity":return i.fillText(j(55356,57221),0,0),e=i.getImageData(16,16,1,1).data,f=e[0]+","+e[1]+","+e[2]+","+e[3],i.fillText(j(55356,57221,55356,57343),0,0),e=i.getImageData(16,16,1,1).data,g=e[0]+","+e[1]+","+e[2]+","+e[3],f!==g;case"simple":return i.fillText(j(55357,56835),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode8":return i.fillText(j(55356,57135),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode9":return i.fillText(j(55358,56631),0,0),0!==i.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity","unicode9"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='twentysixteen-jetpack-css'  href='../../../wp-content/plugins/jetpack/modules/theme-tools/compat/twentysixteen3a05.css?ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-fonts-css'  href='https://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%2C900%2C400italic%2C700italic%2C900italic%7CMontserrat%3A400%2C700%7CInconsolata%3A400&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../../wp-content/plugins/jetpack/_inc/genericons/genericons/genericons128b.css?ver=3.1' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-style-css'  href='../../../wp-content/themes/twentysixteen/style167b.css?ver=4.6' type='text/css' media='all' />
+<!--[if lt IE 10]>
+<link rel='stylesheet' id='twentysixteen-ie-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentysixteen-ie8-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie8.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='twentysixteen-ie7-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie7.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='../../../wp-content/plugins/jetpack/css/jetpack3a05.css?ver=4.2.2' type='text/css' media='all' />
+<script type='text/javascript' src='../../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://stuartsierra.com/wp-content/themes/twentysixteen/js/html5.js?ver=3.7.3'></script>
+<![endif]-->
+<link rel='https://api.w.org/' href='../../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../../wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Open-source Bundling' href='../../03/21/open-source-bundling.html' />
+<link rel='next' title='Apathy of the Commons' href='../../07/18/apathy-of-the-commons.html' />
+<meta name="generator" content="WordPress 4.6" />
+<link rel="canonical" href="fixtures-as-caches.html" />
+<link rel='shortlink' href='https://wp.me/pbl3J-fb' />
+<link rel="alternate" type="application/json+oembed" href="../../../wp-json/oembed/1.0/embeda2f6.json?url=https%3A%2F%2Fstuartsierra.com%2F2016%2F05%2F19%2Ffixtures-as-caches" />
+<link rel="alternate" type="text/xml+oembed" href="../../../wp-json/oembed/1.0/embed29b9?url=https%3A%2F%2Fstuartsierra.com%2F2016%2F05%2F19%2Ffixtures-as-caches&amp;format=xml" />
+
+<link rel='dns-prefetch' href='http://v0.wordpress.com/'>
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Fixtures as Caches" />
+<meta property="og:url" content="https://stuartsierra.com/2016/05/19/fixtures-as-caches" />
+<meta property="og:description" content="I am responsible &mdash; for better or for worse &mdash; for the library which eventually became clojure.test. It has remained largely the same since it was first added to the language distribution…" />
+<meta property="article:published_time" content="2016-05-19T12:36:10+00:00" />
+<meta property="article:modified_time" content="2016-05-19T12:36:10+00:00" />
+<meta property="og:site_name" content="Digital Digressions by Stuart Sierra" />
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary" />
+</head>
+
+<body class="single single-post postid-941 single-format-standard">
+<div id="page" class="site">
+	<div class="site-inner">
+		<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+		<header id="masthead" class="site-header" role="banner">
+			<div class="site-header-main">
+				<div class="site-branding">
+					
+											<p class="site-title"><a href="../../../index.html" rel="home">Digital Digressions by Stuart Sierra</a></p>
+											<p class="site-description">From programming to everything else</p>
+									</div><!-- .site-branding -->
+
+									<button id="menu-toggle" class="menu-toggle">Menu</button>
+
+					<div id="site-header-menu" class="site-header-menu">
+													<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Primary Menu">
+								<div class="menu-main-menu-container"><ul id="menu-main-menu" class="primary-menu"><li id="menu-item-635" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../../../about-me.html">About Me</a></li>
+<li id="menu-item-633" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../../../writing.html">Writing</a></li>
+<li id="menu-item-634" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../../../presentations.html">Presentations</a></li>
+<li id="menu-item-636" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../../../software.html">Software</a></li>
+<li id="menu-item-637" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../../../contact.html">Contact</a></li>
+</ul></div>							</nav><!-- .main-navigation -->
+						
+											</div><!-- .site-header-menu -->
+							</div><!-- .site-header-main -->
+
+											<div class="header-image">
+					<a href="../../../index.html" rel="home">
+						<img src="../../../wp-content/uploads/2015/12/header.jpg" srcset="https://stuartsierra.com/wp-content/uploads/2015/12/header-300x70.jpg 300w, https://stuartsierra.com/wp-content/uploads/2015/12/header-768x179.jpg 768w, https://stuartsierra.com/wp-content/uploads/2015/12/header-1024x239.jpg 1024w, https://stuartsierra.com/wp-content/uploads/2015/12/header.jpg 1200w" sizes="(max-width: 709px) 85vw, (max-width: 909px) 81vw, (max-width: 1362px) 88vw, 1200px" width="1200" height="280" alt="Digital Digressions by Stuart Sierra">
+					</a>
+				</div><!-- .header-image -->
+					</header><!-- .site-header -->
+
+		<div id="content" class="site-content">
+
+<div id="primary" class="content-area">
+	<main id="main" class="site-main" role="main">
+		
+<article id="post-941" class="post-941 post type-post status-publish format-standard hentry category-programming tag-clojure tag-clojure-test tag-testing">
+	<header class="entry-header">
+		<h1 class="entry-title">Fixtures as Caches</h1>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>I am responsible &mdash; for better or for worse &mdash; for the library which eventually became <a href="http://clojure.github.io/clojure/#clojure.test">clojure.test</a>. It has remained largely the same since it was first added to the language distribution back in the pre-1.0 days. While there are many things about clojure.test which I would do differently now &mdash; dynamic binding, var metadata, side effects &mdash; it has held up remarkably well.</p>
+<p>I consider <em>fixtures</em> to be one of the less-well-thought-out features of clojure.test. A clojure.test <em>fixture</em> is a function which wraps a test function, typically for the purpose of setting up and tearing down the environment in which the test should run. Because test functions do not take arguments, the only way for a fixture to pass state to the test function is through dynamic binding. A typical fixture looks like this:</p>
+<pre>
+ (<span class="keyword">ns</span> <span class="type">fixtures-example</span>
+   (<span class="clojure-keyword">:require</span> [<span class="type">clojure.test</span> <span class="clojure-keyword">:as</span> test <span class="clojure-keyword">:refer</span> [deftest is]]))
+ 
+ (<span class="keyword">def</span> ^<span class="clojure-keyword">:dynamic</span> <span class="variable-name">*fix*</span>)
+ 
+ (<span class="keyword">defn</span> <span class="function-name">my-fixture</span> [test-fn]
+   (println <span class="string">"Set up *fix*"</span>)
+   (<span class="keyword">binding</span> [<span class="variable-name">*fix*</span> 42]
+     (test-fn))
+   (println <span class="string">"Tear down *fix*"</span>))
+ 
+ (<span class="type">test</span><span class="default">/</span>use-fixtures <span class="clojure-keyword">:each</span> my-fixture)
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t1</span>
+   (println <span class="string">"Do test t1"</span>)
+   (is (= <span class="variable-name">*fix*</span> 42)))
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t2</span>
+   (println <span class="string">"Do test t2"</span>)
+   (is (= <span class="variable-name">*fix*</span> (* 7 6))))
+</pre>
+<p>There are two kinds of fixtures in clojure.test:</p>
+<p><code>:each</code> fixtures run once per test, for every test in the namespace.</p>
+<p><code>:once</code> fixtures run once per namespace, wrapped around all tests in that namespace.</p>
+<p>I think the design of fixtures has a lot of problems. Firstly, attaching them to namespaces was a bad idea, since namespaces typically contain many different tests, only some of which actually need the fixture. This increases the likelihood of unintended coupling between fixtures and test code.</p>
+<p>Secondly, <code>:each</code> fixtures are redundant. If you need to wrap every test in some piece of shared code, all you need to do is put the shared code in a function or macro and call it in the body of each test function. There&#8217;s a small amount of duplication, but you gain flexibility to add tests which do <strong>not</strong> use the same shared code.</p>
+<p>(Another common complaint about fixtures is that they make it difficult to execute single tests in isolation, although the addition of <a href="http://clojure.github.io/clojure/clojure.test-api.html#clojure.test/test-vars"><code>test-vars</code></a> in Clojure 1.6 ameliorated that problem.)</p>
+<p>So <code>:once</code> fixtures are the only ones that matter. But if you want true isolation between your tests then they should not share any state at all. The only reason for sharing fixtures across tests is when the fixture does something expensive or time-consuming. Here again, namespaces are often the wrong level of granularity. If some resource is expensive to prepare, you may only want to pay the cost of preparing it <strong>once</strong> for all tests in your project, not once per namespace.</p>
+<p>So the purpose of <code>:once</code> fixtures is to <em>cache</em> their initialized state in between tests. What if we were to use fixtures <em>only</em> for caching? It might look something like this:</p>
+<pre>
+ (<span class="keyword">ns</span> <span class="type">caching-example</span>
+   (<span class="clojure-keyword">:require</span> [<span class="type">clojure.test</span> <span class="clojure-keyword">:refer</span> [deftest is]]))
+ 
+ (<span class="keyword">def</span> ^<span class="clojure-keyword">:dynamic</span> ^<span class="clojure-keyword">:private</span> <span class="variable-name">*fix*</span> <span class="constant">nil</span>)
+ 
+ (<span class="keyword">defn</span> <span class="function-name">new-fix</span>
+   <span class="doc">"Computes a new 'fix' value for tests."</span>
+   []
+   (println <span class="string">"Computing fixed value"</span>)
+   42)
+ 
+ (<span class="keyword">defn</span> <span class="function-name">fix</span>
+   <span class="doc">"Returns the current 'fix' value for
+   tests, creating one if needed."</span>
+   []
+   (<span class="keyword">or</span> <span class="variable-name">*fix*</span> (new-fix)))
+ 
+ (<span class="keyword">defn</span> <span class="function-name">fix-fixture</span>
+   <span class="doc">"A fixture function to provide a reusable
+   'fix' value for all tests in a namespace."</span>
+   [test-fn]
+   (<span class="keyword">binding</span> [<span class="variable-name">*fix*</span> (new-fix)]
+     (test-fn)))
+ 
+ (<span class="type">clojure.test</span><span class="default">/</span>use-fixtures <span class="clojure-keyword">:once</span> fix-fixture)
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t1</span>
+   (is (= (fix) 42)))
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t2</span>
+   (is (= (fix) (* 7 6))))
+</pre>
+<p>This still avoids repeated computation of the <code>fix</code> value, but clearly shows exactly which tests use it. The <code>:once</code> fixture is just an optimization: You could remove it and the tests would still work, perhaps more slowly. Best of all, you can run the individual test functions in the REPL without any additional setup.</p>
+<p>The same idea works even if the fixture requires tear-down after tests are finished:</p>
+<pre>
+ (<span class="keyword">ns</span> <span class="type">resource-example</span>
+   (<span class="clojure-keyword">:require</span> [<span class="type">clojure.test</span> <span class="clojure-keyword">:refer</span> [deftest is]]))
+ 
+ (<span class="keyword">defn</span> <span class="function-name">acquire-resource</span> []
+   (println <span class="string">"Acquiring resource"</span>)
+   <span class="clojure-keyword">:the-resource</span>)
+ 
+ (<span class="keyword">defn</span> <span class="function-name">release-resource</span> [resource]
+   (println <span class="string">"Releasing resource"</span>))
+ 
+ (<span class="keyword">def</span> ^<span class="clojure-keyword">:dynamic</span> ^<span class="clojure-keyword">:private</span> <span class="variable-name">*resource*</span> <span class="constant">nil</span>)
+ 
+ (<span class="keyword">defmacro</span> <span class="function-name">with-resource</span>
+   <span class="doc">"Acquires resource and binds it locally to
+   symbol while executing body. Ensures resource
+   is released after body completes. If called in
+   a dynamic context in which *resource* is
+   already bound, reuses the existing resource and
+   does not release it."</span>
+   [symbol &amp; body]
+   `(<span class="keyword">let</span> [~symbol (<span class="keyword">or</span> <span class="variable-name">*resource*</span>
+                      (acquire-resource))]
+      (<span class="keyword">try</span> ~@body
+           (<span class="keyword">finally</span>
+             (<span class="keyword">when-not</span> <span class="variable-name">*resource*</span>
+               (release-resource ~symbol))))))
+ 
+ (<span class="keyword">defn</span> <span class="function-name">resource-fixture</span>
+   <span class="doc">"Fixture function to acquire a resource for all
+   tests in a namespace."</span>
+   [test-fn]
+   (<span class="keyword">with-resource r
+     (<span class="keyword">binding</span> [<span class="variable-name">*resource*</span> r]
+       (test-fn))))
+ 
+ (<span class="type">clojure.test</span><span class="default">/</span>use-fixtures <span class="clojure-keyword">:once</span> resource-fixture)
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t1</span>
+   (with-resource r
+     (is (keyword? r))))
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t2</span>
+   (with-resource r
+     (is (= <span class="string">"the-resource"</span> (name r)))))
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t3</span>
+   (with-resource r
+     (is (nil? (namespace r)))))
+</pre>
+<p>Again, each of these tests can be run individually at the REPL with no extra ceremony. If you don&#8217;t want to keep paying the resource-setup cost in the REPL, you could temporarily redefine the <code>*resource*</code> var in its initialized state.</p>
+<p>The key in both cases is that the &#8220;fixtures&#8221; are designed to nest without duplicating effort. Each test function specifies exactly what state or resources it needs, but only creates them if they do not already exist. Some of those resources may be shared among multiple tests, but that fact is hidden from the individual tests.</p>
+<p>With this in mind, it becomes possible to share a resource across <strong>all</strong> tests in a project, not just within a namespace. All you need is an &#8220;entry point&#8221; which kicks off all the tests. clojure.test provides <a href="http://clojure.github.io/clojure/clojure.test-api.html#clojure.test/run-tests"><code>run-tests</code></a> for specifying individual namespaces and <a href="http://clojure.github.io/clojure/clojure.test-api.html#clojure.test/run-all-tests"><code>run-all-tests</code></a> to search for namespaces by regex. All you have to do is make sure your test namespaces are loaded, either via direct <code>require</code> or a utility such as <a href="https://github.com/clojure/tools.namespace">tools.namespace</a>. Then you can run a full test suite that only executes the expensive setup/teardown code once:</p>
+<pre>
+ (<span class="keyword">ns</span> <span class="type">main-test</span>
+   (<span class="clojure-keyword">:require</span> [<span class="type">clojure.test</span> <span class="clojure-keyword">:as</span> test]
+             [<span class="type">my.app.a-test</span>]))
+ 
+ (<span class="keyword">defn</span> <span class="function-name">-main</span> [&amp; _]
+   (with-resource-1
+     (with-resource-2
+       <span class="comment-delimiter">;;; </span><span class="comment">... more fixture wrappers ...
+</span>       (<span class="type">test</span><span class="default">/</span>run-all-tests #<span class="string">"^my\.app\..+-test$"</span>))))
+</pre>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="fixtures-as-caches.html" rel="bookmark"><time class="entry-date published updated" datetime="2016-05-19T08:36:10+00:00">May 19, 2016</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../../tag/clojure.html" rel="tag">Clojure</a>, <a href="../../../tag/clojure-test.html" rel="tag">clojure.test</a>, <a href="../../../tag/testing.html" rel="tag">testing</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+	<nav class="navigation post-navigation" role="navigation">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="../../03/21/open-source-bundling.html" rel="prev"><span class="meta-nav" aria-hidden="true">Previous</span> <span class="screen-reader-text">Previous post:</span> <span class="post-title">Open-source Bundling</span></a></div><div class="nav-next"><a href="../../07/18/apathy-of-the-commons.html" rel="next"><span class="meta-nav" aria-hidden="true">Next</span> <span class="screen-reader-text">Next post:</span> <span class="post-title">Apathy of the Commons</span></a></div></div>
+	</nav>
+	</main><!-- .site-main -->
+
+	
+</div><!-- .content-area -->
+
+
+	<aside id="secondary" class="sidebar widget-area" role="complementary">
+		<section id="search-3" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://stuartsierra.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+	</label>
+	<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</section><section id="text-4" class="widget widget_text">			<div class="textwidget"><ul>
+<li><a href="http://feeds2.feedburner.com/StuartSierra" title="Syndicate this site using RSS 2.0">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="../../../comments/feed" title="The latest comments to all posts in RSS">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+</ul>
+<ul>
+<li><a href="https://twitter.com/stuartsierra">Twitter</a></li>
+<li><a href="https://github.com/stuartsierra">GitHub</a></li>
+</ul></div>
+		</section><section id="tag-widget-2" class="widget TagWidget"><h2 class="widget-title">Clojure Do’s and Don’ts</h2><ul class = "posts-by-tag-list"><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-883"><a class = "posts-by-tag-item-title" href="../../../2015/08/25/clojure-donts-lazy-effects.html">Clojure Don’ts: Lazy Effects</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-877"><a class = "posts-by-tag-item-title" href="../../../2015/08/10/clojure-donts-redundant-map.html">Clojure Don’ts: Redundant map</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-870"><a class = "posts-by-tag-item-title" href="../../../2015/06/16/clojure-donts-single-branch-if.html">Clojure Don’ts: Single-branch if</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-854"><a class = "posts-by-tag-item-title" href="../../../2015/06/10/clojure-donts-heisenparameter.html">Clojure Don’ts: The Heisenparameter</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-849"><a class = "posts-by-tag-item-title" href="../../../2015/06/01/clojure-donts-optional-arguments-with-varargs.html">Clojure Don’ts: Optional Arguments with Varargs</a></li><li class="posts-by-tag-item Clojure do's and don'ts errors" id="posts-by-tag-item-836"><a class = "posts-by-tag-item-title" href="../../../2015/05/27/clojure-uncaught-exceptions.html">Clojure Do’s: Uncaught Exceptions</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-831"><a class = "posts-by-tag-item-title" href="../../../2015/05/17/clojure-record-constructors.html">Record Constructors</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-826"><a class = "posts-by-tag-item-title" href="../../../2015/05/10/clojure-namespace-aliases.html">Clojure Do’s: Namespace Aliases</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-820"><a class = "posts-by-tag-item-title" href="../../../2015/05/02/clojure-donts-isa.html">Clojure Don’ts: isa?</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-812"><a class = "posts-by-tag-item-title" href="../../../2015/04/26/clojure-donts-concat.html">Clojure Don’ts: Concat</a></li></ul></section>	</aside><!-- .sidebar .widget-area -->
+
+		</div><!-- .site-content -->
+
+		<footer id="colophon" class="site-footer" role="contentinfo">
+							<nav class="main-navigation" role="navigation" aria-label="Footer Primary Menu">
+					<div class="menu-main-menu-container"><ul id="menu-main-menu-1" class="primary-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../../../about-me.html">About Me</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../../../writing.html">Writing</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../../../presentations.html">Presentations</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../../../software.html">Software</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../../../contact.html">Contact</a></li>
+</ul></div>				</nav><!-- .main-navigation -->
+			
+			
+			<div class="site-info">
+								<span class="site-title"><a href="../../../index.html" rel="home">Digital Digressions by Stuart Sierra</a></span>
+				<a href="https://wordpress.org/">Proudly powered by WordPress</a>
+			</div><!-- .site-info -->
+		</footer><!-- .site-footer -->
+	</div><!-- .site-inner -->
+</div><!-- .site -->
+
+	<div style="display:none">
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	</div>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201635'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2016Sepaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../../../wp-content/plugins/jetpack/modules/wpgroho167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../wp-content/themes/twentysixteen/js/skip-link-focus-fix8de4.js?ver=20160816'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var screenReaderText = {"expand":"expand child menu","collapse":"collapse child menu"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../../../wp-content/themes/twentysixteen/js/functions8de4.js?ver=20160816'></script>
+<script type='text/javascript' src='../../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='https://stats.wp.com/e-201635.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.2.2',blog:'2702563',post:'941',tz:'-4',srv:'stuartsierra.com'} ]);
+	_stq.push([ 'clickTrackerInit', '2702563', '941' ]);
+</script>
+</body>
+
+<!-- Mirrored from stuartsierra.com/2016/05/19/fixtures-as-caches by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:56:14 GMT -->
+</html>
+
+<!-- Dynamic page generated in 0.802 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:18:49 -->
+
+<!-- Compression = gzip -->

@@ -1,0 +1,162 @@
+
+/* ¡Los comentarios aparecen dentro de diagonal-asterisco, justo como esta línea! */
+
+/* ####################
+   ## SELECTORES
+   ####################*/
+
+/* Generalmente, la sentencia principal en CSS es muy simple. */
+selector { propiedad: valor; /* más propiedades separados por punto y coma...*/ }
+
+/* El selector es usado para apuntar a (seleccionar) un elemento en la página.
+
+¡Puedes apuntar a todos los elementos en la página con el asterisco! */
+* { color:red; }
+
+/*
+Dado un elemento como este en la página:
+
+<div class='una-clase clase2' id='unaId' attr='valor' />
+*/
+
+/* puedes seleccionar el <div> por el nombre de su clase */
+.una-clase { }
+
+/*¡O por sus dos clases! */
+.una-clase.clase2 { }
+
+/* O por el nombre de su elemento */
+div { }
+
+/* O por su Id */
+#unaId { }
+
+/* ¡O por el hecho de que tiene un atributo! */
+[attr] { font-size:smaller; }
+
+/* O por el hecho de que el atributo tiene un valor determinado */
+[attr='valor'] { font-size:smaller; }
+
+/* Empieza con un valor ('val' en este caso)*/
+[attr^='val'] { font-size:smaller; }
+
+/* O termina con un valor ('or' en este caso) */
+[attr$='or'] { font-size:smaller; }
+
+/* O incluso contiene un valor ('lo' en este caso) */
+[attr~='lo'] { font-size:smaller; }
+
+/*Más importante, puedes combinar estos criterios de búsqueda entre sí.
+No debe existir ningún espacio entre estas partes porque hace que el 
+significado cambie.*/
+div.una-clase[attr$='or'] { }
+
+/* También puedes seleccionar un elemento HTML basándote en sus padres*/
+
+/* Un elemento que es hijo directo de otro elemento (Seleccionado de la forma que
+vimos anteriormente) */
+
+div.un-padre > .nombre-clase {}
+
+/* O cualquiera de sus ancestros en la jerarquía*/
+/* La siguiente sentencia selecciona a cualquier elemento que tenga una clase
+"nombre-clase" y sea hijo de un div con clase "un-padre" EN CUALQUIER PROFUNDIDAD*/
+div.un-padre .nombre-clase {}
+
+/* advertencia: el mismo selector sin espacio tiene otro significado. ¿Puedes
+identificar la diferencia?*/
+
+/* También puedes seleccionar un elemento basado en su hermano inmediato previo*/
+.yo-estoy-antes + .este-elemento { }
+
+/*o cualquier hermano previo */
+.yo-soy-cualquiera-antes ~ .estes-elemento {}
+
+/* Existen algunas pseudo-clases que permiten seleccionar un elemento
+basado en el comportamiendo de la página (a diferencia de la estructura de
+la página) */
+
+/* Por ejemplo, para cuando pasas el mouse por encima de un elemento */
+:hover {}
+
+/* o una liga visitada*/
+:visited {}
+
+/* o una liga no visitada aún*/
+:link {}
+
+/* o un elemento de un formulario que esté seleccionado */
+:focus {}
+
+
+/* ####################
+   ## PROPIEDADES
+   ####################*/
+
+selector {
+    
+    /* Unidades */
+    width: 50%; /* en porcentaje */
+    font-size: 2em; /* dos veces el tamaño de la fuente actual */
+    width: 200px; /* en pixeles */
+    font-size: 20pt; /* en puntos */
+    width: 5cm; /* en centimetros */
+    width: 50mm; /* en milimetros */
+    width: 5in; /* en pulgadas */
+    
+    /* Colores */
+    background-color: #F6E;  /* en hexadecimal corto */
+    background-color: #F262E2; /* en hexadecimal largo */
+    background-color: tomato; /* puede ser un color con nombre */
+    background-color: rgb(255, 255, 255); /* en rgb */
+    background-color: rgb(10%, 20%, 50%); /* en rgb percent */
+    background-color: rgba(255, 0, 0, 0.3); /* en rgb semi-transparente (con valor alfa)*/
+    
+    /* Imagenes */
+    background-image: url(../../ruta-a-la-imagen/imagen.html);
+    
+    /* Fuentes */
+    font-family: Arial;
+    font-family: "Courier New"; /* si el nombre contiene espacios, debe ir entre comillas */
+    font-family: "Courier New", Trebuchet, Arial; /* si la primera fuente no se encontró 
+    entonces se busca la seguna, o la tercera, así recursivamente*/
+}
+
+
+<!-- Necesitas incluir tu archivo CSS en el elemento <head> de tu HTML: -->
+<link rel='stylesheet' type='text/css' href='ruta/archivoDeEstilos.html' />
+
+<!--
+también puedes incluir CSS dentro del archivo HTML. Esta no es una buena práctica
+y debe ser evitada.
+-->
+<style>
+   selector { propiedad:valor; }
+</style>
+
+<!--
+También se pueden aplicar propiedades al elemento directamente.
+Esta práctica también debe ser evitada a toda costa
+-->
+<div style='propiedad:valor;'>
+</div>
+
+
+/*A*/
+p.clase1[attr='valor']
+
+/*B*/
+p.clase1 {}
+
+/*C*/
+p.clase2 {}
+
+/*D*/
+p {}
+
+/*E*/
+p { propiedad: valor !important; }
+
+
+<p style='/*F*/ propiedad:valor;' class='clase1 clase2' attr='valor'>
+</p>

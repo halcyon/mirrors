@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Once-only</title>
+	<atom:link href="http://malisper.me/2015/06/06/once-only/feed/" rel="self" type="application/rss+xml" />
+	<link>http://malisper.me/2015/06/06/once-only/</link>
+	<description>Case Studies in Lisp Macros</description>
+	<lastBuildDate>Thu, 14 Apr 2016 08:46:03 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: malisper</title>
+		<link>http://malisper.me/2015/06/06/once-only/#comment-10</link>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+		<pubDate>Tue, 09 Jun 2015 17:21:51 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=111#comment-10</guid>
+		<description><![CDATA[It should be fixed now.]]></description>
+		<content:encoded><![CDATA[<p>It should be fixed now.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Priyadarshan</title>
+		<link>http://malisper.me/2015/06/06/once-only/#comment-9</link>
+		<dc:creator><![CDATA[Priyadarshan]]></dc:creator>
+		<pubDate>Tue, 09 Jun 2015 16:16:54 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=111#comment-9</guid>
+		<description><![CDATA[It seems there is a problem with the first line of once-only:
+
+(&#038;rest names) &#038;body body)
+
+Even replacing the &#038; with :, I get this error by calling it from SBCL:
+
+[code]
+Execution of a form compiled with errors.
+Form:
+  (ONCE-ONLY (X) `(* ,X ,X))
+Compile-time error:
+  during macroexpansion of (ONCE-ONLY (X) `(* ,X ,X)). Use *BREAK-ON-SIGNALS* to
+intercept.
+
+ error while parsing arguments to DEFMACRO ONCE-ONLY:
+   invalid number of elements in
+     ((X) `(* ,X ,X))
+   to satisfy lambda list
+     ((:REST NAMES) :BODY BODY):
+   exactly 3 expected, but 2 found
+   [Condition of type SB-INT:COMPILED-PROGRAM-ERROR]
+[/code]]]></description>
+		<content:encoded><![CDATA[<p>It seems there is a problem with the first line of once-only:</p>
+<p>(&amp;rest names) &amp;body body)</p>
+<p>Even replacing the &amp; with :, I get this error by calling it from SBCL:</p>
+<pre class="brush: plain; title: ; notranslate">
+Execution of a form compiled with errors.
+Form:
+  (ONCE-ONLY (X) `(* ,X ,X))
+Compile-time error:
+  during macroexpansion of (ONCE-ONLY (X) `(* ,X ,X)). Use *BREAK-ON-SIGNALS* to
+intercept.
+
+ error while parsing arguments to DEFMACRO ONCE-ONLY:
+   invalid number of elements in
+     ((X) `(* ,X ,X))
+   to satisfy lambda list
+     ((:REST NAMES) :BODY BODY):
+   exactly 3 expected, but 2 found
+   [Condition of type SB-INT:COMPILED-PROGRAM-ERROR]
+</pre>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: malisper</title>
+		<link>http://malisper.me/2015/06/06/once-only/#comment-8</link>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+		<pubDate>Tue, 09 Jun 2015 15:49:06 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=111#comment-8</guid>
+		<description><![CDATA[I really like that version. It decomposes the problem pretty well. I feel like the one from Practical Common Lisp tries to do too much at one time.]]></description>
+		<content:encoded><![CDATA[<p>I really like that version. It decomposes the problem pretty well. I feel like the one from Practical Common Lisp tries to do too much at one time.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: James M. Lawrence</title>
+		<link>http://malisper.me/2015/06/06/once-only/#comment-5</link>
+		<dc:creator><![CDATA[James M. Lawrence]]></dc:creator>
+		<pubDate>Tue, 09 Jun 2015 05:20:40 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=111#comment-5</guid>
+		<description><![CDATA[Before I depended upon alexandria, I had used this recursive version,
+[code]
+(defmacro once-only-1 (var &#038;body body)
+  (with-gensyms (tmp)
+    `(let ((,tmp (gensym ,(symbol-name var))))
+       `(let ((,,tmp ,,var))
+          ,(let ((,var ,tmp))
+             ,@body)))))
+
+(defmacro once-only (vars &#038;body body)
+  (if vars
+      `(once-only-1 ,(car vars)
+         (once-only ,(cdr vars)
+           ,@body))
+      `(progn ,@body)))
+[/code]]]></description>
+		<content:encoded><![CDATA[<p>Before I depended upon alexandria, I had used this recursive version,</p>
+<pre class="brush: plain; title: ; notranslate">
+(defmacro once-only-1 (var &amp;body body)
+  (with-gensyms (tmp)
+    `(let ((,tmp (gensym ,(symbol-name var))))
+       `(let ((,,tmp ,,var))
+          ,(let ((,var ,tmp))
+             ,@body)))))
+
+(defmacro once-only (vars &amp;body body)
+  (if vars
+      `(once-only-1 ,(car vars)
+         (once-only ,(cdr vars)
+           ,@body))
+      `(progn ,@body)))
+</pre>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.041 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:23:42 -->

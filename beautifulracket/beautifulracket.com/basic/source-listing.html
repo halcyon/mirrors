@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/basic/source-listing.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:49 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Go with the flow: basic</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;go-with-the-flow-basic&quot;)"></div><h1 anchor="go-with-the-flow-basic" id="go-with-the-flow-basic" hyphens="none">Go with the flow: <span class="my-code" decode="exclude">basic</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-lexer.html">3&emsp;the lexer</a></li><li><a href="the-tokenizer.html">4&emsp;the tok­enizer</a></li><li><a href="the-parser.html">5&emsp;the parser</a></li><li><a href="the-reader.html">6&emsp;the reader</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a class="here" href="source-listing.html">10&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_llZeK&quot;)"></div><p id="a_llZeK">This source list­ing assumes that we’ve cre­ated a <span class="my-code" decode="exclude">basic</span> direc­tory and installed it as a pack­age as described in <a href="specification-and-setup.html">spec­i­fi­ca­tion and setup</a>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Z5yr0&quot;)"></div><p id="a_Z5yr0"><a class="ziplink" href="basic-tutorial.zip">Down­load basic-tuto­r­ial.zip</a></p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">sample.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Vh4Vl&quot;)"></div><div class="highlight-container" id="a_Vh4Vl"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic<br/>30 rem print 'ignored'<br/>35<br/>50 print "never gets here"<br/>40 end<br/>60 print 'three' : print 1.0 + 3<br/>70 goto 11. + 18.5 + .5 rem ignored<br/>10 print "o" ; "n" ; "e"<br/>20 print : goto 60.0 : end</div><div class="highlight" form="false" id="a_Fritf"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="source"><pre>#lang basic
+30 rem print &#39;ignored&#39;
+35
+50 print "never gets here"
+40 end
+60 print &#39;three&#39; : print 1.0 + 3
+70 goto 11. + 18.5 + .5 rem ignored
+10 print "o" ; "n" ; "e"
+20 print : goto 60.0 : end
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rj0rr&quot;)"></div><p id="a_rj0rr"><a href="the-reader.html">The reader</a></p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/main.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Ff26q&quot;)"></div><div class="highlight-container" id="a_Ff26q"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br/quicklang<br/>(require "parser.rkt" "tokenizer.rkt")<br/><br/>(define (read-syntax path port)<br/>  (define parse-tree (parse path (make-tokenizer port path)))<br/>  (strip-bindings<br/>   #`(module basic-mod basic/expander<br/>       #,parse-tree)))<br/><br/>(module+ reader<br/>  (provide read-syntax))
+</div><div class="highlight" form="false" id="a_BEJSI"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br/quicklang</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="s2">"parser.rkt"</span> <span class="s2">"tokenizer.rkt"</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Reading.html#(def._((quote._~23~25kernel)._read-syntax))" class="docs" hyphens="none">read-syntax</a></span> <span class="n">path</span> <span class="n">port</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">parse-tree</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/examples/nested-word-list..rkt)._parse))" class="docs" hyphens="none">parse</a></span> <span class="n">path</span> <span class="p">(</span><span class="n">make-tokenizer</span> <span class="n">port</span> <span class="n">path</span><span class="p">)))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/syntax..rkt)._strip-bindings))" class="docs" hyphens="none">strip-bindings</a></span>
+   <span class="o">#`</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((quote._~23~25kernel)._module))" class="docs" hyphens="none">module</a></span> <span class="n">basic-mod</span> <span class="n">basic/expander</span>
+       <span class="o">#,</span><span class="n">parse-tree</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._module+))" class="docs" hyphens="none">module+</a></span> <span class="n">reader</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/Reading.html#(def._((quote._~23~25kernel)._read-syntax))" class="docs" hyphens="none">read-syntax</a></span><span class="p">))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_6Z9Xa&quot;)"></div><p id="a_6Z9Xa"><a href="the-lexer.html">The lexer</a></p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/lexer.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_nnce4&quot;)"></div><div class="highlight-container" id="a_nnce4"><div id="code_45" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br<br/>(require brag/support)<br/><br/>(define-lex-abbrev digits (:+ (char-set "0123456789")))<br/><br/>(define basic-lexer<br/>  (lexer-srcloc<br/>   [(eof) (return-without-srcloc eof)]<br/>   ["\n" (token 'NEWLINE lexeme)]<br/>   [whitespace (token lexeme #:skip? #t)]<br/>   [(from/stop-before "rem" "\n") (token 'REM lexeme)]<br/>   [(:or "print" "goto" "end"<br/>         "+" ":" ";") (token lexeme lexeme)]<br/>   [digits (token 'INTEGER (string-&gt;number lexeme))]<br/>   [(:or (:seq (:? digits) "." digits)<br/>         (:seq digits "."))<br/>    (token 'DECIMAL (string-&gt;number lexeme))]<br/>   [(:or (from/to "\"" "\"") (from/to "'" "'"))<br/>    (token 'STRING<br/>           (substring lexeme<br/>                      1 (sub1 (string-length lexeme))))]))<br/><br/>(provide basic-lexer)
+</div><div class="highlight" form="false" id="a_DhZyZ"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="n">brag/support</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._define-lex-abbrev))" class="docs" hyphens="none">define-lex-abbrev</a></span> <span class="n">digits</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(form._((lib._brag/support..rkt)._~3a+))" class="docs" hyphens="none">:+</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._char-set))" class="docs" hyphens="none">char-set</a></span> <span class="s2">"0123456789"</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">basic-lexer</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._lexer-srcloc))" class="docs" hyphens="none">lexer-srcloc</a></span>
+   <span class="p">[(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/port-ops.html#(def._((quote._~23~25kernel)._eof))" class="docs" hyphens="none">eof</a></span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._return-without-srcloc))" class="docs" hyphens="none">return-without-srcloc</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/port-ops.html#(def._((quote._~23~25kernel)._eof))" class="docs" hyphens="none">eof</a></span><span class="p">)]</span>
+   <span class="p">[</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="o">&#39;</span><span class="ss">NEWLINE</span> <span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._lexeme))" class="docs" hyphens="none">lexeme</a></span><span class="p">)]</span>
+   <span class="p">[</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._whitespace))" class="docs" hyphens="none">whitespace</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._lexeme))" class="docs" hyphens="none">lexeme</a></span> <span class="kd">#:skip?</span> <span class="no">#t</span><span class="p">)]</span>
+   <span class="p">[(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(form._((lib._brag/support..rkt)._from/stop-before))" class="docs" hyphens="none">from/stop-before</a></span> <span class="s2">"rem"</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="o">&#39;</span><span class="ss">REM</span> <span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._lexeme))" class="docs" hyphens="none">lexeme</a></span><span class="p">)]</span>
+   <span class="p">[(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(form._((lib._brag/support..rkt)._~3aor))" class="docs" hyphens="none">:or</a></span> <span class="s2">"print"</span> <span class="s2">"goto"</span> <span class="s2">"end"</span>
+         <span class="s2">"+"</span> <span class="s2">":"</span> <span class="s2">";"</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._lexeme))" class="docs" hyphens="none">lexeme</a></span> <span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._lexeme))" class="docs" hyphens="none">lexeme</a></span><span class="p">)]</span>
+   <span class="p">[</span><span class="n">digits</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="o">&#39;</span><span class="ss">INTEGER</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._string-~3enumber))" class="docs" hyphens="none">string-&gt;number</a></span> <span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._lexeme))" class="docs" hyphens="none">lexeme</a></span><span class="p">))]</span>
+   <span class="p">[(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(form._((lib._brag/support..rkt)._~3aor))" class="docs" hyphens="none">:or</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(form._((lib._brag/support..rkt)._~3aseq))" class="docs" hyphens="none">:seq</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(form._((lib._brag/support..rkt)._~3a~3f))" class="docs" hyphens="none">:?</a></span> <span class="n">digits</span><span class="p">)</span> <span class="s2">"."</span> <span class="n">digits</span><span class="p">)</span>
+         <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(form._((lib._brag/support..rkt)._~3aseq))" class="docs" hyphens="none">:seq</a></span> <span class="n">digits</span> <span class="s2">"."</span><span class="p">))</span>
+    <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="o">&#39;</span><span class="ss">DECIMAL</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._string-~3enumber))" class="docs" hyphens="none">string-&gt;number</a></span> <span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._lexeme))" class="docs" hyphens="none">lexeme</a></span><span class="p">))]</span>
+   <span class="p">[(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(form._((lib._brag/support..rkt)._~3aor))" class="docs" hyphens="none">:or</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(form._((lib._brag/support..rkt)._from/to))" class="docs" hyphens="none">from/to</a></span> <span class="s2">"</span><span class="se">\"</span><span class="s2">"</span> <span class="s2">"</span><span class="se">\"</span><span class="s2">"</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(form._((lib._brag/support..rkt)._from/to))" class="docs" hyphens="none">from/to</a></span> <span class="s2">"&#39;"</span> <span class="s2">"&#39;"</span><span class="p">))</span>
+    <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="o">&#39;</span><span class="ss">STRING</span>
+           <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/strings.html#(def._((quote._~23~25kernel)._substring))" class="docs" hyphens="none">substring</a></span> <span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._lexeme))" class="docs" hyphens="none">lexeme</a></span>
+                      <span class="mi">1</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._sub1))" class="docs" hyphens="none">sub1</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/strings.html#(def._((quote._~23~25kernel)._string-length))" class="docs" hyphens="none">string-length</a></span> <span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._lexeme))" class="docs" hyphens="none">lexeme</a></span><span class="p">))))]))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="n">basic-lexer</span><span class="p">)</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk2" data-clipboard-target="#code_45" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/lexer-test.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_E0dU9&quot;)"></div><div class="highlight-container" id="a_E0dU9"><div id="code_46" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br<br/>(require "lexer.rkt" brag/support rackunit)<br/><br/>(define (lex str)<br/>  (apply-lexer basic-lexer str))<br/><br/>(check-equal? (lex "") empty)<br/>(check-equal?<br/> (lex " ")<br/> (list (srcloc-token (token " " #:skip? #t)<br/>                     (srcloc 'string #f #f 1 1))))<br/>(check-equal?<br/> (lex "rem ignored\n")<br/> (list (srcloc-token (token 'REM "rem ignored")<br/>                     (srcloc 'string #f #f 1 11))<br/>       (srcloc-token (token 'NEWLINE "\n")<br/>                     (srcloc 'string #f #f 12 1))))<br/>(check-equal?<br/> (lex "print")<br/> (list (srcloc-token (token "print" "print")<br/>                     (srcloc 'string #f #f 1 5))))<br/>(check-equal?<br/> (lex "goto")<br/> (list (srcloc-token (token "goto" "goto")<br/>                     (srcloc 'string #f #f 1 4))))<br/>(check-equal?<br/> (lex "end")<br/> (list (srcloc-token (token "end" "end")<br/>                     (srcloc 'string #f #f 1 3))))<br/>(check-equal?<br/> (lex "+")<br/> (list (srcloc-token (token "+" "+")<br/>                     (srcloc 'string #f #f 1 1))))<br/>(check-equal?<br/> (lex ";")<br/> (list (srcloc-token (token ";" ";")<br/>                     (srcloc 'string #f #f 1 1))))<br/>(check-equal?<br/> (lex ":")<br/> (list (srcloc-token (token ":" ":")<br/>                     (srcloc 'string #f #f 1 1))))<br/>(check-equal?<br/> (lex "12")<br/> (list (srcloc-token (token 'INTEGER 12)<br/>                     (srcloc 'string #f #f 1 2))))<br/>(check-equal?<br/> (lex "1.2")<br/> (list (srcloc-token (token 'DECIMAL 1.2)<br/>                     (srcloc 'string #f #f 1 3))))<br/>(check-equal?<br/> (lex "12.")<br/> (list (srcloc-token (token 'DECIMAL 12.)<br/>                     (srcloc 'string #f #f 1 3))))<br/>(check-equal?<br/> (lex ".12")<br/> (list (srcloc-token (token 'DECIMAL .12)<br/>                     (srcloc 'string #f #f 1 3))))<br/>(check-equal?<br/> (lex "\"foo\"")<br/> (list (srcloc-token (token 'STRING "foo")<br/>                     (srcloc 'string #f #f 1 5))))<br/>(check-equal?<br/> (lex "'foo'")<br/> (list (srcloc-token (token 'STRING "foo")<br/>                     (srcloc 'string #f #f 1 5))))<br/>(check-exn exn:fail:read? (lambda () (lex "x")))</div><div class="highlight" form="false" id="a_THZdw"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="s2">"lexer.rkt"</span> <span class="n">brag/support</span> <span class="n">rackunit</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">lex</span> <span class="n">str</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._apply-lexer))" class="docs" hyphens="none">apply-lexer</a></span> <span class="n">basic-lexer</span> <span class="n">str</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a></span> <span class="p">(</span><span class="n">lex</span> <span class="s2">""</span><span class="p">)</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/list..rkt)._empty))" class="docs" hyphens="none">empty</a></span><span class="p">)</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a></span>
+ <span class="p">(</span><span class="n">lex</span> <span class="s2">" "</span><span class="p">)</span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._srcloc-token))" class="docs" hyphens="none">srcloc-token</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="s2">" "</span> <span class="kd">#:skip?</span> <span class="no">#t</span><span class="p">)</span>
+                     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((lib._racket/private/base..rkt)._srcloc))" class="docs" hyphens="none">srcloc</a></span> <span class="o">&#39;</span><span class="ss">string</span> <span class="no">#f</span> <span class="no">#f</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a></span>
+ <span class="p">(</span><span class="n">lex</span> <span class="s2">"rem ignored</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._srcloc-token))" class="docs" hyphens="none">srcloc-token</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="o">&#39;</span><span class="ss">REM</span> <span class="s2">"rem ignored"</span><span class="p">)</span>
+                     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((lib._racket/private/base..rkt)._srcloc))" class="docs" hyphens="none">srcloc</a></span> <span class="o">&#39;</span><span class="ss">string</span> <span class="no">#f</span> <span class="no">#f</span> <span class="mi">1</span> <span class="mi">11</span><span class="p">))</span>
+       <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._srcloc-token))" class="docs" hyphens="none">srcloc-token</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="o">&#39;</span><span class="ss">NEWLINE</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+                     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((lib._racket/private/base..rkt)._srcloc))" class="docs" hyphens="none">srcloc</a></span> <span class="o">&#39;</span><span class="ss">string</span> <span class="no">#f</span> <span class="no">#f</span> <span class="mi">12</span> <span class="mi">1</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a></span>
+ <span class="p">(</span><span class="n">lex</span> <span class="s2">"print"</span><span class="p">)</span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._srcloc-token))" class="docs" hyphens="none">srcloc-token</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="s2">"print"</span> <span class="s2">"print"</span><span class="p">)</span>
+                     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((lib._racket/private/base..rkt)._srcloc))" class="docs" hyphens="none">srcloc</a></span> <span class="o">&#39;</span><span class="ss">string</span> <span class="no">#f</span> <span class="no">#f</span> <span class="mi">1</span> <span class="mi">5</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a></span>
+ <span class="p">(</span><span class="n">lex</span> <span class="s2">"goto"</span><span class="p">)</span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._srcloc-token))" class="docs" hyphens="none">srcloc-token</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="s2">"goto"</span> <span class="s2">"goto"</span><span class="p">)</span>
+                     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((lib._racket/private/base..rkt)._srcloc))" class="docs" hyphens="none">srcloc</a></span> <span class="o">&#39;</span><span class="ss">string</span> <span class="no">#f</span> <span class="no">#f</span> <span class="mi">1</span> <span class="mi">4</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a></span>
+ <span class="p">(</span><span class="n">lex</span> <span class="s2">"end"</span><span class="p">)</span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._srcloc-token))" class="docs" hyphens="none">srcloc-token</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="s2">"end"</span> <span class="s2">"end"</span><span class="p">)</span>
+                     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((lib._racket/private/base..rkt)._srcloc))" class="docs" hyphens="none">srcloc</a></span> <span class="o">&#39;</span><span class="ss">string</span> <span class="no">#f</span> <span class="no">#f</span> <span class="mi">1</span> <span class="mi">3</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a></span>
+ <span class="p">(</span><span class="n">lex</span> <span class="s2">"+"</span><span class="p">)</span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._srcloc-token))" class="docs" hyphens="none">srcloc-token</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="s2">"+"</span> <span class="s2">"+"</span><span class="p">)</span>
+                     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((lib._racket/private/base..rkt)._srcloc))" class="docs" hyphens="none">srcloc</a></span> <span class="o">&#39;</span><span class="ss">string</span> <span class="no">#f</span> <span class="no">#f</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a></span>
+ <span class="p">(</span><span class="n">lex</span> <span class="s2">";"</span><span class="p">)</span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._srcloc-token))" class="docs" hyphens="none">srcloc-token</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="s2">";"</span> <span class="s2">";"</span><span class="p">)</span>
+                     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((lib._racket/private/base..rkt)._srcloc))" class="docs" hyphens="none">srcloc</a></span> <span class="o">&#39;</span><span class="ss">string</span> <span class="no">#f</span> <span class="no">#f</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a></span>
+ <span class="p">(</span><span class="n">lex</span> <span class="s2">":"</span><span class="p">)</span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._srcloc-token))" class="docs" hyphens="none">srcloc-token</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="s2">":"</span> <span class="s2">":"</span><span class="p">)</span>
+                     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((lib._racket/private/base..rkt)._srcloc))" class="docs" hyphens="none">srcloc</a></span> <span class="o">&#39;</span><span class="ss">string</span> <span class="no">#f</span> <span class="no">#f</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a></span>
+ <span class="p">(</span><span class="n">lex</span> <span class="s2">"12"</span><span class="p">)</span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._srcloc-token))" class="docs" hyphens="none">srcloc-token</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="o">&#39;</span><span class="ss">INTEGER</span> <span class="mi">12</span><span class="p">)</span>
+                     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((lib._racket/private/base..rkt)._srcloc))" class="docs" hyphens="none">srcloc</a></span> <span class="o">&#39;</span><span class="ss">string</span> <span class="no">#f</span> <span class="no">#f</span> <span class="mi">1</span> <span class="mi">2</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a></span>
+ <span class="p">(</span><span class="n">lex</span> <span class="s2">"1.2"</span><span class="p">)</span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._srcloc-token))" class="docs" hyphens="none">srcloc-token</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="o">&#39;</span><span class="ss">DECIMAL</span> <span class="mf">1.2</span><span class="p">)</span>
+                     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((lib._racket/private/base..rkt)._srcloc))" class="docs" hyphens="none">srcloc</a></span> <span class="o">&#39;</span><span class="ss">string</span> <span class="no">#f</span> <span class="no">#f</span> <span class="mi">1</span> <span class="mi">3</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a></span>
+ <span class="p">(</span><span class="n">lex</span> <span class="s2">"12."</span><span class="p">)</span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._srcloc-token))" class="docs" hyphens="none">srcloc-token</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="o">&#39;</span><span class="ss">DECIMAL</span> <span class="mf">12.</span><span class="p">)</span>
+                     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((lib._racket/private/base..rkt)._srcloc))" class="docs" hyphens="none">srcloc</a></span> <span class="o">&#39;</span><span class="ss">string</span> <span class="no">#f</span> <span class="no">#f</span> <span class="mi">1</span> <span class="mi">3</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a></span>
+ <span class="p">(</span><span class="n">lex</span> <span class="s2">".12"</span><span class="p">)</span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._srcloc-token))" class="docs" hyphens="none">srcloc-token</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="o">&#39;</span><span class="ss">DECIMAL</span> <span class="mf">.12</span><span class="p">)</span>
+                     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((lib._racket/private/base..rkt)._srcloc))" class="docs" hyphens="none">srcloc</a></span> <span class="o">&#39;</span><span class="ss">string</span> <span class="no">#f</span> <span class="no">#f</span> <span class="mi">1</span> <span class="mi">3</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a></span>
+ <span class="p">(</span><span class="n">lex</span> <span class="s2">"</span><span class="se">\"</span><span class="s2">foo</span><span class="se">\"</span><span class="s2">"</span><span class="p">)</span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._srcloc-token))" class="docs" hyphens="none">srcloc-token</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="o">&#39;</span><span class="ss">STRING</span> <span class="s2">"foo"</span><span class="p">)</span>
+                     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((lib._racket/private/base..rkt)._srcloc))" class="docs" hyphens="none">srcloc</a></span> <span class="o">&#39;</span><span class="ss">string</span> <span class="no">#f</span> <span class="no">#f</span> <span class="mi">1</span> <span class="mi">5</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a></span>
+ <span class="p">(</span><span class="n">lex</span> <span class="s2">"&#39;foo&#39;"</span><span class="p">)</span>
+ <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._srcloc-token))" class="docs" hyphens="none">srcloc-token</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/support..rkt)._token))" class="docs" hyphens="none">token</a></span> <span class="o">&#39;</span><span class="ss">STRING</span> <span class="s2">"foo"</span><span class="p">)</span>
+                     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((lib._racket/private/base..rkt)._srcloc))" class="docs" hyphens="none">srcloc</a></span> <span class="o">&#39;</span><span class="ss">string</span> <span class="no">#f</span> <span class="no">#f</span> <span class="mi">1</span> <span class="mi">5</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-exn))" class="docs" hyphens="none">check-exn</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((quote._~23~25kernel)._exn~3afail~3aread~3f))" class="docs" hyphens="none">exn:fail:read?</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/lambda.html#(form._((lib._racket/private/base..rkt)._lambda))" class="docs" hyphens="none">lambda</a></span> <span class="p">()</span> <span class="p">(</span><span class="n">lex</span> <span class="s2">"x"</span><span class="p">)))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk3" data-clipboard-target="#code_46" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_0MRXg&quot;)"></div><p id="a_0MRXg"><a href="the-tokenizer.html">The tok­enizer</a></p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/tokenizer.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Z69h2&quot;)"></div><div class="highlight-container" id="a_Z69h2"><div id="code_47" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br<br/>(require "lexer.rkt" brag/support)<br/><br/>(define (make-tokenizer ip [path #f])<br/>  (port-count-lines! ip)<br/>  (lexer-file-path path)<br/>  (define (next-token) (basic-lexer ip))<br/>  next-token)<br/><br/>(provide make-tokenizer)</div><div class="highlight" form="false" id="a_Paqkx"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="s2">"lexer.rkt"</span> <span class="n">brag/support</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">make-tokenizer</span> <span class="n">ip</span> <span class="p">[</span><span class="n">path</span> <span class="no">#f</span><span class="p">])</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/linecol.html#(def._((quote._~23~25kernel)._port-count-lines!))" class="docs" hyphens="none">port-count-lines!</a></span> <span class="n">ip</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._lexer-file-path))" class="docs" hyphens="none">lexer-file-path</a></span> <span class="n">path</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">next-token</span><span class="p">)</span> <span class="p">(</span><span class="n">basic-lexer</span> <span class="n">ip</span><span class="p">))</span>
+  <span class="n">next-token</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="n">make-tokenizer</span><span class="p">)</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk4" data-clipboard-target="#code_47" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_nmA84&quot;)"></div><p id="a_nmA84"><a href="the-parser.html">The parser</a></p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_LSVjr&quot;)"></div><div class="highlight-container" id="a_LSVjr"><div id="code_48" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>b-program : [b-line] (/NEWLINE [b-line])*<br/>b-line : b-line-num [b-statement] (/":" [b-statement])* [b-rem]<br/>@b-line-num : INTEGER<br/>@b-statement : b-end | b-print | b-goto<br/>b-rem : REM<br/>b-end : /"end"<br/>b-print : /"print" [b-printable] (/";" [b-printable])*<br/>@b-printable : STRING | b-expr<br/>b-goto : /"goto" b-expr<br/>b-expr : b-sum<br/>b-sum : b-number (/"+" b-number)*<br/>@b-number : INTEGER | DECIMAL</div><div class="highlight" form="false" id="a_GoWEE"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+b-program : [b-line] (/NEWLINE [b-line])*
+b-line : b-line-num [b-statement] (/":" [b-statement])* [b-rem]
+@b-line-num : INTEGER
+@b-statement : b-end | b-print | b-goto
+b-rem : REM
+b-end : /"end"
+b-print : /"print" [b-printable] (/";" [b-printable])*
+@b-printable : STRING | b-expr
+b-goto : /"goto" b-expr
+b-expr : b-sum
+b-sum : b-number (/"+" b-number)*
+@b-number : INTEGER | DECIMAL
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk5" data-clipboard-target="#code_48" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parse-only.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_DCU0b&quot;)"></div><div class="highlight-container" id="a_DCU0b"><div id="code_49" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br/quicklang<br/>(require "parser.rkt" "tokenizer.rkt")<br/><br/>(define (read-syntax path port)<br/>  (define parse-tree (parse path (make-tokenizer port path)))<br/>  (strip-bindings<br/>   #`(module basic-parser-mod basic/parse-only<br/>       #,parse-tree)))<br/>(module+ reader (provide read-syntax))<br/><br/>(define-macro (parser-only-mb PARSE-TREE)<br/>  #'(#%module-begin<br/>     'PARSE-TREE))<br/>(provide (rename-out [parser-only-mb #%module-begin]))</div><div class="highlight" form="false" id="a_Jo71Z"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br/quicklang</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="s2">"parser.rkt"</span> <span class="s2">"tokenizer.rkt"</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Reading.html#(def._((quote._~23~25kernel)._read-syntax))" class="docs" hyphens="none">read-syntax</a></span> <span class="n">path</span> <span class="n">port</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">parse-tree</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/examples/nested-word-list..rkt)._parse))" class="docs" hyphens="none">parse</a></span> <span class="n">path</span> <span class="p">(</span><span class="n">make-tokenizer</span> <span class="n">port</span> <span class="n">path</span><span class="p">)))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/syntax..rkt)._strip-bindings))" class="docs" hyphens="none">strip-bindings</a></span>
+   <span class="o">#`</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((quote._~23~25kernel)._module))" class="docs" hyphens="none">module</a></span> <span class="n">basic-parser-mod</span> <span class="n">basic/parse-only</span>
+       <span class="o">#,</span><span class="n">parse-tree</span><span class="p">)))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._module+))" class="docs" hyphens="none">module+</a></span> <span class="n">reader</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/Reading.html#(def._((quote._~23~25kernel)._read-syntax))" class="docs" hyphens="none">read-syntax</a></span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/define..rkt)._define-macro))" class="docs" hyphens="none">define-macro</a></span> <span class="p">(</span><span class="n">parser-only-mb</span> <span class="n">PARSE-TREE</span><span class="p">)</span>
+  <span class="o">#&#39;</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._~23~25module-begin))" class="docs" hyphens="none">#%module-begin</a></span>
+     <span class="o">&#39;</span><span class="ss">PARSE-TREE</span><span class="p">))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._rename-out))" class="docs" hyphens="none">rename-out</a></span> <span class="p">[</span><span class="n">parser-only-mb</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._~23~25module-begin))" class="docs" hyphens="none">#%module-begin</a></span><span class="p">]))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk6" data-clipboard-target="#code_49" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/tokenize-only.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_3SaoC&quot;)"></div><div class="highlight-container" id="a_3SaoC"><div id="code_50" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br/quicklang<br/>(require brag/support "tokenizer.rkt")<br/><br/>(define (read-syntax path port)<br/>  (define tokens (apply-tokenizer make-tokenizer port))<br/>  (strip-bindings<br/>   #`(module basic-tokens-mod basic/tokenize-only<br/>       #,@tokens)))<br/>(module+ reader (provide read-syntax))<br/><br/>(define-macro (parser-only-mb TOKEN ...)<br/>  #'(#%module-begin<br/>     (list TOKEN ...)))<br/>(provide (rename-out [parser-only-mb #%module-begin]))</div><div class="highlight" form="false" id="a_c1kSd"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br/quicklang</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="n">brag/support</span> <span class="s2">"tokenizer.rkt"</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Reading.html#(def._((quote._~23~25kernel)._read-syntax))" class="docs" hyphens="none">read-syntax</a></span> <span class="n">path</span> <span class="n">port</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">tokens</span> <span class="p">(</span><span class="n">apply-tokenizer</span> <span class="n">make-tokenizer</span> <span class="n">port</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/syntax..rkt)._strip-bindings))" class="docs" hyphens="none">strip-bindings</a></span>
+   <span class="o">#`</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((quote._~23~25kernel)._module))" class="docs" hyphens="none">module</a></span> <span class="n">basic-tokens-mod</span> <span class="n">basic/tokenize-only</span>
+       <span class="o">#,@</span><span class="n">tokens</span><span class="p">)))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._module+))" class="docs" hyphens="none">module+</a></span> <span class="n">reader</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/Reading.html#(def._((quote._~23~25kernel)._read-syntax))" class="docs" hyphens="none">read-syntax</a></span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/define..rkt)._define-macro))" class="docs" hyphens="none">define-macro</a></span> <span class="p">(</span><span class="n">parser-only-mb</span> <span class="n">TOKEN</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span><span class="p">)</span>
+  <span class="o">#&#39;</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._~23~25module-begin))" class="docs" hyphens="none">#%module-begin</a></span>
+     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="n">TOKEN</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span><span class="p">)))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._rename-out))" class="docs" hyphens="none">rename-out</a></span> <span class="p">[</span><span class="n">parser-only-mb</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._~23~25module-begin))" class="docs" hyphens="none">#%module-begin</a></span><span class="p">]))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk7" data-clipboard-target="#code_50" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_MeVqm&quot;)"></div><p id="a_MeVqm"><a href="the-expander.html">The expander</a></p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/expander.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_sY8o1&quot;)"></div><div class="highlight-container" id="a_sY8o1"><div id="code_51" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br/quicklang<br/>(provide (matching-identifiers-out #rx"^b-" (all-defined-out)))<br/><br/>(define-macro (b-line NUM STATEMENT ...)<br/>  (with-pattern ([LINE-NUM (prefix-id "line-" #'NUM<br/>                                      #:source #'NUM)])<br/>    (syntax/loc caller-stx<br/>      (define (LINE-NUM) (void) STATEMENT ...))))<br/><br/>(define-macro (b-module-begin (b-program LINE ...))<br/>  (with-pattern<br/>      ([((b-line NUM STMT ...) ...) #'(LINE ...)]<br/>       [(LINE-FUNC ...) (prefix-id "line-" #'(NUM ...))])<br/>    #'(#%module-begin<br/>       LINE ...<br/>       (define line-table<br/>         (apply hasheqv (append (list NUM LINE-FUNC) ...)))<br/>       (void (run line-table)))))<br/>(provide (rename-out [b-module-begin #%module-begin]))<br/><br/>(struct end-program-signal ())<br/>(struct change-line-signal (val))<br/><br/>(define (b-end) (raise (end-program-signal)))<br/>(define (b-goto expr) (raise (change-line-signal expr)))<br/><br/>(define (run line-table)<br/>  (define line-vec<br/>    (list-&gt;vector (sort (hash-keys line-table) &lt;)))<br/>  (with-handlers ([end-program-signal? (λ (exn-val) (void))])<br/>    (for/fold ([line-idx 0])<br/>              ([i (in-naturals)]<br/>               #:break (&gt;= line-idx (vector-length line-vec)))<br/>      (define line-num (vector-ref line-vec line-idx))<br/>      (define line-func (hash-ref line-table line-num))<br/>      (with-handlers<br/>          ([change-line-signal?<br/>            (λ (cls)<br/>              (define clsv (change-line-signal-val cls))<br/>              (or<br/>               (and (exact-positive-integer? clsv)<br/>                    (vector-member clsv line-vec))<br/>               (error<br/>                (format "error in line ~a: line ~a not found"<br/>                        line-num clsv))))])<br/>        (line-func)<br/>        (add1 line-idx)))))<br/><br/>(define (b-rem val) (void))<br/>(define (b-print . vals)<br/>  (displayln (string-append* (map ~a vals))))<br/>(define (b-sum . vals) (apply + vals))<br/>(define (b-expr expr)<br/>  (if (integer? expr) (inexact-&gt;exact expr) expr))</div><div class="highlight" form="false" id="a_OlGz8"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br/quicklang</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/provide..rkt)._matching-identifiers-out))" class="docs" hyphens="none">matching-identifiers-out</a></span> <span class="sr">#rx"^b-"</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._all-defined-out))" class="docs" hyphens="none">all-defined-out</a></span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/define..rkt)._define-macro))" class="docs" hyphens="none">define-macro</a></span> <span class="p">(</span><span class="n">b-line</span> <span class="n">NUM</span> <span class="n">STATEMENT</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/syntax..rkt)._with-pattern))" class="docs" hyphens="none">with-pattern</a></span> <span class="p">([</span><span class="n">LINE-NUM</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/syntax..rkt)._prefix-id))" class="docs" hyphens="none">prefix-id</a></span> <span class="s2">"line-"</span> <span class="o">#&#39;</span><span class="n">NUM</span>
+                                      <span class="kd">#:source</span> <span class="o">#&#39;</span><span class="n">NUM</span><span class="p">)])</span>
+    <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._syntax/loc))" class="docs" hyphens="none">syntax/loc</a></span> <span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/define..rkt)._caller-stx))" class="docs" hyphens="none">caller-stx</a></span>
+      <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">LINE-NUM</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/void.html#(def._((quote._~23~25kernel)._void))" class="docs" hyphens="none">void</a></span><span class="p">)</span> <span class="n">STATEMENT</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span><span class="p">))))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/define..rkt)._define-macro))" class="docs" hyphens="none">define-macro</a></span> <span class="p">(</span><span class="n">b-module-begin</span> <span class="p">(</span><span class="n">b-program</span> <span class="n">LINE</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span><span class="p">))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/syntax..rkt)._with-pattern))" class="docs" hyphens="none">with-pattern</a></span>
+      <span class="p">([((</span><span class="n">b-line</span> <span class="n">NUM</span> <span class="n">STMT</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span><span class="p">)</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span><span class="p">)</span> <span class="o">#&#39;</span><span class="p">(</span><span class="n">LINE</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span><span class="p">)]</span>
+       <span class="p">[(</span><span class="n">LINE-FUNC</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/syntax..rkt)._prefix-id))" class="docs" hyphens="none">prefix-id</a></span> <span class="s2">"line-"</span> <span class="o">#&#39;</span><span class="p">(</span><span class="n">NUM</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span><span class="p">))])</span>
+    <span class="o">#&#39;</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._~23~25module-begin))" class="docs" hyphens="none">#%module-begin</a></span>
+       <span class="n">LINE</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span>
+       <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">line-table</span>
+         <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/procedures.html#(def._((lib._racket/private/base..rkt)._apply))" class="docs" hyphens="none">apply</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/hashtables.html#(def._((quote._~23~25kernel)._hasheqv))" class="docs" hyphens="none">hasheqv</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._append))" class="docs" hyphens="none">append</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="n">NUM</span> <span class="n">LINE-FUNC</span><span class="p">)</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span><span class="p">)))</span>
+       <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/void.html#(def._((quote._~23~25kernel)._void))" class="docs" hyphens="none">void</a></span> <span class="p">(</span><span class="n">run</span> <span class="n">line-table</span><span class="p">)))))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._rename-out))" class="docs" hyphens="none">rename-out</a></span> <span class="p">[</span><span class="n">b-module-begin</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._~23~25module-begin))" class="docs" hyphens="none">#%module-begin</a></span><span class="p">]))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define-struct.html#(form._((lib._racket/private/base..rkt)._struct))" class="docs" hyphens="none">struct</a></span> <span class="n">end-program-signal</span> <span class="p">())</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define-struct.html#(form._((lib._racket/private/base..rkt)._struct))" class="docs" hyphens="none">struct</a></span> <span class="n">change-line-signal</span> <span class="p">(</span><span class="n">val</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">b-end</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((quote._~23~25kernel)._raise))" class="docs" hyphens="none">raise</a></span> <span class="p">(</span><span class="n">end-program-signal</span><span class="p">)))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">b-goto</span> <span class="n">expr</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((quote._~23~25kernel)._raise))" class="docs" hyphens="none">raise</a></span> <span class="p">(</span><span class="n">change-line-signal</span> <span class="n">expr</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">run</span> <span class="n">line-table</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">line-vec</span>
+    <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/vectors.html#(def._((quote._~23~25kernel)._list-~3evector))" class="docs" hyphens="none">list-&gt;vector</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/private/list..rkt)._sort))" class="docs" hyphens="none">sort</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/hashtables.html#(def._((lib._racket/private/base..rkt)._hash-keys))" class="docs" hyphens="none">hash-keys</a></span> <span class="n">line-table</span><span class="p">)</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._~3c))" class="docs" hyphens="none">&lt;</a></span><span class="p">)))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(form._((lib._racket/private/more-scheme..rkt)._with-handlers))" class="docs" hyphens="none">with-handlers</a></span> <span class="p">([</span><span class="n">end-program-signal?</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/lambda.html#(form._((lib._racket/private/base..rkt)._~ce~bb))" class="docs" hyphens="none">λ</a></span> <span class="p">(</span><span class="n">exn-val</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/void.html#(def._((quote._~23~25kernel)._void))" class="docs" hyphens="none">void</a></span><span class="p">))])</span>
+    <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/for.html#(form._((lib._racket/private/base..rkt)._for/fold))" class="docs" hyphens="none">for/fold</a></span> <span class="p">([</span><span class="n">line-idx</span> <span class="mi">0</span><span class="p">])</span>
+              <span class="p">([</span><span class="n">i</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/sequences.html#(def._((lib._racket/private/base..rkt)._in-naturals))" class="docs" hyphens="none">in-naturals</a></span><span class="p">)]</span>
+               <span class="kd">#:break</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._~3e~3d))" class="docs" hyphens="none">&gt;=</a></span> <span class="n">line-idx</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/vectors.html#(def._((quote._~23~25kernel)._vector-length))" class="docs" hyphens="none">vector-length</a></span> <span class="n">line-vec</span><span class="p">)))</span>
+      <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">line-num</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/vectors.html#(def._((quote._~23~25kernel)._vector-ref))" class="docs" hyphens="none">vector-ref</a></span> <span class="n">line-vec</span> <span class="n">line-idx</span><span class="p">))</span>
+      <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">line-func</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/hashtables.html#(def._((quote._~23~25kernel)._hash-ref))" class="docs" hyphens="none">hash-ref</a></span> <span class="n">line-table</span> <span class="n">line-num</span><span class="p">))</span>
+      <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(form._((lib._racket/private/more-scheme..rkt)._with-handlers))" class="docs" hyphens="none">with-handlers</a></span>
+          <span class="p">([</span><span class="n">change-line-signal?</span>
+            <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/lambda.html#(form._((lib._racket/private/base..rkt)._~ce~bb))" class="docs" hyphens="none">λ</a></span> <span class="p">(</span><span class="n">cls</span><span class="p">)</span>
+              <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">clsv</span> <span class="p">(</span><span class="n">change-line-signal-val</span> <span class="n">cls</span><span class="p">))</span>
+              <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((lib._racket/private/letstx-scheme..rkt)._or))" class="docs" hyphens="none">or</a></span>
+               <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((lib._racket/private/letstx-scheme..rkt)._and))" class="docs" hyphens="none">and</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._exact-positive-integer~3f))" class="docs" hyphens="none">exact-positive-integer?</a></span> <span class="n">clsv</span><span class="p">)</span>
+                    <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/vectors.html#(def._((lib._racket/vector..rkt)._vector-member))" class="docs" hyphens="none">vector-member</a></span> <span class="n">clsv</span> <span class="n">line-vec</span><span class="p">))</span>
+               <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/exns.html#(def._((quote._~23~25kernel)._error))" class="docs" hyphens="none">error</a></span>
+                <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Writing.html#(def._((quote._~23~25kernel)._format))" class="docs" hyphens="none">format</a></span> <span class="s2">"error in line ~a: line ~a not found"</span>
+                        <span class="n">line-num</span> <span class="n">clsv</span><span class="p">))))])</span>
+        <span class="p">(</span><span class="n">line-func</span><span class="p">)</span>
+        <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._add1))" class="docs" hyphens="none">add1</a></span> <span class="n">line-idx</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">b-rem</span> <span class="n">val</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/void.html#(def._((quote._~23~25kernel)._void))" class="docs" hyphens="none">void</a></span><span class="p">))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">b-print</span> <span class="o">.</span> <span class="n">vals</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Writing.html#(def._((lib._racket/private/misc..rkt)._displayln))" class="docs" hyphens="none">displayln</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/strings.html#(def._((lib._racket/string..rkt)._string-append*))" class="docs" hyphens="none">string-append*</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/private/map..rkt)._map))" class="docs" hyphens="none">map</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/strings.html#(def._((lib._racket/format..rkt)._~7ea))" class="docs" hyphens="none">~a</a></span> <span class="n">vals</span><span class="p">))))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">b-sum</span> <span class="o">.</span> <span class="n">vals</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/procedures.html#(def._((lib._racket/private/base..rkt)._apply))" class="docs" hyphens="none">apply</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span> <span class="n">vals</span><span class="p">))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">b-expr</span> <span class="n">expr</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((quote._~23~25kernel)._if))" class="docs" hyphens="none">if</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._integer~3f))" class="docs" hyphens="none">integer?</a></span> <span class="n">expr</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._inexact-~3eexact))" class="docs" hyphens="none">inexact-&gt;exact</a></span> <span class="n">expr</span><span class="p">)</span> <span class="n">expr</span><span class="p">))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk8" data-clipboard-target="#code_51" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-lexer.html">3&emsp;the lexer</a></li><li><a href="the-tokenizer.html">4&emsp;the tok­enizer</a></li><li><a href="the-parser.html">5&emsp;the parser</a></li><li><a href="the-reader.html">6&emsp;the reader</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a class="here" href="source-listing.html">10&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="recap.html">← prev</a>
+    <a class="nav-right" href="../basic-2/intro.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

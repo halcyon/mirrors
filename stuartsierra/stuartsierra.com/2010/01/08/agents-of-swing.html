@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+
+<!-- Mirrored from stuartsierra.com/2010/01/08/agents-of-swing by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 17:00:38 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+		<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+<title>Agents of Swing &#8211; Digital Digressions by Stuart Sierra</title>
+<link rel='dns-prefetch' href='http://s0.wp.com/'>
+<link rel='dns-prefetch' href='http://secure.gravatar.com/'>
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel='dns-prefetch' href='http://s.w.org/'>
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Comments Feed" href="../../../comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Agents of Swing Comments Feed" href="agents-of-swing/feed" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/stuartsierra.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.6"}};
+			!function(a,b,c){function d(a){var c,d,e,f,g,h=b.createElement("canvas"),i=h.getContext&&h.getContext("2d"),j=String.fromCharCode;if(!i||!i.fillText)return!1;switch(i.textBaseline="top",i.font="600 32px Arial",a){case"flag":return i.fillText(j(55356,56806,55356,56826),0,0),!(h.toDataURL().length<3e3)&&(i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,65039,8205,55356,57096),0,0),c=h.toDataURL(),i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,55356,57096),0,0),d=h.toDataURL(),c!==d);case"diversity":return i.fillText(j(55356,57221),0,0),e=i.getImageData(16,16,1,1).data,f=e[0]+","+e[1]+","+e[2]+","+e[3],i.fillText(j(55356,57221,55356,57343),0,0),e=i.getImageData(16,16,1,1).data,g=e[0]+","+e[1]+","+e[2]+","+e[3],f!==g;case"simple":return i.fillText(j(55357,56835),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode8":return i.fillText(j(55356,57135),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode9":return i.fillText(j(55358,56631),0,0),0!==i.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity","unicode9"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='twentysixteen-jetpack-css'  href='../../../wp-content/plugins/jetpack/modules/theme-tools/compat/twentysixteen3a05.css?ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-fonts-css'  href='https://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%2C900%2C400italic%2C700italic%2C900italic%7CMontserrat%3A400%2C700%7CInconsolata%3A400&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../../wp-content/plugins/jetpack/_inc/genericons/genericons/genericons128b.css?ver=3.1' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-style-css'  href='../../../wp-content/themes/twentysixteen/style167b.css?ver=4.6' type='text/css' media='all' />
+<!--[if lt IE 10]>
+<link rel='stylesheet' id='twentysixteen-ie-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentysixteen-ie8-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie8.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='twentysixteen-ie7-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie7.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='../../../wp-content/plugins/jetpack/css/jetpack3a05.css?ver=4.2.2' type='text/css' media='all' />
+<script type='text/javascript' src='../../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://stuartsierra.com/wp-content/themes/twentysixteen/js/html5.js?ver=3.7.3'></script>
+<![endif]-->
+<link rel='https://api.w.org/' href='../../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../../wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Heating Up Clojure &#038; Swing' href='../06/heating-up-clojure-swing.html' />
+<link rel='next' title='Clojure-Hadoop 1.0.0' href='../11/clojure-hadoop-1-0-0.html' />
+<meta name="generator" content="WordPress 4.6" />
+<link rel="canonical" href="agents-of-swing.html" />
+<link rel='shortlink' href='https://wp.me/pbl3J-6n' />
+<link rel="alternate" type="application/json+oembed" href="../../../wp-json/oembed/1.0/embed9200.json?url=https%3A%2F%2Fstuartsierra.com%2F2010%2F01%2F08%2Fagents-of-swing" />
+<link rel="alternate" type="text/xml+oembed" href="../../../wp-json/oembed/1.0/embeddc2a?url=https%3A%2F%2Fstuartsierra.com%2F2010%2F01%2F08%2Fagents-of-swing&amp;format=xml" />
+
+<link rel='dns-prefetch' href='http://v0.wordpress.com/'>
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Agents of Swing" />
+<meta property="og:url" content="https://stuartsierra.com/2010/01/08/agents-of-swing" />
+<meta property="og:description" content="The title of this post would make a good name for a band. Anyway, today I&#8217;m going to talk about Swing and concurrency and Clojure. The Swing framework is not thread-safe. That may sound stran…" />
+<meta property="article:published_time" content="2010-01-08T17:45:34+00:00" />
+<meta property="article:modified_time" content="2010-01-08T17:45:34+00:00" />
+<meta property="og:site_name" content="Digital Digressions by Stuart Sierra" />
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary" />
+</head>
+
+<body class="single single-post postid-395 single-format-standard">
+<div id="page" class="site">
+	<div class="site-inner">
+		<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+		<header id="masthead" class="site-header" role="banner">
+			<div class="site-header-main">
+				<div class="site-branding">
+					
+											<p class="site-title"><a href="../../../index.html" rel="home">Digital Digressions by Stuart Sierra</a></p>
+											<p class="site-description">From programming to everything else</p>
+									</div><!-- .site-branding -->
+
+									<button id="menu-toggle" class="menu-toggle">Menu</button>
+
+					<div id="site-header-menu" class="site-header-menu">
+													<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Primary Menu">
+								<div class="menu-main-menu-container"><ul id="menu-main-menu" class="primary-menu"><li id="menu-item-635" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../../../about-me.html">About Me</a></li>
+<li id="menu-item-633" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../../../writing.html">Writing</a></li>
+<li id="menu-item-634" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../../../presentations.html">Presentations</a></li>
+<li id="menu-item-636" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../../../software.html">Software</a></li>
+<li id="menu-item-637" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../../../contact.html">Contact</a></li>
+</ul></div>							</nav><!-- .main-navigation -->
+						
+											</div><!-- .site-header-menu -->
+							</div><!-- .site-header-main -->
+
+											<div class="header-image">
+					<a href="../../../index.html" rel="home">
+						<img src="../../../wp-content/uploads/2015/12/header.jpg" srcset="https://stuartsierra.com/wp-content/uploads/2015/12/header-300x70.jpg 300w, https://stuartsierra.com/wp-content/uploads/2015/12/header-768x179.jpg 768w, https://stuartsierra.com/wp-content/uploads/2015/12/header-1024x239.jpg 1024w, https://stuartsierra.com/wp-content/uploads/2015/12/header.jpg 1200w" sizes="(max-width: 709px) 85vw, (max-width: 909px) 81vw, (max-width: 1362px) 88vw, 1200px" width="1200" height="280" alt="Digital Digressions by Stuart Sierra">
+					</a>
+				</div><!-- .header-image -->
+					</header><!-- .site-header -->
+
+		<div id="content" class="site-content">
+
+<div id="primary" class="content-area">
+	<main id="main" class="site-main" role="main">
+		
+<article id="post-395" class="post-395 post type-post status-publish format-standard hentry category-programming tag-clojure tag-swing">
+	<header class="entry-header">
+		<h1 class="entry-title">Agents of Swing</h1>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>The title of this post would make a good name for a band.</p>
+<p>Anyway, today I&#8217;m going to talk about Swing and concurrency and <a href="http://clojure.org/">Clojure</a>.</p>
+<p>The Swing framework is <a href="http://java.sun.com/docs/books/tutorial/uiswing/concurrency/dispatch.html">not thread-safe</a>.  That may sound strange at first, but there&#8217;s actually some <a href="http://weblogs.java.net/blog/kgh/archive/2004/10/multithreaded_t.html">sound technical reasoning</a> behind it.</p>
+<p>Basically, the Swing designers realized that, in order to have a multi-threaded GUI, you need locks everywhere, which typically means you have bugs everywhere.</p>
+<p>That&#8217;s not to say a Swing application can&#8217;t be multi-threaded.  Swing merely requires that the <em>GUI</em> be single-threaded.  In Swing, all GUI-related code must run on a special thread called the <em>event dispatch thread</em>, which is automatically created by the Swing framework.</p>
+<p>By design, event listeners such as <a href="http://java.sun.com/javase/6/docs/api/java/awt/event/ActionListener.html#actionPerformed%28java.awt.event.ActionEvent%29">ActionListener.actionPerformed</a> always run on the event dispatch thread.  To run arbitrary code on the event dispatch thread, you can use the <a href="http://java.sun.com/javase/6/docs/api/javax/swing/SwingUtilities.html#invokeLater%28java.lang.Runnable%29">SwingUtilities.invokeLater</a> method.</p>
+<p>As was pointed out in a comment on my <a href="../06/heating-up-clojure-swing.html">last post</a>, this is how all of my example apps <em>should</em> be started.  The invokeLater method takes a <a title="Runnable API docs" href="http://java.sun.com/javase/6/docs/api/java/lang/Runnable.html">Runnable</a> argument.  In Clojure, this is easy, because all Clojure functions are Runnable.  So, for example, the <strong>temp-app</strong> program should be started like this:</p>
+<pre>(SwingUtilities/invokeLater temp-app)</pre>
+<p>As a consequence of running all GUI code on a single thread, any GUI code that blocks can &#8220;freeze&#8221; the entire application.  Event listeners, therefore, must execute quickly and delegate long operations like I/O to other threads.</p>
+<p>Java 6 provides the <a title="SwingWorker API docs" href="http://java.sun.com/javase/6/docs/api/javax/swing/SwingWorker.html">SwingWorker</a> class to manage long-running background tasks.  Unfortunately, the implementation of SwingWorker is heavily dependent on protected methods and concrete inheritance, features that are awkward to use in Clojure.</p>
+<p>But wait, wasn&#8217;t Clojure <em>designed</em> for concurrency?  Yes it was, and we can replace SwingWorker with Clojure&#8217;s more-powerful tools.</p>
+<p>In this post, I will recreate the <a href="http://java.sun.com/docs/books/tutorial/uiswing/concurrency/interim.html">Flipper application</a> from the Swing tutorials.</p>
+<p>* * *</p>
+<p>The point of Flipper is to test the &#8220;fairness&#8221; of Java&#8217;s random number generator.  It uses <a href="http://java.sun.com/javase/6/docs/api/java/util/Random.html">java.util.Random</a> to generate random booleans, simulating a series of coin flips.  The number of &#8220;heads&#8221; (boolean true) should converge to half of the total number of flips.</p>
+<p>The Java version of Flipper (<a title="Flipper.java" href="http://java.sun.com/docs/books/tutorial/uiswing/examples/concurrency/FlipperProject/src/concurrency/Flipper.java">source here</a>) does the coin flips in a SwingWorker thread, which sends intermediate results to a GUI.</p>
+<p>Our version will use <a href="http://clojure.org/agents">Clojure Agents</a>, a much more flexible and powerful alternative.</p>
+<p>Lets dig into some code.  First, we need a function to create a &#8220;Flipper&#8221; agent:</p>
+<pre>(defn new-flipper []
+  (agent {:total 0, :heads 0,
+          :running false,
+          :random (java.util.Random.)}))</pre>
+<p>This sets up the initial state of the agent, with its own random number generator, two counters, and a boolean flag to designate whether or not the flipper is running.</p>
+<p>The flipper agent will have three actions.  An agent <em>action</em> is just a function taking one argument, which is the <em>current</em> state of the agent.  Whatever the function returns becomes the <em>new</em> state of the agent.</p>
+<p>Additionally, in the body of the action, the special Var <strong>*agent*</strong> is bound to the agent itself.  The action function can <strong>send</strong> other actions to <strong>*agent*</strong>; those actions will not run until <em>after</em> the current action completes.</p>
+<p>Our flipper&#8217;s first action is <strong>calculate</strong>:</p>
+<pre>(defn calculate [state]
+  (if (:running state)
+    (do (send *agent* calculate)
+        (assoc state
+          :total (inc (:total state))
+          :heads (if (.nextBoolean (:random state))
+                   (inc (:heads state))
+                   (:heads state))))
+    state))</pre>
+<p>If the flipper is currently &#8220;running,&#8221; <strong>calculate</strong> will call the random number generator and update the counters.  It will also <strong>send</strong> itself to the agent again, creating a loop.</p>
+<p>If the flipper is not &#8220;running,&#8221; <strong>calculate</strong> does nothing, but it must still return the original state.</p>
+<p>The remaining two actions control the &#8220;running&#8221; state of the agent:</p>
+<pre>(defn start [state]
+  (send *agent* calculate)
+  (assoc state :running true))
+
+(defn stop [state]
+  (assoc state :running false))</pre>
+<p>These actions just change the value of <strong>:running</strong> in the agent&#8217;s state.  The <strong>start</strong> action also sends the <strong>calculate</strong> action to kickstart the calculation loop.</p>
+<p>To watch the agent in action, try this at the REPL:</p>
+<pre>(def flipper (new-flipper))
+(send flipper start)</pre>
+<p>The flipper is now running in the background.  At any time, you can retrieve the current state of the flipper with <strong>(deref&nbsp;flipper)</strong>, or simply <strong>@flipper</strong>.  Try it a few times and see how the counters change, as in this sample REPL session:</p>
+<pre><strong>user&gt;</strong> @flipper
+{:total 365067, :heads 182253, :running true, ...
+<strong>user&gt;</strong> @flipper
+{:total 679283, :heads 338549, :running true, ...
+<strong>user&gt;</strong> @flipper
+{:total 1030204, :heads 513767, :running true, ...</pre>
+<p>To stop the calculation, type</p>
+<pre>(send flipper stop)</pre>
+<p>Subsequent calls to <strong>@flipper</strong> will all show the same value.  You can restart the calculation by typing <strong>(send&nbsp;flipper&nbsp;start)</strong> again.</p>
+<p>We need one more function to make our flipper complete.  We want to compute the &#8220;unfairness&#8221; of the random number generator, or how far it is from 0.5.  This is easy:</p>
+<pre>(defn error [state]
+  (if (zero? (:total state)) 0.0
+      (- (/ (double (:heads state))
+            (:total state))
+         0.5)))</pre>
+<p>The <strong>if</strong> expression is just there to avoid divide-by-zero errors in the initial case.  </p>
+<p>Note that, although I used the same argument name, <strong>state</strong>, as in the actions, the <strong>error</strong> function is <em>not</em> meant to be called as an action with <strong>send</strong>.  Instead, we will call it on the current state of the agent like this:</p>
+<pre>(error @flipper)</pre>
+<p>* * *</p>
+<p>The nice thing about this flipper is that, unlike the Java version, it is completely decoupled from the GUI.  We can design and test it at the REPL before writing any GUI code at all.</p>
+<p>(The Java version <em>could</em> have been decoupled.  But because Swing requires you to create so many classes anyway, the temptation is always there to combine GUI code with &#8220;process&#8221; code.)</p>
+<p>So let&#8217;s get this GUI going.  Unlike the Java example, which used callbacks from the flipper to update the GUI, our GUI will update at a fixed rate of 10 times per second.  To do this we will use a <a href="http://java.sun.com/javase/6/docs/api/javax/swing/Timer.html">javax.swing.Timer</a>, which fires an event every <em>n</em> milliseconds.</p>
+<p>First, some imports and a helper function to create the text fields with common attributes:</p>
+<pre>(import '(javax.swing JPanel JFrame JButton JTextField
+                      JLabel Timer SwingUtilities))
+
+(defn text-field [value]
+  (doto (JTextField. value 15)
+    (.setEnabled false)
+    (.setHorizontalAlignment JTextField/RIGHT)))</pre>
+<p>Next, we will reuse the <strong>on-action</strong> macro from an earlier post, except I&#8217;ve renamed it <strong>with-action</strong> because my editor&#8217;s automatic indentation looks better that way.</p>
+<pre>(defmacro with-action [component event & body]
+  `(. ~component addActionListener
+      (proxy [java.awt.event.ActionListener] []
+        (actionPerformed [~event] ~@body))))</pre>
+<p>And now we&#8217;re ready for the app itself:</p>
+<pre>(defn flipper-app []
+  ;; Construct components:
+  (let [flipper (new-flipper)
+        b-start (JButton. "Start")
+        b-stop (doto (JButton. "Stop")
+                 (.setEnabled false))
+        total (text-field "0")
+        heads (text-field "0")
+        t-error (text-field "0.0")
+        timer (Timer. 100 nil)]
+
+    ;; Setup actions:
+    (with-action timer e
+      (let [state @flipper]
+        (.setText total (str (:total state)))
+        (.setText heads (str (:heads state)))
+        (.setText t-error (format "%.10g" (error state)))))
+    (with-action b-start e
+      (send flipper start)
+      (.setEnabled b-stop true)
+      (.setEnabled b-start false)
+      (.start timer))
+    (with-action b-stop e
+      (send flipper stop)
+      (.setEnabled b-stop false)
+      (.setEnabled b-start true)
+      (.stop timer))
+
+    ;; Create window and layout:
+    (doto (JFrame. "Flipper")
+      (.setContentPane
+       (doto (JPanel.)
+         (.add (JLabel. "Total:"))
+         (.add total)
+         (.add (JLabel. "Heads:"))
+         (.add heads)
+         (.add (JLabel. "Error:"))
+         (.add t-error)
+         (.add b-start)
+         (.add b-stop)))
+      (.pack)
+      (.setVisible true))))</pre>
+<p>The GUI has three text fields showing the total number of flips, the number of &#8220;heads,&#8221; and the error rate.  The &#8220;Start&#8221; button starts the flipper; the &#8220;Stop&#8221; button suspends it.  You can start and stop as many times as you like without losing the results of the calculation (another improvement over the Java version, which restarts at zero each time).</p>
+<p>The important code is in the <strong>with-action</strong> bodies.  (Don&#8217;t confuse Swing ActionListeners with Agent actions.)  Remember, event listeners must execute quickly, so all they do is update the visible parts of the GUI.</p>
+<p>The &#8220;Start&#8221; button kicks off the flipper and activates the Timer.  The Timer fires every 100 milliseconds, updating the text fields from the current state of the flipper.  The &#8220;Stop&#8221; button suspends both the Timer and the flipper.</p>
+<p>Run the application like this:</p>
+<pre>(SwingUtilities/invokeLater flipper-app)</pre>
+<p>We didn&#8217;t do any fancy layout because it wasn&#8217;t necessary for the example.  But if you want something prettier, here&#8217;s another version using the GridBagLayout macros from my last post:</p>
+<pre>(import '(java.awt GridBagLayout Insets))
+
+(defmacro set-grid! [constraints field value]
+  `(set! (. ~constraints ~(symbol (name field)))
+         ~(if (keyword? value)
+            `(. java.awt.GridBagConstraints
+                ~(symbol (name value)))
+            value)))
+
+(defmacro grid-bag-layout [container & body]
+  (let [c (gensym "c")
+        cntr (gensym "cntr")]
+    `(let [~c (new java.awt.GridBagConstraints)
+           ~cntr ~container]
+       ~@(loop [result '() body body]
+           (if (empty? body)
+             (reverse result)
+             (let [expr (first body)]
+               (if (keyword? expr)
+                 (recur (cons `(set-grid! ~c ~expr
+                                          ~(second body))
+                              result)
+                        (next (next body)))
+                 (recur (cons `(.add ~cntr ~expr ~c)
+                              result)
+                        (next body)))))))))
+
+(defn flipper-app2 []
+  ;; Construct components:
+  (let [flipper (new-flipper)
+        b-start (JButton. "Start")
+        b-stop (doto (JButton. "Stop")
+                 (.setEnabled false))
+        total (text-field "0")
+        heads (text-field "0")
+        t-error (text-field "0.0")
+        timer (Timer. 100 nil)]
+
+    ;; Setup actions:
+    (with-action timer e
+      (let [state @flipper]
+        (.setText total (str (:total state)))
+        (.setText heads (str (:heads state)))
+        (.setText t-error (format "%.10g" (error state)))))
+    (with-action b-start e
+      (send flipper start)
+      (.setEnabled b-stop true)
+      (.setEnabled b-start false)
+      (.start timer))
+    (with-action b-stop e
+      (send flipper stop)
+      (.setEnabled b-stop false)
+      (.setEnabled b-start true)
+      (.stop timer))
+
+    ;; Create window and layout:
+    (doto (JFrame. "Flipper")
+      (.setContentPane
+       (doto (JPanel. (GridBagLayout.))
+         (grid-bag-layout
+          :insets (Insets. 5 5 5 5)
+
+          :gridx 0, :anchor :LINE_END
+          :gridy 0, (JLabel. "Total:")
+          :gridy 1, (JLabel. "Heads:")
+          :gridy 2, (JLabel. "Error:")
+
+          :gridx 1, :anchor :LINE_START
+          :gridy 0, total
+          :gridy 1, heads
+          :gridy 2, t-error
+
+          :gridx 0, :gridy 3, :gridwidth 2, :anchor :CENTER
+          (doto (JPanel.)
+            (.add b-start)
+            (.add b-stop)))))
+      (.pack)
+      (.setVisible true))))</pre>
+<p>I centered the buttons below the text fields by embedding them in a nested JPanel that spans the full width of the window.</p>
+<p>Run this example as:</p>
+<pre>(SwingUtilities/invokeLater flipper-app2)</pre>
+<p>Enjoy!</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../../../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="agents-of-swing.html" rel="bookmark"><time class="entry-date published updated" datetime="2010-01-08T13:45:34+00:00">January 8, 2010</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../../../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="../../../tag/clojure.html" rel="tag">Clojure</a>, <a href="../../../tag/swing.html" rel="tag">Swing</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<div id="comments" class="comments-area">
+
+			<h2 class="comments-title">
+			9 thoughts on &ldquo;Agents of Swing&rdquo;		</h2>
+
+		
+		<ol class="comment-list">
+					<li id="comment-42990" class="comment even thread-even depth-1">
+			<article id="div-comment-42990" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/869b5ceab0d87a8812ac8d7fcae95131?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/869b5ceab0d87a8812ac8d7fcae95131?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Jar Fuay</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="agents-of-swing.html#comment-42990">
+							<time datetime="2010-01-12T03:47:12+00:00">
+								January 12, 2010 at 3:47 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I&#8217;d like to thank you for this wonderful, wonderful tutorial. Before this, I didn&#8217;t get Clojure agents that well—now I totally get why they&#8217;re useful, with an example of how to do Swing in Clojure to boot! Thank you very very much!</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-43026" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-43026" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/3ed78e252eb510bc224b0b1c3ae98350?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/3ed78e252eb510bc224b0b1c3ae98350?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://www.nsa.be/' rel='external nofollow' class='url'>Raphaël Bauduin</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="agents-of-swing.html#comment-43026">
+							<time datetime="2010-01-21T13:35:19+00:00">
+								January 21, 2010 at 1:35 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I just ported your example to Jwt, and frameword to develop web application just like desktop applications. I documented it in a blog post with downloadable code at <a href="http://www.nsa.be/index.php/eng/Blog/From-Swing-to-Jwt" rel="nofollow">http://www.nsa.be/index.php/eng/Blog/From-Swing-to-Jwt</a></p>
+<p>Raph</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-43029" class="comment even thread-even depth-1">
+			<article id="div-comment-43029" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/2868897bd25bfcb39311ae7d9acab4a5?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/2868897bd25bfcb39311ae7d9acab4a5?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Michael Wood</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="agents-of-swing.html#comment-43029">
+							<time datetime="2010-01-22T05:46:48+00:00">
+								January 22, 2010 at 5:46 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>This is great :)  Thanks.</p>
+<p>I&#8217;ve noticed that the agent seems to carry on running if you just close the window without first clicking on Stop.  So if you run it once and close the window while it&#8217;s running, then do it again, the second instance will be slower.  If you keep on doing this, Java uses more and more CPU and the running instance of the app gets slower and slower.</p>
+<p>How would one arrange for (send flipper stop) to be called when the window is closed?</p>
+<p>Also, if you run multiple instances of the app at the same time, they get really slow too.  I suppose you wouldn&#8217;t normally run two instances of something like this at the same time, but there might be two windows doing something different from each other that you want to be able to run concurrently.  Any thoughts on this?</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-43031" class="comment byuser comment-author-stuart bypostauthor odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-43031" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='../../../index.html' rel='external nofollow' class='url'>Stuart</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="agents-of-swing.html#comment-43031">
+							<time datetime="2010-01-22T11:57:24+00:00">
+								January 22, 2010 at 11:57 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Michael- you&#8217;re right, each window creates a new flipper, which will eventually use up all your CPU resources.</p>
+<p>One solution is to assign the flipper to a global Var, so that all the windows connect to the same flipper.</p>
+<p>Another way is to automatically stop the flipper when the window is closed.  This is easy enough.  We need to add a <a href="http://java.sun.com/javase/6/docs/api/java/awt/event/WindowListener.html" rel="nofollow">WindowListener</a> on the <a href="http://java.sun.com/javase/6/docs/api/javax/swing/JFrame.html" rel="nofollow">JFrame</a>.  Insert the following lines just above (.pack) in the flipper-app function:</p>
+<pre>(.addWindowListener 
+ (proxy [java.awt.event.WindowListener] []
+   (windowActivated [e])
+   (windowClosed [e])
+   (windowClosing [e]
+                  (send flipper stop)
+                  (.stop timer))
+   (windowDeactivated [e])
+   (windowDeiconified [e])
+   (windowIconified [e])
+   (windowOpened [e])))</pre>
+<p>As to your second question, running multiple instances of any CPU-intensive process will be slow.</p>
+<p>In fact, Clojure puts <em>more</em> strain on the system because it makes full use of all your CPU cores.  That&#8217;s good if you want your computation to finish faster, not so good if you want to leave some CPU for other applications.</p>
+<p>Clojure doesn&#8217;t provide a way to explicitly control how many cores it uses, but it could someday.  Some operating systems also allow you to restrict the number of cores a process can use.  As multi-threaded programming becomes more prevalent, CPU resource management should be more accessible.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-43032" class="comment even thread-even depth-1">
+			<article id="div-comment-43032" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/2868897bd25bfcb39311ae7d9acab4a5?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/2868897bd25bfcb39311ae7d9acab4a5?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Michael Wood</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="agents-of-swing.html#comment-43032">
+							<time datetime="2010-01-24T14:14:13+00:00">
+								January 24, 2010 at 2:14 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thanks :)  That WindowListener was what I was looking for.</p>
+<p>Yes, of course running multiple CPU intensive things at the same time will slow the machine down.  What I meant was that it seemed not to be updating the display at 0.1s intervals anymore, but I suppose it could also be that the values were taking longer than 0.1s to update and if so, I wouldn&#8217;t be able to tell the difference :)  I suppose part of my problem is that I have a single core machine.</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-43187" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-43187" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/149379873fe2cb70e550c6bff8fedd0c?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/149379873fe2cb70e550c6bff8fedd0c?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn"><a href='http://schwabcenter.com/' rel='external nofollow' class='url'>Jeff Schwab</a></b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="agents-of-swing.html#comment-43187">
+							<time datetime="2010-08-14T17:21:35+00:00">
+								August 14, 2010 at 5:21 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thank you for the excellent series of posts.  Would it make more sense to set the text-boxes&#8217; &#8220;editable&#8221; property, rather than &#8220;enabled&#8221;?  Also, would there be any disadvantage to using WindowAdapter, instead of WindowListener, so as to reduce boilerplate?</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-44321" class="comment even thread-even depth-1">
+			<article id="div-comment-44321" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/2c1a92a49c150dd2b16c216022751c8c?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/2c1a92a49c150dd2b16c216022751c8c?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Nic</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="agents-of-swing.html#comment-44321">
+							<time datetime="2011-10-03T15:48:06+00:00">
+								October 3, 2011 at 3:48 pm							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Great blog. I found it very useful.<br />
+The one macro confused me a little. The event parameter in with-action seems to have<br />
+no role. This definition of the macro is clearer for me. Is it also valid or does it have issues I am not seeing ?</p>
+<p>(defmacro with-action [component &amp; body]<br />
+  `(. ~component addActionListener<br />
+      (proxy [java.awt.event.ActionListener] []<br />
+        (actionPerformed [~&#8217;event] ~@body))))</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-44416" class="comment odd alt thread-odd thread-alt depth-1">
+			<article id="div-comment-44416" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='https://secure.gravatar.com/avatar/c3cf214ed0c5f0bca153b1c1177575d6?s=42&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/c3cf214ed0c5f0bca153b1c1177575d6?s=84&amp;d=blank&amp;r=g 2x' class='avatar avatar-42 photo' height='42' width='42' />						<b class="fn">Jim</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="agents-of-swing.html#comment-44416">
+							<time datetime="2012-04-04T07:10:44+00:00">
+								April 4, 2012 at 7:10 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>Thanks a lot Stuart&#8230;I really like your macros! Just a small remark however&#8230;Your with-action macro will create a brand new ActionListener for each component it&#8217;s called with. Is this desirable in general? What if you have 50 buttons? The way i usually do it in Java is using a single ActionListener and by identifying the source of the event from the action command. Isn&#8217;t this more efficient in general? Now in all fairness, i tried to think of a way to do exactly that and I faced problems because there is no concept of class in Clojure (unless you get down and dirty with :gen-class) so I don&#8217;t know how to create an ActionListerner that just pass it around as &#8220;this&#8221; as i would do in Java. Any clarification/help is greatly appreciated&#8230;i just want to know if creating separate listeners for single actions is legit&#8230;</p>
+				</div><!-- .comment-content -->
+
+							</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-44455" class="pingback even thread-even depth-1">
+			<div class="comment-body">
+				Pingback: <a href='http://vmonaco.com/?p=111' rel='external nofollow' class='url'>String Matcher &#124; Vinnie Monaco &#8211; Research in Software</a> 			</div>
+</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+		
+	
+			<p class="no-comments">Comments are closed.</p>
+	
+	
+</div><!-- .comments-area -->
+
+	<nav class="navigation post-navigation" role="navigation">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="../06/heating-up-clojure-swing.html" rel="prev"><span class="meta-nav" aria-hidden="true">Previous</span> <span class="screen-reader-text">Previous post:</span> <span class="post-title">Heating Up Clojure &#038; Swing</span></a></div><div class="nav-next"><a href="../11/clojure-hadoop-1-0-0.html" rel="next"><span class="meta-nav" aria-hidden="true">Next</span> <span class="screen-reader-text">Next post:</span> <span class="post-title">Clojure-Hadoop 1.0.0</span></a></div></div>
+	</nav>
+	</main><!-- .site-main -->
+
+	
+</div><!-- .content-area -->
+
+
+	<aside id="secondary" class="sidebar widget-area" role="complementary">
+		<section id="search-3" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://stuartsierra.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+	</label>
+	<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</section><section id="text-4" class="widget widget_text">			<div class="textwidget"><ul>
+<li><a href="http://feeds2.feedburner.com/StuartSierra" title="Syndicate this site using RSS 2.0">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="../../../comments/feed" title="The latest comments to all posts in RSS">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+</ul>
+<ul>
+<li><a href="https://twitter.com/stuartsierra">Twitter</a></li>
+<li><a href="https://github.com/stuartsierra">GitHub</a></li>
+</ul></div>
+		</section><section id="tag-widget-2" class="widget TagWidget"><h2 class="widget-title">Clojure Do’s and Don’ts</h2><ul class = "posts-by-tag-list"><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-883"><a class = "posts-by-tag-item-title" href="../../../2015/08/25/clojure-donts-lazy-effects.html">Clojure Don’ts: Lazy Effects</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-877"><a class = "posts-by-tag-item-title" href="../../../2015/08/10/clojure-donts-redundant-map.html">Clojure Don’ts: Redundant map</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-870"><a class = "posts-by-tag-item-title" href="../../../2015/06/16/clojure-donts-single-branch-if.html">Clojure Don’ts: Single-branch if</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-854"><a class = "posts-by-tag-item-title" href="../../../2015/06/10/clojure-donts-heisenparameter.html">Clojure Don’ts: The Heisenparameter</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-849"><a class = "posts-by-tag-item-title" href="../../../2015/06/01/clojure-donts-optional-arguments-with-varargs.html">Clojure Don’ts: Optional Arguments with Varargs</a></li><li class="posts-by-tag-item Clojure do's and don'ts errors" id="posts-by-tag-item-836"><a class = "posts-by-tag-item-title" href="../../../2015/05/27/clojure-uncaught-exceptions.html">Clojure Do’s: Uncaught Exceptions</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-831"><a class = "posts-by-tag-item-title" href="../../../2015/05/17/clojure-record-constructors.html">Record Constructors</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-826"><a class = "posts-by-tag-item-title" href="../../../2015/05/10/clojure-namespace-aliases.html">Clojure Do’s: Namespace Aliases</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-820"><a class = "posts-by-tag-item-title" href="../../../2015/05/02/clojure-donts-isa.html">Clojure Don’ts: isa?</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-812"><a class = "posts-by-tag-item-title" href="../../../2015/04/26/clojure-donts-concat.html">Clojure Don’ts: Concat</a></li></ul></section>	</aside><!-- .sidebar .widget-area -->
+
+		</div><!-- .site-content -->
+
+		<footer id="colophon" class="site-footer" role="contentinfo">
+							<nav class="main-navigation" role="navigation" aria-label="Footer Primary Menu">
+					<div class="menu-main-menu-container"><ul id="menu-main-menu-1" class="primary-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../../../about-me.html">About Me</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../../../writing.html">Writing</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../../../presentations.html">Presentations</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../../../software.html">Software</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../../../contact.html">Contact</a></li>
+</ul></div>				</nav><!-- .main-navigation -->
+			
+			
+			<div class="site-info">
+								<span class="site-title"><a href="../../../index.html" rel="home">Digital Digressions by Stuart Sierra</a></span>
+				<a href="https://wordpress.org/">Proudly powered by WordPress</a>
+			</div><!-- .site-info -->
+		</footer><!-- .site-footer -->
+	</div><!-- .site-inner -->
+</div><!-- .site -->
+
+	<div style="display:none">
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	<div class="grofile-hash-map-869b5ceab0d87a8812ac8d7fcae95131">
+	</div>
+	<div class="grofile-hash-map-3ed78e252eb510bc224b0b1c3ae98350">
+	</div>
+	<div class="grofile-hash-map-2868897bd25bfcb39311ae7d9acab4a5">
+	</div>
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	<div class="grofile-hash-map-149379873fe2cb70e550c6bff8fedd0c">
+	</div>
+	<div class="grofile-hash-map-2c1a92a49c150dd2b16c216022751c8c">
+	</div>
+	<div class="grofile-hash-map-c3cf214ed0c5f0bca153b1c1177575d6">
+	</div>
+	</div>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201635'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2016Sepaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../../../wp-content/plugins/jetpack/modules/wpgroho167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../wp-content/themes/twentysixteen/js/skip-link-focus-fix8de4.js?ver=20160816'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var screenReaderText = {"expand":"expand child menu","collapse":"collapse child menu"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../../../wp-content/themes/twentysixteen/js/functions8de4.js?ver=20160816'></script>
+<script type='text/javascript' src='../../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='https://stats.wp.com/e-201635.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.2.2',blog:'2702563',post:'395',tz:'-4',srv:'stuartsierra.com'} ]);
+	_stq.push([ 'clickTrackerInit', '2702563', '395' ]);
+</script>
+</body>
+
+<!-- Mirrored from stuartsierra.com/2010/01/08/agents-of-swing by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 17:00:40 GMT -->
+</html>
+
+<!-- Dynamic page generated in 0.392 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:57:36 -->
+
+<!-- Compression = gzip -->

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: The Naming of Namespaces</title>
+	<atom:link href="https://stuartsierra.com/2006/07/13/the-naming-of-namespaces/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2006/07/13/the-naming-of-namespaces</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: stuart</title>
+		<link>https://stuartsierra.com/2006/07/13/the-naming-of-namespaces/comment-page-1#comment-131</link>
+		<dc:creator><![CDATA[stuart]]></dc:creator>
+		<pubDate>Fri, 14 Jul 2006 15:35:35 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=42#comment-131</guid>
+		<description><![CDATA[Alex Says:
+&lt;em&gt;Isn’t it already done with packages?&lt;/em&gt;
+
+Not exactly.  Packages are namespaces but they can&#039;t overlap.  A better example of what I was thinking of:
+
+
+(defmacro bar-macro ((arg1 :namespace bar))
+  ...)
+
+(defmacro quux-macro ((arg2 :namespace quux))
+  ...)
+
+
+Now I can have a symbol BAR with different definitions in the namespaces BAR and QUUX.  Calling (BAR-MACRO FOO) will use the value of FOO in BAR, calling (QUUX-MACRO FOO) will use the value of FOO in QUUX.  Overlapping namespaces, without conflicts.]]></description>
+		<content:encoded><![CDATA[<p>Alex Says:<br />
+<em>Isn’t it already done with packages?</em></p>
+<p>Not exactly.  Packages are namespaces but they can&#8217;t overlap.  A better example of what I was thinking of:</p>
+<p>(defmacro bar-macro ((arg1 :namespace bar))<br />
+  &#8230;)</p>
+<p>(defmacro quux-macro ((arg2 :namespace quux))<br />
+  &#8230;)</p>
+<p>Now I can have a symbol BAR with different definitions in the namespaces BAR and QUUX.  Calling (BAR-MACRO FOO) will use the value of FOO in BAR, calling (QUUX-MACRO FOO) will use the value of FOO in QUUX.  Overlapping namespaces, without conflicts.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Alex</title>
+		<link>https://stuartsierra.com/2006/07/13/the-naming-of-namespaces/comment-page-1#comment-130</link>
+		<dc:creator><![CDATA[Alex]]></dc:creator>
+		<pubDate>Fri, 14 Jul 2006 08:20:52 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=42#comment-130</guid>
+		<description><![CDATA[Isn&#039;t it already done with packages?
+Like :
+
+(in-package &quot;BLA&quot;)
+
+(defmacro blabla (bla) ..... )
+
+I&#039;m not sure the syntax is correct, but to give the idea, you know.]]></description>
+		<content:encoded><![CDATA[<p>Isn&#8217;t it already done with packages?<br />
+Like :</p>
+<p>(in-package &#8220;BLA&#8221;)</p>
+<p>(defmacro blabla (bla) &#8230;.. )</p>
+<p>I&#8217;m not sure the syntax is correct, but to give the idea, you know.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Michael Campbell</title>
+		<link>https://stuartsierra.com/2006/07/13/the-naming-of-namespaces/comment-page-1#comment-129</link>
+		<dc:creator><![CDATA[Michael Campbell]]></dc:creator>
+		<pubDate>Fri, 14 Jul 2006 00:49:16 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=42#comment-129</guid>
+		<description><![CDATA[I like lisp, although I&#039;m barely more than a rank neophyte with it, but bolstering an argument by misusing the &quot;other&quot; language hardly does anyone any good.  Since you&#039;re quoting Java (and with full text justification, gak!), at least use IDIOMATIC java:
+
+;; Assuming an import up here somewhere..., akin to the ...with-namespaces)
+
+ActionEvent myEvent = new ActionEvent(); 
+
+which might still be too wordy for some, it&#039;s a lot less than you make it out to be.
+
+&#062; Everything is kept neatly separated, without endless qualifiers attached to every symbol.
+
+And truly, other languages, including the one you quoted, allow this as well.]]></description>
+		<content:encoded><![CDATA[<p>I like lisp, although I&#8217;m barely more than a rank neophyte with it, but bolstering an argument by misusing the &#8220;other&#8221; language hardly does anyone any good.  Since you&#8217;re quoting Java (and with full text justification, gak!), at least use IDIOMATIC java:</p>
+<p>;; Assuming an import up here somewhere&#8230;, akin to the &#8230;with-namespaces)</p>
+<p>ActionEvent myEvent = new ActionEvent(); </p>
+<p>which might still be too wordy for some, it&#8217;s a lot less than you make it out to be.</p>
+<p>&gt; Everything is kept neatly separated, without endless qualifiers attached to every symbol.</p>
+<p>And truly, other languages, including the one you quoted, allow this as well.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.270 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:01:41 -->
+
+<!-- Compression = gzip -->

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns#">
+
+<!-- Mirrored from malisper.me/2015/07/22/debugging-lisp-part-3-redefining-classes/?replytocom=249 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:47:27 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Debugging Lisp Part 3: Redefining Classes - Macrology</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="../../../../xmlrpc.php">
+
+
+<!-- This site is optimized with the Yoast SEO plugin v3.4.2 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="robots" content="noindex,follow"/>
+<link rel="canonical" href="index.html" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Debugging Lisp Part 3: Redefining Classes - Macrology" />
+<meta property="og:description" content="This is part 3 of Debugging Common Lisp. If you haven&#8217;t read either of the previous parts, you can find part 1 here, and part 2 here. You can find part 4, which is on restarts, here. The Common Lisp Object System (CLOS) is pretty powerful. It gives you multiple inheritance, multiple dispatch, and many different &hellip;" />
+<meta property="og:url" content="index.html" />
+<meta property="og:site_name" content="Macrology" />
+<meta property="article:section" content="Debugging Lisp" />
+<meta property="article:published_time" content="2015-07-22T03:00:03-05:00" />
+<meta property="article:modified_time" content="2016-01-04T12:24:20-05:00" />
+<meta property="og:updated_time" content="2016-01-04T12:24:20-05:00" />
+<meta property="og:image" content="../../../../wp-content/uploads/2015/07/ezgif.com-optimize1.gif" />
+<meta property="og:image" content="../../../../wp-content/uploads/2015/07/ezgif.com-optimize-1.gif" />
+<meta property="og:image" content="../../../../wp-content/uploads/2015/07/ezgif.com-optimize-21.gif" />
+<meta property="og:image" content="../../../../wp-content/uploads/2015/07/ezgif.com-crop1.gif" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:description" content="This is part 3 of Debugging Common Lisp. If you haven&#8217;t read either of the previous parts, you can find part 1 here, and part 2 here. You can find part 4, which is on restarts, here. The Common Lisp Object System (CLOS) is pretty powerful. It gives you multiple inheritance, multiple dispatch, and many different [&hellip;]" />
+<meta name="twitter:title" content="Debugging Lisp Part 3: Redefining Classes - Macrology" />
+<meta name="twitter:image" content="../../../../wp-content/uploads/2015/07/ezgif.com-optimize1.gif" />
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Feed" href="../../../../feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Comments Feed" href="../../../../comments/feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Debugging Lisp Part 3: Redefining Classes Comments Feed" href="feed/index.html" />
+<link rel='stylesheet' id='scrawl-style-css'  href='../../../../wp-content/themes/scrawl-wpcom/style167b.css?ver=4.6' type='text/css' media='all' />
+<link rel='stylesheet' id='scrawl-fonts-css'  href='https://fonts.googleapis.com/css?family=Lora:400,700|Merriweather:400italic,400,700,700italic&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../../../wp-content/themes/scrawl-wpcom/fonts/genericons6de8.css?ver=3.3' type='text/css' media='all' />
+<script type='text/javascript' src='../../../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<link rel='https://api.w.org/' href='../../../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../../../wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+<link rel='shortlink' href='../../../../indexde52.html?p=530' />
+<meta name='robots' content='noindex,follow' />
+<link rel="alternate" type="application/json+oembed" href="../../../../wp-json/oembed/1.0/embed46b6.json?url=http%3A%2F%2Fmalisper.me%2F2015%2F07%2F22%2Fdebugging-lisp-part-3-redefining-classes%2F" />
+<link rel="alternate" type="text/xml+oembed" href="../../../../wp-json/oembed/1.0/embed9efa?url=http%3A%2F%2Fmalisper.me%2F2015%2F07%2F22%2Fdebugging-lisp-part-3-redefining-classes%2F&amp;format=xml" />
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-63547056-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<style type="text/css" id="syntaxhighlighteranchor"></style>
+
+<script type="text/javascript">
+  window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var n=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(n?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var o=document.getElementsByTagName("script")[0];o.parentNode.insertBefore(a,o);for(var r=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["clearEventProperties","identify","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=r(p[c])};
+    heap.load("931515525");
+</script>
+</head>
+
+<body class="single single-post postid-530 single-format-standard">
+	<button class="menu-toggle x">
+		<span class="lines"></span>
+		<span class="screen-reader-text">Primary Menu</span>
+	</button>
+	<div class="slide-menu">
+				
+		<h1 class="site-title"><a href="../../../../index.html" rel="home">Macrology</a></h1>
+		<h2 class="site-description">Case Studies in Lisp Macros</h2>
+		
+				
+				
+			<div id="secondary" class="widget-area" role="complementary">
+		<aside id="search-2" class="widget widget_search"><form role="search" method="get" class="search-form" action="http://malisper.me/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form></aside><aside id="pages-3" class="widget widget_pages"><h1 class="widget-title">Pages</h1>		<ul>
+			<li class="page_item page-item-55"><a href="../../../../about-me/index.html">About Michael Malis</a></li>
+<li class="page_item page-item-44"><a href="../../../../about-this-site-2/index.html">About This Site</a></li>
+		</ul>
+		</aside><aside id="nav_menu-3" class="widget widget_nav_menu"><h1 class="widget-title">Contact Me</h1><div class="menu-contact-me-container"><ul id="menu-contact-me" class="menu"><li id="menu-item-60" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-60"><a href="mailto:michaelmalis2@gmail.com">Email</a></li>
+<li id="menu-item-58" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-58"><a href="https://github.com/malisper">Github</a></li>
+<li id="menu-item-59" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-59"><a href="https://news.ycombinator.com/user?id=malisper">Hacker News</a></li>
+</ul></div></aside><aside id="archives-2" class="widget widget_archive"><h1 class="widget-title">Archives</h1>		<ul>
+			<li><a href='../../../../2016/06/index.html'>June 2016</a></li>
+	<li><a href='../../../../2016/04/index.html'>April 2016</a></li>
+	<li><a href='../../../../2016/01/index.html'>January 2016</a></li>
+	<li><a href='../../../12/index.html'>December 2015</a></li>
+	<li><a href='../../../11/index.html'>November 2015</a></li>
+	<li><a href='../../../10/index.html'>October 2015</a></li>
+	<li><a href='../../../09/index.html'>September 2015</a></li>
+	<li><a href='../../../08/index.html'>August 2015</a></li>
+	<li><a href='../../index.html'>July 2015</a></li>
+	<li><a href='../../../06/index.html'>June 2015</a></li>
+	<li><a href='../../../05/index.html'>May 2015</a></li>
+		</ul>
+		</aside><aside id="categories-2" class="widget widget_categories"><h1 class="widget-title">Categories</h1>		<ul>
+	<li class="cat-item cat-item-2"><a href="../../../../category/basics/index.html" title="These are basic Lisp macros that should be trivial to understand.">Basic Macros</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="../../../../category/intermediate-macros/index.html" >Intermediate Macros</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="../../../../category/advanced-macros/index.html" >Advanced Macros</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="../../../../category/debugging-common-lisp/index.html" >Debugging Lisp</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="../../../../category/loops-in-lisp/index.html" >Loops in Lisp</a>
+</li>
+		</ul>
+</aside>	</div><!-- #secondary -->
+	</div><!-- .slide-menu -->
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<header id="masthead" class="site-header" role="banner">
+
+		<div class="site-branding">
+						<h1 class="site-title"><a href="../../../../index.html" rel="home">Macrology</a></h1>
+		</div>
+
+	</header><!-- #masthead -->
+
+	
+	
+	<div id="content" class="site-content">
+
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			<article id="post-530" class="post-530 post type-post status-publish format-standard hentry category-debugging-common-lisp">
+			<header class="entry-header">
+			<h1 class="entry-title">Debugging Lisp Part 3: Redefining Classes</h1>		</header><!-- .entry-header -->
+		<div class="entry-content">
+		<p><em>This is part 3 of Debugging Common Lisp</em>. If you haven&#8217;t read either of the previous parts, you can find part 1 <a href="../../07/debugging-lisp-part-1-recompilation/index.html">here</a>, and part 2 <a href="../../14/debugging-lisp-part-2-inspecting/index.html">here</a>. <em>You can find part 4, which is on restarts, <a href="../../../08/05/debugging-lisp-part-4-restarts/index.html">here</a>.</em></p>
+<p>The Common Lisp Object System (CLOS) is pretty powerful. It gives you multiple inheritance, multiple dispatch, and many different ways to extend the behavior of methods. Underneath, most implementations use the Metaobject Protocol (MOP), a way of defining CLOS in terms of itself. As part of the MOP, classes are implemented as objects with several instance variables. Among those are variables that hold the class&#8217;s name, its superclasses, and a list of the class&#8217;s own instance variables. If you don&#8217;t believe me, take the point class from the previous post:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defclass point ()
+  ((x :accessor point-x :initarg :x :initform 0)
+   (y :accessor point-y :initarg :y :initform 0)))
+</pre>
+<p>And use the Slime Inspector to inspect the point class object, which can be obtained by calling <strong>find-class</strong>:</p>
+<p>&nbsp;</p>
+<p><a href="../../../../wp-content/uploads/2015/07/ezgif.com-optimize1.gif"><img class="aligncenter wp-image-569" src="../../../../wp-content/uploads/2015/07/ezgif.com-optimize1.gif" alt="ezgif.com-optimize" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>The advantage of using the MOP is that it makes it possible to fine tune the behavior of CLOS by using ordinary object-oriented programming. A great example of this is the <a href="https://common-lisp.net/project/closer/filtered.html">filtered-functions</a> library which adds arbitrary predicate based dispatch to CLOS. But enough about the MOP.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='#easy-footnote-bottom-1' title='If you are interested in learning more about the MOP, look for a copy of &#8220;The Art of the Metaobject Protocol&#8221;. Alan Kay, the creator of object-oriented programming, called it &#8220;The best book anybody has written in ten years&#8221; in his 1997 OOPSLA talk.'><sup>1</sup></a></span> In this post I&#8217;m going to talk about one tiny piece of CLOS, <strong>update-instance-for-redefined-class</strong>.</p>
+<p><strong>Update-instance-for-redefined-class</strong> is a method which is called whenever a class is redefined (at runtime). By overriding it, you can customize what exactly happens at that point in time. For example, let&#8217;s say you are using the above point class to represent complex numbers for some sort of simulation. As part of the simulation, you have a point object saved inside of the <em>*location*</em> variable<em>:</em></p>
+<p>&nbsp;</p>
+<p><a href="../../../../wp-content/uploads/2015/07/ezgif.com-optimize-1.gif"><img class="aligncenter wp-image-577" src="../../../../wp-content/uploads/2015/07/ezgif.com-optimize-1.gif" alt="ezgif.com-optimize (1)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>After profiling the simulation, you find that one of the bottlenecks is complex multiplication. Since multiplication of complex numbers is much more efficient when they are represented in polar form, you decide that you want to change the implementation of the point class from Cartesian to polar coordinates. To do that (at runtime), all you need to do is run the following code:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defmethod update-instance-for-redefined-class :before
+     ((pos point) added deleted plist &amp;key)
+  (let ((x (getf plist 'x))
+        (y (getf plist 'y)))
+    (setf (point-rho pos) (sqrt (+ (* x x) (* y y)))
+          (point-theta pos) (atan y x))))
+
+(defclass point ()
+  ((rho :initform 0 :accessor point-rho)
+   (theta :initform 0 :accessor point-theta)))
+
+(defmethod point-x ((pos point))
+  (with-slots (rho theta) pos (* rho (cos theta))))
+
+(defmethod point-y ((pos point))
+  (with-slots (rho theta) pos (* rho (sin theta))))
+</pre>
+<p>Basically, the code extends <strong>update-instance-for-redefined-class</strong> to calculate the values of <em>rho</em> and <em>theta</em> for the polar implementation in terms of the variables x and y from the Cartesian one. After extending <strong>update-instance-for-redefined-class</strong> the code then redefines the class, causing all of the existing instances to be changed over to the new implementation.<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='#easy-footnote-bottom-2' title='Actually the time at which update-instance-for-redefined-class is called is unspecified. The only guarantee is that it will be called on an instance before a variable of that instance is accessed.'><sup>2</sup></a></span> Finally, two methods are defined, <strong>point-x</strong> and <strong>point-y</strong>, which preserve the interface for the point class.<span id='easy-footnote-3' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='#easy-footnote-bottom-3' title='There are several other functions that need to be redefined such as initialize-instance in order to truly preserve the interface.'><sup>3</sup></a></span> After running the code and then inspecting the contents of <em>*location*</em>, you should see:</p>
+<p>&nbsp;</p>
+<p><a href="../../../../wp-content/uploads/2015/07/ezgif.com-optimize-21.gif"><img class="aligncenter wp-image-581" src="../../../../wp-content/uploads/2015/07/ezgif.com-optimize-21.gif" alt="ezgif.com-optimize (2)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>Even though the object inside of <em>*location*</em> is still the same object, it is now implemented using polar coordinates! To make sure that it was converted from Cartesian to polar correctly, you decide to call <strong>point-x</strong> on the object to check that the x-coordinate is still the same:</p>
+<p>&nbsp;</p>
+<p><a href="../../../../wp-content/uploads/2015/07/ezgif.com-crop1.gif"><img class="aligncenter wp-image-585" src="../../../../wp-content/uploads/2015/07/ezgif.com-crop1.gif" alt="ezgif.com-crop" width="600" height="330" /></a><a href="../../../../wp-content/uploads/2015/07/ezgif.com-optimize-22.gif"><br />
+</a></p>
+<p>Amazingly, all of the code continues to work even though the implementation of an entire class was completely changed. So anytime you want to change the implementation of a class that is part of a service that needs to be up 24/7 and just happens to be written in Common Lisp, remember to use <strong>update-instance-for-redefined-class</strong>.</p>
+<ol class="easy-footnotes-wrapper"><li class="easy-footnote-single"><span id="easy-footnote-bottom-1" class="easy-footnote-margin-adjust"></span>If you are interested in learning more about the MOP, look for a copy of &#8220;The Art of the Metaobject Protocol&#8221;. Alan Kay, the creator of object-oriented programming, called it &#8220;The best book anybody has written in ten years&#8221; in his 1997 OOPSLA talk.<a class="easy-footnote-to-top" href="#easy-footnote-1"></a></li><li class="easy-footnote-single"><span id="easy-footnote-bottom-2" class="easy-footnote-margin-adjust"></span>Actually the time at which update-instance-for-redefined-class is called is unspecified. The only guarantee is that it will be called on an instance before a variable of that instance is accessed.<a class="easy-footnote-to-top" href="#easy-footnote-2"></a></li><li class="easy-footnote-single"><span id="easy-footnote-bottom-3" class="easy-footnote-margin-adjust"></span>There are several other functions that need to be redefined such as initialize-instance in order to truly preserve the interface.<a class="easy-footnote-to-top" href="#easy-footnote-3"></a></li></ol>			</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="index.html" rel="bookmark"><time class="entry-date published" datetime="2015-07-22T03:00:03+00:00">July 22, 2015</time><time class="updated" datetime="2016-01-04T12:24:20+00:00">January 4, 2016</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../../../author/malisper/index.html">malisper</a></span></span><span class="category-links"> in <a href="../../../../category/debugging-common-lisp/index.html" rel="category tag">Debugging Lisp</a></span>			<span class="secondary-entry-meta">
+								<span class="comments-link"><a href="index.html#comments">3</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+			
+	<nav class="navigation post-navigation" role="navigation">
+		<h2 class="screen-reader-text">Post navigation</h2>
+		<div class="nav-links"><div class="nav-previous"><a href="../../14/debugging-lisp-part-2-inspecting/index.html" rel="prev"><span class="title">Previous post</span>Debugging Lisp Part 2: Inspecting</a></div><div class="nav-next"><a href="../../../08/05/debugging-lisp-part-4-restarts/index.html" rel="next"><span class="title">Next post</span>Debugging Lisp Part 4: Restarts</a></div></div>
+	</nav>
+			
+<div id="comments" class="comments-area">
+
+	
+			<h2 class="comments-title">
+			3 thoughts on &ldquo;<span>Debugging Lisp Part 3: Redefining Classes</span>&rdquo;		</h2>
+
+		<ol class="comment-list">
+					<li id="comment-244" class="comment even thread-even depth-1">
+			<article id="div-comment-244" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://0.gravatar.com/avatar/90ff9b7df6973eae49d3d4911e2eda0c?s=64&amp;d=mm&amp;r=g' srcset='http://0.gravatar.com/avatar/90ff9b7df6973eae49d3d4911e2eda0c?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">stassats</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-244">
+							<time datetime="2015-07-22T05:49:45+00:00">
+								July 22, 2015 at 5:49 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>protip: when you have a defclass form then you can use M-x slime-inspect-definition while the pointer is inside it. This works for many things, not just defclass. There&#8217;s no default binding, but I use C-c M-i</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='indexe972.html?replytocom=244#respond' onclick='return addComment.moveForm( "div-comment-244", "244", "respond", "530" )' aria-label='Reply to stassats'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+		<li id="comment-249" class="comment odd alt thread-odd thread-alt depth-1 parent">
+			<article id="div-comment-249" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://0.gravatar.com/avatar/04ae03f371d9c4eb3fad2352fa0c7eca?s=64&amp;d=mm&amp;r=g' srcset='http://0.gravatar.com/avatar/04ae03f371d9c4eb3fad2352fa0c7eca?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">foo</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-249">
+							<time datetime="2015-07-22T10:17:22+00:00">
+								July 22, 2015 at 10:17 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>so presumably if i were to redefine the class again, update-instance-for-redefined-class will be called again, but this time it&#8217;ll result in error, since x/y no longer there. is there a strategy for making update-instance-for-redefined-class version specific or at least redefine proof? i imagine explicit versioning is one way, and then a migration history for a class (we&#8217;re assuming a very long running process here, that stores its data in memory)</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='indexe6fc.html?replytocom=249#respond' onclick='return addComment.moveForm( "div-comment-249", "249", "respond", "530" )' aria-label='Reply to foo'>Reply</a></div>			</article><!-- .comment-body -->
+<ol class="children">
+		<li id="comment-250" class="comment byuser comment-author-malisper bypostauthor even depth-2">
+			<article id="div-comment-250" class="comment-body">
+				<footer class="comment-meta">
+					<div class="comment-author vcard">
+						<img alt='' src='http://2.gravatar.com/avatar/2587b67431f9cc2a998a25e42e2d172d?s=64&amp;d=mm&amp;r=g' srcset='http://2.gravatar.com/avatar/2587b67431f9cc2a998a25e42e2d172d?s=128&amp;d=mm&amp;r=g 2x' class='avatar avatar-64 photo' height='64' width='64' />						<b class="fn">malisper</b> <span class="says">says:</span>					</div><!-- .comment-author -->
+
+					<div class="comment-metadata">
+						<a href="index.html#comment-250">
+							<time datetime="2015-07-22T10:28:33+00:00">
+								July 22, 2015 at 10:28 am							</time>
+						</a>
+											</div><!-- .comment-metadata -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content">
+					<p>I believe the most common method is to check the deleted slots list and make sure it contains the exact instance variables that were removed.</p>
+				</div><!-- .comment-content -->
+
+				<div class="reply"><a rel='nofollow' class='comment-reply-link' href='index461a.html?replytocom=250#respond' onclick='return addComment.moveForm( "div-comment-250", "250", "respond", "530" )' aria-label='Reply to malisper'>Reply</a></div>			</article><!-- .comment-body -->
+</li><!-- #comment-## -->
+</ol><!-- .children -->
+</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+		
+	
+	
+					<div id="respond" class="comment-respond">
+			<h3 id="reply-title" class="comment-reply-title">Leave a Reply to <a href="#comment-249">foo</a> <small><a rel="nofollow" id="cancel-comment-reply-link" title="Cancel reply" href="index.html#respond"><span class="screen-reader-text">Cancel reply</span></a></small></h3>				<form action="http://malisper.me/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
+					<p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" aria-required="true" required="required"></textarea></p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" aria-required='true' required='required' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" aria-required='true' required='required' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" /></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='530' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='249' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="40c6c47224" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="122"/></p>				</form>
+					</div><!-- #respond -->
+		
+</div><!-- #comments -->
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="site-info">
+			<a href="http://wordpress.org/">Proudly powered by WordPress</a>
+			<span class="sep"> ~ </span>
+			Theme: Scrawl by <a href="https://wordpress.com/themes/" rel="designer">WordPress.com</a>.		</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type='text/javascript' src='../../../../wp-content/plugins/akismet/_inc/form2d73.html?ver=3.1.11'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushPlain09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore09b1.css?ver=3.0.9b";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "../../../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeEclipse09b1.css?ver=3.0.9b";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+<link rel='stylesheet' id='qtipstyles-css'  href='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='easyfootnotescss-css'  href='../../../../wp-content/plugins/easy-footnotes/assets/easy-footnotes167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='dashicons-css'  href='../../../../wp-includes/css/dashicons.min167b.css?ver=4.6' type='text/css' media='all' />
+<script type='text/javascript' src='../../../../wp-content/themes/scrawl-wpcom/js/scrawld56c.js?ver=20150309'></script>
+<script type='text/javascript' src='../../../../wp-content/themes/scrawl-wpcom/js/skip-link-focus-fix08e0.js?ver=20130115'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/comment-reply.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-includes/js/imagesloaded.min55a0.js?ver=3.2.0'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtipcall167b.js?ver=4.6'></script>
+
+</body>
+
+<!-- Mirrored from malisper.me/2015/07/22/debugging-lisp-part-3-redefining-classes/?replytocom=249 by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:47:27 GMT -->
+</html>
+<!-- Dynamic page generated in 0.082 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:24:05 -->

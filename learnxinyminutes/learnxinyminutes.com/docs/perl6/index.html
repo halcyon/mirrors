@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/perl6/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:25 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn perl6 in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../css/normalize.css">
+        <link rel="stylesheet" href="../../css/main.css">
+        <link href="../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fperl6%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3Dperl6">
+        Share this page
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../index.html">Learn X in Y minutes</a></h2>
+  <h2>Where X=perl6</h2>
+  
+    <p class="filelink">
+    Get the code:
+    <a href="../files/learnperl6.perl">learnperl6.pl</a>
+    </p>
+  
+  <div id="doc">
+    <p>Perl 6 is a highly capable, feature-rich programming language made for at
+least the next hundred years.</p>
+
+<p>The primary Perl 6 compiler is called <a href="http://rakudo.org/">Rakudo</a>, which runs on
+the JVM and <a href="http://moarvm.com/">the MoarVM</a>.</p>
+
+<p>Meta-note : the triple pound signs are here to denote headlines,
+double paragraphs, and single notes.</p>
+
+<p><code>#=&gt;</code> represents the output of a command.</p>
+<pre class="highlight perl"><code><span class="c1"># Single line comment start with a pound</span>
+
+<span class="c1">#`(</span>
+  <span class="nv">Multiline</span> <span class="nv">comments</span> <span class="k">use</span> <span class="c1">#` and a quoting construct.</span>
+  <span class="p">(),</span> <span class="o">[]</span><span class="p">,</span> <span class="p">{},</span> <span class="err">「」</span><span class="p">,</span> <span class="nv">etc</span><span class="p">,</span> <span class="nv">will</span> <span class="nv">work</span><span class="o">.</span>
+<span class="p">)</span>
+
+<span class="c1">### Variables</span>
+
+<span class="c1"># In Perl 6, you declare a lexical variable using `my`</span>
+<span class="k">my</span> <span class="nv">$variable</span><span class="p">;</span>
+<span class="c1"># Perl 6 has 4 kinds of variables:</span>
+
+<span class="c1">## * Scalars. They represent a single value. They start with a `$`</span>
+
+<span class="k">my</span> <span class="nv">$str</span> <span class="o">=</span> <span class="s">'String'</span><span class="p">;</span>
+<span class="c1"># double quotes allow for interpolation (which we'll see later):</span>
+<span class="k">my</span> <span class="nv">$str2</span> <span class="o">=</span> <span class="s">"String"</span><span class="p">;</span>
+
+<span class="c1"># variable names can contain but not end with simple quotes and dashes,</span>
+<span class="c1">#  and can contain (and end with) underscores :</span>
+<span class="c1"># my $weird'variable-name_ = 5; # works !</span>
+
+<span class="k">my</span> <span class="nv">$bool</span> <span class="o">=</span> <span class="nv">True</span><span class="p">;</span> <span class="c1"># `True` and `False` are Perl 6's boolean</span>
+<span class="k">my</span> <span class="nv">$inverse</span> <span class="o">=</span> <span class="o">!</span><span class="nv">$bool</span><span class="p">;</span> <span class="c1"># You can invert a bool with the prefix `!` operator</span>
+<span class="k">my</span> <span class="nv">$forced</span><span class="o">-</span><span class="nv">bool</span> <span class="o">=</span> <span class="nv">so</span> <span class="nv">$str</span><span class="p">;</span> <span class="c1"># And you can use the prefix `so` operator</span>
+                           <span class="c1"># which turns its operand into a Bool</span>
+
+<span class="c1">## * Lists. They represent multiple values. Their name start with `@`.</span>
+
+<span class="k">my</span> <span class="nv">@array</span> <span class="o">=</span> <span class="s">'a'</span><span class="p">,</span> <span class="s">'b'</span><span class="p">,</span> <span class="s">'c'</span><span class="p">;</span>
+<span class="c1"># equivalent to :</span>
+<span class="k">my</span> <span class="nv">@letters</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nv">a</span> <span class="nv">b</span> <span class="nv">c</span><span class="o">&gt;</span><span class="p">;</span> <span class="c1"># array of words, delimited by space.</span>
+                     <span class="c1"># Similar to perl5's qw, or Ruby's %w.</span>
+<span class="k">my</span> <span class="nv">@array</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">;</span>
+
+<span class="nv">say</span> <span class="nv">@array</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> <span class="c1"># Array indices start at 0 -- This is the third element</span>
+
+<span class="nv">say</span> <span class="s">"Interpolate an array using [] : @array[]"</span><span class="p">;</span>
+<span class="c1">#=&gt; Interpolate an array using [] : 1 2 3</span>
+
+<span class="nv">@array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="c1"># Assign a new value to an array index</span>
+<span class="nv">@array</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">;</span> <span class="c1"># Assign multiple values</span>
+
+<span class="k">my</span> <span class="nv">@keys</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">;</span>
+<span class="nv">@array</span><span class="p">[</span><span class="nv">@keys</span><span class="p">]</span> <span class="o">=</span> <span class="nv">@letters</span><span class="p">;</span> <span class="c1"># Assign using an array</span>
+<span class="nv">say</span> <span class="nv">@array</span><span class="p">;</span> <span class="c1">#=&gt; a 6 b</span>
+
+<span class="c1">## * Hashes, or key-value Pairs.</span>
+<span class="c1"># Hashes are actually arrays of Pairs</span>
+<span class="c1"># (you can construct a Pair object using the syntax `Key =&gt; Value`),</span>
+<span class="c1">#  except they get "flattened" (hash context), removing duplicated keys.</span>
+<span class="k">my</span> <span class="nv">%hash</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">=&gt;</span> <span class="mi">2</span><span class="p">,</span>
+           <span class="mi">3</span> <span class="o">=&gt;</span> <span class="mi">4</span><span class="p">;</span>
+<span class="k">my</span> <span class="nv">%hash</span> <span class="o">=</span> <span class="nv">foo</span> <span class="o">=&gt;</span> <span class="s">"bar"</span><span class="p">,</span> <span class="c1"># keys get auto-quoted</span>
+            <span class="s">"some other"</span> <span class="o">=&gt;</span> <span class="s">"value"</span><span class="p">,</span> <span class="c1"># trailing commas are okay</span>
+            <span class="p">;</span>
+<span class="k">my</span> <span class="nv">%hash</span> <span class="o">=</span> <span class="o">&lt;</span><span class="nv">key1</span> <span class="nv">value1</span> <span class="nv">key2</span> <span class="nv">value2</span><span class="o">&gt;</span><span class="p">;</span> <span class="c1"># you can also create a hash</span>
+                                      <span class="c1"># from an even-numbered array</span>
+<span class="k">my</span> <span class="nv">%hash</span> <span class="o">=</span> <span class="nv">key1</span> <span class="o">=&gt;</span> <span class="s">'value1'</span><span class="p">,</span> <span class="nv">key2</span> <span class="o">=&gt;</span> <span class="s">'value2'</span><span class="p">;</span> <span class="c1"># same as this</span>
+
+<span class="c1"># You can also use the "colon pair" syntax:</span>
+<span class="c1"># (especially handy for named parameters that you'll see later)</span>
+<span class="k">my</span> <span class="nv">%hash</span> <span class="o">=</span> <span class="p">:</span><span class="nv">w</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="c1"># equivalent to `w =&gt; 1`</span>
+           <span class="c1"># this is useful for the `True` shortcut:</span>
+           <span class="p">:</span><span class="nv">truey</span><span class="p">,</span> <span class="c1"># equivalent to `:truey(True)`, or `truey =&gt; True`</span>
+           <span class="c1"># and for the `False` one:</span>
+           <span class="p">:</span><span class="o">!</span><span class="nv">falsey</span><span class="p">,</span> <span class="c1"># equivalent to `:falsey(False)`, or `falsey =&gt; False`</span>
+           <span class="p">;</span>
+
+<span class="nv">say</span> <span class="nv">%hash</span><span class="p">{</span><span class="s">'key1'</span><span class="p">};</span> <span class="c1"># You can use {} to get the value from a key</span>
+<span class="nv">say</span> <span class="nv">%hash</span><span class="sr">&lt;key2&gt;</span><span class="p">;</span>   <span class="c1"># If it's a string, you can actually use &lt;&gt;</span>
+                   <span class="c1"># (`{key1}` doesn't work, as Perl6 doesn't have barewords)</span>
+
+<span class="c1">## * Subs (subroutines, or functions in most other languages).</span>
+<span class="k">sub </span><span class="nf">say</span><span class="p">-hello {</span> <span class="nv">say</span> <span class="s">"Hello, world"</span> <span class="p">}</span>
+
+<span class="k">sub </span><span class="nf">say</span><span class="p">-hello-to(Str $name) {</span> <span class="c1"># You can provide the type of an argument</span>
+                              <span class="c1"># and it'll be checked at compile-time.</span>
+
+    <span class="nv">say</span> <span class="s">"Hello, $name !"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">## It can also have optional arguments:</span>
+<span class="k">sub </span><span class="nf">with</span><span class="p">-optional($arg?) {</span> <span class="c1"># the "?" marks the argument optional</span>
+  <span class="nv">say</span> <span class="s">"I might return `(Any)` (Perl's 'null'-like value) if I don't have
+        an argument passed, or I'll return my argument"</span><span class="p">;</span>
+  <span class="nv">$arg</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nv">with</span><span class="o">-</span><span class="nv">optional</span><span class="p">;</span> <span class="c1"># returns Any</span>
+<span class="nv">with</span><span class="o">-</span><span class="nv">optional</span><span class="p">();</span> <span class="c1"># returns Any</span>
+<span class="nv">with</span><span class="o">-</span><span class="nv">optional</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1"># returns 1</span>
+
+<span class="c1">## You can also give them a default value when they're not passed:</span>
+<span class="k">sub </span><span class="nf">hello</span><span class="p">-to($name = "World") {</span>
+  <span class="nv">say</span> <span class="s">"Hello, $name !"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nv">hello</span><span class="o">-</span><span class="nv">to</span><span class="p">;</span> <span class="c1">#=&gt; Hello, World !</span>
+<span class="nv">hello</span><span class="o">-</span><span class="nv">to</span><span class="p">();</span> <span class="c1">#=&gt; Hello, World !</span>
+<span class="nv">hello</span><span class="o">-</span><span class="nv">to</span><span class="p">(</span><span class="s">'You'</span><span class="p">);</span> <span class="c1">#=&gt; Hello, You !</span>
+
+<span class="c1">## You can also, by using a syntax akin to the one of hashes (yay unified syntax !),</span>
+<span class="c1">##  pass *named* arguments to a `sub`.</span>
+<span class="c1"># They're optional, and will default to "Any".</span>
+<span class="k">sub </span><span class="nf">with</span><span class="p">-named($normal-arg, :$named) {</span>
+  <span class="nv">say</span> <span class="nv">$normal</span><span class="o">-</span><span class="nv">arg</span> <span class="o">+</span> <span class="nv">$named</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nv">with</span><span class="o">-</span><span class="nv">named</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nv">named</span> <span class="o">=&gt;</span> <span class="mi">6</span><span class="p">);</span> <span class="c1">#=&gt; 7</span>
+<span class="c1"># There's one gotcha to be aware of, here:</span>
+<span class="c1"># If you quote your key, Perl 6 won't be able to see it at compile time,</span>
+<span class="c1">#  and you'll have a single Pair object as a positional parameter,</span>
+<span class="c1">#  which means this fails:</span>
+<span class="nv">with</span><span class="o">-</span><span class="nv">named</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">'named'</span> <span class="o">=&gt;</span> <span class="mi">6</span><span class="p">);</span>
+
+<span class="nv">with</span><span class="o">-</span><span class="nv">named</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">:</span><span class="nv">named</span><span class="p">(</span><span class="mi">5</span><span class="p">));</span> <span class="c1">#=&gt; 7</span>
+
+<span class="c1"># To make a named argument mandatory, you can use `?`'s inverse, `!`</span>
+<span class="k">sub </span><span class="nf">with</span><span class="p">-mandatory-named(:$str!)  {</span>
+  <span class="nv">say</span> <span class="s">"$str !"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nv">with</span><span class="o">-</span><span class="nv">mandatory</span><span class="o">-</span><span class="nv">named</span><span class="p">(</span><span class="nv">str</span> <span class="o">=&gt;</span> <span class="s">"My String"</span><span class="p">);</span> <span class="c1">#=&gt; My String !</span>
+<span class="nv">with</span><span class="o">-</span><span class="nv">mandatory</span><span class="o">-</span><span class="nv">named</span><span class="p">;</span> <span class="c1"># run time error: "Required named parameter not passed"</span>
+<span class="nv">with</span><span class="o">-</span><span class="nv">mandatory</span><span class="o">-</span><span class="nv">named</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span> <span class="c1"># run time error: "Too many positional parameters passed"</span>
+
+<span class="c1">## If a sub takes a named boolean argument ...</span>
+<span class="k">sub </span><span class="nf">takes</span><span class="p">-a-bool($name, :$bool) {</span>
+  <span class="nv">say</span> <span class="s">"$name takes $bool"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1"># ... you can use the same "short boolean" hash syntax:</span>
+<span class="nv">takes</span><span class="o">-</span><span class="nv">a</span><span class="o">-</span><span class="nv">bool</span><span class="p">(</span><span class="s">'config'</span><span class="p">,</span> <span class="p">:</span><span class="nv">bool</span><span class="p">);</span> <span class="c1"># config takes True</span>
+<span class="nv">takes</span><span class="o">-</span><span class="nv">a</span><span class="o">-</span><span class="nv">bool</span><span class="p">(</span><span class="s">'config'</span><span class="p">,</span> <span class="p">:</span><span class="o">!</span><span class="nv">bool</span><span class="p">);</span> <span class="c1"># config takes False</span>
+
+<span class="c1">## You can also provide your named arguments with defaults:</span>
+<span class="k">sub </span><span class="nf">named</span><span class="p">-def(:$def = 5) {</span>
+  <span class="nv">say</span> <span class="nv">$def</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nv">named</span><span class="o">-</span><span class="nv">def</span><span class="p">;</span> <span class="c1">#=&gt; 5</span>
+<span class="nv">named</span><span class="o">-</span><span class="nv">def</span><span class="p">(</span><span class="nv">def</span> <span class="o">=&gt;</span> <span class="mi">15</span><span class="p">);</span> <span class="c1">#=&gt; 15</span>
+
+<span class="c1"># Since you can omit parenthesis to call a function with no arguments,</span>
+<span class="c1">#  you need "&amp;" in the name to store `say-hello` in a variable.</span>
+<span class="k">my</span> <span class="o">&amp;</span><span class="nv">s</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nv">say</span><span class="o">-</span><span class="nv">hello</span><span class="p">;</span>
+<span class="k">my</span> <span class="o">&amp;</span><span class="nv">other</span><span class="o">-</span><span class="nv">s</span> <span class="o">=</span> <span class="k">sub </span><span class="p">{</span> <span class="nv">say</span> <span class="s">"Anonymous function !"</span> <span class="p">}</span>
+
+<span class="c1"># A sub can have a "slurpy" parameter, or "doesn't-matter-how-many"</span>
+<span class="k">sub </span><span class="nf">as</span><span class="p">-many($head, *@rest) {</span> <span class="c1"># `*@` (slurpy) will basically "take everything else".</span>
+                             <span class="c1"># Note: you can have parameters *before* (like here)</span>
+                             <span class="c1"># a slurpy one, but not *after*.</span>
+  <span class="nv">say</span> <span class="nv">@rest</span><span class="o">.</span><span class="nb">join</span><span class="p">(</span><span class="s">' / '</span><span class="p">)</span> <span class="o">~</span> <span class="s">" !"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nv">say</span> <span class="nv">as</span><span class="o">-</span><span class="nv">many</span><span class="p">(</span><span class="s">'Happy'</span><span class="p">,</span> <span class="s">'Happy'</span><span class="p">,</span> <span class="s">'Birthday'</span><span class="p">);</span> <span class="c1">#=&gt; Happy / Birthday !</span>
+                                           <span class="c1"># Note that the splat (the *) did not</span>
+                                           <span class="c1"># consume the parameter before.</span>
+
+<span class="c1">## You can call a function with an array using the</span>
+<span class="c1"># "argument list flattening" operator `|`</span>
+<span class="c1"># (it's not actually the only role of this operator, but it's one of them)</span>
+<span class="k">sub </span><span class="nf">concat3</span><span class="p">($a, $b, $c) {</span>
+  <span class="nv">say</span> <span class="s">"$a, $b, $c"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nv">concat3</span><span class="p">(</span><span class="o">|</span><span class="nv">@array</span><span class="p">);</span> <span class="c1">#=&gt; a, b, c</span>
+                  <span class="c1"># `@array` got "flattened" as a part of the argument list</span>
+
+<span class="c1">### Containers</span>
+<span class="c1"># In Perl 6, values are actually stored in "containers".</span>
+<span class="c1"># The assignment operator asks the container on the left to store the value on</span>
+<span class="c1">#  its right. When passed around, containers are marked as immutable.</span>
+<span class="c1"># Which means that, in a function, you'll get an error if you try to</span>
+<span class="c1">#  mutate one of your arguments.</span>
+<span class="c1"># If you really need to, you can ask for a mutable container using `is rw`:</span>
+<span class="k">sub </span><span class="nf">mutate</span><span class="p">($n is rw) {</span>
+  <span class="nv">$n</span><span class="o">++</span><span class="p">;</span>
+  <span class="nv">say</span> <span class="s">"\$n is now $n !"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1"># If what you want a copy instead, use `is copy`.</span>
+
+<span class="c1"># A sub itself returns a container, which means it can be marked as rw:</span>
+<span class="k">my</span> <span class="nv">$x</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+<span class="k">sub </span><span class="nf">x</span><span class="p">-store() is rw {</span> <span class="nv">$x</span> <span class="p">}</span>
+<span class="nv">x</span><span class="o">-</span><span class="nv">store</span><span class="p">()</span> <span class="o">=</span> <span class="mi">52</span><span class="p">;</span> <span class="c1"># in this case, the parentheses are mandatory</span>
+                <span class="c1"># (else Perl 6 thinks `x-store` is an identifier)</span>
+<span class="nv">say</span> <span class="nv">$x</span><span class="p">;</span> <span class="c1">#=&gt; 52</span>
+
+
+<span class="c1">### Control Flow Structures</span>
+<span class="c1">## Conditionals</span>
+
+<span class="c1"># - `if`</span>
+<span class="c1"># Before talking about `if`, we need to know which values are "Truthy"</span>
+<span class="c1">#  (represent True), and which are "Falsey" (or "Falsy") -- represent False.</span>
+<span class="c1"># Only these values are Falsey: 0, (), {}, "", Nil, A type (like `Str` or `Int`),</span>
+<span class="c1">#  and of course False itself.</span>
+<span class="c1"># Every other value is Truthy.</span>
+<span class="k">if</span> <span class="nv">True</span> <span class="p">{</span>
+  <span class="nv">say</span> <span class="s">"It's true !"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">unless</span> <span class="nv">False</span> <span class="p">{</span>
+  <span class="nv">say</span> <span class="s">"It's not false !"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1"># As you can see, you don't need parentheses around conditions.</span>
+<span class="c1"># However, you do need the brackets around the "body" block:</span>
+<span class="c1"># if (true) say; # This doesn't work !</span>
+
+<span class="c1"># You can also use their postfix versions, with the keyword after:</span>
+<span class="nv">say</span> <span class="s">"Quite truthy"</span> <span class="k">if</span> <span class="nv">True</span><span class="p">;</span>
+
+<span class="c1"># - Ternary conditional, "?? !!" (like `x ? y : z` in some other languages)</span>
+<span class="k">my</span> <span class="nv">$a</span> <span class="o">=</span> <span class="nv">$condition</span> <span class="p">??</span> <span class="nv">$value</span><span class="o">-</span><span class="k">if</span><span class="o">-</span><span class="nv">true</span> <span class="o">!!</span> <span class="nv">$value</span><span class="o">-</span><span class="k">if</span><span class="o">-</span><span class="nv">false</span><span class="p">;</span>
+
+<span class="c1"># - `given`-`when` looks like other languages' `switch`, but much more</span>
+<span class="c1"># powerful thanks to smart matching and thanks to Perl 6's "topic variable", $_.</span>
+<span class="c1">#</span>
+<span class="c1"># This variable contains the default argument of a block,</span>
+<span class="c1">#  a loop's current iteration (unless explicitly named), etc.</span>
+<span class="c1">#</span>
+<span class="c1"># `given` simply puts its argument into `$_` (like a block would do),</span>
+<span class="c1">#  and `when` compares it using the "smart matching" (`~~`) operator.</span>
+<span class="c1">#</span>
+<span class="c1"># Since other Perl 6 constructs use this variable (as said before, like `for`,</span>
+<span class="c1"># blocks, etc), this means the powerful `when` is not only applicable along with</span>
+<span class="c1"># a `given`, but instead anywhere a `$_` exists.</span>
+<span class="nv">given</span> <span class="s">"foo bar"</span> <span class="p">{</span>
+  <span class="nv">say</span> <span class="nv">$_</span><span class="p">;</span> <span class="c1">#=&gt; foo bar</span>
+  <span class="nv">when</span> <span class="sr">/foo/</span> <span class="p">{</span> <span class="c1"># Don't worry about smart matching yet – just know `when` uses it.</span>
+               <span class="c1"># This is equivalent to `if $_ ~~ /foo/`.</span>
+    <span class="nv">say</span> <span class="s">"Yay !"</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nv">when</span> <span class="nv">$_</span><span class="o">.</span><span class="nv">chars</span> <span class="o">&gt;</span> <span class="mi">50</span> <span class="p">{</span> <span class="c1"># smart matching anything with True (`$a ~~ True`) is True,</span>
+                       <span class="c1"># so you can also put "normal" conditionals.</span>
+                       <span class="c1"># This when is equivalent to this `if`:</span>
+                       <span class="c1">#  if $_ ~~ ($_.chars &gt; 50) {...}</span>
+                       <span class="c1"># Which means:</span>
+                       <span class="c1">#  if $_.chars &gt; 50 {...}</span>
+    <span class="nv">say</span> <span class="s">"Quite a long string !"</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nv">default</span> <span class="p">{</span> <span class="c1"># same as `when *` (using the Whatever Star)</span>
+    <span class="nv">say</span> <span class="s">"Something else"</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">## Looping constructs</span>
+
+<span class="c1"># - `loop` is an infinite loop if you don't pass it arguments,</span>
+<span class="c1"># but can also be a C-style `for` loop:</span>
+<span class="nv">loop</span> <span class="p">{</span>
+  <span class="nv">say</span> <span class="s">"This is an infinite loop !"</span><span class="p">;</span>
+  <span class="k">last</span><span class="p">;</span> <span class="c1"># last breaks out of the loop, like the `break` keyword in other languages</span>
+<span class="p">}</span>
+
+<span class="nv">loop</span> <span class="p">(</span><span class="k">my</span> <span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">next</span> <span class="k">if</span> <span class="nv">$i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">;</span> <span class="c1"># `next` skips to the next iteration, like `continue`</span>
+                   <span class="c1"># in other languages. Note that you can also use postfix</span>
+                   <span class="c1"># conditionals, loops, etc.</span>
+  <span class="nv">say</span> <span class="s">"This is a C-style for loop !"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1"># - `for` - Passes through an array</span>
+<span class="k">for</span> <span class="nv">@array</span> <span class="o">-&gt;</span> <span class="nv">$variable</span> <span class="p">{</span>
+  <span class="nv">say</span> <span class="s">"I've got $variable !"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1"># As we saw with given, for's default "current iteration" variable is `$_`.</span>
+<span class="c1"># That means you can use `when` in a `for` just like you were in a `given`.</span>
+<span class="k">for</span> <span class="nv">@array</span> <span class="p">{</span>
+  <span class="nv">say</span> <span class="s">"I've got $_"</span><span class="p">;</span>
+
+  <span class="o">.</span><span class="nv">say</span><span class="p">;</span> <span class="c1"># This is also allowed.</span>
+        <span class="c1"># A dot call with no "topic" (receiver) is sent to `$_` by default</span>
+  <span class="nv">$_</span><span class="o">.</span><span class="nv">say</span><span class="p">;</span> <span class="c1"># the above and this are equivalent.</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="nv">@array</span> <span class="p">{</span>
+  <span class="c1"># You can...</span>
+  <span class="k">next</span> <span class="k">if</span> <span class="nv">$_</span> <span class="o">==</span> <span class="mi">3</span><span class="p">;</span> <span class="c1"># Skip to the next iteration (`continue` in C-like languages).</span>
+  <span class="k">redo</span> <span class="k">if</span> <span class="nv">$_</span> <span class="o">==</span> <span class="mi">4</span><span class="p">;</span> <span class="c1"># Re-do the iteration, keeping the same topic variable (`$_`).</span>
+  <span class="k">last</span> <span class="k">if</span> <span class="nv">$_</span> <span class="o">==</span> <span class="mi">5</span><span class="p">;</span> <span class="c1"># Or break out of a loop (like `break` in C-like languages).</span>
+<span class="p">}</span>
+
+<span class="c1"># The "pointy block" syntax isn't specific to for.</span>
+<span class="c1"># It's just a way to express a block in Perl6.</span>
+<span class="k">if</span> <span class="nv">long</span><span class="o">-</span><span class="nv">computation</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nv">$result</span> <span class="p">{</span>
+  <span class="nv">say</span> <span class="s">"The result is $result"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">### Operators</span>
+
+<span class="c1">## Since Perl languages are very much operator-based languages,</span>
+<span class="c1">## Perl 6 operators are actually just funny-looking subroutines, in syntactic</span>
+<span class="c1">##  categories, like infix:&lt;+&gt; (addition) or prefix:&lt;!&gt; (bool not).</span>
+
+<span class="c1">## The categories are:</span>
+<span class="c1"># - "prefix": before (like `!` in `!True`).</span>
+<span class="c1"># - "postfix": after (like `++` in `$a++`).</span>
+<span class="c1"># - "infix": in between (like `*` in `4 * 3`).</span>
+<span class="c1"># - "circumfix": around (like `[`-`]` in `[1, 2]`).</span>
+<span class="c1"># - "post-circumfix": around, after another term (like `{`-`}` in `%hash{'key'}`)</span>
+
+<span class="c1">## The associativity and precedence list are explained below.</span>
+
+<span class="c1"># Alright, you're set to go !</span>
+
+<span class="c1">## * Equality Checking</span>
+
+<span class="c1"># - `==` is numeric comparison</span>
+<span class="mi">3</span> <span class="o">==</span> <span class="mi">4</span><span class="p">;</span> <span class="c1"># False</span>
+<span class="mi">3</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">;</span> <span class="c1"># True</span>
+
+<span class="c1"># - `eq` is string comparison</span>
+<span class="s">'a'</span> <span class="ow">eq</span> <span class="s">'b'</span><span class="p">;</span>
+<span class="s">'a'</span> <span class="ow">ne</span> <span class="s">'b'</span><span class="p">;</span> <span class="c1"># not equal</span>
+<span class="s">'a'</span> <span class="o">!</span><span class="ow">eq</span> <span class="s">'b'</span><span class="p">;</span> <span class="c1"># same as above</span>
+
+<span class="c1"># - `eqv` is canonical equivalence (or "deep equality")</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="nv">eqv</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+
+<span class="c1"># - `~~` is smart matching</span>
+<span class="c1"># For a complete list of combinations, use this table:</span>
+<span class="c1"># http://perlcabal.org/syn/S03.html#Smart_matching</span>
+<span class="s">'a'</span> <span class="o">~~</span> <span class="sr">/a/</span><span class="p">;</span> <span class="c1"># true if matches regexp</span>
+<span class="s">'key'</span> <span class="o">~~</span> <span class="nv">%hash</span><span class="p">;</span> <span class="c1"># true if key exists in hash</span>
+<span class="nv">$arg</span> <span class="o">~~</span> <span class="o">&amp;</span><span class="nv">bool</span><span class="o">-</span><span class="nv">returning</span><span class="o">-</span><span class="nv">function</span><span class="p">;</span> <span class="c1"># `True` if the function, passed `$arg`</span>
+                                  <span class="c1"># as an argument, returns `True`.</span>
+<span class="mi">1</span> <span class="o">~~</span> <span class="nv">Int</span><span class="p">;</span> <span class="c1"># "has type" (check superclasses and roles)</span>
+<span class="mi">1</span> <span class="o">~~</span> <span class="nv">True</span><span class="p">;</span> <span class="c1"># smart-matching against a boolean always returns that boolean</span>
+           <span class="c1"># (and will warn).</span>
+
+<span class="c1"># You also, of course, have `&lt;`, `&lt;=`, `&gt;`, `&gt;=`.</span>
+<span class="c1"># Their string equivalent are also avaiable : `lt`, `le`, `gt`, `ge`.</span>
+<span class="mi">3</span> <span class="o">&gt;</span> <span class="mi">4</span><span class="p">;</span>
+
+<span class="c1">## * Range constructors</span>
+<span class="mi">3</span> <span class="o">..</span> <span class="mi">7</span><span class="p">;</span> <span class="c1"># 3 to 7, both included</span>
+<span class="c1"># `^` on either side them exclusive on that side :</span>
+<span class="mi">3</span> <span class="o">^..^</span> <span class="mi">7</span><span class="p">;</span> <span class="c1"># 3 to 7, not included (basically `4 .. 6`)</span>
+<span class="c1"># This also works as a shortcut for `0..^N`:</span>
+<span class="o">^</span><span class="mi">10</span><span class="p">;</span> <span class="c1"># means 0..^10</span>
+
+<span class="c1"># This also allows us to demonstrate that Perl 6 has lazy/infinite arrays,</span>
+<span class="c1">#  using the Whatever Star:</span>
+<span class="k">my</span> <span class="nv">@array</span> <span class="o">=</span> <span class="mi">1</span><span class="o">..*</span><span class="p">;</span> <span class="c1"># 1 to Infinite ! `1..Inf` is the same.</span>
+<span class="nv">say</span> <span class="nv">@array</span><span class="p">[</span><span class="o">^</span><span class="mi">10</span><span class="p">];</span> <span class="c1"># you can pass arrays as subscripts and it'll return</span>
+                 <span class="c1">#  an array of results. This will print</span>
+                 <span class="c1"># "1 2 3 4 5 6 7 8 9 10" (and not run out of memory !)</span>
+<span class="c1"># Note : when reading an infinite list, Perl 6 will "reify" the elements</span>
+<span class="c1"># it needs, then keep them in memory. They won't be calculated more than once.</span>
+<span class="c1"># It also will never calculate more elements that are needed.</span>
+
+<span class="c1"># An array subscript can also be a closure.</span>
+<span class="c1"># It'll be called with the length as the argument</span>
+<span class="nv">say</span> <span class="nb">join</span><span class="p">(</span><span class="s">' '</span><span class="p">,</span> <span class="nv">@array</span><span class="p">[</span><span class="mi">15</span><span class="o">..*</span><span class="p">]);</span> <span class="c1">#=&gt; 15 16 17 18 19</span>
+<span class="c1"># which is equivalent to:</span>
+<span class="nv">say</span> <span class="nb">join</span><span class="p">(</span><span class="s">' '</span><span class="p">,</span> <span class="nv">@array</span><span class="p">[</span><span class="o">-&gt;</span> <span class="nv">$n</span> <span class="p">{</span> <span class="mi">15</span><span class="o">..</span><span class="nv">$n</span> <span class="p">}]);</span>
+<span class="c1"># Note: if you try to do either of those with an infinite array,</span>
+<span class="c1">#       you'll trigger an infinite loop (your program won't finish)</span>
+
+<span class="c1"># You can use that in most places you'd expect, even assigning to an array</span>
+<span class="k">my</span> <span class="nv">@numbers</span> <span class="o">=</span> <span class="o">^</span><span class="mi">20</span><span class="p">;</span>
+
+<span class="c1"># Here numbers increase by "6"; more on `...` operator later.</span>
+<span class="k">my</span> <span class="nv">@seq</span> <span class="o">=</span>  <span class="mi">3</span><span class="p">,</span> <span class="mi">9</span> <span class="o">...</span> <span class="o">*</span> <span class="o">&gt;</span> <span class="mi">95</span><span class="p">;</span> <span class="c1"># 3 9 15 21 27 [...] 81 87 93 99;</span>
+<span class="nv">@numbers</span><span class="p">[</span><span class="mi">5</span><span class="o">..*</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">9</span> <span class="o">...</span> <span class="o">*</span><span class="p">;</span> <span class="c1"># even though the sequence is infinite,</span>
+                             <span class="c1"># only the 15 needed values will be calculated.</span>
+<span class="nv">say</span> <span class="nv">@numbers</span><span class="p">;</span> <span class="c1">#=&gt; 0 1 2 3 4 3 9 15 21 [...] 81 87</span>
+              <span class="c1"># (only 20 values)</span>
+
+<span class="c1">## * And, Or</span>
+<span class="mi">3</span> <span class="o">&amp;&amp;</span> <span class="mi">4</span><span class="p">;</span> <span class="c1"># 4, which is Truthy. Calls `.Bool` on `4` and gets `True`.</span>
+<span class="mi">0</span> <span class="o">||</span> <span class="nv">False</span><span class="p">;</span> <span class="c1"># False. Calls `.Bool` on `0`</span>
+
+<span class="c1">## * Short-circuit (and tight) versions of the above</span>
+<span class="nv">$a</span> <span class="o">&amp;&amp;</span> <span class="nv">$b</span> <span class="o">&amp;&amp;</span> <span class="nv">$c</span><span class="p">;</span> <span class="c1"># Returns the first argument that evaluates to False,</span>
+                <span class="c1"># or the last argument.</span>
+<span class="nv">$a</span> <span class="o">||</span> <span class="nv">$b</span><span class="p">;</span>
+
+<span class="c1"># And because you're going to want them,</span>
+<span class="c1">#  you also have compound assignment operators:</span>
+<span class="nv">$a</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span> <span class="c1"># multiply and assignment</span>
+<span class="nv">$b</span> <span class="nv">%%</span><span class="err">=</span> <span class="nv">5</span><span class="p">;</span> <span class="c1"># divisible by and assignment</span>
+<span class="nv">@array</span> <span class="o">.=</span> <span class="nb">sort</span><span class="p">;</span> <span class="c1"># calls the `sort` method and assigns the result back</span>
+
+<span class="c1">### More on subs !</span>
+<span class="c1"># As we said before, Perl 6 has *really* powerful subs. We're going to see</span>
+<span class="c1"># a few more key concepts that make them better than in any other language :-).</span>
+
+<span class="c1">## Unpacking !</span>
+<span class="c1"># It's the ability to "extract" arrays and keys (AKA "destructuring").</span>
+<span class="c1"># It'll work in `my`s and in parameter lists.</span>
+<span class="k">my</span> <span class="p">(</span><span class="nv">$a</span><span class="p">,</span> <span class="nv">$b</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">;</span>
+<span class="nv">say</span> <span class="nv">$a</span><span class="p">;</span> <span class="c1">#=&gt; 1</span>
+<span class="k">my</span> <span class="p">(</span><span class="vg">$,</span> <span class="vg">$,</span> <span class="nv">$c</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">;</span> <span class="c1"># keep the non-interesting anonymous</span>
+<span class="nv">say</span> <span class="nv">$c</span><span class="p">;</span> <span class="c1">#=&gt; 3</span>
+
+<span class="k">my</span> <span class="p">(</span><span class="nv">$head</span><span class="p">,</span> <span class="o">*</span><span class="nv">@tail</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">;</span> <span class="c1"># Yes, it's the same as with "slurpy subs"</span>
+<span class="k">my</span> <span class="p">(</span><span class="o">*</span><span class="nv">@small</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="k">sub </span><span class="nf">foo</span><span class="p">(@array [$fst, $snd]) {</span>
+  <span class="nv">say</span> <span class="s">"My first is $fst, my second is $snd ! All in all, I'm @array[]."</span><span class="p">;</span>
+  <span class="c1"># (^ remember the `[]` to interpolate the array)</span>
+<span class="p">}</span>
+<span class="nv">foo</span><span class="p">(</span><span class="nv">@tail</span><span class="p">);</span> <span class="c1">#=&gt; My first is 2, my second is 3 ! All in all, I'm 2 3</span>
+
+
+<span class="c1"># If you're not using the array itself, you can also keep it anonymous,</span>
+<span class="c1">#  much like a scalar:</span>
+<span class="k">sub </span><span class="nf">first</span><span class="p">-of-array(@ [$fst]) {</span> <span class="nv">$fst</span> <span class="p">}</span>
+<span class="nv">first</span><span class="o">-</span><span class="nv">of</span><span class="o">-</span><span class="nv">array</span><span class="p">(</span><span class="nv">@small</span><span class="p">);</span> <span class="c1">#=&gt; 1</span>
+<span class="nv">first</span><span class="o">-</span><span class="nv">of</span><span class="o">-</span><span class="nv">array</span><span class="p">(</span><span class="nv">@tail</span><span class="p">);</span> <span class="c1"># Throws an error "Too many positional parameters passed"</span>
+                       <span class="c1"># (which means the array is too big).</span>
+
+<span class="c1"># You can also use a slurp ...</span>
+<span class="k">sub </span><span class="nf">slurp</span><span class="p">-in-array(@ [$fst, *@rest]) {</span> <span class="c1"># You could keep `*@rest` anonymous</span>
+  <span class="nv">say</span> <span class="nv">$fst</span> <span class="o">+</span> <span class="nv">@rest</span><span class="o">.</span><span class="nv">elems</span><span class="p">;</span> <span class="c1"># `.elems` returns a list's length.</span>
+                          <span class="c1"># Here, `@rest` is `(3,)`, since `$fst` holds the `2`.</span>
+<span class="p">}</span>
+<span class="nv">slurp</span><span class="o">-</span><span class="nv">in</span><span class="o">-</span><span class="nv">array</span><span class="p">(</span><span class="nv">@tail</span><span class="p">);</span> <span class="c1">#=&gt; 3</span>
+
+<span class="c1"># You could even extract on a slurpy (but it's pretty useless ;-).)</span>
+<span class="k">sub </span><span class="nf">fst</span><span class="p">(*@ [$fst]) {</span> <span class="c1"># or simply : `sub fst($fst) { ... }`</span>
+  <span class="nv">say</span> <span class="nv">$fst</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nv">fst</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">#=&gt; 1</span>
+<span class="nv">fst</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span> <span class="c1"># errors with "Too many positional parameters passed"</span>
+
+<span class="c1"># You can also destructure hashes (and classes, which you'll learn about later !)</span>
+<span class="c1"># The syntax is basically `%hash-name (:key($variable-to-store-value-in))`.</span>
+<span class="c1"># The hash can stay anonymous if you only need the values you extracted.</span>
+<span class="k">sub </span><span class="nf">key</span><span class="p">-of(% (:value($val), :qua($qua))) {</span>
+  <span class="nv">say</span> <span class="s">"Got val $val, $qua times."</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1"># Then call it with a hash: (you need to keep the brackets for it to be a hash)</span>
+<span class="nv">key</span><span class="o">-</span><span class="nv">of</span><span class="p">({</span><span class="nv">value</span> <span class="o">=&gt;</span> <span class="s">'foo'</span><span class="p">,</span> <span class="nv">qua</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">});</span>
+<span class="c1">#key-of(%hash); # the same (for an equivalent `%hash`)</span>
+
+<span class="c1">## The last expression of a sub is returned automatically</span>
+<span class="c1"># (though you may use the `return` keyword, of course):</span>
+<span class="k">sub </span><span class="nf">next</span><span class="p">-index($n) {</span>
+  <span class="nv">$n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">my</span> <span class="nv">$new</span><span class="o">-</span><span class="nv">n</span> <span class="o">=</span> <span class="k">next</span><span class="o">-</span><span class="nb">index</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span> <span class="c1"># $new-n is now 4</span>
+
+<span class="c1"># This is true for everything, except for the looping constructs</span>
+<span class="c1"># (due to performance reasons): there's reason to build a list</span>
+<span class="c1">#  if we're just going to discard all the results.</span>
+<span class="c1"># If you still want to build one, you can use the `do` statement prefix:</span>
+<span class="c1">#  (or the `gather` prefix, which we'll see later)</span>
+<span class="k">sub </span><span class="nf">list</span><span class="p">-of($n) {</span>
+  <span class="k">do</span> <span class="k">for</span> <span class="o">^</span><span class="nv">$n</span> <span class="p">{</span> <span class="c1"># note the use of the range-to prefix operator `^` (`0..^N`)</span>
+    <span class="nv">$_</span> <span class="c1"># current loop iteration</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">my</span> <span class="nv">@list3</span> <span class="o">=</span> <span class="nv">list</span><span class="o">-</span><span class="nv">of</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span> <span class="c1">#=&gt; (0, 1, 2)</span>
+
+<span class="c1">## You can create a lambda with `-&gt; {}` ("pointy block") or `{}` ("block")</span>
+<span class="k">my</span> <span class="o">&amp;</span><span class="nv">lambda</span> <span class="o">=</span> <span class="o">-&gt;</span> <span class="nv">$argument</span> <span class="p">{</span> <span class="s">"The argument passed to this lambda is $argument"</span> <span class="p">}</span>
+<span class="c1"># `-&gt; {}` and `{}` are pretty much the same thing, except that the former can</span>
+<span class="c1"># take arguments, and that the latter can be mistaken as a hash by the parser.</span>
+
+<span class="c1"># We can, for example, add 3 to each value of an array using map:</span>
+<span class="k">my</span> <span class="nv">@arrayplus3</span> <span class="o">=</span> <span class="nb">map</span><span class="p">({</span> <span class="nv">$_</span> <span class="o">+</span> <span class="mi">3</span> <span class="p">},</span> <span class="nv">@array</span><span class="p">);</span> <span class="c1"># $_ is the implicit argument</span>
+
+<span class="c1"># A sub (`sub {}`) has different semantics than a block (`{}` or `-&gt; {}`):</span>
+<span class="c1"># A block doesn't have a "function context" (though it can have arguments),</span>
+<span class="c1">#  which means that if you return from it,</span>
+<span class="c1">#  you're going to return from the parent function. Compare:</span>
+<span class="k">sub </span><span class="nf">is</span><span class="p">-in(@array, $elem) {</span>
+  <span class="c1"># this will `return` out of the `is-in` sub</span>
+  <span class="c1"># once the condition evaluated to True, the loop won't be run anymore</span>
+  <span class="nb">map</span><span class="p">({</span> <span class="k">return</span> <span class="nv">True</span> <span class="k">if</span> <span class="nv">$_</span> <span class="o">==</span> <span class="nv">$elem</span> <span class="p">},</span> <span class="nv">@array</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">sub </span><span class="nf">truthy</span><span class="p">-array(@array) {</span>
+  <span class="c1"># this will produce an array of `True` and `False`:</span>
+  <span class="c1"># (you can also say `anon sub` for "anonymous subroutine")</span>
+  <span class="nb">map</span><span class="p">(</span><span class="k">sub </span><span class="p">($i) {</span> <span class="k">if</span> <span class="nv">$i</span> <span class="p">{</span> <span class="k">return</span> <span class="nv">True</span> <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="nv">False</span> <span class="p">}</span> <span class="p">},</span> <span class="nv">@array</span><span class="p">);</span>
+  <span class="c1"># ^ the `return` only returns from the anonymous `sub`</span>
+<span class="p">}</span>
+
+<span class="c1"># You can also use the "whatever star" to create an anonymous function</span>
+<span class="c1"># (it'll stop at the furthest operator in the current expression)</span>
+<span class="k">my</span> <span class="nv">@arrayplus3</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="o">*+</span><span class="mi">3</span><span class="p">,</span> <span class="nv">@array</span><span class="p">);</span> <span class="c1"># `*+3` is the same as `{ $_ + 3 }`</span>
+<span class="k">my</span> <span class="nv">@arrayplus3</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="o">*+*+</span><span class="mi">3</span><span class="p">,</span> <span class="nv">@array</span><span class="p">);</span> <span class="c1"># Same as `-&gt; $a, $b { $a + $b + 3 }`</span>
+                                     <span class="c1"># also `sub ($a, $b) { $a + $b + 3 }`</span>
+<span class="nv">say</span> <span class="p">(</span><span class="o">*/</span><span class="mi">2</span><span class="p">)(</span><span class="mi">4</span><span class="p">);</span> <span class="c1">#=&gt; 2</span>
+              <span class="c1"># Immediatly execute the function Whatever created.</span>
+<span class="nv">say</span> <span class="p">((</span><span class="o">*+</span><span class="mi">3</span><span class="p">)</span><span class="o">/</span><span class="mi">5</span><span class="p">)(</span><span class="mi">5</span><span class="p">);</span> <span class="c1">#=&gt; 1.6</span>
+                  <span class="c1"># works even in parens !</span>
+
+<span class="c1"># But if you need to have more than one argument (`$_`)</span>
+<span class="c1">#  in a block (without wanting to resort to `-&gt; {}`),</span>
+<span class="c1">#  you can also use the implicit argument syntax, `$^` :</span>
+<span class="nb">map</span><span class="p">({</span> <span class="nv">$</span><span class="err">^</span><span class="nv">a</span> <span class="o">+</span> <span class="nv">$</span><span class="err">^</span><span class="nv">b</span> <span class="o">+</span> <span class="mi">3</span> <span class="p">},</span> <span class="nv">@array</span><span class="p">);</span> <span class="c1"># equivalent to following:</span>
+<span class="nb">map</span><span class="p">(</span><span class="k">sub </span><span class="p">($a, $b) {</span> <span class="nv">$a</span> <span class="o">+</span> <span class="nv">$b</span> <span class="o">+</span> <span class="mi">3</span> <span class="p">},</span> <span class="nv">@array</span><span class="p">);</span> <span class="c1"># (here with `sub`)</span>
+
+<span class="c1"># Note : those are sorted lexicographically.</span>
+<span class="c1"># `{ $^b / $^a }` is like `-&gt; $a, $b { $b / $a }`</span>
+
+<span class="c1">## About types...</span>
+<span class="c1"># Perl6 is gradually typed. This means you can specify the type</span>
+<span class="c1">#  of your variables/arguments/return types, or you can omit them</span>
+<span class="c1">#  and they'll default to "Any".</span>
+<span class="c1"># You obviously get access to a few base types, like Int and Str.</span>
+<span class="c1"># The constructs for declaring types are "class", "role",</span>
+<span class="c1">#  which you'll see later.</span>
+
+<span class="c1"># For now, let us examine "subset":</span>
+<span class="c1"># a "subset" is a "sub-type" with additional checks.</span>
+<span class="c1"># For example: "a very big integer is an Int that's greater than 500"</span>
+<span class="c1"># You can specify the type you're subtyping (by default, Any),</span>
+<span class="c1">#  and add additional checks with the "where" keyword:</span>
+<span class="nv">subset</span> <span class="nv">VeryBigInteger</span> <span class="nv">of</span> <span class="nv">Int</span> <span class="nv">where</span> <span class="o">*</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">;</span>
+
+<span class="c1">## Multiple Dispatch</span>
+<span class="c1"># Perl 6 can decide which variant of a `sub` to call based on the type of the</span>
+<span class="c1"># arguments, or on arbitrary preconditions, like with a type or a `where`:</span>
+
+<span class="c1"># with types</span>
+<span class="nv">multi</span> <span class="k">sub </span><span class="nf">sayit</span><span class="p">(Int $n) {</span> <span class="c1"># note the `multi` keyword here</span>
+  <span class="nv">say</span> <span class="s">"Number: $n"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nv">multi</span> <span class="nv">sayit</span><span class="p">(</span><span class="nv">Str</span> <span class="nv">$s</span><span class="p">)</span> <span class="p">{</span> <span class="c1"># a multi is a `sub` by default</span>
+  <span class="nv">say</span> <span class="s">"String: $s"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nv">sayit</span><span class="p">(</span><span class="s">"foo"</span><span class="p">);</span> <span class="c1"># prints "String: foo"</span>
+<span class="nv">sayit</span><span class="p">(</span><span class="nv">True</span><span class="p">);</span> <span class="c1"># fails at *compile time* with</span>
+             <span class="c1"># "calling 'sayit' will never work with arguments of types ..."</span>
+
+<span class="c1"># with arbitrary precondition (remember subsets?):</span>
+<span class="nv">multi</span> <span class="nv">is</span><span class="o">-</span><span class="nv">big</span><span class="p">(</span><span class="nv">Int</span> <span class="nv">$n</span> <span class="nv">where</span> <span class="o">*</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">)</span> <span class="p">{</span> <span class="s">"Yes !"</span> <span class="p">}</span> <span class="c1"># using a closure</span>
+<span class="nv">multi</span> <span class="nv">is</span><span class="o">-</span><span class="nv">big</span><span class="p">(</span><span class="nv">Int</span> <span class="nv">$</span> <span class="nv">where</span> <span class="mi">10</span><span class="o">..</span><span class="mi">50</span><span class="p">)</span> <span class="p">{</span> <span class="s">"Quite."</span> <span class="p">}</span> <span class="c1"># Using smart-matching</span>
+                                              <span class="c1"># (could use a regexp, etc)</span>
+<span class="nv">multi</span> <span class="nv">is</span><span class="o">-</span><span class="nv">big</span><span class="p">(</span><span class="nv">Int</span> <span class="nv">$</span><span class="p">)</span> <span class="p">{</span> <span class="s">"No"</span> <span class="p">}</span>
+
+<span class="nv">subset</span> <span class="nv">Even</span> <span class="nv">of</span> <span class="nv">Int</span> <span class="nv">where</span> <span class="o">*</span> <span class="nv">%%</span> <span class="nv">2</span><span class="p">;</span>
+
+<span class="nv">multi</span> <span class="nv">odd</span><span class="o">-</span><span class="ow">or</span><span class="o">-</span><span class="nv">even</span><span class="p">(</span><span class="nv">Even</span><span class="p">)</span> <span class="p">{</span> <span class="s">"Even"</span> <span class="p">}</span> <span class="c1"># The main case using the type.</span>
+                                   <span class="c1"># We don't name the argument.</span>
+<span class="nv">multi</span> <span class="nv">odd</span><span class="o">-</span><span class="ow">or</span><span class="o">-</span><span class="nv">even</span><span class="p">(</span><span class="nv">$</span><span class="p">)</span> <span class="p">{</span> <span class="s">"Odd"</span> <span class="p">}</span> <span class="c1"># "else"</span>
+
+<span class="c1"># You can even dispatch based on a positional's argument presence !</span>
+<span class="nv">multi</span> <span class="nv">with</span><span class="o">-</span><span class="ow">or</span><span class="o">-</span><span class="nv">without</span><span class="o">-</span><span class="nv">you</span><span class="p">(:</span><span class="nv">$with</span><span class="o">!</span><span class="p">)</span> <span class="p">{</span> <span class="c1"># You need make it mandatory to</span>
+                                     <span class="c1"># be able to dispatch against it.</span>
+  <span class="nv">say</span> <span class="s">"I can live ! Actually, I can't."</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nv">multi</span> <span class="nv">with</span><span class="o">-</span><span class="ow">or</span><span class="o">-</span><span class="nv">without</span><span class="o">-</span><span class="nv">you</span> <span class="p">{</span>
+  <span class="nv">say</span> <span class="s">"Definitely can't live."</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1"># This is very, very useful for many purposes, like `MAIN` subs (covered later),</span>
+<span class="c1">#  and even the language itself is using it in several places.</span>
+<span class="c1">#</span>
+<span class="c1"># - `is`, for example, is actually a `multi sub` named `trait_mod:&lt;is&gt;`,</span>
+<span class="c1">#  and it works off that.</span>
+<span class="c1"># - `is rw`, is simply a dispatch to a function with this signature:</span>
+<span class="c1"># sub trait_mod:&lt;is&gt;(Routine $r, :$rw!) {}</span>
+<span class="c1">#</span>
+<span class="c1"># (commented because running this would be a terrible idea !)</span>
+
+
+<span class="c1">### Scoping</span>
+<span class="c1"># In Perl 6, contrarily to many scripting languages (like Python, Ruby, PHP),</span>
+<span class="c1">#  you are to declare your variables before using them. You know `my`.</span>
+<span class="c1"># (there are other declarators, `our`, `state`, ..., which we'll see later).</span>
+<span class="c1"># This is called "lexical scoping", where in inner blocks,</span>
+<span class="c1">#  you can access variables from outer blocks.</span>
+<span class="k">my</span> <span class="nv">$foo</span> <span class="o">=</span> <span class="s">'Foo'</span><span class="p">;</span>
+<span class="k">sub </span><span class="nf">foo</span> <span class="p">{</span>
+  <span class="k">my</span> <span class="nv">$bar</span> <span class="o">=</span> <span class="s">'Bar'</span><span class="p">;</span>
+  <span class="k">sub </span><span class="nf">bar</span> <span class="p">{</span>
+    <span class="nv">say</span> <span class="s">"$foo $bar"</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="o">&amp;</span><span class="nv">bar</span><span class="p">;</span> <span class="c1"># return the function</span>
+<span class="p">}</span>
+<span class="nv">foo</span><span class="p">()();</span> <span class="c1">#=&gt; 'Foo Bar'</span>
+
+<span class="c1"># As you can see, `$foo` and `$bar` were captured.</span>
+<span class="c1"># But if we were to try and use `$bar` outside of `foo`,</span>
+<span class="c1"># the variable would be undefined (and you'd get a compile time error).</span>
+
+<span class="c1"># Perl 6 has another kind of scope : dynamic scope.</span>
+<span class="c1"># They use the twigil (composed sigil) `*` to mark dynamically-scoped variables:</span>
+<span class="k">my</span> <span class="nv">$</span><span class="err">*</span><span class="nv">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="c1"># Dyamically-scoped variables depend on the current call stack,</span>
+<span class="c1">#  instead of the current block depth.</span>
+<span class="k">sub </span><span class="nf">foo</span> <span class="p">{</span>
+  <span class="k">my</span> <span class="nv">$</span><span class="err">*</span><span class="nv">foo</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="nv">bar</span><span class="p">();</span> <span class="c1"># call `bar` in-place</span>
+<span class="p">}</span>
+<span class="k">sub </span><span class="nf">bar</span> <span class="p">{</span>
+  <span class="nv">say</span> <span class="nv">$</span><span class="err">*</span><span class="nv">foo</span><span class="p">;</span> <span class="c1"># `$*foo` will be looked in the call stack, and find `foo`'s,</span>
+             <span class="c1">#  even though the blocks aren't nested (they're call-nested).</span>
+             <span class="c1">#=&gt; 1</span>
+<span class="p">}</span>
+
+<span class="c1">### Object Model</span>
+
+<span class="c1"># You declare a class with the keyword `class`, fields with `has`,</span>
+<span class="c1"># methods with `method`. Every attribute that is private is named `$!attr`.</span>
+<span class="c1"># Immutable public attributes are named `$.attr`</span>
+<span class="c1">#   (you can make them mutable with `is rw`)</span>
+
+<span class="c1"># Perl 6's object model ("SixModel") is very flexible,</span>
+<span class="c1"># and allows you to dynamically add methods, change semantics, etc ...</span>
+<span class="c1"># (this will not be covered here, and you should refer to the Synopsis).</span>
+
+<span class="nv">class</span> <span class="nv">A</span> <span class="p">{</span>
+  <span class="nv">has</span> <span class="nv">$</span><span class="err">.</span><span class="nv">field</span><span class="p">;</span> <span class="c1"># `$.field` is immutable.</span>
+               <span class="c1"># From inside the class, use `$!field` to modify it.</span>
+  <span class="nv">has</span> <span class="nv">$</span><span class="err">.</span><span class="nv">other</span><span class="o">-</span><span class="nv">field</span> <span class="nv">is</span> <span class="nv">rw</span><span class="p">;</span> <span class="c1"># You can mark a public attribute `rw`.</span>
+  <span class="nv">has</span> <span class="nv">Int</span> <span class="nv">$</span><span class="err">!</span><span class="nv">private</span><span class="o">-</span><span class="nv">field</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+
+  <span class="nv">method</span> <span class="nv">get</span><span class="o">-</span><span class="nv">value</span> <span class="p">{</span>
+    <span class="nv">$</span><span class="err">.</span><span class="nv">field</span> <span class="o">+</span> <span class="nv">$</span><span class="err">!</span><span class="nv">private</span><span class="o">-</span><span class="nv">field</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nv">method</span> <span class="nv">set</span><span class="o">-</span><span class="nv">value</span><span class="p">(</span><span class="nv">$n</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1"># $.field = $n; # As stated before, you can't use the `$.` immutable version.</span>
+    <span class="nv">$</span><span class="err">!</span><span class="nv">field</span> <span class="o">=</span> <span class="nv">$n</span><span class="p">;</span>   <span class="c1"># This works, because `$!` is always mutable.</span>
+
+    <span class="nv">$</span><span class="err">.</span><span class="nv">other</span><span class="o">-</span><span class="nv">field</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span> <span class="c1"># This works, because `$.other-field` is `rw`.</span>
+  <span class="p">}</span>
+
+  <span class="nv">method</span> <span class="o">!</span><span class="nv">private</span><span class="o">-</span><span class="nv">method</span> <span class="p">{</span>
+    <span class="nv">say</span> <span class="s">"This method is private to the class !"</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="c1"># Create a new instance of A with $.field set to 5 :</span>
+<span class="c1"># Note: you can't set private-field from here (more later on).</span>
+<span class="k">my</span> <span class="nv">$a</span> <span class="o">=</span> <span class="nv">A</span><span class="o">.</span><span class="k">new</span><span class="p">(</span><span class="nv">field</span> <span class="o">=&gt;</span> <span class="mi">5</span><span class="p">);</span>
+<span class="nv">$a</span><span class="o">.</span><span class="nv">get</span><span class="o">-</span><span class="nv">value</span><span class="p">;</span> <span class="c1">#=&gt; 15</span>
+<span class="c1">#$a.field = 5; # This fails, because the `has $.field` is immutable</span>
+<span class="nv">$a</span><span class="o">.</span><span class="nv">other</span><span class="o">-</span><span class="nv">field</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="c1"># This, however, works, because the public field</span>
+                     <span class="c1">#  is mutable (`rw`).</span>
+
+<span class="c1">## Perl 6 also has inheritance (along with multiple inheritance)</span>
+
+<span class="nv">class</span> <span class="nv">A</span> <span class="p">{</span>
+  <span class="nv">has</span> <span class="nv">$</span><span class="err">.</span><span class="nv">val</span><span class="p">;</span>
+
+  <span class="nv">submethod</span> <span class="ow">not</span><span class="o">-</span><span class="nv">inherited</span> <span class="p">{</span>
+    <span class="nv">say</span> <span class="s">"This method won't be available on B."</span><span class="p">;</span>
+    <span class="nv">say</span> <span class="s">"This is most useful for BUILD, which we'll see later"</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nv">method</span> <span class="nv">bar</span> <span class="p">{</span> <span class="nv">$</span><span class="err">.</span><span class="nv">val</span> <span class="o">*</span> <span class="mi">5</span> <span class="p">}</span>
+<span class="p">}</span>
+<span class="nv">class</span> <span class="nv">B</span> <span class="nv">is</span> <span class="nv">A</span> <span class="p">{</span> <span class="c1"># inheritance uses `is`</span>
+  <span class="nv">method</span> <span class="nv">foo</span> <span class="p">{</span>
+    <span class="nv">say</span> <span class="nv">$</span><span class="err">.</span><span class="nv">val</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nv">method</span> <span class="nv">bar</span> <span class="p">{</span> <span class="nv">$</span><span class="err">.</span><span class="nv">val</span> <span class="o">*</span> <span class="mi">10</span> <span class="p">}</span> <span class="c1"># this shadows A's `bar`</span>
+<span class="p">}</span>
+
+<span class="c1"># When you use `my T $var`, `$var` starts off with `T` itself in it,</span>
+<span class="c1"># so you can call `new` on it.</span>
+<span class="c1"># (`.=` is just the dot-call and the assignment operator:</span>
+<span class="c1">#  `$a .= b` is the same as `$a = $a.b`)</span>
+<span class="c1"># Also note that `BUILD` (the method called inside `new`)</span>
+<span class="c1">#  will set parent properties too, so you can pass `val =&gt; 5`.</span>
+<span class="k">my</span> <span class="nv">B</span> <span class="nv">$b</span> <span class="o">.=</span> <span class="k">new</span><span class="p">(</span><span class="nv">val</span> <span class="o">=&gt;</span> <span class="mi">5</span><span class="p">);</span>
+
+<span class="c1"># $b.not-inherited; # This won't work, for reasons explained above</span>
+<span class="nv">$b</span><span class="o">.</span><span class="nv">foo</span><span class="p">;</span> <span class="c1"># prints 5</span>
+<span class="nv">$b</span><span class="o">.</span><span class="nv">bar</span><span class="p">;</span> <span class="c1">#=&gt; 50, since it calls B's `bar`</span>
+
+<span class="c1">## Roles are supported too (also called Mixins in other languages)</span>
+<span class="nv">role</span> <span class="nv">PrintableVal</span> <span class="p">{</span>
+  <span class="nv">has</span> <span class="nv">$</span><span class="err">!</span><span class="nv">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="nv">method</span> <span class="k">print</span> <span class="p">{</span>
+    <span class="nv">say</span> <span class="nv">$</span><span class="err">.</span><span class="nv">val</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1"># you "import" a mixin (a "role") with "does":</span>
+<span class="nv">class</span> <span class="nv">Item</span> <span class="nv">does</span> <span class="nv">PrintableVal</span> <span class="p">{</span>
+  <span class="nv">has</span> <span class="nv">$</span><span class="err">.</span><span class="nv">val</span><span class="p">;</span>
+
+  <span class="c1"># When `does`-ed, a `role` literally "mixes in" the class:</span>
+  <span class="c1">#  the methods and fields are put together, which means a class can access</span>
+  <span class="c1">#  the private fields/methods of its roles (but not the inverse !):</span>
+  <span class="nv">method</span> <span class="nv">access</span> <span class="p">{</span>
+    <span class="nv">say</span> <span class="nv">$</span><span class="err">!</span><span class="nv">counter</span><span class="o">++</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="c1"># However, this:</span>
+  <span class="c1"># method print {}</span>
+  <span class="c1"># is ONLY valid when `print` isn't a `multi` with the same dispatch.</span>
+  <span class="c1"># (this means a parent class can shadow a child class's `multi print() {}`,</span>
+  <span class="c1">#  but it's an error if a role does)</span>
+
+  <span class="c1"># NOTE: You can use a role as a class (with `is ROLE`). In this case, methods</span>
+  <span class="c1"># will be shadowed, since the compiler will consider `ROLE` to be a class.</span>
+<span class="p">}</span>
+
+<span class="c1">### Exceptions</span>
+<span class="c1"># Exceptions are built on top of classes, in the package `X` (like `X::IO`).</span>
+<span class="c1"># Unlike many other languages, in Perl 6, you put the `CATCH` block *within* the</span>
+<span class="c1">#  block to `try`. By default, a `try` has a `CATCH` block that catches</span>
+<span class="c1">#  any exception (`CATCH { default {} }`).</span>
+<span class="c1"># You can redefine it using `when`s (and `default`)</span>
+<span class="c1">#  to handle the exceptions you want:</span>
+<span class="nv">try</span> <span class="p">{</span>
+  <span class="nb">open</span> <span class="s">'foo'</span><span class="p">;</span>
+  <span class="nv">CATCH</span> <span class="p">{</span>
+    <span class="nv">when</span> <span class="nn">X::</span><span class="nv">AdHoc</span> <span class="p">{</span> <span class="nv">say</span> <span class="s">"unable to open file !"</span> <span class="p">}</span>
+    <span class="c1"># Any other exception will be re-raised, since we don't have a `default`</span>
+    <span class="c1"># Basically, if a `when` matches (or there's a `default`) marks the exception as</span>
+    <span class="c1">#  "handled" so that it doesn't get re-thrown from the `CATCH`.</span>
+    <span class="c1"># You still can re-throw the exception (see below) by hand.</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1"># You can throw an exception using `die`:</span>
+<span class="nb">die</span> <span class="nn">X::</span><span class="nv">AdHoc</span><span class="o">.</span><span class="k">new</span><span class="p">(</span><span class="nv">payload</span> <span class="o">=&gt;</span> <span class="s">'Error !'</span><span class="p">);</span>
+
+<span class="c1"># You can access the last exception with `$!` (use `$_` in a `CATCH` block)</span>
+
+<span class="c1"># There are also some subtelties to exceptions. Some Perl 6 subs return a `Failure`,</span>
+<span class="c1">#  which is a kind of "unthrown exception". They're not thrown until you tried to look</span>
+<span class="c1">#  at their content, unless you call `.Bool`/`.defined` on them - then they're handled.</span>
+<span class="c1">#  (the `.handled` method is `rw`, so you can mark it as `False` back yourself)</span>
+<span class="c1">#</span>
+<span class="c1"># You can throw a `Failure` using `fail`. Note that if the pragma `use fatal` is on,</span>
+<span class="c1">#  `fail` will throw an exception (like `die`).</span>
+<span class="nv">fail</span> <span class="s">"foo"</span><span class="p">;</span> <span class="c1"># We're not trying to access the value, so no problem.</span>
+<span class="nv">try</span> <span class="p">{</span>
+  <span class="nv">fail</span> <span class="s">"foo"</span><span class="p">;</span>
+  <span class="nv">CATCH</span> <span class="p">{</span>
+    <span class="nv">default</span> <span class="p">{</span> <span class="nv">say</span> <span class="s">"It threw because we tried to get the fail's value!"</span> <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1"># There is also another kind of exception: Control exceptions.</span>
+<span class="c1"># Those are "good" exceptions, which happen when you change your program's flow,</span>
+<span class="c1">#  using operators like `return`, `next` or `last`.</span>
+<span class="c1"># You can "catch" those with `CONTROL` (not 100% working in Rakudo yet).</span>
+
+<span class="c1">### Packages</span>
+<span class="c1"># Packages are a way to reuse code. Packages are like "namespaces", and any</span>
+<span class="c1">#  element of the six model (`module`, `role`, `class`, `grammar`, `subset`</span>
+<span class="c1">#  and `enum`) are actually packages. (Packages are the lowest common denominator)</span>
+<span class="c1"># Packages are important - especially as Perl is well-known for CPAN,</span>
+<span class="c1">#  the Comprehensive Perl Archive Network.</span>
+<span class="c1"># You're not supposed to use the package keyword, usually:</span>
+<span class="c1">#  you use `class Package::Name::Here;` to declare a class,</span>
+<span class="c1">#  or if you only want to export variables/subs, you can use `module`:</span>
+<span class="nv">module</span> <span class="nn">Hello::</span><span class="nv">World</span> <span class="p">{</span> <span class="c1"># Bracketed form</span>
+                      <span class="c1"># If `Hello` doesn't exist yet, it'll just be a "stub",</span>
+                      <span class="c1">#  that can be redeclared as something else later.</span>
+  <span class="c1"># ... declarations here ...</span>
+<span class="p">}</span>
+<span class="nv">unit</span> <span class="nv">module</span> <span class="nn">Parse::</span><span class="nv">Text</span><span class="p">;</span> <span class="c1"># file-scoped form</span>
+<span class="nv">grammar</span> <span class="nn">Parse::Text::</span><span class="nv">Grammar</span> <span class="p">{</span> <span class="c1"># A grammar is a package, which you could `use`</span>
+<span class="p">}</span>
+
+<span class="c1"># You can use a module (bring its declarations into scope) with `use`</span>
+<span class="k">use</span> <span class="nn">JSON::</span><span class="nv">Tiny</span><span class="p">;</span> <span class="c1"># if you installed Rakudo* or Panda, you'll have this module</span>
+<span class="nv">say</span> <span class="nv">from</span><span class="o">-</span><span class="nv">json</span><span class="p">(</span><span class="s">'[1]'</span><span class="p">)</span><span class="o">.</span><span class="nv">perl</span><span class="p">;</span> <span class="c1">#=&gt; [1]</span>
+
+<span class="c1"># As said before, any part of the six model is also a package.</span>
+<span class="c1"># Since `JSON::Tiny` uses (its own) `JSON::Tiny::Actions` class, you can use it:</span>
+<span class="k">my</span> <span class="nv">$actions</span> <span class="o">=</span> <span class="nn">JSON::Tiny::</span><span class="nv">Actions</span><span class="o">.</span><span class="k">new</span><span class="p">;</span>
+
+<span class="c1"># We'll see how to export variables and subs in the next part:</span>
+
+<span class="c1">### Declarators</span>
+<span class="c1"># In Perl 6, you get different behaviors based on how you declare a variable.</span>
+<span class="c1"># You've already seen `my` and `has`, we'll now explore the others.</span>
+
+<span class="c1">## * `our` (happens at `INIT` time -- see "Phasers" below)</span>
+<span class="c1"># It's like `my`, but it also creates a package variable.</span>
+<span class="c1"># (All packagish things (`class`, `role`, etc) are `our` by default)</span>
+<span class="nv">module</span> <span class="nn">Foo::</span><span class="nv">Bar</span> <span class="p">{</span>
+  <span class="k">our</span> <span class="nv">$n</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1"># note: you can't put a type constraint on an `our` variable</span>
+  <span class="k">our</span> <span class="k">sub </span><span class="nf">inc</span> <span class="p">{</span>
+    <span class="k">our</span> <span class="k">sub </span><span class="nf">available</span> <span class="p">{</span> <span class="c1"># If you try to make inner `sub`s `our`...</span>
+                        <span class="c1"># Better know what you're doing (Don't !).</span>
+      <span class="nv">say</span> <span class="s">"Don't do that. Seriously. You'd get burned."</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">my</span> <span class="k">sub </span><span class="nf">unavailable</span> <span class="p">{</span> <span class="c1"># `my sub` is the default</span>
+      <span class="nv">say</span> <span class="s">"Can't access me from outside, I'm my !"</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nv">say</span> <span class="o">++</span><span class="nv">$n</span><span class="p">;</span> <span class="c1"># increment the package variable and output its value</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="nv">say</span> <span class="nv">$</span><span class="nn">Foo::Bar::</span><span class="nv">n</span><span class="p">;</span> <span class="c1">#=&gt; 1</span>
+<span class="nn">Foo::Bar::</span><span class="nv">inc</span><span class="p">;</span> <span class="c1">#=&gt; 2</span>
+<span class="nn">Foo::Bar::</span><span class="nv">inc</span><span class="p">;</span> <span class="c1">#=&gt; 3</span>
+
+<span class="c1">## * `constant` (happens at `BEGIN` time)</span>
+<span class="c1"># You can use the `constant` keyword to declare a compile-time variable/symbol:</span>
+<span class="nv">constant</span> <span class="nv">Pi</span> <span class="o">=</span> <span class="mf">3.14</span><span class="p">;</span>
+<span class="nv">constant</span> <span class="nv">$var</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="c1"># And if you're wondering, yes, it can also contain infinite lists.</span>
+<span class="nv">constant</span> <span class="nv">why</span><span class="o">-</span><span class="ow">not</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">15</span> <span class="o">...</span> <span class="o">*</span><span class="p">;</span>
+<span class="nv">say</span> <span class="nv">why</span><span class="o">-</span><span class="ow">not</span><span class="p">[</span><span class="o">^</span><span class="mi">5</span><span class="p">];</span> <span class="c1">#=&gt; 5 15 25 35 45</span>
+
+<span class="c1">## * `state` (happens at run time, but only once)</span>
+<span class="c1"># State variables are only initialized one time</span>
+<span class="c1"># (they exist in other langages such as C as `static`)</span>
+<span class="k">sub </span><span class="nf">fixed</span><span class="p">-rand {</span>
+  <span class="nv">state</span> <span class="nv">$val</span> <span class="o">=</span> <span class="nb">rand</span><span class="p">;</span>
+  <span class="nv">say</span> <span class="nv">$val</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nv">fixed</span><span class="o">-</span><span class="nb">rand</span> <span class="k">for</span> <span class="o">^</span><span class="mi">10</span><span class="p">;</span> <span class="c1"># will print the same number 10 times</span>
+
+<span class="c1"># Note, however, that they exist separately in different enclosing contexts.</span>
+<span class="c1"># If you declare a function with a `state` within a loop, it'll re-create the</span>
+<span class="c1">#  variable for each iteration of the loop. See:</span>
+<span class="k">for</span> <span class="o">^</span><span class="mi">5</span> <span class="o">-&gt;</span> <span class="nv">$a</span> <span class="p">{</span>
+  <span class="k">sub </span><span class="nf">foo</span> <span class="p">{</span>
+    <span class="nv">state</span> <span class="nv">$val</span> <span class="o">=</span> <span class="nb">rand</span><span class="p">;</span> <span class="c1"># This will be a different value for every value of `$a`</span>
+  <span class="p">}</span>
+  <span class="k">for</span> <span class="o">^</span><span class="mi">5</span> <span class="o">-&gt;</span> <span class="nv">$b</span> <span class="p">{</span>
+    <span class="nv">say</span> <span class="nv">foo</span><span class="p">;</span> <span class="c1"># This will print the same value 5 times, but only 5.</span>
+             <span class="c1"># Next iteration will re-run `rand`.</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+
+
+<span class="c1">### Phasers</span>
+<span class="c1"># Phasers in Perl 6 are blocks that happen at determined points of time in your</span>
+<span class="c1">#  program. When the program is compiled, when a for loop runs, when you leave a</span>
+<span class="c1">#  block, when an exception gets thrown ... (`CATCH` is actually a phaser !)</span>
+<span class="c1"># Some of them can be used for their return values, some of them can't</span>
+<span class="c1">#  (those that can have a "[*]" in the beginning of their explanation text).</span>
+<span class="c1"># Let's have a look !</span>
+
+<span class="c1">## * Compile-time phasers</span>
+<span class="k">BEGIN</span> <span class="p">{</span> <span class="nv">say</span> <span class="s">"[*] Runs at compile time, as soon as possible, only once"</span> <span class="p">}</span>
+<span class="k">CHECK</span> <span class="p">{</span> <span class="nv">say</span> <span class="s">"[*] Runs at compile time, as late as possible, only once"</span> <span class="p">}</span>
+
+<span class="c1">## * Run-time phasers</span>
+<span class="k">INIT</span> <span class="p">{</span> <span class="nv">say</span> <span class="s">"[*] Runs at run time, as soon as possible, only once"</span> <span class="p">}</span>
+<span class="k">END</span> <span class="p">{</span> <span class="nv">say</span> <span class="s">"Runs at run time, as late as possible, only once"</span> <span class="p">}</span>
+
+<span class="c1">## * Block phasers</span>
+<span class="nv">ENTER</span> <span class="p">{</span> <span class="nv">say</span> <span class="s">"[*] Runs everytime you enter a block, repeats on loop blocks"</span> <span class="p">}</span>
+<span class="nv">LEAVE</span> <span class="p">{</span> <span class="nv">say</span> <span class="s">"Runs everytime you leave a block, even when an exception
+    happened. Repeats on loop blocks."</span> <span class="p">}</span>
+
+<span class="nv">PRE</span> <span class="p">{</span> <span class="nv">say</span> <span class="s">"Asserts a precondition at every block entry,
+    before ENTER (especially useful for loops)"</span> <span class="p">}</span>
+<span class="c1"># exemple:</span>
+<span class="k">for</span> <span class="mi">0</span><span class="o">..</span><span class="mi">2</span> <span class="p">{</span>
+    <span class="nv">PRE</span> <span class="p">{</span> <span class="nv">$_</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">}</span> <span class="c1"># This is going to blow up with "Precondition failed"</span>
+<span class="p">}</span>
+
+<span class="nv">POST</span> <span class="p">{</span> <span class="nv">say</span> <span class="s">"Asserts a postcondition at every block exit,
+    after LEAVE (especially useful for loops)"</span> <span class="p">}</span>
+<span class="k">for</span> <span class="mi">0</span><span class="o">..</span><span class="mi">2</span> <span class="p">{</span>
+    <span class="nv">POST</span> <span class="p">{</span> <span class="nv">$_</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="p">}</span> <span class="c1"># This is going to blow up with "Postcondition failed"</span>
+<span class="p">}</span>
+
+<span class="c1">## * Block/exceptions phasers</span>
+<span class="k">sub </span><span class="p">{</span>
+    <span class="nv">KEEP</span> <span class="p">{</span> <span class="nv">say</span> <span class="s">"Runs when you exit a block successfully (without throwing an exception)"</span> <span class="p">}</span>
+    <span class="nv">UNDO</span> <span class="p">{</span> <span class="nv">say</span> <span class="s">"Runs when you exit a block unsuccessfully (by throwing an exception)"</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">## * Loop phasers</span>
+<span class="k">for</span> <span class="o">^</span><span class="mi">5</span> <span class="p">{</span>
+  <span class="nv">FIRST</span> <span class="p">{</span> <span class="nv">say</span> <span class="s">"[*] The first time the loop is run, before ENTER"</span> <span class="p">}</span>
+  <span class="nv">NEXT</span> <span class="p">{</span> <span class="nv">say</span> <span class="s">"At loop continuation time, before LEAVE"</span> <span class="p">}</span>
+  <span class="nv">LAST</span> <span class="p">{</span> <span class="nv">say</span> <span class="s">"At loop termination time, after LEAVE"</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">## * Role/class phasers</span>
+<span class="nv">COMPOSE</span> <span class="p">{</span> <span class="s">"When a role is composed into a class. /!\ NOT YET IMPLEMENTED"</span> <span class="p">}</span>
+
+<span class="c1"># They allow for cute tricks or clever code ...:</span>
+<span class="nv">say</span> <span class="s">"This code took "</span> <span class="o">~</span> <span class="p">(</span><span class="nb">time</span> <span class="o">-</span> <span class="k">CHECK</span> <span class="nb">time</span><span class="p">)</span> <span class="o">~</span> <span class="s">"s to compile"</span><span class="p">;</span>
+
+<span class="c1"># ... or clever organization:</span>
+<span class="k">sub </span><span class="nf">do</span><span class="p">-db-stuff {</span>
+  <span class="nv">$db</span><span class="o">.</span><span class="nv">start</span><span class="o">-</span><span class="nv">transaction</span><span class="p">;</span> <span class="c1"># start a new transaction</span>
+  <span class="nv">KEEP</span> <span class="nv">$db</span><span class="o">.</span><span class="nv">commit</span><span class="p">;</span> <span class="c1"># commit the transaction if all went well</span>
+  <span class="nv">UNDO</span> <span class="nv">$db</span><span class="o">.</span><span class="nv">rollback</span><span class="p">;</span> <span class="c1"># or rollback if all hell broke loose</span>
+<span class="p">}</span>
+
+<span class="c1">### Statement prefixes</span>
+<span class="c1"># Those act a bit like phasers: they affect the behavior of the following code.</span>
+<span class="c1"># Though, they run in-line with the executable code, so they're in lowercase.</span>
+<span class="c1"># (`try` and `start` are theoretically in that list, but explained somewhere else)</span>
+<span class="c1"># Note: all of these (except start) don't need explicit brackets `{` and `}`.</span>
+
+<span class="c1"># - `do` (that you already saw) - runs a block or a statement as a term</span>
+<span class="c1"># You can't normally use a statement as a value (or "term"):</span>
+<span class="c1">#</span>
+<span class="c1">#    my $value = if True { 1 } # `if` is a statement - parse error</span>
+<span class="c1">#</span>
+<span class="c1"># This works:</span>
+<span class="k">my</span> <span class="nv">$a</span> <span class="o">=</span> <span class="k">do</span> <span class="k">if</span> <span class="nv">True</span> <span class="p">{</span> <span class="mi">5</span> <span class="p">}</span> <span class="c1"># with `do`, `if` is now a term.</span>
+
+<span class="c1"># - `once` - Makes sure a piece of code only runs once</span>
+<span class="k">for</span> <span class="o">^</span><span class="mi">5</span> <span class="p">{</span> <span class="nv">once</span> <span class="nv">say</span> <span class="mi">1</span> <span class="p">};</span> <span class="c1">#=&gt; 1</span>
+                       <span class="c1"># Only prints ... once.</span>
+<span class="c1"># Like `state`, they're cloned per-scope</span>
+<span class="k">for</span> <span class="o">^</span><span class="mi">5</span> <span class="p">{</span> <span class="k">sub </span><span class="p">{</span> <span class="nv">once</span> <span class="nv">say</span> <span class="mi">1</span> <span class="p">}()</span> <span class="p">}</span> <span class="c1">#=&gt; 1 1 1 1 1</span>
+                                <span class="c1"># Prints once per lexical scope</span>
+
+<span class="c1"># - `gather` - Co-routine thread</span>
+<span class="c1"># Gather allows you to `take` several values in an array,</span>
+<span class="c1">#  much like `do`, but allows you to take any expression.</span>
+<span class="nv">say</span> <span class="nv">gather</span> <span class="k">for</span> <span class="o">^</span><span class="mi">5</span> <span class="p">{</span>
+  <span class="nv">take</span> <span class="nv">$_</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="nv">take</span> <span class="nv">$_</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span> <span class="c1">#=&gt; -1 1 2 4 5 7 8 10 11 13</span>
+<span class="nv">say</span> <span class="nb">join</span> <span class="s">','</span><span class="p">,</span> <span class="nv">gather</span> <span class="k">if</span> <span class="nv">False</span> <span class="p">{</span>
+  <span class="nv">take</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="nv">take</span> <span class="mi">2</span><span class="p">;</span>
+  <span class="nv">take</span> <span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span> <span class="c1"># Doesn't print anything.</span>
+
+<span class="c1"># - `eager` - Evaluate statement eagerly (forces eager context)</span>
+<span class="c1"># Don't try this at home:</span>
+<span class="c1">#</span>
+<span class="c1">#    eager 1..*; # this will probably hang for a while (and might crash ...).</span>
+<span class="c1">#</span>
+<span class="c1"># But consider:</span>
+<span class="nv">constant</span> <span class="nv">thrice</span> <span class="o">=</span> <span class="nv">gather</span> <span class="k">for</span> <span class="o">^</span><span class="mi">3</span> <span class="p">{</span> <span class="nv">say</span> <span class="nv">take</span> <span class="nv">$_</span> <span class="p">};</span> <span class="c1"># Doesn't print anything</span>
+<span class="c1"># versus:</span>
+<span class="nv">constant</span> <span class="nv">thrice</span> <span class="o">=</span> <span class="nv">eager</span> <span class="nv">gather</span> <span class="k">for</span> <span class="o">^</span><span class="mi">3</span> <span class="p">{</span> <span class="nv">say</span> <span class="nv">take</span> <span class="nv">$_</span> <span class="p">};</span> <span class="c1">#=&gt; 0 1 2</span>
+
+<span class="c1"># - `lazy` - Defer actual evaluation until value is fetched (forces lazy context)</span>
+<span class="c1"># Not yet implemented !!</span>
+
+<span class="c1"># - `sink` - An `eager` that discards the results (forces sink context)</span>
+<span class="nv">constant</span> <span class="nv">nilthingie</span> <span class="o">=</span> <span class="nv">sink</span> <span class="k">for</span> <span class="o">^</span><span class="mi">3</span> <span class="p">{</span> <span class="o">.</span><span class="nv">say</span> <span class="p">}</span> <span class="c1">#=&gt; 0 1 2</span>
+<span class="nv">say</span> <span class="nv">nilthingie</span><span class="o">.</span><span class="nv">perl</span><span class="p">;</span> <span class="c1">#=&gt; Nil</span>
+
+<span class="c1"># - `quietly` - Supresses warnings</span>
+<span class="c1"># Not yet implemented !</span>
+
+<span class="c1"># - `contend` - Attempts side effects under STM</span>
+<span class="c1"># Not yet implemented !</span>
+
+<span class="c1">### More operators thingies !</span>
+
+<span class="c1">## Everybody loves operators ! Let's get more of them</span>
+
+<span class="c1"># The precedence list can be found here:</span>
+<span class="c1"># http://perlcabal.org/syn/S03.html#Operator_precedence</span>
+<span class="c1"># But first, we need a little explanation about associativity:</span>
+
+<span class="c1"># * Binary operators:</span>
+<span class="nv">$a</span> <span class="o">!</span> <span class="nv">$b</span> <span class="o">!</span> <span class="nv">$c</span><span class="p">;</span> <span class="c1"># with a left-associative `!`, this is `($a ! $b) ! $c`</span>
+<span class="nv">$a</span> <span class="o">!</span> <span class="nv">$b</span> <span class="o">!</span> <span class="nv">$c</span><span class="p">;</span> <span class="c1"># with a right-associative `!`, this is `$a ! ($b ! $c)`</span>
+<span class="nv">$a</span> <span class="o">!</span> <span class="nv">$b</span> <span class="o">!</span> <span class="nv">$c</span><span class="p">;</span> <span class="c1"># with a non-associative `!`, this is illegal</span>
+<span class="nv">$a</span> <span class="o">!</span> <span class="nv">$b</span> <span class="o">!</span> <span class="nv">$c</span><span class="p">;</span> <span class="c1"># with a chain-associative `!`, this is `($a ! $b) and ($b ! $c)`</span>
+<span class="nv">$a</span> <span class="o">!</span> <span class="nv">$b</span> <span class="o">!</span> <span class="nv">$c</span><span class="p">;</span> <span class="c1"># with a list-associative `!`, this is `infix:&lt;&gt;`</span>
+
+<span class="c1"># * Unary operators:</span>
+<span class="o">!</span><span class="nv">$a</span><span class="o">!</span> <span class="c1"># with left-associative `!`, this is `(!$a)!`</span>
+<span class="o">!</span><span class="nv">$a</span><span class="o">!</span> <span class="c1"># with right-associative `!`, this is `!($a!)`</span>
+<span class="o">!</span><span class="nv">$a</span><span class="o">!</span> <span class="c1"># with non-associative `!`, this is illegal</span>
+
+<span class="c1">## Create your own operators !</span>
+<span class="c1"># Okay, you've been reading all of that, so I guess I should try</span>
+<span class="c1">#  to show you something exciting.</span>
+<span class="c1"># I'll tell you a little secret (or not-so-secret):</span>
+<span class="c1"># In Perl 6, all operators are actually just funny-looking subroutines.</span>
+
+<span class="c1"># You can declare an operator just like you declare a sub:</span>
+<span class="k">sub </span><span class="nf">prefix</span><span class="p">:&lt;win&gt;($winner) {</span> <span class="c1"># refer to the operator categories</span>
+                            <span class="c1"># (yes, it's the "words operator" `&lt;&gt;`)</span>
+  <span class="nv">say</span> <span class="s">"$winner Won !"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nv">win</span> <span class="s">"The King"</span><span class="p">;</span> <span class="c1">#=&gt; The King Won !</span>
+                <span class="c1"># (prefix is before)</span>
+
+<span class="c1"># you can still call the sub with its "full name"</span>
+<span class="nv">say</span> <span class="nv">prefix:</span><span class="sr">&lt;!&gt;</span><span class="p">(</span><span class="nv">True</span><span class="p">);</span> <span class="c1">#=&gt; False</span>
+
+<span class="k">sub </span><span class="nf">postfix</span><span class="p">:&lt;!&gt;(Int $n) {</span>
+  <span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="mi">2</span><span class="o">..</span><span class="nv">$n</span><span class="p">;</span> <span class="c1"># using the reduce meta-operator ... See below ;-) !</span>
+<span class="p">}</span>
+<span class="nv">say</span> <span class="mi">5</span><span class="o">!</span><span class="p">;</span> <span class="c1">#=&gt; 120</span>
+        <span class="c1"># Postfix operators (after) have to come *directly* after the term.</span>
+        <span class="c1"># No whitespace. You can use parentheses to disambiguate, i.e. `(5!)!`</span>
+
+
+<span class="k">sub </span><span class="nf">infix</span><span class="p">:&lt;times&gt;(Int $n, Block $r) {</span> <span class="c1"># infix in the middle</span>
+  <span class="k">for</span> <span class="o">^</span><span class="nv">$n</span> <span class="p">{</span>
+    <span class="nv">$r</span><span class="p">();</span> <span class="c1"># You need the explicit parentheses to call the function in `$r`,</span>
+          <span class="c1">#  else you'd be referring at the variable itself, like with `&amp;r`.</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="mi">3</span> <span class="nb">times</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="nv">say</span> <span class="s">"hello"</span> <span class="p">};</span> <span class="c1">#=&gt; hello</span>
+                            <span class="c1">#=&gt; hello</span>
+                            <span class="c1">#=&gt; hello</span>
+                            <span class="c1"># You're very recommended to put spaces</span>
+                            <span class="c1"># around your infix operator calls.</span>
+
+<span class="c1"># For circumfix and post-circumfix ones</span>
+<span class="k">sub </span><span class="nf">circumfix</span><span class="p">:&lt;[ ]&gt;(Int $n) {</span>
+  <span class="nv">$n</span> <span class="o">**</span> <span class="nv">$n</span>
+<span class="p">}</span>
+<span class="nv">say</span> <span class="p">[</span><span class="mi">5</span><span class="p">];</span> <span class="c1">#=&gt; 3125</span>
+         <span class="c1"># circumfix is around. Again, no whitespace.</span>
+
+<span class="k">sub </span><span class="nf">postcircumfix</span><span class="p">:&lt;{</span> <span class="p">}</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">Str</span> <span class="nv">$s</span><span class="p">,</span> <span class="nv">Int</span> <span class="nv">$idx</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1"># post-circumfix is</span>
+  <span class="c1"># "after a term, around something"</span>
+  <span class="nv">$s</span><span class="o">.</span><span class="nb">substr</span><span class="p">(</span><span class="nv">$idx</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nv">say</span> <span class="s">"abc"</span><span class="p">{</span><span class="mi">1</span><span class="p">};</span> <span class="c1">#=&gt; b</span>
+              <span class="c1"># after the term `"abc"`, and around the index (1)</span>
+
+<span class="c1"># This really means a lot -- because everything in Perl 6 uses this.</span>
+<span class="c1"># For example, to delete a key from a hash, you use the `:delete` adverb</span>
+<span class="c1">#  (a simple named argument underneath):</span>
+<span class="nv">%h</span><span class="p">{</span><span class="nv">$key</span><span class="p">}:</span><span class="nb">delete</span><span class="p">;</span>
+<span class="c1"># equivalent to:</span>
+<span class="nv">postcircumfix:</span><span class="o">&lt;</span><span class="p">{</span> <span class="p">}</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">%h</span><span class="p">,</span> <span class="nv">$key</span><span class="p">,</span> <span class="p">:</span><span class="nb">delete</span><span class="p">);</span> <span class="c1"># (you can call operators like that)</span>
+<span class="c1"># It's *all* using the same building blocks!</span>
+<span class="c1"># Syntactic categories (prefix infix ...), named arguments (adverbs), ...,</span>
+<span class="c1">#  - used to build the language - are available to you.</span>
+
+<span class="c1"># (you are, obviously, recommended against making an operator out of</span>
+<span class="c1"># *everything* -- with great power comes great responsibility)</span>
+
+<span class="c1">## Meta operators !</span>
+<span class="c1"># Oh boy, get ready. Get ready, because we're delving deep</span>
+<span class="c1">#  into the rabbit's hole, and you probably won't want to go</span>
+<span class="c1">#  back to other languages after reading that.</span>
+<span class="c1">#  (I'm guessing you don't want to already at that point).</span>
+<span class="c1"># Meta-operators, as their name suggests, are *composed* operators.</span>
+<span class="c1"># Basically, they're operators that apply another operator.</span>
+
+<span class="c1">## * Reduce meta-operator</span>
+<span class="c1"># It's a prefix meta-operator that takes a binary function and</span>
+<span class="c1">#  one or many lists. If it doesn't get passed any argument,</span>
+<span class="c1">#  it either returns a "default value" for this operator</span>
+<span class="c1">#  (a meaningless value) or `Any` if there's none (examples below).</span>
+<span class="c1">#</span>
+<span class="c1"># Otherwise, it pops an element from the list(s) one at a time, and applies</span>
+<span class="c1">#  the binary function to the last result (or the list's first element)</span>
+<span class="c1">#  and the popped element.</span>
+<span class="c1">#</span>
+<span class="c1"># To sum a list, you could use the reduce meta-operator with `+`, i.e.:</span>
+<span class="nv">say</span> <span class="p">[</span><span class="o">+</span><span class="p">]</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">#=&gt; 6</span>
+<span class="c1"># equivalent to `(1+2)+3`</span>
+<span class="nv">say</span> <span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="mi">1</span><span class="o">..</span><span class="mi">5</span><span class="p">;</span> <span class="c1">#=&gt; 120</span>
+<span class="c1"># equivalent to `((((1*2)*3)*4)*5)`.</span>
+
+<span class="c1"># You can reduce with any operator, not just with mathematical ones.</span>
+<span class="c1"># For example, you could reduce with `//` to get</span>
+<span class="c1">#  the first defined element of a list:</span>
+<span class="nv">say</span> <span class="p">[</span><span class="sr">//</span><span class="p">]</span> <span class="nv">Nil</span><span class="p">,</span> <span class="nv">Any</span><span class="p">,</span> <span class="nv">False</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">;</span> <span class="c1">#=&gt; False</span>
+                                <span class="c1"># (Falsey, but still defined)</span>
+
+
+<span class="c1"># Default value examples:</span>
+<span class="nv">say</span> <span class="p">[</span><span class="o">*</span><span class="p">]</span> <span class="p">();</span> <span class="c1">#=&gt; 1</span>
+<span class="nv">say</span> <span class="p">[</span><span class="o">+</span><span class="p">]</span> <span class="p">();</span> <span class="c1">#=&gt; 0</span>
+            <span class="c1"># meaningless values, since N*1=N and N+0=N.</span>
+<span class="nv">say</span> <span class="p">[</span><span class="sr">//</span><span class="p">];</span>   <span class="c1">#=&gt; (Any)</span>
+            <span class="c1"># There's no "default value" for `//`.</span>
+
+<span class="c1"># You can also call it with a function you made up, using double brackets:</span>
+<span class="k">sub </span><span class="nf">add</span><span class="p">($a, $b) {</span> <span class="nv">$a</span> <span class="o">+</span> <span class="nv">$b</span> <span class="p">}</span>
+<span class="nv">say</span> <span class="p">[[</span><span class="o">&amp;</span><span class="nv">add</span><span class="p">]]</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">#=&gt; 6</span>
+
+<span class="c1">## * Zip meta-operator</span>
+<span class="c1"># This one is an infix meta-operator than also can be used as a "normal" operator.</span>
+<span class="c1"># It takes an optional binary function (by default, it just creates a pair),</span>
+<span class="c1">#  and will pop one value off of each array and call its binary function on these</span>
+<span class="c1">#  until it runs out of elements. It returns an array with all of these new elements.</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="nv">Z</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span> <span class="c1"># ((1, 3), (2, 4)), since by default, the function makes an array</span>
+<span class="mi">1</span><span class="o">..</span><span class="mi">3</span> <span class="nv">Z</span><span class="o">+</span> <span class="mi">4</span><span class="o">..</span><span class="mi">6</span><span class="p">;</span> <span class="c1"># (5, 7, 9), using the custom infix:&lt;+&gt; function</span>
+
+<span class="c1"># Since `Z` is list-associative (see the list above),</span>
+<span class="c1">#  you can use it on more than one list</span>
+<span class="p">(</span><span class="nv">True</span><span class="p">,</span> <span class="nv">False</span><span class="p">)</span> <span class="nv">Z</span><span class="o">||</span> <span class="p">(</span><span class="nv">False</span><span class="p">,</span> <span class="nv">False</span><span class="p">)</span> <span class="nv">Z</span><span class="o">||</span> <span class="p">(</span><span class="nv">False</span><span class="p">,</span> <span class="nv">False</span><span class="p">);</span> <span class="c1"># (True, False)</span>
+
+<span class="c1"># And, as it turns out, you can also use the reduce meta-operator with it:</span>
+<span class="p">[</span><span class="nv">Z</span><span class="o">||</span><span class="p">]</span> <span class="p">(</span><span class="nv">True</span><span class="p">,</span> <span class="nv">False</span><span class="p">),</span> <span class="p">(</span><span class="nv">False</span><span class="p">,</span> <span class="nv">False</span><span class="p">),</span> <span class="p">(</span><span class="nv">False</span><span class="p">,</span> <span class="nv">False</span><span class="p">);</span> <span class="c1"># (True, False)</span>
+
+
+<span class="c1">## And to end the operator list:</span>
+
+<span class="c1">## * Sequence operator</span>
+<span class="c1"># The sequence operator is one of Perl 6's most powerful features:</span>
+<span class="c1"># it's composed of first, on the left, the list you want Perl 6 to deduce from</span>
+<span class="c1">#  (and might include a closure), and on the right, a value or the predicate</span>
+<span class="c1">#  that says when to stop (or Whatever for a lazy infinite list).</span>
+<span class="k">my</span> <span class="nv">@list</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span> <span class="o">...</span> <span class="mi">10</span><span class="p">;</span> <span class="c1"># basic deducing</span>
+<span class="c1">#my @list = 1, 3, 6 ... 10; # this dies because Perl 6 can't figure out the end</span>
+<span class="k">my</span> <span class="nv">@list</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span> <span class="o">...^</span> <span class="mi">10</span><span class="p">;</span> <span class="c1"># as with ranges, you can exclude the last element</span>
+                            <span class="c1"># (the iteration when the predicate matches).</span>
+<span class="k">my</span> <span class="nv">@list</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">9</span> <span class="o">...</span> <span class="o">*</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">;</span> <span class="c1"># you can use a predicate</span>
+                               <span class="c1"># (with the Whatever Star, here).</span>
+<span class="k">my</span> <span class="nv">@list</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">9</span> <span class="o">...</span> <span class="p">{</span> <span class="nv">$_</span> <span class="o">&gt;</span> <span class="mi">30</span> <span class="p">};</span> <span class="c1"># (equivalent to the above)</span>
+
+<span class="k">my</span> <span class="nv">@fib</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">*+*</span> <span class="o">...</span> <span class="o">*</span><span class="p">;</span> <span class="c1"># lazy infinite list of fibonacci series,</span>
+                           <span class="c1">#  computed using a closure!</span>
+<span class="k">my</span> <span class="nv">@fib</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-&gt;</span> <span class="nv">$a</span><span class="p">,</span> <span class="nv">$b</span> <span class="p">{</span> <span class="nv">$a</span> <span class="o">+</span> <span class="nv">$b</span> <span class="p">}</span> <span class="o">...</span> <span class="o">*</span><span class="p">;</span> <span class="c1"># (equivalent to the above)</span>
+<span class="k">my</span> <span class="nv">@fib</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">{</span> <span class="nv">$</span><span class="err">^</span><span class="nv">a</span> <span class="o">+</span> <span class="nv">$</span><span class="err">^</span><span class="nv">b</span> <span class="p">}</span> <span class="o">...</span> <span class="o">*</span><span class="p">;</span> <span class="c1">#(... also equivalent to the above)</span>
+<span class="c1"># $a and $b will always take the previous values, meaning here</span>
+<span class="c1">#  they'll start with $a = 1 and $b = 1 (values we set by hand).</span>
+<span class="c1">#  then $a = 1 and $b = 2 (result from previous $a+$b), and so on.</span>
+
+<span class="nv">say</span> <span class="nv">@fib</span><span class="p">[</span><span class="o">^</span><span class="mi">10</span><span class="p">];</span> <span class="c1">#=&gt; 1 1 2 3 5 8 13 21 34 55</span>
+               <span class="c1"># (using a range as the index)</span>
+<span class="c1"># Note : as for ranges, once reified, elements aren't re-calculated.</span>
+<span class="c1"># That's why `@primes[^100]` will take a long time the first time you print</span>
+<span class="c1">#  it, then be instant.</span>
+
+<span class="c1">### Regular Expressions</span>
+<span class="c1"># I'm sure a lot of you have been waiting for this one.</span>
+<span class="c1"># Well, now that you know a good deal of Perl 6 already, we can get started.</span>
+<span class="c1"># First off, you'll have to forget about "PCRE regexps" (perl-compatible regexps).</span>
+<span class="c1">#</span>
+<span class="c1"># IMPORTANT: Don't skip them because you know PCRE. They're different.</span>
+<span class="c1"># Some things are the same (like `?`, `+`, and `*`),</span>
+<span class="c1">#  but sometimes the semantics change (`|`).</span>
+<span class="c1"># Make sure you read carefully, because you might trip over a new behavior.</span>
+<span class="c1">#</span>
+<span class="c1"># Perl 6 has many features related to RegExps. After all, Rakudo parses itself.</span>
+<span class="c1"># We're first going to look at the syntax itself,</span>
+<span class="c1">#  then talk about grammars (PEG-like), differences between</span>
+<span class="c1">#  `token`, `regex` and `rule` declarators, and some more.</span>
+<span class="c1"># Side note: you still have access to PCRE regexps using the `:P5` modifier.</span>
+<span class="c1">#  (we won't be discussing this in this tutorial, however)</span>
+<span class="c1">#</span>
+<span class="c1"># In essence, Perl 6 natively implements PEG ("Parsing Expression Grammars").</span>
+<span class="c1"># The pecking order for ambiguous parses is determined by a multi-level</span>
+<span class="c1">#  tie-breaking test:</span>
+<span class="c1">#  - Longest token matching. `foo\s+` beats `foo` (by 2 or more positions)</span>
+<span class="c1">#  - Longest literal prefix. `food\w*` beats `foo\w*` (by 1)</span>
+<span class="c1">#  - Declaration from most-derived to less derived grammars</span>
+<span class="c1">#     (grammars are actually classes)</span>
+<span class="c1">#  - Earliest declaration wins</span>
+<span class="nv">say</span> <span class="nv">so</span> <span class="s">'a'</span> <span class="o">~~</span> <span class="sr">/a/</span><span class="p">;</span> <span class="c1">#=&gt; True</span>
+<span class="nv">say</span> <span class="nv">so</span> <span class="s">'a'</span> <span class="o">~~</span> <span class="sr">/ a /</span><span class="p">;</span> <span class="c1"># More readable with some spaces!</span>
+
+<span class="c1"># In all our examples, we're going to use the smart-matching operator against</span>
+<span class="c1">#  a regexp. We're converting the result using `so`, but in fact, it's</span>
+<span class="c1">#  returning a `Match` object. They know how to respond to list indexing,</span>
+<span class="c1">#  hash indexing, and return the matched string.</span>
+<span class="c1"># The results of the match are available as `$/` (implicitly lexically-scoped).</span>
+<span class="c1"># You can also use the capture variables (`$0`, `$1`, ... starting at 0, not 1 !).</span>
+<span class="c1">#</span>
+<span class="c1"># You can also note that `~~` does not perform start/end checking</span>
+<span class="c1">#  (meaning the regexp can be matched with just one char of the string),</span>
+<span class="c1">#  we're going to explain later how you can do it.</span>
+
+<span class="c1"># In Perl 6, you can have any alphanumeric as a literal,</span>
+<span class="c1"># everything else has to be escaped, using a backslash or quotes.</span>
+<span class="nv">say</span> <span class="nv">so</span> <span class="s">'a|b'</span> <span class="o">~~</span> <span class="sr">/ a '|' b /</span><span class="p">;</span> <span class="c1"># `True`. Wouln't mean the same if `|` wasn't escaped</span>
+<span class="nv">say</span> <span class="nv">so</span> <span class="s">'a|b'</span> <span class="o">~~</span> <span class="sr">/ a \| b /</span><span class="p">;</span> <span class="c1"># `True`. Another way to escape it.</span>
+
+<span class="c1"># The whitespace in a regexp is actually not significant,</span>
+<span class="c1">#  unless you use the `:s` (`:sigspace`, significant space) modifier.</span>
+<span class="nv">say</span> <span class="nv">so</span> <span class="s">'a b c'</span> <span class="o">~~</span> <span class="sr">/ a b c /</span><span class="p">;</span> <span class="c1"># `False`. Space is not significant here</span>
+<span class="nv">say</span> <span class="nv">so</span> <span class="s">'a b c'</span> <span class="o">~~</span> <span class="sr">/:s a b c /</span><span class="p">;</span> <span class="c1"># `True`. We added the modifier `:s` here.</span>
+
+<span class="c1"># It is, however, important as for how modifiers (that you're gonna see just below)</span>
+<span class="c1">#  are applied ...</span>
+
+<span class="c1">## Quantifying - `?`, `+`, `*` and `**`.</span>
+<span class="c1"># - `?` - 0 or 1</span>
+<span class="nv">so</span> <span class="s">'ac'</span> <span class="o">~~</span> <span class="sr">/ a b c /</span><span class="p">;</span> <span class="c1"># `False`</span>
+<span class="nv">so</span> <span class="s">'ac'</span> <span class="o">~~</span> <span class="sr">/ a b? c /</span><span class="p">;</span> <span class="c1"># `True`, the "b" matched 0 times.</span>
+<span class="nv">so</span> <span class="s">'abc'</span> <span class="o">~~</span> <span class="sr">/ a b? c /</span><span class="p">;</span> <span class="c1"># `True`, the "b" matched 1 time.</span>
+
+<span class="c1"># ... As you read just before, whitespace is important because it determines</span>
+<span class="c1">#  which part of the regexp is the target of the modifier:</span>
+<span class="nv">so</span> <span class="s">'def'</span> <span class="o">~~</span> <span class="sr">/ a b c? /</span><span class="p">;</span> <span class="c1"># `False`. Only the `c` is optional</span>
+<span class="nv">so</span> <span class="s">'def'</span> <span class="o">~~</span> <span class="sr">/ ab?c /</span><span class="p">;</span> <span class="c1"># `False`. Whitespace is not significant</span>
+<span class="nv">so</span> <span class="s">'def'</span> <span class="o">~~</span> <span class="sr">/ 'abc'? /</span><span class="p">;</span> <span class="c1"># `True`. The whole "abc" group is optional.</span>
+
+<span class="c1"># Here (and below) the quantifier applies only to the `b`</span>
+
+<span class="c1"># - `+` - 1 or more</span>
+<span class="nv">so</span> <span class="s">'ac'</span> <span class="o">~~</span> <span class="sr">/ a b+ c /</span><span class="p">;</span> <span class="c1"># `False`; `+` wants at least one matching</span>
+<span class="nv">so</span> <span class="s">'abc'</span> <span class="o">~~</span> <span class="sr">/ a b+ c /</span><span class="p">;</span> <span class="c1"># `True`; one is enough</span>
+<span class="nv">so</span> <span class="s">'abbbbc'</span> <span class="o">~~</span> <span class="sr">/ a b+ c /</span><span class="p">;</span> <span class="c1"># `True`, matched 4 "b"s</span>
+
+<span class="c1"># - `*` - 0 or more</span>
+<span class="nv">so</span> <span class="s">'ac'</span> <span class="o">~~</span> <span class="sr">/ a b* c /</span><span class="p">;</span> <span class="c1"># `True`, they're all optional.</span>
+<span class="nv">so</span> <span class="s">'abc'</span> <span class="o">~~</span> <span class="sr">/ a b* c /</span><span class="p">;</span> <span class="c1"># `True`</span>
+<span class="nv">so</span> <span class="s">'abbbbc'</span> <span class="o">~~</span> <span class="sr">/ a b* c /</span><span class="p">;</span> <span class="c1"># `True`</span>
+<span class="nv">so</span> <span class="s">'aec'</span> <span class="o">~~</span> <span class="sr">/ a b* c /</span><span class="p">;</span> <span class="c1"># `False`. "b"(s) are optional, not replaceable.</span>
+
+<span class="c1"># - `**` - (Unbound) Quantifier</span>
+<span class="c1"># If you squint hard enough, you might understand</span>
+<span class="c1">#  why exponentation is used for quantity.</span>
+<span class="nv">so</span> <span class="s">'abc'</span> <span class="o">~~</span> <span class="sr">/ a b ** 1 c /</span><span class="p">;</span> <span class="c1"># `True` (exactly one time)</span>
+<span class="nv">so</span> <span class="s">'abc'</span> <span class="o">~~</span> <span class="sr">/ a b ** 1..3 c /</span><span class="p">;</span> <span class="c1"># `True` (one to three times)</span>
+<span class="nv">so</span> <span class="s">'abbbc'</span> <span class="o">~~</span> <span class="sr">/ a b ** 1..3 c /</span><span class="p">;</span> <span class="c1"># `True`</span>
+<span class="nv">so</span> <span class="s">'abbbbbbc'</span> <span class="o">~~</span> <span class="sr">/ a b ** 1..3 c /</span><span class="p">;</span> <span class="c1"># `False` (too much)</span>
+<span class="nv">so</span> <span class="s">'abbbbbbc'</span> <span class="o">~~</span> <span class="sr">/ a b ** 3..* c /</span><span class="p">;</span> <span class="c1"># `True` (infinite ranges are okay)</span>
+
+<span class="c1"># - `&lt;[]&gt;` - Character classes</span>
+<span class="c1"># Character classes are the equivalent of PCRE's `[]` classes, but</span>
+<span class="c1">#  they use a more perl6-ish syntax:</span>
+<span class="nv">say</span> <span class="s">'fooa'</span> <span class="o">~~</span> <span class="sr">/ f &lt;[ o a ]&gt;+ /</span><span class="p">;</span> <span class="c1">#=&gt; 'fooa'</span>
+<span class="c1"># You can use ranges:</span>
+<span class="nv">say</span> <span class="s">'aeiou'</span> <span class="o">~~</span> <span class="sr">/ a &lt;[ e..w ]&gt; /</span><span class="p">;</span> <span class="c1">#=&gt; 'ae'</span>
+<span class="c1"># Just like in normal regexes, if you want to use a special character, escape it</span>
+<span class="c1">#  (the last one is escaping a space)</span>
+<span class="nv">say</span> <span class="s">'he-he !'</span> <span class="o">~~</span> <span class="sr">/ 'he-' &lt;[ a..z \! \  ]&gt; + /</span><span class="p">;</span> <span class="c1">#=&gt; 'he-he !'</span>
+<span class="c1"># You'll get a warning if you put duplicate names</span>
+<span class="c1">#  (which has the nice effect of catching the wrote quoting:)</span>
+<span class="s">'he he'</span> <span class="o">~~</span> <span class="sr">/ &lt;[ h e ' ' ]&gt; /</span><span class="p">;</span> <span class="c1"># Warns "Repeated characters found in characters class"</span>
+
+<span class="c1"># You can also negate them ... (equivalent to `[^]` in PCRE)</span>
+<span class="nv">so</span> <span class="s">'foo'</span> <span class="o">~~</span> <span class="sr">/ &lt;-[ f o ]&gt; + /</span><span class="p">;</span> <span class="c1"># False</span>
+
+<span class="c1"># ... and compose them: :</span>
+<span class="nv">so</span> <span class="s">'foo'</span> <span class="o">~~</span> <span class="sr">/ &lt;[ a..z ] - [ f o ]&gt; + /</span><span class="p">;</span> <span class="c1"># False (any letter except f and o)</span>
+<span class="nv">so</span> <span class="s">'foo'</span> <span class="o">~~</span> <span class="sr">/ &lt;-[ a..z ] + [ f o ]&gt; + /</span><span class="p">;</span> <span class="c1"># True (no letter except f and o)</span>
+<span class="nv">so</span> <span class="s">'foo!'</span> <span class="o">~~</span> <span class="sr">/ &lt;-[ a..z ] + [ f o ]&gt; + /</span><span class="p">;</span> <span class="c1"># True (the + doesn't replace the left part)</span>
+
+<span class="c1">## Grouping and capturing</span>
+<span class="c1"># Group: you can group parts of your regexp with `[]`.</span>
+<span class="c1"># These groups are *not* captured (like PCRE's `(?:)`).</span>
+<span class="nv">so</span> <span class="s">'abc'</span> <span class="o">~~</span> <span class="sr">/ a [ b ] c /</span><span class="p">;</span> <span class="c1"># `True`. The grouping does pretty much nothing</span>
+<span class="nv">so</span> <span class="s">'foo012012bar'</span> <span class="o">~~</span> <span class="sr">/ foo [ '01' &lt;[0..9]&gt; ] + bar /</span><span class="p">;</span>
+<span class="c1"># The previous line returns `True`.</span>
+<span class="c1"># We match the "012" 1 or more time (the `+` was applied to the group).</span>
+
+<span class="c1"># But this does not go far enough, because we can't actually get back what</span>
+<span class="c1">#  we matched.</span>
+<span class="c1"># Capture: We can actually *capture* the results of the regexp, using parentheses.</span>
+<span class="nv">so</span> <span class="s">'fooABCABCbar'</span> <span class="o">~~</span> <span class="sr">/ foo ( 'A' &lt;[A..Z]&gt; 'C' ) + bar /</span><span class="p">;</span> <span class="c1"># `True`. (using `so` here, `$/` below)</span>
+
+<span class="c1"># So, starting with the grouping explanations.</span>
+<span class="c1"># As we said before, our `Match` object is available as `$/`:</span>
+<span class="nv">say</span> <span class="vg">$/</span><span class="p">;</span> <span class="c1"># Will print some weird stuff (we'll explain) (or "Nil" if nothing matched).</span>
+
+<span class="c1"># As we also said before, it has array indexing:</span>
+<span class="nv">say</span> <span class="vg">$/</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span> <span class="c1">#=&gt; ｢ABC｣ ｢ABC｣</span>
+           <span class="c1"># These weird brackets are `Match` objects.</span>
+           <span class="c1"># Here, we have an array of these.</span>
+<span class="nv">say</span> <span class="nv">$0</span><span class="p">;</span> <span class="c1"># The same as above.</span>
+
+<span class="c1"># Our capture is `$0` because it's the first and only one capture in the regexp.</span>
+<span class="c1"># You might be wondering why it's an array, and the answer is simple:</span>
+<span class="c1"># Some capture (indexed using `$0`, `$/[0]` or a named one) will be an array</span>
+<span class="c1">#  IFF it can have more than one element</span>
+<span class="c1">#  (so, with `*`, `+` and `**` (whatever the operands), but not with `?`).</span>
+<span class="c1"># Let's use examples to see that:</span>
+<span class="nv">so</span> <span class="s">'fooABCbar'</span> <span class="o">~~</span> <span class="sr">/ foo ( A B C )? bar /</span><span class="p">;</span> <span class="c1"># `True`</span>
+<span class="nv">say</span> <span class="vg">$/</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span> <span class="c1">#=&gt; ｢ABC｣</span>
+<span class="nv">say</span> <span class="nv">$0</span><span class="o">.</span><span class="nv">WHAT</span><span class="p">;</span> <span class="c1">#=&gt; (Match)</span>
+             <span class="c1"># It can't be more than one, so it's only a single match object.</span>
+<span class="nv">so</span> <span class="s">'foobar'</span> <span class="o">~~</span> <span class="sr">/ foo ( A B C )? bar /</span><span class="p">;</span> <span class="c1">#=&gt; True</span>
+<span class="nv">say</span> <span class="nv">$0</span><span class="o">.</span><span class="nv">WHAT</span><span class="p">;</span> <span class="c1">#=&gt; (Any)</span>
+             <span class="c1"># This capture did not match, so it's empty</span>
+<span class="nv">so</span> <span class="s">'foobar'</span> <span class="o">~~</span> <span class="sr">/ foo ( A B C ) ** 0..1 bar /</span><span class="p">;</span> <span class="c1"># `True`</span>
+<span class="nv">say</span> <span class="nv">$0</span><span class="o">.</span><span class="nv">WHAT</span><span class="p">;</span> <span class="c1">#=&gt; (Array)</span>
+             <span class="c1"># A specific quantifier will always capture an Array,</span>
+             <span class="c1">#  may it be a range or a specific value (even 1).</span>
+
+<span class="c1"># The captures are indexed per nesting. This means a group in a group will be nested</span>
+<span class="c1">#  under its parent group: `$/[0][0]`, for this code:</span>
+<span class="s">'hello-~-world'</span> <span class="o">~~</span> <span class="sr">/ ( 'hello' ( &lt;[ \- \~ ]&gt; + ) ) 'world' /</span><span class="p">;</span>
+<span class="nv">say</span> <span class="vg">$/</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="nv">Str</span><span class="p">;</span> <span class="c1">#=&gt; hello~</span>
+<span class="nv">say</span> <span class="vg">$/</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="nv">Str</span><span class="p">;</span> <span class="c1">#=&gt; ~</span>
+
+<span class="c1"># This stems from a very simple fact: `$/` does not contain strings, integers or arrays,</span>
+<span class="c1">#  it only contains match objects. These contain the `.list`, `.hash` and `.Str` methods.</span>
+<span class="c1">#  (but you can also just use `match&lt;key&gt;` for hash access</span>
+<span class="c1">#    and `match[idx]` for array access)</span>
+<span class="nv">say</span> <span class="vg">$/</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="nv">list</span><span class="o">.</span><span class="nv">perl</span><span class="p">;</span> <span class="c1">#=&gt; (Match.new(...),).list</span>
+                     <span class="c1"># We can see it's a list of Match objects. Those contain</span>
+                     <span class="c1"># a bunch of infos: where the match started/ended,</span>
+                     <span class="c1">#    the "ast" (see actions later), etc.</span>
+                     <span class="c1"># You'll see named capture below with grammars.</span>
+
+<span class="c1">## Alternatives - the `or` of regexps</span>
+<span class="c1"># WARNING: They are DIFFERENT from PCRE regexps.</span>
+<span class="nv">so</span> <span class="s">'abc'</span> <span class="o">~~</span> <span class="sr">/ a [ b | y ] c /</span><span class="p">;</span> <span class="c1"># `True`. Either "b" or "y".</span>
+<span class="nv">so</span> <span class="s">'ayc'</span> <span class="o">~~</span> <span class="sr">/ a [ b | y ] c /</span><span class="p">;</span> <span class="c1"># `True`. Obviously enough ...</span>
+
+<span class="c1"># The difference between this `|` and the one you're used to is LTM.</span>
+<span class="c1"># LTM means "Longest Token Matching". This means that the engine will always</span>
+<span class="c1">#  try to match as much as possible in the strng</span>
+<span class="s">'foo'</span> <span class="o">~~</span> <span class="sr">/ fo | foo /</span><span class="p">;</span> <span class="c1"># `foo`, because it's longer.</span>
+<span class="c1"># To decide which part is the "longest", it first splits the regex in two parts:</span>
+<span class="c1"># The "declarative prefix" (the part that can be statically analyzed)</span>
+<span class="c1">#  and the procedural parts.</span>
+<span class="c1"># Declarative prefixes include alternations (`|`), conjuctions (`&amp;`),</span>
+<span class="c1">#  sub-rule calls (not yet introduced), literals, characters classes and quantifiers.</span>
+<span class="c1"># The latter include everything else: back-references, code assertions,</span>
+<span class="c1">#  and other things that can't traditionnaly be represented by normal regexps.</span>
+<span class="c1">#</span>
+<span class="c1"># Then, all the alternatives are tried at once, and the longest wins.</span>
+<span class="c1"># Exemples:</span>
+<span class="c1"># DECLARATIVE | PROCEDURAL</span>
+<span class="sr">/ 'foo' \d+     [ &lt;subrule1&gt; || &lt;subrule2&gt; ] /</span><span class="p">;</span>
+<span class="c1"># DECLARATIVE (nested groups are not a problem)</span>
+<span class="sr">/ \s* [ \w &amp; b ] [ c | d ] /</span><span class="p">;</span>
+<span class="c1"># However, closures and recursion (of named regexps) are procedural.</span>
+<span class="c1"># ... There are also more complicated rules, like specificity</span>
+<span class="c1">#  (literals win over character classes)</span>
+
+<span class="c1"># Note: the first-matching `or` still exists, but is now spelled `||`</span>
+<span class="s">'foo'</span> <span class="o">~~</span> <span class="sr">/ fo || foo /</span><span class="p">;</span> <span class="c1"># `fo` now.</span>
+
+
+
+
+<span class="c1">### Extra: the MAIN subroutine</span>
+<span class="c1"># The `MAIN` subroutine is called when you run a Perl 6 file directly.</span>
+<span class="c1"># It's very powerful, because Perl 6 actually parses the arguments</span>
+<span class="c1">#  and pass them as such to the sub. It also handles named argument (`--foo`)</span>
+<span class="c1">#  and will even go as far as to autogenerate a `--help`</span>
+<span class="k">sub </span><span class="nf">MAIN</span><span class="p">($name) {</span> <span class="nv">say</span> <span class="s">"Hello, $name !"</span> <span class="p">}</span>
+<span class="c1"># This produces:</span>
+<span class="c1">#    $ perl6 cli.pl</span>
+<span class="c1">#    Usage:</span>
+<span class="c1">#      t.pl &lt;name&gt;</span>
+
+<span class="c1"># And since it's a regular Perl 6 sub, you can haz multi-dispatch:</span>
+<span class="c1"># (using a "Bool" for the named argument so that we can do `--replace`</span>
+<span class="c1">#  instead of `--replace=1`)</span>
+<span class="nv">subset</span> <span class="nv">File</span> <span class="nv">of</span> <span class="nv">Str</span> <span class="nv">where</span> <span class="o">*.</span><span class="nv">IO</span><span class="o">.</span><span class="nv">d</span><span class="p">;</span> <span class="c1"># convert to IO object to check the file exists</span>
+
+<span class="nv">multi</span> <span class="nv">MAIN</span><span class="p">(</span><span class="s">'add'</span><span class="p">,</span> <span class="nv">$key</span><span class="p">,</span> <span class="nv">$value</span><span class="p">,</span> <span class="nv">Bool</span> <span class="p">:</span><span class="nv">$replace</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+<span class="nv">multi</span> <span class="nv">MAIN</span><span class="p">(</span><span class="s">'remove'</span><span class="p">,</span> <span class="nv">$key</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span>
+<span class="nv">multi</span> <span class="nv">MAIN</span><span class="p">(</span><span class="s">'import'</span><span class="p">,</span> <span class="nv">File</span><span class="p">,</span> <span class="nv">Str</span> <span class="p">:</span><span class="nv">$as</span><span class="p">)</span> <span class="p">{</span> <span class="o">...</span> <span class="p">}</span> <span class="c1"># omitting parameter name</span>
+<span class="c1"># This produces:</span>
+<span class="c1">#    $ perl6 cli.pl</span>
+<span class="c1">#    Usage:</span>
+<span class="c1">#      t.pl [--replace] add &lt;key&gt; &lt;value&gt;</span>
+<span class="c1">#      t.pl remove &lt;key&gt;</span>
+<span class="c1">#      t.pl [--as=&lt;Str&gt;] import (File)</span>
+<span class="c1"># As you can see, this is *very* powerful.</span>
+<span class="c1"># It even went as far as to show inline the constants.</span>
+<span class="c1"># (the type is only displayed if the argument is `$`/is named)</span>
+
+<span class="c1">###</span>
+<span class="c1">### APPENDIX A:</span>
+<span class="c1">###</span>
+<span class="c1">### List of things</span>
+<span class="c1">###</span>
+
+<span class="c1"># It's considered by now you know the Perl6 basics.</span>
+<span class="c1"># This section is just here to list some common operations,</span>
+<span class="c1">#  but which are not in the "main part" of the tutorial to bloat it up</span>
+
+<span class="c1">## Operators</span>
+
+
+<span class="c1">## * Sort comparison</span>
+<span class="c1"># They return one value of the `Order` enum : `Less`, `Same` and `More`</span>
+<span class="c1">#  (which numerify to -1, 0 or +1).</span>
+<span class="mi">1</span> <span class="sr">&lt;=&gt;</span> <span class="mi">4</span><span class="p">;</span> <span class="c1"># sort comparison for numerics</span>
+<span class="s">'a'</span> <span class="nv">leg</span> <span class="s">'b'</span><span class="p">;</span> <span class="c1"># sort comparison for string</span>
+<span class="nv">$obj</span> <span class="nv">eqv</span> <span class="nv">$obj2</span><span class="p">;</span> <span class="c1"># sort comparison using eqv semantics</span>
+
+<span class="c1">## * Generic ordering</span>
+<span class="mi">3</span> <span class="nv">before</span> <span class="mi">4</span><span class="p">;</span> <span class="c1"># True</span>
+<span class="s">'b'</span> <span class="nv">after</span> <span class="s">'a'</span><span class="p">;</span> <span class="c1"># True</span>
+
+<span class="c1">## * Short-circuit default operator</span>
+<span class="c1"># Like `or` and `||`, but instead returns the first *defined* value :</span>
+<span class="nv">say</span> <span class="nv">Any</span> <span class="sr">//</span> <span class="nv">Nil</span> <span class="sr">//</span> <span class="mi">0</span> <span class="sr">//</span> <span class="mi">5</span><span class="p">;</span> <span class="c1">#=&gt; 0</span>
+
+<span class="c1">## * Short-circuit exclusive or (XOR)</span>
+<span class="c1"># Returns `True` if one (and only one) of its arguments is true</span>
+<span class="nv">say</span> <span class="nv">True</span> <span class="o">^^</span> <span class="nv">False</span><span class="p">;</span> <span class="c1">#=&gt; True</span>
+<span class="c1">## * Flip Flop</span>
+<span class="c1"># The flip flop operators (`ff` and `fff`, equivalent to P5's `..`/`...`).</span>
+<span class="c1">#  are operators that take two predicates to test:</span>
+<span class="c1"># They are `False` until their left side returns `True`, then are `True` until</span>
+<span class="c1">#  their right side returns `True`.</span>
+<span class="c1"># Like for ranges, you can exclude the iteration when it became `True`/`False`</span>
+<span class="c1">#  by using `^` on either side.</span>
+<span class="c1"># Let's start with an example :</span>
+<span class="k">for</span> <span class="o">&lt;</span><span class="nv">well</span> <span class="nv">met</span> <span class="nv">young</span> <span class="nv">hero</span> <span class="nv">we</span> <span class="nv">shall</span> <span class="nv">meet</span> <span class="nv">later</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="c1"># by default, `ff`/`fff` smart-match (`~~`) against `$_`:</span>
+  <span class="k">if</span> <span class="s">'met'</span> <span class="o">^</span><span class="nv">ff</span> <span class="s">'meet'</span> <span class="p">{</span> <span class="c1"># Won't enter the if for "met"</span>
+                        <span class="c1">#  (explained in details below).</span>
+    <span class="o">.</span><span class="nv">say</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="nb">rand</span> <span class="o">==</span> <span class="mi">0</span> <span class="nv">ff</span> <span class="nb">rand</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span> <span class="c1"># compare variables other than `$_`</span>
+    <span class="nv">say</span> <span class="s">"This ... probably will never run ..."</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1"># This will print "young hero we shall meet" (excluding "met"):</span>
+<span class="c1">#  the flip-flop will start returning `True` when it first encounters "met"</span>
+<span class="c1">#  (but will still return `False` for "met" itself, due to the leading `^`</span>
+<span class="c1">#   on `ff`), until it sees "meet", which is when it'll start returning `False`.</span>
+
+<span class="c1"># The difference between `ff` (awk-style) and `fff` (sed-style) is that</span>
+<span class="c1">#  `ff` will test its right side right when its left side changes to `True`,</span>
+<span class="c1">#  and can get back to `False` right away</span>
+<span class="c1">#  (*except* it'll be `True` for the iteration that matched) -</span>
+<span class="c1"># While `fff` will wait for the next iteration to</span>
+<span class="c1">#  try its right side, once its left side changed:</span>
+<span class="o">.</span><span class="nv">say</span> <span class="k">if</span> <span class="s">'B'</span> <span class="nv">ff</span> <span class="s">'B'</span> <span class="k">for</span> <span class="o">&lt;</span><span class="nv">A</span> <span class="nv">B</span> <span class="nv">C</span> <span class="nv">B</span> <span class="nv">A</span><span class="o">&gt;</span><span class="p">;</span> <span class="c1">#=&gt; B B</span>
+                                    <span class="c1"># because the right-hand-side was tested</span>
+                                    <span class="c1"># directly (and returned `True`).</span>
+                                    <span class="c1"># "B"s are printed since it matched that time</span>
+                                    <span class="c1">#  (it just went back to `False` right away).</span>
+<span class="o">.</span><span class="nv">say</span> <span class="k">if</span> <span class="s">'B'</span> <span class="nv">fff</span> <span class="s">'B'</span> <span class="k">for</span> <span class="o">&lt;</span><span class="nv">A</span> <span class="nv">B</span> <span class="nv">C</span> <span class="nv">B</span> <span class="nv">A</span><span class="o">&gt;</span><span class="p">;</span> <span class="c1">#=&gt; B C B</span>
+                                    <span class="c1"># The right-hand-side wasn't tested until</span>
+                                    <span class="c1">#  `$_` became "C"</span>
+                                    <span class="c1"># (and thus did not match instantly).</span>
+
+<span class="c1"># A flip-flop can change state as many times as needed:</span>
+<span class="k">for</span> <span class="o">&lt;</span><span class="nv">test</span> <span class="nv">start</span> <span class="k">print</span> <span class="nv">it</span> <span class="nv">stop</span> <span class="ow">not</span> <span class="nv">printing</span> <span class="nv">start</span> <span class="k">print</span> <span class="nv">again</span> <span class="nv">stop</span> <span class="ow">not</span> <span class="nv">anymore</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="o">.</span><span class="nv">say</span> <span class="k">if</span> <span class="nv">$_</span> <span class="ow">eq</span> <span class="s">'start'</span> <span class="o">^</span><span class="nv">ff</span><span class="o">^</span> <span class="nv">$_</span> <span class="ow">eq</span> <span class="s">'stop'</span><span class="p">;</span> <span class="c1"># exclude both "start" and "stop",</span>
+                                           <span class="c1">#=&gt; "print it print again"</span>
+<span class="p">}</span>
+
+<span class="c1"># you might also use a Whatever Star,</span>
+<span class="c1"># which is equivalent to `True` for the left side or `False` for the right:</span>
+<span class="k">for</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span> <span class="p">{</span> <span class="c1"># Note: the parenthesis are superfluous here</span>
+                            <span class="c1"># (sometimes called "superstitious parentheses")</span>
+ <span class="o">.</span><span class="nv">say</span> <span class="k">if</span> <span class="nv">$_</span> <span class="o">&gt;</span> <span class="mi">50</span> <span class="nv">ff</span> <span class="o">*</span><span class="p">;</span> <span class="c1"># Once the flip-flop reaches a number greater than 50,</span>
+                       <span class="c1">#  it'll never go back to `False`</span>
+                       <span class="c1">#=&gt; 60 3 40 60</span>
+<span class="p">}</span>
+
+<span class="c1"># You can also use this property to create an `If`</span>
+<span class="c1">#  that'll not go through the first time :</span>
+<span class="k">for</span> <span class="o">&lt;</span><span class="nv">a</span> <span class="nv">b</span> <span class="nv">c</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="o">.</span><span class="nv">say</span> <span class="k">if</span> <span class="o">*</span> <span class="o">^</span><span class="nv">ff</span> <span class="o">*</span><span class="p">;</span> <span class="c1"># the flip-flop is `True` and never goes back to `False`,</span>
+                   <span class="c1">#  but the `^` makes it *not run* on the first iteration</span>
+                   <span class="c1">#=&gt; b c</span>
+<span class="p">}</span>
+
+
+<span class="c1"># - `===` is value identity and uses `.WHICH` on the objects to compare them</span>
+<span class="c1"># - `=:=` is container identity and uses `VAR()` on the objects to compare them</span>
+
+</code></pre>
+
+<p>If you want to go further, you can:</p>
+
+<ul>
+<li>Read the <a href="http://perl6advent.wordpress.com/">Perl 6 Advent Calendar</a>. This is probably the greatest source of Perl 6 information, snippets and such.</li>
+<li>Come along on <code>#perl6</code> at <code>irc.freenode.net</code>. The folks here are always helpful.</li>
+<li>Check the <a href="https://github.com/rakudo/rakudo/tree/nom/src/core">source of Perl 6&rsquo;s functions and classes</a>. Rakudo is mainly written in Perl 6 (with a lot of NQP, &ldquo;Not Quite Perl&rdquo;, a Perl 6 subset easier to implement and optimize).</li>
+<li>Read <a href="http://design.perl6.org/">the language design documents</a>. They explain P6 from an implementor point-of-view, but it&rsquo;s still very interesting.</li>
+</ul>
+
+    <hr>
+    <p>Got a suggestion? A correction, perhaps? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Open an Issue</a> on the Github Repo, or make a pull request yourself!
+    </p>
+    <p class="contributed">
+    Originally contributed by vendethiel, and updated by <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/perl6.html.markdown">20 contributor(s)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://github.com/vendethiel">vendethiel</a>
+      
+    
+    </p>
+
+    <p>
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/perl6/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:25 GMT -->
+</html>

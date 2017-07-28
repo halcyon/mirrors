@@ -1,0 +1,74 @@
+# $Id: //info.ravenbrook.com/user/ndl/lisp/claude/claude-1.0.2/mumble/pyMumble/config.py#1 $
+#
+#                              CONFIG.PY
+#             Nick Levine, Ravenbrook Limited, 2013-03-27
+#
+# 1.  INTRODUCTION
+
+"""
+This module lists configurations for the Mumble library and pyMumble package.
+"""
+
+
+# 2.  CONFIGURATIONS FOR CONNECT.PY
+#
+# libraryPath is a list of paths (absolute or relative) which will be
+# searched for the Mumble library ('mumble.dll' on Windows).
+
+libraryPath = ['']
+
+
+# 3.  CONFIGURATIONS FOR ERROR.PY
+#
+# show_backtrace determines whether errors within the Mumble library
+# will include a verbose backtrace or just a one-line description of
+# the error. Note for Python users: this backtrace dosn't oringate
+# from Python; the most recent call comes first. The most interesting
+# frame is probably the call immediately following the "Call to ERROR".
+#
+# If you're getting a Mumble error you don't understand, please enable
+# backtraces and forward one without delay to mumble@ravenbrook.com.
+# We'll help you interpret it if the problem was at your end, or get a
+# fix to you if the fault was inside Mumble.
+
+show_backtrace = False
+
+
+
+# A. REFERENCES
+#
+#
+# B. DOCUMENT HISTORY
+#
+# 2013-03-27 NDL Created.
+#
+#
+# C. COPYRIGHT AND LICENSE
+#
+# Copyright (c) 2013, Ravenbrook Limited.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in
+#    the documentation and/or other materials provided with the
+#    distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.

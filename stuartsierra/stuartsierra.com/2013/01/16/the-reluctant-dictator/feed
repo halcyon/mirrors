@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: The Reluctant Dictator</title>
+	<atom:link href="https://stuartsierra.com/2013/01/16/the-reluctant-dictator/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2013/01/16/the-reluctant-dictator</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: ken restivo</title>
+		<link>https://stuartsierra.com/2013/01/16/the-reluctant-dictator/comment-page-1#comment-44915</link>
+		<dc:creator><![CDATA[ken restivo]]></dc:creator>
+		<pubDate>Mon, 28 Jan 2013 20:41:22 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=677#comment-44915</guid>
+		<description><![CDATA[&lt;blockquote&gt;
+But this age of “social” insists that everything be a community. Deoderant brands beg us to “like” their Facebook pages and advertising campaigns come accesorized with Twitter hash tags. In software, you can’t just release a bit of code as open-source. You have to create a Google Group and a blog and an IRC channel and a novelty Twitter account too. 
+&lt;/blockquote&gt;
+
+TL;DR:
+&lt;blockquote&gt;
+(disj my-lawn :you-kids)
+&lt;/blockquote&gt;]]></description>
+		<content:encoded><![CDATA[<blockquote><p>
+But this age of “social” insists that everything be a community. Deoderant brands beg us to “like” their Facebook pages and advertising campaigns come accesorized with Twitter hash tags. In software, you can’t just release a bit of code as open-source. You have to create a Google Group and a blog and an IRC channel and a novelty Twitter account too.
+</p></blockquote>
+<p>TL;DR:</p>
+<blockquote><p>
+(disj my-lawn :you-kids)
+</p></blockquote>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Eric Normand</title>
+		<link>https://stuartsierra.com/2013/01/16/the-reluctant-dictator/comment-page-1#comment-44893</link>
+		<dc:creator><![CDATA[Eric Normand]]></dc:creator>
+		<pubDate>Thu, 24 Jan 2013 21:35:16 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=677#comment-44893</guid>
+		<description><![CDATA[Stuart, you&#039;re right.
+
+The whole point of git is that people can work in their own copy of the repo without affecting others. Github even makes this kind of thing really easy. I think it&#039;s one click to fork a project, see which projects come from which, etc. Actually, popular projects tend to have a fog of forks surrounding them.
+
+What&#039;s hard is managing these different versions. If I want a feature in a library, of course I can fork it and add it myself. Then I have to bump the version number in the project.clj, build a jar, and push it to clojars to be able to use it. I could imagine a system where we could have our branches and use them seamlessly, too.
+
+Conclusion? Github is made for the kind of &quot;lazy&quot; management you mention in this article. Tell those jerks with the pull requests to lay off!
+
+Thanks for the article!
+Eric]]></description>
+		<content:encoded><![CDATA[<p>Stuart, you&#8217;re right.</p>
+<p>The whole point of git is that people can work in their own copy of the repo without affecting others. Github even makes this kind of thing really easy. I think it&#8217;s one click to fork a project, see which projects come from which, etc. Actually, popular projects tend to have a fog of forks surrounding them.</p>
+<p>What&#8217;s hard is managing these different versions. If I want a feature in a library, of course I can fork it and add it myself. Then I have to bump the version number in the project.clj, build a jar, and push it to clojars to be able to use it. I could imagine a system where we could have our branches and use them seamlessly, too.</p>
+<p>Conclusion? Github is made for the kind of &#8220;lazy&#8221; management you mention in this article. Tell those jerks with the pull requests to lay off!</p>
+<p>Thanks for the article!<br />
+Eric</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2013/01/16/the-reluctant-dictator/comment-page-1#comment-44852</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Sat, 19 Jan 2013 02:02:23 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=677#comment-44852</guid>
+		<description><![CDATA[Hi Julian, 
+
+As I see it, Bultitude is a perfect example of open-source working well. Anthony forked tools.namespace 1.x (as Bultitude) to get a specific &lt;a href=&quot;http://dev.clojure.org/jira/browse/TNS-1&quot; rel=&quot;nofollow&quot;&gt;feature&lt;/a&gt; he needed for Leiningen. I didn&#039;t need or want that feature at the time, but about 4 months later I realized it was useful and merged it into tools.namespace. Nobody had to ask permission or wait for anyone else to apply a patch to get their work done. It was a trivial amount of code anyway, hardly worth getting worked up about.
+
+-S]]></description>
+		<content:encoded><![CDATA[<p>Hi Julian, </p>
+<p>As I see it, Bultitude is a perfect example of open-source working well. Anthony forked tools.namespace 1.x (as Bultitude) to get a specific <a href="http://dev.clojure.org/jira/browse/TNS-1" rel="nofollow">feature</a> he needed for Leiningen. I didn&#8217;t need or want that feature at the time, but about 4 months later I realized it was useful and merged it into tools.namespace. Nobody had to ask permission or wait for anyone else to apply a patch to get their work done. It was a trivial amount of code anyway, hardly worth getting worked up about.</p>
+<p>-S</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Julian Birch</title>
+		<link>https://stuartsierra.com/2013/01/16/the-reluctant-dictator/comment-page-1#comment-44849</link>
+		<dc:creator><![CDATA[Julian Birch]]></dc:creator>
+		<pubDate>Fri, 18 Jan 2013 21:41:12 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=677#comment-44849</guid>
+		<description><![CDATA[I think tools.namespace is a bit of an unfortunate example, given that the readme of https://github.com/Raynes/bultitude specifically mentions problems with the community relations for tools.namespace.
+
+I&#039;m not saying the code isn&#039;t good, nor that there aren&#039;t many of us that are lousy at the community thing (I&#039;m one of them).  But I think your dividing line between languages/code and end-user systems is false.  They all need community.
+
+By the way, the reason people ask you if you&#039;d accept a pull request is because it&#039;s received etiquette and no-one much likes forking code.]]></description>
+		<content:encoded><![CDATA[<p>I think tools.namespace is a bit of an unfortunate example, given that the readme of <a href="https://github.com/Raynes/bultitude" rel="nofollow">https://github.com/Raynes/bultitude</a> specifically mentions problems with the community relations for tools.namespace.</p>
+<p>I&#8217;m not saying the code isn&#8217;t good, nor that there aren&#8217;t many of us that are lousy at the community thing (I&#8217;m one of them).  But I think your dividing line between languages/code and end-user systems is false.  They all need community.</p>
+<p>By the way, the reason people ask you if you&#8217;d accept a pull request is because it&#8217;s received etiquette and no-one much likes forking code.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: iNecas</title>
+		<link>https://stuartsierra.com/2013/01/16/the-reluctant-dictator/comment-page-1#comment-44826</link>
+		<dc:creator><![CDATA[iNecas]]></dc:creator>
+		<pubDate>Thu, 17 Jan 2013 19:39:09 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=677#comment-44826</guid>
+		<description><![CDATA[Interesting view. Maybe it&#039;s worth including the attitude in README. Something like &quot;don&#039;t bother me&quot;. That could help both you and people that bother (and don&#039;t know about it)
+
+However, I don&#039;t thing the lack of dep management tool is a result of too much communication, but maybe too little.
+
+Just my $0.02]]></description>
+		<content:encoded><![CDATA[<p>Interesting view. Maybe it&#8217;s worth including the attitude in README. Something like &#8220;don&#8217;t bother me&#8221;. That could help both you and people that bother (and don&#8217;t know about it)</p>
+<p>However, I don&#8217;t thing the lack of dep management tool is a result of too much communication, but maybe too little.</p>
+<p>Just my $0.02</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stephen Kell</title>
+		<link>https://stuartsierra.com/2013/01/16/the-reluctant-dictator/comment-page-1#comment-44820</link>
+		<dc:creator><![CDATA[Stephen Kell]]></dc:creator>
+		<pubDate>Thu, 17 Jan 2013 16:40:24 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=677#comment-44820</guid>
+		<description><![CDATA[I think it&#039;s possible to agree with both of you (Sam and Stuart). The basic point is that integration is hard. There is potentially great value in it, too, and this is Sam&#039;s point. But if some developer finds, after weighing up the various benefits, pains, satisfactions and frustrations of participating in integrative development activity, that it&#039;s not for them, there&#039;s nothing wrong with that. Arguably, the open-source model thrives on human diversity. If something is really worth integrating, there is a decent chance that someone else who has a different set of coefficients will come along and do it.
+
+The latter supposing is arguably optimistic. I can think of lots of software in which plenty of potential progress is passed over because nobody can be bothered to make the integration effort. In fact, this debate points to a research question. Perhaps integration is more difficult than it &lt;em&gt;needs&lt;/em&gt; to be, and can be made easier given different tools and systems (cf. the never-ending struggle for consensus, which manual patch-based approaches entail). I really believe this (it&#039;s what my PhD was about, although I wouldn&#039;t say I made very much progress). So Stuart&#039;s last paragraph is raising a classic tension that recurs in just about any discipline: how much effort should we spend working within the existing system, perhaps inefficiently, versus working to improve on it, which might yield longer-term benefits at some shorter-term cost?]]></description>
+		<content:encoded><![CDATA[<p>I think it&#8217;s possible to agree with both of you (Sam and Stuart). The basic point is that integration is hard. There is potentially great value in it, too, and this is Sam&#8217;s point. But if some developer finds, after weighing up the various benefits, pains, satisfactions and frustrations of participating in integrative development activity, that it&#8217;s not for them, there&#8217;s nothing wrong with that. Arguably, the open-source model thrives on human diversity. If something is really worth integrating, there is a decent chance that someone else who has a different set of coefficients will come along and do it.</p>
+<p>The latter supposing is arguably optimistic. I can think of lots of software in which plenty of potential progress is passed over because nobody can be bothered to make the integration effort. In fact, this debate points to a research question. Perhaps integration is more difficult than it <em>needs</em> to be, and can be made easier given different tools and systems (cf. the never-ending struggle for consensus, which manual patch-based approaches entail). I really believe this (it&#8217;s what my PhD was about, although I wouldn&#8217;t say I made very much progress). So Stuart&#8217;s last paragraph is raising a classic tension that recurs in just about any discipline: how much effort should we spend working within the existing system, perhaps inefficiently, versus working to improve on it, which might yield longer-term benefits at some shorter-term cost?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2013/01/16/the-reluctant-dictator/comment-page-1#comment-44817</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Thu, 17 Jan 2013 15:09:45 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=677#comment-44817</guid>
+		<description><![CDATA[&lt;em&gt;&quot;Please don’t stop&quot;&lt;/em&gt; -- Don&#039;t worry. I couldn&#039;t stop myself if I tried. :)]]></description>
+		<content:encoded><![CDATA[<p><em>&#8220;Please don’t stop&#8221;</em> &#8212; Don&#8217;t worry. I couldn&#8217;t stop myself if I tried. :)</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Sam Aaron</title>
+		<link>https://stuartsierra.com/2013/01/16/the-reluctant-dictator/comment-page-1#comment-44816</link>
+		<dc:creator><![CDATA[Sam Aaron]]></dc:creator>
+		<pubDate>Thu, 17 Jan 2013 15:03:53 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=677#comment-44816</guid>
+		<description><![CDATA[&lt;i&gt;&quot;I want to spend my time where I feel have the most to offer, which is in writing code, documentation, articles, and books.&quot;&lt;/i&gt;
+
+Please don&#039;t stop - I respect the work you do and hold you in high regard. Absolutely none of what I said above was aimed specifically at you, it was more broadly targeted towards the wider discourse of code and community and the tensions therein.]]></description>
+		<content:encoded><![CDATA[<p><i>&#8220;I want to spend my time where I feel have the most to offer, which is in writing code, documentation, articles, and books.&#8221;</i></p>
+<p>Please don&#8217;t stop &#8211; I respect the work you do and hold you in high regard. Absolutely none of what I said above was aimed specifically at you, it was more broadly targeted towards the wider discourse of code and community and the tensions therein.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2013/01/16/the-reluctant-dictator/comment-page-1#comment-44815</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Thu, 17 Jan 2013 14:51:27 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=677#comment-44815</guid>
+		<description><![CDATA[Hi Sam,
+
+I&#039;m not advocating this approach for everyone, nor for every project. I&#039;m really impressed with (and a daily user of) the amazing work Phil has done with Leiningen. But Leiningen and Overtone are both end-user applications (even if they are targeted at developers). Some software projects definitely need a community -- tooling being a perfect example.
+
+My open-source code tends to be in the form of libraries and small snippets. I think that kind of software is served just as well by free-form evolution. Good ideas tend to stick around and grow on their own. For example, I wrote and abandoned &lt;a href=&quot;https://github.com/stuartsierra/lazytest&quot; rel=&quot;nofollow&quot;&gt;Lazytest&lt;/a&gt;, but the code-reloading techniques it employed got copied around in &lt;a href=&quot;https://github.com/weavejester/ns-tracker&quot; rel=&quot;nofollow&quot;&gt;various other libraries&lt;/a&gt; until I returned to it in &lt;a href=&quot;https://github.com/clojure/tools.namespace&quot; rel=&quot;nofollow&quot;&gt;tools.namespace&lt;/a&gt; 0.2, which Brian Marick made use of in &lt;a href=&quot;https://github.com/marick/Midje&quot; rel=&quot;nofollow&quot;&gt;Midje&lt;/a&gt;. All of this required no coordination at all.
+
+I want to spend my time where I feel have the most to offer, which is in writing code, documentation, articles, and books.
+
+-S]]></description>
+		<content:encoded><![CDATA[<p>Hi Sam,</p>
+<p>I&#8217;m not advocating this approach for everyone, nor for every project. I&#8217;m really impressed with (and a daily user of) the amazing work Phil has done with Leiningen. But Leiningen and Overtone are both end-user applications (even if they are targeted at developers). Some software projects definitely need a community &#8212; tooling being a perfect example.</p>
+<p>My open-source code tends to be in the form of libraries and small snippets. I think that kind of software is served just as well by free-form evolution. Good ideas tend to stick around and grow on their own. For example, I wrote and abandoned <a href="https://github.com/stuartsierra/lazytest" rel="nofollow">Lazytest</a>, but the code-reloading techniques it employed got copied around in <a href="https://github.com/weavejester/ns-tracker" rel="nofollow">various other libraries</a> until I returned to it in <a href="https://github.com/clojure/tools.namespace" rel="nofollow">tools.namespace</a> 0.2, which Brian Marick made use of in <a href="https://github.com/marick/Midje" rel="nofollow">Midje</a>. All of this required no coordination at all.</p>
+<p>I want to spend my time where I feel have the most to offer, which is in writing code, documentation, articles, and books.</p>
+<p>-S</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Sam Aaron</title>
+		<link>https://stuartsierra.com/2013/01/16/the-reluctant-dictator/comment-page-1#comment-44813</link>
+		<dc:creator><![CDATA[Sam Aaron]]></dc:creator>
+		<pubDate>Thu, 17 Jan 2013 14:22:18 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=677#comment-44813</guid>
+		<description><![CDATA[It&#039;s wonderful that you like working on open source projects and that you release a lot of work for free for others to use. That&#039;s truly a beautiful thing. However, I believe that the real value and benefit of ones work is limited by the extent to which the work is understandable and usable by the community at large. Users give meaning to software.
+
+&lt;i&gt;&quot;Imagine if you could free open-source developers from all the time spent on mailing lists, IRC, bug trackers, wikis, pull requests, comment threads, and patches and channel all that energy into solving problems. Who knows? We might even solve the hard problems, like dependency management&quot;&lt;/i&gt;
+
+I&#039;m not sure if I could disagree more.  The real hard problems in the world are all to do with people - especially working together, collaborating and sharing in harmony. The energy I channel into the Overtone community is in-turn fuelling and shaping the culture and enthusiasm of the users who in-turn help and fuel others, and so on.
+
+Writing software is the easy part. Watching software fragment into a million tiny pieces is even easier. Finding common ground, and working with others though, that&#039;s tough. 
+
+The benefits of working together are also immense. Just check out all the amazing work that Phil Hagelberg is doing with the Leiningen community. It really is a fantastic piece of community work that really is having a massive impact on the majority of Clojure developers. Something like this would never be possible with the write-once-throw-into-the-ether-for-the-hounds-to-fork approach you&#039;re advocating.]]></description>
+		<content:encoded><![CDATA[<p>It&#8217;s wonderful that you like working on open source projects and that you release a lot of work for free for others to use. That&#8217;s truly a beautiful thing. However, I believe that the real value and benefit of ones work is limited by the extent to which the work is understandable and usable by the community at large. Users give meaning to software.</p>
+<p><i>&#8220;Imagine if you could free open-source developers from all the time spent on mailing lists, IRC, bug trackers, wikis, pull requests, comment threads, and patches and channel all that energy into solving problems. Who knows? We might even solve the hard problems, like dependency management&#8221;</i></p>
+<p>I&#8217;m not sure if I could disagree more.  The real hard problems in the world are all to do with people &#8211; especially working together, collaborating and sharing in harmony. The energy I channel into the Overtone community is in-turn fuelling and shaping the culture and enthusiasm of the users who in-turn help and fuel others, and so on.</p>
+<p>Writing software is the easy part. Watching software fragment into a million tiny pieces is even easier. Finding common ground, and working with others though, that&#8217;s tough. </p>
+<p>The benefits of working together are also immense. Just check out all the amazing work that Phil Hagelberg is doing with the Leiningen community. It really is a fantastic piece of community work that really is having a massive impact on the majority of Clojure developers. Something like this would never be possible with the write-once-throw-into-the-ether-for-the-hounds-to-fork approach you&#8217;re advocating.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 1.152 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 01:02:54 -->
+
+<!-- Compression = gzip -->

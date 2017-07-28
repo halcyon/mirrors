@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: On the Perils of Dynamic Scope</title>
+	<atom:link href="https://stuartsierra.com/2013/03/29/perils-of-dynamic-scope/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2013/03/29/perils-of-dynamic-scope</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2013/03/29/perils-of-dynamic-scope/comment-page-1#comment-45376</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Fri, 19 Apr 2013 17:49:11 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=710#comment-45376</guid>
+		<description><![CDATA[Hi Cliff,
+
+You can still support long-lived state with this technique. Each function can still take the state (ref, atom, agent) as a parameter and operate on it.
+
+As to where you keep the state between function calls, I hope to write more about it in the future. My general approach is to create an &quot;instance&quot; of my application which encapsulates all of its state, then pass that state around through explicit function arguments or closures. I not to have any state in global Vars, but sometimes deployment environments make that impossible to avoid.]]></description>
+		<content:encoded><![CDATA[<p>Hi Cliff,</p>
+<p>You can still support long-lived state with this technique. Each function can still take the state (ref, atom, agent) as a parameter and operate on it.</p>
+<p>As to where you keep the state between function calls, I hope to write more about it in the future. My general approach is to create an &#8220;instance&#8221; of my application which encapsulates all of its state, then pass that state around through explicit function arguments or closures. I not to have any state in global Vars, but sometimes deployment environments make that impossible to avoid.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Cliff</title>
+		<link>https://stuartsierra.com/2013/03/29/perils-of-dynamic-scope/comment-page-1#comment-45373</link>
+		<dc:creator><![CDATA[Cliff]]></dc:creator>
+		<pubDate>Fri, 19 Apr 2013 14:46:55 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=710#comment-45373</guid>
+		<description><![CDATA[Great article Stuart, I have one question though.  I am just learning Clojure so pardon me if this is a dumb question.  What is your recommendation for long-lived code that needs to maintain some state internally that spans function calls?  An example might be some metric information about the service calls being made or some summary of the results returned on an API across all it&#039;s clients.  In this case the state is long-lived and not tied to a specific function invocation.  Assuming that we&#039;ve dealt with the multi-threading issues by some other means (STM,agents,refs,etc) , what&#039;s the best way to declare/bind said vars?  
+
+I see this a more general problem because unlike parsing (which is a purely functional transformation), there is context &quot;left over&quot; here after a client call to the API function(s) that will be used in subsequent calls.  I know that the general recommendation is to avoid building an API that requires these semantics as much as possible, but I just don&#039;t know else you would do it.  Thoughts?]]></description>
+		<content:encoded><![CDATA[<p>Great article Stuart, I have one question though.  I am just learning Clojure so pardon me if this is a dumb question.  What is your recommendation for long-lived code that needs to maintain some state internally that spans function calls?  An example might be some metric information about the service calls being made or some summary of the results returned on an API across all it&#8217;s clients.  In this case the state is long-lived and not tied to a specific function invocation.  Assuming that we&#8217;ve dealt with the multi-threading issues by some other means (STM,agents,refs,etc) , what&#8217;s the best way to declare/bind said vars?  </p>
+<p>I see this a more general problem because unlike parsing (which is a purely functional transformation), there is context &#8220;left over&#8221; here after a client call to the API function(s) that will be used in subsequent calls.  I know that the general recommendation is to avoid building an API that requires these semantics as much as possible, but I just don&#8217;t know else you would do it.  Thoughts?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2013/03/29/perils-of-dynamic-scope/comment-page-1#comment-45204</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Sun, 31 Mar 2013 16:33:51 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=710#comment-45204</guid>
+		<description><![CDATA[Hi Ignacio,
+
+Yes, it is convenient. That&#039;s part of the problem. :)
+
+&lt;i&gt;&quot;in your mind is having two versions of functions (one that uses the default resource and one that allows passing it in) just as gross?&quot;&lt;/i&gt;
+
+I try to stay away from emotion-laden words like &quot;gross,&quot; but I do think that trying to provide multiple versions of the same API is more trouble than it&#039;s worth. You&#039;ll inevitably try some &quot;clever&quot; code tricks to avoid duplication, which are more likely to cause problems down the road.
+
+Instead, focus on making your API as &lt;i&gt;simple&lt;/i&gt; as possible (see Rich Hickey&#039;s talks on &lt;a href=&quot;http://www.infoq.com/presentations/Simple-Made-Easy&quot; rel=&quot;nofollow&quot;&gt;Simple versus Easy&lt;/a&gt;) then leave it up to consumers to add additional conveniences that suit their specific use cases.
+
+And yes, in recent versions of Clojure, dynamic bindings are &quot;conveyed&quot; to other threads. In Clojure 1.3 the implementation had a bug that caused a pretty serious memory leak. This was fixed in later releases. Even with binding conveyance, though, you still have the resource-extent and singleton problems I described.
+
+-S]]></description>
+		<content:encoded><![CDATA[<p>Hi Ignacio,</p>
+<p>Yes, it is convenient. That&#8217;s part of the problem. :)</p>
+<p><i>&#8220;in your mind is having two versions of functions (one that uses the default resource and one that allows passing it in) just as gross?&#8221;</i></p>
+<p>I try to stay away from emotion-laden words like &#8220;gross,&#8221; but I do think that trying to provide multiple versions of the same API is more trouble than it&#8217;s worth. You&#8217;ll inevitably try some &#8220;clever&#8221; code tricks to avoid duplication, which are more likely to cause problems down the road.</p>
+<p>Instead, focus on making your API as <i>simple</i> as possible (see Rich Hickey&#8217;s talks on <a href="http://www.infoq.com/presentations/Simple-Made-Easy" rel="nofollow">Simple versus Easy</a>) then leave it up to consumers to add additional conveniences that suit their specific use cases.</p>
+<p>And yes, in recent versions of Clojure, dynamic bindings are &#8220;conveyed&#8221; to other threads. In Clojure 1.3 the implementation had a bug that caused a pretty serious memory leak. This was fixed in later releases. Even with binding conveyance, though, you still have the resource-extent and singleton problems I described.</p>
+<p>-S</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: mpenet</title>
+		<link>https://stuartsierra.com/2013/03/29/perils-of-dynamic-scope/comment-page-1#comment-45200</link>
+		<dc:creator><![CDATA[mpenet]]></dc:creator>
+		<pubDate>Sun, 31 Mar 2013 10:45:02 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=710#comment-45200</guid>
+		<description><![CDATA[My code was cut in the middle, here is what I meant: https://www.refheap.com/paste/13144]]></description>
+		<content:encoded><![CDATA[<p>My code was cut in the middle, here is what I meant: <a href="https://www.refheap.com/paste/13144" rel="nofollow">https://www.refheap.com/paste/13144</a></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: mpenet</title>
+		<link>https://stuartsierra.com/2013/03/29/perils-of-dynamic-scope/comment-page-1#comment-45199</link>
+		<dc:creator><![CDATA[mpenet]]></dc:creator>
+		<pubDate>Sun, 31 Mar 2013 10:41:59 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=710#comment-45199</guid>
+		<description><![CDATA[Another solution is to use kw args defaults, but that&#039;s not usable for leading argument(s):
+
+&lt;code&gt;
+(defn foo [x y }]
+...)
+&lt;/code&gt;
+
+About futures yes, there is a binding-conveyor-fn that does the magic: https://github.com/clojure/clojure/blob/master/src/clj/clojure/core.clj#L1828]]></description>
+		<content:encoded><![CDATA[<p>Another solution is to use kw args defaults, but that&#8217;s not usable for leading argument(s):</p>
+<p><code><br />
+(defn foo [x y }]<br />
+...)<br />
+</code></p>
+<p>About futures yes, there is a binding-conveyor-fn that does the magic: <a href="https://github.com/clojure/clojure/blob/master/src/clj/clojure/core.clj#L1828" rel="nofollow">https://github.com/clojure/clojure/blob/master/src/clj/clojure/core.clj#L1828</a></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Ignacio Thayer</title>
+		<link>https://stuartsierra.com/2013/03/29/perils-of-dynamic-scope/comment-page-1#comment-45195</link>
+		<dc:creator><![CDATA[Ignacio Thayer]]></dc:creator>
+		<pubDate>Sun, 31 Mar 2013 01:30:40 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=710#comment-45195</guid>
+		<description><![CDATA[Committing this sin is very convenient. The best way I&#039;ve found to avoid this pattern is to inject dependencies/resources into a record or type that exposes the API (i think you also gave a related talk). I think most people don&#039;t do this though because it&#039;s considered too close to OO (?).  
+
+Out of curiosity - in your mind is having two versions of functions (one that uses the default resource and one that allows passing it in) just as gross?
+
+btw, clojure now does magic to propagate dynamic values to futures? or did I misunderstand above?
+
+user&#062; (def ^:dynamic *x*)
+#&#039;user/*x*
+user&#062; (defmacro with-x [v &#038; body] `(binding [*x* ~v] (do ~@body)))
+#&#039;user/with-x
+user&#062; (with-x 3 (future (Thread/sleep 2000) (println *x*)))
+#
+3]]></description>
+		<content:encoded><![CDATA[<p>Committing this sin is very convenient. The best way I&#8217;ve found to avoid this pattern is to inject dependencies/resources into a record or type that exposes the API (i think you also gave a related talk). I think most people don&#8217;t do this though because it&#8217;s considered too close to OO (?).  </p>
+<p>Out of curiosity &#8211; in your mind is having two versions of functions (one that uses the default resource and one that allows passing it in) just as gross?</p>
+<p>btw, clojure now does magic to propagate dynamic values to futures? or did I misunderstand above?</p>
+<p>user&gt; (def ^:dynamic *x*)<br />
+#&#8217;user/*x*<br />
+user&gt; (defmacro with-x [v &amp; body] `(binding [*x* ~v] (do ~@body)))<br />
+#&#8217;user/with-x<br />
+user&gt; (with-x 3 (future (Thread/sleep 2000) (println *x*)))<br />
+#<br />
+3</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: mpenet</title>
+		<link>https://stuartsierra.com/2013/03/29/perils-of-dynamic-scope/comment-page-1#comment-45194</link>
+		<dc:creator><![CDATA[mpenet]]></dc:creator>
+		<pubDate>Sat, 30 Mar 2013 20:47:47 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=710#comment-45194</guid>
+		<description><![CDATA[You are 100% right! 
+I too have thing against dynamic vars, it always felt impure (not ot mention less performant + all other problems you mentioned) and more of a burden than anything, when it can simply be replaced (in most cases) by function arguments. 
+I have yet to see one real world use case of deep nesting of with- macros that would really improve the code/readability too.
+
+As you said there are some use cases that are valid, but the sad part is the fact that it is advertised as &quot;idiomatic&quot; by a lot of people and some users will complain if you don&#039;t provide that since it&#039;s expected now... 
+An (sadly) some very good libraries rely on that as well. I just spent a good part of the day porting some code to one of these, the quality and functionalities are excellent, but you spend your time fighting these macros and end up dreaming about a simple arg+partial version of it.
+
+ As a result I tend to provide both styles when I can, but it still feels like a stain in the code to be honest.]]></description>
+		<content:encoded><![CDATA[<p>You are 100% right!<br />
+I too have thing against dynamic vars, it always felt impure (not ot mention less performant + all other problems you mentioned) and more of a burden than anything, when it can simply be replaced (in most cases) by function arguments.<br />
+I have yet to see one real world use case of deep nesting of with- macros that would really improve the code/readability too.</p>
+<p>As you said there are some use cases that are valid, but the sad part is the fact that it is advertised as &#8220;idiomatic&#8221; by a lot of people and some users will complain if you don&#8217;t provide that since it&#8217;s expected now&#8230;<br />
+An (sadly) some very good libraries rely on that as well. I just spent a good part of the day porting some code to one of these, the quality and functionalities are excellent, but you spend your time fighting these macros and end up dreaming about a simple arg+partial version of it.</p>
+<p> As a result I tend to provide both styles when I can, but it still feels like a stain in the code to be honest.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Mike</title>
+		<link>https://stuartsierra.com/2013/03/29/perils-of-dynamic-scope/comment-page-1#comment-45191</link>
+		<dc:creator><![CDATA[Mike]]></dc:creator>
+		<pubDate>Sat, 30 Mar 2013 06:49:21 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=710#comment-45191</guid>
+		<description><![CDATA[Great article. This whole point (the problems with dynamic scope) is part of what inspired me to start thinking about &quot;The Environment as a Value&quot; - ref my post on the clojure-dev list: https://groups.google.com/d/topic/clojure-dev/S8BawG7nzJA/discussion
+
+The other solution I&#039;ve found to this is to use lots of closures (effectively embedding scope within functions) and compose them with HOFs. This works and is nicely functional, although it can get a bit messy and painful when you need to thread some new parameter through an existing call chain.]]></description>
+		<content:encoded><![CDATA[<p>Great article. This whole point (the problems with dynamic scope) is part of what inspired me to start thinking about &#8220;The Environment as a Value&#8221; &#8211; ref my post on the clojure-dev list: <a href="https://groups.google.com/d/topic/clojure-dev/S8BawG7nzJA/discussion" rel="nofollow">https://groups.google.com/d/topic/clojure-dev/S8BawG7nzJA/discussion</a></p>
+<p>The other solution I&#8217;ve found to this is to use lots of closures (effectively embedding scope within functions) and compose them with HOFs. This works and is nicely functional, although it can get a bit messy and painful when you need to thread some new parameter through an existing call chain.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2013/03/29/perils-of-dynamic-scope/comment-page-1#comment-45187</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Fri, 29 Mar 2013 16:36:49 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=710#comment-45187</guid>
+		<description><![CDATA[Hi Ram,
+
+Even when you nest different bindings of &lt;code&gt;*resource*&lt;/code&gt;, you&#039;re still limited by the API to using one at a time. You cannot interleave API calls targeting two different resources without adding a lot of extra code to swap the bindings at every step.
+
+&lt;i&gt;&quot;there are some who will ... decide that this kind of abstraction needs to be done away with altogether.&quot;&lt;/i&gt;
+
+That is my hope. :)
+
+-S]]></description>
+		<content:encoded><![CDATA[<p>Hi Ram,</p>
+<p>Even when you nest different bindings of <code>*resource*</code>, you&#8217;re still limited by the API to using one at a time. You cannot interleave API calls targeting two different resources without adding a lot of extra code to swap the bindings at every step.</p>
+<p><i>&#8220;there are some who will &#8230; decide that this kind of abstraction needs to be done away with altogether.&#8221;</i></p>
+<p>That is my hope. :)</p>
+<p>-S</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Ram Krishnan</title>
+		<link>https://stuartsierra.com/2013/03/29/perils-of-dynamic-scope/comment-page-1#comment-45186</link>
+		<dc:creator><![CDATA[Ram Krishnan]]></dc:creator>
+		<pubDate>Fri, 29 Mar 2013 16:28:52 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=710#comment-45186</guid>
+		<description><![CDATA[I take it when you say &quot;You can’t have more than one resource at a time&quot;, you&#039;re not including the case where you can nest such `with-*` macros, i.e.,
+
+&lt;code&gt;
+(def ^:dynamic *resource* nil)
+
+(with-resource res1
+  (println :resource *resource*)
+  (with-resource res2
+    (println :resource *resource*))
+  (println :resource &quot;is back to&quot; *resource*))
+&lt;/code&gt;
+
+The use case for this pattern (or anti-pattern as it were) is one where there&#039;s a thread local binding for a resource that needs to be properly released. It&#039;s the create/release mechanism that the library is abstracting away. I&#039;m not entirely sure why this is a bad thing, so long as the user understands the other tradeoffs related to thread boundaries and laziness.
+
+Your point about providing access to to the create/release mechanism (in addition to the `with-*`) is valuable. And, if the caller decides to take complete control of the resource management, at least the `with-*` serves as a reasonable documentation for what needs to be done.
+
+But, I worry about a statement like:
+
+&quot;The alternative is easy: don’t do it. Don’t try to “solve” resource management in every library&quot;
+
+because there are some who will take this as gospel, and decide that this kind of abstraction needs to be done away with altogether.]]></description>
+		<content:encoded><![CDATA[<p>I take it when you say &#8220;You can’t have more than one resource at a time&#8221;, you&#8217;re not including the case where you can nest such `with-*` macros, i.e.,</p>
+<p><code><br />
+(def ^:dynamic *resource* nil)</p>
+<p>(with-resource res1<br />
+  (println :resource *resource*)<br />
+  (with-resource res2<br />
+    (println :resource *resource*))<br />
+  (println :resource "is back to" *resource*))<br />
+</code></p>
+<p>The use case for this pattern (or anti-pattern as it were) is one where there&#8217;s a thread local binding for a resource that needs to be properly released. It&#8217;s the create/release mechanism that the library is abstracting away. I&#8217;m not entirely sure why this is a bad thing, so long as the user understands the other tradeoffs related to thread boundaries and laziness.</p>
+<p>Your point about providing access to to the create/release mechanism (in addition to the `with-*`) is valuable. And, if the caller decides to take complete control of the resource management, at least the `with-*` serves as a reasonable documentation for what needs to be done.</p>
+<p>But, I worry about a statement like:</p>
+<p>&#8220;The alternative is easy: don’t do it. Don’t try to “solve” resource management in every library&#8221;</p>
+<p>because there are some who will take this as gospel, and decide that this kind of abstraction needs to be done away with altogether.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.299 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:02:26 -->
+
+<!-- Compression = gzip -->

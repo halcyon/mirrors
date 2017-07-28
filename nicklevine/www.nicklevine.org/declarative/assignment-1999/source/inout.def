@@ -1,0 +1,187 @@
+DEFINITION MODULE InOut;
+
+(* (C) Copyright 1987,1988 Fitted Software Tools. All rights reserved. *)
+
+(*
+    This is the standard module InOut as defined in
+    "Programming in Modula-2" by Niklaus Wirth.
+
+    A few additionns were made to this modules, mainly
+    to add support for LONGINT and LONGCARD data types
+*)
+
+FROM SYSTEM     IMPORT WORD;
+FROM FileSystem IMPORT File;
+
+CONST
+    EOL = 36C;
+
+VAR
+    Done    :BOOLEAN;
+    termCH  :CHAR;
+
+(*
+    Done is set by the procedures
+        OpenInput, OpenOutput,
+        RedirectInput, RedirectOutput,
+        Read, ReadInt, ReadCard,
+        ReadLongInt, ReadLongCard,
+        ReadWrd, WriteWrd,
+    to indicate if the call was successful or not.
+*)
+
+
+PROCEDURE OpenInput( defext :ARRAY OF CHAR );
+(*
+    prompts the user for a file to redirect the input from.
+    if the last character in the input is a '.', defext is
+    appended to it.
+*)
+
+PROCEDURE OpenOutput( defext :ARRAY OF CHAR );
+(*
+    prompts the user for a file to redirect the input to.
+    if the last character in the input is a '.', defext is
+    appended to it.
+*)
+
+PROCEDURE RedirectInput( from :ARRAY OF CHAR );
+(*
+    redirects the input from file from.
+*)
+
+PROCEDURE RedirectOutput( to :ARRAY OF CHAR );
+(*
+    redirects the output to file to.
+*)
+
+PROCEDURE CloseInput;
+(*
+    the file opened with OpenInput or RedirectInput is closed
+    and the terminal is reestablished as the input device.
+*)
+
+PROCEDURE CloseOutput;
+(*
+    the file opened with OpenOutput or RedirectOutput is closed
+    and the terminal is reestablished as the output device.
+*)
+
+PROCEDURE Read( VAR ch :CHAR );
+(*
+    read a character
+*)
+
+PROCEDURE ReadString( VAR s :ARRAY OF CHAR );
+(*
+    read a string.
+    input is terminated by a ' ', or any control character except BS or DEL.
+    the terminating character is saved in termCH.
+    when reading from the terminal, editing of the input is available:
+        ASCII.BS deletes the last characted input
+        ASCII.DEL deletes all characters input
+        ASCII.ESC deletes all characters input and returns
+*)
+
+PROCEDURE ReadLine( VAR s :ARRAY OF CHAR );
+(*
+    read a line.
+    input is terminated by an EOL, EOF or ESC character.
+    the terminating character is saved in termCH.
+    when reading from the terminal, editing of the input is available:
+        ASCII.BS deletes the last characted input
+        ASCII.DEL deletes all characters input
+        ASCII.ESC deletes all characters input and returns
+*)
+
+PROCEDURE ReadInt( VAR x :INTEGER );
+(*
+    a string is read from the input device and is then converted to
+    an INTEGER.
+*)
+
+PROCEDURE ReadCard( VAR x :CARDINAL );
+(*
+    a string is read from the input device and is then converted to
+    a CARDINAL.
+*)
+
+PROCEDURE ReadWrd( VAR w :WORD );
+(*
+    read a WORD from the input file.
+    legal only if input is being redirected from a file.
+*)
+
+PROCEDURE Write( ch :CHAR );
+(*
+    write the character
+*)
+
+PROCEDURE WriteLn;
+(*
+    same as: Write( ASCII.EOL )
+*)
+
+PROCEDURE WriteString( s :ARRAY OF CHAR );
+(*
+    write the string out
+*)
+
+PROCEDURE WriteLine( s :ARRAY OF CHAR );
+(*
+    same as: WriteString( s ); WriteLn;
+*)
+
+PROCEDURE WriteInt( x :INTEGER; n :CARDINAL );
+(*
+    write the INTEGER right justified in a field of at least n characters.
+*)
+
+PROCEDURE WriteCard( x, n :CARDINAL );
+(*
+    write the CARDINAL right justified in a field of at least n characters.
+*)
+
+PROCEDURE WriteOct( x, n :CARDINAL );
+(*
+    write x in octal format in a right justified field of at least n characters.
+    IF (n <= 3) AND (x < 100H) THEN 3 digits are written
+    ELSE 6 digits are written
+*)
+
+PROCEDURE WriteHex( x, n :CARDINAL );
+(*
+    write x in hexadecimal in a right justified field of at least n characters.
+    IF (n <= 2) AND (x < 100H) THEN 2 digits are written
+    ELSE 4 digits are written
+*)
+
+PROCEDURE WriteWrd( w :WORD );
+(*
+    write w to the output file.
+    only legal when output is being redirected to a file.
+*)
+
+PROCEDURE ReadLongInt( VAR x :LONGINT );
+(*
+    a string is read from the input device and is then converted to
+    a LONGINT.
+*)
+
+PROCEDURE ReadLongCard( VAR x :LONGCARD );
+(*
+    a string is read from the input device and is then converted to
+    a LONGCARD.
+*)
+
+PROCEDURE WriteLongInt( x :LONGINT; n :CARDINAL );
+(*
+    write the LONGINT right justified in a field of at least n characters.
+*)
+
+PROCEDURE WriteLongCard( x :LONGCARD; n :CARDINAL );
+(*
+    write the LONGCARD right justified in a field of at least n characters.
+*)
+
+END InOut.

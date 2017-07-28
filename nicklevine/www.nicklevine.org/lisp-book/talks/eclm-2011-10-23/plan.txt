@@ -1,0 +1,1220 @@
+$Id: //info.ravenbrook.com/project/olb/master/site/talks/eclm-2011-10-23/plan.txt#1 $
+
+                      LOOKING AT THE BRIGHT SIDE
+	     Nick Levine, Ravenbrook Limited, 2011-05-16
+
+Notes for a talk to be presented at the European Common Lisp Meeting,
+Amsterdam, 2011-10-23.
+
+
+1. Summary
+
+In May 2009 O'Reilly agreed to publish a book about Common Lisp, and I
+agreed to write it. This is the story of what happened.
+
+
+2. Opening move
+
+Date:  Sat,  28 Mar 2009 07:32:48 EDT
+From:  Daniel Weinreb <dlw@alum.mit.edu>
+To:    ILC09 Attendees <ilc09-attendees@alu.org>
+Subject:   Is anybody looking to write a book about Lisp?
+
+Our sponsor, O'Reilley publishing, is interested in considering a
+proposal for a book about Lisp. If you are interested or know anyone
+who is, send mail to [... ]
+
+
+3. The O'Reilley website says "We're NOT looking for..."
+
+    [...]
+
+    Books on topics that have dismal sales despite quality books being
+    available. (If you're addressing a topic where good books have
+    sold dismally in the past (for instance, LISP, LaTeX, or Web-based
+    training), you have a much higher threshold to clear with your
+    proposal. Convince us why there is a revival of interest in your
+    topic, or why your approach to a deadly topic will provoke
+    interest nonetheless.)
+
+<http://oreilly.com/oreilly/author/writeforus_1101.html>
+
+
+4. Huh?
+
+Date:  Tue, 31 Mar 2009 16:42:00 EDT
+From:  Michael K. Loukides <mikel@oreilly.com>
+To:    Nick Levine <ndl@ravenbrook.com>
+
+> I'll probably have a number of questions for you then. However one
+> thing I'd particularly like to ask about right now is how this book
+> proposal might square with the (paraphrasing) "we're not looking for
+> books that have sold dismally in the past (for instance, LISP...)"
+> statement on the O'Reilly web site.
+
+Well, LISP books have a long history of dismal sales. If you want
+that data, I can produce it.
+
+I think there's reason to believe that's changing, particularly with
+the right book; LISP awareness has been growing for the past couple of
+years. Our Haskell book has outsold expectations; Erlang has obviously
+made a comeback; so there has been a relatively recent shift in the
+language map.
+
+[...]
+
+
+5. A lightning talk
+
+At the 2009 International Lisp Conference, Gerald Sussman, co-author
+of "Structure and Interpretation of Computer Programs", had given a
+lightning talk to explain why MIT no longer taught Scheme as the
+foundation of its introductory programming course. It all came down to
+libraries. Back in the mid 80s, programming problems such as you might
+pose for relative novices had been small, well-defined and
+self-contained (think: Towers of Hanoi); Scheme / SICP (*) were ideal
+instruments for introducing the reasoning skills that students needed
+for solving them. All that's changed now - if you want to "get real"
+these days then the interesting problems just don't exist in isolation
+from "library space" (think: trying to program a badly behaved robot
+arm, with a massive manual half of which is full of bugs and the other
+half is missing altogether). Sussman was instrumental in realising
+that MIT's course had to change with the times; as a side-effect of
+this change it just happened that the badly behaved robot arm which
+MIT acquired for the job was programmed in Python.
+
+* Structure and Interpretation of Computer Programs, by Abelson,
+  Sussman, and Sussman; MIT Press, 1984; ISBN 0-262-01077-1.
+
+
+6. Inspiration
+
+This got me thinking; now that the opportunity to write a lisp book
+for O'Reilly had come along it inspired my choice of topic. Much of
+what we do as programmers comes down to the libraries. Of course this
+problem is not just confined to Common Lisp. But I was led to ask -
+not for the fist time - but this time actually to start investigating:
+how well are we doing in our management of library space? how well
+would we like to do? how might we set about improvement? and who is
+this "we" anyway?
+
+
+7. Management of library space?
+
+Let me illustrate this with a bootstrapping problem:
+
+   I can't install or use a library I don't know about. I need, at the
+   very least, the names of those libraries which are candidates for
+   helping me address my difficulties. From a list of such names I can
+   go on to identify capabilities, dependencies, licenses, download
+   and install procedures, documentation; but if I don't have the name
+   of the library in front of me then I'm really not about to start
+   using it.
+
+I would come back to this conundrum later. Meanwhile, I had a book
+proposal to write.
+
+
+8. "Lisp Outside the Box"
+
+Common Lisp is all well and fine, but as-is it doesn't let you talk to
+anything other than the filesystem. My aim is to show people who
+suspected that Lisp is dead because it cannot look outside the box,
+along with those who hoped it could but didn't know how, that the
+going isn't all that hard. Although the book will introduce Common
+Lisp from scratch and give generous treatment to those features which
+make the language great, it isn't going to cover the whole thing or
+anything like it. I want to make lisp look easy and steer the novice
+away from the more complex edge cases.
+
+The core of the book will be a number of in-depth examples which
+between them thoroughly address the use of libraries whether or not
+these were written in Lisp. I plan to visit common, important
+utilities for dealing with persistence, threading, GUIs, system
+building and more. Examples will include: an end-user desktop
+application, a web server, and an introduction to getting Lisp working
+on a mobile phone.
+
+
+9. My goals
+
+  1. write a book about lisp suitable for publication by O'Reilly;
+
+  2. promote the use of lisp and convey my enthusiasm for it;
+
+  3. enjoy the work and use it to develop and grow as an individual.
+
+
+10. What the book was / was not
+
+* The message of this book was going to be:
+
+    You can do more or less "anything" in lisp, and here are some
+    examples.
+
+  and not:
+
+    Here's how to do everything.
+
+* No temptation to rework Graham or Seibel:
+
+    There are already enough lisp 101s, we don't need another.
+
+    These are great books but they talk about lisp as something that's
+    more or less self-contained. Like the lisp of the ANSI standard,
+    its ability to interact with the outside world is limited.
+
+    This is no longer a defensible position.
+
+* On the other hand, although I felt no obgliation to cover all of
+  Common Lisp, I still had to introduce the language. So (finger in
+  the air) about one third of the book devoted to lisp itself, the
+  rest on its libraries.
+
+    In retrospect, was introducing Common Lisp from scratch too much
+    of a burden on this book?
+
+* I was not going to let this become a research project (that was a
+  tough call).
+
+* I knew from the beginning that I'd have to deal with moving targets
+  and variable quality.
+
+* I thought it was very important to strike a neutral balance between
+  commercial and free lisps. Ditto between commercial and free
+  libraries.
+
+    The Introduction to Common Lisp would run equally on any
+    implementation, any platform.
+
+    For the rest of book: each block of chapters would more-or-less
+    focus on one implementation on one platform. There would be some
+    proprietary libraries alongside the proprietary implementations.
+
+* Should there be a single major running example? That would have been
+  nice, but I never came close to thinking one up.
+
+
+11. Apologies
+
+... in advance to all the library authors I mention(ed) along the
+way. I wasn't getting at anyone. The book didn't mention any library
+unless I thought it was fit for purpose, whatever the difficulties in
+deploying it. I could (maybe should?) single myself out for the same
+treatment. I thought SLIME was very good. I was less sold on ASDF.
+
+
+12. Contents
+
+  Parts 1 & 2 "Open the Box"  / "Inventory of the Box"
+
+  Early chapters were to introduce Common Lisp and be implementation
+  neutral.
+
+  Chapter 1: Preliminaries (written)
+
+    "Let's start with some practical issues: picking a Common Lisp
+    implementation, running it, coping when things go wrong, and
+    turning for help when coping is no longer an option."
+
+      MKL (Mike Loukides, my editor): There's a zillion slightly
+      different [implementations] to choose from. How am I supposed to
+      make a choice before I even know what the language is?
+
+     and
+
+      MKL: The plethora of Lisp implementations is *really* daunting.
+      Are there any we can squeeze out?
+
+    But I liked this chapter.
+
+  2: Basics (written)
+  3: Controls
+  4: Standard tools
+
+    (By which I meant: listener, debugger, inspector, editor)
+
+    Maybe if I'd ever got as far as writing this one I might have been
+    able to do something more inspiring to the SLIME piece that came
+    later?
+
+  5: I/O
+  6: Portable State
+  7: CLOS
+  8: Types
+  9: Hmm, maybe it's time we mentioned Lists
+
+    Experimentally, I wanted to try delaying any talk about lists for
+    as long as possible, namely until the chapter before macros. I
+    still think that might have been a good idea, but as I didn't
+    around to completing the experiment we may never know.
+
+  10: Programs as data
+  11: What Makes Great Lisp
+  12: What Makes Lisp Great
+
+
+  Part 3 "Libraries Inside the Box" (ACL / Windows)
+
+    "Most lisp implementations are accompanied by a rich set of
+    supplementary libraries. Although the aim of this book is to look
+    'outside the box', it's worth noting that the box is typically
+    larger than you'd think; so let's use a few of the libraries which
+    accompany one of the lisp distributions as our starting point."
+
+    (And the distribution in question was the Express Edition of ACL.)
+
+  13 & 14: Two chapters on Persistence (written)
+
+    Why did I decide to work with AllegroCache rather than an SQL
+    clone (this topic gets the briefest of mentions at the end)?
+    Because it's good example of a language extension which comes
+    "inside the box" for just one implementation.
+
+    MKL: You say that this is a proprietary library that ships with a
+    Lisp implementation, and that the code using it won't port to
+    other Lisps. That's a pretty big problem, isn't it?
+
+  15: Concurrency (written)
+  16: Memory (written - one of my better efforts, I reckon)
+
+
+  Part 4 "Libraries Outside the Box" (CCL / FreeBSD)
+
+  17: Image Processing (written)
+
+    Getting on for half this chapter was devoted to what I had to do
+    to get my hands on and build my chosen library, ch-image, together
+    with its dependencies. Fairly early on, I observed:
+
+      *****************************************
+      *                                       *
+      * There is no single central repository *
+      *      for listing Lisp libraries.      *
+      *                                       *
+      *****************************************
+
+    Did I really sneak this one past MKL? All I can imagine is, his
+    expectations from experience elsewhere can't have been high.
+
+    MKL: Hmmm. Package management by hand. Sort of 1980s, don't you
+    think? [...] I get really nervous around URLs with things like
+    display?id=95 in them.
+
+  18: SLIME (written)
+
+    As already noted: not my most inspired writing; SLIME deserved
+    better.
+
+  19: Systems (written)
+
+    Back then (2009), this meant ASDF and ASDF-INSTALL.
+
+    Did I really sneak this one past MKL? All I can imagine is, his
+    expectations from experience elsewhere can't have been high.
+
+    (Yes, I have said this more than once.)
+
+  20: Performance (written)
+
+    I chose to work with "the Metering System" - monitor.cl - fairly
+    easily ported to any implementation, but unmaintained since 1994
+    and definitely pre-ANSI. Did I make a poor call here? Is it good
+    to brag about how little effort it takes to run a 20-year-old
+    library? I thought this chapter worked out well; my editor
+    disagreed.
+
+    MKL: I don't know about this chapter--frankly, everything you're
+    telling me sounds like a good reason not to use lisp. The profiler
+    you talk to is out of date and hasn't been maintained in many
+    years; you've to to do a fair amount of your own hacking to it
+    just to get it to work with a modern implementation; it doesn't
+    provide a call tree (which has been standard in profilers since
+    the early 80s); etc. You sure this is the right message? This is
+    NOT going to make LISP sound like a good, modern programming
+    environment.
+
+  Part 5 "Server Boxes" (SBCL / Linux)
+
+  "Although we'll be working on Steel Bank Common Lisp (SBCL) you
+  might have some trouble spotting that. All the examples will be
+  shown within the SLIME REPL and we'll be using portable interface
+  layers for sockets and threading which hide implementation-specifics
+  from the programmer... All the libraries we'll be looking at here,
+  along with SBCL itself, are open-source and free to use."
+
+  21: Serving HTTP (written)
+
+    This chapter described a mod_lisp server. It's the best of the
+    bunch.
+
+    MKL: "I like the way you develop the server: starting with
+    something minimal and adding bits of functionality."
+
+    NDL: "Thanks. You're not the only person to say that. If I could
+    put the rest of the book together like that I would."
+
+  22: Parsing Input
+  23: Generating HTML
+  24: Hunchentoot
+
+  Part 6 "Gift-wraping the Box" (LW / Mac OS)
+
+  25: Desktop application
+  26: GUI development environments
+  27: Internationalization
+  28: World Building
+
+  Part 7 "Talking to Other Boxes" (platforms tbd)
+
+  29: Talking to C
+  30: RabbitMQ
+  31: Clojure
+
+  Appendices
+
+  A: Where to obtain everything mentioned in the book
+  B: The LLGPL
+
+
+13. Coverage
+
+In the third of the book that actually got written, I covered:
+
+  - libraries which in some form or another are present in all lisp
+    implementations
+
+  - an implementation-specific solution to a generic problem
+
+  - a library which together with its dependencies had to be manually
+    located and downloaded (that was then - it's all in quicklisp now
+    and so, to an extent, half of that chapter has become history);
+    for one lisp platform it needed either hand-holding or the wit to
+    pay close attention to platform-specifics on the library's web
+    site
+
+  - SLIME and ASDF: typically you have to (i) know they exist and (ii)
+    download them yourself
+
+  - as archaeology practice: a late 1980s library which predates the
+    ANSI spec but still has merit
+
+
+14. Making it happen
+
+* The trick is to work on it every day
+
+* Compose as text (Emacs), format it (DocBook) later
+
+* I started writing from the middle of the book (so that the earlier
+  chapters could be tailored to the needs of the later material). This
+  made the going difficult for my editor and I eventually broke off
+  and went back to the beginning.
+
+* 500 hours effort over 8 months generated a first draft of about one
+  third of the text.
+
+  My initial estimate of 1000 hours for the whole project was way
+  off.
+
+* Each chapter grew massively as I wrote it. Each one felt like it
+  could be a whole book in its own right - conversely fitting all that
+  material into 4000 words was something of a squeeze.
+
+* I had a faithful team of reviewers: regulars plus per-chapter
+  guests. Taking their magnificent comments on board was a
+  time-consuming process.
+
+* Sometimes I found it difficult to say positive things about the more
+  deranged quirks of some otherwise worthy libraries...
+
+
+15. Gripes
+
+My apologies if any of these are no longer valid, or if you plain
+disagree.
+
+  * AllegroCache leaked connections and cursors (they needed to be
+    freed explicitly).
+
+        AllegroCache connections are not automatically closed. The
+        result of calling db.ac:open-network-database is stored in
+        db.ac:*allegrocache* thus overwriting any previous value. If
+        you haven't stored that somewhere else, it'll leak: it's
+        consuming resources and you can't get them back. (Also, the
+        Express Edition only supports three open connections at a time
+        so this is one leak you can't afford.)
+
+  * AllegroCache connections were not thread-safe.
+
+  * SBCL binaries shipped without support for threads. I had to build
+    the whole thing from source to correct that - talk about "out of
+    the box experience"? SBCL didn't support threads on Windows.
+
+  * I sometimes found other people's argument conventions hard to
+    justify in print. In AllegroCache, db.ac:create-index-cursor takes
+    keywords :initial-value and :limit-value where (did I miss
+    something subtle?) I would have expected :start and :end. In
+    ch-image, the image data is generally refered to in row-major
+    order, y before x rather than what I think of as the more obvious
+    x before y:
+
+      (ch-image:get-pixel image y x)
+
+  * Error: Error while invoking #<ASDF:COMPILE-OP (:VERBOSE NIL)
+    222550F3> on #<ASDF:CL-SOURCE-FILE "foo">
+
+  * ASDF didn't understand Windows shortcuts at the time (this has
+    since been addressed).
+
+  * Before ASDF-INSTALL was finally (according to the CLiki)
+    obsoleted, if you wanted to use it on Windows you had to install
+    Cygwin first.
+
+  * There were hard-to-explain inconsistencies in timing reports
+    generated by the Metering System: a function which was reported at
+    the top of the stack 3% of the time before I started tinkering
+    ended up at the top of the stack 73% of the time, but I'd only
+    sped up the code by a factor of 5.
+
+
+16. Editorial matters
+
+* I was asked to reorganise my initial breakdown of about eight
+  chapters, so that each one would be shorter (and there'd be more of
+  them). This turned out to slow my writing down considerably, as I
+  frequently found the restrictions imposed by the grouping of subject
+  matter difficult to work with.
+
+* There was a 75 character limit in code chunks (time-consuming for me
+  to rearrange the code to fit; and the examples then swallowed up
+  more of my vertical space budget than I cared for).
+
+  In general, the O'Reilly page templates spat out a lot of whitespace
+  that I'd rather have been able to fill with ink.
+
+* US spelling. I now have a copy of Webster's on my desk. It lists
+  British variants too and it's got lots of nice pictures to jolly me
+  along.
+
+* Constraints of DocBook - like html but worse, it's hard to imagine
+  something less suited for describing the page layout of a techincal
+  book.
+
+* Stylistic issues, for example I was asked to use labelled
+  "exercises" where I would have preferred less intrusive in-text
+  questions:
+
+    "However running on indexed slots is faster and you should order
+     your expressions so that indexed values are tested first. (Why?)"
+
+
+17. Good news
+
+Date:  Mon, 13 Jul 2009 22:32:46 BST
+From:  Nick Levine <ndl@ravenbrook.com>
+To:    karens@oreilly.com
+Subject: Re: Processing your payment for Lisp
+
+Hi Karen,
+
+   Mike Loukides has authorized your first advance payment. I'm
+   curious which address should payment be sent to and should the
+   check be made to your name or to your company's name?
+
+Excellent, thanks.
+
+If you send me a US check I can frame it and hang it on the wall, but
+I won't be able to cash it. You can send a cheque in my name for the
+sterling equivalent to either address (I work at Ravenbrook and live
+on Pretoria Road, so am frequent visitors to both). Alternatively, you
+can pay by transfer to my bank account ...
+
+
+18. Framing it on the wall
+
+ <http://lisp-book.org/talks/eclm-2011-10-23/ora-check.jpg>
+
+
+19. Pleasing Everybody
+
+* The "Memory" chapter drew quite heavy fire from my reviewers - a
+  shame because I thought at the time it was quite good.
+
+* The "Bordeaux Threads" question: the chapter on concurrency fell
+  naturally into the ACL section and so I wrote about the ACL
+  threading library (as an example of proprietary libraries); some
+  readers disagreed with this.
+
+* Something of a rough ride on reddit.com/r/lisp/ (but I've since been
+  told I shouldn't take that to heart).
+
+
+20. Choosing a Cover
+
+    "I ask the authors to supply me with a description of the topic of
+    the book. What I am looking for is adjectives that really give me
+    an idea of the 'personality' of the topic. Authors are free to
+    make suggestions about animals, but I prefer to deal with
+    adjectives..."
+
+<http://oreilly.com/oreilly/author/ch05.html>
+
+I was still waiting for that particular phone call when this turned
+up:
+
+  To: Nick Levine <ndl@ravenbrook.com>
+  Subject: Fwd: Lisp Outside the Box Front Cover Approval Request
+  Date: Tue, 11 Aug 2009 10:03:28 -0400
+
+  Here's a draft of a cover. What do you think? I like the idea--an
+  emu is an out of the box animal, and it is outside the box.
+
+  Unfortunately, LISP itself is inside the box. That's how our covers
+  work, and I don't know if there's anything we can do about that.
+
+  Mike
+
+  Begin forwarded message:
+
+  > From: Karen Montgomery <karen@oreilly.com>
+  > Date: August 10, 2009 6:50:07 PM EDT
+  > To: Mike Loukides <mikel@oreilly.com>
+  > Cc: Edie Freedman <edie@oreilly.com>
+  > Subject: Lisp Outside the Box Front Cover Approval Request
+  >
+  > Hi Mike,
+  >
+
+  > Here's a front cover for review. The bird is a very cute "outside
+  > the box" Emu.
+  > We are in need of a tagline.
+  >
+  > karen
+
+
+<http://lisp-book.org/cover.png>
+
+
+21. Caption Competition
+
+So what might the tagline have been?
+
+* Enabling Libraries for Common Lisp
+
+* Modern Toolkits for a Venerable Language
+
+* Get Out There and Do Stuff
+
+* Searching for Weasel Words in the Soup of Tomorrow
+
+* Do not feed the emu
+
+
+
+22. Bad news
+
+Nine months into the project my rubbish state of health forced me to
+abandon being an O'Reilly author and all work on the book ceased. I
+had written eleven chapters (with another 20 to go).
+
+
+23. Creative Commons
+
+Everything I wrote is now available under a Creative Commons license,
+in the hope that it might be useful to somebody. Please regard this as
+constituting an ex-work in progress which I deserted overnight 21
+months ago: the writing, correcting and editing were uneven when I
+left off and, I regret, that's how they're going to stay. I was
+happier with some chapters (1, 16, 20 and in particular 21) and less
+so with some of the others (2 turned out less inspired than I expected
+it to; 18 reads like a laundry list).
+
+(At time of drafting this talk, the particular CC license in question
+is "Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported
+License", which is as restrictive as CC can get... But nobody's
+complained.)
+
+
+24. Is not writing a book really more interesting than what I actually
+wrote?
+
+
+  Blog entry                                    # blog replies
+                                               (not counting me!)
+
+I'm going to write a book                            11
+
+Chapter outline                                       7
+
+Things this book will not do                          6
+
+Common Lisp implementation for which                 24
+(eq 3 3) need not be true?
+
+Nomenclature: "Threads" or "processes"?               8
+
+Four chapters ready for public consumption            3
+
+Four more chapters ready for public consumption       2
+
+Common Lisp implementation which does not use         6
+ASCII encodings for the graphic standard-characters?
+
+I'm not going to write a book                        16
+
+Three final chapters; everything as PDF under         0 (so far)
+Creative Commons
+
+
+25. Defects
+
+And then there were all those "known problems" such as, but not at all
+limited to:
+
+- It might be out of date
+
+I was always standing on rapidly moving ground; some of the libraries
+I was writing about were undergoing major changes while I was sat
+there trying to write about them. There was no hope of doing anything
+about this until closer to publication date and that's now never going
+to happen. So please check that the version of the library which
+you're using bears any resemblance to the version I wrote about,
+before taking what I said about it too seriously.
+
+The obvious case in point here is quicklisp, which wasn't around when
+I was writing in 2009. (So I wrote about ASDF-INSTALL instead.) I'm
+almost glad that I _didn't_ complete a book that failed to mention
+quicklisp.
+
+More generally, this is of course not just our problem. Much as I
+personally really like working from physical books, the versatility of
+online publishing is the obvious way to keep up with volatile
+libraries. (Ebooks sell for less, but cost considerably less to
+distribute. It's unclear how this will affect the publishing business
+in the end.)
+
+
+- Symmetric Multiprocessing in Concurrency chapter
+
+This section really needed massive expansion. (At the time I was
+writing, there weren't any full implementations I could write
+about. "Some other implementations already provide symmetric MP,
+albeit with less sophisticated controls.") On the other hand, this
+chapter was already too long.
+
+
+- Dry examples, occasional lack of motivation, fuzzy screenshots
+
+Sounds like a call for a second draft, if I'd ever finished the first
+one.
+
+
+- PDF issues
+
+The PDF on the book's website was generated chapter by chapter. Each
+one claims to start at "page 1", and some of the references from one
+chapter to another are broken. These irritations would have vanished
+when the whole book was assembled.
+
+The hyphenation of symbols in code font is plain broken. O'Reilly said
+they'd fix that before publication.
+
+Page breaks sometimes strand the last one or two lines of a code
+example on a different page.
+
+
+- Omnipresent typos
+
+Philipp Marek and Ernst van Waning very kindly sent me a gratifying
+number of comments, mainly about wording, puncutation and layout. Some
+stylistic, others plain mistakes. It's amazing how many times I (and
+several other people) can stare at a body of text and not notice the
+typos.
+
+It's still riddled with errors, as I found out to my considerable
+annoyance while researching this talk.
+
+
+- Iteration - the lost chapter
+
+This chapter was originally going to include (non exhaustive list):
+AllegroCache's support for walking over instances of persistent
+classes; and Richard Waters' "series" package. I was looking forward
+to having an excuse to finally get my head round that. But I found
+while writing about AllegroCache that I had about 50% more material
+than I could fit into my budget of about 4000 words per chapter. So I
+took the decision to drop "Iteration" and merge the AC walking
+("Persistence with AllegroCache") material for that chapter into the
+overflow from 13 to create a new chapter 14 ("Further AllegroCache").
+
+This decision was probably a mistake - it was unbalanced to devote two
+chapters to a single topic when overall space was under such
+contention - and I intended to revisit it at the end of first draft.
+
+
+- Explicit use-package forms
+
+I prefixed example code in chapters 13-16 (AllegroCache; Concurrency;
+Memory) with use-package forms, so as to minimise the need for
+explicit package qualifiers. I wrote subsequent chapters the other
+way. In retrospect, package qualifiers are not a hindrance in the text
+and they do make the exposition much clearer. So, without implying
+anything detrimental about packages using each other in production
+code, I did intend that when I got the chance I would switch these
+four chapters over to work with explicit package qualifiers
+throughout.
+
+Thanks to Peter Lindahl and Rusty Johnson for keeping me sharp on this
+one.
+
+
+26. Back to my conundrum
+
+And finally: that little conundrum, outside the scope of a book
+writing project to address, along with my suggested solution to it.
+
+   *****************************************
+   *                                       *
+   * There is no single central repository *
+   *      for listing Lisp libraries.      *
+   *                                       *
+   *****************************************
+
+There isn't even anywhere obvious to go to that warns me that there
+is no single central repository for Lisp libraries. There might be
+places which list such repositories as we have, but these places
+aren't listed themselves listed anywhere obvious - for no such
+obvious place exists - and so I haven't got anywhere closer.
+
+If I were new to the game I'd be tempted to use a search engine at
+this point. Google for "lisp libraries" and if I were lucky I might
+come up with this list of repositories:
+
+  - Common Lisp wiki (the CLiki)
+
+  - Common Lisp Directory
+
+  - Common-Lisp.net Projects
+
+... but I might have to work hard to get to all of them. For
+example, last time I tried the above search (on 2011-09-03), the top ten
+hits I got were:
+
+  - Quicklisp library manager
+
+  - a brief and somewhat out of date forum entry
+
+  - an essay by Dan Weinreb covering similar ground to this
+    <http://ilc2009.scheming.org/node/8>
+
+  - CLiki
+
+  - a blog entry on library standards
+
+  - Lispy library manager
+
+  - some Emacs Lisp documentation
+
+  - A bunch of emacs libraries in use by the Maths Dept at Cambridge
+
+  - one contributor's personal and not-very-long library list
+
+  - A sparse, albeit upbeat, listing on Wikibooks
+
+The entry for the CLiki reads:
+
+   CLiki : library
+   Use a more specific topic marker. If you see any pages listed
+   below, please categorize them appropriately! Quicklisp is a good
+   way to get lisp libraries. ...
+   www.cliki.net/library - Cached - Similar
+
+I don't know how much of an inducement that would be for me to click
+through, if I hadn't heard of this site before.
+
+In case anyone wants to keep score, it happens that a fuller answer
+can be scavenged from the guts of "the brief and somewhat out of
+date forum entry". Maybe I wasn't to know that. Certainly I wouldn't
+get to find out without clicking through first. Once there, because
+the names of the repositories don't reflect either their uses or
+usefulness, I'd have to click through again to find out what they
+were. And hopefully I wouldn't follow the blog's link to Mudballs
+and get put off altogether...
+
+  <http://mudballs.com/>
+
+Is this the point at which I bail out (hopefully not from my lisp
+project altogether) and just use Google to hunt directly for the
+library I wanted? Why not cut out the middle man? Well, that's
+certainly one option, and one that I can't deny actually having used
+myself fairly often. I'd like to take it as a given however, that we
+can improve on trusting a blind search engine, and that it benefits
+both us and Common Lisp in general for us to do so.
+
+Suppose maybe I got lucky and hit some combination of the three
+repositories listed above. Where would that lead me? In reverse
+order of usefulness (to the hunter-for-libraries, that is):
+
+   3. Common-Lisp.net Projects  <http://common-lisp.net/projects.shtml>
+
+   Hosting/redirecting site for over 400 projects (plus mailman
+   facilities for about 80% of them). Most but not all of the
+   projects (for example, not the CDR) are libraries. They're listed
+   alphabetically. In some cases I can tell from the name
+   (e.g. cl-pdf) roughly what a library is about, in others (claw?
+   cleric? cloud?) the meaning is less plain and I have to click
+   through to discover anything. There's no immediate way to tell
+   whether anything is listed here but nowhere else, and so it's
+   unclear how important it is for would-be hunters-for-libraries to
+   visit the site. In general though, I'd say that any document that
+   suggests this site can be used for _locating_ libraries is
+   probably in error.
+
+   2. Common Lisp Directory  <http://www.cl-user.net/>
+
+   Lists five or six hundred libraries (I got different numbers off
+   different pages and the distinction between them wasn't
+   apparent). Some but by no means all of the listings point to
+   hosting on common-lisp.net, and the extent of overlap or
+   otherwise in either direction would be a matter of further
+   research.
+
+   Thankfully there is a breakdown of libraries by subject (25
+   "topics"), and if I have the courage to keep clicking through
+   I'll eventually come to subject-related lists with brief (but
+   sometimes auto-chopped) descriptions.
+
+   1. Common Lisp wiki (CLiki)  <http://www.cliki.net/>
+
+   The best of the lot? A well-stocked list of "Free Software Lisp
+   libraries" by subject and with brief descriptions which are less
+   pervasively chopped than in the Directory. Because the topic
+   lists are generated automatically by the wiki they have something
+   of a clunky look. I can't immediately tell how many libraries are
+   listed here, and again the extent of overlap is unclear (indeed,
+   I can't really say from looking at them what if any the intended
+   difference is between the Directory and the CLiki).
+
+   Incidentally, "free" here means the Debian Free Software
+   Guidelines. I have no way to tell the extent if any to which this
+   requirement has restricted otherwise useful libraries from being
+   listed here. There are precisely two libraries listed under the
+   non-free tag; I can't help feeling that many more may have been
+   put off and so aren't listed at all.
+
+   Two other features of note:
+
+    - the CLiki lists 30 or so "Current recommended libraries":
+
+	"The libraries on this page are considered 'good enough for
+	government use', and serve as a starting point when looking
+	for a library covering a given field."
+
+    - the CLiki carries a prominent link to Planet Lisp, that
+      essential clearing house of announcements worth scanning
+      occasionally for (inter alia) library releases which look as
+      if they might turn out to be useful one day. I send myself
+      little emails when a good one comes up. Effectively, I've been
+      maintaining my own private library listing; ahh, don't I trust
+      the real ones?
+
+Suppose I've trawled the CLiki and the Directory (and skimmed
+common-lisp.net) for the libraries I seek. How do I know whether the
+list I came up with is complete, or whether I missed stuff out? How
+do I know which of these library listings are up to date and which
+point to projects that are totally moribund?
+
+Multiple solutions to a single problem are seen as one of the
+hallmarks of lisp at the language level, and this has managed to carry
+itself - to our benefit, I believe - over to a plethora of
+implementations. But I'd argue that the "multiple solutions"
+philosophy isn't serving us well here: what we need is one good one.
+
+So here's my proposal:
+
+   We should converge on one (and only one) Repository of Common Lisp
+   Library Listings. It should be obviously named, readily located,
+   generously linked to by implementations and other "meta sites". It
+   should be maintained to a professional standard: de facto it should
+   become everyone's point of entry to the system.
+
+Notes:
+
+  - I'm not saying anything about where the bytes are hosted, as I
+    don't imagine that matters so much (in the sense that there are
+    already several perfectly workable solutions to this, for
+    example but not restricted to hosting at common-lisp.net or
+    alu.org). What counts is access to information.
+
+  - The point about "readily located" is that people should be able
+    to stumble across the site and then remember how easy it was to
+    find it, alongside other material of similar massive usefulness
+    (such as lists of implementations with download links, white
+    papers on how wonderful Common Lisp is, CDRs and proposals for
+    CLtL-n, local lisp groups and conferences, and so on in a long
+    and splendid list).
+
+    I'd like it to be something like http://lisp.org/library/
+
+    Indeed, the domain lisp.org surely has better uses than a
+    synonym for the Association of Lisp Users homepage and this has
+    to be one of them. But be advised that, for better or worse, the
+    remit of the ALU is "broad spectrum" across the whole lisp
+    family. So to those in the know, the above URL is required to
+    suggest Scheme and elisp as well as Common Lisp libraries - not
+    the most practical combination when you're out hunting for a
+    particular library to merge into your existing CL application.
+
+    For my money:
+
+       The ALU should be encouraged either to put lisp.org to better
+       use, or to hand it over to another group which shows itself
+       more able to the task, even if that group chooses to restrict
+       the domain to Common Lisp.
+
+  - "Generously linked": there's a small bunch of high-level
+    meta-solutions - such as the Hyperspec, SLIME, quicklisp and (I
+    hope) this Repository - over which it would serve us well to come
+    to general agreement and which ought to be plugged very
+    broadly. Implementations could come with prepackaged support for
+    quicklisp; their websites should always promote an IDE (and if
+    they don't supply a GUI themselves then the IDE should default to
+    SLIME); I imagine they'll all want to point to some version of the
+    CL specification. If the Repository is any good, shouldn't these
+    sites all want to give prominent mention to that too?
+
+  - I'll come back to the "professional" bit later. My point for now
+    is that semi-automatically assembled sites are great for getting
+    ideas off the ground rapidly (witness their success for the
+    CLiki and the Directory) but they don't leave a great impression
+    of maturity, reliability, elegance, standards of care. Also, a
+    manually maintained list can choose to advertise libraries of
+    particular worth, to give some libraries greater prominence than
+    others (so I might go shopping for a matrix processing library
+    but also come home with a copy of SLIME, which perhaps I hadn't
+    known about before).
+
+  - This is one place where we will serve ourselves really well if we
+    go out of our way to do it better. If there were going to be just
+    one part of our act which we cleaned up, I'd argue for this to be
+    it.
+
+So let's dream on and suppose that all this has happened, that it's
+become really easy to find the true, one-and-only, utterly complete
+list of Common Lisp libraries. What next? I've already suggested my
+next bugbear - unadorned alphabetical lists - whence:
+
+   The libraries should be grouped by task.
+
+   - There's nothing wrong with multiple ways to access the library
+     lists. Sometimes alphabetical is what you wanted, often it's
+     not. Some thought might go into tagging and into tuning search
+     facilities (I started at the CLiki's CL-PPCRE page and typed
+     the word "regexp" into the search box; of the 17 hits I got
+     back none of them said CL-PPCRE).
+
+And then we come down to some per-library nitty-gritty:
+
+   The following information should be available, as uniformly as
+   possible (which might not be very, given the provenances of the
+   different libraries).
+
+   - Ideally for each entry both a one line description, a short
+     introductory paragraph, and a direct link into documentation.
+     (It's outside the scope of this proposal to require that
+     documentation should always be available without the need to
+     download and unpack a tarball first; but really that ought to
+     be the case even though in worryingly many cases it isn't).
+
+   - Technical restrictions and requirements (it only works on Linux,
+     it won't work on FrobCL, it's an extension to cl-foo,...) are
+     fine but must be stated clearly.
+
+   - Licensing and acquisition restrictions. Some libraries will be
+     free, with various different notions of "free", and others
+     won't. That's life and we should accept it. It's important to
+     list them all. (Example: the CLiki doesn't list the CAPI,
+     LispWorks' proprietary windowing library. Granted it's not in
+     any sense "free", but it does have many happy users and it
+     really should be listed in the Repository, albeit clearly
+     marked as an integral part of a single commercial CL
+     implementation.)
+
+   - How to download, install, resolve dependencies. There's been
+     considerable effort and some excellent progress in this area
+     recently, for example: LibCL (moribund?), mudballs (ditto?),
+     ASDF-install (likewise?), Quicklisp (the current winner!),
+     clbuild, XCVB, ... Some libraries, for whatever reason, will
+     only be available the "old way" and this should be supported.
+
+     <http://common-lisp.net/project/lispy/versus.html>
+
+     Incidentally, the library managers (e.g. Quicklisp) should be
+     encouraged to provide links from their website entries back
+     into these ones, so when you look down their listings it's
+     possible to discover what you're looking at without having to
+     hit a serarch engine first.
+
+     Footnote: library managers which work through a central
+     Registry are great when you're prototyping but for solid
+     application delivery they need also to support extraction from
+     the Registry.
+
+     - If you're co-working then you and your colleagues need to
+       know you're all working on precisely the same versions of
+       every library you use.
+
+     - When you ship source to your customer you may also want to
+       include the source of all the libraries you bundled. So if
+       the customer wants to rebuild that particular version of your
+       application two years from now they'll be able to do so
+       without having to resort to archive.org to locate versions of
+       the libraries that will actually work with it.
+
+     So an invocation which says: "locate, download, compile and load
+     the source and recursively all dependencies for library foo" is a
+     real gift, but we need to add to it the opportunity to "copy into
+     this directory a snapshot of the files you just compiled" (or
+     something functionally equivalent).
+
+   - As far as possible the above information should be available
+     within the Repository itself, so you don't have to wait for
+     SourceForge on a slow day just so you can answer one of the
+     above questions. Much of it will be on a single page (the
+     listing of libraries covering a single topic), so you don't
+     have to keep clicking through just to access basic information.
+
+   - Submissions should be reviewed by the site maintainer(s) and
+     edited as appropriate to ensure evenness.
+
+   - There'd be nothing wrong with some editorial guidance comparing
+     offerings which appear to be multiple solutions to the same
+     problem. Certainly, some level of quality control is needed,
+     and the following measures might be useful to people: is the
+     library an experiment in progress or regarded as a finished
+     piece of work? is it actively maintained or acutely dead? how
+     long ago was it released, or last patched (and does that long
+     interval tell us the library's been abandoned, or that it was
+     always too perfect to be improved upon)? what do users think of
+     it?
+
+As you can see, this has become quite a long laundry list. The task of
+implementing it would be time consuming, sometimes dull and possibly
+fairly thankless as some unlucky victim repeatedly exposed themselves
+to the ire of disgruntled library creators. I don't suppose it'll
+appear on anyone's personal agenda, nor am I under any illusions about
+it magically happening, just because I stood up and suggested it.
+
+This is where the "professional" bit I mentioned before comes back
+in. I firmly believe somebody (not me!) should be paid to do this
+work, to put in the hours required to implement a Common Lisp Library
+Repository to the standard that I claim we need of it. I can imagine
+this site taking up some months of somebody's time to establish, with
+part-time but long-term effort needed to maintain it into the
+future. I don't see why anyone should have to go hungry while they're
+doing it.
+
+This is quite a radical suggestion. As a community, employing people
+is not something we're used to doing. It raises very real questions as
+to our collective identity in the first place. It's one thing to roll
+up (for instance) to an excellent day of talks on Common Lisp, and by
+the evening each of us might generously feel part of something
+bigger. But as sense of community goes that's not enough to employ
+somebody and put them to work. So maybe we can't embark on this
+without first saying: this is who we are, what we want, and how much
+we want it.
+
+In practical terms: an agenda has to be fixed (and I dare say that
+when all's said and done it won't totally coincide with mine);
+sources of funding have to be identified; money has to be raised; a
+worker has to be hired and managed. Can we do all this? Do we want
+to do it? And as I asked before, who is this "we" anyway?
+
+At this point, it's worth examining the position of the Association of
+Lisp Users in this context.
+
+  - Involvement in this project would be within the ALU's remit (the
+    first line of its three part mission reads: "provide
+    high-quality information about Lisp" and this certainly
+    qualifies).
+
+  - The ALU actually has some money put by (I'd estimate that it's
+    got something on the rough order of USD 20k in the bank) but
+    that's probably earmarked for underwriting their conferences and
+    so mustn't be relied upon.
+
+  - The ALU has experience in raising money, by both occasionally
+    setting conference rates high enough to turn a nice profit, and
+    raising cash directly from its website in the form of individual
+    memberships and corporate sponsorships.
+
+  - The ALU also has some limited experience in hiring and managing
+    a consultant (that would have been me) to get work done for
+    them.
+
+  - On the other hand, many people (myself included) would have real
+    difficulty trusting the ALU with a used paper bag. Their track
+    record for implementing anything in finite time is abysmally
+    poor; speaking as a past ILC organiser I suspect that there's a
+    strong sense in which the conferences get to happen in spite of
+    the ALU rather than because of it. I have tried to figure out
+    what else the ALU might have achieved over, say, the last decade
+    but I couldn't find anything more significant than minor
+    sponsorship of a small number of lisp meetings.
+
+  - Influencing the nature of the ALU would be difficult. It's
+    governed by a board much of whose membership is entrenched (of the
+    eight people currently involved, five have been on the board since
+    2005 and of those, three since before the 2002 ILC). The board
+    receives external direction at the "general meetings" held at ILCs
+    - next one Kyoto in late 2012 - but its track record is that this
+    direction never subsequently ammounts to anything, i.e. it's
+    effectively ignored. Nothing changes.
+
+Finally, I have to mention Nikodemus Siivola's recent success over the
+summer with crowdfunding for SBCL development. If anyone has the
+personal inspiration to put themselves forward for crowdfunded work on
+a Common Lisp Library Repository then I wish them every success.
+
+In summary, what have I said? I have:
+
+  - identified the need for a quality Repository of Common Lisp
+    libraries;
+
+  - suggested standards to which this Repository might be
+    implemented;
+
+  - started to struggle with how one might set about bribing
+    somebody to put in the effort all this would take; and
+
+  - asked deep questions about our identity as a Common Lisp
+    community.
+
+Finally: Brave New Solutions for the ailments of Common Lisp do get
+suggested from time to time and this is by no means the first. The
+worthiness of a proposal has never been a guarantee for survival
+(where, oh where, are the Gardeners now?). What makes this one any
+more likely to succeed?
+
+
+27. What did all my work achieve?
+
+I still think there's a space for something akin to the book I was
+trying to write. But maybe not under the constraints of it being an
+O'Reilly book. (O'Reilly need to print it on squashed trees and make a
+profit. That's a major constraint on both them and the author, even
+before we get onto such niceties as DocBook, or material becoming out
+of date in the gap between writing about it and going to press.)
+
+
+28. The last word
+
+Date:  Thu, 23 Jul 2009 12:23:51 EDT
+From:  Kenneth Tilton <kentilton@gmail.com>
+To:    Nick Levine <ndl@ravenbrook.com>
+Subject: Re: go, nick, go!
+
+Look at the bright side: if it's a flop we'll be talking about the
+Lisp "Levine winter" for the next two decades.
+

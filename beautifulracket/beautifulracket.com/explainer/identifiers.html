@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/explainer/identifiers.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:46:55 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Identifiers</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#explainers">explain­ers</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;identifiers&quot;)"></div><h1 anchor="identifiers" id="identifiers" hyphens="none">Identifiers</h1></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_uHRjT&quot;)"></div><p id="a_uHRjT">An <em>iden­ti­fier</em> is a name that appears in a pro­gram. The mean­ing of the name is deter­mined by the iden­ti­fier’s <a class="glossary" href="../appendix/glossary.html#binding"><span class="glossary-link-text">bind­ing</span></a>, which is an asso­ci­a­tion between an iden­ti­fier and some other item—e.g., a spe­cific value, a <a class="glossary" href="../appendix/glossary.html#function"><span class="glossary-link-text">func­tion</span></a>, a <a class="glossary" href="../appendix/glossary.html#macro"><span class="glossary-link-text">macro</span></a>, or another iden­ti­fier.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_RLwdB&quot;)"></div><p id="a_RLwdB">An iden­ti­fier with a bind­ing is also known as a <em>vari­able</em>:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_XujFa&quot;)"></div><div class="highlight-container" id="a_XujFa"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">(define prometheus "I am bound, ergo I am a variable")<br/>prometheus</div><div class="highlight" form="false" id="a_J2jSr"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="source"><pre><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">prometheus</span> <span class="s2">"I am bound, ergo I am a variable"</span><span class="p">)</span>
+<span class="n">prometheus</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_nNYKU&quot;)"></div><div class="highlight-container" id="a_nNYKU"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">"I am bound, ergo I am a variable"</div><div class="highlight" form="false" id="a_X7ncd"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>"I am bound, ergo I am a variable"
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_f68gO&quot;)"></div><p id="a_f68gO">An iden­ti­fier with­out a bind­ing is called an <em>unbound</em> iden­ti­fier. A Racket pro­gram can­not run unless every iden­ti­fier has a bind­ing, so this is a phrase com­monly seen in error mes­sages:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Wu7Hb&quot;)"></div><div class="highlight-container" id="a_Wu7Hb"><div id="code_45" form="false" decode="exclude" style="font-size:0;width:0;height:0">atlas</div><div class="highlight" form="false" id="a_eIMWO"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre><span class="n">atlas</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk2" data-clipboard-target="#code_45" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_r1idW&quot;)"></div><div class="highlight-container err" id="a_r1idW"><div id="code_46" form="false" decode="exclude" style="font-size:0;width:0;height:0">atlas: unbound identifier in module in: atlas</div><div class="highlight" form="false" id="a_fUMfJ"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>atlas: unbound identifier in module in: atlas
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk3" data-clipboard-target="#code_46" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;naming-requirements-and-conventions&quot;)"></div><h3 anchor="naming-requirements-and-conventions" class="subhead" id="naming-requirements-and-conventions"><a href="#naming-requirements-and-conventions">Nam­ing require­ments &amp; con­ven­tions</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_2SUdG&quot;)"></div><p id="a_2SUdG">An iden­ti­fier can be writ­ten with any Uni­code char­ac­ters, except white­space and the fol­low­ing reserved char­ac­ters:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_C6EUs&quot;)"></div><div class="highlight-container" id="a_C6EUs"><div id="code_47" form="false" decode="exclude" style="font-size:0;width:0;height:0">( ) [ ] { } " , ' ` ; # | \</div><div class="highlight" form="false" id="a_JFAdM"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>( ) [ ] { } " , &#39; ` ; # | \
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk4" data-clipboard-target="#code_47" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_S25j1&quot;)"></div><p id="a_S25j1">Also, num­bers can­not be used as iden­ti­fiers:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_6oF51&quot;)"></div><div class="highlight-container" id="a_6oF51"><div id="code_48" form="false" decode="exclude" style="font-size:0;width:0;height:0">(define 42a "value") ; ok, though possibly confusing<br/>(define 42 "value")  ; not ok: bad-syntax error</div><div class="highlight" form="false" id="a_vuus5"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="source"><pre><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">42a</span> <span class="s2">"value"</span><span class="p">)</span> <span class="c1">; ok, though possibly confusing</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="mi">42</span> <span class="s2">"value"</span><span class="p">)</span>  <span class="c1">; not ok: bad-syntax error</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk5" data-clipboard-target="#code_48" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_LVwsT&quot;)"></div><p id="a_LVwsT">By con­ven­tion, iden­ti­fiers are typ­i­cally writ­ten in low­er­case, with hyphens between words:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_s6o13&quot;)"></div><div class="highlight-container" id="a_s6o13"><div id="code_49" form="false" decode="exclude" style="font-size:0;width:0;height:0">lowercased<br/>lowercased-with-hyphens</div><div class="highlight" form="false" id="a_yMUjU"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="source"><pre><span class="n">lowercased</span>
+<span class="n">lowercased-with-hyphens</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk6" data-clipboard-target="#code_49" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ed3hL&quot;)"></div><p id="a_ed3hL">Nam­ing styles com­mon in other lan­guages are not syn­tac­ti­cally wrong in Racket, but they’re also not idiomatic:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_UW3jm&quot;)"></div><div class="highlight-container" id="a_UW3jm"><div id="code_50" form="false" decode="exclude" style="font-size:0;width:0;height:0">Capitalized ; no<br/>lowercased_with_underscores ; no<br/>Title-Cased ; no<br/>CamelCased ; hell no</div><div class="highlight" form="false" id="a_jxjRj"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="source"><pre><span class="n">Capitalized</span> <span class="c1">; no</span>
+<span class="n">lowercased_with_underscores</span> <span class="c1">; no</span>
+<span class="n">Title-Cased</span> <span class="c1">; no</span>
+<span class="n">CamelCased</span> <span class="c1">; hell no</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk7" data-clipboard-target="#code_50" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_E12Dq&quot;)"></div><p id="a_E12Dq">Cer­tain classes of func­tions have rec­om­mended nam­ing con­ven­tions. See <a href="functions.html#naming-conventions">Func­tions</a>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;making-bindings&quot;)"></div><h3 anchor="making-bindings" class="subhead" id="making-bindings"><a href="#making-bindings">Mak­ing bind­ings</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_O3xx5&quot;)"></div><p id="a_O3xx5">Iden­ti­fier bind­ings can be cre­ated three ways:</p></div><ol><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_HnIWI&quot;)"></div><p id="a_HnIWI">With an explicit bind­ing form like <a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a>, <a href="http://docs.racket-lang.org/reference/let.html#(form._((lib._racket/private/letstx-scheme..rkt)._let))" class="docs" hyphens="none">let</a>, or <a href="http://docs.racket-lang.org/reference/lambda.html#(form._((lib._racket/private/base..rkt)._lambda))" class="docs" hyphens="none">lambda</a>. These bind­ings will over­ride (aka <em>shadow</em>) exist­ing bind­ings out­side the form:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_pfws1&quot;)"></div><div class="highlight-container" id="a_pfws1"><div id="code_51" form="false" decode="exclude" style="font-size:0;width:0;height:0">(define x 42)<br/>x ; 42<br/><br/>(define y 100)<br/>(let ([y 42])<br/>  (+ x y)) ; 84 (not 142)<br/><br/>(define z 1000)<br/>(define f (lambda ([z 42]) (+ x y z)))<br/>(f) ; 184 (not 1142)</div><div class="highlight" form="false" id="a_DPzxD"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="source"><pre><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">x</span> <span class="mi">42</span><span class="p">)</span>
+<span class="n">x</span> <span class="c1">; 42</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">y</span> <span class="mi">100</span><span class="p">)</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/let.html#(form._((lib._racket/private/letstx-scheme..rkt)._let))" class="docs" hyphens="none">let</a></span> <span class="p">([</span><span class="n">y</span> <span class="mi">42</span><span class="p">])</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span> <span class="n">x</span> <span class="n">y</span><span class="p">))</span> <span class="c1">; 84 (not 142)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">z</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">f</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/lambda.html#(form._((lib._racket/private/base..rkt)._lambda))" class="docs" hyphens="none">lambda</a></span> <span class="p">([</span><span class="n">z</span> <span class="mi">42</span><span class="p">])</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span> <span class="n">x</span> <span class="n">y</span> <span class="n">z</span><span class="p">)))</span>
+<span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="c1">; 184 (not 1142)</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk8" data-clipboard-target="#code_51" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_hNNez&quot;)"></div><p id="a_hNNez">By import­ing bind­ings from another mod­ule with a form like <a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a>. Bind­ings within the mod­ule will shadow imported bind­ings:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_yPPmy&quot;)"></div><div class="highlight-container" id="a_yPPmy"><div id="code_52" form="false" decode="exclude" style="font-size:0;width:0;height:0">(module mod1 br<br/>  (define foo "zim")<br/>  (provide foo))<br/>(require (submod "." mod1))<br/><br/>foo ; "zim"<br/><br/>(module mod2 br<br/>  (define bar "zam")<br/>  (provide bar))<br/>(require (submod "." mod2))<br/><br/>(define bar "bang")<br/>bar ; "bang" (not "zam")</div><div class="highlight" form="false" id="a_1nJn0"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="source"><pre><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((quote._~23~25kernel)._module))" class="docs" hyphens="none">module</a></span> <span class="n">mod1</span> <span class="n">br</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">foo</span> <span class="s2">"zim"</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="n">foo</span><span class="p">))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._submod))" class="docs" hyphens="none">submod</a></span> <span class="s2">"."</span> <span class="n">mod1</span><span class="p">))</span>
+
+<span class="n">foo</span> <span class="c1">; "zim"</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((quote._~23~25kernel)._module))" class="docs" hyphens="none">module</a></span> <span class="n">mod2</span> <span class="n">br</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">bar</span> <span class="s2">"zam"</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="n">bar</span><span class="p">))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._submod))" class="docs" hyphens="none">submod</a></span> <span class="s2">"."</span> <span class="n">mod2</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">bar</span> <span class="s2">"bang"</span><span class="p">)</span>
+<span class="n">bar</span> <span class="c1">; "bang" (not "zam")</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk9" data-clipboard-target="#code_52" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_uMlnC&quot;)"></div><p id="a_uMlnC">But an error will arise if two imported mod­ules <span class="my-code" decode="exclude">provide</span> bind­ings for the same iden­ti­fier:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_i7IOE&quot;)"></div><div class="highlight-container" id="a_i7IOE"><div id="code_53" form="false" decode="exclude" style="font-size:0;width:0;height:0">(module mod1 br<br/>  (define foo "zim")<br/>  (provide foo))<br/>(require (submod "." mod1))<br/><br/>(module mod2 br<br/>  (define foo "zam")<br/>  (provide foo))<br/>(require (submod "." mod2))<br/>;; error: identifier `foo` imported twice</div><div class="highlight" form="false" id="a_PUTpH"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="source"><pre><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((quote._~23~25kernel)._module))" class="docs" hyphens="none">module</a></span> <span class="n">mod1</span> <span class="n">br</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">foo</span> <span class="s2">"zim"</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="n">foo</span><span class="p">))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._submod))" class="docs" hyphens="none">submod</a></span> <span class="s2">"."</span> <span class="n">mod1</span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((quote._~23~25kernel)._module))" class="docs" hyphens="none">module</a></span> <span class="n">mod2</span> <span class="n">br</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">foo</span> <span class="s2">"zam"</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="n">foo</span><span class="p">))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._submod))" class="docs" hyphens="none">submod</a></span> <span class="s2">"."</span> <span class="n">mod2</span><span class="p">))</span>
+<span class="c1">;; error: identifier `foo` imported twice</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpka" data-clipboard-target="#code_53" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_37sBs&quot;)"></div><p id="a_37sBs">By mak­ing new bind­ings with a macro. Macros can attach bind­ings to exist­ing iden­ti­fiers, or cre­ate a new iden­ti­fier and its bind­ing.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_iTnbJ&quot;)"></div><div class="highlight-container" id="a_iTnbJ"><div id="code_54" form="false" decode="exclude" style="font-size:0;width:0;height:0">(define-macro (define-as-42 ID)<br/>  #'(define ID 42))<br/>(define-as-42 foo)<br/>foo ; 42<br/><br/>(define-macro (define-bar-as-42)<br/>  (with-shared-id (bar)<br/>    #'(define bar 42)))<br/>(define-bar-as-42)<br/>bar ; 42</div><div class="highlight" form="false" id="a_cDp37"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="source"><pre><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/define..rkt)._define-macro))" class="docs" hyphens="none">define-macro</a></span> <span class="p">(</span><span class="n">define-as-42</span> <span class="n">ID</span><span class="p">)</span>
+  <span class="o">#&#39;</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">ID</span> <span class="mi">42</span><span class="p">))</span>
+<span class="p">(</span><span class="n">define-as-42</span> <span class="n">foo</span><span class="p">)</span>
+<span class="n">foo</span> <span class="c1">; 42</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/define..rkt)._define-macro))" class="docs" hyphens="none">define-macro</a></span> <span class="p">(</span><span class="n">define-bar-as-42</span><span class="p">)</span>
+  <span class="p">(</span><span class="n">with-shared-id</span> <span class="p">(</span><span class="n">bar</span><span class="p">)</span>
+    <span class="o">#&#39;</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">bar</span> <span class="mi">42</span><span class="p">)))</span>
+<span class="p">(</span><span class="n">define-bar-as-42</span><span class="p">)</span>
+<span class="n">bar</span> <span class="c1">; 42</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkb" data-clipboard-target="#code_54" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></li></ol><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;scope&quot;)"></div><h3 anchor="scope" class="subhead" id="scope"><a href="#scope">Scope</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_P220T&quot;)"></div><p id="a_P220T">Every iden­ti­fier bind­ing has a <a class="glossary" href="../appendix/glossary.html#scope"><span class="glossary-link-text">scope</span></a> that deter­mines where in the pro­gram the bind­ing is vis­i­ble. Out­side that scope, the bind­ing won’t work. The scope of a bind­ing depends on how &amp; where the iden­ti­fier is intro­duced. The three most com­mon options:</p></div><ol><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_we6ET&quot;)"></div><p id="a_we6ET">Expres­sion scope: a bind­ing cre­ated within another expres­sion is only vis­i­ble within that expres­sion (and it can be shad­owed within that expres­sion):</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_afbbH&quot;)"></div><div class="highlight-container" id="a_afbbH"><div id="code_55" form="false" decode="exclude" style="font-size:0;width:0;height:0">(define (get-bar)<br/>  (define bar 42)<br/>  (let ([bar 92])<br/>    bar))<br/><br/>(get-bar) ; 92<br/>bar ; error: unbound identifier</div><div class="highlight" form="false" id="a_kwIZI"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="source"><pre><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">get-bar</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">bar</span> <span class="mi">42</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/let.html#(form._((lib._racket/private/letstx-scheme..rkt)._let))" class="docs" hyphens="none">let</a></span> <span class="p">([</span><span class="n">bar</span> <span class="mi">92</span><span class="p">])</span>
+    <span class="n">bar</span><span class="p">))</span>
+
+<span class="p">(</span><span class="n">get-bar</span><span class="p">)</span> <span class="c1">; 92</span>
+<span class="n">bar</span> <span class="c1">; error: unbound identifier</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkc" data-clipboard-target="#code_55" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_tb6dX&quot;)"></div><p id="a_tb6dX">Mod­ule scope: a bind­ing cre­ated at the top level of a mod­ule with <span class="my-code" decode="exclude">define</span>, or imported with <span class="my-code" decode="exclude">require</span>, is vis­i­ble through­out the mod­ule (though it can be shad­owed else­where). <span class="tooltip" onclick="this.classList.toggle('tooltip_visible')"> + <span class="tooltip-inner">True, a mod­ule is itself an expres­sion. But mod­ule scope is not a spe­cial case of expres­sion scope, because bind­ings can only cross mod­ule bound­aries when explic­itly requested (for instance, with <a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a>).</span></span></p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_iXVpV&quot;)"></div><div class="highlight-container" id="a_iXVpV"><div id="code_56" form="false" decode="exclude" style="font-size:0;width:0;height:0">(define top 40)<br/><br/>(define (f1)<br/>  (let ()<br/>    (let ()<br/>      (let ()<br/>        top))))<br/>(f1) ; 40<br/><br/>(define (f2)<br/>  (let ([top 41])<br/>    (let ([top 42])<br/>      (let ([top 43])<br/>        top))))<br/>(f2) ; 43</div><div class="highlight" form="false" id="a_irSRI"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="source"><pre><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">top</span> <span class="mi">40</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">f1</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/let.html#(form._((lib._racket/private/letstx-scheme..rkt)._let))" class="docs" hyphens="none">let</a></span> <span class="p">()</span>
+    <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/let.html#(form._((lib._racket/private/letstx-scheme..rkt)._let))" class="docs" hyphens="none">let</a></span> <span class="p">()</span>
+      <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/let.html#(form._((lib._racket/private/letstx-scheme..rkt)._let))" class="docs" hyphens="none">let</a></span> <span class="p">()</span>
+        <span class="n">top</span><span class="p">))))</span>
+<span class="p">(</span><span class="n">f1</span><span class="p">)</span> <span class="c1">; 40</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">f2</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/let.html#(form._((lib._racket/private/letstx-scheme..rkt)._let))" class="docs" hyphens="none">let</a></span> <span class="p">([</span><span class="n">top</span> <span class="mi">41</span><span class="p">])</span>
+    <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/let.html#(form._((lib._racket/private/letstx-scheme..rkt)._let))" class="docs" hyphens="none">let</a></span> <span class="p">([</span><span class="n">top</span> <span class="mi">42</span><span class="p">])</span>
+      <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/let.html#(form._((lib._racket/private/letstx-scheme..rkt)._let))" class="docs" hyphens="none">let</a></span> <span class="p">([</span><span class="n">top</span> <span class="mi">43</span><span class="p">])</span>
+        <span class="n">top</span><span class="p">))))</span>
+<span class="p">(</span><span class="n">f2</span><span class="p">)</span> <span class="c1">; 43</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkd" data-clipboard-target="#code_56" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_bTU97&quot;)"></div><p id="a_bTU97">Macro scope: if a macro cre­ates an iden­ti­fier and its bind­ing (i.e., a vari­able) it’s only vis­i­ble to to <em>other code cre­ated by the same macro</em>. Cau­tion: this is a trap for the unwary. In the exam­ple below, even though the macro emits <span class="my-code" decode="exclude">(define foo 42)</span>—which sure looks like it will cre­ate a vari­able <span class="my-code" decode="exclude">foo</span> that has mod­ule scope—it doesn’t. That vari­able is not vis­i­ble to code out­side the macro:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_CJOd3&quot;)"></div><div class="highlight-container" id="a_CJOd3"><div id="code_57" form="false" decode="exclude" style="font-size:0;width:0;height:0">(define-macro (make-macro-scoped-foo)<br/>  #'(begin<br/>      (define foo 42)<br/>      (* foo 2)))<br/><br/>(make-macro-scoped-foo) ; 84<br/>foo ; unbound identifier (!)</div><div class="highlight" form="false" id="a_PZ8IL"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="source"><pre><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/define..rkt)._define-macro))" class="docs" hyphens="none">define-macro</a></span> <span class="p">(</span><span class="n">make-macro-scoped-foo</span><span class="p">)</span>
+  <span class="o">#&#39;</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/begin.html#(form._((quote._~23~25kernel)._begin))" class="docs" hyphens="none">begin</a></span>
+      <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">foo</span> <span class="mi">42</span><span class="p">)</span>
+      <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span> <span class="n">foo</span> <span class="mi">2</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="n">make-macro-scoped-foo</span><span class="p">)</span> <span class="c1">; 84</span>
+<span class="n">foo</span> <span class="c1">; unbound identifier (!)</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpke" data-clipboard-target="#code_57" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_EbbCP&quot;)"></div><p id="a_EbbCP">But if a macro adds a bind­ing to an exist­ing iden­ti­fier—for instance, one passed as an argu­ment to the macro—that bind­ing does <em>not</em> have macro scope, but rather the scope of the iden­ti­fier:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_fBhtS&quot;)"></div><div class="highlight-container" id="a_fBhtS"><div id="code_58" form="false" decode="exclude" style="font-size:0;width:0;height:0">(define-macro (bind-existing-identifier ID)<br/>  #'(begin<br/>      (define ID 42)<br/>      (* ID 2)))<br/><br/>(bind-existing-identifier foo) ; 84<br/>foo ; 42 (and `foo` has module scope)<br/><br/>(let ()<br/>  (bind-existing-identifier bar)<br/>  bar) ; 42 (and `bar` has expression scope)<br/>bar ; unbound identifier</div><div class="highlight" form="false" id="a_wFcYS"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="source"><pre><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/define..rkt)._define-macro))" class="docs" hyphens="none">define-macro</a></span> <span class="p">(</span><span class="n">bind-existing-identifier</span> <span class="n">ID</span><span class="p">)</span>
+  <span class="o">#&#39;</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/begin.html#(form._((quote._~23~25kernel)._begin))" class="docs" hyphens="none">begin</a></span>
+      <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">ID</span> <span class="mi">42</span><span class="p">)</span>
+      <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span> <span class="n">ID</span> <span class="mi">2</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="n">bind-existing-identifier</span> <span class="n">foo</span><span class="p">)</span> <span class="c1">; 84</span>
+<span class="n">foo</span> <span class="c1">; 42 (and `foo` has module scope)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/let.html#(form._((lib._racket/private/letstx-scheme..rkt)._let))" class="docs" hyphens="none">let</a></span> <span class="p">()</span>
+  <span class="p">(</span><span class="n">bind-existing-identifier</span> <span class="n">bar</span><span class="p">)</span>
+  <span class="n">bar</span><span class="p">)</span> <span class="c1">; 42 (and `bar` has expression scope)</span>
+<span class="n">bar</span> <span class="c1">; unbound identifier</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkf" data-clipboard-target="#code_58" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_cPoGo&quot;)"></div><p id="a_cPoGo">For more about this behav­ior—which is a fea­ture, not a bug—see <a class="explainer" href="hygiene.html">hygiene</a>.</p></div></li></ol><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;further&quot;)"></div><h3 anchor="further" class="subhead" id="further"><a href="#further">Fur­ther</a></h3></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_EZS9p&quot;)"></div><p id="a_EZS9p"><span><a href="http://docs.racket-lang.org/guide/binding.html">Iden­ti­fiers and Bind­ing</a> in the Racket Guide</span></p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_H2HxK&quot;)"></div><p id="a_H2HxK"><span><a href="http://docs.racket-lang.org/reference/syntax-model.html?q=identifier#%28part._id-model%29">Iden­ti­fiers, Bind­ing, and Scopes</a> in the Racket Ref­er­ence</span></p></div></li></ul></div>
+    <a class="nav-left" href="hygiene.html">← prev</a>
+    <a class="nav-right" href="importing-and-exporting.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

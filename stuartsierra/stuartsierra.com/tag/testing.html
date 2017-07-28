@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+
+<!-- Mirrored from stuartsierra.com/tag/testing by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:56:14 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+		<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+<title>testing &#8211; Digital Digressions by Stuart Sierra</title>
+<link rel='dns-prefetch' href='http://s0.wp.com/'>
+<link rel='dns-prefetch' href='http://secure.gravatar.com/'>
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel='dns-prefetch' href='http://s.w.org/'>
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Comments Feed" href="../comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; testing Tag Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/stuartsierra.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.6"}};
+			!function(a,b,c){function d(a){var c,d,e,f,g,h=b.createElement("canvas"),i=h.getContext&&h.getContext("2d"),j=String.fromCharCode;if(!i||!i.fillText)return!1;switch(i.textBaseline="top",i.font="600 32px Arial",a){case"flag":return i.fillText(j(55356,56806,55356,56826),0,0),!(h.toDataURL().length<3e3)&&(i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,65039,8205,55356,57096),0,0),c=h.toDataURL(),i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,55356,57096),0,0),d=h.toDataURL(),c!==d);case"diversity":return i.fillText(j(55356,57221),0,0),e=i.getImageData(16,16,1,1).data,f=e[0]+","+e[1]+","+e[2]+","+e[3],i.fillText(j(55356,57221,55356,57343),0,0),e=i.getImageData(16,16,1,1).data,g=e[0]+","+e[1]+","+e[2]+","+e[3],f!==g;case"simple":return i.fillText(j(55357,56835),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode8":return i.fillText(j(55356,57135),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode9":return i.fillText(j(55358,56631),0,0),0!==i.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity","unicode9"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='twentysixteen-jetpack-css'  href='../wp-content/plugins/jetpack/modules/theme-tools/compat/twentysixteen3a05.css?ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-fonts-css'  href='https://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%2C900%2C400italic%2C700italic%2C900italic%7CMontserrat%3A400%2C700%7CInconsolata%3A400&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../wp-content/plugins/jetpack/_inc/genericons/genericons/genericons128b.css?ver=3.1' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-style-css'  href='../wp-content/themes/twentysixteen/style167b.css?ver=4.6' type='text/css' media='all' />
+<!--[if lt IE 10]>
+<link rel='stylesheet' id='twentysixteen-ie-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentysixteen-ie8-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie8.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='twentysixteen-ie7-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie7.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='../wp-content/plugins/jetpack/css/jetpack3a05.css?ver=4.2.2' type='text/css' media='all' />
+<script type='text/javascript' src='../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://stuartsierra.com/wp-content/themes/twentysixteen/js/html5.js?ver=3.7.3'></script>
+<![endif]-->
+<link rel='https://api.w.org/' href='../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+
+<link rel='dns-prefetch' href='http://v0.wordpress.com/'>
+</head>
+
+<body class="archive tag tag-testing tag-97 hfeed">
+<div id="page" class="site">
+	<div class="site-inner">
+		<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+		<header id="masthead" class="site-header" role="banner">
+			<div class="site-header-main">
+				<div class="site-branding">
+					
+											<p class="site-title"><a href="../index.html" rel="home">Digital Digressions by Stuart Sierra</a></p>
+											<p class="site-description">From programming to everything else</p>
+									</div><!-- .site-branding -->
+
+									<button id="menu-toggle" class="menu-toggle">Menu</button>
+
+					<div id="site-header-menu" class="site-header-menu">
+													<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Primary Menu">
+								<div class="menu-main-menu-container"><ul id="menu-main-menu" class="primary-menu"><li id="menu-item-635" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../about-me.html">About Me</a></li>
+<li id="menu-item-633" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../writing.html">Writing</a></li>
+<li id="menu-item-634" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../presentations.html">Presentations</a></li>
+<li id="menu-item-636" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../software.html">Software</a></li>
+<li id="menu-item-637" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../contact.html">Contact</a></li>
+</ul></div>							</nav><!-- .main-navigation -->
+						
+											</div><!-- .site-header-menu -->
+							</div><!-- .site-header-main -->
+
+											<div class="header-image">
+					<a href="../index.html" rel="home">
+						<img src="../wp-content/uploads/2015/12/header.jpg" srcset="https://stuartsierra.com/wp-content/uploads/2015/12/header-300x70.jpg 300w, https://stuartsierra.com/wp-content/uploads/2015/12/header-768x179.jpg 768w, https://stuartsierra.com/wp-content/uploads/2015/12/header-1024x239.jpg 1024w, https://stuartsierra.com/wp-content/uploads/2015/12/header.jpg 1200w" sizes="(max-width: 709px) 85vw, (max-width: 909px) 81vw, (max-width: 1362px) 88vw, 1200px" width="1200" height="280" alt="Digital Digressions by Stuart Sierra">
+					</a>
+				</div><!-- .header-image -->
+					</header><!-- .site-header -->
+
+		<div id="content" class="site-content">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			<header class="page-header">
+				<h1 class="page-title">Tag: testing</h1>			</header><!-- .page-header -->
+
+			
+<article id="post-941" class="post-941 post type-post status-publish format-standard hentry category-programming tag-clojure tag-clojure-test tag-testing">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2016/05/19/fixtures-as-caches.html" rel="bookmark">Fixtures as Caches</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>I am responsible &mdash; for better or for worse &mdash; for the library which eventually became <a href="http://clojure.github.io/clojure/#clojure.test">clojure.test</a>. It has remained largely the same since it was first added to the language distribution back in the pre-1.0 days. While there are many things about clojure.test which I would do differently now &mdash; dynamic binding, var metadata, side effects &mdash; it has held up remarkably well.</p>
+<p>I consider <em>fixtures</em> to be one of the less-well-thought-out features of clojure.test. A clojure.test <em>fixture</em> is a function which wraps a test function, typically for the purpose of setting up and tearing down the environment in which the test should run. Because test functions do not take arguments, the only way for a fixture to pass state to the test function is through dynamic binding. A typical fixture looks like this:</p>
+<pre>
+ (<span class="keyword">ns</span> <span class="type">fixtures-example</span>
+   (<span class="clojure-keyword">:require</span> [<span class="type">clojure.test</span> <span class="clojure-keyword">:as</span> test <span class="clojure-keyword">:refer</span> [deftest is]]))
+ 
+ (<span class="keyword">def</span> ^<span class="clojure-keyword">:dynamic</span> <span class="variable-name">*fix*</span>)
+ 
+ (<span class="keyword">defn</span> <span class="function-name">my-fixture</span> [test-fn]
+   (println <span class="string">"Set up *fix*"</span>)
+   (<span class="keyword">binding</span> [<span class="variable-name">*fix*</span> 42]
+     (test-fn))
+   (println <span class="string">"Tear down *fix*"</span>))
+ 
+ (<span class="type">test</span><span class="default">/</span>use-fixtures <span class="clojure-keyword">:each</span> my-fixture)
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t1</span>
+   (println <span class="string">"Do test t1"</span>)
+   (is (= <span class="variable-name">*fix*</span> 42)))
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t2</span>
+   (println <span class="string">"Do test t2"</span>)
+   (is (= <span class="variable-name">*fix*</span> (* 7 6))))
+</pre>
+<p>There are two kinds of fixtures in clojure.test:</p>
+<p><code>:each</code> fixtures run once per test, for every test in the namespace.</p>
+<p><code>:once</code> fixtures run once per namespace, wrapped around all tests in that namespace.</p>
+<p>I think the design of fixtures has a lot of problems. Firstly, attaching them to namespaces was a bad idea, since namespaces typically contain many different tests, only some of which actually need the fixture. This increases the likelihood of unintended coupling between fixtures and test code.</p>
+<p>Secondly, <code>:each</code> fixtures are redundant. If you need to wrap every test in some piece of shared code, all you need to do is put the shared code in a function or macro and call it in the body of each test function. There&#8217;s a small amount of duplication, but you gain flexibility to add tests which do <strong>not</strong> use the same shared code.</p>
+<p>(Another common complaint about fixtures is that they make it difficult to execute single tests in isolation, although the addition of <a href="http://clojure.github.io/clojure/clojure.test-api.html#clojure.test/test-vars"><code>test-vars</code></a> in Clojure 1.6 ameliorated that problem.)</p>
+<p>So <code>:once</code> fixtures are the only ones that matter. But if you want true isolation between your tests then they should not share any state at all. The only reason for sharing fixtures across tests is when the fixture does something expensive or time-consuming. Here again, namespaces are often the wrong level of granularity. If some resource is expensive to prepare, you may only want to pay the cost of preparing it <strong>once</strong> for all tests in your project, not once per namespace.</p>
+<p>So the purpose of <code>:once</code> fixtures is to <em>cache</em> their initialized state in between tests. What if we were to use fixtures <em>only</em> for caching? It might look something like this:</p>
+<pre>
+ (<span class="keyword">ns</span> <span class="type">caching-example</span>
+   (<span class="clojure-keyword">:require</span> [<span class="type">clojure.test</span> <span class="clojure-keyword">:refer</span> [deftest is]]))
+ 
+ (<span class="keyword">def</span> ^<span class="clojure-keyword">:dynamic</span> ^<span class="clojure-keyword">:private</span> <span class="variable-name">*fix*</span> <span class="constant">nil</span>)
+ 
+ (<span class="keyword">defn</span> <span class="function-name">new-fix</span>
+   <span class="doc">"Computes a new 'fix' value for tests."</span>
+   []
+   (println <span class="string">"Computing fixed value"</span>)
+   42)
+ 
+ (<span class="keyword">defn</span> <span class="function-name">fix</span>
+   <span class="doc">"Returns the current 'fix' value for
+   tests, creating one if needed."</span>
+   []
+   (<span class="keyword">or</span> <span class="variable-name">*fix*</span> (new-fix)))
+ 
+ (<span class="keyword">defn</span> <span class="function-name">fix-fixture</span>
+   <span class="doc">"A fixture function to provide a reusable
+   'fix' value for all tests in a namespace."</span>
+   [test-fn]
+   (<span class="keyword">binding</span> [<span class="variable-name">*fix*</span> (new-fix)]
+     (test-fn)))
+ 
+ (<span class="type">clojure.test</span><span class="default">/</span>use-fixtures <span class="clojure-keyword">:once</span> fix-fixture)
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t1</span>
+   (is (= (fix) 42)))
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t2</span>
+   (is (= (fix) (* 7 6))))
+</pre>
+<p>This still avoids repeated computation of the <code>fix</code> value, but clearly shows exactly which tests use it. The <code>:once</code> fixture is just an optimization: You could remove it and the tests would still work, perhaps more slowly. Best of all, you can run the individual test functions in the REPL without any additional setup.</p>
+<p>The same idea works even if the fixture requires tear-down after tests are finished:</p>
+<pre>
+ (<span class="keyword">ns</span> <span class="type">resource-example</span>
+   (<span class="clojure-keyword">:require</span> [<span class="type">clojure.test</span> <span class="clojure-keyword">:refer</span> [deftest is]]))
+ 
+ (<span class="keyword">defn</span> <span class="function-name">acquire-resource</span> []
+   (println <span class="string">"Acquiring resource"</span>)
+   <span class="clojure-keyword">:the-resource</span>)
+ 
+ (<span class="keyword">defn</span> <span class="function-name">release-resource</span> [resource]
+   (println <span class="string">"Releasing resource"</span>))
+ 
+ (<span class="keyword">def</span> ^<span class="clojure-keyword">:dynamic</span> ^<span class="clojure-keyword">:private</span> <span class="variable-name">*resource*</span> <span class="constant">nil</span>)
+ 
+ (<span class="keyword">defmacro</span> <span class="function-name">with-resource</span>
+   <span class="doc">"Acquires resource and binds it locally to
+   symbol while executing body. Ensures resource
+   is released after body completes. If called in
+   a dynamic context in which *resource* is
+   already bound, reuses the existing resource and
+   does not release it."</span>
+   [symbol &amp; body]
+   `(<span class="keyword">let</span> [~symbol (<span class="keyword">or</span> <span class="variable-name">*resource*</span>
+                      (acquire-resource))]
+      (<span class="keyword">try</span> ~@body
+           (<span class="keyword">finally</span>
+             (<span class="keyword">when-not</span> <span class="variable-name">*resource*</span>
+               (release-resource ~symbol))))))
+ 
+ (<span class="keyword">defn</span> <span class="function-name">resource-fixture</span>
+   <span class="doc">"Fixture function to acquire a resource for all
+   tests in a namespace."</span>
+   [test-fn]
+   (<span class="keyword">with-resource r
+     (<span class="keyword">binding</span> [<span class="variable-name">*resource*</span> r]
+       (test-fn))))
+ 
+ (<span class="type">clojure.test</span><span class="default">/</span>use-fixtures <span class="clojure-keyword">:once</span> resource-fixture)
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t1</span>
+   (with-resource r
+     (is (keyword? r))))
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t2</span>
+   (with-resource r
+     (is (= <span class="string">"the-resource"</span> (name r)))))
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t3</span>
+   (with-resource r
+     (is (nil? (namespace r)))))
+</pre>
+<p>Again, each of these tests can be run individually at the REPL with no extra ceremony. If you don&#8217;t want to keep paying the resource-setup cost in the REPL, you could temporarily redefine the <code>*resource*</code> var in its initialized state.</p>
+<p>The key in both cases is that the &#8220;fixtures&#8221; are designed to nest without duplicating effort. Each test function specifies exactly what state or resources it needs, but only creates them if they do not already exist. Some of those resources may be shared among multiple tests, but that fact is hidden from the individual tests.</p>
+<p>With this in mind, it becomes possible to share a resource across <strong>all</strong> tests in a project, not just within a namespace. All you need is an &#8220;entry point&#8221; which kicks off all the tests. clojure.test provides <a href="http://clojure.github.io/clojure/clojure.test-api.html#clojure.test/run-tests"><code>run-tests</code></a> for specifying individual namespaces and <a href="http://clojure.github.io/clojure/clojure.test-api.html#clojure.test/run-all-tests"><code>run-all-tests</code></a> to search for namespaces by regex. All you have to do is make sure your test namespaces are loaded, either via direct <code>require</code> or a utility such as <a href="https://github.com/clojure/tools.namespace">tools.namespace</a>. Then you can run a full test suite that only executes the expensive setup/teardown code once:</p>
+<pre>
+ (<span class="keyword">ns</span> <span class="type">main-test</span>
+   (<span class="clojure-keyword">:require</span> [<span class="type">clojure.test</span> <span class="clojure-keyword">:as</span> test]
+             [<span class="type">my.app.a-test</span>]))
+ 
+ (<span class="keyword">defn</span> <span class="function-name">-main</span> [&amp; _]
+   (with-resource-1
+     (with-resource-2
+       <span class="comment-delimiter">;;; </span><span class="comment">... more fixture wrappers ...
+</span>       (<span class="type">test</span><span class="default">/</span>run-all-tests #<span class="string">"^my\.app\..+-test$"</span>))))
+</pre>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2016/05/19/fixtures-as-caches.html" rel="bookmark"><time class="entry-date published updated" datetime="2016-05-19T08:36:10+00:00">May 19, 2016</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="clojure.html" rel="tag">Clojure</a>, <a href="clojure-test.html" rel="tag">clojure.test</a>, <a href="testing.html" rel="tag">testing</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-463" class="post-463 post type-post status-publish format-standard hentry category-programming tag-clojure tag-lazytest tag-testing">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2010/07/19/typed-assertions.html" rel="bookmark">Typed Assertions Tell You What Hurts</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>One thing <code>clojure.test</code> did reasonably well was tell you why an assertion failed.  Currently, <a href="http://github.com/stuartsierra/lazytest">Lazytest</a> fails in this regard.</p>
+<p>The problem with requiring test functions to return true/false to indicate pass/fail is that they can&#8217;t attach any additional information to a failure to explain <em>why</em> it failed.</p>
+<p>I realized that function return values are insufficient for describing failure conditions. Fortunately, we&#8217;ve long had another means for functions to signal failure: typed exceptions.</p>
+<p>Typed exceptions seem to be out of favor at the moment. Clojure itself only uses a handful of generic exception types, and defines none of its own.</p>
+<p>It&#8217;s slightly awkward to define new exceptions in Clojure because the JVM requires any thrown exception to be derived from the concrete base class <a href="http://download.oracle.com/docs/cd/E17409_01/javase/6/docs/api/java/lang/Throwable.html">java.lang.Throwable</a>.</p>
+<p>Sure, you could use <a href="http://clojure.github.com/clojure/clojure.core-api.html#clojure.core/gen-class">gen-class</a>, but generating a stub class that maps to a Clojure namespace seems like overkill for such a simple task.  All I need is something that I can throw with an arbitrary payload attached.</p>
+<p>So I did that thing that will make everyone cringe: I wrote it in Java.  All nine lines of it:</p>
+<pre>package lazytest;
+
+public class ExpectationFailed extends Error {
+    public final Object reason;
+
+    public ExpectationFailed(Object reason) {
+	this.reason = reason;
+    }
+}</pre>
+<p>Now I can define any number of <a href="http://github.com/stuartsierra/lazytest/blob/8330dc43558299777fea119533d343296ca81f29/src/main/clojure/lazytest/failure.clj">typed objects representing different failure conditions</a>, and I still only have to worry about catching one exception type.</p>
+<p>Next I can write <a href="http://github.com/stuartsierra/lazytest/blob/8330dc43558299777fea119533d343296ca81f29/src/main/clojure/lazytest/expect.clj">functions that test for different conditions</a> and throw <code>ExpectationFailed</code> when they are not met, attaching the appropriate failure object.  I can even write a macro, <a href="http://github.com/stuartsierra/lazytest/blob/8330dc43558299777fea119533d343296ca81f29/src/main/clojure/lazytest/expect.clj#L43">expect</a>, that transforms an ordinary predicate expression into an &#8220;expectation expression&#8221; by reflecting on the code.</p>
+<p>The <code>expect</code> macro fills the same role in Lazytest as the <code>is</code> macro in <code>clojure.test</code>.</p>
+<p>Now I just need to figure out how to merge all this back in to the master branch.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2010/07/19/typed-assertions.html" rel="bookmark"><time class="entry-date published updated" datetime="2010-07-19T21:25:05+00:00">July 19, 2010</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="clojure.html" rel="tag">Clojure</a>, <a href="lazytest.html" rel="tag">Lazytest</a>, <a href="testing.html" rel="tag">testing</a></span><span class="comments-link"><a href="../2010/07/19/typed-assertions.html#comments">7 Comments<span class="screen-reader-text"> on Typed Assertions Tell You What Hurts</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-458" class="post-458 post type-post status-publish format-standard hentry category-programming tag-clojure tag-testing">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2010/07/05/lazytest-status-report.html" rel="bookmark">A Journey of a Thousand Lines Begins with a Single Test</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>I have a curious obsession with testing frameworks.  The first thing I do with any new programming language is try to write a test framework in it. It&#8217;s a useful exercise for exploring the metaprogramming facilities provided by any language. So in C, I use preprocessor macros; in Java, annotations; and in a Lisp, macros.</p>
+<p>When I started playing with <a href="http://clojure.org/">Clojure</a>, there was no testing framework. So I wrote one, borrowing ideas from Common Lisp test frameworks such as <a href="http://common-lisp.net/project/lift/">LIFT</a> and <a href="http://www.gigamonkeys.com/book/practical-building-a-unit-test-framework.html">Chapter 9</a> of Peter Seibel&#8217;s <em>Practical Common Lisp</em>.</p>
+<p>This was <code>clojure.contrib.test-is</code>. By virtual of being first out of the gate, it became the de facto standard testing framework for Clojure, and release 1.1 gave it an official position as <code>clojure.test</code>.</p>
+<p>After seeing <code>clojure.test</code> used in the wild, and using it on my own projects, I found some problems. I set out to fix them in a totally new framework called Lazytest, which I have been working on since February. Lazytest has gone through three major revisions already, and will probably get at least one more before I release it.</p>
+<p>Lazytest started with the simple desire to fix all the problems I found with <code>clojure.test</code>, but it evolved into an attempt to make the perfect behavior-driven development framework for Clojure, incorporating all the best ideas from TDD/BDD frameworks in other languages.</p>
+<p>This post is an attempt to document where Lazytest is now, the thought processes that got it there, and where it&#8217;s headed.</p>
+<p>First, I&#8217;ll cover what <code>clojure.test</code> did wrong (and right).</p>
+<h2>Things <code>clojure.test</code> got wrong:</h2>
+<p><strong>Test code is tightly coupled to reporting.</strong> Every assertion is responsible for calling <code>clojure.test/report</code>, which immediately prints the result and updates a global counter for tests passed/failed. The only way to change the report output format is to rebind <code>report</code> while tests are running. This makes it awkward to implement alternative result formats such as TAP and JUnit XML.</p>
+<p><strong>Tests can only be grouped by dynamic scope.</strong> Following the style of Seibel, the only way <code>clojure.test</code> can combine tests into groups (other than namespaces) is to call one test within the body of another. This conflicts with the default <code>run-tests</code> behavior of running all tests defined in a namespace, leading to the poorly-understood <code>test-ns-hook</code> hack. There is no way to group tests by lexical scope.</p>
+<p><strong>Fixtures can only be assigned per-namespace.</strong> Fixtures were a late addition to <code>clojure.test</code> and were not integrated well with the rest of the design. The fact that they are globally applied to an entire namespace makes them useless for all but the simplest cases.</p>
+<p><strong>Fixtures rely on dynamic scope.</strong> The only way to pass values from a fixture to a test function is with dynamic binding. Not only is this awkward to use (every value shared between fixtures and tests needs a global Var) it makes test functions dependent on the dynamic context provided by the framework.  Individual tests cannot be run outside of <code>run-tests</code>.</p>
+<p><strong>Code templates.</strong> This was a clever idea that didn&#8217;t pan out. <code>clojure.template/do-template</code> is a really complicated way to do <code>map</code> and never should have been promoted from clojure-contrib to Clojure proper.</p>
+<p><strong>Tree-walking.</strong> <code>clojure.walk</code> was another clever idea that didn&#8217;t pan out. It is still useful in a handful of situations, such as recursively changing all keywords to strings, but it could probably be replaced with something simpler.</p>
+<h2>Things <code>clojure.test</code> got right:</h2>
+<p><strong>An explicit assertion form,</strong> a.k.a. the <code>is</code> macro.  In most drafts of Lazytest I omitted this form, instead treating the last expression of any test body as an assertion.  I wanted to discourage the use of multiple assertions in a single test, but such usage is frequently necessary when testing real-world code.</p>
+<p><strong>Recognizing assertions by syntactic form.</strong> The <code>is</code> macro uses a multimethod to dispatch on the first symbol in the assertion expression.  The multimethod can generate different code for different kinds of assertions, such as equality, <code>instance?</code> checks, or exceptions thrown.</p>
+<p>I had hoped that people would extend the <code>is</code> macro with their own assertion forms, but almost no one did. It was too hard to understand and, like the rest of <code>clojure.test</code>, too tightly coupled to the reporting subsystem.</p>
+<h2>Goals for Lazytest</h2>
+<p><strong>Separation of concerns.</strong> There should be well-defined interfaces for creating tests, running tests, and reporting test results. It should be trivial to replace any of those components with another that respects the same interface.</p>
+<p><strong>Separation of syntax from internal representations.</strong> There should be a simple, functional interface for defining tests without any need for macros. Different text syntaxes, implemented as macros, can be layered on top of this interface.</p>
+<p><strong>Support for continuous testing.</strong> It should be possible to start a &#8220;watcher&#8221; process to monitor directories and re-run tests when files change.</p>
+<p><strong>Lexical grouping.</strong> It should be possible to combine tests into groups, with unlimited nesting, using lexical scopes.</p>
+<p><strong>Composable per-test fixtures.</strong> Fixtures (called &#8220;contexts&#8221; at the moment) may be attached to individual tests or groups of tests, and may be composed.</p>
+<p><strong>Support for tagging.</strong> Tests may be tagged with arbitrary metadata, including &#8220;skip&#8221;, &#8220;pending&#8221;, and &#8220;focus&#8221; to control which tests are run.</p>
+<p><strong>Useful reporting.</strong> A test failure report should include enough information to diagnose the problem without referring back to the test code. This is probably the hardest goal, partly because it is dependent on having clearly-written tests.</p>
+<p>If I can do all this, it will be TDD-nirvana, but that&#8217;s a big <em>if</em>.  Even though I have code for most of the pieces, making them all work together will be a significant challenge.</p>
+<p>The basics are already there, on my <a href="http://github.com/stuartsierra/lazytest">Lazytest github page</a>. Please try it out and send me any feedback you have, but be aware that everything in the code, including the test syntax, is still <strong>alpha</strong> and <strong>subject to change</strong>.</p>
+<p>I <strong>will</strong> make a proper release at some point, but not until I am satisfied that I have implemented the proper abstractions.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2010/07/05/lazytest-status-report.html" rel="bookmark"><time class="entry-date published updated" datetime="2010-07-05T22:12:02+00:00">July 5, 2010</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="clojure.html" rel="tag">Clojure</a>, <a href="testing.html" rel="tag">testing</a></span><span class="comments-link"><a href="../2010/07/05/lazytest-status-report.html#comments">5 Comments<span class="screen-reader-text"> on A Journey of a Thousand Lines Begins with a Single Test</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-195" class="post-195 post type-post status-publish format-standard hentry category-programming tag-clojure tag-lisp tag-rspec tag-testing">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2009/01/18/tests-are-code.html" rel="bookmark">Tests Are Code</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>It&#8217;s interesting to see the first signs of <a href="http://dablog.rubypal.com/2008/11/30/probative-programming-the-physical-unification-of-code-and-tests">rebellion against RSpec</a>. I jumped on the RSpec bandwagon when it first appeared, mostly so I wouldn&#8217;t have to write &#8220;assert_equals&#8221; all the time. But while I liked and used RSpec, I don&#8217;t think it made my tests any better. If anything, they were a little bit worse. I found myself testing things that were not really relevant to the code I was writing, asserting obvious things like &#8220;a newly-created record should be empty.&#8221;</p>
+<p>When I got interested in <a href="http://clojure.org/">Clojure</a>, one of the first things I wrote was a testing library called &#8220;test-is&#8221;. I borrowed from a lot of Common Lisp testing frameworks, especially the idea of a generic assertion macro called &#8220;is&#8221;. It looks like this:</p>
+<pre>(deftest test-my-function
+  (is (= 7 (my-function 3 4)))
+  (is (even? (my-function 10 2))))</pre>
+<p>This is pretty basic, but it&#8217;s sufficient for low-level unit testing. So far, I think that&#8217;s how the library has been typically used. There have been occasional requests, however, for RSpec-style syntax. I can see how this would be useful for testing at a level higher than individual functions, but I have come to believe that the added semantics of RSpec are not really necessary.</p>
+<p>Right now, the test-is library is built on the same abstractions as Clojure itself. Tests are functions, so you can apply all the same tools that already exist for handling functions. Tests can be called by name, organized into namespaces, and composed. There is almost no extra bookkeeping code that I need to write to make all of this work.</p>
+<p>In contrast, if I were to adopt the RSpec style, I would have to write code to call, store, and organize tests. That&#8217;s more work for me, and ultimately restricts the flexibility of the library for people who use it. Furthermore, RSpec has its own set of semantics, above and beyond the language itself, which must be learned.</p>
+<p>This is my first experience supporting a library for anyone other than myself, and I don&#8217;t want to force anyone into a particular style. A library like RSpec is a complete environment that attempts to anticipate all possible usage scenarios, so it&#8217;s grown correspondingly complicated.  I want to provide a set of small tools, that can be combined with other tools to do interesting things. </p>
+<p>Of course, by making that decision I&#8217;m already dictating, to some extent, how the library can be used. But really, what I&#8217;m trying to do is set limits for myself. I will commit to providing a flexible, extensible set of functions and macros for writing tests. I am explicitly not trying to provide a complete testing framework. If someone wants to build an RSpec-style framework on top of test-is, more power to them. I will happily try to make test-is easier to integrate into that framework.</p>
+<p>But there&#8217;s one other thing that struck me about that article that I linked to at the beginning &#8212; the idea of putting tests and code in the same file. I think that&#8217;s a great idea, and Clojure comes ready-made to implement it. Clojure supports the idea of &#8220;metadata&#8221; on definitions. You can attach a set of arbitrary properties to any object, without affecting the value of that object.</p>
+<p>It&#8217;s easy to attach a test function as metadata on a definition in Clojure, but the syntax is a little ugly, and there is no easy way to remove the tests from production code. So I came up with in addition to my library, the &#8220;with-test&#8221; macro. It lets you wrap any definition in a set of tests. It looks like this:</p>
+<pre>(with-test
+ (defn add-numbers [a b]
+   (+ a b))
+ (is (= 7 (add-numbers 3 4)))
+ (is (= -4 (add-numbers -6 2))))</pre>
+<p>This is equivalent to adding metadata to the function, but the syntax is a little cleaner. I&#8217;ve also added a global variable, &#8220;*load-tests*&#8221;, which can be set to false to omit tests when loading production code.</p>
+<p>I like having each function right next to its tests. It makes it easier to remember to write tests, and easier to see how the function is supposed to behave. So to the extent that test-is will promote a testing style, this is it.  But it&#8217;s a pretty radical departure from the traditional style of testing, so I&#8217;m not sure how others will react to it.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2009/01/18/tests-are-code.html" rel="bookmark"><time class="entry-date published updated" datetime="2009-01-18T12:04:21+00:00">January 18, 2009</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="clojure.html" rel="tag">Clojure</a>, <a href="lisp.html" rel="tag">Lisp</a>, <a href="rspec.html" rel="tag">RSpec</a>, <a href="testing.html" rel="tag">testing</a></span><span class="comments-link"><a href="../2009/01/18/tests-are-code.html#comments">6 Comments<span class="screen-reader-text"> on Tests Are Code</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+		</main><!-- .site-main -->
+	</div><!-- .content-area -->
+
+
+	<aside id="secondary" class="sidebar widget-area" role="complementary">
+		<section id="search-3" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://stuartsierra.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+	</label>
+	<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</section><section id="text-4" class="widget widget_text">			<div class="textwidget"><ul>
+<li><a href="http://feeds2.feedburner.com/StuartSierra" title="Syndicate this site using RSS 2.0">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="../comments/feed" title="The latest comments to all posts in RSS">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+</ul>
+<ul>
+<li><a href="https://twitter.com/stuartsierra">Twitter</a></li>
+<li><a href="https://github.com/stuartsierra">GitHub</a></li>
+</ul></div>
+		</section><section id="tag-widget-2" class="widget TagWidget"><h2 class="widget-title">Clojure Do’s and Don’ts</h2><ul class = "posts-by-tag-list"><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-883"><a class = "posts-by-tag-item-title" href="../2015/08/25/clojure-donts-lazy-effects.html">Clojure Don’ts: Lazy Effects</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-877"><a class = "posts-by-tag-item-title" href="../2015/08/10/clojure-donts-redundant-map.html">Clojure Don’ts: Redundant map</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-870"><a class = "posts-by-tag-item-title" href="../2015/06/16/clojure-donts-single-branch-if.html">Clojure Don’ts: Single-branch if</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-854"><a class = "posts-by-tag-item-title" href="../2015/06/10/clojure-donts-heisenparameter.html">Clojure Don’ts: The Heisenparameter</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-849"><a class = "posts-by-tag-item-title" href="../2015/06/01/clojure-donts-optional-arguments-with-varargs.html">Clojure Don’ts: Optional Arguments with Varargs</a></li><li class="posts-by-tag-item Clojure do's and don'ts errors" id="posts-by-tag-item-836"><a class = "posts-by-tag-item-title" href="../2015/05/27/clojure-uncaught-exceptions.html">Clojure Do’s: Uncaught Exceptions</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-831"><a class = "posts-by-tag-item-title" href="../2015/05/17/clojure-record-constructors.html">Record Constructors</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-826"><a class = "posts-by-tag-item-title" href="../2015/05/10/clojure-namespace-aliases.html">Clojure Do’s: Namespace Aliases</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-820"><a class = "posts-by-tag-item-title" href="../2015/05/02/clojure-donts-isa.html">Clojure Don’ts: isa?</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-812"><a class = "posts-by-tag-item-title" href="../2015/04/26/clojure-donts-concat.html">Clojure Don’ts: Concat</a></li></ul></section>	</aside><!-- .sidebar .widget-area -->
+
+		</div><!-- .site-content -->
+
+		<footer id="colophon" class="site-footer" role="contentinfo">
+							<nav class="main-navigation" role="navigation" aria-label="Footer Primary Menu">
+					<div class="menu-main-menu-container"><ul id="menu-main-menu-1" class="primary-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../about-me.html">About Me</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../writing.html">Writing</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../presentations.html">Presentations</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../software.html">Software</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../contact.html">Contact</a></li>
+</ul></div>				</nav><!-- .main-navigation -->
+			
+			
+			<div class="site-info">
+								<span class="site-title"><a href="../index.html" rel="home">Digital Digressions by Stuart Sierra</a></span>
+				<a href="https://wordpress.org/">Proudly powered by WordPress</a>
+			</div><!-- .site-info -->
+		</footer><!-- .site-footer -->
+	</div><!-- .site-inner -->
+</div><!-- .site -->
+
+	<div style="display:none">
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	</div>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201635'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2016Sepaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../wp-content/plugins/jetpack/modules/wpgroho167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../wp-content/themes/twentysixteen/js/skip-link-focus-fix8de4.js?ver=20160816'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var screenReaderText = {"expand":"expand child menu","collapse":"collapse child menu"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../wp-content/themes/twentysixteen/js/functions8de4.js?ver=20160816'></script>
+<script type='text/javascript' src='../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='https://stats.wp.com/e-201635.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.2.2',blog:'2702563',post:'0',tz:'-4',srv:'stuartsierra.com'} ]);
+	_stq.push([ 'clickTrackerInit', '2702563', '0' ]);
+</script>
+</body>
+
+<!-- Mirrored from stuartsierra.com/tag/testing by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:56:16 GMT -->
+</html>
+
+<!-- Dynamic page generated in 0.348 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:55:10 -->
+
+<!-- Compression = gzip -->

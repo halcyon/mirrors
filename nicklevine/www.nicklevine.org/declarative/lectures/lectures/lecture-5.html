@@ -1,0 +1,557 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-5.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:46 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Lecture Five</title>
+</head>
+<body>
+
+<center><b><font size=+3>Declarative Languages</font></b>
+<br><b><font size=+3>Lecture #5</font></b></center>
+
+<p><b>Purpose:</b> Functions, recursive and iterative: the sordid truth
+and other stuff
+<p><b>5.1 Let's talk recursive</b>
+<p>Suppose we are (still) trying to write a function which takes two arguments
+- a list and a number - and if the number is = to the any element of the
+list then return the position of that element in the list. (So if the number
+matches the first element in the list return 0, if it matches the second
+return 1, and so on.) If the number isn't found in the list, we'll return
+<tt>nil</tt>.
+<p>Here's one solution to the problem:
+<blockquote><tt>(defun position-one (list number)</tt>
+<br><tt>&nbsp; (if list</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (= (first list) number)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (let* ((pos (position-one
+(rest list) number)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if pos</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(1+ pos)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+nil)))))</tt></blockquote>
+And here's another:
+<ul><tt>(defun position-two (list number &amp;optional (pos 0))</tt>
+<br><tt>&nbsp; (if list</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (= (first list) number)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pos</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (position-two (rest
+list) number (+ 1 pos)))))</tt></ul>
+Both these solutions are <i>recursive</i> - the functions call themselves.
+There are two official tips for how to write recursive functions (these
+apply to any language, not just lisp):
+<ul>
+<li>
+you need to find a way to reduce the problem to a slightly simpler case,
+in the event that this time round wasn't the last pass, and</li>
+
+<li>
+you must ensure that <u>whatever the data to your function</u> it will
+<i>terminate</i>,
+i.e. not keep calling itself forever.</li>
+</ul>
+Also there is one unofficial tip:
+<ul>
+<li>
+keep it as simple as you can possibly get away with. In my humble opinion
+<tt>position-one</tt>
+above is somewhat on the hairy side.</li>
+</ul>
+Points to note, if your lecturer hasn't already done so:
+<ul>
+<li>
+the equivalence of the empty list and <i>logical false </i>- handy for
+tests with <tt>if</tt></li>
+
+<li>
+the use of <tt>&amp;optional</tt> to allow functions to take a variable
+number of arguments</li>
+
+<li>
+tail recursion...</li>
+</ul>
+What is <i>tail recursion</i>? Answer: a tail recursive function is one
+in which the recursive call is the last thing it does. Why should that
+matter to anybody? Answer: because (a) the compiler can transform it into
+a loop, which will run faster and (b) if the compiler can write it as a
+loop then so can you, which will save you all the aggro of having to think
+recursively in the first place. :-) More on this later.
+<p><b>5.2 Sinking without a trace</b>
+<p>If you're stuck on seeing how these recursive functions work (and there
+are plenty of further examples on the <a href="../index-2.html#solutions">solution
+sheets</a>), you should consider <i>tracing</i> function calls. For example,
+if you evaluate
+<br><tt>&nbsp;&nbsp;&nbsp; (trace position-two)</tt>
+<br>- after defining the function! - and then call it with test data, you
+will see a printout of all the recursive calls and their return values.
+<ul>
+<li>
+Turn tracing off with <tt>(untrace position-two)</tt> or even <tt>(untrace)</tt>
+to untrace everything.</li>
+
+<li>
+Be warned that tracing Common Lisp functions (as opposed to tracing your
+own code) can get a little bit hectic. The reason for this is that there
+is a strong possibility that the lisp system will be calling these functions
+anyway, e.g. to handle redisplay of the listener brought on by printing
+out all that tracing info.</li>
+</ul>
+Sometimes tracing won't be appropriate, and you may find yourself peppering
+your code with print statements to get it debugged. If you need to do this,
+you might as well make it quick'n'dirty rather than bothering with the
+finesse of <tt>format</tt>.&nbsp; The function <tt>print</tt> takes a lisp
+object and prints it (as the <tt>read-eval-print</tt> loop would, i.e.
+as if with the format directive <tt>~s </tt>as opposed to the <tt>~a </tt>which
+we've been using and which leaves output more human-readable). The printing
+is preceded by a newline and followed by a space. [See also definitions
+of <tt>prin1</tt> and <tt>princ</tt>.]
+<p><b>5.3 Divertimento: several functions, a macro and a special operator</b>
+<br>&nbsp;
+<table CELLSPACING=15 WIDTH="100%" >
+<tr ALIGN=LEFT VALIGN=TOP>
+<td><tt>1+</tt>
+<br><tt>1-</tt></td>
+
+<td>These functions each take one argument (a number) and return it after
+either adding or subtracting 1, as the case may be.&nbsp;
+<br><tt>(1+ foo)</tt> is shorthand for <tt>(+ foo 1)</tt> and similarly
+<tt>(1-
+foo)</tt> abbreviates <tt>(- foo 1)</tt></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>consp</tt></td>
+
+<td>Predicate, takes one argument and returns true if this is a cons, i.e.
+a non-<tt>nil</tt> list.
+<br>There is another predicate, <tt>atom</tt>, which does the opposite,
+i.e. returns true if its argument is not a cons.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>listp</tt></td>
+
+<td>Predicate, takes one argument and returns true if this is a list, i.e.
+either a cons or <tt>nil</tt>.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>null</tt></td>
+
+<td>Predicate, true of empty lists. Now, given the existence of <tt>not</tt>,
+which is true if its argument is logically false, and given the equivalence
+between logical false and the empty list, you might be justified in asking:
+why bother? These two functions are the same. The answer is: use whichever
+looks more appropriate, and keep your code readable. Thank you.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>type-of</tt></td>
+
+<td>Takes one argument and returns its type. Neat. Play with this!
+<br>Note that the types returned by <tt>type-of</tt> will be the most specific
+the system can come up with, which is not always the most useful answer
+for you. For instance,
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (type-of "Hello World") =>&nbsp; simple-base-string</tt>
+<br>(as opposed to <tt>string</tt>).</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>typep</tt></td>
+
+<td>Predicate for determining whether its first argument is <i>of the type</i>
+named by its second argument.
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (typep "Hello World" 'simple-base-string)&nbsp;
+=>&nbsp; t</tt>
+<br>Note that you do not have to be fully specific with the type here:
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (typep "Hello World" 'string)&nbsp; =>&nbsp;
+t</tt>
+<br>which is handy, because you can ask about the types you cared about
+without fussing at all about the underlying depths if that's what you wanted.
+So by <i>of the type</i> above, what I meant was <i>either it is of this
+type or it is a subtype of this type.&nbsp;</i>
+<p>All common types are associated with a <i>type predicate. </i>We met
+three of these above:
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (consp foo)&nbsp; ===&nbsp; (typep foo
+'cons)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (listp foo)&nbsp; ===&nbsp; (typep foo
+'list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (null foo)&nbsp;&nbsp; ===&nbsp; (typep
+foo 'null)&nbsp; ===&nbsp; (not foo)</tt>
+<br>Also:
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; symbolp</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; sequencep</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; stringp</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; simple-base-string-p&nbsp;</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; floatp</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; complexp</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; ratiop</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; bignump</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; fixnump</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; numberp</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; realp</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; integerp</tt>
+<br>(and so on when you meet new types later in the course).
+<p>You lecturer will now draw a diagram showing how all these types fit
+together.&nbsp;</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>equal</tt></td>
+
+<td>Predicate of two arguments: true if they are the "same". (Nebulous
+concept, needs defining. At this stage in the game, if two objects print
+out identically then they are <tt>equal</tt>. For what it's worth, if their
+types are different then they cannot be equal.) For example:
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (equal (list 'foo 'bar 'baz) '(foo bar
+baz))&nbsp; =>&nbsp; t</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (equal 'nick (car '(nick)))&nbsp; =>&nbsp;
+t</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (equal 'nick "NICK")&nbsp; =>&nbsp; nil</tt></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>nth</tt></td>
+
+<td><i>setfable </i>Takes a number and a list and uses the number to index
+into that list. (Zero based.) Hideously inefficient with long lists, compared
+with equivalent operation on arrays. Similarly
+<tt>nthcdr</tt> for the
+nth <tt>cdr</tt> of the list.
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (nth 0 '(1 2 3 4 5 6 7))&nbsp; =>&nbsp;
+1</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (equal any-list (nthcdr 0 any-list))&nbsp;
+=>&nbsp; t</tt></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>length</tt></td>
+
+<td>Takes a list and returns its length. As with <tt>nth</tt>, has to traverse
+the whole list.
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (length '(1 2 3 4 5 6 7))&nbsp; =>&nbsp;
+7</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (length nil)&nbsp; =>&nbsp; 0</tt></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>last</tt></td>
+
+<td>Returns the last cons in a list (the actual cons, not a copy of it):
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (last '(1 2 3 4 5 6 7))&nbsp; =>&nbsp;
+(7)</tt>
+<br>As above, takes longer with longer lists, but at least it's not as
+bad (why?) as
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (let* ((list '(1 2 3 4 5 6 7)))&nbsp;</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (nthcdr (1- (length
+list)) list))</tt>
+<br>Related to <tt>last</tt> is <tt>butlast</tt>, which returns a fresh
+copy of a list but with the final element missed off.&nbsp;
+<br>Both <tt>last</tt> and <tt>butlast</tt> take an optional second argument,
+in case you want to include / exclude more than one element:
+<br>&nbsp;<tt>&nbsp;&nbsp;&nbsp; (last '(1 2 3 4 5 6 7) 2)&nbsp; =>&nbsp;
+(6 7)</tt></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>copy-list</tt></td>
+
+<td>Takes a list and returns a fresh copy of it. Each list is now safe
+from destructive modification of the other.
+<br><tt>&nbsp;&nbsp;&nbsp; (let* ((original-list (list 0 2 3 4))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (copied-list
+(copy-list original-list)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (incf (first original-list))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; copied-list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; => (0 2 3 4)</tt>
+<br>An impressive number of supposedly intractable bugs in major applications
+can be traced back to failure to copy a list before modifying its guts.
+You have been warned.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>reverse</tt></td>
+
+<td>Takes a list and returns a fresh list with the old elements in reverse
+order. Does not modify the old list.
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (reverse '(1 2 3 4 5 6 7))&nbsp; =>&nbsp;
+(7 6 5 4 3 2 1)</tt></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>progn</tt></td>
+
+<td>Special operator. Evaluates all its subforms and returns the value
+produced by the last subform.
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (progn (call-this-function)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(call-that-function)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(1- 100))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; =>&nbsp; 99</tt>
+<br>Many other operators are said to contain <i>implicit progns</i>, for
+example <tt>defun</tt>.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>prog1</tt></td>
+
+<td>Macro. Evaluates all its subforms and returns the value produced by
+the <u>first</u> subform. Useful for implementation of <tt>pop</tt> but
+not a lot else.</td>
+</tr>
+</table>
+
+<p><b>5.4&nbsp; Let's get iterative</b>
+<p>Lisp supplies you with a whole load of macros and functions to make
+iteration simple. These range from fairly basic "loop forever until I tell
+you to stop" constructs to highly complex packages supporting specialized
+data structures, or lazy evaluation (see appendices to Cltl2). Let's start
+with the macro<tt> dolist:</tt>
+<blockquote><tt>(dolist (variable expression &amp;optional result-form)</tt>
+<br><tt>&nbsp;&nbsp; form-1</tt>
+<br><tt>&nbsp;&nbsp; ...</tt>
+<br><tt>&nbsp;&nbsp; form-n)</tt></blockquote>
+This macro is used for iterating along a list. The <tt>expression</tt>
+is evaluated, and it should come out as a list. The variable <tt>variable</tt>
+is bound to the first element in the list and the forms <tt>form-1 ...
+form-n</tt> are evaluated as an implicit <tt>progn</tt>. Then <tt>variable</tt>
+is bound to the second element in the list and the forms are evaluated
+again, and so on down the list until it runs out.
+<p>If <tt>result-form</tt> is present it is evaluated (with <tt>variable</tt>
+bound to <tt>nil</tt>, fwiw) and its value is the return value of <tt>dolist</tt>,
+otherwise <tt>dolist</tt> returns <tt>nil</tt>.
+<p>If you want to bail out of a <tt>dolist</tt> loop before the list has
+been used up, use the macro <tt>return</tt>. This takes an optional return
+value (to be evaluated), otherwise <tt>dolist</tt> still returns <tt>nil</tt>.
+<p>Examples:
+<blockquote><tt>(defun my-reverse (old-list)</tt>
+<br><tt>&nbsp; (let* ((new-list nil))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dolist (elt old-list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (push elt new-list))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; new-list))</tt>
+<br><tt>(my-reverse '(alpha beta gamma))&nbsp; =>&nbsp; (gamma beta alpha)</tt>
+<p><tt>(defun position-three (list number)</tt>
+<br><tt>&nbsp; (let ((count 0))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dolist (var list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (= var number)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (return
+count))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (incf count))))</tt></blockquote>
+A similar macro is <tt>dotimes:</tt>
+<blockquote><tt>(dotimes (variable expression &amp;optional result-form)</tt>
+<br><tt>&nbsp;&nbsp; form-1</tt>
+<br><tt>&nbsp;&nbsp; ...</tt>
+<br><tt>&nbsp;&nbsp; form-n)</tt></blockquote>
+This macro is used for iterating while incrementing a counter. The <tt>expression</tt>
+is evaluated, and this time it should come out as an integer. The variable
+<tt>variable</tt>
+is bound to <tt>0</tt> first time round the loop, then
+<tt>1</tt>, etc
+until the loop has been been executed <tt>expression</tt> times. If
+<tt>result-form</tt>
+is present it is evaluated (with <tt>variable</tt> incremented one final
+time to give you the number of times the body of the loop was executed);
+return values and use of the macro <tt>return</tt> are exactly as for <tt>dolist</tt>.
+Examples:
+<blockquote><tt>(dotimes (foo 10 foo))&nbsp; =>&nbsp; 10</tt>
+<p><tt>(setf bar 0)</tt>
+<br><tt>(dotimes (foo 10)</tt>
+<br><tt>&nbsp; (incf bar))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; nil</tt>
+<br><tt>bar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; 10</tt>
+<p><tt>(let* ((list nil))</tt>
+<br><tt>&nbsp; (dotimes (i 5)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (push i list))</tt>
+<br><tt>&nbsp; list)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=> (4 3 2 1 0)</tt></blockquote>
+There is a fun example with palindromic strings on the HyperSpec page on
+<tt>dotimes</tt>.
+<p><b>5.5 Functions can iterate too</b>
+<p>If you need to bomb down a list in a hurry (and it's your valuable time
+as a slothful typist I'm thinking of here), you should consider the following
+incredibly neat function.
+<blockquote><tt>(mapcar '1+ '(1 4 9 16))&nbsp; =>&nbsp; (2 5 10 17)</tt>
+<br><tt>(mapcar 'evenp '(1 2 3 4 5))&nbsp; =>&nbsp; (nil t nil t nil)</tt>
+<br><tt>(mapcar 'type-of (list "my" (+ 1 2) 'sons))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; (simple-base-string fixnum symbol)</tt>
+<br><tt>(mapcar 'length '(() (()) (()()) (()()()) (()()()())))&nbsp; =>&nbsp;
+(0 1 2 3 4)</tt></blockquote>
+So what does <tt>mapcar</tt> do? At its simplest it takes a function and
+a list. The function is passed members of the list, one at a time, and
+its return values are collected into a fresh list which is itself returned
+from <tt>mapcar</tt>.
+<p>Hang on. <i>Takes a function</i>?<b> </b>How do you pass a function
+around? Answer: simple, just quote its name. As above.
+<p>Another example:
+<blockquote><tt>(defun my-copy-list (list)</tt>
+<br><tt>&nbsp; (mapcar 'identity list))</tt></blockquote>
+Stuck? Try tracing (see 5.2 above) the function which is being passed to
+<tt>mapcar</tt>,
+i.e. <tt>1+</tt>, <tt>evenp</tt>, ..., <tt>identity</tt> in the above.
+<p><b>5.6 More on mapcar</b>
+<p>In all the examples above, <tt>mapcar</tt> was passed a function which
+itself took one argument. Now, this need not be the case. More examples:
+<blockquote><tt>(mapcar '+ '(1 2 3) '(4 5 6))&nbsp; =>&nbsp; (5 7 9)</tt>
+<br><tt>(mapcar '&lt; '(1 2 3) '(3 2 1))&nbsp; =>&nbsp; (t nil nil)</tt>
+<br><tt>(mapcar 'list '(one two three four) '(1 2 3 4) '("I" "II" "III"
+"IV"))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; =>&nbsp; ((one 1 "I")</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (two 2 "II")</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (three 3 "III")</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (four 4 "IV"))</tt></blockquote>
+The function handed to <tt>mapcar</tt> should take as many arguments as
+there are lists. First time around, it is called with the first element
+of each list, and so on. If the lists turn out to be of different lengths,
+<tt>mapcar</tt>
+halts as soon as any of them run out:
+<blockquote><tt>(mapcar '/ '(0 1 2) '(3 2 1 0))&nbsp; =>&nbsp; (0 1/2 2)&nbsp;
+; no division by zero</tt></blockquote>
+Finally, if you want to do iteration like this without the overhead of
+collecting results into a list, call <tt>mapc</tt> instead:
+<blockquote><tt>(mapc 'print (list foo bar baz))</tt></blockquote>
+will print out the values of <tt>foo bar </tt>and <tt>baz</tt>. For want
+of anything better, <tt>mapc</tt> returns the first list passed to it,
+and programmers generally throw this value away. In other words, <tt>mapc</tt>
+is called for side effects only.
+<p><b>5.7 Practical session</b>
+<ol>
+<li>
+Use <tt>dolist</tt> to write a function which adds together (i.e. sums)
+all the elements in a list.</li>
+
+<li>
+Use <tt>dotimes</tt> to implement the <tt>factorial</tt> function.</li>
+
+<li>
+Implement the following Common Lisp functions recursively (n.b. give them
+new names or you will upset your lisp session)</li>
+
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <tt>length copy-list
+reverse</tt>
+<li>
+Repeat the above (apart from <tt>reverse</tt> whose solution was given
+above) with <tt>dolist</tt>. Which ones get easier? Which get harder?</li>
+
+<li>
+Rewrite the function</li>
+
+<ol TYPE=a><tt>(defun multi-type-of (list)</tt>
+<br><tt>&nbsp; (if list</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (cons (type-of (first list))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(multi-type-of (rest list)))))</tt>
+<li>
+with <tt>mapcar</tt></li>
+
+<li>
+with <tt>dolist</tt></li>
+</ol>
+Which of the three approaches do you prefer?
+<li>
+Use <tt>mapc</tt> to write a function which takes a list and prints a dot
+for each member of the list:</li>
+
+<ol><tt>(dotty '(a b c d e f g h i j k l m n o))</tt>
+<br><tt>...............</tt>
+<br><tt>=>&nbsp; nil ; actually you need _two_ functions to do this ;-)</tt></ol>
+</ol>
+<b>5.8 Suggested activity / exercises etc</b>
+<center>
+<p><b>&nbsp;<u><font size=+1> MAKE SURE YOU UNDERSTAND IT ALL, NOW</font></u></b></center>
+
+<ol>
+<li>
+Go through your lecture notes and check you are happy with <b><i>everything
+</i></b>to
+date. Fire up a lisp session and experiment with every function etc introduced
+so far (one-liners will do) to check your understanding.
+<b><i>Anything</i></b>
+you don't understand from the notes: look it up in Graham, Cltl2, the HyperSpec.
+<b><i>Come
+and ask me</i></b> if you're still stuck. See my office door for consultation
+times.</li>
+
+<li>
+Make <b><i>very certain</i></b> that you can by now write simple lisp functions.
+Examples:</li>
+
+<ol TYPE=a>
+<li>
+take two numbers (i.e. write a function of two arguments) and sum them</li>
+
+<li>
+take a list of two numbers (i.e. write a function of one argument) and
+sum them</li>
+
+<li>
+take an arbitrary list of numbers and sum them</li>
+
+<li>
+take a list of numbers and return a list of all the numbers which were
+negative</li>
+</ol>
+I would hope by now that you can do all four of these; I would accept it
+if you could produce working versions of the first three; I would be worried
+if you can't get the first two right. <b><i>Come and ask me</i></b> if
+you're stuck. See my office door for consultation times.
+<li>
+Complete any exercises from previous weeks and any unfinished practical
+work. I have deliberately set lots so that there is more than one example
+of each concept. Try without the <a href="../solutions/solutions-5.html">solutions</a>
+first but - failing that - look them up.
+<b><i>Come and ask me</i></b>
+if you're stuck.</li>
+
+<li>
+Go through the above notes and answer all the rhetorical questions.</li>
+
+<li>
+Experiment with different arguments to <tt>type-of</tt> to see how many
+different return values you can get it to produce. (Rate yourself:- 4:
+good, 5: very good, 7 great, 9: excellent)</li>
+
+<li>
+Implement <tt>my-consp</tt> in terms of <tt>type-of</tt> and <tt>my-listp</tt>
+in terms of <tt>my-consp</tt>.</li>
+
+<li>
+Why would</li>
+
+<ol><tt>(defun last (list)</tt>
+<br><tt>&nbsp;&nbsp; (nthcdr (1- (length list)) list))</tt></ol>
+be considered inefficient?
+<li>
+What's wrong with</li>
+
+<ol><tt>(defun copy-list (list)</tt>
+<br><tt>&nbsp;&nbsp; (reverse (reverse list)))</tt></ol>
+as a means of copying lists?
+<li>
+The body of the macro <tt>defun</tt> is an implicit <tt>progn</tt>. Name
+another operator whose body has this property.</li>
+
+<li>
+Both <tt>dolist</tt> and <tt>dotimes</tt> have an optional <tt>result-form</tt>.
+Programmers rarely use this feature. Why do you imagine this is?</li>
+</ol>
+This week is your best chance to sort out lingering problems. Assignment
+coming next week.
+<br>&nbsp;
+<div align=right>Copyright (C) <a href="mailto:ndl@ravenbrook.com">Nick
+Levine</a> 1999. All rights reserved.
+<br>Last modified 2004-02-16
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/lectures/lecture-5.html#2
+$</div>
+
+<br>&nbsp;
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-5.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:46 GMT -->
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/bf/the-parser.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:16 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Follow the grammar: bf</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;follow-the-grammar-bf&quot;)"></div><h1 anchor="follow-the-grammar-bf" id="follow-the-grammar-bf" hyphens="none">Follow the grammar: <span class="my-code" decode="exclude">bf</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="grammars-and-parsers.html">2&emsp;gram­mars and parsers</a></li><li><a href="grammar-notation.html">3&emsp;gram­mar nota­tion</a></li><li><a class="here" href="the-parser.html">4&emsp;the parser</a></li><li><a href="the-tokenizer-and-reader.html">5&emsp;the tok­enizer and reader</a></li><li><a href="an-imperative-expander.html">6&emsp;an imper­a­tive expander</a></li><li><a href="a-functional-expander.html">7&emsp;a func­tional expander</a></li><li><a href="packaging-our-language.html">8&emsp;pack­ag­ing our lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;writing-a-grammar-for-bf&quot;)"></div><h3 anchor="writing-a-grammar-for-bf" class="subhead" id="writing-a-grammar-for-bf"><a href="#writing-a-grammar-for-bf">Writ­ing a gram­mar for BF</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_j8tkD&quot;)"></div><p id="a_j8tkD">Back to the task at hand—writ­ing a gram­mar for <span class="my-code" decode="exclude">bf</span> so we can parse source code like this:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_kbJM0&quot;)"></div><div class="highlight-container" id="a_kbJM0"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">++++++[&gt;++++++++++++&lt;-]&gt;.<br/>&gt;++++++++++[&gt;++++++++++&lt;-]&gt;+.<br/>+++++++..+++.&gt;++++[&gt;+++++++++++&lt;-]&gt;.<br/>&lt;+++[&gt;----&lt;-]&gt;.&lt;&lt;&lt;&lt;&lt;+++[&gt;+++++&lt;-]&gt;.<br/>&gt;&gt;.+++.------.--------.&gt;&gt;+.</div><div class="highlight" form="false" id="a_ECGVx"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="source"><pre><span class="nb">++++++</span><span class="k">[</span><span class="nv">&gt;</span><span class="nb">++++++++++++</span><span class="nv">&lt;</span><span class="nb">-</span><span class="k">]</span><span class="nv">&gt;</span><span class="nt">.</span><span class="c"></span>
+<span class="nv">&gt;</span><span class="nb">++++++++++</span><span class="k">[</span><span class="nv">&gt;</span><span class="nb">++++++++++</span><span class="nv">&lt;</span><span class="nb">-</span><span class="k">]</span><span class="nv">&gt;</span><span class="nb">+</span><span class="nt">.</span><span class="c"></span>
+<span class="nb">+++++++</span><span class="nt">..</span><span class="nb">+++</span><span class="nt">.</span><span class="nv">&gt;</span><span class="nb">++++</span><span class="k">[</span><span class="nv">&gt;</span><span class="nb">+++++++++++</span><span class="nv">&lt;</span><span class="nb">-</span><span class="k">]</span><span class="nv">&gt;</span><span class="nt">.</span><span class="c"></span>
+<span class="nv">&lt;</span><span class="nb">+++</span><span class="k">[</span><span class="nv">&gt;</span><span class="nb">----</span><span class="nv">&lt;</span><span class="nb">-</span><span class="k">]</span><span class="nv">&gt;</span><span class="nt">.</span><span class="nv">&lt;&lt;&lt;&lt;&lt;</span><span class="nb">+++</span><span class="k">[</span><span class="nv">&gt;</span><span class="nb">+++++</span><span class="nv">&lt;</span><span class="nb">-</span><span class="k">]</span><span class="nv">&gt;</span><span class="nt">.</span><span class="c"></span>
+<span class="nv">&gt;&gt;</span><span class="nt">.</span><span class="nb">+++</span><span class="nt">.</span><span class="nb">------</span><span class="nt">.</span><span class="nb">--------</span><span class="nt">.</span><span class="nv">&gt;&gt;</span><span class="nb">+</span><span class="nt">.</span><span class="c"></span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_IhrU3&quot;)"></div><p id="a_IhrU3">It turns out, how­ever, that <span class="my-code" decode="exclude">bf</span> has a gram­mar even sim­pler than our fic­ti­tious M-expres­sions.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_t20r3&quot;)"></div><p id="a_t20r3">Let’s recall <a href="intro.html#how-bf-works">how <span class="my-code" decode="exclude">bf</span> works</a>:</p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_BTFu8&quot;)"></div><p id="a_BTFu8">There are six oper­a­tors that manip­u­late a byte array: <span class="my-code" decode="exclude">&gt; &lt; + - . ,</span>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Q8cZ2&quot;)"></div><p id="a_Q8cZ2">There’s also a loop­ing con­struct <span class="my-code" decode="exclude">[···]</span> that can con­tain oper­a­tors or other loops.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_xst15&quot;)"></div><p id="a_xst15">White­space and other char­ac­ters have to be han­dled too—but we’ll leave those out of the gram­mar, because in the next sec­tion, we’ll learn a short­cut for deal­ing with them.</p></div></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_FMTxo&quot;)"></div><p id="a_FMTxo">Let’s build up our gram­mar line by line. The first pro­duc­tion rule rep­re­sents the top ele­ment, which we’ll call <span class="my-code" decode="exclude">bf-program</span>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_6dxgh&quot;)"></div><div class="highlight-container" id="a_6dxgh"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">bf-program :</div><div class="highlight" form="false" id="a_oUYKK"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>bf-program :
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_iEeHb&quot;)"></div><p id="a_iEeHb">What’s the pat­tern for a <span class="my-code" decode="exclude">bf-program</span>? We know that <span class="my-code" decode="exclude">bf</span> is just a list of oper­a­tions and loops. Let’s call them <span class="my-code" decode="exclude">bf-op</span> and <span class="my-code" decode="exclude">bf-loop</span> respec­tively. Thus our pat­tern for <span class="my-code" decode="exclude">bf-program</span> is a list of any num­ber of <span class="my-code" decode="exclude">bf-op</span>s or <span class="my-code" decode="exclude">bf-loop</span>s:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Js4uj&quot;)"></div><div class="highlight-container" id="a_Js4uj"><div id="code_45" form="false" decode="exclude" style="font-size:0;width:0;height:0">bf-program : (bf-op | bf-loop)*</div><div class="highlight" form="false" id="a_0JLcl"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>bf-program : (bf-op | bf-loop)*
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk2" data-clipboard-target="#code_45" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_3Cv8O&quot;)"></div><p id="a_3Cv8O">To recap, <span class="my-code" decode="exclude">(bf-op | bf-loop)</span> means “either an <span class="my-code" decode="exclude">bf-op</span> or a <span class="my-code" decode="exclude">bf-loop</span>" and <span class="my-code" decode="exclude">*</span> means “zero or more of the pre­ced­ing item”.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_mQ5JH&quot;)"></div><p id="a_mQ5JH">If we stopped here, our gram­mar wouldn’t work, because we’ve referred to <span class="my-code" decode="exclude">bf-op</span> and <span class="my-code" decode="exclude">bf-loop</span> with­out defin­ing them. We’ll do that next:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_4Bp77&quot;)"></div><div class="highlight-container" id="a_4Bp77"><div id="code_46" form="false" decode="exclude" style="font-size:0;width:0;height:0">bf-program : (bf-op | bf-loop)*<br/>bf-op      :<br/>bf-loop    :</div><div class="highlight" form="false" id="a_Z23Kz"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="source"><pre>bf-program : (bf-op | bf-loop)*
+bf-op      :
+bf-loop    :
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk3" data-clipboard-target="#code_46" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ptUNr&quot;)"></div><p id="a_ptUNr">So what’s a <span class="my-code" decode="exclude">bf-op</span>? As we noted, it’s one of the char­ac­ters <span class="my-code" decode="exclude">&gt; &lt; + - . ,</span>, which we notate like so:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_esYNn&quot;)"></div><div class="highlight-container" id="a_esYNn"><div id="code_47" form="false" decode="exclude" style="font-size:0;width:0;height:0">bf-program : (bf-op | bf-loop)*<br/>bf-op      : "&gt;" | "&lt;" | "+" | "-" | "." | ","<br/>bf-loop    :</div><div class="highlight" form="false" id="a_Ho2VG"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="source"><pre>bf-program : (bf-op | bf-loop)*
+bf-op      : "&gt;" | "&lt;" | "+" | "-" | "." | ","
+bf-loop    :
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk4" data-clipboard-target="#code_47" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_aLaQe&quot;)"></div><p id="a_aLaQe">Finally, what’s a <span class="my-code" decode="exclude">bf-loop</span>? It’s a pair of square brack­ets with another list of <span class="my-code" decode="exclude">bf-op</span>s or <span class="my-code" decode="exclude">bf-loop</span>s inside:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_vbEC2&quot;)"></div><div class="highlight-container" id="a_vbEC2"><div id="code_48" form="false" decode="exclude" style="font-size:0;width:0;height:0">bf-program : (bf-op | bf-loop)*<br/>bf-op      : "&gt;" | "&lt;" | "+" | "-" | "." | ","<br/>bf-loop    : "[" (bf-op | bf-loop)* "]"</div><div class="highlight" form="false" id="a_swPlp"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="source"><pre>bf-program : (bf-op | bf-loop)*
+bf-op      : "&gt;" | "&lt;" | "+" | "-" | "." | ","
+bf-loop    : "[" (bf-op | bf-loop)* "]"
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk5" data-clipboard-target="#code_48" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_WHb5s&quot;)"></div><p id="a_WHb5s">That’s it—we have a com­plete gram­mar for <span class="my-code" decode="exclude">bf</span>. Mean­ing, <span class="my-code" decode="exclude">bf</span> may be a crazy lan­guage, but no mat­ter how big or com­plex a <span class="my-code" decode="exclude">bf</span> pro­gram some­one handed us, we could parse it using just these three rules.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_qr88T&quot;)"></div><p id="a_qr88T">Is this the only valid gram­mar for <span class="my-code" decode="exclude">bf</span>? No. We could recur­sively reuse our <span class="my-code" decode="exclude">bf-program</span> ele­ment like so:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Hc2kX&quot;)"></div><div class="highlight-container" id="a_Hc2kX"><div id="code_49" form="false" decode="exclude" style="font-size:0;width:0;height:0">bf-program : (bf-op | bf-loop)*<br/>bf-op      : "&gt;" | "&lt;" | "+" | "-" | "." | ","<br/>bf-loop    : "[" bf-program "]"</div><div class="highlight" form="false" id="a_dssP1"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="source"><pre>bf-program : (bf-op | bf-loop)*
+bf-op      : "&gt;" | "&lt;" | "+" | "-" | "." | ","
+bf-loop    : "[" bf-program "]"
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk6" data-clipboard-target="#code_49" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_63ap8&quot;)"></div><p id="a_63ap8">We could also cre­ate a sep­a­rate ele­ment, call it <span class="my-code" decode="exclude">bf-exprs</span>, to rep­re­sent a list of <span class="my-code" decode="exclude">bf-op</span>s and <span class="my-code" decode="exclude">bf-loop</span>s:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_T3pXV&quot;)"></div><div class="highlight-container" id="a_T3pXV"><div id="code_50" form="false" decode="exclude" style="font-size:0;width:0;height:0">bf-program : bf-exprs<br/>bf-exprs   : (bf-op | bf-loop)*<br/>bf-op      : "&gt;" | "&lt;" | "+" | "-" | "." | ","<br/>bf-loop    : "[" bf-exprs "]"</div><div class="highlight" form="false" id="a_tR1k3"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="source"><pre>bf-program : bf-exprs
+bf-exprs   : (bf-op | bf-loop)*
+bf-op      : "&gt;" | "&lt;" | "+" | "-" | "." | ","
+bf-loop    : "[" bf-exprs "]"
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk7" data-clipboard-target="#code_50" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_XGJkW&quot;)"></div><p id="a_XGJkW">A case could be made for either of these alter­na­tives. The tiebreaker is con­ve­nience. For rea­sons that will become clear when we write our <a class="glossary" href="../appendix/glossary.html#expander"><span class="glossary-link-text">expander</span></a>, the eas­i­est gram­mar to work with will be the first one, because <span class="my-code" decode="exclude">bf-program</span> only appears once, and it oth­er­wise uses the fewest pos­si­ble rules.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;converting-a-grammar-to-a-parser&quot;)"></div><h3 anchor="converting-a-grammar-to-a-parser" class="subhead" id="converting-a-grammar-to-a-parser"><a href="#converting-a-grammar-to-a-parser">Con­vert­ing a gram­mar to a parser</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_pxHYl&quot;)"></div><p id="a_pxHYl">Our small invest­ment in mak­ing a gram­mar will pay an imme­di­ate div­i­dend. Because now that we’ve made our <span class="my-code" decode="exclude">bf</span> gram­mar:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_vbEC2a&quot;)"></div><div class="highlight-container" id="a_vbEC2a"><div id="code_51" form="false" decode="exclude" style="font-size:0;width:0;height:0">bf-program : (bf-op | bf-loop)*<br/>bf-op      : "&gt;" | "&lt;" | "+" | "-" | "." | ","<br/>bf-loop    : "[" (bf-op | bf-loop)* "]"</div><div class="highlight" form="false" id="a_swPlp8"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="source"><pre>bf-program : (bf-op | bf-loop)*
+bf-op      : "&gt;" | "&lt;" | "+" | "-" | "." | ","
+bf-loop    : "[" (bf-op | bf-loop)* "]"
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk9" data-clipboard-target="#code_51" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_KtbXh&quot;)"></div><p id="a_KtbXh">We need to con­vert it to an actual <span class="my-code" decode="exclude">bf</span> parser. How?</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_7YZ0T&quot;)"></div><p id="a_7YZ0T">Con­sis­tent with the idea of using a <a class="glossary" href="../appendix/glossary.html#domain-specific-language"><span class="glossary-link-text">domain-spe­cific lan­guage</span></a> to solve spe­cial­ized prob­lems, we’ll use a parser-gen­er­at­ing lan­guage called <span class="my-code" decode="exclude">brag</span> that takes a list of pro­duc­tion rules as its source code, and turns those rules into a work­ing parser.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_D0Rm3&quot;)"></div><p id="a_D0Rm3">Here’s how we use it. We make a new file called <span class="my-code" decode="exclude">"parser.rkt"</span> like so:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_mqxaR&quot;)"></div><div class="highlight-container" id="a_mqxaR"><div id="code_52" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>bf-program : (bf-op | bf-loop)*<br/>bf-op      : "&gt;" | "&lt;" | "+" | "-" | "." | ","<br/>bf-loop    : "[" (bf-op | bf-loop)* "]"</div><div class="highlight" form="false" id="a_LGaA2"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+bf-program : (bf-op | bf-loop)*
+bf-op      : "&gt;" | "&lt;" | "+" | "-" | "." | ","
+bf-loop    : "[" (bf-op | bf-loop)* "]"
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkb" data-clipboard-target="#code_52" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_f4dGO&quot;)"></div><p id="a_f4dGO">All we’ve done is take our gram­mar and add a <span class="my-code" decode="exclude">#lang brag</span> line to the top. When we import this mod­ule into our <span class="my-code" decode="exclude">bf</span> reader, we’ll get a func­tion called <a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/examples/nested-word-list..rkt)._parse))" class="docs" hyphens="none">parse</a> that imple­ments this gram­mar, and another called <a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/examples/nested-word-list..rkt)._parse-to-datum))" class="docs" hyphens="none">parse-to-datum</a> that will let us check the gen­er­ated parse tree.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_PZqFJ&quot;)"></div><p id="a_PZqFJ">Let’s do that now, by mak­ing another file in the same direc­tory, and past­ing in the source code from our <a href="intro.html#how-bf-works">demo pro­gram</a>:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">parser-tester.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_QUhi8&quot;)"></div><div class="highlight-container" id="a_QUhi8"><div id="code_53" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br<br/>(require "parser.rkt")<br/>(parse-to-datum "++++-+++-++-++[&gt;++++-+++-++-++&lt;-]&gt;.")</div><div class="highlight" form="false" id="a_e39yQ"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="s2">"parser.rkt"</span><span class="p">)</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/examples/nested-word-list..rkt)._parse-to-datum))" class="docs" hyphens="none">parse-to-datum</a></span> <span class="s2">"++++-+++-++-++[&gt;++++-+++-++-++&lt;-]&gt;."</span><span class="p">)</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkc" data-clipboard-target="#code_53" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_4qWZK&quot;)"></div><p id="a_4qWZK">When we run <span class="my-code" decode="exclude">"parser-tester.rkt"</span>, we’ll get this:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_XgVMI&quot;)"></div><div class="highlight-container" id="a_XgVMI"><div id="code_54" form="false" decode="exclude" style="font-size:0;width:0;height:0">'(bf-program<br/>  (bf-op "+")<br/>  (bf-op "+")<br/>  (bf-op "+")<br/>  (bf-op "+")<br/>  (bf-op "-")<br/>  (bf-op "+")<br/>  (bf-op "+")<br/>  (bf-op "+")<br/>  (bf-op "-")<br/>  (bf-op "+")<br/>  (bf-op "+")<br/>  (bf-op "-")<br/>  (bf-op "+")<br/>  (bf-op "+")<br/>  (bf-loop<br/>   "["<br/>   (bf-op "&gt;")<br/>   (bf-op "+")<br/>   (bf-op "+")<br/>   (bf-op "+")<br/>   (bf-op "+")<br/>   (bf-op "-")<br/>   (bf-op "+")<br/>   (bf-op "+")<br/>   (bf-op "+")<br/>   (bf-op "-")<br/>   (bf-op "+")<br/>   (bf-op "+")<br/>   (bf-op "-")<br/>   (bf-op "+")<br/>   (bf-op "+")<br/>   (bf-op "&lt;")<br/>   (bf-op "-")<br/>   "]")<br/>  (bf-op "&gt;")<br/>  (bf-op "."))</div><div class="highlight" form="false" id="a_mLbbU"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37</pre></div></td><td class="code"><div class="source"><pre><span class="o">&#39;</span><span class="p">(</span><span class="ss">bf-program</span>
+  <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+  <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+  <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+  <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+  <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"-"</span><span class="p">)</span>
+  <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+  <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+  <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+  <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"-"</span><span class="p">)</span>
+  <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+  <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+  <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"-"</span><span class="p">)</span>
+  <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+  <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+  <span class="p">(</span><span class="ss">bf-loop</span>
+   <span class="s2">"["</span>
+   <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"&gt;"</span><span class="p">)</span>
+   <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+   <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+   <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+   <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+   <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"-"</span><span class="p">)</span>
+   <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+   <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+   <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+   <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"-"</span><span class="p">)</span>
+   <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+   <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+   <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"-"</span><span class="p">)</span>
+   <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+   <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"+"</span><span class="p">)</span>
+   <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"&lt;"</span><span class="p">)</span>
+   <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"-"</span><span class="p">)</span>
+   <span class="s2">"]"</span><span class="p">)</span>
+  <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"&gt;"</span><span class="p">)</span>
+  <span class="p">(</span><span class="ss">bf-op</span> <span class="s2">"."</span><span class="p">))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkd" data-clipboard-target="#code_54" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_vaLuq&quot;)"></div><p id="a_vaLuq">Once again, all the char­ac­ters in our source code appear in a node of the parse tree, and these nodes cor­re­spond to the names and pat­terns of the pro­duc­tion rules. (The curi­ous can change the source string in <span class="my-code" decode="exclude">"parser-tester.rkt"</span> and see how the parse tree changes, though take care not to use any char­ac­ters other than the eight han­dled by our gram­mar.)</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_etPTb&quot;)"></div><p id="a_etPTb">Not bad—with four lines of code, the heavy lift­ing for the parser is now done. To fin­ish our parser, we need to build one helper func­tion that will take care of white­space and other char­ac­ters.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="grammars-and-parsers.html">2&emsp;gram­mars and parsers</a></li><li><a href="grammar-notation.html">3&emsp;gram­mar nota­tion</a></li><li><a class="here" href="the-parser.html">4&emsp;the parser</a></li><li><a href="the-tokenizer-and-reader.html">5&emsp;the tok­enizer and reader</a></li><li><a href="an-imperative-expander.html">6&emsp;an imper­a­tive expander</a></li><li><a href="a-functional-expander.html">7&emsp;a func­tional expander</a></li><li><a href="packaging-our-language.html">8&emsp;pack­ag­ing our lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="grammar-notation.html">← prev</a>
+    <a class="nav-right" href="the-tokenizer-and-reader.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

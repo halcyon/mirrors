@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/vi-vn/objective-c-vi/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:20 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn Objective-C in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.html">
+        <link rel="stylesheet" href="css/main.html">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+        <script src="js/vendor/modernizr-2.6.1.min.html"></script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">Share this page</span>
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">Learn X in Y minutes</a></h2>
+  <h2>Where X=Objective-C</h2>
+  
+    <p class="filelink">
+    Get the code:
+    <a href="../../files/LearnObjectiveC-vi.m">LearnObjectiveC-vi.m</a>
+    </p>
+  
+  <div id="doc">
+    <p>Objective-C là ngôn ngữ lập trình chính được sử dụng bởi Apple cho các hệ điều hành OS X, iOS và các framework tương ứng của họ, Cocoa và Cocoa Touch.
+Nó là một ngôn ngữ lập trình mục đích tổng quát, hướng đối tượng có bổ sung thêm kiểu truyền thông điệp giống Smalltalk vào ngôn ngữ lập trình C.</p>
+<pre><code class="highlight objective_c"><span class="c1">// Chú thích dòng đơn bắt đầu với //
+</span>
+<span class="cm">/*
+Chú thích đa dòng trông như thế này.
+*/</span>
+
+<span class="c1">// Nhập các headers của framework Foundation với cú pháp #import
+</span><span class="cp">#import &lt;Foundation/Foundation.h&gt;
+#import "MyClass.h"
+</span>
+<span class="c1">// Đầu vào chương trình của bạn là một hàm gọi là
+// main với một kiểu trả về kiểu integer.
+</span><span class="kt">int</span> <span class="nf">main</span> <span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span> <span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+    <span class="c1">// Tạo một autorelease pool để quản lý bộ nhớ vào chương trình
+</span>    <span class="n">NSAutoreleasePool</span> <span class="o">*</span> <span class="n">pool</span> <span class="o">=</span> <span class="p">[[</span><span class="n">NSAutoreleasePool</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+
+    <span class="c1">// Sử dụng hàm NSLog() để in ra các dòng lệnh vào console
+</span>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Hello World!"</span><span class="p">);</span> <span class="c1">// Print the string "Hello World!"
+</span>
+    <span class="c1">///////////////////////////////////////
+</span>    <span class="c1">// Kiểu &amp; Biến (Types &amp; Variables)
+</span>    <span class="c1">///////////////////////////////////////
+</span>
+    <span class="c1">// Khai báo số nguyên
+</span>    <span class="kt">int</span> <span class="n">myPrimitive1</span>  <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="n">myPrimitive2</span> <span class="o">=</span> <span class="mi">234554664565</span><span class="p">;</span>
+
+    <span class="c1">// Khai báo đối tượng
+</span>    <span class="c1">// Đặt dấu nháy * vào trước tên biến cho khai báo đối tượng strong
+</span>    <span class="n">MyClass</span> <span class="o">*</span><span class="n">myObject1</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>  <span class="c1">// Strong
+</span>    <span class="n">id</span>       <span class="n">myObject2</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>  <span class="c1">// Weak
+</span>    <span class="c1">// %@ là một đối tượng
+</span>    <span class="c1">// 'miêu tả' ('desciption') là thông lệ để trình bày giá trị của các Đối tượng
+</span>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%@ và %@"</span><span class="p">,</span> <span class="n">myObject1</span><span class="p">,</span> <span class="p">[</span><span class="n">myObject2</span> <span class="nf">description</span><span class="p">]);</span> <span class="c1">// In ra "(null) và (null)"
+</span>
+    <span class="c1">// Chuỗi
+</span>    <span class="n">NSString</span> <span class="o">*</span><span class="n">worldString</span> <span class="o">=</span> <span class="s">@"World"</span><span class="p">;</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Hello %@!"</span><span class="p">,</span> <span class="n">worldString</span><span class="p">);</span> <span class="c1">// In ra "Hello World!"
+</span>
+    <span class="c1">// Ký tự literals
+</span>    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">theLetterZNumber</span> <span class="o">=</span> <span class="sc">@'Z'</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">theLetterZ</span>            <span class="o">=</span> <span class="p">[</span><span class="n">theLetterZNumber</span> <span class="nf">charValue</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%c"</span><span class="p">,</span> <span class="n">theLetterZ</span><span class="p">);</span>
+
+    <span class="c1">// Số nguyên literals
+</span>    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">fortyTwoNumber</span> <span class="o">=</span> <span class="mi">@42</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">fortyTwo</span>             <span class="o">=</span> <span class="p">[</span><span class="n">fortyTwoNumber</span> <span class="nf">intValue</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%i"</span><span class="p">,</span> <span class="n">fortyTwo</span><span class="p">);</span>
+
+    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">fortyTwoUnsignedNumber</span> <span class="o">=</span> <span class="mi">@42</span><span class="n">U</span><span class="p">;</span>
+    <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">fortyTwoUnsigned</span>    <span class="o">=</span> <span class="p">[</span><span class="n">fortyTwoUnsignedNumber</span> <span class="nf">unsignedIntValue</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%u"</span><span class="p">,</span> <span class="n">fortyTwoUnsigned</span><span class="p">);</span>
+
+    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">fortyTwoShortNumber</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSNumber</span> <span class="nf">numberWithShort</span><span class="p">:</span><span class="mi">42</span><span class="p">];</span>
+    <span class="kt">short</span> <span class="n">fortyTwoShort</span>           <span class="o">=</span> <span class="p">[</span><span class="n">fortyTwoShortNumber</span> <span class="nf">shortValue</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%hi"</span><span class="p">,</span> <span class="n">fortyTwoShort</span><span class="p">);</span>
+
+    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">fortyTwoLongNumber</span> <span class="o">=</span> <span class="mi">@42</span><span class="n">L</span><span class="p">;</span>
+    <span class="kt">long</span> <span class="n">fortyTwoLong</span>            <span class="o">=</span> <span class="p">[</span><span class="n">fortyTwoLongNumber</span> <span class="nf">longValue</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%li"</span><span class="p">,</span> <span class="n">fortyTwoLong</span><span class="p">);</span>
+
+    <span class="c1">// Dấu phẩy động (floating point) literals
+</span>    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">piFloatNumber</span> <span class="o">=</span> <span class="mf">@3.141592654F</span><span class="p">;</span>
+    <span class="kt">float</span> <span class="n">piFloat</span>           <span class="o">=</span> <span class="p">[</span><span class="n">piFloatNumber</span> <span class="nf">floatValue</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%f"</span><span class="p">,</span> <span class="n">piFloat</span><span class="p">);</span>
+
+    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">piDoubleNumber</span> <span class="o">=</span> <span class="mf">@3.1415926535</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">piDouble</span>                 <span class="o">=</span> <span class="p">[</span><span class="n">piDoubleNumber</span> <span class="nf">doubleValue</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%f"</span><span class="p">,</span> <span class="n">piDouble</span><span class="p">);</span>
+
+    <span class="c1">// BOOL literals
+</span>    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">yesNumber</span> <span class="o">=</span> <span class="nb">@YES</span><span class="p">;</span>
+    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">noNumber</span>  <span class="o">=</span> <span class="nb">@NO</span><span class="p">;</span>
+
+    <span class="c1">// Đối tượng Mảng
+</span>    <span class="n">NSArray</span> <span class="o">*</span><span class="n">anArray</span>      <span class="o">=</span> <span class="err">@</span><span class="p">[</span><span class="mi">@1</span><span class="p">,</span> <span class="mi">@2</span><span class="p">,</span> <span class="mi">@3</span><span class="p">,</span> <span class="mi">@4</span><span class="p">];</span>
+    <span class="n">NSNumber</span> <span class="o">*</span><span class="n">thirdNumber</span> <span class="o">=</span> <span class="n">anArray</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Third number = %@"</span><span class="p">,</span> <span class="n">thirdNumber</span><span class="p">);</span> <span class="c1">// In ra "Third number = 3"
+</span>
+    <span class="c1">// Đối tượng Từ điển
+</span>    <span class="n">NSDictionary</span> <span class="o">*</span><span class="n">aDictionary</span> <span class="o">=</span> <span class="err">@</span><span class="p">{</span> <span class="s">@"key1"</span> <span class="o">:</span> <span class="s">@"value1"</span><span class="p">,</span> <span class="s">@"key2"</span> <span class="o">:</span> <span class="s">@"value2"</span> <span class="p">};</span>
+    <span class="n">NSObject</span> <span class="o">*</span><span class="n">valueObject</span>     <span class="o">=</span> <span class="n">aDictionary</span><span class="p">[</span><span class="s">@"A Key"</span><span class="p">];</span>
+    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Đối tượng = %@"</span><span class="p">,</span> <span class="n">valueObject</span><span class="p">);</span> <span class="c1">// In ra "Object = (null)"
+</span>
+    <span class="c1">///////////////////////////////////////
+</span>    <span class="c1">// Toán Tử (Operators)
+</span>    <span class="c1">///////////////////////////////////////
+</span>
+    <span class="c1">// Các toán tử cũng hoạt động giống như ngôn ngữ C
+</span>    <span class="c1">// Ví dụ:
+</span>    <span class="mi">2</span> <span class="o">+</span> <span class="mi">5</span><span class="p">;</span> <span class="c1">// =&gt; 7
+</span>    <span class="mi">4</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span> <span class="o">+</span> <span class="mi">5</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="p">;</span> <span class="c1">// =&gt; 9.3f
+</span>    <span class="mi">3</span> <span class="o">==</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">// =&gt; 0 (NO)
+</span>    <span class="mi">3</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">;</span> <span class="c1">// =&gt; 1 (YES)
+</span>    <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// =&gt; 1 (Logical and)
+</span>    <span class="mi">0</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// =&gt; 1 (Logical or)
+</span>    <span class="o">~</span><span class="mh">0x0F</span><span class="p">;</span> <span class="c1">// =&gt; 0xF0 (bitwise negation)
+</span>    <span class="mh">0x0F</span> <span class="o">&amp;</span> <span class="mh">0xF0</span><span class="p">;</span> <span class="c1">// =&gt; 0x00 (bitwise AND)
+</span>    <span class="mh">0x01</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// =&gt; 0x02 (bitwise dịch trái (bởi 1))
+</span>
+    <span class="c1">/////////////////////////////////////////////
+</span>    <span class="c1">// Cấu Trúc Điều Khiển (Controls Structures)
+</span>    <span class="c1">/////////////////////////////////////////////
+</span>
+    <span class="c1">// Câu lệnh If-Else
+</span>    <span class="k">if</span> <span class="p">(</span><span class="nb">NO</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"I am never run"</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"I am also never run"</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"I print"</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Câu lệnh Switch
+</span>    <span class="k">switch</span> <span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">case</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="p">{</span>
+            <span class="n">NSLog</span><span class="p">(</span><span class="s">@"I am never run"</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+        <span class="k">case</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="p">{</span>
+            <span class="n">NSLog</span><span class="p">(</span><span class="s">@"I am also never run"</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+        <span class="nl">default:</span>
+        <span class="p">{</span>
+            <span class="n">NSLog</span><span class="p">(</span><span class="s">@"I print"</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Câu lệnh vòng lặp While
+</span>    <span class="kt">int</span> <span class="n">ii</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">ii</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%d,"</span><span class="p">,</span> <span class="n">ii</span><span class="o">++</span><span class="p">);</span> <span class="c1">// ii++ tăng dần, sau khi sử dụng giá trị của nó.
+</span>    <span class="p">}</span> <span class="c1">// =&gt; in ra  "0,"
+</span>      <span class="c1">//           "1,"
+</span>      <span class="c1">//           "2,"
+</span>      <span class="c1">//           "3,"
+</span>
+    <span class="c1">// Câu lệnh vòng lặp For
+</span>    <span class="kt">int</span> <span class="n">jj</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">jj</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">jj</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">jj</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%d,"</span><span class="p">,</span> <span class="n">jj</span><span class="p">);</span>
+    <span class="p">}</span> <span class="c1">// =&gt; in ra  "0,"
+</span>      <span class="c1">//           "1,"
+</span>      <span class="c1">//           "2,"
+</span>      <span class="c1">//           "3,"
+</span>
+    <span class="c1">// Câu lệnh Foreach
+</span>    <span class="n">NSArray</span> <span class="o">*</span><span class="n">values</span> <span class="o">=</span> <span class="err">@</span><span class="p">[</span><span class="mi">@0</span><span class="p">,</span> <span class="mi">@1</span><span class="p">,</span> <span class="mi">@2</span><span class="p">,</span> <span class="mi">@3</span><span class="p">];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">NSNumber</span> <span class="o">*</span><span class="n">value</span> <span class="k">in</span> <span class="n">values</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%@,"</span><span class="p">,</span> <span class="n">value</span><span class="p">);</span>
+    <span class="p">}</span> <span class="c1">// =&gt; in ra  "0,"
+</span>      <span class="c1">//           "1,"
+</span>      <span class="c1">//           "2,"
+</span>      <span class="c1">//           "3,"
+</span>
+    <span class="c1">// Câu lệnh Try-Catch-Finally
+</span>    <span class="k">@try</span>
+    <span class="p">{</span>
+        <span class="c1">// Your statements here
+</span>        <span class="k">@throw</span> <span class="p">[</span><span class="n">NSException</span> <span class="nf">exceptionWithName</span><span class="p">:</span><span class="s">@"FileNotFoundException"</span>
+                            <span class="nf">reason</span><span class="p">:</span><span class="s">@"Không Tìm Thấy Tập Tin trên Hệ Thống"</span> <span class="nf">userInfo</span><span class="p">:</span><span class="nb">nil</span><span class="p">];</span>
+    <span class="p">}</span> <span class="k">@catch</span> <span class="p">(</span><span class="n">NSException</span> <span class="o">*</span> <span class="n">e</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Exception: %@"</span><span class="p">,</span> <span class="n">e</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">@finally</span>
+    <span class="p">{</span>
+        <span class="n">NSLog</span><span class="p">(</span><span class="s">@"Finally"</span><span class="p">);</span>
+    <span class="p">}</span> <span class="c1">// =&gt; in ra  "Exception: Không Tìm Thấy Tập Tin trên Hệ Thống"
+</span>      <span class="c1">//           "Finally"
+</span>
+    <span class="c1">///////////////////////////////////////
+</span>    <span class="c1">// Đối Tượng (Objects)
+</span>    <span class="c1">///////////////////////////////////////
+</span>
+    <span class="c1">// Tạo một thực thể đối tượng bằng cách phân vùng nhớ và khởi tạo đối tượng đó.
+</span>    <span class="c1">// Một đối tượng sẽ không thật sự hoạt động cho đến khi cả 2 bước alloc] init] được hoàn thành
+</span>    <span class="n">MyClass</span> <span class="o">*</span><span class="n">myObject</span> <span class="o">=</span> <span class="p">[[</span><span class="n">MyClass</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+
+    <span class="c1">// Mô hình lập trình hướng đối tượng của Objective-C dựa trên việc truyền thông điệp (message)
+</span>    <span class="c1">// và các thực thể đối tượng với nhau.
+</span>    <span class="c1">// Trong Objective-C một đối tượng không đơn thuần gọi phương thức; nó truyền thông điệp.
+</span>    <span class="p">[</span><span class="n">myObject</span> <span class="nf">instanceMethodWithParameter</span><span class="p">:</span><span class="s">@"Steve Jobs"</span><span class="p">];</span>
+
+    <span class="c1">// Dọn dẹp vùng nhớ mà bạn đã dùng ở chương trình
+</span>    <span class="p">[</span><span class="n">pool</span> <span class="nf">drain</span><span class="p">];</span>
+
+    <span class="c1">// Kết thúc chương trình
+</span>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">///////////////////////////////////////
+// Lớp và Hàm (Classes &amp; Functions)
+///////////////////////////////////////
+</span>
+<span class="c1">// Khai báo lớp của bạn ở một tập tin header (MyClass.h):
+// Cú pháp Khai Báo Lớp:
+// @interface ClassName : ParentClassName &lt;ImplementedProtocols&gt;
+// {
+//    Khai báo biến thành viên;
+// }
+// -/+ (type) Khai báo method;
+// @end
+</span><span class="k">@interface</span> <span class="nc">MyClass</span> <span class="p">:</span> <span class="nc">NSObject</span> <span class="o">&lt;</span><span class="n">MyProtocol</span><span class="o">&gt;</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">count</span><span class="p">;</span>
+    <span class="n">id</span> <span class="n">data</span><span class="p">;</span>
+    <span class="n">NSString</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">// Ký hiệu (notation) tiện ích để tự động khởi tạo public getter và setter
+</span><span class="k">@property</span> <span class="kt">int</span> <span class="n">count</span><span class="p">;</span>
+<span class="k">@property</span> <span class="p">(</span><span class="n">copy</span><span class="p">)</span> <span class="n">NSString</span> <span class="o">*</span><span class="n">name</span><span class="p">;</span> <span class="c1">// Sao chép đối tượng trong quá trình gán.
+</span><span class="k">@property</span> <span class="p">(</span><span class="n">readonly</span><span class="p">)</span> <span class="n">id</span> <span class="n">data</span><span class="p">;</span>    <span class="c1">// Chỉ khai báo phương thức getter.
+</span>
+<span class="c1">// Phương thức
+</span><span class="o">+/-</span> <span class="p">(</span><span class="k">return</span> <span class="n">type</span><span class="p">)</span><span class="n">methodSignature</span><span class="o">:</span><span class="p">(</span><span class="n">Parameter</span> <span class="n">Type</span> <span class="o">*</span><span class="p">)</span><span class="n">parameterName</span><span class="p">;</span>
+
+<span class="c1">// dấu '+' cho phương thức lớp
+</span><span class="k">+</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">classMethod</span><span class="p">;</span>
+
+<span class="c1">// dấu '-' cho phương thức thực thể
+</span><span class="k">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nf">instanceMethodWithParameter</span><span class="p">:(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">string</span><span class="p">;</span>
+<span class="k">-</span> <span class="p">(</span><span class="n">NSNumber</span> <span class="o">*</span><span class="p">)</span><span class="nf">methodAParameterAsString</span><span class="p">:(</span><span class="n">NSString</span><span class="o">*</span><span class="p">)</span><span class="nv">string</span> <span class="nf">andAParameterAsNumber</span><span class="p">:(</span><span class="n">NSNumber</span> <span class="o">*</span><span class="p">)</span><span class="nv">number</span><span class="p">;</span>
+
+<span class="k">@end</span>
+
+<span class="c1">// Thực thi các phương thức trong một tập tin thực thi (MyClass.m):
+</span>
+<span class="k">@implementation</span> <span class="nc">MyClass</span>
+
+<span class="c1">// Gọi khi đối tượng được release
+</span><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">dealloc</span>
+<span class="p">{</span>
+<span class="p">}</span>
+
+<span class="c1">// Phương thức khởi tạo (Constructors) là một cách để tạo các lớp
+// Đây là phương thức khởi tạo mặc định được gọi khi đối tượng được khởi tạo
+</span><span class="o">-</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="n">init</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">((</span><span class="n">self</span> <span class="o">=</span> <span class="p">[</span><span class="n">super</span> <span class="nf">init</span><span class="p">]))</span>
+    <span class="p">{</span>
+        <span class="n">self</span><span class="p">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="o">+</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">classMethod</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">[[</span><span class="n">self</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="o">-</span> <span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">instanceMethodWithParameter</span><span class="o">:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="n">string</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="s">@"New string"</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="o">-</span> <span class="p">(</span><span class="n">NSNumber</span> <span class="o">*</span><span class="p">)</span><span class="n">methodAParameterAsString</span><span class="o">:</span><span class="p">(</span><span class="n">NSString</span><span class="o">*</span><span class="p">)</span><span class="n">string</span> <span class="n">andAParameterAsNumber</span><span class="o">:</span><span class="p">(</span><span class="n">NSNumber</span> <span class="o">*</span><span class="p">)</span><span class="n">number</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="mi">@42</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Các phương thức được khai báo vào MyProtocol
+</span><span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">myProtocolMethod</span>
+<span class="p">{</span>
+    <span class="c1">// câu lệnh
+</span><span class="p">}</span>
+
+<span class="k">@end</span>
+
+<span class="cm">/*
+ * Một protocol khai báo các phương thức mà có thể thực thi bởi bất kỳ lớp nào.
+ * Các protocol chính chúng không phải là các lớp. Chúng chỉ đơn giản là định ra giao diện (interface)
+ * mà các đối tượng khác có trách nhiệm sẽ thực thi.
+ */</span>
+<span class="k">@protocol</span> <span class="nc">MyProtocol</span>
+    <span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">myProtocolMethod</span><span class="p">;</span>
+<span class="k">@end</span>
+
+
+
+</code></pre>
+
+<h2>Xem Thêm</h2>
+
+<ul>
+<li><p><a href="http://en.wikipedia.org/wiki/Objective-C">Wikipedia Objective-C</a></p></li>
+<li><p>Apple Docs&#39;:</p>
+
+<ul>
+<li><a href="http://developer.apple.com/library/ios/referencelibrary/GettingStarted/Learning_Objective-C_A_Primer/">Learning Objective-C</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/Introduction/Introduction.html">Programming With Objective-C</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/OOP_ObjC/Introduction/Introduction.html#//apple_ref/doc/uid/TP40005149">Object-Oriented Programming with Objective-C</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html">Coding Guidelines for Cocoa</a></li>
+</ul></li>
+<li><p><a href="http://www.raywenderlich.com/5600/ios-for-high-school-students-getting-started">iOS For High School Students: Getting Started</a></p></li>
+</ul>
+
+    <hr>
+    <p>Got a suggestion? A correction, perhaps? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Open an Issue</a> on the Github Repo, or make a pull request yourself!
+    </p>
+    <p class="contributed">
+    Originally contributed by Eugene Yagrushkin, and updated by <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/vi-vn/objective-c-vi.html.markdown">0 contributor(s)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2015
+    
+      
+        <a href="www.about.me/yagrushkin.html">Eugene Yagrushkin</a>,
+      
+    
+      
+        <a href="https://github.com/YannickL">Yannick Loriot</a>
+      
+    
+    </p>
+
+    <p>
+    
+
+    </footer>
+  </div>
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "ur-510ed322-cbdc-7d3a-c1d1-8a1a745aa7", doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.0.min.html"><\/script>')</script>
+        <script src="js/script.html"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/vi-vn/objective-c-vi/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:22 GMT -->
+</html>

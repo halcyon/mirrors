@@ -1,0 +1,139 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/solutions/solutions-8.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:24:00 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Solutions to exercises in lecture 8</title>
+</head>
+<body>
+
+<center><b><font size=+3>Solutions to exercises from "lecture notes 8"</font></b></center>
+
+<p><br>
+<br>
+<br>
+<p><tt>(defun my-equal (x y)</tt>
+<br><tt>&nbsp; (or (eql x y)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (and (stringp x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (stringp
+y)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (string=
+x y))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (and (consp x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (consp
+y)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (my-equal
+(car x) (car y))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (my-equal
+(cdr x) (cdr y)))))</tt>
+<p><tt>(defun my-eql (x y)</tt>
+<br><tt>&nbsp; (or (eq x y)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (and (numberp x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (numberp
+y)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (=
+x y))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (and (characterp x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (characterp
+y)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (char=
+x y))))</tt>
+<p><tt>(defun date()</tt>
+<br><tt>&nbsp; (multiple-value-bind</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (second minute hour date month year
+day daylight-p zone)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (get-decoded-time)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (unless (zerop zone)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (error "Have not yet coded names
+for zone ~a" zone))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (format nil</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+"~a ~a ~a ~a:~a:~a ~a ~a"</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(aref #("Mon" "Tue" "Wed" "Thu" "Fri" "Sat" "Sun") day)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(aref #(nil "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct"
+"Nov" "Dec") month)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+date</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+hour minute second</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(if daylight-p "BST" "GMT")</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+year)))</tt>
+<p><tt>;; error in question - sorry - it's COMPILING the crude version</tt>
+<br><tt>;; (defun first-arg (first second) first) which produces a warning</tt>
+<br><tt>(defun first-arg (first second)</tt>
+<br><tt>&nbsp; (declare (ignore second))</tt>
+<br><tt>&nbsp; first)</tt>
+<p><tt>(defun position-three-returning-from-nil (list number)</tt>
+<br><tt>&nbsp; (let ((count 0))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dolist (var list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (= var number)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (return-from
+nil count))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (incf count))))</tt>
+<p><tt>(defun position-three-returning-from-self (list number)</tt>
+<br><tt>&nbsp; (let ((count 0))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (dolist (var list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (= var number)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (return-from
+position-three-returning-from-self count))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (incf count))))</tt>
+<p><tt>(defun double-all (list)</tt>
+<br><tt>&nbsp; (mapcar (lambda (x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(if (numberp x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(+ x x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(return-from double-all)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; list))</tt>
+<p><tt>;;;;;;;;;;</tt>
+<p><tt>(defun my-make-array (length)</tt>
+<br><tt>&nbsp; (let* ((table (make-hash-table)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (setf (gethash 'length table) length)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; table))</tt>
+<p><tt>(defun my-length (table)</tt>
+<br><tt>&nbsp; (gethash 'length table))</tt>
+<p><tt>(defun check-index (table index)</tt>
+<br><tt>&nbsp; (or (&lt; -1 index (my-length table))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (error "Index ~a out of bounds"
+index)))</tt>
+<p><tt>(defun my-aref (table index)</tt>
+<br><tt>&nbsp; (check-index table index)</tt>
+<br><tt>&nbsp; (gethash index table))</tt>
+<p><tt>(defun my-setf-aref (table index new-value)</tt>
+<br><tt>&nbsp; (check-index table index)</tt>
+<br><tt>&nbsp; (setf (gethash index table) new-value))</tt>
+<p><tt>(defsetf my-aref my-setf-aref) ; cute addon - can now say (setf
+(my-aref table index) new-value)</tt>
+<br>&nbsp;
+<p>&nbsp;If you have tried the exercises, looked at the solutions and still
+do not understand what's going on, I am available for consultation at the
+times advertised on my office door. Bring your code with you in BOTH the
+following forms:
+<ul>
+<li>
+Logbook containing printout (nothing handwritten please)</li>
+
+<li>
+file on floppy</li>
+</ul>
+&nbsp;
+<div align=right>
+<br><a href="mailto:ndl@ravenbrook.com">Nick Levine</a>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+last modified 2000-11-24
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+Copyright (C) Nick Levine 1999. All rights reserved.
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/solutions/solutions-8.html#2 $</div>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/solutions/solutions-8.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:24:00 GMT -->
+</html>

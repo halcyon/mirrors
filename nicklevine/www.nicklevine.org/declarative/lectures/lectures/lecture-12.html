@@ -1,0 +1,352 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-12.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:53 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Lecture Twelve</title>
+</head>
+<body>
+
+<center><b><font size=+3>Declarative Languages</font></b>
+<br><b><font size=+3>Lecture #12</font></b></center>
+
+<p><b>Purpose: Loose ends / CLOS in 10 minutes / revision quiz / summary</b>
+<p><b>12.1 Loose ends</b>
+<p>There are a couple of specific points that I want to tie up. The first
+is that one of the great things about lisp is that it offers so many different
+ways of expressing your intent. Recall from the first lecture:
+<blockquote>
+<center><i>A <a href="http://www.cs.rochester.edu/u/www/courses/108/glossary/Declarative_Language.html">declarative
+language</a> is a language in which you describe the problem you are working
+on and the computer decides how to solve it. Lisp and Prolog are declarative
+languages.</i>
+<p><i>On the other hand a <a href="http://www.cs.rochester.edu/u/www/courses/108/glossary/Prodedural_Language.html">procedural
+language</a> is a language in which you tell the computer what to do. The
+machine will then do what you tell it and you hope that what it tells you
+is the answer to the question you wanted to ask. Pascal is a procedural
+language.</i></center>
+</blockquote>
+I am still unhappy with the thought of languages being <i>declarative</i>
+(if that is what the word means) - although code like
+<blockquote><tt>(def-url "/" ...)&nbsp;&nbsp;&nbsp;&nbsp; ; define root
+page of my web server</tt></blockquote>
+is getting close to that ideal. However, I think it is indisputable that
+lisp gives you so many ways of telling the computer what to do that you
+can effectively get on with the task of describing your actual problem
+relatively unencumbered by small details.
+<p>For example, the following would all find the position in the list <tt>things</tt>
+of a sublist of length 1. The first is fairly compact, and fine if you
+know how to use the <tt>:key</tt> argument to <tt>position</tt>. The next
+is almost as neat but depends on knowing about <tt>position-if</tt>, the
+third works but might be criticized for wasteful allocation (generating
+a list of length <tt>(length things)</tt> and then throwing it away again).
+The <tt>dolist</tt> form uses "primitive" parts, which is fine and might
+even in some circumstances run faster than the others; the <tt>mapc</tt>-closure
+solution is quite frankly revolting. Presumably, we could also have written
+a recursive function to do the search.
+<blockquote><tt>(position 1 things :key 'length)</tt>
+<p><tt>(position-if #'(lambda (x) (= (length x) 1)) things)</tt>
+<p><tt>(position 1 (mapcar 'length things))</tt>
+<p><tt>(let ((where 0))</tt>
+<br><tt>&nbsp; (dolist (x things)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (when (= (length x) 1)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (return where))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (incf where)))</tt>
+<p><tt>(block found</tt>
+<br><tt>&nbsp; (let ((where 0))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (mapc #'(lambda (x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(when (and x (not (cdr x)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(return-from found where))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(incf where))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; things))</tt>
+<br><tt>&nbsp; nil)</tt></blockquote>
+A lot of the functions I have told you about take additional (optional)
+arguments, and I may not always have told you about these. They quite frequently
+permit greater flexibility, and sometimes additional sophistication, in
+how you use them. For example, the following
+<blockquote><tt>(or (gethash key table)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; default)</tt>
+<p><tt>(gethash key table default)</tt></blockquote>
+both allow you to retrieve a value from a hash-table and state a default
+value in case the <tt>key</tt> wasn't present. However, suppose that the
+<tt>key
+</tt><u>is</u>
+present in the table, and the value stored against it is
+<tt>nil</tt>.
+In the first case above, <tt>gethash</tt> returns <tt>nil</tt> and so the
+<tt>or</tt>
+form returns <tt>default</tt>; in the second, <tt>gethash</tt> again finds
+<tt>key</tt>
+and returns <tt>nil</tt>. So the second form, while ostensibly similar
+to the first, can be used to distinguish between a stored value of <tt>nil</tt>
+and no stored value.
+<p>You'll find many cases like this in lisp: where different treatments
+can have similar results but for fine tuning you have to really know how
+each operator works.
+<p><b>12.2 What did we miss out?&nbsp;&nbsp; </b>(incorporating "CLOS in
+ten minutes"<sup>TM</sup>)
+<p>We have covered <a href="../additional/index.html">around 160 Common
+Lisp symbols</a> - looked at one way that's one sixth of the language.
+In practice, it's considerably more than that because a lot of the remaining
+symbols involve more book-work to cover less ground. (Or: less dramatic
+ground.) I'd reckon we're about half-way there. We didn't touch:
+<ul>
+<li>
+packages (other than in passing)</li>
+
+<li>
+streams (other than in passing)</li>
+
+<li>
+pathnames (other than very much in passing)</li>
+
+<li>
+compilation issues</li>
+
+<li>
+declarations</li>
+
+<li>
+optimization</li>
+
+<li>
+defining your own <tt>setf</tt> behaviour</li>
+
+<li>
+multiple values (other than in passing)</li>
+
+<li>
+the complex loop macro</li>
+
+<li>
+the condition system</li>
+
+<li>
+advanced macro building techniques</li>
+
+<li>
+extending the syntax</li>
+
+<li>
+vast numbers of functions dealing with lists, arrays, string, characters,
+numbers</li>
+</ul>
+<b>12.3 Summary</b>
+<p>So why use Lisp? Because it is
+<ul>
+<li>
+Standardized</li>
+
+<li>
+Extensible</li>
+
+<li>
+Dynamic</li>
+
+<li>
+Large</li>
+
+<li>
+Powerful</li>
+
+<li>
+Robust</li>
+
+<li>
+Reliable</li>
+
+<li>
+Y2K proof ;-)</li>
+
+<li>
+Flexible</li>
+
+<li>
+Cheap</li>
+
+<li>
+High-level</li>
+
+<li>
+Interactive</li>
+
+<li>
+Elegant</li>
+
+<li>
+Fun</li>
+</ul>
+It offers (see also <a href="http://www.xanalys.com/software_tools/products/myths_and_legends.html">the
+white paper</a>)
+<ul>
+<li>
+simple consistent syntax</li>
+
+<li>
+a rich set of datatypes</li>
+
+<li>
+run-time (dynamic) typing</li>
+
+<li>
+automatic memory management (<i>garbage collection</i>)</li>
+
+<li>
+a fully integrated object system (CLOS)</li>
+
+<li>
+sophisticated error handling</li>
+
+<li>
+stunningly powerful macro system ("programs as data")</li>
+
+<li>
+features (such as <tt>unwind-protect </tt>and closures) which you simply
+won't find elsewhere</li>
+</ul>
+It is particularly suitable for applications which are
+<ul>
+<li>
+large and complex</li>
+
+<li>
+server side</li>
+
+<li>
+non-stop</li>
+</ul>
+<b>12.4 Revision Quiz</b>
+<ol>
+<li>
+How would you add (i.e. insert) an extra element to the start of a list?</li>
+
+<li>
+How could you splice two lists together?</li>
+
+<li>
+How would you add (i.e. insert) an extra element to the end of a list?</li>
+
+<li>
+Suppose you wanted to perform some operation on each element of a list:
+how could you do this? (3 different answers...)</li>
+
+<li>
+What kinds of things can you use lists for?</li>
+
+<li>
+Give an example of a special operator.</li>
+
+<li>
+How could you find out the variable value of a symbol?</li>
+
+<li>
+How could you find out whether a symbol had a functional value?</li>
+
+<li>
+Give an example of a lisp object which is of two types, neither of which
+is a subtype of the other.</li>
+
+<li>
+True or false: every valid expression, when evaluated, returns a value?</li>
+
+<li>
+True or false: <tt>and</tt> is a function?</li>
+
+<li>
+How could you define a function so that it can take 0 or more parameters?</li>
+
+<li>
+How do you give a default value for an optional argument?</li>
+
+<li>
+Give five lisp datatypes.</li>
+
+<li>
+What does <tt>eval</tt> do?</li>
+
+<li>
+What defining forms do you know?</li>
+
+<li>
+Give some advantages of macros.</li>
+
+<li>
+Give an example of an iterative operator.</li>
+
+<li>
+Give 3 different equality predicates.</li>
+
+<li>
+How would you decide which equality predicate to use?</li>
+
+<li>
+If you wanted to find an operator which worked on strings, you might look
+in a reference manual in the chapter on string operators. Which other chapters
+would you look in?</li>
+
+<li>
+What is tail recursion?</li>
+
+<li>
+How do you write comments in lisp code?</li>
+
+<li>
+What conventions do you know for lisp code?</li>
+
+<li>
+How would you choose whether to use structures, hash-tables, lists or arrays
+for a particular application?</li>
+
+<li>
+What kinds of applications do you think lisp is good for?</li>
+
+<li>
+How do you ask a lisp programmer if they want a drink?</li>
+</ol>
+<b>12.5 Practical session / Suggested activity</b>
+<ul>
+<li>
+Implement a recursive function to find the position in a given list of
+a sublist of length 1.</li>
+
+<li>
+Implement the function <tt>append</tt>. Is your solution elegant? fast?
+robust?</li>
+
+<li>
+Implement a function which takes a lisp object and says something useful
+about it (the way that <tt>describe</tt> does).</li>
+
+<li>
+Go back through all the practicals and exercises and complete everything
+you missed out first time through.</li>
+</ul>
+<b>12.6 Revision reading</b>
+<ul>
+<li>
+Graham chapters 1-8 and 10</li>
+
+<li>
+Take at least one look through chapter 13 and appendix D of Graham.</li>
+</ul>
+As a final word, I just want to thank all my students at APU for helping
+me deliver this course, for working so hard and (I hope) for coming to
+appreciate at least the edges of why for me lisp is the <u>only</u> language
+to write your programs in.
+<br>&nbsp;
+<div align=right>Copyright (C) <a href="mailto:ndl@ravenbrook.com">Nick
+Levine</a> 1999. All rights reserved.</div>
+
+<div align=right>Last modified 2000-09-14
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/lectures/lecture-12.html#2 $</div>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-12.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:53 GMT -->
+</html>

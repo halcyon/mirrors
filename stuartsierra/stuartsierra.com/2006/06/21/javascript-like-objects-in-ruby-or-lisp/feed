@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: JavaScript-like Objects in Ruby (or Lisp)</title>
+	<atom:link href="https://stuartsierra.com/2006/06/21/javascript-like-objects-in-ruby-or-lisp/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2006/06/21/javascript-like-objects-in-ruby-or-lisp</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Julian Stecklina</title>
+		<link>https://stuartsierra.com/2006/06/21/javascript-like-objects-in-ruby-or-lisp/comment-page-1#comment-60</link>
+		<dc:creator><![CDATA[Julian Stecklina]]></dc:creator>
+		<pubDate>Sat, 24 Jun 2006 02:13:38 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=37#comment-60</guid>
+		<description><![CDATA[There is a CL library for prototype-based OO named KR: http://www.cliki.net/KR]]></description>
+		<content:encoded><![CDATA[<p>There is a CL library for prototype-based OO named KR: <a href="http://www.cliki.net/KR" rel="nofollow">http://www.cliki.net/KR</a></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Christian Lynbech</title>
+		<link>https://stuartsierra.com/2006/06/21/javascript-like-objects-in-ruby-or-lisp/comment-page-1#comment-54</link>
+		<dc:creator><![CDATA[Christian Lynbech]]></dc:creator>
+		<pubDate>Thu, 22 Jun 2006 20:56:44 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=37#comment-54</guid>
+		<description><![CDATA[Actually you could argue that standard CLOS has the same ability as Ruby, well at least the result is almost the same.
+
+In CLOS, you can redefine a class and that will take effect even in the running program with objects already instantiated. This means that if one decides to add a new slot to a class, one adds the slot definition, re-evaluate the defclass and voila, you may access the new slots in any object, and you do not have to use any special classes or MOP or anything to achieve the effect.]]></description>
+		<content:encoded><![CDATA[<p>Actually you could argue that standard CLOS has the same ability as Ruby, well at least the result is almost the same.</p>
+<p>In CLOS, you can redefine a class and that will take effect even in the running program with objects already instantiated. This means that if one decides to add a new slot to a class, one adds the slot definition, re-evaluate the defclass and voila, you may access the new slots in any object, and you do not have to use any special classes or MOP or anything to achieve the effect.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Joseph Oswald</title>
+		<link>https://stuartsierra.com/2006/06/21/javascript-like-objects-in-ruby-or-lisp/comment-page-1#comment-53</link>
+		<dc:creator><![CDATA[Joseph Oswald]]></dc:creator>
+		<pubDate>Thu, 22 Jun 2006 16:14:44 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=37#comment-53</guid>
+		<description><![CDATA[Actually, the symbol plist is the absolutely *wrong* place to put this information. Slots belong to instances of objects, not to the names of objects.
+
+Objects passed as functional arguments have a name (the parameter name), but that name is NOT global, and therefore, the global symbol&#039;s plist does not belong to that parameter. Furthermore, that functional argument refers to that object only during the particular call; the next time the function is called, the object with that name is likely to be a completely different object.  
+
+An object might, however, have a *slot* which is a plist, to which arbitrary &quot;pseudo-slots&quot; would be added.
+
+Symbol plists get used when *literal names* have significance, e.g., you are writing an assembler, and you record the definition of assembly labels under a my-assembler::definition property of the symbol named by the label, and the assumed width under a my-assembler::byte-width property, etc. You avoid collisions because no other application cares about those properties (your my-assembler package belongs to you), even if your assembly code input uses a label that matches a Lisp-defined symbol.]]></description>
+		<content:encoded><![CDATA[<p>Actually, the symbol plist is the absolutely *wrong* place to put this information. Slots belong to instances of objects, not to the names of objects.</p>
+<p>Objects passed as functional arguments have a name (the parameter name), but that name is NOT global, and therefore, the global symbol&#8217;s plist does not belong to that parameter. Furthermore, that functional argument refers to that object only during the particular call; the next time the function is called, the object with that name is likely to be a completely different object.  </p>
+<p>An object might, however, have a *slot* which is a plist, to which arbitrary &#8220;pseudo-slots&#8221; would be added.</p>
+<p>Symbol plists get used when *literal names* have significance, e.g., you are writing an assembler, and you record the definition of assembly labels under a my-assembler::definition property of the symbol named by the label, and the assumed width under a my-assembler::byte-width property, etc. You avoid collisions because no other application cares about those properties (your my-assembler package belongs to you), even if your assembly code input uses a label that matches a Lisp-defined symbol.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Spiffy</title>
+		<link>https://stuartsierra.com/2006/06/21/javascript-like-objects-in-ruby-or-lisp/comment-page-1#comment-51</link>
+		<dc:creator><![CDATA[Spiffy]]></dc:creator>
+		<pubDate>Thu, 22 Jun 2006 12:28:27 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=37#comment-51</guid>
+		<description><![CDATA[The same thing can be done in CLOS using the MOP, I have some sample code I could dig up that shows this.]]></description>
+		<content:encoded><![CDATA[<p>The same thing can be done in CLOS using the MOP, I have some sample code I could dig up that shows this.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: anonymous</title>
+		<link>https://stuartsierra.com/2006/06/21/javascript-like-objects-in-ruby-or-lisp/comment-page-1#comment-50</link>
+		<dc:creator><![CDATA[anonymous]]></dc:creator>
+		<pubDate>Thu, 22 Jun 2006 10:16:22 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=37#comment-50</guid>
+		<description><![CDATA[Perhaps a better idea would be to use your own plist instead of the symbol&#039;s (`getf&#039; instead of `get&#039;).  Note that in your example you don&#039;t need the `defvar&#039;.  If you use your own plist, you would have to give an initial value (e.g., `nil&#039;).]]></description>
+		<content:encoded><![CDATA[<p>Perhaps a better idea would be to use your own plist instead of the symbol&#8217;s (`getf&#8217; instead of `get&#8217;).  Note that in your example you don&#8217;t need the `defvar&#8217;.  If you use your own plist, you would have to give an initial value (e.g., `nil&#8217;).</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Friedrich</title>
+		<link>https://stuartsierra.com/2006/06/21/javascript-like-objects-in-ruby-or-lisp/comment-page-1#comment-49</link>
+		<dc:creator><![CDATA[Friedrich]]></dc:creator>
+		<pubDate>Thu, 22 Jun 2006 05:44:24 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=37#comment-49</guid>
+		<description><![CDATA[Well this is not really a unquie in both langauges. I guess the borrow that from Self
+http://research.sun.com/self/
+
+another langauge which is quite similiar is IO
+http://www.iolanguage.com/about/
+
+Regards
+Friedrich]]></description>
+		<content:encoded><![CDATA[<p>Well this is not really a unquie in both langauges. I guess the borrow that from Self<br />
+<a href="http://research.sun.com/self/" rel="nofollow">http://research.sun.com/self/</a></p>
+<p>another langauge which is quite similiar is IO<br />
+<a href="http://www.iolanguage.com/about/" rel="nofollow">http://www.iolanguage.com/about/</a></p>
+<p>Regards<br />
+Friedrich</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.282 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:03:24 -->
+
+<!-- Compression = gzip -->

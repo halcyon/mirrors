@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/rapid-prototyping-part-ii by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:58 GMT -->
+<head>
+    <title> Rapid Prototyping, Part II </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="rapid-prototyping-part-ii.html">
+    <meta property="og:title" content="Rapid Prototyping, Part II">
+    <meta property="og:description" content="Today we'll continue our discussion on Rapid Prototyping.">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Rapid Prototyping, Part II" />
+	<meta name="twitter:description" content="Today we'll continue our discussion on Rapid Prototyping" />
+	<meta name="twitter:image" content="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/136e51f2-6dc1-41cc-9110-4e012349e7d6.png" />
+	<meta name="og:image" content="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/136e51f2-6dc1-41cc-9110-4e012349e7d6.png" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> October 25, 2015 </div>
+            <h1 class="subject"> Rapid Prototyping, Part II </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> Hello Developer Friend!&nbsp;<br>
+<br>
+Today we&#39;ll continue our discussion on Rapid Prototyping.<br>
+<br>
+In <a href="rapid-prototyping-part-i.html">the first part of this series</a>, we laid out scaffolding for a music recommendation web application. The goal was not to produce something elegant or beautiful, but instead to complete a couple rounds of feedback as quickly as possible. The images below show where we were by the end of the email:<br>
+<br>
+<img class="tl-email-image" data-id="438221" height="349" src="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/136e51f2-6dc1-41cc-9110-4e012349e7d6.png" style="width: 640px; max-width: 640px;" width="640"><br>
+On the left side, you see a whiteboard sketch. On the right, you see the same concept implemented as a web page deployed on Heroku. Neither iteration implemented any meaningful functionality, they just laid out the structural bones of the system.<br>
+<br>
+That said, these simple artifacts do serve a useful purpose for generating feedback.<br>
+<br>
+The whiteboard sketch hints at how many recommendations might be shown at once, where they&#39;ll be positioned, and how the user is expected to interact with them. This leaves room for discussion on those topics, which will inform future developments.<br>
+<br>
+Once the sketch is translated into an actual web page that is accessible over the internet, your friends can load it up on their own devices, and see if it looks the way they&#39;d expect. You may find for example, that the slow startup time of a Heroku free plan account would be annoying and impractical for real use... or that the hastily thrown together layout works fine on a reasonably high resolution laptop but renders awkwardly on mobile devices.<br>
+<br>
+Getting this sort of feedback very early in your development process is invaluable, because it gives you a better picture of the real challenges you&#39;ll face in building your project. It&#39;s better to know about these basic stumbling blocks a half hour into a project than it is to discover them once you&#39;re ten hours into your work... because it buys you information that will influence your decision making process.<br>
+<br>
+That said, it is important to resist the temptation to &quot;solve&quot; problems that do not lie on the critical path during the prototyping phase. If you&#39;re semi-convinced that sorting out mobile rendering issues or hosting options are problems that can wait until later because they&#39;re not the main source of unknowns for your project, you can and should just jot down some notes about those issues and move on to the next iteration.<br>
+<br>
+In the interest of keeping the story moving, you and your friends decide those problems can wait. The next step is to begin adding some simple video recommendation behavior, since that is the heart of what this application will be used for.<br>
+<br>
+You have not yet sorted out exactly where your video metadata and the embedded videos themselves will come from, and that&#39;s something that will need to be sorted out soon. However, you are reasonably confident that you&#39;ll be able to get that information one way or another.<br>
+<br>
+Instead of spending time digging through service API documentation and experimenting with various video websites, you decide to mock up the most simple possible data set that could possibly work: A list of artists names and songs. You use the Faker library to do this, and within minutes you have a CSV file full of hilarious contrived data:<br>
+<br>
+<img class="tl-email-image" data-id="438209" height="370" src="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/0ceabbbe-b706-44db-8602-e6c46e80811d.png" style="width: 480px; max-width: 480px;" width="480"><br>
+The decision to use a CSV-based dataset rather than some other format or a proper database management system is not arbitrary. CSV is easy to read and write in any programming language, and it also is easy to use as a data import format for most databases. But the most compelling reason to use CSV isn&#39;t technical convenience, it&#39;s that the format is supported by every piece of spreadsheet software under the sun.<br>
+<br>
+This first round of feedback will rely on ridiculous data that was generated by a script, but future rounds may involve your friends opening up a Google Spreadsheet to key in more realistic information. If and when that happens, integrating their data will be easy.<br>
+<br>
+With this simple data set, you can map an artist to their complete collection of songs, which gives you your first meaningful recommendation behavior. Take whatever song is currently playing, and then recommend three more by the same artist:<br>
+<img class="tl-email-image" data-id="438201" height="481" src="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/cdabe7d5-597c-4247-b867-864a397cc3b0.png" style="width: 480px; max-width: 480px;" width="480"><br>
+Those with a keen eye will notice that one other change has been snuck in here: The placeholder image for the currently playing video has been replaced with a placeholder video! You and your friends are now able to enjoy the silky smooth tunes of Rick Astley as you continue to build out your prototype, which may be considered a killer feature on its own. But this wasn&#39;t done purely as an easter egg... there was a specific reason for making this change: Can you guess what question it was meant to answer?<br>
+<br>
+Keeping with the spirit of baby steps, I&#39;m going to stop here and ask you a few questions:
+<ul>
+	<li>What should the next step(s) be for this prototype? We&#39;re now at the point where there are many different directions that we can head, so what do you think should be towards the top of the priority list?<br>
+	&nbsp;</li>
+	<li>Put yourselves in the shoes of your non-technical friends (i.e. the eventual users of this system). What questions might they have for you? What questions do you need to ask them to understand their needs better?<br>
+	&nbsp;</li>
+	<li>What is the biggest technical challenge you see on the horizon before the 1.0 release of this project? What risk factors (if any)&nbsp;could kill the project entirely?<br>
+	&nbsp;</li>
+	<li style="font-size: 16px;">What are examples of good discussion topics for during the rapid prototyping phase, and what are examples of distracting or unproductive discussion topics?<br>
+	&nbsp;</li>
+	<li>When is the right time to stop prototyping and get into &quot;serious&quot;&nbsp;mode?</li>
+</ul>
+Where I take things next really depends on the answers I get to the above questions, so if you have thoughts on any or all of them, please send them along!<br>
+<br>
+-greg<br>
+<br>
+<em>PS: I&#39;d like to thank Joseph McCormick and&nbsp;Calinoiu Alexandru Nicolae for sharing ideas and feedback that have helped me create this essay series.</em><br>
+&nbsp;
+<hr><br>
+<em style="font-weight: normal; font-size: 16px; outline: none; color: rgb(80, 80, 80); line-height: 22px; max-width: 600px !important;"><strong>To share feedback: </strong><br>
+Reply to this email, or use the&nbsp;<a href="https://twitter.com/search?src=typd&amp;q=%23ProgrammingBeyondPractices" style="font-size: 16px; font-family: inherit; outline: none; color: rgb(52, 102, 204); text-decoration: none; max-width: 600px !important;">#ProgrammingBeyondPractices</a></em><em style="font-weight: normal; font-size: 16px; outline: none; color: rgb(80, 80, 80); line-height: 22px; max-width: 600px !important;"><font color="#505050" style="max-width: 600px !important;">&nbsp;hashtag on Twitter.&nbsp;</font><br style="max-width: 600px !important;">
+<br style="max-width: 600px !important;">
+<font color="#505050" style="max-width: 600px !important;">If you&#39;re a&nbsp;</font><a href="http://practicingruby.com/" style="font-size: 16px; font-family: inherit; outline: none; color: rgb(52, 102, 204); text-decoration: none; max-width: 600px !important;">Practicing Ruby</a><font color="#505050" style="max-width: 600px !important;">&nbsp;subscriber, you can also discuss these essays with me at any time via Slack or Discourse.</font></em> </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="rapid-prototyping-part-iii-1.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="rapid-prototyping-part-i.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/rapid-prototyping-part-ii by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:58 GMT -->
+</html>

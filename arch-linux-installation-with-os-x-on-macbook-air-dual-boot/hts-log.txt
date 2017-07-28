@@ -1,0 +1,11 @@
+HTTrack3.48-22 launched on Tue, 29 Nov 2016 13:22:36 at http://panks.me/posts/2013/06/arch-linux-installation-with-os-x-on-macbook-air-dual-boot/
+(httrack http://panks.me/posts/2013/06/arch-linux-installation-with-os-x-on-macbook-air-dual-boot/ )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+
+HTTrack Website Copier/3.48-22 mirror complete in 1 seconds : 2 links scanned, 1 files written (23760 bytes overall) [11325 bytes received at 11325 bytes/sec], 25864 bytes transferred using HTTP compression in 2 files, ratio 41%
+(No errors, 0 warnings, 0 messages)

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: HTML Footnotes</title>
+	<atom:link href="https://stuartsierra.com/2007/06/15/html-footnotes/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2007/06/15/html-footnotes</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Timo Lehtinen</title>
+		<link>https://stuartsierra.com/2007/06/15/html-footnotes/comment-page-1#comment-42338</link>
+		<dc:creator><![CDATA[Timo Lehtinen]]></dc:creator>
+		<pubDate>Sun, 03 May 2009 22:54:32 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/06/15/html-footnotes#comment-42338</guid>
+		<description><![CDATA[Who would have guessed in 1993, when HTML was introduced, that 16 years later the language would still not have something as basic as a mechanism for marking up footnotes. Or that after the publishing of the XHTML 1.1 spec in 2001, we would go more than a decade without any updates to the language (it doesn&#039;t look like HTML5 or XHTML 2.0 will reach completion any time soon).
+
+Personally, I have stopped waiting and have now solved the footnotes issue with my &quot;Nelson&quot; HTML preprocessor (http://nelsonhtml.com/). I only wish I had taken this route years ago.]]></description>
+		<content:encoded><![CDATA[<p>Who would have guessed in 1993, when HTML was introduced, that 16 years later the language would still not have something as basic as a mechanism for marking up footnotes. Or that after the publishing of the XHTML 1.1 spec in 2001, we would go more than a decade without any updates to the language (it doesn&#8217;t look like HTML5 or XHTML 2.0 will reach completion any time soon).</p>
+<p>Personally, I have stopped waiting and have now solved the footnotes issue with my &#8220;Nelson&#8221; HTML preprocessor (<a href="http://nelsonhtml.com/" rel="nofollow">http://nelsonhtml.com/</a>). I only wish I had taken this route years ago.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Luiz</title>
+		<link>https://stuartsierra.com/2007/06/15/html-footnotes/comment-page-1#comment-42095</link>
+		<dc:creator><![CDATA[Luiz]]></dc:creator>
+		<pubDate>Sat, 10 Jan 2009 20:28:18 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/06/15/html-footnotes#comment-42095</guid>
+		<description><![CDATA[By now I believe that you have finished your database. But if anybody else is interested, keep reading.
+
+For small footnotes, take a look at http://microformats.org/wiki/footnotes-examples. However, I&#039;m against using the SUP tag because it is not meaningful and should be replace with CSS. Another possibility would be to use the title attribute, that can be included in most tags. From the HTML 4 spec:
+&quot;title: This attribute offers advisory information about the element for which it is set.&quot;
+(more info on this attribute can be found in http://www.w3schools.com/tags/att_standard_title.asp)
+Most browsers show this as a tooltip when the mouse is over the element, but it can be rendered inside the page with the CSS &quot;content&quot; rule and attribute selectors if needed, or you can highlight the elements that have this attribute set. Internet Explorer doesn&#039;t supports attribute selectors however.
+
+The internal link solution has the advantage of using the built-in navigation from the browser and supporting longer, structured chunks of text while the tittle attribute only supports plain text. You can also use a custom value for the &quot;rel&quot; attribute like this: &lt;a href=&quot;#footnote1&quot; rel=&quot;nofollow&quot;&gt;1&lt;/a&gt;
+
+XHTML 2 (currently in draft stage) provides the &quot;note&quot; and &quot;complementary&quot; values for the &quot;role&quot; attribute of elements that could be used for footnotes.
+And for HTML 5 (also currently in draft stage) see http://dev.w3.org/html5/spec/Overview.html#footnotes. Basically it tells you to use title attribute for short notes, a tag with the number inside square brackets for longer notes (ex: &lt;a href=&quot;#somenote&quot; rel=&quot;nofollow&quot;&gt;[1]&lt;/a&gt;) or the new aside tag (equivalent to the XHTML 2 complementary role) for even longer notes or side notes.
+
+And finally, you can also look for the terms html and annotation. This may yeld some interesting results.
+
+I&#039;d also like to point out, even though off-topic, that html has the blockquote and cite tags for including references from other authors.]]></description>
+		<content:encoded><![CDATA[<p>By now I believe that you have finished your database. But if anybody else is interested, keep reading.</p>
+<p>For small footnotes, take a look at <a href="http://microformats.org/wiki/footnotes-examples" rel="nofollow">http://microformats.org/wiki/footnotes-examples</a>. However, I&#8217;m against using the SUP tag because it is not meaningful and should be replace with CSS. Another possibility would be to use the title attribute, that can be included in most tags. From the HTML 4 spec:<br />
+&#8220;title: This attribute offers advisory information about the element for which it is set.&#8221;<br />
+(more info on this attribute can be found in <a href="http://www.w3schools.com/tags/att_standard_title.asp" rel="nofollow">http://www.w3schools.com/tags/att_standard_title.asp</a>)<br />
+Most browsers show this as a tooltip when the mouse is over the element, but it can be rendered inside the page with the CSS &#8220;content&#8221; rule and attribute selectors if needed, or you can highlight the elements that have this attribute set. Internet Explorer doesn&#8217;t supports attribute selectors however.</p>
+<p>The internal link solution has the advantage of using the built-in navigation from the browser and supporting longer, structured chunks of text while the tittle attribute only supports plain text. You can also use a custom value for the &#8220;rel&#8221; attribute like this: <a href="#footnote1" rel="nofollow">1</a></p>
+<p>XHTML 2 (currently in draft stage) provides the &#8220;note&#8221; and &#8220;complementary&#8221; values for the &#8220;role&#8221; attribute of elements that could be used for footnotes.<br />
+And for HTML 5 (also currently in draft stage) see <a href="http://dev.w3.org/html5/spec/Overview.html#footnotes" rel="nofollow">http://dev.w3.org/html5/spec/Overview.html#footnotes</a>. Basically it tells you to use title attribute for short notes, a tag with the number inside square brackets for longer notes (ex: <a href="#somenote" rel="nofollow">[1]</a>) or the new aside tag (equivalent to the XHTML 2 complementary role) for even longer notes or side notes.</p>
+<p>And finally, you can also look for the terms html and annotation. This may yeld some interesting results.</p>
+<p>I&#8217;d also like to point out, even though off-topic, that html has the blockquote and cite tags for including references from other authors.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Leonard Richardson</title>
+		<link>https://stuartsierra.com/2007/06/15/html-footnotes/comment-page-1#comment-12654</link>
+		<dc:creator><![CDATA[Leonard Richardson]]></dc:creator>
+		<pubDate>Fri, 15 Jun 2007 16:40:26 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/06/15/html-footnotes#comment-12654</guid>
+		<description><![CDATA[I have long noticed an anti-humanities bias in HTML. I can&#039;t think of a better way to do what you want than the internal-links solution.
+
+This is almost certainly overkill, but Docbook has built-in support for footnotes.]]></description>
+		<content:encoded><![CDATA[<p>I have long noticed an anti-humanities bias in HTML. I can&#8217;t think of a better way to do what you want than the internal-links solution.</p>
+<p>This is almost certainly overkill, but Docbook has built-in support for footnotes.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.272 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:02:10 -->
+
+<!-- Compression = gzip -->

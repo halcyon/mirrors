@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from practicaltypography.com/carriage-returns.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 17:01:21 GMT -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript">
+if (navigator.appVersion.indexOf("Win")!=-1) {
+    document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-a.css" />');
+} else if (navigator.appVersion.indexOf("Mac")!=-1) {
+    if (navigator.userAgent.match(/iPad/i) != null) {
+        document.write('<link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="fonts/equity-b.css" type="text/css" />');
+        document.write('<link rel="stylesheet" media="only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2)" type="text/css" href="fonts/equity-a.css" />');
+    } else {
+        document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-b.css" />');
+    }
+} else {
+    document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-a.css" />');
+}
+
+</script>
+
+<title>Carriage returns | Butterick’s Practical Typography</title>
+<link rel="stylesheet" type="text/css" media="all" href="styles.css" />
+<link rel="stylesheet" type="text/css" media="all" href="fonts/1406-fonts.css" />
+<meta name="format-detection" content="telephone=no">
+
+
+
+
+
+<script type="text/javascript">
+var isFirefox = typeof InstallTrigger !== 'undefined';
+if (isFirefox) {
+document.write('<link rel="stylesheet" type="text/css" media="all" href="firefox.css" />');
+}
+var isChromium = window.chrome,
+    winNav = window.navigator,
+    vendorName = winNav.vendor,
+    isOpera = winNav.userAgent.indexOf("OPR") > -1,
+    isIEedge = winNav.userAgent.indexOf("Edge") > -1,
+    isIOSChrome = winNav.userAgent.match("CriOS");
+if(isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isIEedge == false) {
+   // is Google Chrome or Opera
+   document.write('<link rel="stylesheet" type="text/css" media="all" href="chrome.css" />');
+}
+</script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-19281911-7']);
+  _gaq.push(['_setDomainName', 'practicaltypography.com']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+
+<body>
+<div class="content"><div id="doc"><title-block><topic>carriage returns</topic><short-rule>Only when you want a new paragraph</short-rule></title-block><p>On man­ual type­writ­ers, the <first-use>car­riage</first-use> was the cylin­der that held the pa­per and scooted left­ward as you typed. At the end of each line, you’d push a lever to move the car­riage to the be­gin­ning of the next line. On elec­tric type­writ­ers, this lever be­came the <first-use>car­riage re­turn</first-use> key, which you’d use at the end of each <span class="no-hyphens">line.</span></p><p>The ter­mi­nol­ogy has stayed with us, but on a word proces­sor, you only use a car­riage re­turn to start a new para­graph. (In HTML, you use a for­mat­ting tag to de­note a para­graph—a car­riage re­turn has no vis­i­ble <span class="no-hyphens">effect.)</span></p><table class="shortcut"><thead><tr><th class="no-hyphens"></th><th class="no-hyphens">Word</th><th class="no-hyphens">Pages</th><th class="no-hyphens">HTML</th></tr></thead><tbody><tr><td>carriage return</td><td class="instruction">return</td><td class="instruction">return</td><td class="instruction"><code>&lt;p&gt; … &lt;/p&gt;</code></td></tr></tbody></table><p>As with the <a href="word-spaces.html" class="xref">word space</a>, use only one car­riage re­turn at a time. It’s com­mon to see mul­ti­ple car­riage re­turns used to add ver­ti­cal space be­tween para­graphs. Bad idea. If you want ver­ti­cal space af­ter a para­graph, use <a href="space-between-paragraphs.html" class="xref">space be­tween para­graphs</a>.</p><p><quo><dquo-push></dquo-push><dquo-pull>“</dquo-pull>But it’s so much eas­ier to type two car­riage re­turns.” I know. But in long, struc­tured doc­u­ments, ex­tra car­riage re­turns cre­ate un­pre­dictable con­se­quences as the doc­u­ment is edited. What­ever time you save with the short­cut will cost you <span class="no-hyphens">later.</span></quo></p><p>What if you get a doc­u­ment that’s al­ready lit­tered with dou­ble car­riage re­turns? Search-and-re­place works with <a href="white-space-characters.html" class="xref">white-space char­ac­ters</a> <span class="no-hyphens">too.</span></p><div class="howto"><div class="howto-name">How to replace double carriage returns</div><p><program>Word</program> <ui>Find and Replace</ui> (con­trol + f) → <ui>Replace</ui> → <ui>More</ui>. Use the <ui>Special</ui> menu to put two <ui>Paragraph Marks</ui> in the <ui>Find what</ui> box, and one <ui>Paragraph Mark</ui> in the <ui>Replace with</ui> box. (Care­ful: you don’t want the <ui>Paragraph Character</ui>, which de­notes the lit­eral ¶ sym­bol.) Click <ui>Replace All</ui>.</p><p><program>OS X Word</program> <ui>Edit</ui> → <ui>Find</ui> → <ui>Advanced Find and Replace</ui> → <ui>Replace</ui> → click tri­an­gle-shaped box in lower left to re­veal the <ui>Special</ui> menu, and then con­tinue as de­scribed <span class="no-hyphens">above.</span></p><p><program>Pages</program> This is aw­ful, but it seems to be the only way. Dis­play the white-space char­ac­ters with <ui>View</ui> → <ui>Show Invisibles</ui> (or ⌘ + shift + i). In the doc­u­ment, se­lect two con­tigu­ous blue ¶ sym­bols and do <ui>Edit</ui> → <ui>Find</ui> → <ui>Use Selection for Find</ui>. Then se­lect only one of the blue ¶ sym­bols, and do <ui>Edit</ui> → <ui>Find</ui> → <ui>Use Selection for Replace</ui>. Then go to the <ui>Find</ui> panel (ei­ther <ui>Edit</ui> → <ui>Find</ui> → <ui>Find...</ui> or ⌘ + f). You won’t see the car­riage re­turns you se­lected—don’t panic. Just click <ui>Replace All</ui>.</p></div><div class="btw"><div class="btw-title">by the way</div><ul><li><p>In email or other plain-text sit­u­a­tions, it’s fine to use mul­ti­ple car­riage re­turns to add ver­ti­cal space, be­cause there’s no other way to do <span class="no-hyphens">it.</span></p></li></ul></div></div><a id="links"></a><div style="height:1em"></div><ul class="children"></ul></div>
+
+
+<!-- top nav -->
+<div class="nav-outer" id="top"><a href="index-2.html#toc"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="up"><a href="type-composition.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="prev"><a href="hard-line-breaks.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="next"><a href="hard-page-breaks.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="bottom"><div class="nav-inner"><div id="navtable">
+
+<div id="left">
+
+<a class="xref box-link" href="hard-line-breaks.html"><span class="arrow">←</span>&nbsp;hard line breaks</a></div>
+
+
+<div id="center-left"><a class="xref box-link" href="index-2.html#toc">top</a></div>
+
+<div id="center-right"><a class="xref box-link" href="type-composition.html#links">Chapter</a></div>
+
+<div id="right">
+<a class="xref box-link" href="hard-page-breaks.html">hard page breaks&nbsp;<span class="arrow">→</span></a></div>
+
+
+
+</div></div></div> 
+
+</body>
+
+<!-- Mirrored from practicaltypography.com/carriage-returns.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 17:01:21 GMT -->
+</html>
+
+<!-- © 2013–16 Matthew Butterick -->
+

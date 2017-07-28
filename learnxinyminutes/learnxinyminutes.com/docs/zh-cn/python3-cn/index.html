@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/zh-cn/python3-cn/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:38 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn python3 in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../../css/normalize.css">
+        <link rel="stylesheet" href="../../../css/main.css">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fzh-cn%2Fpython3-cn%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3Dpython3">
+        分享此页
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">X分钟速成Y</a></h2>
+  <h2>其中 Y=python3</h2>
+  
+    <p class="filelink">
+    源代码下载：
+    <a href="../../files/learnpython3-cn.py">learnpython3-cn.py</a>
+    </p>
+  
+  <div id="doc">
+    <p>Python是由吉多·范罗苏姆(Guido Van Rossum)在90年代早期设计。它是如今最常用的编程
+语言之一。它的语法简洁且优美，几乎就是可执行的伪代码。</p>
+
+<p>欢迎大家斧正。英文版原作Louie Dinh <a href="http://twitter.com/louiedinh">@louiedinh</a>
+或着Email louiedinh [at] [谷歌的信箱服务]。中文翻译Geoff Liu。</p>
+
+<p>注意：这篇教程是特别为Python3写的。如果你想学旧版Python2，我们特别有另一篇教程。</p>
+<pre class="highlight python"><code>
+<span class="c"># 用井字符开头的是单行注释</span>
+
+<span class="s">""" 多行字符串用三个引号
+    包裹，也常被用来做多
+    行注释
+"""</span>
+
+<span class="c">####################################################</span>
+<span class="c">## 1. 原始数据类型和运算符</span>
+<span class="c">####################################################</span>
+
+<span class="c"># 整数</span>
+<span class="mi">3</span>  <span class="c"># =&gt; 3</span>
+
+<span class="c"># 算术没有什么出乎意料的</span>
+<span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c"># =&gt; 2</span>
+<span class="mi">8</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c"># =&gt; 7</span>
+<span class="mi">10</span> <span class="o">*</span> <span class="mi">2</span>  <span class="c"># =&gt; 20</span>
+
+<span class="c"># 但是除法例外，会自动转换成浮点数</span>
+<span class="mi">35</span> <span class="o">/</span> <span class="mi">5</span>  <span class="c"># =&gt; 7.0</span>
+<span class="mi">5</span> <span class="o">/</span> <span class="mi">3</span>  <span class="c"># =&gt; 1.6666666666666667</span>
+
+<span class="c"># 整数除法的结果都是向下取整</span>
+<span class="mi">5</span> <span class="o">//</span> <span class="mi">3</span>     <span class="c"># =&gt; 1</span>
+<span class="mf">5.0</span> <span class="o">//</span> <span class="mf">3.0</span> <span class="c"># =&gt; 1.0 # 浮点数也可以</span>
+<span class="o">-</span><span class="mi">5</span> <span class="o">//</span> <span class="mi">3</span>  <span class="c"># =&gt; -2</span>
+<span class="o">-</span><span class="mf">5.0</span> <span class="o">//</span> <span class="mf">3.0</span> <span class="c"># =&gt; -2.0</span>
+
+<span class="c"># 浮点数的运算结果也是浮点数</span>
+<span class="mi">3</span> <span class="o">*</span> <span class="mf">2.0</span> <span class="c"># =&gt; 6.0</span>
+
+<span class="c"># 模除</span>
+<span class="mi">7</span> <span class="o">%</span> <span class="mi">3</span> <span class="c"># =&gt; 1</span>
+
+<span class="c"># x的y次方</span>
+<span class="mi">2</span><span class="o">**</span><span class="mi">4</span> <span class="c"># =&gt; 16</span>
+
+<span class="c"># 用括号决定优先级</span>
+<span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span>  <span class="c"># =&gt; 8</span>
+
+<span class="c"># 布尔值</span>
+<span class="bp">True</span>
+<span class="bp">False</span>
+
+<span class="c"># 用not取非</span>
+<span class="ow">not</span> <span class="bp">True</span>  <span class="c"># =&gt; False</span>
+<span class="ow">not</span> <span class="bp">False</span>  <span class="c"># =&gt; True</span>
+
+<span class="c"># 逻辑运算符，注意and和or都是小写</span>
+<span class="bp">True</span> <span class="ow">and</span> <span class="bp">False</span> <span class="c">#=&gt; False</span>
+<span class="bp">False</span> <span class="ow">or</span> <span class="bp">True</span> <span class="c">#=&gt; True</span>
+
+<span class="c"># 整数也可以当作布尔值</span>
+<span class="mi">0</span> <span class="ow">and</span> <span class="mi">2</span> <span class="c">#=&gt; 0</span>
+<span class="o">-</span><span class="mi">5</span> <span class="ow">or</span> <span class="mi">0</span> <span class="c">#=&gt; -5</span>
+<span class="mi">0</span> <span class="o">==</span> <span class="bp">False</span> <span class="c">#=&gt; True</span>
+<span class="mi">2</span> <span class="o">==</span> <span class="bp">True</span> <span class="c">#=&gt; False</span>
+<span class="mi">1</span> <span class="o">==</span> <span class="bp">True</span> <span class="c">#=&gt; True</span>
+
+<span class="c"># 用==判断相等</span>
+<span class="mi">1</span> <span class="o">==</span> <span class="mi">1</span>  <span class="c"># =&gt; True</span>
+<span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span>  <span class="c"># =&gt; False</span>
+
+<span class="c"># 用!=判断不等</span>
+<span class="mi">1</span> <span class="o">!=</span> <span class="mi">1</span>  <span class="c"># =&gt; False</span>
+<span class="mi">2</span> <span class="o">!=</span> <span class="mi">1</span>  <span class="c"># =&gt; True</span>
+
+<span class="c"># 比较大小</span>
+<span class="mi">1</span> <span class="o">&lt;</span> <span class="mi">10</span>  <span class="c"># =&gt; True</span>
+<span class="mi">1</span> <span class="o">&gt;</span> <span class="mi">10</span>  <span class="c"># =&gt; False</span>
+<span class="mi">2</span> <span class="o">&lt;=</span> <span class="mi">2</span>  <span class="c"># =&gt; True</span>
+<span class="mi">2</span> <span class="o">&gt;=</span> <span class="mi">2</span>  <span class="c"># =&gt; True</span>
+
+<span class="c"># 大小比较可以连起来！</span>
+<span class="mi">1</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="mi">3</span>  <span class="c"># =&gt; True</span>
+<span class="mi">2</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="o">&lt;</span> <span class="mi">2</span>  <span class="c"># =&gt; False</span>
+
+<span class="c"># 字符串用单引双引都可以</span>
+<span class="s">"这是个字符串"</span>
+<span class="s">'这也是个字符串'</span>
+
+<span class="c"># 用加号连接字符串</span>
+<span class="s">"Hello "</span> <span class="o">+</span> <span class="s">"world!"</span>  <span class="c"># =&gt; "Hello world!"</span>
+
+<span class="c"># 字符串可以被当作字符列表</span>
+<span class="s">"This is a string"</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c"># =&gt; 'T'</span>
+
+<span class="c"># 用.format来格式化字符串</span>
+<span class="s">"{} can be {}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">"strings"</span><span class="p">,</span> <span class="s">"interpolated"</span><span class="p">)</span>
+
+<span class="c"># 可以重复参数以节省时间</span>
+<span class="s">"{0} be nimble, {0} be quick, {0} jump over the {1}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s">"Jack"</span><span class="p">,</span> <span class="s">"candle stick"</span><span class="p">)</span>
+<span class="c">#=&gt; "Jack be nimble, Jack be quick, Jack jump over the candle stick"</span>
+
+<span class="c"># 如果不想数参数，可以用关键字</span>
+<span class="s">"{name} wants to eat {food}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"Bob"</span><span class="p">,</span> <span class="n">food</span><span class="o">=</span><span class="s">"lasagna"</span><span class="p">)</span> <span class="c">#=&gt; "Bob wants to eat lasagna"</span>
+
+<span class="c"># 如果你的Python3程序也要在Python2.5以下环境运行，也可以用老式的格式化语法</span>
+<span class="s">"</span><span class="si">%</span><span class="s">s can be </span><span class="si">%</span><span class="s">s the </span><span class="si">%</span><span class="s">s way"</span> <span class="o">%</span> <span class="p">(</span><span class="s">"strings"</span><span class="p">,</span> <span class="s">"interpolated"</span><span class="p">,</span> <span class="s">"old"</span><span class="p">)</span>
+
+<span class="c"># None是一个对象</span>
+<span class="bp">None</span>  <span class="c"># =&gt; None</span>
+
+<span class="c"># 当与None进行比较时不要用 ==，要用is。is是用来比较两个变量是否指向同一个对象。</span>
+<span class="s">"etc"</span> <span class="ow">is</span> <span class="bp">None</span>  <span class="c"># =&gt; False</span>
+<span class="bp">None</span> <span class="ow">is</span> <span class="bp">None</span>  <span class="c"># =&gt; True</span>
+
+<span class="c"># None，0，空字符串，空列表，空字典都算是False</span>
+<span class="c"># 所有其他值都是True</span>
+<span class="nb">bool</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c"># =&gt; False</span>
+<span class="nb">bool</span><span class="p">(</span><span class="s">""</span><span class="p">)</span>  <span class="c"># =&gt; False</span>
+<span class="nb">bool</span><span class="p">([])</span> <span class="c">#=&gt; False</span>
+<span class="nb">bool</span><span class="p">({})</span> <span class="c">#=&gt; False</span>
+
+
+<span class="c">####################################################</span>
+<span class="c">## 2. 变量和集合</span>
+<span class="c">####################################################</span>
+
+<span class="c"># print是内置的打印函数</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"I'm Python. Nice to meet you!"</span><span class="p">)</span>
+
+<span class="c"># 在给变量赋值前不用提前声明</span>
+<span class="c"># 传统的变量命名是小写，用下划线分隔单词</span>
+<span class="n">some_var</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">some_var</span>  <span class="c"># =&gt; 5</span>
+
+<span class="c"># 访问未赋值的变量会抛出异常</span>
+<span class="c"># 参考流程控制一段来学习异常处理</span>
+<span class="n">some_unknown_var</span>  <span class="c"># 抛出NameError</span>
+
+<span class="c"># 用列表(list)储存序列</span>
+<span class="n">li</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c"># 创建列表时也可以同时赋给元素</span>
+<span class="n">other_li</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+
+<span class="c"># 用append在列表最后追加元素</span>
+<span class="n">li</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>    <span class="c"># li现在是[1]</span>
+<span class="n">li</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>    <span class="c"># li现在是[1, 2]</span>
+<span class="n">li</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>    <span class="c"># li现在是[1, 2, 4]</span>
+<span class="n">li</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>    <span class="c"># li现在是[1, 2, 4, 3]</span>
+<span class="c"># 用pop从列表尾部删除</span>
+<span class="n">li</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>        <span class="c"># =&gt; 3 且li现在是[1, 2, 4]</span>
+<span class="c"># 把3再放回去</span>
+<span class="n">li</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>    <span class="c"># li变回[1, 2, 4, 3]</span>
+
+<span class="c"># 列表存取跟数组一样</span>
+<span class="n">li</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c"># =&gt; 1</span>
+<span class="c"># 取出最后一个元素</span>
+<span class="n">li</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c"># =&gt; 3</span>
+
+<span class="c"># 越界存取会造成IndexError</span>
+<span class="n">li</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>  <span class="c"># 抛出IndexError</span>
+
+<span class="c"># 列表有切割语法</span>
+<span class="n">li</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>  <span class="c"># =&gt; [2, 4]</span>
+<span class="c"># 取尾</span>
+<span class="n">li</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>  <span class="c"># =&gt; [4, 3]</span>
+<span class="c"># 取头</span>
+<span class="n">li</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>  <span class="c"># =&gt; [1, 2, 4]</span>
+<span class="c"># 隔一个取一个</span>
+<span class="n">li</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>   <span class="c"># =&gt;[1, 4]</span>
+<span class="c"># 倒排列表</span>
+<span class="n">li</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>   <span class="c"># =&gt; [3, 4, 2, 1]</span>
+<span class="c"># 可以用三个参数的任何组合来构建切割</span>
+<span class="c"># li[始:终:步伐]</span>
+
+<span class="c"># 用del删除任何一个元素</span>
+<span class="k">del</span> <span class="n">li</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>   <span class="c"># li is now [1, 2, 3]</span>
+
+<span class="c"># 列表可以相加</span>
+<span class="c"># 注意：li和other_li的值都不变</span>
+<span class="n">li</span> <span class="o">+</span> <span class="n">other_li</span>   <span class="c"># =&gt; [1, 2, 3, 4, 5, 6]</span>
+
+<span class="c"># 用extend拼接列表</span>
+<span class="n">li</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">other_li</span><span class="p">)</span>   <span class="c"># li现在是[1, 2, 3, 4, 5, 6]</span>
+
+<span class="c"># 用in测试列表是否包含值</span>
+<span class="mi">1</span> <span class="ow">in</span> <span class="n">li</span>   <span class="c"># =&gt; True</span>
+
+<span class="c"># 用len取列表长度</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>   <span class="c"># =&gt; 6</span>
+
+
+<span class="c"># 元组是不可改变的序列</span>
+<span class="n">tup</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>   <span class="c"># =&gt; 1</span>
+<span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c"># 抛出TypeError</span>
+
+<span class="c"># 列表允许的操作元组大都可以</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span>   <span class="c"># =&gt; 3</span>
+<span class="n">tup</span> <span class="o">+</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>   <span class="c"># =&gt; (1, 2, 3, 4, 5, 6)</span>
+<span class="n">tup</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>   <span class="c"># =&gt; (1, 2)</span>
+<span class="mi">2</span> <span class="ow">in</span> <span class="n">tup</span>   <span class="c"># =&gt; True</span>
+
+<span class="c"># 可以把元组合列表解包，赋值给变量</span>
+<span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>     <span class="c"># 现在a是1，b是2，c是3</span>
+<span class="c"># 元组周围的括号是可以省略的</span>
+<span class="n">d</span><span class="p">,</span> <span class="n">e</span><span class="p">,</span> <span class="n">f</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span>
+<span class="c"># 交换两个变量的值就这么简单</span>
+<span class="n">e</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">d</span><span class="p">,</span> <span class="n">e</span>     <span class="c"># 现在d是5，e是4</span>
+
+
+<span class="c"># 用字典表达映射关系</span>
+<span class="n">empty_dict</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="c"># 初始化的字典</span>
+<span class="n">filled_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">"one"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">"two"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">"three"</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+
+<span class="c"># 用[]取值</span>
+<span class="n">filled_dict</span><span class="p">[</span><span class="s">"one"</span><span class="p">]</span>   <span class="c"># =&gt; 1</span>
+
+
+<span class="c"># 用keys获得所有的键。因为keys返回一个可迭代对象，所以在这里把结果包在list里。我们下面会详细介绍可迭代。</span>
+<span class="c"># 注意：字典键的顺序是不定的，你得到的结果可能和以下不同。</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">filled_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>   <span class="c"># =&gt; ["three", "two", "one"]</span>
+
+
+<span class="c"># 用values获得所有的值。跟keys一样，要用list包起来，顺序也可能不同。</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">filled_dict</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>   <span class="c"># =&gt; [3, 2, 1]</span>
+
+
+<span class="c"># 用in测试一个字典是否包含一个键</span>
+<span class="s">"one"</span> <span class="ow">in</span> <span class="n">filled_dict</span>   <span class="c"># =&gt; True</span>
+<span class="mi">1</span> <span class="ow">in</span> <span class="n">filled_dict</span>   <span class="c"># =&gt; False</span>
+
+<span class="c"># 访问不存在的键会导致KeyError</span>
+<span class="n">filled_dict</span><span class="p">[</span><span class="s">"four"</span><span class="p">]</span>   <span class="c"># KeyError</span>
+
+<span class="c"># 用get来避免KeyError</span>
+<span class="n">filled_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"one"</span><span class="p">)</span>   <span class="c"># =&gt; 1</span>
+<span class="n">filled_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"four"</span><span class="p">)</span>   <span class="c"># =&gt; None</span>
+<span class="c"># 当键不存在的时候get方法可以返回默认值</span>
+<span class="n">filled_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"one"</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>   <span class="c"># =&gt; 1</span>
+<span class="n">filled_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"four"</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>   <span class="c"># =&gt; 4</span>
+
+<span class="c"># setdefault方法只有当键不存在的时候插入新值</span>
+<span class="n">filled_dict</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">"five"</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>  <span class="c"># filled_dict["five"]设为5</span>
+<span class="n">filled_dict</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">"five"</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>  <span class="c"># filled_dict["five"]还是5</span>
+
+<span class="c"># 字典赋值</span>
+<span class="n">filled_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s">"four"</span><span class="p">:</span><span class="mi">4</span><span class="p">})</span> <span class="c">#=&gt; {"one": 1, "two": 2, "three": 3, "four": 4}</span>
+<span class="n">filled_dict</span><span class="p">[</span><span class="s">"four"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c"># 另一种赋值方法</span>
+
+<span class="c"># 用del删除</span>
+<span class="k">del</span> <span class="n">filled_dict</span><span class="p">[</span><span class="s">"one"</span><span class="p">]</span>  <span class="c"># 从filled_dict中把one删除</span>
+
+
+<span class="c"># 用set表达集合</span>
+<span class="n">empty_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+<span class="c"># 初始化一个集合，语法跟字典相似。</span>
+<span class="n">some_set</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">}</span>   <span class="c"># some_set现在是{1, 2, 3, 4}</span>
+
+<span class="c"># 可以把集合赋值于变量</span>
+<span class="n">filled_set</span> <span class="o">=</span> <span class="n">some_set</span>
+
+<span class="c"># 为集合添加元素</span>
+<span class="n">filled_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>   <span class="c"># filled_set现在是{1, 2, 3, 4, 5}</span>
+
+<span class="c"># &amp; 取交集</span>
+<span class="n">other_set</span> <span class="o">=</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">}</span>
+<span class="n">filled_set</span> <span class="o">&amp;</span> <span class="n">other_set</span>   <span class="c"># =&gt; {3, 4, 5}</span>
+
+<span class="c"># | 取并集</span>
+<span class="n">filled_set</span> <span class="o">|</span> <span class="n">other_set</span>   <span class="c"># =&gt; {1, 2, 3, 4, 5, 6}</span>
+
+<span class="c"># - 取补集</span>
+<span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">}</span> <span class="o">-</span> <span class="p">{</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">}</span>   <span class="c"># =&gt; {1, 4}</span>
+
+<span class="c"># in 测试集合是否包含元素</span>
+<span class="mi">2</span> <span class="ow">in</span> <span class="n">filled_set</span>   <span class="c"># =&gt; True</span>
+<span class="mi">10</span> <span class="ow">in</span> <span class="n">filled_set</span>   <span class="c"># =&gt; False</span>
+
+
+<span class="c">####################################################</span>
+<span class="c">## 3. 流程控制和迭代器</span>
+<span class="c">####################################################</span>
+
+<span class="c"># 先随便定义一个变量</span>
+<span class="n">some_var</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="c"># 这是个if语句。注意缩进在Python里是有意义的</span>
+<span class="c"># 印出"some_var比10小"</span>
+<span class="k">if</span> <span class="n">some_var</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"some_var比10大"</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">some_var</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>    <span class="c"># elif句是可选的</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"some_var比10小"</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>                  <span class="c"># else也是可选的</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"some_var就是10"</span><span class="p">)</span>
+
+
+<span class="s">"""
+用for循环语句遍历列表
+打印:
+    dog is a mammal
+    cat is a mammal
+    mouse is a mammal
+"""</span>
+<span class="k">for</span> <span class="n">animal</span> <span class="ow">in</span> <span class="p">[</span><span class="s">"dog"</span><span class="p">,</span> <span class="s">"cat"</span><span class="p">,</span> <span class="s">"mouse"</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"{} is a mammal"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">animal</span><span class="p">))</span>
+
+<span class="s">"""
+"range(number)"返回数字列表从0到给的数字
+打印:
+    0
+    1
+    2
+    3
+"""</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+<span class="s">"""
+while循环直到条件不满足
+打印:
+    0
+    1
+    2
+    3
+"""</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c"># x = x + 1 的简写</span>
+
+<span class="c"># 用try/except块处理异常状况</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="c"># 用raise抛出异常</span>
+    <span class="k">raise</span> <span class="nb">IndexError</span><span class="p">(</span><span class="s">"This is an index error"</span><span class="p">)</span>
+<span class="k">except</span> <span class="nb">IndexError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="k">pass</span>    <span class="c"># pass是无操作，但是应该在这里处理错误</span>
+<span class="k">except</span> <span class="p">(</span><span class="nb">TypeError</span><span class="p">,</span> <span class="nb">NameError</span><span class="p">):</span>
+    <span class="k">pass</span>    <span class="c"># 可以同时处理不同类的错误</span>
+<span class="k">else</span><span class="p">:</span>   <span class="c"># else语句是可选的，必须在所有的except之后</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"All good!"</span><span class="p">)</span>   <span class="c"># 只有当try运行完没有错误的时候这句才会运行</span>
+
+
+<span class="c"># Python提供一个叫做可迭代(iterable)的基本抽象。一个可迭代对象是可以被当作序列</span>
+<span class="c"># 的对象。比如说上面range返回的对象就是可迭代的。</span>
+
+<span class="n">filled_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s">"one"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">"two"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">"three"</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+<span class="n">our_iterable</span> <span class="o">=</span> <span class="n">filled_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">our_iterable</span><span class="p">)</span> <span class="c"># =&gt; range(1,10) 是一个实现可迭代接口的对象</span>
+
+<span class="c"># 可迭代对象可以遍历</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">our_iterable</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>    <span class="c"># 打印 one, two, three</span>
+
+<span class="c"># 但是不可以随机访问</span>
+<span class="n">our_iterable</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="c"># 抛出TypeError</span>
+
+<span class="c"># 可迭代对象知道怎么生成迭代器</span>
+<span class="n">our_iterator</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">our_iterable</span><span class="p">)</span>
+
+<span class="c"># 迭代器是一个可以记住遍历的位置的对象</span>
+<span class="c"># 用__next__可以取得下一个元素</span>
+<span class="n">our_iterator</span><span class="o">.</span><span class="n">__next__</span><span class="p">()</span>  <span class="c">#=&gt; "one"</span>
+
+<span class="c"># 再一次调取__next__时会记得位置</span>
+<span class="n">our_iterator</span><span class="o">.</span><span class="n">__next__</span><span class="p">()</span>  <span class="c">#=&gt; "two"</span>
+<span class="n">our_iterator</span><span class="o">.</span><span class="n">__next__</span><span class="p">()</span>  <span class="c">#=&gt; "three"</span>
+
+<span class="c"># 当迭代器所有元素都取出后，会抛出StopIteration</span>
+<span class="n">our_iterator</span><span class="o">.</span><span class="n">__next__</span><span class="p">()</span> <span class="c"># 抛出StopIteration</span>
+
+<span class="c"># 可以用list一次取出迭代器所有的元素</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">filled_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>  <span class="c">#=&gt; Returns ["one", "two", "three"]</span>
+
+
+
+<span class="c">####################################################</span>
+<span class="c">## 4. 函数</span>
+<span class="c">####################################################</span>
+
+<span class="c"># 用def定义新函数</span>
+<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"x is {} and y is {}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>    <span class="c"># 用return语句返回</span>
+
+<span class="c"># 调用函数</span>
+<span class="n">add</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>   <span class="c"># =&gt; 印出"x is 5 and y is 6"并且返回11</span>
+
+<span class="c"># 也可以用关键字参数来调用函数</span>
+<span class="n">add</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>   <span class="c"># 关键字参数可以用任何顺序</span>
+
+
+<span class="c"># 我们可以定义一个可变参数函数</span>
+<span class="k">def</span> <span class="nf">varargs</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">args</span>
+
+<span class="n">varargs</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>   <span class="c"># =&gt; (1, 2, 3)</span>
+
+
+<span class="c"># 我们也可以定义一个关键字可变参数函数</span>
+<span class="k">def</span> <span class="nf">keyword_args</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">kwargs</span>
+
+<span class="c"># 我们来看看结果是什么：</span>
+<span class="n">keyword_args</span><span class="p">(</span><span class="n">big</span><span class="o">=</span><span class="s">"foot"</span><span class="p">,</span> <span class="n">loch</span><span class="o">=</span><span class="s">"ness"</span><span class="p">)</span>   <span class="c"># =&gt; {"big": "foot", "loch": "ness"}</span>
+
+
+<span class="c"># 这两种可变参数可以混着用</span>
+<span class="k">def</span> <span class="nf">all_the_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="s">"""
+all_the_args(1, 2, a=3, b=4) prints:
+    (1, 2)
+    {"a": 3, "b": 4}
+"""</span>
+
+<span class="c"># 调用可变参数函数时可以做跟上面相反的，用*展开序列，用**展开字典。</span>
+<span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s">"a"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s">"b"</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+<span class="n">all_the_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>   <span class="c"># 相当于 foo(1, 2, 3, 4)</span>
+<span class="n">all_the_args</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>   <span class="c"># 相当于 foo(a=3, b=4)</span>
+<span class="n">all_the_args</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>   <span class="c"># 相当于 foo(1, 2, 3, 4, a=3, b=4)</span>
+
+
+<span class="c"># 函数作用域</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="k">def</span> <span class="nf">setX</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="c"># 局部作用域的x和全局域的x是不同的</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">num</span> <span class="c"># =&gt; 43</span>
+    <span class="k">print</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c"># =&gt; 43</span>
+
+<span class="k">def</span> <span class="nf">setGlobalX</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">x</span>
+    <span class="k">print</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c"># =&gt; 5</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">num</span> <span class="c"># 现在全局域的x被赋值</span>
+    <span class="k">print</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c"># =&gt; 6</span>
+
+<span class="n">setX</span><span class="p">(</span><span class="mi">43</span><span class="p">)</span>
+<span class="n">setGlobalX</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+
+
+<span class="c"># 函数在Python是一等公民</span>
+<span class="k">def</span> <span class="nf">create_adder</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">adder</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+    <span class="k">return</span> <span class="n">adder</span>
+
+<span class="n">add_10</span> <span class="o">=</span> <span class="n">create_adder</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">add_10</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>   <span class="c"># =&gt; 13</span>
+
+<span class="c"># 也有匿名函数</span>
+<span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">)(</span><span class="mi">3</span><span class="p">)</span>   <span class="c"># =&gt; True</span>
+
+<span class="c"># 内置的高阶函数</span>
+<span class="nb">map</span><span class="p">(</span><span class="n">add_10</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>   <span class="c"># =&gt; [11, 12, 13]</span>
+<span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span>   <span class="c"># =&gt; [6, 7]</span>
+
+<span class="c"># 用列表推导式可以简化映射和过滤。列表推导式的返回值是另一个列表。</span>
+<span class="p">[</span><span class="n">add_10</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]]</span>  <span class="c"># =&gt; [11, 12, 13]</span>
+<span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span> <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">]</span>   <span class="c"># =&gt; [6, 7]</span>
+
+<span class="c">####################################################</span>
+<span class="c">## 5. 类</span>
+<span class="c">####################################################</span>
+
+
+<span class="c"># 定义一个继承object的类</span>
+<span class="k">class</span> <span class="nc">Human</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="c"># 类属性，被所有此类的实例共用。</span>
+    <span class="n">species</span> <span class="o">=</span> <span class="s">"H. sapiens"</span>
+
+    <span class="c"># 构造方法，当实例被初始化时被调用。注意名字前后的双下划线，这是表明这个属</span>
+    <span class="c"># 性或方法对Python有特殊意义，但是允许用户自行定义。你自己取名时不应该用这</span>
+    <span class="c"># 种格式。</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="c"># Assign the argument to the instance's name attribute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+
+    <span class="c"># 实例方法，第一个参数总是self，就是这个实例对象</span>
+    <span class="k">def</span> <span class="nf">say</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">"{name}: {message}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c"># 类方法，被所有此类的实例共用。第一个参数是这个类对象。</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_species</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">species</span>
+
+    <span class="c"># 静态方法。调用时没有实例或类的绑定。</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">grunt</span><span class="p">():</span>
+        <span class="k">return</span> <span class="s">"*grunt*"</span>
+
+
+<span class="c"># 构造一个实例</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">Human</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"Ian"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">say</span><span class="p">(</span><span class="s">"hi"</span><span class="p">))</span>     <span class="c"># 印出 "Ian: hi"</span>
+
+<span class="n">j</span> <span class="o">=</span> <span class="n">Human</span><span class="p">(</span><span class="s">"Joel"</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">j</span><span class="o">.</span><span class="n">say</span><span class="p">(</span><span class="s">"hello"</span><span class="p">))</span>  <span class="c"># 印出 "Joel: hello"</span>
+
+<span class="c"># 调用一个类方法</span>
+<span class="n">i</span><span class="o">.</span><span class="n">get_species</span><span class="p">()</span>   <span class="c"># =&gt; "H. sapiens"</span>
+
+<span class="c"># 改一个共用的类属性</span>
+<span class="n">Human</span><span class="o">.</span><span class="n">species</span> <span class="o">=</span> <span class="s">"H. neanderthalensis"</span>
+<span class="n">i</span><span class="o">.</span><span class="n">get_species</span><span class="p">()</span>   <span class="c"># =&gt; "H. neanderthalensis"</span>
+<span class="n">j</span><span class="o">.</span><span class="n">get_species</span><span class="p">()</span>   <span class="c"># =&gt; "H. neanderthalensis"</span>
+
+<span class="c"># 调用静态方法</span>
+<span class="n">Human</span><span class="o">.</span><span class="n">grunt</span><span class="p">()</span>   <span class="c"># =&gt; "*grunt*"</span>
+
+
+<span class="c">####################################################</span>
+<span class="c">## 6. 模块</span>
+<span class="c">####################################################</span>
+
+<span class="c"># 用import导入模块</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="k">print</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">16</span><span class="p">))</span>  <span class="c"># =&gt; 4.0</span>
+
+<span class="c"># 也可以从模块中导入个别值</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">floor</span>
+<span class="k">print</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="mf">3.7</span><span class="p">))</span>  <span class="c"># =&gt; 4.0</span>
+<span class="k">print</span><span class="p">(</span><span class="n">floor</span><span class="p">(</span><span class="mf">3.7</span><span class="p">))</span>   <span class="c"># =&gt; 3.0</span>
+
+<span class="c"># 可以导入一个模块中所有值</span>
+<span class="c"># 警告：不建议这么做</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c"># 如此缩写模块名字</span>
+<span class="kn">import</span> <span class="nn">math</span> <span class="kn">as</span> <span class="nn">m</span>
+<span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>   <span class="c"># =&gt; True</span>
+
+<span class="c"># Python模块其实就是普通的Python文件。你可以自己写，然后导入，</span>
+<span class="c"># 模块的名字就是文件的名字。</span>
+
+<span class="c"># 你可以这样列出一个模块里所有的值</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="nb">dir</span><span class="p">(</span><span class="n">math</span><span class="p">)</span>
+
+
+<span class="c">####################################################</span>
+<span class="c">## 7. 高级用法</span>
+<span class="c">####################################################</span>
+
+<span class="c"># 用生成器(generators)方便地写惰性运算</span>
+<span class="k">def</span> <span class="nf">double_numbers</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">iterable</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">i</span> <span class="o">+</span> <span class="n">i</span>
+
+<span class="c"># 生成器只有在需要时才计算下一个值。它们每一次循环只生成一个值，而不是把所有的</span>
+<span class="c"># 值全部算好。这意味着double_numbers不会生成大于15的数字。</span>
+<span class="c">#</span>
+<span class="c"># range的返回值也是一个生成器，不然一个1到900000000的列表会花很多时间和内存。</span>
+<span class="c">#</span>
+<span class="c"># 如果你想用一个Python的关键字当作变量名，可以加一个下划线来区分。</span>
+<span class="n">range_</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">900000000</span><span class="p">)</span>
+<span class="c"># 当找到一个 &gt;=30 的结果就会停</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">double_numbers</span><span class="p">(</span><span class="n">range_</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">30</span><span class="p">:</span>
+        <span class="k">break</span>
+
+
+<span class="c"># 装饰器(decorators)</span>
+<span class="c"># 这个例子中，beg装饰say</span>
+<span class="c"># beg会先调用say。如果返回的say_please为真，beg会改变返回的字符串。</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+
+
+<span class="k">def</span> <span class="nf">beg</span><span class="p">(</span><span class="n">target_function</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">target_function</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">msg</span><span class="p">,</span> <span class="n">say_please</span> <span class="o">=</span> <span class="n">target_function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">say_please</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">"{} {}"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="s">"Please! I am poor :("</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">msg</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span>
+
+
+<span class="nd">@beg</span>
+<span class="k">def</span> <span class="nf">say</span><span class="p">(</span><span class="n">say_please</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s">"Can you buy me a beer?"</span>
+    <span class="k">return</span> <span class="n">msg</span><span class="p">,</span> <span class="n">say_please</span>
+
+
+<span class="k">print</span><span class="p">(</span><span class="n">say</span><span class="p">())</span>  <span class="c"># Can you buy me a beer?</span>
+<span class="k">print</span><span class="p">(</span><span class="n">say</span><span class="p">(</span><span class="n">say_please</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>  <span class="c"># Can you buy me a beer? Please! I am poor :(</span>
+</code></pre>
+
+<h2>想继续学吗？</h2>
+
+<h3>线上免费材料（英文）</h3>
+
+<ul>
+<li><a href="http://learnpythonthehardway.org/book/">Learn Python The Hard Way</a></li>
+<li><a href="http://www.diveintopython.net/">Dive Into Python</a></li>
+<li><p><a href="http://pythonpracticeprojects.com/">Ideas for Python Projects</a></p></li>
+<li><p><a href="http://docs.python.org/3/">The Official Docs</a></p></li>
+<li><p><a href="http://docs.python-guide.org/en/latest/">Hitchhiker&rsquo;s Guide to Python</a></p></li>
+<li><p><a href="http://pymotw.com/3/">Python Module of the Week</a></p></li>
+<li><p><a href="http://nbviewer.ipython.org/5920182">A Crash Course in Python for Scientists</a></p></li>
+</ul>
+
+<h3>书籍（也是英文）</h3>
+
+<ul>
+<li><a href="http://www.amazon.com/gp/product/0596158106/ref=as_li_qf_sp_asin_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0596158106&amp;linkCode=as2&amp;tag=homebits04-20">Programming Python</a></li>
+<li><a href="http://www.amazon.com/gp/product/1441413022/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1441413022&amp;linkCode=as2&amp;tag=homebits04-20">Dive Into Python</a></li>
+<li><a href="http://www.amazon.com/gp/product/0672329786/ref=as_li_tf_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0672329786&amp;linkCode=as2&amp;tag=homebits04-20">Python Essential Reference</a></li>
+</ul>
+
+    <hr>
+    <p>有建议？或者发现什么错误？在Github上<a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">开一个issue</a>，或者你自己也可以写一个pull request！
+    </p>
+    <p class="contributed">
+    原著Louie Dinh，并由<a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/zh-cn/python3-cn.html.markdown">1个好心人</a>修改。
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://pythonpracticeprojects.com/">Louie Dinh</a>,
+      
+    
+      
+        <a href="http://github.com/xksteven">Steven Basart</a>,
+      
+    
+      
+        <a href="https://github.com/Oire">Andre Polykanine</a>
+      
+    
+    </p>
+
+    <p>
+    
+      Translated by:
+      
+        <a href="http://geoffliu.me/">Geoff Liu</a>
+      
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/zh-cn/python3-cn/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:39 GMT -->
+</html>

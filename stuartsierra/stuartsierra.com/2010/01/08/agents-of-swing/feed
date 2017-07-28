@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Agents of Swing</title>
+	<atom:link href="https://stuartsierra.com/2010/01/08/agents-of-swing/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2010/01/08/agents-of-swing</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: String Matcher &#124; Vinnie Monaco &#8211; Research in Software</title>
+		<link>https://stuartsierra.com/2010/01/08/agents-of-swing/comment-page-1#comment-44455</link>
+		<dc:creator><![CDATA[String Matcher &#124; Vinnie Monaco &#8211; Research in Software]]></dc:creator>
+		<pubDate>Fri, 20 Apr 2012 23:28:49 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=395#comment-44455</guid>
+		<description><![CDATA[[...] cached. Clojure has agents, which provide shared access to mutable state. (Stuart Sierra has a nice article on using agents with [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] cached. Clojure has agents, which provide shared access to mutable state. (Stuart Sierra has a nice article on using agents with [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Jim</title>
+		<link>https://stuartsierra.com/2010/01/08/agents-of-swing/comment-page-1#comment-44416</link>
+		<dc:creator><![CDATA[Jim]]></dc:creator>
+		<pubDate>Wed, 04 Apr 2012 12:10:44 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=395#comment-44416</guid>
+		<description><![CDATA[Thanks a lot Stuart...I really like your macros! Just a small remark however...Your with-action macro will create a brand new ActionListener for each component it&#039;s called with. Is this desirable in general? What if you have 50 buttons? The way i usually do it in Java is using a single ActionListener and by identifying the source of the event from the action command. Isn&#039;t this more efficient in general? Now in all fairness, i tried to think of a way to do exactly that and I faced problems because there is no concept of class in Clojure (unless you get down and dirty with :gen-class) so I don&#039;t know how to create an ActionListerner that just pass it around as &quot;this&quot; as i would do in Java. Any clarification/help is greatly appreciated...i just want to know if creating separate listeners for single actions is legit...]]></description>
+		<content:encoded><![CDATA[<p>Thanks a lot Stuart&#8230;I really like your macros! Just a small remark however&#8230;Your with-action macro will create a brand new ActionListener for each component it&#8217;s called with. Is this desirable in general? What if you have 50 buttons? The way i usually do it in Java is using a single ActionListener and by identifying the source of the event from the action command. Isn&#8217;t this more efficient in general? Now in all fairness, i tried to think of a way to do exactly that and I faced problems because there is no concept of class in Clojure (unless you get down and dirty with :gen-class) so I don&#8217;t know how to create an ActionListerner that just pass it around as &#8220;this&#8221; as i would do in Java. Any clarification/help is greatly appreciated&#8230;i just want to know if creating separate listeners for single actions is legit&#8230;</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Nic</title>
+		<link>https://stuartsierra.com/2010/01/08/agents-of-swing/comment-page-1#comment-44321</link>
+		<dc:creator><![CDATA[Nic]]></dc:creator>
+		<pubDate>Mon, 03 Oct 2011 20:48:06 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=395#comment-44321</guid>
+		<description><![CDATA[Great blog. I found it very useful.
+The one macro confused me a little. The event parameter in with-action seems to have
+no role. This definition of the macro is clearer for me. Is it also valid or does it have issues I am not seeing ?
+
+(defmacro with-action [component &#038; body]
+  `(. ~component addActionListener
+      (proxy [java.awt.event.ActionListener] []
+        (actionPerformed [~&#039;event] ~@body))))]]></description>
+		<content:encoded><![CDATA[<p>Great blog. I found it very useful.<br />
+The one macro confused me a little. The event parameter in with-action seems to have<br />
+no role. This definition of the macro is clearer for me. Is it also valid or does it have issues I am not seeing ?</p>
+<p>(defmacro with-action [component &amp; body]<br />
+  `(. ~component addActionListener<br />
+      (proxy [java.awt.event.ActionListener] []<br />
+        (actionPerformed [~&#8217;event] ~@body))))</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Jeff Schwab</title>
+		<link>https://stuartsierra.com/2010/01/08/agents-of-swing/comment-page-1#comment-43187</link>
+		<dc:creator><![CDATA[Jeff Schwab]]></dc:creator>
+		<pubDate>Sat, 14 Aug 2010 21:21:35 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=395#comment-43187</guid>
+		<description><![CDATA[Thank you for the excellent series of posts.  Would it make more sense to set the text-boxes&#039; &quot;editable&quot; property, rather than &quot;enabled&quot;?  Also, would there be any disadvantage to using WindowAdapter, instead of WindowListener, so as to reduce boilerplate?]]></description>
+		<content:encoded><![CDATA[<p>Thank you for the excellent series of posts.  Would it make more sense to set the text-boxes&#8217; &#8220;editable&#8221; property, rather than &#8220;enabled&#8221;?  Also, would there be any disadvantage to using WindowAdapter, instead of WindowListener, so as to reduce boilerplate?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Michael Wood</title>
+		<link>https://stuartsierra.com/2010/01/08/agents-of-swing/comment-page-1#comment-43032</link>
+		<dc:creator><![CDATA[Michael Wood]]></dc:creator>
+		<pubDate>Sun, 24 Jan 2010 18:14:13 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=395#comment-43032</guid>
+		<description><![CDATA[Thanks :)  That WindowListener was what I was looking for.
+
+Yes, of course running multiple CPU intensive things at the same time will slow the machine down.  What I meant was that it seemed not to be updating the display at 0.1s intervals anymore, but I suppose it could also be that the values were taking longer than 0.1s to update and if so, I wouldn&#039;t be able to tell the difference :)  I suppose part of my problem is that I have a single core machine.]]></description>
+		<content:encoded><![CDATA[<p>Thanks :)  That WindowListener was what I was looking for.</p>
+<p>Yes, of course running multiple CPU intensive things at the same time will slow the machine down.  What I meant was that it seemed not to be updating the display at 0.1s intervals anymore, but I suppose it could also be that the values were taking longer than 0.1s to update and if so, I wouldn&#8217;t be able to tell the difference :)  I suppose part of my problem is that I have a single core machine.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2010/01/08/agents-of-swing/comment-page-1#comment-43031</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Fri, 22 Jan 2010 15:57:24 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=395#comment-43031</guid>
+		<description><![CDATA[Michael- you&#039;re right, each window creates a new flipper, which will eventually use up all your CPU resources.
+
+One solution is to assign the flipper to a global Var, so that all the windows connect to the same flipper.
+
+Another way is to automatically stop the flipper when the window is closed.  This is easy enough.  We need to add a &lt;a href=&quot;http://java.sun.com/javase/6/docs/api/java/awt/event/WindowListener.html&quot; rel=&quot;nofollow&quot;&gt;WindowListener&lt;/a&gt; on the &lt;a href=&quot;http://java.sun.com/javase/6/docs/api/javax/swing/JFrame.html&quot; rel=&quot;nofollow&quot;&gt;JFrame&lt;/a&gt;.  Insert the following lines just above (.pack) in the flipper-app function:
+&lt;pre&gt;(.addWindowListener 
+ (proxy [java.awt.event.WindowListener] []
+   (windowActivated [e])
+   (windowClosed [e])
+   (windowClosing [e]
+                  (send flipper stop)
+                  (.stop timer))
+   (windowDeactivated [e])
+   (windowDeiconified [e])
+   (windowIconified [e])
+   (windowOpened [e])))&lt;/pre&gt;
+
+As to your second question, running multiple instances of any CPU-intensive process will be slow.
+
+In fact, Clojure puts &lt;em&gt;more&lt;/em&gt; strain on the system because it makes full use of all your CPU cores.  That&#039;s good if you want your computation to finish faster, not so good if you want to leave some CPU for other applications.
+
+Clojure doesn&#039;t provide a way to explicitly control how many cores it uses, but it could someday.  Some operating systems also allow you to restrict the number of cores a process can use.  As multi-threaded programming becomes more prevalent, CPU resource management should be more accessible.]]></description>
+		<content:encoded><![CDATA[<p>Michael- you&#8217;re right, each window creates a new flipper, which will eventually use up all your CPU resources.</p>
+<p>One solution is to assign the flipper to a global Var, so that all the windows connect to the same flipper.</p>
+<p>Another way is to automatically stop the flipper when the window is closed.  This is easy enough.  We need to add a <a href="http://java.sun.com/javase/6/docs/api/java/awt/event/WindowListener.html" rel="nofollow">WindowListener</a> on the <a href="http://java.sun.com/javase/6/docs/api/javax/swing/JFrame.html" rel="nofollow">JFrame</a>.  Insert the following lines just above (.pack) in the flipper-app function:</p>
+<pre>(.addWindowListener 
+ (proxy [java.awt.event.WindowListener] []
+   (windowActivated [e])
+   (windowClosed [e])
+   (windowClosing [e]
+                  (send flipper stop)
+                  (.stop timer))
+   (windowDeactivated [e])
+   (windowDeiconified [e])
+   (windowIconified [e])
+   (windowOpened [e])))</pre>
+<p>As to your second question, running multiple instances of any CPU-intensive process will be slow.</p>
+<p>In fact, Clojure puts <em>more</em> strain on the system because it makes full use of all your CPU cores.  That&#8217;s good if you want your computation to finish faster, not so good if you want to leave some CPU for other applications.</p>
+<p>Clojure doesn&#8217;t provide a way to explicitly control how many cores it uses, but it could someday.  Some operating systems also allow you to restrict the number of cores a process can use.  As multi-threaded programming becomes more prevalent, CPU resource management should be more accessible.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Michael Wood</title>
+		<link>https://stuartsierra.com/2010/01/08/agents-of-swing/comment-page-1#comment-43029</link>
+		<dc:creator><![CDATA[Michael Wood]]></dc:creator>
+		<pubDate>Fri, 22 Jan 2010 09:46:48 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=395#comment-43029</guid>
+		<description><![CDATA[This is great :)  Thanks.
+
+I&#039;ve noticed that the agent seems to carry on running if you just close the window without first clicking on Stop.  So if you run it once and close the window while it&#039;s running, then do it again, the second instance will be slower.  If you keep on doing this, Java uses more and more CPU and the running instance of the app gets slower and slower.
+
+How would one arrange for (send flipper stop) to be called when the window is closed?
+
+Also, if you run multiple instances of the app at the same time, they get really slow too.  I suppose you wouldn&#039;t normally run two instances of something like this at the same time, but there might be two windows doing something different from each other that you want to be able to run concurrently.  Any thoughts on this?]]></description>
+		<content:encoded><![CDATA[<p>This is great :)  Thanks.</p>
+<p>I&#8217;ve noticed that the agent seems to carry on running if you just close the window without first clicking on Stop.  So if you run it once and close the window while it&#8217;s running, then do it again, the second instance will be slower.  If you keep on doing this, Java uses more and more CPU and the running instance of the app gets slower and slower.</p>
+<p>How would one arrange for (send flipper stop) to be called when the window is closed?</p>
+<p>Also, if you run multiple instances of the app at the same time, they get really slow too.  I suppose you wouldn&#8217;t normally run two instances of something like this at the same time, but there might be two windows doing something different from each other that you want to be able to run concurrently.  Any thoughts on this?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Raphaël Bauduin</title>
+		<link>https://stuartsierra.com/2010/01/08/agents-of-swing/comment-page-1#comment-43026</link>
+		<dc:creator><![CDATA[Raphaël Bauduin]]></dc:creator>
+		<pubDate>Thu, 21 Jan 2010 17:35:19 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=395#comment-43026</guid>
+		<description><![CDATA[I just ported your example to Jwt, and frameword to develop web application just like desktop applications. I documented it in a blog post with downloadable code at http://www.nsa.be/index.php/eng/Blog/From-Swing-to-Jwt
+
+Raph]]></description>
+		<content:encoded><![CDATA[<p>I just ported your example to Jwt, and frameword to develop web application just like desktop applications. I documented it in a blog post with downloadable code at <a href="http://www.nsa.be/index.php/eng/Blog/From-Swing-to-Jwt" rel="nofollow">http://www.nsa.be/index.php/eng/Blog/From-Swing-to-Jwt</a></p>
+<p>Raph</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Jar Fuay</title>
+		<link>https://stuartsierra.com/2010/01/08/agents-of-swing/comment-page-1#comment-42990</link>
+		<dc:creator><![CDATA[Jar Fuay]]></dc:creator>
+		<pubDate>Tue, 12 Jan 2010 07:47:12 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=395#comment-42990</guid>
+		<description><![CDATA[I&#039;d like to thank you for this wonderful, wonderful tutorial. Before this, I didn&#039;t get Clojure agents that well—now I totally get why they&#039;re useful, with an example of how to do Swing in Clojure to boot! Thank you very very much!]]></description>
+		<content:encoded><![CDATA[<p>I&#8217;d like to thank you for this wonderful, wonderful tutorial. Before this, I didn&#8217;t get Clojure agents that well—now I totally get why they&#8217;re useful, with an example of how to do Swing in Clojure to boot! Thank you very very much!</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.295 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:00:39 -->
+
+<!-- Compression = gzip -->

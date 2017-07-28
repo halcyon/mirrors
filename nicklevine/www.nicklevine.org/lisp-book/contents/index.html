@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<!-- Mirrored from www.nicklevine.org/lisp-book/contents/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:38 GMT -->
+<head>
+<title>Lisp Outside the Box / Contents</title>
+<link rel="stylesheet" title="Default" href="http://www.ravenbrook.com/style/web-site-page.css" type="text/css" />
+<script type="text/javascript"><!--
+function obfuscate( domain, name , pretty ) { document.write('<a href="mai' + 'lto:' + name + '@' + domain + '">' + pretty + '</a>'); }
+// --></script>
+</head>
+
+<body>
+<div align="center">
+
+<table><tr><td width="750">
+<h1>Lisp Outside the Box / Contents</h1>
+
+<p>This was my draft outline. Eleven of the chapters are now
+available as drafts in PDF form - just follow the links below.</p>
+
+<p>Early chapters introduced Common Lisp and were implementation
+neutral. The rest of the book revolved around specific proprietary and
+non-proprietary libraries; each part focused more or less on a
+different lisp implementation: Allegro, Clozure, SBCL, LispWorks,
+Clojure.</p>
+
+<p>I started writing in the middle (because the needs of later
+chapters were going to drive the contents of earlier ones). After a
+while I went back to the beginning and continued work from there.</p>
+
+<p>Something you hoped to see not on the list? I can but <a
+href="http://enlivend.livejournal.com/12902.html">apologise</a>.</p>
+
+<p>Found a mistake? Check whether someone else <a href="../../issue.html">beat
+you to it</a>, then let me know.</p>
+
+<noscript><font class="alarm">--&gt; please enable Javascript to see this email address &lt;--</font></noscript>
+<address>
+    <script type="text/javascript">
+	obfuscate('lisp-book.org',
+		  'nick',
+		  'Nick Levine'
+		  )
+    </script>
+</address>
+<br />
+
+<h4>Introduction</h4>
+
+<a id="one" name="one"></a>
+<h4>PART ONE "Open the Box"</h4>
+
+<ol start="1">
+  <li><a href="chgo.pdf">Preliminaries</a></li>
+  <li><a href="chbasic.pdf">Basics</a></li>
+  <li>Controls</li>
+  <li>Standard tools</li>
+  <li>I/O</li>
+</ol>
+
+<a id="two" name="two"></a>
+<h4>PART TWO "Inventory of the Box"</h4>
+
+<ol start="6">
+  <li>Portable State</li>
+  <li>CLOS</li>
+  <li>Types</li>
+  <li>Hmm, maybe it's time we mentioned Lists</li>
+  <li>Programs as data</li>
+  <li>What Makes Great Lisp</li>
+  <li>What Makes Lisp Great</li>
+</ol>
+
+<a id="three" name="three"></a>
+<h4>PART THREE "Libraries Inside the Box"</h4>
+
+<p>
+Most lisp implementations are accompanied by a rich set of
+supplementary libraries. Although the aim of this book is to look
+"outside the box", it's worth noting that the box is typically larger
+than you'd think; so let's use a few of the libraries which accompany
+one of the lisp distributions as our starting point.
+</p>
+
+<p>
+We'll start our tour of lisp libraries with a look at a persistent
+memory system called
+<em>AllegroCache</em>. This library is proprietary
+and it ships with Allegro Common Lisp (<em>ACL</em>).
+</p>
+
+<p>
+We'll wander through the AllegroCache documentation looking out for
+salient features. These will lead us to a couple of ubiquitous
+extensions to Common Lisp (memory management, and multithreading) and
+we'll digress to examime them in some detail.
+</p>
+
+<p>
+The <em>Express Edition</em> of ACL is free for personal use and will
+be suitable for running the examples in the next two chapters. It has
+a number of built-in restrictions; the one that's most likely to bite
+is its limit of three AllegroCache <em>connections</em> and I'll
+remind you of that later. Chapters 15 and 16 are more general and with
+little modification the examples can be run on most implementations.
+</p>
+
+
+<ol start="13">
+  <li><a href="chac.pdf">Persistence with AllegroCache</a></li>
+  <li><a href="chac2.pdf">Further AllegroCache</a></li>
+  <li><a href="chmp.pdf">Concurrency</a></li>
+  <li><a href="chgc.pdf">Memory</a></li>
+</ol>
+
+<a id="four" name="four"></a>
+<h4>PART FOUR "Libraries Outside the Box"</h4>
+
+<p>
+It's times to take a first look outside. We'll download and install
+the <em>ch-image</em> image processing library and put it through its
+paces on Clozure Common Lisp. Along the way we'll pause to consider
+two invaluable tools: the <em>SLIME</em> development environment and
+<em>ASDF</em> for system definition. Image processing can get hungry
+for machine cycles, so this will also be a good opportunity for
+discussing optimizations.
+</p>
+
+<p>
+All the libraries we'll be looking at here, along with Clozure CL
+itself, are open-source and free to use.
+</p>
+
+<ol start="17">
+  <li><a href="chimg.pdf">Image Processing</a></li>
+  <li><a href="chslime.pdf">SLIME</a></li>
+  <li><a href="chasdf.pdf">Systems</a></li>
+  <li><a href="chopt.pdf">Performance</a></li>
+</ol>
+
+<a id="five" name="five"></a>
+<h4>PART FIVE "Server Boxes"</h4>
+
+<p>
+We're ready to graduate to writing servers. We'll be working with
+several libraries over the next four chapters and in particular the
+Hunchentoot web server. We'll consider socket communications in
+general, different approaches to HTTP, techniques for parsing input
+and generating output, and how to make your server "solid".
+</p>
+
+<p>
+Although we'll be working on Steel Bank Common Lisp (SBCL) you might
+have some trouble spotting that. All the examples will be shown within
+the SLIME REPL (<xref linkend="chslime" />) and we'll be using
+portable interface layers for sockets and threading which hide
+implementation-specifics from the programmer. We'll run on Ubuntu
+Linux; again that won't be apparent from the code which will be OS
+independent.
+</p>
+
+<p>
+All the libraries we'll be looking at here, along with SBCL itself,
+are open-source and free to use.
+</p>
+
+<ol start="21">
+  <li><a href="chhttp.pdf">Serving HTTP</a></li>
+  <li>Parsing Input</li>
+  <li>Generating HTML</li>
+  <li>Hunchentoot</li>
+</ol>
+
+<a id="six" name="six"></a>
+<h4>PART SIX "Gift-wrapping the Box"</h4>
+
+<ol start="25">
+  <li>A desktop application</li>
+  <li>GUI development environments</li>
+  <li>Internationalization</li>
+  <li>World building</li>
+</ol>
+
+<a id="seven" name="seven"></a>
+<h4>PART SEVEN "Talking to Other Boxes"</h4>
+
+<ol start="29">
+  <li>Talking to C</li>
+  <li>RabbitMQ</li>
+  <li>Clojure</li>
+</ol>
+
+<h4>APPENDICES</h4>
+
+<ol type="A" start="A">
+  <li>Where to obtain everything mentioned in the book</li>
+  <li>The LLGPL</li>
+</ol>
+
+<p><small>Copyright &copy; Nick Levine 2009 - 2011. Some rights
+reserved. This work is licensed under the Creative Commons
+Attribution-NonCommercial-NoDerivs 3.0 Unported License. To view a
+copy of this license, visit
+<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/">http://creativecommons.org/licenses/by-nc-nd/3.0/</a></small>
+</small></p>
+</td></tr></table>
+
+</div>
+</body>
+
+<!-- Mirrored from www.nicklevine.org/lisp-book/contents/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:38 GMT -->
+</html>
+
+<!-- $Id: //info.ravenbrook.com/project/olb/master/site/contents/index.html#13 $ -->
+

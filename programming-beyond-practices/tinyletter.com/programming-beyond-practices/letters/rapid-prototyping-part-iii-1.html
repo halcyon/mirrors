@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/rapid-prototyping-part-iii-1 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:58 GMT -->
+<head>
+    <title> Rapid Prototyping, Part III </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="rapid-prototyping-part-iii-1.html">
+    <meta property="og:title" content="Rapid Prototyping, Part III">
+    <meta property="og:description" content="Long time, no see. It's been a couple weeks since I've published an essay, and I hope you've missed reading these emails as much as I have missed writing them.">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Rapid Prototyping, Part III" />
+	<meta name="twitter:description" content="Long time, no see. It's been a couple weeks since I've published an essay, and I hope you've missed reading these emails as much as I have missed writing them" />
+	<meta name="twitter:image" content="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/cdabe7d5-597c-4247-b867-864a397cc3b0.png" />
+	<meta name="og:image" content="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/cdabe7d5-597c-4247-b867-864a397cc3b0.png" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> November 19, 2015 </div>
+            <h1 class="subject"> Rapid Prototyping, Part III </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> Hello Practicing Developer!<br>
+<br>
+Long time, no see. It&#39;s been a couple weeks since I&#39;ve published an essay, and I hope you&#39;ve missed reading these emails as much as I have missed writing them.<br>
+<br>
+Today, I&#39;d like to continue our discussion on rapid prototyping.This essay is reasonably self contained, but if you&#39;re a completionist&nbsp;you&#39;re welcome to check out <a href="rapid-prototyping-part-i.html">Part I</a> and <a href="rapid-prototyping-part-ii.html">Part II</a> before reading on.<br>
+<br>
+To pick up where we left off, this is what our music recommendations prototype looked like at the end of my last email:<br>
+<br>
+<img class="tl-email-image" data-id="438201" height="481" src="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/cdabe7d5-597c-4247-b867-864a397cc3b0.png" style="width: 480px; max-width: 480px;" width="480"><br>
+At this stage in its lifecycle, the program didn&#39;t do a whole lot, but it mostly looked like what you might expect this sort of program to look like. It also had a crude approximation of realistic recommendation behavior, in that it would use the current song to look up three more songs at random by the same artist.<br>
+<br>
+To save time in these early iterations, 100% of the data was faked out rather than pulling from a real music video database. This explains why you&#39;re looking at a video of Rick Astley that is titled &quot;Durable Silk Wallet&quot; by Theresia Schneider, and why all the recommendations have similarly ridiculous song titles by the same fictonal artist.<br>
+<br>
+At the end of the last essay, I had promised that introducing an embedded video rather than sticking to the placeholder images I used in earlier iterations was not&nbsp;<em>entirely</em>&nbsp;a cheap attempt to rickroll you, and I invited everyone to think on why I snuck that change into the last feedback cycle.<br>
+<br>
+Now that some time has passed, here&#39;s the answer: Even though the goal of the last iteration was to implement the rudimentary artist-based recommendation behavior, I couldn&#39;t resist introducing a small technical spike into the mix to answer a question that popped up in my mind as I was working.<br>
+<br>
+As I was building the CSV file mapping song names to artists, I started to think about adding an extra column for the song&#39;s video embed code, making it possible to increase the realism of the prototype a bit. That thought led me to wonder what the embed codes would look like structurally, and also whether they&#39;d fit reasonably into the placeholder box I had built for them in the mocked out layout.<br>
+<br>
+It only took a couple minutes to answer some of these questions in code, so I went for it. I grabbed an embed code from YouTube, deleted the placeholder image, and replaced it with the video shown in the above screenshot. I knew that thinking through and sourcing proper video links was something I could wait to solve until later, but this experiment got me part of the way there.<br>
+<br>
+To take things even farther, I decided... why have just one video of Rick Astley when you could have four? I promptly set out to replace the placeholder images for recommendations with embedded videos... and um... quickly realized that&#39;s not how a recommendations interface works.<br>
+<br>
+From this silly experiment, I discovered a missing requirement that was hidden in plain sight: In addition to video embed codes, I&#39;d also need to get my hands on video thumbnail images as well. Realizing that I had gone far afield from the goals of the current iteration, I decided to just write down a note about that and move on -- but it was an important discovery that the prototyping process helped me catch sooner than I would have if I had just sat down and thought about the project without writing any code.<br>
+<br>
+This little anecdote illustrates both the risks and rewards of using a prototype as a sandbox for technical spikes. You gain extra information that will help you sort out implementation details down the line, but you also can be distracted by those details to the point where you lose sight of the main goal of getting feedback on specific questions at the product design level. In other words, there is no benefit in thinking through fine-grained details if you aren&#39;t confident that you&#39;ve got the main ideas right.<br>
+<br>
+Whenever an easy to answer technical question comes to mind, it is fine to explore it a little bit and see where it takes you. But as soon as you feel it pulling you in deeper than you need to go at that particular moment, its better to write down some notes than it is to turn one seemingly simple question into five interlocking sub-experiments.<br>
+<br>
+Digging a little deeper, the fact that I missed this requirement iillustrates an important distinction between static mockups and dynamic prototypes. The first iteration of this project was nothing more than an HTML/CSS mockup, and the only question we were interested in was whether the basic layout made sense for the needs of the project. For that purpose, using a bunch of little black boxes worked fine, and it gave us the benefit of not having to think about what eventually would need to go in them.<br>
+<br>
+However, the moment we started unpacking the box into the actual concept it represented, a much richer mental model sprung into existence. These aren&#39;t just &quot;boxes&quot; in a layout, they&#39;re videos and thumbnail images. Each of those things has a much more complex purpose than to simply occupy space within a grid layout, and this becomes immediately obvious as soon as the prototyping phase becomes interactive.<br>
+<br>
+Hopefully by now you&#39;re starting to see how useful rapid prototyping for helping you think about and reify the problems you are working on. I think I&#39;ve got one more of these essays in me before we wrap up the series -- there is an important but not-very-obvious technique I want to share with you that will help you get a lot more out of your prototyping work.<br>
+<br>
+More to come soon, but until then, please take a moment to do me a quick favor:<br>
+<br>
+<strong>Reply to this email and let me know who you are, what you&#39;re interested in, and what kinds of questions you&#39;d like to see me answer in future Programming Beyond Practices essays.</strong><br>
+<br>
+Readers often underestimate just how important their feedback is to writers, so please do share your thoughts even if you don&#39;t feel like they&#39;re anything ground-breaking. A few minutes of your time might help me write much better essays for you.<br>
+<br>
+Until next time, happy hacking!<br>
+-greg<br>
+&nbsp;
+<hr><br>
+<em>Have these essays been useful to you? If so...<br>
+Please&nbsp;<a href="https://twitter.com/practicingdev">follow me on Twitter</a>, and also check out&nbsp;<a href="http://practicingdeveloper.com/workshop/">The Practicing Developer&#39;s Workshop</a>.</em> </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="the-sad-graph-of-software-death.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="rapid-prototyping-part-ii.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/rapid-prototyping-part-iii-1 by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:58 GMT -->
+</html>

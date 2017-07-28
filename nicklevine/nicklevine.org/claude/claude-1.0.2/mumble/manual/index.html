@@ -1,0 +1,1087 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<!-- Mirrored from nicklevine.org/claude/claude-1.0.2/mumble/manual/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:24:26 GMT -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Docutils 0.11: http://docutils.sourceforge.net/" />
+<title>Mumble</title>
+<link rel="stylesheet" href="style/claude.css" type="text/css" />
+</head>
+<body>
+<div class="document" id="mumble">
+<h1 class="title">Mumble</h1>
+
+<!-- -*- mode: rst; eval: (rst2html-after-save-hook) -*- -->
+<!-- $Id: //info.ravenbrook.com/user/ndl/lisp/claude-setup/mumble/manual/source/index.txt#1 $ -->
+<div class="contents local topic" id="contents">
+<ul class="auto-toc simple">
+<li><a class="reference internal" href="#introduction" id="id51">1&nbsp;&nbsp;&nbsp;Introduction</a><ul class="auto-toc">
+<li><a class="reference internal" href="#obtaining-and-unpacking" id="id52">1.1&nbsp;&nbsp;&nbsp;Obtaining and unpacking</a></li>
+<li><a class="reference internal" href="#using-mumble-in-your-application" id="id53">1.2&nbsp;&nbsp;&nbsp;Using Mumble in your application</a></li>
+<li><a class="reference internal" href="#redistributing-mumble-with-your-application" id="id54">1.3&nbsp;&nbsp;&nbsp;Redistributing Mumble with your application</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#library-infrastructure" id="id55">2&nbsp;&nbsp;&nbsp;Library infrastructure</a><ul class="auto-toc">
+<li><a class="reference internal" href="#initialisation-and-termination" id="id56">2.1&nbsp;&nbsp;&nbsp;Initialisation and termination</a></li>
+<li><a class="reference internal" href="#calling-mumble-functions" id="id57">2.2&nbsp;&nbsp;&nbsp;Calling Mumble functions</a></li>
+<li><a class="reference internal" href="#data-model" id="id58">2.3&nbsp;&nbsp;&nbsp;Data model</a></li>
+<li><a class="reference internal" href="#error-handling" id="id59">2.4&nbsp;&nbsp;&nbsp;Error handling</a></li>
+<li><a class="reference internal" href="#dereferencing" id="id60">2.5&nbsp;&nbsp;&nbsp;Dereferencing</a></li>
+<li><a class="reference internal" href="#records" id="id61">2.6&nbsp;&nbsp;&nbsp;Records</a></li>
+<li><a class="reference internal" href="#arrays" id="id62">2.7&nbsp;&nbsp;&nbsp;Arrays</a></li>
+<li><a class="reference internal" href="#handles" id="id63">2.8&nbsp;&nbsp;&nbsp;Handles</a></li>
+<li><a class="reference internal" href="#tests" id="id64">2.9&nbsp;&nbsp;&nbsp;Tests</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#working-with-mumble" id="id65">3&nbsp;&nbsp;&nbsp;Working with Mumble</a><ul class="auto-toc">
+<li><a class="reference internal" href="#objects" id="id66">3.1&nbsp;&nbsp;&nbsp;Objects</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#reference" id="id67">4&nbsp;&nbsp;&nbsp;Reference</a><ul class="auto-toc">
+<li><a class="reference internal" href="#calling-convention" id="id68">4.1&nbsp;&nbsp;&nbsp;Calling convention</a></li>
+<li><a class="reference internal" href="#types" id="id69">4.2&nbsp;&nbsp;&nbsp;Types</a></li>
+<li><a class="reference internal" href="#functions" id="id70">4.3&nbsp;&nbsp;&nbsp;Functions</a></li>
+<li><a class="reference internal" href="#callbacks" id="id71">4.4&nbsp;&nbsp;&nbsp;Callbacks</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#troubleshooting" id="id72">5&nbsp;&nbsp;&nbsp;Troubleshooting</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h1><a class="toc-backref" href="#id51">1&nbsp;&nbsp;&nbsp;Introduction</a></h1>
+<p>This is the documentation for Mumble, version x.x.</p>
+<p>[...]</p>
+<div class="section" id="obtaining-and-unpacking">
+<h2><a class="toc-backref" href="#id52">1.1&nbsp;&nbsp;&nbsp;Obtaining and unpacking</a></h2>
+<p>Mumble is available as a .ZIP archive. You can download the latest
+release of this version from
+<a class="reference external" href="http://mumble.com/downloads/">http://mumble.com/downloads/</a>.
+There's no installation process: just unpack the archive anywhere
+that's convenient to you.</p>
+<p>Once unpacked, you'll find the following:</p>
+<pre class="literal-block">
+mumble-x.x.x\
+   mumble.dll                the Mumble DLL
+   examples\C\               a brief test case
+   include\                  C header file
+   manual\                   this document, plus supporting files
+   Microsoft.VC80.CRT\       runtime libraries used by Mumble
+   pyMumble\                 example Python interface
+</pre>
+<p>You'll find working with this document, and in particular the Python
+example, easiest if you keep all these files together.</p>
+<div class="section" id="mumble-s-runtime-libraries">
+<h3>1.1.1&nbsp;&nbsp;&nbsp;Mumble's Runtime Libraries</h3>
+<div class="tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">If you don't intend either to copy / move <tt class="docutils literal">mumble.dll</tt> after you've
+unpacked it, or to redistribute an application you've built using
+Mumble, you can skip this small print.</p>
+</div>
+<p><span class="small">Mumble needs access to Microsoft's</span> <span class="smallcite">C Runtime and Standard
+C++ Libraries.</span> <span class="small">If it can't find them it simply won't run.
+You'll see something like this:</span></p>
+<img alt="images/incorrect-config.png" src="images/incorrect-config.png" />
+<p><span class="small">These runtime libraries can be either installed to a central
+location on your computer or</span> — <span class="small">as in the .ZIP archive</span>
+— <span class="small">present in a Microsoft.VC80.CRT\ directory alongside
+the Mumble DLL.</span></p>
+<ul>
+<li><p class="first"><span class="small">Central location</span></p>
+<p><span class="small">If the runtime libraries have already been installed on your
+machine (by the installer of some other application, say) then you
+can move or copy the Mumble DLL as you wish, and it will continue to
+work.</span></p>
+</li>
+<li><p class="first"><span class="small">Private copy</span></p>
+<p><span class="small">Otherwise, if you move or copy the DLL you should keep a
+copy of Microsoft.VC80.CRT\ alongside it.</span></p>
+</li>
+<li><p class="first"><span class="small">Redistribution</span></p>
+<p><span class="small">If you redistribute an application based on Mumble then you
+will need to revisit this issue. Advice on</span>
+<span class="smallcite">Redistributing Visual C++ libraries</span> <span class="small">will be
+found on the MSDN website:</span> <a class="reference external" href="http://msdn.microsoft.com/en-us/library/ms235316(v=vs.80).aspx">here</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="using-mumble-in-your-application">
+<h2><a class="toc-backref" href="#id53">1.2&nbsp;&nbsp;&nbsp;Using Mumble in your application</a></h2>
+<p>How much work this is will depend on the language you're working in.</p>
+<ul>
+<li><p class="first"><strong>Python</strong></p>
+<p>The <tt class="docutils literal">pyMumble\</tt> directory contains a Python (version 2.7) package
+which uses the <a class="reference external" href="http://docs.python.org/2/library/ctypes.html"><tt class="docutils literal">ctypes</tt></a> module to connect to Mumble's external
+interface.</p>
+<p>I'll use pyMumble in the sections that follow, to demonstrate the
+features of Mumble.</p>
+<p>You can build your application directly on top of this package; see
+<a class="reference external" href="#more-instant-demos">below</a> for an example. So you might choose to skip reading
+<a class="reference internal" href="#library-infrastructure">Library infrastructure</a> and go straight on to <a class="reference internal" href="#working-with-mumble">Working with
+Mumble</a>.</p>
+<p>Mumble is a 32-bit library; you'll need a 32-bit Python installation.</p>
+</li>
+<li><p class="first"><strong>C</strong></p>
+<p>The <a class="reference external" href="#obtaining-and-unpacking">distribution</a> includes a <a class="reference external" href="../include/mumble.h">header file</a>
+which declares the library's external interface, <a class="reference external" href="../examples/C/mumble.c">the functions</a> which implement it, and a (brief) sample
+<a class="reference external" href="../examples/C/test.c">application</a>.</p>
+<blockquote>
+</blockquote>
+<p>You'll need to define your side of the interface. I recommend that
+you work through <a class="reference internal" href="#library-infrastructure">Library infrastructure</a> and implement each
+section in turn. Once you can get the <a class="reference internal" href="#tests">tests</a> to pass, move on to
+<a class="reference internal" href="#working-with-mumble">Working with Mumble</a>.</p>
+</li>
+<li><p class="first"><strong>Common Lisp</strong></p>
+<p><a class="reference external" href="mailto:mumble&#64;ravenbrook.com">Talk to us</a>. Depending on your
+implementation, we can probably offer you a native interface for
+part or all of the library.</p>
+</li>
+<li><p class="first"><strong>Anything else</strong></p>
+<p>I suggest adapting the <a class="reference external" href="../include/mumble.h">header file</a> to your
+language — in other words, you need to be able to call every
+<a class="reference external" href="#functions">exported</a> function — and then proceeding as for <strong>C</strong>
+above. <a class="reference external" href="mailto:mumble&#64;ravenbrook.com">Let us know</a> how you get on.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="redistributing-mumble-with-your-application">
+<h2><a class="toc-backref" href="#id54">1.3&nbsp;&nbsp;&nbsp;Redistributing Mumble with your application</a></h2>
+<p>The short answer is: [...]</p>
+<p>Don't forget to include the <a class="reference external" href="#mumble-s-runtime-libraries">runtime libraries</a> in your
+distribution.</p>
+</div>
+</div>
+<div class="section" id="library-infrastructure">
+<h1><a class="toc-backref" href="#id55">2&nbsp;&nbsp;&nbsp;Library infrastructure</a></h1>
+<p>This section covers everything you need to know about driving Mumble,
+other than [...]. I'll cover starting and stopping the library,
+function calls, error handling, the structures Mumble uses, and memory
+and how to free it.</p>
+<p>If you plan to drive Mumble from Python then you can probably skip all
+this and go straight on to <a class="reference internal" href="#working-with-mumble">Working with Mumble</a>.</p>
+<p>Otherwise, you'll have to start by implementing your own
+infrastructure layer, as described below. The <a class="reference external" href="../examples/C/brief.html">C example</a> might help, as should the following files
+in the Python interface:</p>
+<blockquote>
+<dl class="docutils">
+<dt><a class="reference external" href="../pyMumble/invoke.html">invoke.py</a></dt>
+<dd>Function call wrappers: extract results, check for errors</dd>
+<dt><a class="reference external" href="../pyMumble/lib.html">lib.py</a></dt>
+<dd>Stubs for all calls into the DLL</dd>
+<dt><a class="reference external" href="../pyMumble/objects.html">objects.py</a></dt>
+<dd>Implementations of the objects that Mumble uses</dd>
+</dl>
+</blockquote>
+<p>In the following I'll use extracts from the Python interface to
+demonstrate how to drive the library. I'll assume some familiarity
+with Python's <a class="reference external" href="http://docs.python.org/2/library/ctypes.html"><tt class="docutils literal">ctypes</tt></a> foreign function library.</p>
+<p><strong>The library's calling convention is stdcall.</strong></p>
+<div class="section" id="initialisation-and-termination">
+<h2><a class="toc-backref" href="#id56">2.1&nbsp;&nbsp;&nbsp;Initialisation and termination</a></h2>
+<p>The Mumble library initialises itself automatically, the first time you
+call any function in its interface. If you find this distasteful, you
+can initialise the library explicitly by calling <a class="reference internal" href="#mumble-init"><tt class="docutils literal">mumble_init()</tt></a>.</p>
+<p>Somewhat more important is to close the library gracefully when you're
+finished it, by calling <a class="reference internal" href="#mumble-close"><tt class="docutils literal">mumble_close()</tt></a>; failure to do may result in
+a warning message.</p>
+<p>The Python interface arranges for this in <a class="reference external" href="../pyMumble/connect.html">connect.py</a>, which also sets the global <tt class="docutils literal">dll</tt> to point
+to the ctypes shared library object. Every export from the library is
+now a member of the <tt class="docutils literal">dll</tt> object (for example, we can invoke the
+library function <a class="reference internal" href="#mumble-init"><tt class="docutils literal">mumble_init()</tt></a> by calling <tt class="docutils literal">dll.mumble_init</tt> from
+pyMumble).</p>
+<p><tt class="docutils literal">connect.py</tt>, along with everything else you'll need to go with it,
+is loaded via <tt class="docutils literal">mumble.py</tt>:</p>
+<pre class="code python literal-block">
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-kn">from</span> <span class="pygments-nn">pyMumble</span> <span class="pygments-kn">import</span> <span class="pygments-n">mumble</span>
+<span class="pygments-o">&gt;&gt;&gt;</span>
+
+</pre>
+</div>
+<div class="section" id="calling-mumble-functions">
+<span id="error-will-be-signalled"></span><span id="error-to-be-signalled"></span><span id="error-is-signalled"></span><span id="signal-an-error"></span><h2><a class="toc-backref" href="#id57">2.2&nbsp;&nbsp;&nbsp;Calling Mumble functions</a></h2>
+<p>All Mumble functions return a result code of type <a class="reference internal" href="#mumble-res-t"><tt class="docutils literal">mumble_res_t</tt></a>. They
+indicate <cite>success</cite> by returning <tt class="docutils literal">MUMBLE_RES_OK</tt>, which is defined to
+be zero; they <cite>signal errors</cite> by returning <tt class="docutils literal">MUMBLE_RES_FAIL</tt>, which
+is non-zero, and retaining a string describing the error. You can
+retrieve the most recent error string by calling
+<a class="reference internal" href="#mumble-last-error"><tt class="docutils literal">mumble_last_error()</tt></a>.</p>
+<p>In the Python example, the function <tt class="docutils literal">check</tt> in <a class="reference external" href="../pyMumble/invoke.html">invoke.py</a> examines the return value of a function call
+into the library. If this value is not OK (zero) then a <a class="reference external" href="#error-handling">MumbleError</a>
+is raised.</p>
+<pre class="code python literal-block">
+<span class="pygments-n">OK</span> <span class="pygments-o">=</span> <span class="pygments-mi">0</span>
+
+<span class="pygments-k">def</span> <span class="pygments-nf">check</span><span class="pygments-p">(</span><span class="pygments-n">func</span><span class="pygments-p">,</span> <span class="pygments-o">*</span><span class="pygments-n">args</span><span class="pygments-p">):</span>
+    <span class="pygments-sd">&quot;&quot;&quot;
+    Apply func to its args, checking the result code.
+    &quot;&quot;&quot;</span>
+    <span class="pygments-n">result</span> <span class="pygments-o">=</span> <span class="pygments-n">func</span><span class="pygments-p">(</span><span class="pygments-o">*</span><span class="pygments-n">args</span><span class="pygments-p">)</span>
+    <span class="pygments-k">if</span> <span class="pygments-n">result</span> <span class="pygments-o">!=</span> <span class="pygments-n">OK</span><span class="pygments-p">:</span>
+        <span class="pygments-k">raise</span> <span class="pygments-n">MumbleError</span><span class="pygments-p">()</span>
+
+</pre>
+<p>Library functions which need to return some value in addition to the
+result code do so by reference: they take a pointer as their first
+argument and write through it.</p>
+<p>Still in <a class="reference external" href="../pyMumble/invoke.html">invoke.py</a>, the function wrapper
+<tt class="docutils literal">val</tt> creates just such a pointer. This pointer is prepended to
+<tt class="docutils literal">func</tt>'s argument list, the library is invoked, the result code
+checked, and the result is extracted. The wrapper <tt class="docutils literal">void</tt> has the
+same form but is for calls which don't return a useful result.</p>
+<pre class="code python literal-block">
+<span class="pygments-k">def</span> <span class="pygments-nf">val</span><span class="pygments-p">(</span><span class="pygments-n">func</span><span class="pygments-p">):</span>
+    <span class="pygments-sd">&quot;&quot;&quot;
+    Return a function which calls func with an additional pointer argument,
+    checks the result, and dereferences the pointer.
+    &quot;&quot;&quot;</span>
+    <span class="pygments-k">def</span> <span class="pygments-nf">invoker</span><span class="pygments-p">(</span><span class="pygments-o">*</span><span class="pygments-n">args</span><span class="pygments-p">):</span>
+        <span class="pygments-n">pointer</span> <span class="pygments-o">=</span> <span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">c_void_p</span><span class="pygments-p">()</span>
+        <span class="pygments-n">check</span><span class="pygments-p">(</span><span class="pygments-n">func</span><span class="pygments-p">,</span> <span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">byref</span><span class="pygments-p">(</span><span class="pygments-n">pointer</span><span class="pygments-p">),</span> <span class="pygments-o">*</span><span class="pygments-n">args</span><span class="pygments-p">)</span>
+        <span class="pygments-k">return</span> <span class="pygments-n">pointer</span><span class="pygments-o">.</span><span class="pygments-n">value</span>
+    <span class="pygments-k">return</span> <span class="pygments-n">invoker</span>
+
+<span class="pygments-k">def</span> <span class="pygments-nf">void</span><span class="pygments-p">(</span><span class="pygments-n">func</span><span class="pygments-p">):</span>
+    <span class="pygments-sd">&quot;&quot;&quot;
+    Return a function which calls func, checking the result.
+    &quot;&quot;&quot;</span>
+    <span class="pygments-k">def</span> <span class="pygments-nf">invoker</span><span class="pygments-p">(</span><span class="pygments-o">*</span><span class="pygments-n">args</span><span class="pygments-p">):</span>
+        <span class="pygments-n">check</span><span class="pygments-p">(</span><span class="pygments-n">func</span><span class="pygments-p">,</span> <span class="pygments-o">*</span><span class="pygments-n">args</span><span class="pygments-p">)</span>
+    <span class="pygments-k">return</span> <span class="pygments-n">invoker</span>
+
+</pre>
+</div>
+<div class="section" id="data-model">
+<h2><a class="toc-backref" href="#id58">2.3&nbsp;&nbsp;&nbsp;Data model</a></h2>
+<p>Mumble functions take arguments of the following types:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#integer"><tt class="docutils literal">integer</tt></a> (signed and unsigned);</li>
+<li>UTF-8 encoded string;</li>
+<li><a class="reference internal" href="#handle"><tt class="docutils literal">handle</tt></a> (denoting an [...] object within the library);</li>
+<li><a class="reference internal" href="#record"><tt class="docutils literal">record</tt></a> (sequence of values whose length and constituent types
+are determined by the context in which it's being passed);</li>
+<li><a class="reference internal" href="#array"><tt class="docutils literal">array</tt></a> (sequence of values whose length is not known in advance);</li>
+<li>pointer to any of the above (for <a class="reference external" href="#calling-mumble-functions">return values</a>);</li>
+<li>pointer to function (passed as an unsigned integer).</li>
+</ul>
+<p>Handles are only ever generated by the library. When you have no
+further use for a handle (for instance: when removing a [...] from the
+system) you should call <a class="reference internal" href="#mumble-remove-objects"><tt class="docutils literal">mumble_remove_objects()</tt></a>.</p>
+<p><a class="reference internal" href="#aggregate"><tt class="docutils literal">Aggregate</tt></a> values — strings, records (for example, a pair of
+integers representing a [..]) and arrays (for example, a list of
+[...]) — might be generated by either the library or your
+application.</p>
+<p>The contents of any aggregate value created by your application,
+passed into Mumble and retained there — for example, the string to
+be [...], or an array of records describing new objects to be added
+to the system — are copied by the library before your call returns.
+So you may immediately recycle the memory associated with such values.</p>
+<p>Any <em>aggregate</em> value created within the library and passed to your
+application <em>as return data</em> will be retained by Mumble, until you
+declare that you have no further use for it by calling the library
+function <a class="reference internal" href="#mumble-free"><tt class="docutils literal">mumble_free()</tt></a>. If you free a sequence (i.e. a <a class="reference internal" href="#record"><tt class="docutils literal">record</tt></a>
+or <a class="reference internal" href="#array"><tt class="docutils literal">array</tt></a>) which itself contains any aggregate values, then these
+values will be freed recursively.</p>
+<p>The Python interface has a simple stub for invoking <a class="reference internal" href="#mumble-free"><tt class="docutils literal">mumble_free()</tt></a>:</p>
+<pre class="code python literal-block">
+<span class="pygments-k">def</span> <span class="pygments-nf">free</span><span class="pygments-p">(</span><span class="pygments-n">pointer</span><span class="pygments-p">):</span>
+    <span class="pygments-n">invoke</span><span class="pygments-o">.</span><span class="pygments-n">void</span><span class="pygments-p">(</span><span class="pygments-n">dll</span><span class="pygments-o">.</span><span class="pygments-n">mumble_free</span><span class="pygments-p">)(</span><span class="pygments-n">pointer</span><span class="pygments-p">)</span>
+
+</pre>
+<p><strong>Note that</strong> <a class="reference internal" href="#mumble-free"><tt class="docutils literal">mumble_free()</tt></a> <strong>does not free</strong> <a class="reference internal" href="#id26"><tt class="docutils literal">handles</tt></a>, or
+release them in any sense. Freeing an array of objects releases the
+resources associated with the array itself and not those of the
+objects. (See instead <a class="reference internal" href="#mumble-remove-objects"><tt class="docutils literal">mumble_remove_objects()</tt></a>.)</p>
+<div class="warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The library is designed to catch and recover from errors but it
+cannot be totally resilient to bad data: the only way for it to
+interpret an <a class="reference internal" href="#aggregate"><tt class="docutils literal">aggregate</tt></a> value (string, record, array) is to
+dereference the corresponding pointer. If the pointer is invalid
+this may lead to an unhandled exception which could crash either the
+library or your application. If you're working in Python the
+following minimal check from <a class="reference external" href="../pyMumble/invoke.html">invoke.py</a> is
+suggested.</p>
+</div>
+<pre class="code python literal-block">
+<span class="pygments-k">def</span> <span class="pygments-nf">plausible_address</span><span class="pygments-p">(</span><span class="pygments-n">address</span><span class="pygments-p">):</span>
+    <span class="pygments-sd">&quot;&quot;&quot;
+    Return the address, checking that it refers to valid memory.
+
+    This is only the most basic of checks. The address of a compound
+    record might pass this test but what it points to might be
+    rubbish, and we can't check for that without going into a
+    description of record layout.
+
+    The test works by loading one byte from the given address. If
+    there's anything wrong with the address, Python will handle the
+    error and raise one of its own Exceptions.
+    &quot;&quot;&quot;</span>
+    <span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">string_at</span><span class="pygments-p">(</span><span class="pygments-n">address</span><span class="pygments-p">,</span> <span class="pygments-mi">1</span><span class="pygments-p">)</span>
+    <span class="pygments-k">return</span> <span class="pygments-n">address</span>
+
+</pre>
+</div>
+<div class="section" id="error-handling">
+<span id="mumbleerror-will-be-raised"></span><span id="mumbleerror-to-be-raised"></span><span id="mumbleerror-is-raised"></span><span id="raise-a-mumbleerror"></span><span id="raise-an-exception"></span><h2><a class="toc-backref" href="#id59">2.4&nbsp;&nbsp;&nbsp;Error handling</a></h2>
+<p>Let's see how errors might be handled. The <tt class="docutils literal">MumbleError</tt> exception
+defined in <a class="reference external" href="../pyMumble/invoke.html">invoke.py</a> demonstrates:</p>
+<ul class="simple">
+<li>checking result codes;</li>
+<li>a Mumble function returning a value in addition to its result code;</li>
+<li>use of  <a class="reference internal" href="#mumble-free"><tt class="docutils literal">mumble_free()</tt></a> to release the resources associated with a
+string which originated inside the library.</li>
+</ul>
+<p>Raising this exception calls <a class="reference internal" href="#mumble-last-error"><tt class="docutils literal">mumble_last_error()</tt></a> and reports the
+result. As corner cases, the exception checks whether (a) there
+actually was any error in the first place, (b) it was possible to
+report the error and (c) it was possible to <a class="reference internal" href="#mumble-free"><tt class="docutils literal">mumble_free()</tt></a> the error
+report. In the last case a warning note is tacked onto the head of the
+report rather than risking a chain of recursive errors.</p>
+<pre class="code python literal-block">
+<span class="pygments-k">class</span> <span class="pygments-nc">MumbleError</span><span class="pygments-p">(</span><span class="pygments-ne">Exception</span><span class="pygments-p">):</span>
+    <span class="pygments-k">def</span> <span class="pygments-nf">__init__</span><span class="pygments-p">(</span><span class="pygments-bp">self</span><span class="pygments-p">):</span>
+        <span class="pygments-n">string</span> <span class="pygments-o">=</span> <span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">c_char_p</span><span class="pygments-p">(</span><span class="pygments-bp">None</span><span class="pygments-p">)</span>
+        <span class="pygments-n">error</span> <span class="pygments-o">=</span> <span class="pygments-n">dll</span><span class="pygments-o">.</span><span class="pygments-n">mumble_last_error</span><span class="pygments-p">(</span><span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">byref</span><span class="pygments-p">(</span><span class="pygments-n">string</span><span class="pygments-p">))</span>
+        <span class="pygments-k">if</span> <span class="pygments-n">error</span> <span class="pygments-o">!=</span> <span class="pygments-n">OK</span><span class="pygments-p">:</span>
+            <span class="pygments-bp">self</span><span class="pygments-o">.</span><span class="pygments-n">string</span> <span class="pygments-o">=</span> <span class="pygments-s">'Mumble reports an error, '</span> \
+                          <span class="pygments-o">+</span> <span class="pygments-s">'and an error reporting the error.'</span>
+        <span class="pygments-k">else</span><span class="pygments-p">:</span>
+            <span class="pygments-n">value</span> <span class="pygments-o">=</span> <span class="pygments-n">string</span><span class="pygments-o">.</span><span class="pygments-n">value</span>
+            <span class="pygments-k">if</span> <span class="pygments-n">value</span><span class="pygments-p">:</span>
+                <span class="pygments-bp">self</span><span class="pygments-o">.</span><span class="pygments-n">string</span> <span class="pygments-o">=</span> <span class="pygments-n">value</span><span class="pygments-o">.</span><span class="pygments-n">decode</span><span class="pygments-p">(</span><span class="pygments-s">'utf-8'</span><span class="pygments-p">)</span>
+                <span class="pygments-k">if</span> <span class="pygments-ow">not</span> <span class="pygments-n">config</span><span class="pygments-o">.</span><span class="pygments-n">show_backtrace</span><span class="pygments-p">:</span>
+                    <span class="pygments-bp">self</span><span class="pygments-o">.</span><span class="pygments-n">string</span> <span class="pygments-o">=</span> <span class="pygments-bp">self</span><span class="pygments-o">.</span><span class="pygments-n">string</span><span class="pygments-o">.</span><span class="pygments-n">splitlines</span><span class="pygments-p">()[</span><span class="pygments-mi">0</span><span class="pygments-p">]</span>
+                <span class="pygments-k">if</span> <span class="pygments-n">dll</span><span class="pygments-o">.</span><span class="pygments-n">mumble_free</span><span class="pygments-p">(</span><span class="pygments-n">string</span><span class="pygments-p">)</span> <span class="pygments-o">!=</span> <span class="pygments-n">OK</span><span class="pygments-p">:</span>
+                    <span class="pygments-c"># Today isn't turning out very well. (Not that I</span>
+                    <span class="pygments-c"># was seriously expecting to end up on this branch.)</span>
+                    <span class="pygments-n">warning</span> <span class="pygments-o">=</span> <span class="pygments-s">'*** Warning: Mumble was unable to free '</span> \
+                              <span class="pygments-o">+</span> <span class="pygments-s">'the mumble_last_error string. ***'</span>
+                    <span class="pygments-bp">self</span><span class="pygments-o">.</span><span class="pygments-n">string</span> <span class="pygments-o">=</span> <span class="pygments-n">warning</span> <span class="pygments-o">+</span> <span class="pygments-s">'</span><span class="pygments-se">\n\n</span><span class="pygments-s">'</span> <span class="pygments-o">+</span> <span class="pygments-bp">self</span><span class="pygments-o">.</span><span class="pygments-n">string</span>
+            <span class="pygments-k">else</span><span class="pygments-p">:</span>
+                <span class="pygments-bp">self</span><span class="pygments-o">.</span><span class="pygments-n">string</span> <span class="pygments-o">=</span> <span class="pygments-s">'How did this happen? There was no error in Mumble.'</span>
+
+    <span class="pygments-k">def</span> <span class="pygments-nf">__str__</span><span class="pygments-p">(</span><span class="pygments-bp">self</span><span class="pygments-p">):</span>
+        <span class="pygments-k">return</span> <span class="pygments-bp">self</span><span class="pygments-o">.</span><span class="pygments-n">string</span>
+
+</pre>
+<p>(You'll note that I haven't made use of the bundling functions
+<tt class="docutils literal">check</tt>, <tt class="docutils literal">val</tt> or <tt class="docutils literal">void</tt> here. That's because any failure they
+encountered would recursively raise another <tt class="docutils literal">MumbleError</tt>, which
+could rapidly spiral out of control.)</p>
+<p>The string returned from <a class="reference internal" href="#mumble-last-error"><tt class="docutils literal">mumble_last_error()</tt></a> describes the most
+recent error signalled by the library. If this was a <em>pilot error</em>
+then you'll get a one line description of the problem. If
+alternatively some exceptional condition (say: division by zero) was
+caught then a backtrace will be included. This might be longer and
+less edifying than you care for; <tt class="docutils literal">MumbleError</tt> uses the configuration
+variable <tt class="docutils literal">show_backtrace</tt> from <a class="reference external" href="../pyMumble/config.html">config.py</a>
+to decide whether to show you the backtrace.</p>
+<p>If there is no error to report, <a class="reference internal" href="#mumble-last-error"><tt class="docutils literal">mumble_last_error()</tt></a> returns a null
+pointer.</p>
+<p>Let's go under the hood. I'll bypasss all the bundling and checking
+functions (<tt class="docutils literal">check</tt> etc.) and make a series of low-level calls, at
+the Python prompt, directly into the DLL:</p>
+<ol class="arabic simple">
+<li>provoking a deliberate error (result code is not <tt class="docutils literal">OK</tt>),</li>
+<li>calling <a class="reference internal" href="#mumble-last-error"><tt class="docutils literal">mumble_last_error()</tt></a> to obtain a string describing the
+error,</li>
+<li><a class="reference internal" href="#mumble-free"><tt class="docutils literal">mumble_free()</tt></a>ing the string, and</li>
+<li>polling to see if there's another error string (which there
+isn't).</li>
+</ol>
+<pre class="code python literal-block">
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-kn">import</span> <span class="pygments-nn">ctypes</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-kn">from</span> <span class="pygments-nn">pyMumble.invoke</span> <span class="pygments-kn">import</span> <span class="pygments-n">dll</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">dll</span><span class="pygments-o">.</span><span class="pygments-n">mumble_free</span><span class="pygments-p">(</span><span class="pygments-mh">0xdeadbeef</span><span class="pygments-p">)</span>
+<span class="pygments-o">-</span><span class="pygments-mi">1</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">string</span> <span class="pygments-o">=</span> <span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">c_char_p</span><span class="pygments-p">(</span><span class="pygments-bp">None</span><span class="pygments-p">)</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">dll</span><span class="pygments-o">.</span><span class="pygments-n">mumble_last_error</span><span class="pygments-p">(</span><span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">byref</span><span class="pygments-p">(</span><span class="pygments-n">string</span><span class="pygments-p">))</span>
+<span class="pygments-mi">0</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">string</span>
+<span class="pygments-n">c_char_p</span><span class="pygments-p">(</span><span class="pygments-s">'Pointer to 0xdeadbeef is invalid and cannot be freed.</span><span class="pygments-se">\r\n</span><span class="pygments-s">'</span><span class="pygments-p">)</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">dll</span><span class="pygments-o">.</span><span class="pygments-n">mumble_free</span><span class="pygments-p">(</span><span class="pygments-n">string</span><span class="pygments-p">)</span>
+<span class="pygments-mi">0</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">dll</span><span class="pygments-o">.</span><span class="pygments-n">mumble_last_error</span><span class="pygments-p">(</span><span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">byref</span><span class="pygments-p">(</span><span class="pygments-n">string</span><span class="pygments-p">))</span>
+<span class="pygments-mi">0</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">string</span>
+<span class="pygments-n">c_char_p</span><span class="pygments-p">(</span><span class="pygments-bp">None</span><span class="pygments-p">)</span>
+<span class="pygments-o">&gt;&gt;&gt;</span>
+
+</pre>
+<p>The C equivalent to the above might be based on the following
+fragments:</p>
+<pre class="code C literal-block">
+<span class="pygments-cp">#define ASSERT_OK(form)    \
+   {mumble_res_t res = (form); assert(res == MUMBLE_RES_OK);}
+#define ASSERT_FAIL(form)  \
+   {mumble_res_t res = (form); assert(res == MUMBLE_RES_FAIL);}
+</span>
+<span class="pygments-kt">mumble_aggregate_t</span> <span class="pygments-n">pointer</span><span class="pygments-p">;</span>
+
+<span class="pygments-n">pointer</span><span class="pygments-p">.</span><span class="pygments-n">string</span> <span class="pygments-o">=</span> <span class="pygments-p">(</span><span class="pygments-kt">char</span><span class="pygments-o">*</span><span class="pygments-p">)</span><span class="pygments-mh">0xdeadbeef</span><span class="pygments-p">;</span>
+<span class="pygments-n">ASSERT_FAIL</span><span class="pygments-p">(</span><span class="pygments-n">mumble_free</span><span class="pygments-p">(</span><span class="pygments-n">pointer</span><span class="pygments-p">));</span>
+
+<span class="pygments-n">ASSERT_OK</span><span class="pygments-p">(</span><span class="pygments-n">mumble_last_error</span><span class="pygments-p">(</span><span class="pygments-o">&amp;</span><span class="pygments-p">(</span><span class="pygments-n">pointer</span><span class="pygments-p">.</span><span class="pygments-n">string</span><span class="pygments-p">)));</span>
+<span class="pygments-n">assert</span><span class="pygments-p">(</span><span class="pygments-n">strcmp</span><span class="pygments-p">(</span><span class="pygments-n">pointer</span><span class="pygments-p">.</span><span class="pygments-n">string</span><span class="pygments-p">,</span>
+              <span class="pygments-s">&quot;Pointer to 0xdeadbeef is invalid and cannot be freed.</span><span class="pygments-se">\r\n</span><span class="pygments-s">&quot;</span><span class="pygments-p">)</span>
+       <span class="pygments-o">==</span> <span class="pygments-mi">0</span><span class="pygments-p">);</span>
+<span class="pygments-n">ASSERT_OK</span><span class="pygments-p">(</span><span class="pygments-n">mumble_free</span><span class="pygments-p">(</span><span class="pygments-n">pointer</span><span class="pygments-p">));</span>
+
+<span class="pygments-n">ASSERT_OK</span><span class="pygments-p">(</span><span class="pygments-n">mumble_last_error</span><span class="pygments-p">(</span><span class="pygments-o">&amp;</span><span class="pygments-p">(</span><span class="pygments-n">pointer</span><span class="pygments-p">.</span><span class="pygments-n">string</span><span class="pygments-p">)));</span>
+<span class="pygments-n">assert</span><span class="pygments-p">(</span><span class="pygments-n">pointer</span><span class="pygments-p">.</span><span class="pygments-n">string</span> <span class="pygments-o">==</span> <span class="pygments-mi">0</span><span class="pygments-p">);</span>
+
+</pre>
+</div>
+<div class="section" id="dereferencing">
+<h2><a class="toc-backref" href="#id60">2.5&nbsp;&nbsp;&nbsp;Dereferencing</a></h2>
+<p>Working from Python, we'll need to be able to switch between ctypes
+instances and their memory addresses. (With the foreign interfaces of
+other languages, the corresponding solution might look very
+different. In C it'll be trivial.)</p>
+<p>The pyMumble function <tt class="docutils literal">dereference_address</tt> in <a class="reference external" href="../pyMumble/objects.html">objects.py</a> takes one argument which it treats as the
+memory address of a <tt class="docutils literal">ctypes.c_uint</tt>. It dereferences this address
+and returns the integer. Dereferencing <tt class="docutils literal">0</tt> returns <tt class="docutils literal">None</tt>.</p>
+<p>The function <tt class="docutils literal">address_of</tt> returns the address of a ctypes instance's
+underlying data.</p>
+<p>In the following example we create a ctypes <a class="reference external" href="http://docs.python.org/2/library/ctypes.html#arrays"><tt class="docutils literal">array</tt></a> which contains
+an integer and the address of a ctypes string. By dereferencing the
+address of the array we are able to recover the integer; by
+dereferencing the address of the following word in memory we recover
+the address of the string.</p>
+<pre class="code python literal-block">
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-kn">from</span> <span class="pygments-nn">pyMumble</span> <span class="pygments-kn">import</span> <span class="pygments-n">objects</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">s</span> <span class="pygments-o">=</span> <span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">c_char_p</span><span class="pygments-p">(</span><span class="pygments-s">'hello'</span><span class="pygments-p">)</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">x</span> <span class="pygments-o">=</span> <span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">pointer</span><span class="pygments-p">((</span><span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">c_uint</span> <span class="pygments-o">*</span><span class="pygments-mi">2</span><span class="pygments-p">)(</span><span class="pygments-mi">99</span><span class="pygments-p">,</span> <span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">address_of</span><span class="pygments-p">(</span><span class="pygments-n">s</span><span class="pygments-p">)))</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">address_of</span><span class="pygments-p">(</span><span class="pygments-n">s</span><span class="pygments-p">)</span>
+<span class="pygments-il">39344980L</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">address_of</span><span class="pygments-p">(</span><span class="pygments-n">x</span><span class="pygments-p">)</span>
+<span class="pygments-il">38708808L</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">dereference_address</span><span class="pygments-p">(</span><span class="pygments-il">38708808L</span><span class="pygments-p">)</span>
+<span class="pygments-il">99L</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">dereference_address</span><span class="pygments-p">(</span><span class="pygments-il">38708808L</span> <span class="pygments-o">+</span> <span class="pygments-mi">4</span><span class="pygments-p">)</span>
+<span class="pygments-il">39344980L</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-nb">hex</span><span class="pygments-p">(</span><span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">dereference_address</span><span class="pygments-p">(</span><span class="pygments-n">_</span><span class="pygments-p">))</span>
+<span class="pygments-s">'0x6c6c6568L'</span>
+<span class="pygments-o">&gt;&gt;&gt;</span>
+
+</pre>
+<div class="tip">
+<p class="first admonition-title">Tip</p>
+<p>Watch out for the Python garbage collector!</p>
+<pre class="code python literal-block">
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">c_char_p</span><span class="pygments-p">(</span><span class="pygments-s">'goodbye'</span><span class="pygments-p">)</span>
+<span class="pygments-n">c_char_p</span><span class="pygments-p">(</span><span class="pygments-s">'goodbye'</span><span class="pygments-p">)</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">address_of</span><span class="pygments-p">(</span><span class="pygments-n">_</span><span class="pygments-p">)</span>
+<span class="pygments-il">39343764L</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">dereference_address</span><span class="pygments-p">(</span><span class="pygments-n">_</span><span class="pygments-p">)</span>
+<span class="pygments-il">0L</span>
+<span class="pygments-o">&gt;&gt;&gt;</span>
+
+</pre>
+<p class="last">In this case we haven't retained a pointer to the ctypes string. Its
+data has already been reclaimed and is no longer accessible to us.</p>
+</div>
+</div>
+<div class="section" id="records">
+<span id="record"></span><h2><a class="toc-backref" href="#id61">2.6&nbsp;&nbsp;&nbsp;Records</a></h2>
+<p>A <a class="reference internal" href="#mumble-record-t">record</a> is a sequence of Mumble values in memory.</p>
+<p>Both the number of the values which constitute a record, and their
+various types, are determined by the context in which that record
+is used.</p>
+<p>As a very simple example of records in pyMumble, I'll get values
+into and out of a record used to hold a co-ordinate pair. In this
+case the record consists of two values and both happen to have the
+same type: signed <a class="reference internal" href="#integers"><tt class="docutils literal">integers</tt></a>. I'll use the functions <tt class="docutils literal">construct</tt>
+and <tt class="docutils literal">deconstruct</tt> which are fully documented in <a class="reference external" href="../pyMumble/objects.html">objects.py</a> and which basically do what I did the long
+way round in the <a class="reference internal" href="#dereferencing">dereferencing</a> example above.</p>
+<pre class="code python literal-block">
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-kn">from</span> <span class="pygments-nn">pyMumble</span> <span class="pygments-kn">import</span> <span class="pygments-n">objects</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">location</span> <span class="pygments-o">=</span> <span class="pygments-p">(</span><span class="pygments-mi">101</span><span class="pygments-p">,</span> <span class="pygments-mi">234</span><span class="pygments-p">)</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">x</span> <span class="pygments-o">=</span> <span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">construct</span><span class="pygments-p">(</span><span class="pygments-n">location</span><span class="pygments-p">)</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">x</span>
+<span class="pygments-o">&lt;</span><span class="pygments-n">pyMumble</span><span class="pygments-o">.</span><span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">LP_c_ulong_Array_2</span> <span class="pygments-nb">object</span> <span class="pygments-n">at</span> <span class="pygments-mh">0x024EA620</span><span class="pygments-o">&gt;</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">deconstruct</span><span class="pygments-p">(</span><span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">address_of</span><span class="pygments-p">(</span><span class="pygments-n">x</span><span class="pygments-p">),</span> <span class="pygments-mi">2</span><span class="pygments-p">)</span>
+<span class="pygments-p">(</span><span class="pygments-il">101L</span><span class="pygments-p">,</span> <span class="pygments-il">234L</span><span class="pygments-p">)</span>
+<span class="pygments-o">&gt;&gt;&gt;</span>
+
+</pre>
+</div>
+<div class="section" id="arrays">
+<span id="array"></span><h2><a class="toc-backref" href="#id62">2.7&nbsp;&nbsp;&nbsp;Arrays</a></h2>
+<p>An <a class="reference internal" href="#mumble-array-t">array</a> is another form of sequence of Mumble values in memory .</p>
+<p>This time the number of values is not determined by context but must
+be passed as part of the array. The types of an array's members are
+always the same.</p>
+<p>Under the hood, arrays are implemented as <a class="reference internal" href="#records"><tt class="docutils literal">records</tt></a>. The first
+member of the record is the array's length; the remaining members
+are the array's values.</p>
+<p>Two examples, the first in C. The macro <tt class="docutils literal">CHECK</tt> is defined in <a class="reference external" href="../include/mumble.h">mumble.h</a>; it verifies that a library call has returned
+<tt class="docutils literal">MUMBLE_RES_OK</tt>.</p>
+<pre class="code C literal-block">
+<span class="pygments-cp">#define MUMBLE_RECORD_SIZE(n) (offsetof(mumble_record_s, values) \
+                              + (n) * sizeof(mumble_value_t))
+#define MUMBLE_ARRAY_SIZE(n)  (offsetof(mumble_array_s, values)  \
+                              + ((n)+1) * sizeof(mumble_value_t))
+</span>
+<span class="pygments-p">[...]</span>
+
+</pre>
+<p>The second example uses pyMumble:</p>
+<pre class="code python literal-block">
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-kn">import</span> <span class="pygments-nn">ctypes</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-kn">from</span> <span class="pygments-nn">pyMumble</span> <span class="pygments-kn">import</span> <span class="pygments-n">objects</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">s</span> <span class="pygments-o">=</span> <span class="pygments-nb">map</span><span class="pygments-p">(</span><span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">c_char_p</span><span class="pygments-p">,</span> <span class="pygments-p">[</span><span class="pygments-s">'hello'</span><span class="pygments-p">,</span> <span class="pygments-s">'goodbye'</span><span class="pygments-p">])</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">x</span> <span class="pygments-o">=</span> <span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">pack</span><span class="pygments-p">(</span><span class="pygments-n">s</span><span class="pygments-p">)</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">x</span>
+<span class="pygments-o">&lt;</span><span class="pygments-n">pyMumble</span><span class="pygments-o">.</span><span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">LP_c_ulong_Array_3</span> <span class="pygments-nb">object</span> <span class="pygments-n">at</span> <span class="pygments-mh">0x022B9620</span><span class="pygments-o">&gt;</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">unwrap</span> <span class="pygments-o">=</span> <span class="pygments-k">lambda</span><span class="pygments-p">(</span><span class="pygments-n">name</span><span class="pygments-p">):</span> <span class="pygments-p">(</span><span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">cast</span><span class="pygments-p">(</span><span class="pygments-n">name</span><span class="pygments-p">,</span> <span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">c_char_p</span><span class="pygments-p">)</span><span class="pygments-o">.</span><span class="pygments-n">value</span><span class="pygments-p">)</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">unpack</span><span class="pygments-p">(</span><span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">address_of</span><span class="pygments-p">(</span><span class="pygments-n">x</span><span class="pygments-p">),</span> <span class="pygments-n">unwrapfun</span><span class="pygments-o">=</span><span class="pygments-n">unwrap</span><span class="pygments-p">)</span>
+<span class="pygments-p">[</span><span class="pygments-s">'hello'</span><span class="pygments-p">,</span> <span class="pygments-s">'goodbye'</span><span class="pygments-p">]</span>
+<span class="pygments-o">&gt;&gt;&gt;</span>
+
+</pre>
+<p><tt class="docutils literal">Pack</tt> and <tt class="docutils literal">unpack</tt> are implemented in <a class="reference external" href="../pyMumble/objects.html">objects.py</a>, in terms of <tt class="docutils literal">construct</tt> and
+<tt class="docutils literal">deconstruct</tt> above. Note that by default, <tt class="docutils literal">unpack</tt> is designed to
+pass its array argument to <a class="reference internal" href="#mumble-free"><tt class="docutils literal">mumble_free()</tt></a> after the array's members
+have been extracted; this allows the Mumble DLL to reclaim the memory
+pointed to by the array (and by any aggregate values which it
+contains). Overriding this behaviour is unlikely to be useful to you
+if the array originated inside the library; once you've unpacked an
+array there is no further use for it.</p>
+</div>
+<div class="section" id="handles">
+<h2><a class="toc-backref" href="#id63">2.8&nbsp;&nbsp;&nbsp;Handles</a></h2>
+<p>In Mumble, objects are represented by <a class="reference internal" href="#id26"><tt class="docutils literal">handles</tt></a>. The library provides
+functions — [...], etc. — for constructing each
+of the various types of object, and each of these functions returns a
+<tt class="docutils literal">handle</tt>.</p>
+<p>In pyMumble we define classes corresponding to each of the Mumble object
+types — these are all subclasses of <tt class="docutils literal">MumbleObject</tt> which is
+defined in <a class="reference external" href="../pyMumble/objects.html">objects.py</a> — and create
+instances of these classes to correspond to each new handle:</p>
+<pre class="code python literal-block">
+<span class="pygments-n">_objects</span> <span class="pygments-o">=</span> <span class="pygments-p">{</span><span class="pygments-mi">0</span><span class="pygments-p">:</span><span class="pygments-bp">None</span><span class="pygments-p">}</span>
+
+<span class="pygments-k">class</span> <span class="pygments-nc">MumbleObject</span><span class="pygments-p">(</span><span class="pygments-nb">object</span><span class="pygments-p">):</span>
+    <span class="pygments-k">def</span> <span class="pygments-nf">__init__</span><span class="pygments-p">(</span><span class="pygments-bp">self</span><span class="pygments-p">,</span> <span class="pygments-n">handle</span><span class="pygments-p">):</span>
+        <span class="pygments-n">_objects</span><span class="pygments-p">[</span><span class="pygments-n">handle</span><span class="pygments-p">]</span> <span class="pygments-o">=</span> <span class="pygments-bp">self</span>
+        <span class="pygments-bp">self</span><span class="pygments-o">.</span><span class="pygments-n">handle</span> <span class="pygments-o">=</span> <span class="pygments-n">handle</span>
+
+    <span class="pygments-k">def</span> <span class="pygments-nf">box</span><span class="pygments-p">(</span><span class="pygments-bp">self</span><span class="pygments-p">):</span>
+        <span class="pygments-k">return</span> <span class="pygments-bp">self</span><span class="pygments-o">.</span><span class="pygments-n">handle</span>
+
+    <span class="pygments-k">def</span> <span class="pygments-nf">_discard</span><span class="pygments-p">(</span><span class="pygments-bp">self</span><span class="pygments-p">):</span>
+        <span class="pygments-n">handle</span> <span class="pygments-o">=</span> <span class="pygments-bp">self</span><span class="pygments-o">.</span><span class="pygments-n">handle</span>
+        <span class="pygments-k">del</span> <span class="pygments-n">_objects</span><span class="pygments-p">[</span><span class="pygments-n">handle</span><span class="pygments-p">]</span>
+        <span class="pygments-bp">self</span><span class="pygments-o">.</span><span class="pygments-n">handle</span> <span class="pygments-o">=</span> <span class="pygments-bp">None</span>
+
+<span class="pygments-k">def</span> <span class="pygments-nf">unbox</span><span class="pygments-p">(</span><span class="pygments-n">handle</span><span class="pygments-p">):</span>
+    <span class="pygments-k">return</span> <span class="pygments-n">_objects</span><span class="pygments-p">[</span><span class="pygments-n">handle</span><span class="pygments-p">]</span>
+
+</pre>
+<p>We can now use <a class="reference internal" href="#arrays">arrays</a>, <tt class="docutils literal">box</tt> and <tt class="docutils literal">unbox</tt> to demonstrate the use
+of <a class="reference internal" href="#mumble-remove-objects"><tt class="docutils literal">mumble_remove_objects()</tt></a>:</p>
+<pre class="code python literal-block">
+<span class="pygments-k">def</span> <span class="pygments-nf">remove_objects</span><span class="pygments-p">(</span><span class="pygments-n">objects</span><span class="pygments-p">):</span>
+    <span class="pygments-n">box</span> <span class="pygments-o">=</span> <span class="pygments-k">lambda</span><span class="pygments-p">(</span><span class="pygments-n">x</span><span class="pygments-p">):</span> <span class="pygments-n">x</span><span class="pygments-o">.</span><span class="pygments-n">box</span><span class="pygments-p">()</span>
+    <span class="pygments-n">invalids</span> <span class="pygments-o">=</span> <span class="pygments-n">unpack</span><span class="pygments-p">(</span><span class="pygments-n">lib</span><span class="pygments-o">.</span><span class="pygments-n">remove_objects</span><span class="pygments-p">(</span><span class="pygments-n">pack</span><span class="pygments-p">(</span><span class="pygments-n">objects</span><span class="pygments-p">,</span> <span class="pygments-n">box</span><span class="pygments-p">)),</span> <span class="pygments-n">unbox</span><span class="pygments-p">)</span>
+    <span class="pygments-k">for</span> <span class="pygments-n">invalid</span> <span class="pygments-ow">in</span> <span class="pygments-n">invalids</span><span class="pygments-p">:</span>
+        <span class="pygments-n">invalid</span><span class="pygments-o">.</span><span class="pygments-n">_discard</span><span class="pygments-p">()</span>
+
+</pre>
+<p>Note incidentally that:</p>
+<ul class="simple">
+<li>the array created by <tt class="docutils literal">pack</tt> is reclaimed by the Python garbage
+collector; and</li>
+<li>the array created by <a class="reference internal" href="#mumble-remove-objects"><tt class="docutils literal">mumble_remove_objects()</tt></a> is explicitly passed
+to <a class="reference internal" href="#mumble-free"><tt class="docutils literal">mumble_free()</tt></a> by <tt class="docutils literal">unpack</tt>.</li>
+</ul>
+<p>In this example I use <tt class="docutils literal">unbox</tt> as a debugging aid. Suppose I'm faced
+with the following error:</p>
+<pre class="literal-block">
+pyMumble.invoke.MumbleError: Wibble, with #&lt;Mumble MumbleObject
+handle=0x20053748&gt;), which is not permitted.
+</pre>
+<p>Then <tt class="docutils literal">unbox</tt> can identify the object with handle <tt class="docutils literal">0x20053748</tt>:</p>
+<pre class="code python literal-block">
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">mumble</span><span class="pygments-o">.</span><span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">unbox</span><span class="pygments-p">(</span><span class="pygments-mh">0x20053748</span><span class="pygments-p">)</span>
+<span class="pygments-o">&lt;</span><span class="pygments-n">Mumble</span> <span class="pygments-n">MumbleObject</span> <span class="pygments-n">handle</span><span class="pygments-o">=</span><span class="pygments-mh">0x20053748</span><span class="pygments-o">&gt;</span>
+<span class="pygments-o">&gt;&gt;&gt;</span>
+
+</pre>
+</div>
+<div class="section" id="tests">
+<h2><a class="toc-backref" href="#id64">2.9&nbsp;&nbsp;&nbsp;Tests</a></h2>
+<p>Before moving on, you should conduct a test equivalent to the
+following. It will ensure that the library is working, that you are
+communicating with the library successfully and in particular that you
+are <a class="reference internal" href="#arrays">packing</a> and unpacking arrays correctly.</p>
+<p>In this test we:</p>
+<ol class="arabic simple">
+<li>create and record the handles of two vanilla Mumble <a class="reference internal" href="#mumble-new-object">objects</a>;</li>
+<li>pass one of them to Mumble and observe that <a class="reference internal" href="#mumble-return-object"><tt class="docutils literal">mumble_return_object()</tt></a>
+returns precisely the same handle;</li>
+<li>pass an array containing the pair to Mumble and observe that
+<a class="reference internal" href="#mumble-return-array"><tt class="docutils literal">mumble_return_array()</tt></a> returns an equivalent array; and</li>
+<li>define an externally callable function which returns its argument,
+pass this plus one of the objects to Mumble, and allow the library
+to apply our function to that object and <a class="reference internal" href="#mumble-invoke-return-object">confirm</a> that the right
+value came back to it.</li>
+</ol>
+<pre class="code python literal-block">
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-kn">import</span> <span class="pygments-nn">ctypes</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-nd">&#64;ctypes.WINFUNCTYPE</span><span class="pygments-p">(</span><span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">c_uint</span><span class="pygments-p">,</span> <span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">c_uint</span><span class="pygments-p">)</span>
+<span class="pygments-o">...</span> <span class="pygments-k">def</span> <span class="pygments-nf">return_handle</span><span class="pygments-p">(</span><span class="pygments-n">handle</span><span class="pygments-p">):</span>
+<span class="pygments-o">...</span>   <span class="pygments-k">return</span> <span class="pygments-n">handle</span>
+<span class="pygments-o">...</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-kn">from</span> <span class="pygments-nn">pyMumble.invoke</span> <span class="pygments-kn">import</span> <span class="pygments-n">dll</span><span class="pygments-p">,</span> <span class="pygments-n">void</span><span class="pygments-p">,</span> <span class="pygments-n">val</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">obj_1</span> <span class="pygments-o">=</span> <span class="pygments-n">val</span><span class="pygments-p">(</span><span class="pygments-n">dll</span><span class="pygments-o">.</span><span class="pygments-n">mumble_new_object</span><span class="pygments-p">)()</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">obj_2</span> <span class="pygments-o">=</span> <span class="pygments-n">val</span><span class="pygments-p">(</span><span class="pygments-n">dll</span><span class="pygments-o">.</span><span class="pygments-n">mumble_new_object</span><span class="pygments-p">)()</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">objs</span> <span class="pygments-o">=</span> <span class="pygments-p">[</span><span class="pygments-n">obj_1</span><span class="pygments-p">,</span> <span class="pygments-n">obj_2</span><span class="pygments-p">]</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">objs</span>
+<span class="pygments-p">[</span><span class="pygments-mi">537280600</span><span class="pygments-p">,</span> <span class="pygments-mi">537280728</span><span class="pygments-p">]</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">val</span><span class="pygments-p">(</span><span class="pygments-n">dll</span><span class="pygments-o">.</span><span class="pygments-n">mumble_return_object</span><span class="pygments-p">)(</span><span class="pygments-n">obj_1</span><span class="pygments-p">)</span>
+<span class="pygments-mi">537280600</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">unpack</span><span class="pygments-p">(</span><span class="pygments-n">val</span><span class="pygments-p">(</span><span class="pygments-n">dll</span><span class="pygments-o">.</span><span class="pygments-n">mumble_return_array</span><span class="pygments-p">)(</span><span class="pygments-n">objects</span><span class="pygments-o">.</span><span class="pygments-n">pack</span><span class="pygments-p">(</span><span class="pygments-n">objs</span><span class="pygments-p">)))</span>
+<span class="pygments-p">[</span><span class="pygments-il">537280600L</span><span class="pygments-p">,</span> <span class="pygments-il">537280728L</span><span class="pygments-p">]</span>
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-n">ctypes</span><span class="pygments-o">.</span><span class="pygments-n">c_bool</span><span class="pygments-p">(</span><span class="pygments-n">val</span><span class="pygments-p">(</span><span class="pygments-n">dll</span><span class="pygments-o">.</span><span class="pygments-n">mumble_invoke_return_object</span><span class="pygments-p">)(</span><span class="pygments-n">return_handle</span><span class="pygments-p">,</span> <span class="pygments-n">obj_1</span><span class="pygments-p">))</span>
+<span class="pygments-n">c_bool</span><span class="pygments-p">(</span><span class="pygments-bp">True</span><span class="pygments-p">)</span>
+<span class="pygments-o">&gt;&gt;&gt;</span>
+
+</pre>
+<p>See also <tt class="docutils literal">communications_test</tt> in <a class="reference external" href="../pyMumble/objects.html">objects.py</a>.</p>
+</div>
+</div>
+<div class="section" id="working-with-mumble">
+<h1><a class="toc-backref" href="#id65">3&nbsp;&nbsp;&nbsp;Working with Mumble</a></h1>
+<p>This section covers Mumble's higher level functionality and in
+particular how to [...]</p>
+<p>If you plan to drive Mumble from Python then you can simply use the
+classes and functions referenced in this section. They are all
+defined in <a class="reference external" href="../pyMumble/mumble.html">mumble.py</a>.</p>
+<p><strong>Mumble is a 32-bit library; you'll need a 32-bit Python installation.</strong></p>
+<pre class="code python literal-block">
+<span class="pygments-o">&gt;&gt;&gt;</span> <span class="pygments-kn">from</span> <span class="pygments-nn">pyMumble</span> <span class="pygments-kn">import</span> <span class="pygments-n">mumble</span>
+<span class="pygments-o">&gt;&gt;&gt;</span>
+
+</pre>
+<p>Otherwise, you'll have to implement equivalents to these functions
+along with the <a class="reference internal" href="#library-infrastructure">library infrastructure</a> discussed earlier.</p>
+<p>I won't document every possible way to <a class="reference internal" href="#raise-an-exception">raise an exception</a> while
+working with this code. Most <tt class="docutils literal">MumbleError</tt>s have fairly obvious
+causes. Working with discarded objects is the primary culprit. (The C
+<a class="reference internal" href="#functions">functions</a> reference is more thorough about error conditions.)</p>
+<div class="section" id="objects">
+<span id="object"></span><h2><a class="toc-backref" href="#id66">3.1&nbsp;&nbsp;&nbsp;Objects</a></h2>
+<p>The objects with which Mumble deals are: [...]</p>
+</div>
+</div>
+<div class="section" id="reference">
+<h1><a class="toc-backref" href="#id67">4&nbsp;&nbsp;&nbsp;Reference</a></h1>
+<div class="section" id="calling-convention">
+<h2><a class="toc-backref" href="#id68">4.1&nbsp;&nbsp;&nbsp;Calling convention</a></h2>
+<p>The library's calling convention is stdcall.</p>
+</div>
+<div class="section" id="types">
+<h2><a class="toc-backref" href="#id69">4.2&nbsp;&nbsp;&nbsp;Types</a></h2>
+<p>The following types are declared in <a class="reference external" href="../include/mumble.h">mumble.h</a>.</p>
+<span class="target" id="aggregate"></span><pre class="code literal-block" id="mumble-aggregate-t">
+mumble_aggregate_t
+</pre>
+<p>An aggregate value is a string, <a class="reference internal" href="#record"><tt class="docutils literal">record</tt></a>, or <a class="reference internal" href="#array"><tt class="docutils literal">array</tt></a>. Note that
+these are all pointer types.</p>
+<p>The contents of any aggregate value created by your application,
+passed into Mumble and retained there — for example, the string to
+be drawn on some window's titlebar — are copied by Mumble before
+your call returns. So you may immediately recycle the memory
+associated with such values.</p>
+<p>The contents of any aggregate value created within Mumble and passed to
+your application will be retained by Mumble until you declare that you
+have no further use for them. See the library function <a class="reference internal" href="#mumble-free"><tt class="docutils literal">mumble_free()</tt></a>
+for this.</p>
+<pre class="code C literal-block">
+<span class="pygments-k">typedef</span> <span class="pygments-k">union</span> <span class="pygments-kt">mumble_aggregate_t</span> <span class="pygments-p">{</span>
+  <span class="pygments-kt">char</span> <span class="pygments-o">*</span><span class="pygments-n">string</span><span class="pygments-p">;</span>               <span class="pygments-cm">/* UTF-8 */</span>
+  <span class="pygments-k">struct</span> <span class="pygments-n">mumble_record_s</span> <span class="pygments-o">*</span><span class="pygments-n">record</span><span class="pygments-p">;</span>
+  <span class="pygments-k">struct</span> <span class="pygments-n">mumble_array_s</span> <span class="pygments-o">*</span><span class="pygments-n">array</span><span class="pygments-p">;</span>
+<span class="pygments-p">}</span> <span class="pygments-kt">mumble_aggregate_t</span><span class="pygments-p">;</span>
+
+</pre>
+<pre class="code literal-block" id="mumble-array-t">
+mumble_array_t
+</pre>
+<p>An <em>array</em> is the memory address of a sequence of <a class="reference internal" href="#values"><tt class="docutils literal">values</tt></a> whose
+length is not known in advance. The constituent types are all the same
+and are determined by context. For example, [...]. The first item in
+any array is always the number of remaining items. (If the [...] has
+three [...], then the array consists of four values, the first of
+which is the number 3.)</p>
+<p>Compare with <a class="reference internal" href="#records"><tt class="docutils literal">records</tt></a>, whose length is known in advance, but
+whose constituent types need not be the same.</p>
+<pre class="code C literal-block">
+<span class="pygments-k">typedef</span> <span class="pygments-k">struct</span> <span class="pygments-n">mumble_array_s</span> <span class="pygments-o">*</span><span class="pygments-kt">mumble_array_t</span><span class="pygments-p">;</span>
+<span class="pygments-k">typedef</span> <span class="pygments-k">struct</span> <span class="pygments-n">mumble_array_s</span> <span class="pygments-p">{</span>
+  <span class="pygments-kt">mumble_ulong_t</span> <span class="pygments-n">length</span><span class="pygments-p">;</span>
+  <span class="pygments-kt">mumble_value_t</span> <span class="pygments-n">values</span><span class="pygments-p">[</span><span class="pygments-mi">1</span><span class="pygments-p">];</span>    <span class="pygments-cm">/* all the same members of mumble_value_t */</span>
+<span class="pygments-p">}</span> <span class="pygments-n">mumble_array_s</span><span class="pygments-p">;</span>
+
+</pre>
+<span class="target" id="handle"></span><span class="target" id="id26"></span><pre class="code literal-block" id="mumble-handle-t">
+mumble_handle_t
+</pre>
+<p>A <em>handle</em> denotes a [...] within the library. Each such object is
+assigned a handle when Mumble creates it; and that handle can be used
+to unambiguously reference the object.</p>
+<pre class="code C literal-block">
+<span class="pygments-k">typedef</span> <span class="pygments-kt">mumble_ulong_t</span> <span class="pygments-kt">mumble_handle_t</span><span class="pygments-p">;</span>
+
+</pre>
+<p>Handles can only be generated by the library. When you have no further
+use for a handle (for instance: when removing a [...] from the system)
+you should call <a class="reference internal" href="#mumble-remove-objects"><tt class="docutils literal">mumble_remove_objects()</tt></a>.</p>
+<span class="target" id="integer"></span><span class="target" id="integers"></span><span class="target" id="mumble-long-t"></span><pre class="code literal-block" id="mumble-ulong-t">
+mumble_long_t
+mumble_ulong_t
+</pre>
+<p>All integers are passed as one of these two types.</p>
+<pre class="code C literal-block">
+<span class="pygments-cp">#include &lt;stdint.h&gt;
+</span>
+<span class="pygments-k">typedef</span> <span class="pygments-kt">int32_t</span> <span class="pygments-kt">mumble_long_t</span><span class="pygments-p">;</span>
+<span class="pygments-k">typedef</span> <span class="pygments-kt">uint32_t</span> <span class="pygments-kt">mumble_ulong_t</span><span class="pygments-p">;</span>
+
+</pre>
+<pre class="code literal-block" id="mumble-res-t">
+mumble_res_t
+</pre>
+<p>All mumble functions return a value of type <tt class="docutils literal">mumble_res_t</tt>. This is an
+alias for <tt class="docutils literal">int32_t</tt>:</p>
+<pre class="code C literal-block">
+<span class="pygments-k">typedef</span> <span class="pygments-kt">mumble_long_t</span> <span class="pygments-kt">mumble_res_t</span><span class="pygments-p">;</span>
+
+<span class="pygments-k">enum</span> <span class="pygments-p">{</span>
+  <span class="pygments-n">MUMBLE_RES_OK</span>   <span class="pygments-o">=</span>  <span class="pygments-mi">0</span><span class="pygments-p">,</span>        <span class="pygments-cm">/* success */</span>
+  <span class="pygments-n">MUMBLE_RES_FAIL</span> <span class="pygments-o">=</span> <span class="pygments-o">-</span><span class="pygments-mi">1</span>         <span class="pygments-cm">/* failure */</span>
+<span class="pygments-p">};</span>
+
+</pre>
+<p>If a call into Mumble has failed, you should call <a class="reference internal" href="#mumble-last-error"><tt class="docutils literal">mumble_last_error()</tt></a>
+to find out why.</p>
+<pre class="code literal-block" id="mumble-record-t">
+mumble_record_t
+</pre>
+<p>A <em>record</em> is the memory address of a sequence of <a class="reference internal" href="#values"><tt class="docutils literal">values</tt></a> whose
+length and constituent types (which need not all be the same) are
+determined by the context in which it's being passed. For example, the
+co-ordinates of a given [...] might be passed as a record of two
+integers.</p>
+<p>Compare with <a class="reference internal" href="#arrays"><tt class="docutils literal">arrays</tt></a>, whose length is not known in advance, but whose
+constituent types must be the same.</p>
+<pre class="code C literal-block">
+<span class="pygments-k">typedef</span> <span class="pygments-k">struct</span> <span class="pygments-n">mumble_record_s</span> <span class="pygments-o">*</span><span class="pygments-kt">mumble_record_t</span><span class="pygments-p">;</span>
+<span class="pygments-k">typedef</span> <span class="pygments-k">struct</span> <span class="pygments-n">mumble_record_s</span> <span class="pygments-p">{</span>
+  <span class="pygments-kt">mumble_value_t</span> <span class="pygments-n">values</span><span class="pygments-p">[</span><span class="pygments-mi">1</span><span class="pygments-p">];</span>    <span class="pygments-cm">/* maybe different members of mumble_value_t */</span>
+<span class="pygments-p">}</span> <span class="pygments-n">mumble_record_s</span><span class="pygments-p">;</span>
+
+</pre>
+<span class="target" id="values"></span><pre class="code literal-block" id="mumble-value-t">
+mumble_value_t
+</pre>
+<p><tt class="docutils literal">mumble_value_t</tt> is a union of all other Mumble types. The values
+passed within <a class="reference internal" href="#arrays"><tt class="docutils literal">arrays</tt></a> and <a class="reference internal" href="#records"><tt class="docutils literal">records</tt></a> are of type
+<tt class="docutils literal">mumble_value_t</tt>. All values passed as arguments to library functions
+are of type <tt class="docutils literal">mumble_value_t</tt> (or, for functions which return some
+value in addition to the result code, <tt class="docutils literal">mumble_value_t*</tt>).</p>
+<pre class="code C literal-block">
+<span class="pygments-k">typedef</span> <span class="pygments-k">union</span> <span class="pygments-kt">mumble_value_t</span> <span class="pygments-p">{</span>
+  <span class="pygments-kt">mumble_ulong_t</span> <span class="pygments-n">uinteger</span><span class="pygments-p">;</span>
+  <span class="pygments-kt">mumble_long_t</span> <span class="pygments-n">integer</span><span class="pygments-p">;</span>
+  <span class="pygments-kt">mumble_handle_t</span> <span class="pygments-n">handle</span><span class="pygments-p">;</span>
+  <span class="pygments-kt">mumble_aggregate_t</span> <span class="pygments-n">aggregate</span><span class="pygments-p">;</span>
+<span class="pygments-p">}</span> <span class="pygments-kt">mumble_value_t</span><span class="pygments-p">;</span>
+
+</pre>
+</div>
+<div class="section" id="functions">
+<h2><a class="toc-backref" href="#id70">4.3&nbsp;&nbsp;&nbsp;Functions</a></h2>
+<p>The following functions are declared in <a class="reference external" href="../include/mumble.h">mumble.h</a>. For sample calls into the DLL see also
+<a class="reference external" href="../examples/C/mumble.c">mumble.c</a> and <a class="reference external" href="../examples/C/test.c">test.c</a>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="51%" />
+<col width="49%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><dl class="first last docutils">
+<dt>Connecting and Disconnecting</dt>
+<dd><a class="reference internal" href="#id28"><tt class="docutils literal">mumble_close</tt></a>                     <br />
+<a class="reference internal" href="#id31"><tt class="docutils literal">mumble_init</tt></a></dd>
+<dt>Error Handling</dt>
+<dd><a class="reference internal" href="#id34"><tt class="docutils literal">mumble_last_error</tt></a>                <br />
+<a class="reference internal" href="#id40"><tt class="docutils literal">mumble_raise_error</tt></a></dd>
+<dt>Mumble Objects and Communication Tests</dt>
+<dd><a class="reference internal" href="#id32"><tt class="docutils literal">mumble_invoke_return_object</tt></a>      <br />
+<a class="reference internal" href="#id37"><tt class="docutils literal">mumble_new_object</tt></a>                <br />
+<a class="reference internal" href="#id42"><tt class="docutils literal">mumble_request_error</tt></a>             <br />
+<a class="reference internal" href="#id43"><tt class="docutils literal">mumble_return_array</tt></a>              <br />
+<a class="reference internal" href="#id45"><tt class="docutils literal">mumble_return_object</tt></a></dd>
+</dl>
+</td>
+<td><dl class="first last docutils">
+<dt>Memory</dt>
+<dd><a class="reference internal" href="#id30"><tt class="docutils literal">mumble_free</tt></a>                     <br />
+<a class="reference internal" href="#id41"><tt class="docutils literal">mumble_remove_objects</tt></a>           <br /></dd>
+<dt>Callbacks</dt>
+<dd><a class="reference internal" href="#id47"><tt class="docutils literal">mumble_set_callbacks</tt></a></dd>
+</dl>
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="code literal-block" id="id28">
+<span id="mumble-close"></span>mumble_res_t mumble_close(void)
+</pre>
+<p>Make the Mumble library quit.</p>
+<p>If this function is not called before your process exits, the Mumble
+library might issue a warning message about not being unloaded cleanly
+(<tt class="docutils literal">&quot;Idle process was still alive when DLL was <span class="pre">unloaded...&quot;</span></tt>).</p>
+<p>See the <tt class="docutils literal">_on_exit()</tt> function in <a class="reference external" href="../pyMumble/connect.html">connect.py</a> for an example of calling this function
+automatically when Python is quit, provided the DLL is initialised at
+the time.</p>
+<pre class="code literal-block" id="id30">
+<span id="mumble-free"></span>mumble_res_t mumble_free(mumble_aggregate_t pointer)
+</pre>
+<p>Instruct the Mumble library to free the memory referenced by pointer.</p>
+<p>Pointer may be any <a class="reference internal" href="#aggregate"><tt class="docutils literal">aggregate</tt></a> value which originated in the Mumble
+library. If it references a sequence (i.e. a <a class="reference internal" href="#record"><tt class="docutils literal">record</tt></a> or
+<a class="reference internal" href="#array"><tt class="docutils literal">array</tt></a>), then any aggregate values within that sequence will be
+freed recursively.</p>
+<p>If pointer isn't a valid reference (for instance, if it's just some
+number you made up) then an <a class="reference internal" href="#error-is-signalled">error is signalled</a>.</p>
+<pre class="code literal-block" id="id31">
+<span id="mumble-init"></span>mumble_res_t mumble_init(void)
+</pre>
+<p>Initialise the Mumble library.</p>
+<p>Calling this function is optional, in that calling any function in the
+Mumble interface will automatically ensure that Mumble has been
+initialised. If however you prefer to initialise the library
+explicitly then you're welcome to do so.</p>
+<pre class="code literal-block" id="id32">
+<span id="mumble-invoke-return-object"></span>mumble_res_t mumble_invoke_return_object(bool *success,
+                                       mumble_handle_t(*)(mumble_handle_t) funct,
+                                       mumble_handle_t object)
+</pre>
+<p>Ask Mumble whether applying the function to the handle returns the same
+handle.</p>
+<p>The only conceivable purpose of this function is to allow you to
+conduct <a class="reference external" href="#tests">communication tests</a> with the library while you're porting
+to it. It answers the questions: are you passing function pointers
+correctly? and are you successfully interpreting handles to
+pre-existing objects?</p>
+<p>Your function <tt class="docutils literal">funct</tt> should take one argument, a <a class="reference internal" href="#handle"><tt class="docutils literal">handle</tt></a>. It
+should interpret this handle as a Mumble <a class="reference internal" href="#object"><tt class="docutils literal">object</tt></a>, in whatever way is
+appropriate to your application; then it should convert that object
+back to a handle and return this new handle. If the application's data
+model is simply to work with raw handles, then it's fine for this
+function to just return its argument; doing that otherwise would be
+defeating the purpose of the test.</p>
+<p>Mumble decodes the handle argument (<tt class="docutils literal">object</tt>) into one of its own
+objects. It calls the function with that object's handle. It expects
+the result of this function call to be a handle which it can decode
+and compare with the original object, returning true if they were the
+same.</p>
+<pre class="code literal-block" id="id34">
+<span id="mumble-last-error"></span>mumble_res_t mumble_last_error(char **error_string)
+</pre>
+<p>Return a string describing the last error to occur within the Mumble
+library.</p>
+<p>The string consists of a brief error message possibly followed by a
+verbose stack backtrace (note for Python users: with most recent call
+<em>first</em>).</p>
+<p>If you're getting an error you don't understand, please forward it
+without delay to <a class="reference external" href="mailto:mumble&#64;ravenbrook.com">mumble&#64;ravenbrook.com</a> and we'll help you interpret
+it if the problem was at your end, or get a fix to you if the
+fault was inside Mumble.</p>
+<p>If no error has occurred in this session, or at least none since a
+previous call to <tt class="docutils literal">mumble_last_error()</tt>, then <tt class="docutils literal">mumble_last_error()</tt>
+returns a null pointer.</p>
+<p>When you're done with the error string you should <a class="reference internal" href="#mumble-free"><tt class="docutils literal">mumble_free()</tt></a>
+it.</p>
+<p>See the <a class="reference external" href="#error-handling"><tt class="docutils literal">MumbleError</tt></a> Exception class in <a class="reference external" href="../pyMumble/invoke.html">invoke.py</a> for a cautious example.</p>
+<pre class="code literal-block" id="id37">
+<span id="mumble-new-object"></span>mumble_res_t mumble_new_object(mumble_handle_t *object)
+</pre>
+<p>Return the handle for a new, undifferentiated, Mumble object.</p>
+<p>The only conceivable purpose of such an object is to allow you to
+conduct <a class="reference external" href="#tests">communication tests</a> with the library while you're porting
+to it. See <a class="reference internal" href="#mumble-return-object"><tt class="docutils literal">mumble_return_object()</tt></a>, <a class="reference internal" href="#mumble-return-array"><tt class="docutils literal">mumble_return_array()</tt></a> and
+<a class="reference internal" href="#mumble-invoke-return-object"><tt class="docutils literal">mumble_invoke_return_object()</tt></a> for test functions, and
+<tt class="docutils literal">communications_test</tt> in <a class="reference external" href="../pyMumble/objects.html">objects.py</a> for a
+complete example.</p>
+<p>To create more interesting Mumble objects, consider: [...]</p>
+<p>When you're done with the object you should <a class="reference internal" href="#mumble-remove-objects"><tt class="docutils literal">mumble_remove_objects()</tt></a>
+an array containing its handle.</p>
+<pre class="code literal-block" id="id40">
+<span id="mumble-raise-error"></span>mumble_res_t mumble_raise_error(char *error_string)
+</pre>
+<p><a class="reference internal" href="#signal-an-error">Signal an error</a> whose report is <tt class="docutils literal">error_string</tt>. The string should
+have originated in a <a class="reference internal" href="#mumble-advise-condition"><tt class="docutils literal">mumble_advise_condition</tt></a> callback; it will be
+automatically passed to <a class="reference internal" href="#mumble-free"><tt class="docutils literal">mumble_free()</tt></a> by this call.</p>
+<p>See also <a class="reference internal" href="#mumble-request-error"><tt class="docutils literal">mumble_request_error()</tt></a>.</p>
+<pre class="code literal-block" id="id41">
+<span id="mumble-remove-objects"></span>mumble_res_t mumble_remove_objects(mumble_array_t *result, mumble_array_t array)
+</pre>
+<p><em>Invalidate</em> objects within Mumble and permit memory to be recycled.</p>
+<p><tt class="docutils literal">Array</tt> may contain any number of <a class="reference internal" href="#id26"><tt class="docutils literal">handles</tt></a> for [...]. Once a
+handle has been removed the corresponding Mumble object becomes
+invalid: you should no longer communicate with Mumble about that
+object and if you attempt to do so an <a class="reference internal" href="#error-will-be-signalled">error will be signalled</a>.</p>
+<p>[...]</p>
+<p><tt class="docutils literal">mumble_remove_objects()</tt> returns a new <a class="reference internal" href="#array">array</a> itemising all the
+handles whose objects have been invalidated. [...] When you're done
+with this array you should <a class="reference internal" href="#mumble-free"><tt class="docutils literal">mumble_free()</tt></a> it.</p>
+<pre class="code literal-block" id="id42">
+<span id="mumble-request-error"></span>mumble_res_t mumble_request_error(mumble_handle_t object, char *error_string)
+</pre>
+<p>Cause an <a class="reference internal" href="#error-to-be-signalled">error to be signalled</a>. If <tt class="docutils literal">object</tt> is null the error
+will come straight back (via <tt class="docutils literal">MUMBLE_RES_FAIL</tt>); if it's a windowing
+display handle then the error will occur in that display's thread; if
+it's any other object then a new thread will be created and the error
+will occur in that thread; in both of these two cases the
+<a class="reference internal" href="#mumble-advise-condition"><tt class="docutils literal">mumble_advise_condition</tt></a> callback will be invoked.</p>
+<p><tt class="docutils literal"><span class="pre">Error-string</span></tt> is any text of your choosing.</p>
+<p>The only conceivable purpose of this function is to allow you to
+conduct tests with the library while you're porting to it. It helps
+answer the question: are you handling errors correctly?</p>
+<pre class="code literal-block" id="id43">
+<span id="mumble-return-array"></span>mumble_res_t mumble_return_array(mumble_array_t *result, mumble_array_t array)
+</pre>
+<p>Return a fresh <a class="reference internal" href="#array"><tt class="docutils literal">array</tt></a>, containing the same <a class="reference internal" href="#id26"><tt class="docutils literal">handles</tt></a> as this one.</p>
+<p>The only conceivable purpose of this function is to allow you to
+conduct <a class="reference external" href="#tests">communication tests</a> with the library while you're porting
+to it. It answers the question: can you pack and unpack arrays
+correctly?</p>
+<p>The argument should be an array of handles. Mumble unpacks the array to
+get at the handles, decodes the handles to obtain a sequence of its
+own objects, and from this packs a fresh array of those objects'
+handles. As with <a class="reference internal" href="#mumble-return-object"><tt class="docutils literal">mumble_return_object()</tt></a>, if array isn't a valid
+array or its constituent handles handles, then an <a class="reference internal" href="#error-is-signalled">error is
+signalled</a>. However the onus is on the application to check that
+interpreting the array as a memory address will not be problematic.</p>
+<p>When you're done with the returned array you should <a class="reference internal" href="#mumble-free"><tt class="docutils literal">mumble_free()</tt></a>
+it.</p>
+<pre class="code literal-block" id="id45">
+<span id="mumble-return-object"></span>mumble_res_t mumble_return_object(mumble_handle_t *result, mumble_handle_t object)
+</pre>
+<p>Return the object's <a class="reference internal" href="#handle"><tt class="docutils literal">handle</tt></a>.</p>
+<p>The only conceivable purpose of this function is to allow you to
+conduct <a class="reference external" href="#tests">communication tests</a> with the library while you're porting
+to it. It answers the question: are you recording new handles
+correctly?</p>
+<p>This function isn't totally trivial: Mumble decodes the handle into one
+of its own objects and then returns that object's handle. If your
+handle isn't a valid handle (for instance, if it's just some number
+you made up) then Mumble can't process it and an <a class="reference internal" href="#error-is-signalled">error is signalled</a>.</p>
+<pre class="code literal-block" id="id47">
+<span id="mumble-set-callbacks"></span>mumble_res_t mumble_set_callbacks(mumble_handle_t object, mumble_array_t callbacks)
+</pre>
+<p>Establish callbacks in this object.</p>
+<p>The <tt class="docutils literal">object</tt> argument is either the <a class="reference internal" href="#handle"><tt class="docutils literal">handle</tt></a> of an object or null;
+<tt class="docutils literal">callbacks</tt> is an array of two-element records, each containing
+the name of one of the <a class="reference external" href="#callbacks">documented callbacks</a> and either a function
+pointer to be called when Mumble wants to invoke that callback, or a
+null pointer to remove that callback.</p>
+<p>If <tt class="docutils literal">object</tt> is null then each callback set (or removed) applies to
+all objects for which that callback has not been set explicitly.</p>
+<p>It is not an error for Mumble to attempt to invoke a callback which
+isn't currently set: in this case nothing happens. If, for example, if
+there were a callback called <tt class="docutils literal">mumble_frobnicated</tt> and you didn't
+want that callback to do anything, you might simply choose not to set
+that callback. For any callback which returns a value, I will document
+what happens if the callback isn't set.</p>
+<!-- ctype `C callable function pointer` __ http://docs.python.org/2/library/ctypes.html#callback-functions -->
+</div>
+<div class="section" id="callbacks">
+<span id="callback"></span><h2><a class="toc-backref" href="#id71">4.4&nbsp;&nbsp;&nbsp;Callbacks</a></h2>
+<p>The following callbacks are declared in <a class="reference external" href="../include/mumble.h">mumble.h</a>. For how to set and unset callbacks, and what
+happens if an unset callback is invoked, see <a class="reference internal" href="#mumble-set-callbacks"><tt class="docutils literal">mumble_set_callbacks()</tt></a>.</p>
+<pre class="code literal-block" id="mumble-advise-condition">
+void mumble_advise_condition(mumble_handle_t object, char *error_string)
+</pre>
+<p>If an error occurs during a call to one of the <a class="reference external" href="#functions">library functions</a>
+then an <a class="reference internal" href="#error-is-signalled">error is signalled</a>.</p>
+<p>If an error occurs at some other time then the option of returning the
+value <tt class="docutils literal">MUMBLE_RES_FAIL</tt> isn't available — there's no function
+call from which to return anything. Instead, this callback is invoked.</p>
+<p>If the error occurred in a thread associated with one of the objects,
+then <tt class="docutils literal">object</tt> is that object's handle (otherwise <tt class="docutils literal">object</tt> is null).</p>
+<p>The <tt class="docutils literal">error_string</tt> is of the same form as the reports returned by
+calls to <a class="reference internal" href="#mumble-last-error"><tt class="docutils literal">mumble_last_error()</tt></a>.</p>
+<p>You have two choices when programming your application to receive this
+callback.</p>
+<ul class="simple">
+<li>Deal with the <tt class="docutils literal">error_string</tt> and then <a class="reference internal" href="#mumble-free"><tt class="docutils literal">mumble_free()</tt></a> it.</li>
+<li>Call <a class="reference internal" href="#mumble-raise-error"><tt class="docutils literal">mumble_raise_error()</tt></a> which will turn the error over to
+whatever mechanism you have for dealing with <tt class="docutils literal">MUMBLE_RES_FAIL</tt>.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="troubleshooting">
+<h1><a class="toc-backref" href="#id72">5&nbsp;&nbsp;&nbsp;Troubleshooting</a></h1>
+<p>[...]</p>
+<ul class="simple">
+<li>If you were using pyMumble and Python raised an exception, please send
+us the backtrace.</li>
+<li>If a call into the library returned an error code, please send us
+any error string generated by <a class="reference internal" href="#mumble-last-error"><tt class="docutils literal">mumble_last_error()</tt></a>.</li>
+<li>Make sure you are handling the <a class="reference internal" href="#mumble-advise-condition"><tt class="docutils literal">mumble_advise_condition</tt></a> callback,
+and include any error strings arising from this.</li>
+</ul>
+<p>[...]</p>
+<hr class="docutils" />
+<div class="figure" id="license">
+<img alt="images/lisp.jpg" src="images/lisp.jpg" />
+</div>
+<p><span class="copyright">CLAUDE: The Common Lisp Library Audience Expansion Toolkit</span> <br />
+<span class="copyright">Copyright (c) 2009-2013, Ravenbrook Limited.</span> <br />
+<span class="copyright">All rights reserved.</span></p>
+<p><span class="copyright">Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:</span></p>
+<blockquote>
+<p><span class="copyright">Redistributions of source code must retain the above
+copyright notice, this list of conditions and the following
+disclaimer.</span></p>
+<p><span class="copyright">Redistributions in binary form must reproduce the
+above copyright notice, this list of conditions and the following
+disclaimer in the documentation and/or other materials provided
+with the distribution.</span></p>
+</blockquote>
+<p><span class="copyright">THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
+BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+DAMAGE.</span></p>
+<!-- .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. .. -->
+</div>
+</div>
+<div class="footer">
+<hr class="footer" />
+Generated on: 2014-04-14 13:08 UTC.
+
+</div>
+</body>
+
+<!-- Mirrored from nicklevine.org/claude/claude-1.0.2/mumble/manual/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:24:26 GMT -->
+</html>

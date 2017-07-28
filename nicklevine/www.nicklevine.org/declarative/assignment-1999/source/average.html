@@ -1,0 +1,36 @@
+MODULE average;
+
+
+FROM RealInOut IMPORT ReadReal,WriteReal;
+FROM InOut     IMPORT ReadCard,WriteString,WriteLn;
+
+
+VAR NumberOfNumbers,loop:CARDINAL;
+VAR average,enter,sum:REAL;
+
+BEGIN
+
+WriteString('How many numbers are you averaging? ');
+ReadCard(NumberOfNumbers);
+
+sum:=0.0;
+loop:=1;
+
+
+WriteString('Please type the 1st number ');
+ReadReal(enter);
+sum:=enter;
+
+    WHILE loop<>NumberOfNumbers DO
+
+        WriteString('Please enter the next number ');
+        ReadReal(enter);
+        sum:=sum+enter;
+        loop:=loop+1
+    END;
+
+ average:=sum/FLOAT(NumberOfNumbers);
+ WriteString('The average is: ');
+ WriteReal(average,0)
+
+ END average.

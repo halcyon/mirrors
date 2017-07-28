@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Lazytest Churn</title>
+	<atom:link href="https://stuartsierra.com/2010/07/30/lazytest-churn/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2010/07/30/lazytest-churn</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2010/07/30/lazytest-churn/comment-page-1#comment-43161</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Fri, 30 Jul 2010 22:35:31 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=468#comment-43161</guid>
+		<description><![CDATA[Peter- thanks, somehow I missed that.]]></description>
+		<content:encoded><![CDATA[<p>Peter- thanks, somehow I missed that.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2010/07/30/lazytest-churn/comment-page-1#comment-43160</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Fri, 30 Jul 2010 22:35:06 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=468#comment-43160</guid>
+		<description><![CDATA[Pedro- &#039;given&#039; and &#039;using&#039; will probably stick around, though my latest commits make them unusable outside of &#039;describe&#039;.
+
+One possibility I&#039;m considering is unifying &#039;given&#039; and &#039;using&#039; under a single name.]]></description>
+		<content:encoded><![CDATA[<p>Pedro- &#8216;given&#8217; and &#8216;using&#8217; will probably stick around, though my latest commits make them unusable outside of &#8216;describe&#8217;.</p>
+<p>One possibility I&#8217;m considering is unifying &#8216;given&#8217; and &#8216;using&#8217; under a single name.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Pedro Teixeira</title>
+		<link>https://stuartsierra.com/2010/07/30/lazytest-churn/comment-page-1#comment-43159</link>
+		<dc:creator><![CDATA[Pedro Teixeira]]></dc:creator>
+		<pubDate>Fri, 30 Jul 2010 22:28:54 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=468#comment-43159</guid>
+		<description><![CDATA[liked it, because it requires less typing.
+
+do you plan to keep the given and using macros to use Fixtures as they are now? I&#039;m curious, because I&#039;m already making use of them ;)]]></description>
+		<content:encoded><![CDATA[<p>liked it, because it requires less typing.</p>
+<p>do you plan to keep the given and using macros to use Fixtures as they are now? I&#8217;m curious, because I&#8217;m already making use of them ;)</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Pedro Teixeira</title>
+		<link>https://stuartsierra.com/2010/07/30/lazytest-churn/comment-page-1#comment-43163</link>
+		<dc:creator><![CDATA[Pedro Teixeira]]></dc:creator>
+		<pubDate>Fri, 30 Jul 2010 21:00:18 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=468#comment-43163</guid>
+		<description><![CDATA[Previously, it was quite easy to throw typed exceptions from custom functions. Would be happy to hear your insight on the following issues:
+
+a) Would you consider the expectation map of vars in lazytest.expect, an extension mechanism for adding custom expectations? So, it&#039;s ok for users to add to it?
+
+b) How would one re-use some expectations for different objects/fixtures?  Imagine a case, where you&#039;d want to assert common expectations a given protocol for different implementations. Right now, I would have to call a function inside a do-it, which would then call various expects.
+
+ps: enjoyed the colors on the report! currently, using a multi-term buffer (w/ black background) on emacs, and looks good.]]></description>
+		<content:encoded><![CDATA[<p>Previously, it was quite easy to throw typed exceptions from custom functions. Would be happy to hear your insight on the following issues:</p>
+<p>a) Would you consider the expectation map of vars in lazytest.expect, an extension mechanism for adding custom expectations? So, it&#8217;s ok for users to add to it?</p>
+<p>b) How would one re-use some expectations for different objects/fixtures?  Imagine a case, where you&#8217;d want to assert common expectations a given protocol for different implementations. Right now, I would have to call a function inside a do-it, which would then call various expects.</p>
+<p>ps: enjoyed the colors on the report! currently, using a multi-term buffer (w/ black background) on emacs, and looks good.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Peter Niederwieser</title>
+		<link>https://stuartsierra.com/2010/07/30/lazytest-churn/comment-page-1#comment-43158</link>
+		<dc:creator><![CDATA[Peter Niederwieser]]></dc:creator>
+		<pubDate>Fri, 30 Jul 2010 17:04:03 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=468#comment-43158</guid>
+		<description><![CDATA[Spock&#039;s &quot;when: then:&quot; is meant for testing side-effects. For testing pure functions, &quot;expect:&quot; is a better fit.]]></description>
+		<content:encoded><![CDATA[<p>Spock&#8217;s &#8220;when: then:&#8221; is meant for testing side-effects. For testing pure functions, &#8220;expect:&#8221; is a better fit.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.290 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:01:24 -->
+
+<!-- Compression = gzip -->

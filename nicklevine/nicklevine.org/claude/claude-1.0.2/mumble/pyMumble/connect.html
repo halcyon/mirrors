@@ -1,0 +1,122 @@
+# $Id: //info.ravenbrook.com/user/ndl/lisp/claude/claude-1.0.2/mumble/pyMumble/connect.py#1 $
+#
+#                              CONNECT.PY
+#             Nick Levine, Ravenbrook Limited, 2013-03-21
+#
+# 1.  INTRODUCTION
+
+"""
+This module handles connection to, and disconnection from, the Mumble DLL.
+
+The library exports two functions, mumble_init() and mumble_close(), for
+performing these actions. Examples of their use provided here.
+
+The library's calling convention is stdcall.
+
+Importing this module sets the global variable dll to the ctypes
+shared library object. This value can then used elsewhere to invoke
+Mumble functionality.
+"""
+
+import atexit
+import ctypes
+import os
+
+import config
+
+_wordSizeError = """
+**~'*/~/********************************************************
+* ~' /~/                                                       *
+* Mumble is a 32-bit dll and will only work in a 32-bit Python *
+* ~' /~/                                                       *
+**~'*/~/********************************************************
+"""
+
+_wordSize = ctypes.sizeof(ctypes.c_voidp)
+if _wordSize != 4:
+    raise Exception(_wordSizeError)
+
+filename = 'mumble.dll'
+
+def _findLibrary():
+    """Return the first instance of (global) filename found on config.libraryPath."""
+    for path in config.libraryPath:
+        if path and path[len(path)-1] == os.sep:
+            path = path + filename
+        elif path:
+            path = path + os.sep + filename
+        else:
+            path = filename
+        try:
+            with open(path):
+                return path
+        except IOError:
+            pass
+
+
+# 2.  INITIALISE, AND CLEANUP ON EXIT
+
+def _on_exit():
+    """Called automatically when Python is quit, to close the Mumble DLL."""
+    def dll_running():
+        # http://www.lispworks.com/documentation/lw61/LW/html/lw-1522.htm
+        return dll.LispWorksState(100)>0
+    try:
+        # If mumble_close() has already been called, don't invoke it
+        # again (consider a library that performs a costly
+        # initialisation on startup).
+        if dll_running():
+            dll.mumble_close()
+    except:
+        pass
+
+try:
+    # Is this the first time we loaded this module?
+    dll
+except NameError:
+    # Yes, it is. Locate the DLL
+    library = _findLibrary()
+    # Connect. Use windll loader because Mumble's calling convention is stdcall.
+    dll = ctypes.windll.LoadLibrary(library)
+    dll.mumble_init()
+    # Ensure that mumble_close() will be closed when we exit.
+    atexit.register(_on_exit)
+
+
+# A. REFERENCES
+#
+#
+# B. DOCUMENT HISTORY
+#
+# 2013-03-21 NDL Created.
+#
+#
+# C. COPYRIGHT AND LICENSE
+#
+# Copyright (c) 2013, Ravenbrook Limited.
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in
+#    the documentation and/or other materials provided with the
+#    distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+# COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.

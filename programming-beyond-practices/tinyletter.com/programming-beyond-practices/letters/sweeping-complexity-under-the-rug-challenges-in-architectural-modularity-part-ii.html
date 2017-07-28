@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/sweeping-complexity-under-the-rug-challenges-in-architectural-modularity-part-ii by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:00 GMT -->
+<head>
+    <title> Sweeping complexity under the rug (Challenges in architectural modularity, Part II) </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="sweeping-complexity-under-the-rug-challenges-in-architectural-modularity-part-ii.html">
+    <meta property="og:title" content="Sweeping complexity under the rug (Challenges in architectural modularity, Part II)">
+    <meta property="og:description" content="Welcome back to another installment of *Programming Beyond Practices. *I hope that your week is off to a good start, and that you'll have many fruitful deploys in the coming days!">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Sweeping complexity under the rug (Challenges in architectural modular" />
+	<meta name="twitter:description" content="Welcome back to another installment of *Programming Beyond Practices. *I hope that your week is off to a good start, and that you'll have many fruitful deploys in the coming days!" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> September 29, 2015 </div>
+            <h1 class="subject"> Sweeping complexity under the rug (Challenges in architectural modularity, Part II) </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> <div>Hello Developer Friend!<br>
+<br>
+Welcome back to another installment of&nbsp;<em>Programming Beyond Practices.&nbsp;</em>I hope that your week is off to a good start, and that you&#39;ll have many fruitful deploys in the coming days!<br>
+<br>
+Last week, I had started a conversation around the concept of architectural modularity, and gave you a handful of problems to think through. I&#39;ll restate each of those problems briefly in this email, and share my own solutions to them.<br>
+<br>
+If you want more of a backstory, you can go back and read <a href="challenges-in-architectural-modularity-part-1.html">Challenges in architectural modularity,&nbsp;Part I</a>&nbsp;-- but that&#39;s totally optional. I&#39;m trying to make these emails self-contained where possible, even if it means repeating myself a little bit.<br>
+&nbsp;
+<hr><br>
+<em>Architectural modularity</em> sounds a bit&nbsp;formal, but for our purposes it&#39;s not a very complicated concept. Take the&nbsp;<a href="https://en.wikipedia.org/wiki/Separation_of_concerns">separation of concerns</a>&nbsp;design principle that you&#39;d typically implement by breaking code into functions and classes and then apply it at the system level, and you&#39;ve got yourself a modular architecture.<br>
+<br>
+For the moment, let&#39;s not allow this conversation to become too theoretical. We&#39;ve got these great example problems to work through, and they&#39;ll serve us well in exploring these ideas within a realistic context.<br>
+<br>
+Pay attention, because I&#39;m going to move quickly here. The details of the individual examples aren&#39;t terribly important, it&#39;s the common thread between them&nbsp;that is worth looking for.<br>
+<span style="display: none;">&nbsp;</span>&nbsp;
+
+<hr>
+<div><br>
+<em><strong>Problem 1: </strong>You need to integrate a Rails web app with a Windows-based truck routing application via a legacy COM interface. The windows application is unreliable and can fail in various unpleasant ways, making error handling complicated.</em></div>
+<br>
+The first order of business whenever you have an ancient, platform-specific way of integrating with some third party piece of software is to wrap it in a modernized interface.&nbsp;In this particular project, I ended up using Sinatra to build a tiny web service that would run on the Windows machine, allowing our Rails application to treat it the same way it would any other HTTP-based service.</div>
+<br>
+From there, we built a fake server with the same endpoints that could be run in development and testing, serving up canned data that was representative of what the real service would produce in production. This fake service was a plain Sinatra application that could run anywhere, so developers working on the Rails application did not need to worry about setting up code that could integrate with a Windows application, much less running a copy of an expensive piece of legacy Windows software in their own environments.<br>
+<br>
+The path towards getting the real production web service running wasn&#39;t so simple: this was many years ago, and at that time Ruby on Windows was a real mess. I think after trying various tools that could have possibly worked in standard Ruby, we ended up using JRuby and FFI to integrate with the truck routing software.<br>
+<br>
+Things mostly worked, but there were some situations where the application could end up in a dirty state, requiring processes to be restarted or other tedious cleanup efforts to be done. Error handling in general was also a mess, because you&#39;d have to try to extract useful messages and error states out of an obtuse COM interface. We used a combination of up-front validation to prevent sending invalid inputs to the truck routing software in the first place, error detection code, and recovery/cleanup code to keep things up and running.<br>
+<br>
+No matter what problems we encountered in the Windows-based code, we were able to generate some sort of sane error state to send along via the web service, even if in some cases that might just be a generic &quot;whoops, something went wrong&quot; error. Because the Rails application was running on a totally separate machine and had no shared dependencies beyond the data that was being passed back and forth over the web service, any instability was limited to the features depending on this service.<br>
+<br>
+Although it was held together with shoestrings and glue, the newly built truck routing web service stabilized fairly quickly as we added a new fix or workaround for each problem we encountered. Only one developer on the team needed to understand how to care for this service, the rest went on with their work on the Rails app without needing to even think about the hidden complexity beyond the HTTP interface.<br>
+&nbsp;
+<hr><br>
+<em><strong>Problem 2:&nbsp;</strong>You need to build reporting functionality based on data found in a 10+ year old payroll application. You don&#39;t have the budget to rewrite or upgrade the payroll system, but it would be very painful to work with old tech stack.</em><br>
+<br>
+Working with very old toolchains is more than just a matter of getting the right dependencies all installed and running on a development machine. You also need to be able to remember how things worked back then (or learn about old versions of tools if you&#39;ve never used them before), and you need to give up all the creature comforts and muscle memory that you&#39;ve built up around your modern tech stack.<br>
+<br>
+After a certain number of years have passed, you also lose the benefit of being able to take advantage of the many open source packages we tend to use day-to-day. Some of these tools may not have existed when the old system you&#39;re working on was built, so they&#39;ve never been compatible with its dependencies. Others may have dropped support for your particular toolchain a long, long time ago, and so finding a compatible version to work with can be an exercise in futility.<br>
+<br>
+In theory, software that lives long enough to essentially become frozen in time deserves to be killed off. In practice, this can take a lot of time and money -- so it tends to happen slower than we&#39;d like it to.<br>
+<br>
+So what&#39;s the fast, cheap option if you end up in this situation? Drop down below the level of the application, directly access whatever data it&#39;s using, and then build a new project to work with that data.<br>
+<br>
+The client needed some reports on their payroll data, and it was obvious that spending time integrating them into their ancient system would have been an exercise in futility. However, the data was sitting in an easily accessible database, and none of the models were complicated.<br>
+<br>
+Within a day or two of work, we had set up a new Rails application that let us make use of all the modern developer tools we had gotten used to. The only &quot;integration&quot; with the old system was by way of a shared database, but the reporting tools we were building were read-only, so there wasn&#39;t any risk involved in sharing this data. We were even able to reuse the same authentication scheme so that usernames and passwords wouldn&#39;t need to change!<br>
+<br>
+Some degree of duplication did occur as a result of maintaining a new system alongside an existing legacy program -- in some places we needed to repeat application logic that existed in the old system. When enough overlap accumulated, we ended up creating a gem that combined the shared business modeling functionality and then slowly and painstakingly refactored the old system to use these new models. However, this project didn&#39;t start until over a year after the new reporting system was in place, and was mostly a stop-gap measure on the road to decommissioning the old system entirely.<br>
+&nbsp;
+<hr><br>
+<em><strong>Problem 3:</strong> You need to build&nbsp;a medical schedule reporting system that will run on Heroku, but all of the data you need is coming from messy sources (i.e. you need to combine employee shift data that&#39;s only&nbsp;accessible via an&nbsp;unstable web API with appointment book data that&#39;s stored in&nbsp;SQL Server 2000). You also have privacy concerns to deal with;&nbsp;although the scheduling reports won&#39;t include any sensitive information, some of the data you&#39;ll use to generate them involves&nbsp;patient information.</em><br>
+<br>
+This problem is almost a mirror image of&nbsp;<strong>Problem 1</strong>, with a few twists. You&#39;ve got unstable data sources, but rather than querying them for specific pieces of data in real time, you need to normalize bulk data from multiple sources and do some aggregate reporting on it.<br>
+<br>
+The way I ended up solving this in my own work was to build an importer process that runs on an internal network where the SQL Server is already accessible. This process deals with the various quirks of using an ancient database (such as deadlocks, and using a particular commit of a particular branch of a particular fork of a particular ActiveRecord adapter), and miraculously, pulls out the data we need. From there, the data gets normalized and rolled up, eliminating any sensitive patient information that we wouldn&#39;t want to put on the internet. Finally, this information gets sent to the web application running on Heroku via a HTTP POST to a write-only service endpoint.<br>
+<br>
+Initially I had thought about integrating the other data source (a third-party employee shift planning tool) directly into the web application I was building. In theory, this should have been a safe thing to do, because it&#39;s a web API and what could go wrong, right?<br>
+<br>
+As it turns out, quite a bit can go wrong with a web API. Sometimes, requests wouldn&#39;t outright fail, but it&#39;d take five minutes or more to get a response to something that usually runs in less than a second. Other times, responses would come back in HTML format rather than JSON format. Still other times, we&#39;d get every possible HTTP code under the sun, or authentication errors that were clearly invalid. Handling all of this within our multi-purpose web application would mean introducing a lot of incidental complexity, and also would risk stability due to unintended side effects if we weren&#39;t careful.<br>
+<br>
+It became obvious that because our reporting tool needed to synchronize both of these data sources before it could do anything useful, that having direct access to the employee shift planning service inside of the web application we were building wouldn&#39;t really help anything. With this in mind, I decided to fold these two tasks together into a single import process: If one data source encountered problems, the import would be cancelled and rescheduled, preventing the reporting system from ever seeing inconsistent data.<br>
+<br>
+On the importer side, things are still incredibly brittle to this day. They work well enough, and the value we get out of them is worth the development effort, but it&#39;s a complete Rube Goldberg machine. However, this code only needs to be touched once every few months, while the main web application gets worked on daily.<br>
+<br>
+As you can imagine, this makes developing and testing a whole lot easier on the web application side as well. Nothing about that code needs to know about where this data is coming from, and even for the purposes of an end-to-end test the outermost layer of the system is just working with some simple, well-formatted JSON data hitting a service endpoint.<br>
+&nbsp;
+<div>
+<hr><br>
+<strong>The moral of the story</strong><br>
+<br>
+A good portion of the complexity we&#39;re forced to deal with in real software projects is incidental rather than essential. That is to say, even if some theoretically pure solution may exist to keep systems in a perfect state of health -- in practice we often must deviate from the golden path.<br>
+<br>
+With this in mind, we can use the concept of&nbsp;<em>architectural modularity</em>&nbsp;to separate stable, easy to maintain code from unreliable code and data sources. This approach isn&#39;t especially elegant, because in the end all you&#39;re doing is sweeping complexity under the rug rather than eliminating it.<br>
+<br>
+However, the practical implication of applying the S<em>eparation of Concerns&nbsp;</em>principle at the architectural level is quite profound.&nbsp;The simple act of physically separating two parts of a software system and reducing their connection points to nothing more than a shared database connection or a minimal HTTP-based API costs almost no effort but produces tremendous benefits. Good code is not required to make this happen, and you don&#39;t need a PhD in Software Architecture to see how to apply this technique.<br>
+<br>
+Hopefully these examples have given you something to think about. If you have any thoughts to share or questions for me, just reply to this email!<br>
+<br>
+For a little more on the topic, see the <a href="http://www.laputan.org/mud/mud.html#SweepingItUnderTheRug">Sweeping it under the rug</a> section of the Big Ball of Mud paper, which is where I got some of these ideas from.<br>
+<br>
+-greg<br>
+<br>
+PS: Bonus points for thinking about how all of this related to the Unix design philosophy.</div> </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="effective-code-reviews-part-1.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="challenges-in-architectural-modularity-part-1.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/sweeping-complexity-under-the-rug-challenges-in-architectural-modularity-part-ii by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:00 GMT -->
+</html>

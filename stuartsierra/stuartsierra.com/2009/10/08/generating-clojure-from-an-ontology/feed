@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Generating Clojure from an Ontology</title>
+	<atom:link href="https://stuartsierra.com/2009/10/08/generating-clojure-from-an-ontology/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2009/10/08/generating-clojure-from-an-ontology</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Ryan</title>
+		<link>https://stuartsierra.com/2009/10/08/generating-clojure-from-an-ontology/comment-page-1#comment-44184</link>
+		<dc:creator><![CDATA[Ryan]]></dc:creator>
+		<pubDate>Thu, 05 May 2011 02:06:28 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=322#comment-44184</guid>
+		<description><![CDATA[I took a slightly different approach to RDF in Clojure, since I really wanted to both leverage Sparql (particularly the new 1.1 stuff) and work with my result sets in Incanter.  It&#039;s my first project with Clojure, so it&#039;s still a learning experience, but I decided to throw it up on Clojars and Github at https://github.com/ryankohl/seabass .  Nonetheless, your idea of a more-or-less ORM layer between straight-up Clojure data structures and RDF graphs is pretty cool.  Have you returned much to this recently?]]></description>
+		<content:encoded><![CDATA[<p>I took a slightly different approach to RDF in Clojure, since I really wanted to both leverage Sparql (particularly the new 1.1 stuff) and work with my result sets in Incanter.  It&#8217;s my first project with Clojure, so it&#8217;s still a learning experience, but I decided to throw it up on Clojars and Github at <a href="https://github.com/ryankohl/seabass" rel="nofollow">https://github.com/ryankohl/seabass</a> .  Nonetheless, your idea of a more-or-less ORM layer between straight-up Clojure data structures and RDF graphs is pretty cool.  Have you returned much to this recently?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: polypus</title>
+		<link>https://stuartsierra.com/2009/10/08/generating-clojure-from-an-ontology/comment-page-1#comment-42898</link>
+		<dc:creator><![CDATA[polypus]]></dc:creator>
+		<pubDate>Sat, 07 Nov 2009 22:13:13 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=322#comment-42898</guid>
+		<description><![CDATA[this is very interesting. i&#039;m just getting into clojure now (usually hack in ruby) 
+because i think that it is a great fit for working with rdf for several reasons:
+
+a) most rdf and owl libraries and tools are written in java
+b) i think that a lisp is better suited to working with rdf than an oopl
+
+please keep us updated on this work.]]></description>
+		<content:encoded><![CDATA[<p>this is very interesting. i&#8217;m just getting into clojure now (usually hack in ruby)<br />
+because i think that it is a great fit for working with rdf for several reasons:</p>
+<p>a) most rdf and owl libraries and tools are written in java<br />
+b) i think that a lisp is better suited to working with rdf than an oopl</p>
+<p>please keep us updated on this work.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Julien Chastang</title>
+		<link>https://stuartsierra.com/2009/10/08/generating-clojure-from-an-ontology/comment-page-1#comment-42871</link>
+		<dc:creator><![CDATA[Julien Chastang]]></dc:creator>
+		<pubDate>Tue, 27 Oct 2009 19:37:25 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=322#comment-42871</guid>
+		<description><![CDATA[Thanks for the interesting post. I am playing around with Clojure and RDF technologies as well. I am invoking the OpenRDF Sesame Java API via Clojure. Like you I do not know exactly where I am going  but my intuition tells me something interesting may come out of this exploration. For one, you mention Protégé. It seems like you may be able to bypass Protégé and have a &quot;command-line&quot; or &quot;shell&quot; (or even DSL) to directly create/read/update  ontologies/RDF directly from the Clojure REPL. Also if you load various triple stores, and you are good enough at Clojure, you can start slicing and dicing RDF interesting and perhaps novel ways from the REPL. Good luck, and let us know how all this is going.]]></description>
+		<content:encoded><![CDATA[<p>Thanks for the interesting post. I am playing around with Clojure and RDF technologies as well. I am invoking the OpenRDF Sesame Java API via Clojure. Like you I do not know exactly where I am going  but my intuition tells me something interesting may come out of this exploration. For one, you mention Protégé. It seems like you may be able to bypass Protégé and have a &#8220;command-line&#8221; or &#8220;shell&#8221; (or even DSL) to directly create/read/update  ontologies/RDF directly from the Clojure REPL. Also if you load various triple stores, and you are good enough at Clojure, you can start slicing and dicing RDF interesting and perhaps novel ways from the REPL. Good luck, and let us know how all this is going.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Rodrigo Miranda (rodrigocmiranda) 's status on Thursday, 08-Oct-09 20:40:45 UTC - Identi.ca</title>
+		<link>https://stuartsierra.com/2009/10/08/generating-clojure-from-an-ontology/comment-page-1#comment-42784</link>
+		<dc:creator><![CDATA[Rodrigo Miranda (rodrigocmiranda) 's status on Thursday, 08-Oct-09 20:40:45 UTC - Identi.ca]]></dc:creator>
+		<pubDate>Thu, 08 Oct 2009 20:40:54 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=322#comment-42784</guid>
+		<description><![CDATA[[...] RDF ontologies in Clojure: http://stuartsierra.com/2009/10/08/generating-clojure-from-an-ontology [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] RDF ontologies in Clojure: <a href="http://stuartsierra.com/2009/10/08/generating-clojure-from-an-ontology" rel="nofollow">http://stuartsierra.com/2009/10/08/generating-clojure-from-an-ontology</a> [&#8230;]</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.269 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:58:39 -->
+
+<!-- Compression = gzip -->

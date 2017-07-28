@@ -1,0 +1,25 @@
+MODULE MaxOfNv5;
+
+FROM InOut IMPORT
+ReadInt,WriteInt,ReadCard,WriteCard,WriteString,WriteLn,Done;
+
+VAR Value,Max:INTEGER;
+
+BEGIN
+  Max:= MIN (INTEGER);
+  WriteString('Enter integer value - any other character to stop');WriteLn;
+
+  WriteString('Enter value > '); ReadInt(Value); WriteLn;
+
+  WHILE Done DO
+
+    IF Value > Max THEN
+      MAx := Value
+    END;
+
+    WriteString('Enter value > '); ReadInt(Value); WriteLn
+
+  END; (* WHILE *)
+
+  WriteString('Maximum is: '); WriteInt(Max,0); WriteLn
+END MaxOfNv5.

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Clojure Don’ts: The Heisenparameter</title>
+	<atom:link href="https://stuartsierra.com/2015/06/10/clojure-donts-heisenparameter/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2015/06/10/clojure-donts-heisenparameter</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2015/06/10/clojure-donts-heisenparameter/comment-page-1#comment-54744</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Tue, 16 Jun 2015 17:40:27 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=854#comment-54744</guid>
+		<description><![CDATA[This discussion has gone off the topic of the original post. If you would like to continue it, I suggest moving to the &lt;a href=&quot;https://groups.google.com/forum/#!forum/clojure&quot; rel=&quot;nofollow&quot;&gt;Clojure mailing list&lt;/a&gt;.]]></description>
+		<content:encoded><![CDATA[<p>This discussion has gone off the topic of the original post. If you would like to continue it, I suggest moving to the <a href="https://groups.google.com/forum/#!forum/clojure" rel="nofollow">Clojure mailing list</a>.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: ne-on</title>
+		<link>https://stuartsierra.com/2015/06/10/clojure-donts-heisenparameter/comment-page-1#comment-54743</link>
+		<dc:creator><![CDATA[ne-on]]></dc:creator>
+		<pubDate>Tue, 16 Jun 2015 17:17:38 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=854#comment-54743</guid>
+		<description><![CDATA[Howard - I often want to do exactly what you are doing, and have read the same opinions you have. It also causes me some cognitive dissonance not having a name to document the argument as a whole. My compromise has been to add the :as directive in the destructuring even if I don&#039;t use it like so:
+
+&lt;code&gt;
+(defn publish-field-change
+&quot;Publishes a change to a field, specifying its new value and new error message (which may be nil).&quot;
+[{:keys [data-key] :as whatever} key value error]
+&lt;/code&gt;]]></description>
+		<content:encoded><![CDATA[<p>Howard &#8211; I often want to do exactly what you are doing, and have read the same opinions you have. It also causes me some cognitive dissonance not having a name to document the argument as a whole. My compromise has been to add the :as directive in the destructuring even if I don&#8217;t use it like so:</p>
+<p><code><br />
+(defn publish-field-change<br />
+"Publishes a change to a field, specifying its new value and new error message (which may be nil)."<br />
+[{:keys [data-key] :as whatever} key value error]<br />
+</code></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Jarrod</title>
+		<link>https://stuartsierra.com/2015/06/10/clojure-donts-heisenparameter/comment-page-1#comment-54730</link>
+		<dc:creator><![CDATA[Jarrod]]></dc:creator>
+		<pubDate>Wed, 10 Jun 2015 19:58:44 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=854#comment-54730</guid>
+		<description><![CDATA[The one thing I like about seeing map de-structuring is that I know this arg will be a map, and some of the keys I can count on it having.  I think it goes along with the sentiment of this post: be explicit even with dynamic types.
+
+This is also the first of this series of posts, they are great Stuart!  Looking forward to reading the backlog.]]></description>
+		<content:encoded><![CDATA[<p>The one thing I like about seeing map de-structuring is that I know this arg will be a map, and some of the keys I can count on it having.  I think it goes along with the sentiment of this post: be explicit even with dynamic types.</p>
+<p>This is also the first of this series of posts, they are great Stuart!  Looking forward to reading the backlog.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2015/06/10/clojure-donts-heisenparameter/comment-page-1#comment-54729</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Wed, 10 Jun 2015 17:35:09 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=854#comment-54729</guid>
+		<description><![CDATA[Thanks, Howard!
+
+I have given some thought to destructuring map parameters, but not to the point where I can express it as a general principle. I don&#039;t have all the answers, at least not yet. ;)]]></description>
+		<content:encoded><![CDATA[<p>Thanks, Howard!</p>
+<p>I have given some thought to destructuring map parameters, but not to the point where I can express it as a general principle. I don&#8217;t have all the answers, at least not yet. ;)</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Howard Lewis Ship</title>
+		<link>https://stuartsierra.com/2015/06/10/clojure-donts-heisenparameter/comment-page-1#comment-54728</link>
+		<dc:creator><![CDATA[Howard Lewis Ship]]></dc:creator>
+		<pubDate>Wed, 10 Jun 2015 17:30:41 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=854#comment-54728</guid>
+		<description><![CDATA[I really appreciate the clarity with which you&#039;ve been describing these anti-patterns and their effects, as well as the solutions. I don&#039;t often find myself in violation, but it certainly I can point some of the new-to-Clojure members of my team at.
+
+Also, what are your thoughts on destructuring parameters?
+
+I&#039;ve heard somewhere that is is frowned upon, but in something like this:
+
+&lt;code&gt;
+(defn publish-field-change
+  &quot;Publishes a change to a field, specifying its new value and new error message (which may be nil).&quot;
+  [{:keys [data-key]} key value error]
+&lt;/code&gt;
+
+It is more clear, I think, for a caller, a reader of the documentation, or someone testing the code, which key(s) in the first parameter are actually used. A little bit of Schema here would also go a long way towards identifying what that first parameter is in the larger context.]]></description>
+		<content:encoded><![CDATA[<p>I really appreciate the clarity with which you&#8217;ve been describing these anti-patterns and their effects, as well as the solutions. I don&#8217;t often find myself in violation, but it certainly I can point some of the new-to-Clojure members of my team at.</p>
+<p>Also, what are your thoughts on destructuring parameters?</p>
+<p>I&#8217;ve heard somewhere that is is frowned upon, but in something like this:</p>
+<p><code><br />
+(defn publish-field-change<br />
+  "Publishes a change to a field, specifying its new value and new error message (which may be nil)."<br />
+  [{:keys [data-key]} key value error]<br />
+</code></p>
+<p>It is more clear, I think, for a caller, a reader of the documentation, or someone testing the code, which key(s) in the first parameter are actually used. A little bit of Schema here would also go a long way towards identifying what that first parameter is in the larger context.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.274 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:56:47 -->
+
+<!-- Compression = gzip -->

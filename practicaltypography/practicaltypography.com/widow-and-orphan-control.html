@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from practicaltypography.com/widow-and-orphan-control.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 17:01:26 GMT -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript">
+if (navigator.appVersion.indexOf("Win")!=-1) {
+    document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-a.css" />');
+} else if (navigator.appVersion.indexOf("Mac")!=-1) {
+    if (navigator.userAgent.match(/iPad/i) != null) {
+        document.write('<link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="fonts/equity-b.css" type="text/css" />');
+        document.write('<link rel="stylesheet" media="only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2)" type="text/css" href="fonts/equity-a.css" />');
+    } else {
+        document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-b.css" />');
+    }
+} else {
+    document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-a.css" />');
+}
+
+</script>
+
+<title>Widow and orphan control | Butterick’s Practical Typography</title>
+<link rel="stylesheet" type="text/css" media="all" href="styles.css" />
+<link rel="stylesheet" type="text/css" media="all" href="fonts/1406-fonts.css" />
+<meta name="format-detection" content="telephone=no">
+
+
+
+
+
+<script type="text/javascript">
+var isFirefox = typeof InstallTrigger !== 'undefined';
+if (isFirefox) {
+document.write('<link rel="stylesheet" type="text/css" media="all" href="firefox.css" />');
+}
+var isChromium = window.chrome,
+    winNav = window.navigator,
+    vendorName = winNav.vendor,
+    isOpera = winNav.userAgent.indexOf("OPR") > -1,
+    isIEedge = winNav.userAgent.indexOf("Edge") > -1,
+    isIOSChrome = winNav.userAgent.match("CriOS");
+if(isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isIEedge == false) {
+   // is Google Chrome or Opera
+   document.write('<link rel="stylesheet" type="text/css" media="all" href="chrome.css" />');
+}
+</script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-19281911-7']);
+  _gaq.push(['_setDomainName', 'practicaltypography.com']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+
+<body>
+<div class="content"><div id="doc"><title-block><topic>widow and orphan control</topic><short-rule>Your call</short-rule></title-block><p>Pic­ture a para­graph that starts at the bot­tom of one page and con­tin­ues at the top of the next page. When only the last line of the para­graph ap­pears at the top of the next page, that line is called a <em>widow</em>. When only the first line of the para­graph ap­pears at the bot­tom of the first page, that line is called an <em>or­phan</em>.</p><p><em>Widow and or­phan con­trol</em> pre­vents both. Or­phans are moved to the next page with the rest of the para­graph. To cure wid­ows, lines are moved from the bot­tom of one page to the top of the next. It’s a lit­tle more com­pli­cated than it sounds, be­cause cur­ing a widow can­not cre­ate a new or­phan, nor vice <span class="no-hyphens">versa.</span></p><p>Be aware that if you use widow and or­phan con­trol, you will fre­quently see blank lines at the bot­tom of your pages. This is nor­mal, since lines must be trans­planted to cure the <span class="no-hyphens">problem.</span></p><p>Widow and or­phan con­trol in a word proces­sor is all-or-noth­ing. You can’t con­trol wid­ows and or­phans sep­a­rately, even though wid­ows are more dis­tract­ing. Why? Or­phans ap­pear at the be­gin­ning of a para­graph, so they’re at least a full line. But wid­ows can be any length, even a sin­gle word, be­cause they ap­pear at the end of a <span class="no-hyphens">paragraph.</span></p><p>Do you need widow and or­phan con­trol? Try it. See how it looks. In my own work, I ap­proach widow and or­phan con­trol the same way I ap­proach <a href="ligatures.html" class="xref">lig­a­tures</a>—I only use it if wid­ows and or­phans are caus­ing a vis­i­ble prob­lem. Oth­er­wise, I find that the blank lines at the bot­tom of the page are more an­noy­ing than the wid­ows and <span class="no-hyphens">orphans.</span></p><div class="howto"><div class="howto-name">How to turn on widow &amp; orphan control</div><p><program>Word</program> Right-click in the text and se­lect <ui>Paragraph</ui> → <ui>Line and Page Breaks</ui> → check <ui>Widow / Orphan <span class="no-hyphens">control</span></ui></p><p><program>Pages</program> <ui>View</ui> → <ui>Show Toolbar</ui> (or op­tion + ⌘ + t) → <ui>Format</ui> but­ton → <ui>More</ui> pane → check <ui>Prevent widow &amp; orphan <span class="no-hyphens">lines</span></ui></p><p><program>CSS</program> Not <span class="no-hyphens">applicable</span></p></div><div class="btw"><div class="btw-title">by the way</div><ul><li><p>You can also cure iso­lated wid­ows and or­phans with some ju­di­cious edit­ing. But don’t use a <a href="hard-line-breaks.html" class="xref">hard line break</a> or <a href="carriage-returns.html" class="xref">car­riage re­turn</a>.</p></li><li><p>Wid­ows &amp; or­phans aren’t typ­i­cally an is­sue on the web, be­cause web con­tent doesn’t nat­u­rally span mul­ti­ple pages. Browsers, how­ever, are happy to put a small word alone on the last line of a para­graph, which al­ways looks bad. You can fix this with a <a href="nonbreaking-spaces.html" class="xref">non­break­ing space</a> and a lit­tle clever <span class="no-hyphens">programming.</span></p></li></ul></div></div><a id="links"></a><div style="height:1em"></div><ul class="children"></ul></div>
+
+
+<!-- top nav -->
+<div class="nav-outer" id="top"><a href="index-2.html#toc"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="up"><a href="page-layout.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="prev"><a href="space-above-and-below.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="next"><a href="keep-lines-together.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="bottom"><div class="nav-inner"><div id="navtable">
+
+<div id="left">
+
+<a class="xref box-link" href="space-above-and-below.html"><span class="arrow">←</span>&nbsp;space above & below</a></div>
+
+
+<div id="center-left"><a class="xref box-link" href="index-2.html#toc">top</a></div>
+
+<div id="center-right"><a class="xref box-link" href="page-layout.html#links">Chapter</a></div>
+
+<div id="right">
+<a class="xref box-link" href="keep-lines-together.html">keep lines together&nbsp;<span class="arrow">→</span></a></div>
+
+
+
+</div></div></div> 
+
+</body>
+
+<!-- Mirrored from practicaltypography.com/widow-and-orphan-control.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 17:01:26 GMT -->
+</html>
+
+<!-- © 2013–16 Matthew Butterick -->
+

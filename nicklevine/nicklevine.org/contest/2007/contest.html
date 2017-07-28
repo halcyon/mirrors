@@ -1,0 +1,1495 @@
+<!--  $Id: //bibop.alu.org/ilc/www/2007/contest.clp#10 $ -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  
+<!-- Mirrored from nicklevine.org/contest/2007/contest.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:28 GMT -->
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <style type="text/css" media="screen">@import "style/ilc-screen.css";</style>
+    <style type="text/css" media="print">@import "style/ilc-print.css";</style>
+    <script type="text/javascript"><!-- 
+    function obfuscate( domain, name , pretty ) { document.write('<a href="mai' + 'lto:' + name + '@' + domain + '">' + pretty + '</a>'); }
+    // --></script>
+    <title>ILC 2007 &gt; Programming Contest</title>
+  </head>
+  <body>
+    <div id="Header">
+      <a href="http://www.international-lisp-conference.org/2007/index" title="International Lisp Conference 2007">International Lisp Conference 2007</a>
+    </div>
+    <div id="Content">
+
+    <h1>Programming Contest</h1>
+
+
+
+
+<p><strong>The deadline for submissions was 2pm GMT on Saturday
+2007-03-03. Many thanks to everyone who entered.</strong></p>
+
+
+
+  <p><strong>For results of the competition, <a
+  href="judges-report.pdf">read</a> the judges' report
+  or <a
+  href="http://international-lisp-conference.org/2007/audio/2007_Programming_Contest_Winners.mp3">listen</a>
+  to a summary. The entries themselves are also available in <a
+  href="entries.tar.gz">tar</a> and <a
+  href="entries.zip">zip</a> formats. The file
+  "judge.lisp" is the judges' test harness.</strong></p>
+
+
+
+<h2><a id="section-1" name="section-1">1. Introduction</a></h2>
+
+<div align="center"><h3>How well can you play Continuo? How well can you play it in lisp?</h3></div>
+
+<p>Continuo is a game for 2-5 players which involves them taking turns
+to place coloured cards on the table and scoring points according to
+how well they do it.</p>
+
+<p>The 42 cards are squares. The face of each card is covered by a 4x4
+grid of smaller coloured squares. Just four colours are used: red,
+green, blue and yellow.  The cards are illustrated in <a
+href="#section-3">section 3</a> below. Because of symmetry and other
+regularity, you can totally specify each card by naming (in order) the
+colours along any edge. We'll always work from the top-left corner 
+with the cards as illustrated. For example, the first card in the last
+row would be specified by the keyword <code>:yrgy</code>.</p>
+
+<p>The method of play is this: when it's your turn you take an unused
+card (in the physical game they're shuffled and placed in a pack
+face-down) and place the card so that it touches at least one of the
+cards already played but does not overlap any of them. Note that the
+cards have to touch edge to edge but don't have to join along entire
+edges. To score, you sum the sizes (in small squares) of all
+newly-enlarged single-colour connected regions. See <a
+href="#section-4">section 4</a> for some examples.</p>
+
+<p>Your entry should play the game in one-player mode. It should
+accept card specifications, in the form of keywords as above, and
+should produce card placements (top corner coordinates and
+orientation) and the scores corresponding to these placements. Each
+placement is to be produced before the next specification is
+provided. Each entry will be given the same sequence of all 42
+cards. The aim is to maximize the total score of all the moves.</p>
+
+
+<h4><a id="section-1.1" name="section-1.1">1.1. Functional specification</a></h4>
+
+<p>Each entry should define the following two functions. The symbols
+naming them should be visible from the <code>CL-USER</code> package.</p>
+
+<p>Function <code>clear</code> takes no arguments and "clears the
+board", resetting the game to its initial state.</p>
+
+<p>Function <code>play</code> takes the keyword describing a card as
+its argument and returns a list of four elements:</p>
+
+<ul>
+<li>x</li>
+<li>y</li>
+<li>spin</li>
+<li>score</li>
+</ul>
+
+<p>where x and y are integers specifying the top-left coordinate of
+the card (in small-square units), increasing values taking you down
+and to the right; spin is a boolean indicating whether or not the
+square needs to be rotated (90<sup>o</sup>, either way) from its
+default orientation; and score is the score claimed for this move.</p>
+
+<p>For example (see <a href="#section-4">section 4</a>):</p>
+
+<blockquote><p>
+
+<code> (clear) </code><br />
+
+<code> (play :bgbg) =&gt; (0 0 t 0)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;; the first move doesn't score anything</code><br />
+
+<code> (play :rbgb) =&gt; (4 -1 nil 14) </code><br />
+
+<code> (play :rbry) =&gt; (5 3 nil 10) </code><br />
+
+<code> (play :bgby) =&gt; (1 4 t 18) </code>
+
+</p></blockquote>
+
+<p>In order to time program execution, the judges will run the
+code akin to the following:</p>
+
+<blockquote>
+<pre>
+(let ((cards (judge:generate-cards))) 
+  (time
+   (progn (clear)
+	  (mapcar 'play cards))))
+</pre>
+</blockquote>
+
+
+<h2><a id="section-2" name="section-2">2. Contest</a></h2>
+
+
+<p>The aim in this contest is for you to write a program, in <a
+href="http://www.lispworks.com/reference/HyperSpec/Front/index.htm">Common
+Lisp</a>, to play Continuo.</p>
+
+<p>By entering the contest, you are deemed to have accepted all of
+the following, so please read them carefully.</p>
+
+
+<ol>
+
+
+<li>
+    <p>The deadline for submissions will be 2pm GMT on Saturday
+    2007-03-03 (universal time 3381919200). You may submit more than
+    one entry, but only your last submission (before the closing date)
+    will be judged.</p>
+</li>
+
+
+<li>
+    <p>Entries may be submitted only by email, which should be sent to
+    <script type="text/javascript">
+            obfuscate('alu.org','ilc07-lisp-contest','ilc07-lisp-contest (at) alu (dot) org')
+    </script>. 
+    If such email would be over 1 megabyte in length,
+    please send instead a short message to this address stating how
+    your entry can be acquired by some other electronic means (http /
+    ftp, etc).</p>
+</li>
+
+
+<li>
+    <p>Prizes may be awarded in the following categories:</p>
+
+    <ul>
+
+      <li><p>highest scoring program;</p></li>
+
+      <li><p>first answer to be submitted which plays the game "half
+      decently" (the definition of which being totally up to the
+      judges at the time of judging, but might involve scoring at
+      least as well as half the other entrants);</p></li>
+
+      <li><p>fastest running program which plays the game "half
+      decently":</p>
+
+         <ul>
+
+	 <li><p>this is to be defined by the total time, as measured
+	 by <a
+	 href="http://www.lispworks.com/reference/HyperSpec/Body/m_time.htm">time</a>,
+	 taken to read source, expand macros, compile code, load
+	 compiled code, and execute it, plus anything else we forgot
+	 to mention here; the judges will take steps to integrate each
+	 entry into the implementation used for the timings, in such a
+	 way as to ensure a level playing field for each
+	 entry;</p></li>
+
+	 <li><p>this is a test of algorithm, not of use of
+         optimizations, therefore (a) no <a
+         href="http://www.lispworks.com/reference/HyperSpec/Body/d_type.htm">type
+         declarations</a> or <a
+         href="http://www.lispworks.com/reference/HyperSpec/Body/s_the.htm">the
+         forms</a> will be permitted and (b) the judges reserve the
+         right to run entries on the lisp implementation(s) of their
+         choice;</p></li>
+
+	 </ul>
+
+      <li><p>most elegant algorithm;</p></li>
+
+      <li><p>most elegant use of lisp;</p></li>
+
+      <li><p>best use of really obscure lisp features;</p></li>
+
+      <li><p>contestants under the age of 21 on the first day of the <a
+      href="http://www.international-lisp-conference.org/2007">conference</a>
+      (you'll have to tell us that you're under 21, otherwise we won't
+      know);</p></li>
+
+      <li><p>facilities (e.g. a harness plus an extended specification
+      for entrants) to permit entrants to play "head to head" at the
+      conference;</p></li>
+
+      <li><p>best "added value".</p></li>
+
+    </ul>
+
+    <p>The judges reserve the rights (a) not to award a prize in any
+    category if they do not believe the standard of entries in that
+    category merits it, (b) to create additional prize categories
+    after the closing date for submissions and (c) to entertain any
+    suggestions, which are received before the deadline for
+    submissions, for other categories. </p>
+
+</li>
+
+
+<li>
+    <p>Names of prize winners will be announced at the conference, and
+    subsequently on this website.</p>
+</li>
+
+
+<li>
+    <p>In order to qualify for a prize, the entrant must register for
+    at least one day of the conference. Prize-giving might be on
+    Monday April 2nd, but that's not a firm date yet.</p> </li>
+
+
+<li>
+    <p>The prizes will be tasteful medals of low scrap-metal value. As
+    if fame wasn't enough.</p>
+</li>
+
+
+<li>
+    <p>Entries are to consist of source code, plus sufficient
+    documentation (potentially in the form of comments) to allow the
+    judges to (a) build and run the program and (b) understand the
+    algorithm employed to solve the puzzle.</p>
+</li>
+
+
+<li>
+    <p>Please include with each entry a list of any sources
+    (e.g. publications, internet sites, etc) used to generate that
+    entry.</p>
+</li>
+
+
+<li>
+    <p>Team entries will be allowed. Please indicate with your entry
+    if this is a team effort, and name the particpants. At least one
+    member of the team must register for at least one day of the
+    conference.</p> </li>
+
+
+<li>
+    <p>All entries will be tested on the same machine: a laptop
+    running Windows XP. If you intend to submit an entry which cannot
+    be run on this machine then you are advised to consult with the
+    judges beforehand. You may be responsible for bringing hardware to
+    the conference on which to demonstrate your entry, and - depending
+    on the speed of that hardware - your entry may not be eligible to
+    win a prize under the "fastest running program" category.</p>
+</li>
+
+
+<li>
+    <p>If you intend to submit an entry which is not written <a
+    href="http://www.lispworks.com/reference/HyperSpec/Body/26_glo_p.htm#portable">portably</a>
+    then you are advised to consult with the judges beforehand. The
+    judges will make reasonable efforts to obtain particular lisp
+    implementations on which to test entries, provided there is
+    sufficient justification for doing so. Use of an
+    implementation-specific UI will be considered to be a "sufficient
+    justification".</p>
+</li>
+
+
+<li><p>Employees of David Westnedge Limited and of Ravenbrook Limited,
+     the judges, and the immediate families of all of these, are not
+     eligible to enter this contest.</p></li>
+
+
+<li>
+    <p>The judges will be Nick Levine and Nicholas Barnes. The judges
+    can be contacted by email via 
+    <script type="text/javascript">
+            obfuscate('alu.org','ilc07-lisp-contest','ilc07-lisp-contest (at) alu (dot) org')
+    </script>. The judges' decision will be final in all matters, including
+    whether or not to enter into any correspondence.</p> </li>
+
+
+<li>
+    <p>Although each entry will remain the intellectual property of
+    the entrant, the judges may demonstrate and publish winning
+    entries at the conference, and may publish them in conference
+    proceedings and on this website. Entries must be licensed in such
+    a manner as to permit these activities freely.</p>
+</li>
+
+
+</ol>
+
+
+
+<h2><a id="section-3" name="section-3">3. The cards</a></h2>
+
+<p>Each card has up to three distinct colours, in the pattern</p>
+
+<blockquote><pre>ABCD
+BBCC
+CCBB
+DCBA</pre></blockquote>
+
+<p>such that <code>(not (or (eq A B) (eq B C) (eq C D)))</code>.  No
+two cards are identical.  It's trivial to see that this specification
+permits 6 cards ABAB, 24 cards ABAC, and 12 cards ABCA. The 42
+distinct such cards form the deck.</p>
+
+
+<!-- 
+ <tr><ilc_contest07_card colours="rbrb"/> <ilc_contest07_card colours="yryr"/> <ilc_contest07_card colours="bgbg"/> <ilc_contest07_card colours="ybyb"/></tr>
+ <tr><ilc_contest07_card colours="rgrg"/> <ilc_contest07_card colours="rbry"/> <ilc_contest07_card colours="rbgb"/> <ilc_contest07_card colours="gygb"/></tr>
+ <tr><ilc_contest07_card colours="gyrg"/> <ilc_contest07_card colours="brby"/> <ilc_contest07_card colours="gbrb"/> <ilc_contest07_card colours="gybg"/></tr>
+ <tr><ilc_contest07_card colours="rgyr"/> <ilc_contest07_card colours="yrby"/> <ilc_contest07_card colours="rbrg"/> <ilc_contest07_card colours="ygyb"/></tr>
+ <tr><ilc_contest07_card colours="grgy"/> <ilc_contest07_card colours="rbyb"/> <ilc_contest07_card colours="bgrb"/> <ilc_contest07_card colours="bgby"/></tr>
+ <tr><ilc_contest07_card colours="rgry"/> <ilc_contest07_card colours="ybyr"/> <ilc_contest07_card colours="gbrg"/> <ilc_contest07_card colours="bygb"/></tr>
+ <tr><ilc_contest07_card colours="gryr"/> <ilc_contest07_card colours="yryb"/> <ilc_contest07_card colours="rgbr"/> <ilc_contest07_card colours="gbyb"/></tr>
+ <tr><ilc_contest07_card colours="rgyg"/> <ilc_contest07_card colours="byrb"/> <ilc_contest07_card colours="brgr"/> <ilc_contest07_card colours="ygbg"/></tr>
+ <tr><ilc_contest07_card colours="gyry"/> <ilc_contest07_card colours="rbyr"/> <ilc_contest07_card colours="bgrg"/> <ilc_contest07_card colours="gyby"/></tr>
+ <tr><ilc_contest07_card colours="rygy"/> <ilc_contest07_card colours="ryrb"/> <ilc_contest07_card colours="rgbg"/> <ilc_contest07_card colours="ygby"/></tr>
+ <tr><ilc_contest07_card colours="yrgy"/> <ilc_contest07_card colours="gygy"/></tr>
+-->
+
+<table>
+
+<tr><td class="no_border"><table><tr><td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_red" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_blue" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+</tr>
+</table>
+</td>
+</tr>
+<tr><td class="no_border"><table><tr><td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_red" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_red" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_red" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+</tr>
+</table>
+</td>
+</tr>
+<tr><td class="no_border"><table><tr><td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_blue" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_green" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+</tr>
+</table>
+</td>
+</tr>
+<tr><td class="no_border"><table><tr><td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_red" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_red" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+</tr>
+</table>
+</td>
+</tr>
+<tr><td class="no_border"><table><tr><td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_green" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_red" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_blue" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_blue" />
+</tr>
+</table>
+</td>
+</tr>
+<tr><td class="no_border"><table><tr><td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_red" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_green" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+</tr>
+</table>
+</td>
+</tr>
+<tr><td class="no_border"><table><tr><td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_green" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_red" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_green" />
+</tr>
+</table>
+</td>
+</tr>
+<tr><td class="no_border"><table><tr><td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_red" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_blue" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+</tr>
+</table>
+</td>
+</tr>
+<tr><td class="no_border"><table><tr><td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_red" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_red" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_blue" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+</tr>
+</table>
+</td>
+</tr>
+<tr><td class="no_border"><table><tr><td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+<td class="contest_red" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_red" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_blue" />
+<td class="contest_blue" />
+</tr>
+<tr><td class="contest_blue" />
+<td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_blue" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+</tr>
+</table>
+</td>
+</tr>
+<tr><td class="no_border"><table><tr><td class="contest_yellow" />
+<td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_red" />
+<td class="contest_red" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_red" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_red" />
+<td class="contest_yellow" />
+</tr>
+</table>
+</td>
+ <td class="no_border"><table><tr><td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_green" />
+</tr>
+<tr><td class="contest_green" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_yellow" />
+</tr>
+<tr><td class="contest_yellow" />
+<td class="contest_green" />
+<td class="contest_yellow" />
+<td class="contest_green" />
+</tr>
+</table>
+</td>
+</tr>
+
+
+</table>
+
+<br /><br />
+
+<h2><a id="section-4" name="section-4">4. Example of scoring</a></h2>
+
+<p>(See also <a href=#section-1.1>section 1.1</a>, for the corresponding lisp.)</p>
+
+<h4><a id="section-4.1" name="section-4.1">4.1. First two cards</a></h4>
+
+<table><tr>
+<td class="no_border">
+  <table>
+  <tr><td class="no_border" colspan=4/>
+      <td class="contest_red" /><td class="contest_blue" /><td class="contest_green" /><td class="contest_blue" /></tr>
+  <tr><td class="contest_green" /><td class="contest_blue" /><td class="contest_green" /><td class="contest_blue" />
+      <td class="contest_blue" /><td class="contest_blue" /><td class="contest_green" /><td class="contest_green" /></tr>
+  <tr><td class="contest_blue" /><td class="contest_blue" /><td class="contest_green" /><td class="contest_green" />
+      <td class="contest_green" /><td class="contest_green" /><td class="contest_blue" /><td class="contest_blue" /></tr>
+  <tr><td class="contest_green" /><td class="contest_green" /><td class="contest_blue" /><td class="contest_blue" />
+      <td class="contest_blue" /><td class="contest_green" /><td class="contest_blue" /><td class="contest_red" /></tr>
+  <tr><td class="contest_blue" /><td class="contest_green" /><td class="contest_blue" /><td class="contest_green" />
+      <td class="no_border" colspan=4/></tr>
+  </table>
+</td>
+<td class="no_border" valign="top">
+<p>One chain of 6 in green, two chains of 4 in blue. Score (+ 6 4 4) -&gt; 14</p>
+</td>
+</tr></table>
+
+
+<h4><a id="section-4.2" name="section-4.2">4.2. Third card</a></h4>
+
+
+
+<table><tr>
+<td class="no_border">
+  <table>
+  <tr><td class="no_border" colspan=4/>
+      <td class="contest_red" /><td class="contest_blue" /><td class="contest_green" /><td class="contest_blue" />
+      <td class="no_border" colspan=1/></tr>
+  <tr><td class="contest_green" /><td class="contest_blue" /><td class="contest_green" /><td class="contest_blue" />
+      <td class="contest_blue" /><td class="contest_blue" /><td class="contest_green" /><td class="contest_green" />
+      <td class="no_border" colspan=1/></tr>
+  <tr><td class="contest_blue" /><td class="contest_blue" /><td class="contest_green" /><td class="contest_green" />
+      <td class="contest_green" /><td class="contest_green" /><td class="contest_blue" /><td class="contest_blue" />
+      <td class="no_border" colspan=1/></tr>
+  <tr><td class="contest_green" /><td class="contest_green" /><td class="contest_blue" /><td class="contest_blue" />
+      <td class="contest_blue" /><td class="contest_green" /><td class="contest_blue" /><td class="contest_red" />
+      <td class="no_border" colspan=1/></tr>
+  <tr><td class="contest_blue" /><td class="contest_green" /><td class="contest_blue" /><td class="contest_green" />
+      <td class="no_border" colspan=1/>
+      <td class="contest_red" /><td class="contest_blue" /><td class="contest_red" /><td class="contest_yellow" /></tr>
+  <tr><td class="no_border" colspan=5/>
+      <td class="contest_blue" /><td class="contest_blue" /><td class="contest_red" /><td class="contest_red" /></tr>
+  <tr><td class="no_border" colspan=5/>
+      <td class="contest_red" /><td class="contest_red" /><td class="contest_blue" /><td class="contest_blue" /></tr>
+  <tr><td class="no_border" colspan=5/>
+      <td class="contest_yellow" /><td class="contest_red" /><td class="contest_blue" /><td class="contest_red" /></tr>
+  </table>
+</td>
+<td class="no_border" valign="top">
+<p>One chain of 6 in blue, one chain of 4 in red. Score (+ 6 4) -&gt; 10</p>
+</td>
+</tr></table>
+
+<h4><a id="section-4.3" name="section-4.3">4.3. Fourth card</a></h4>
+
+<table><tr>
+<td class="no_border">
+  <table>
+  <tr><td class="no_border" colspan=4/>
+      <td class="contest_red" /><td class="contest_blue" /><td class="contest_green" /><td class="contest_blue" />
+      <td class="no_border" colspan=1/></tr>
+  <tr><td class="contest_green" /><td class="contest_blue" /><td class="contest_green" /><td class="contest_blue" />
+      <td class="contest_blue" /><td class="contest_blue" /><td class="contest_green" /><td class="contest_green" />
+      <td class="no_border" colspan=1/></tr>
+  <tr><td class="contest_blue" /><td class="contest_blue" /><td class="contest_green" /><td class="contest_green" />
+      <td class="contest_green" /><td class="contest_green" /><td class="contest_blue" /><td class="contest_blue" />
+      <td class="no_border" colspan=1/></tr>
+  <tr><td class="contest_green" /><td class="contest_green" /><td class="contest_blue" /><td class="contest_blue" />
+      <td class="contest_blue" /><td class="contest_green" /><td class="contest_blue" /><td class="contest_red" />
+      <td class="no_border" colspan=1/></tr>
+  <tr><td class="contest_blue" /><td class="contest_green" /><td class="contest_blue" /><td class="contest_green" />
+      <td class="no_border" colspan=1/>
+      <td class="contest_red" /><td class="contest_blue" /><td class="contest_red" /><td class="contest_yellow" /></tr>
+  <tr><td class="no_border" colspan=1/>
+      <td class="contest_yellow" /><td class="contest_blue" /><td class="contest_green" /><td class="contest_blue" />
+      <td class="contest_blue" /><td class="contest_blue" /><td class="contest_red" /><td class="contest_red" /></tr>
+  <tr><td class="no_border" colspan=1/>
+      <td class="contest_blue" /><td class="contest_blue" /><td class="contest_green" /><td class="contest_green" />
+      <td class="contest_red" /><td class="contest_red" /><td class="contest_blue" /><td class="contest_blue" /></tr>
+  <tr><td class="no_border" colspan=1/>
+      <td class="contest_green" /><td class="contest_green" /><td class="contest_blue" /><td class="contest_blue" />
+      <td class="contest_yellow" /><td class="contest_red" /><td class="contest_blue" /><td class="contest_red" /></tr>
+  <tr><td class="no_border" colspan=1/>
+      <td class="contest_blue" /><td class="contest_green" /><td class="contest_blue" /><td class="contest_yellow" />
+      <td class="no_border" colspan=4/></tr>
+  </table>
+</td>
+<td class="no_border" valign="top">
+<p>Two chains of 7 in blue, one chain of 4 in green. Score (+ 7 7 4) -&gt; 18</p>
+</td>
+</tr></table>
+
+<br /><br />
+
+<h2><a id="section-5" name="section-5">5.  Material added to this page since it was first posted</a></h2>
+
+<p>Last updated: $Date: 2007/05/04 $.</p>
+
+<ul>
+
+<li><p>Although a text representation of top edges of the cards is
+buried as a comment in the html source of this document, it's
+becomming clear that some people aren't finding it and this may be
+slowing them down. Because this is a test of programming and not of
+detective skills, we've therefore added a text description of the
+cards to <a href="#section-3">section 3</a></p></li>
+
+</ul>
+
+
+<br /><hr /><br />
+
+<p class="smaller">The game Continuo is copyright (c) Maureen Hiron
+1982.  References to Continuo on this website are specifically only
+for the purpose of the programming contest described above, and this
+use is under licence from the inventor, Maureen Hiron, and the game's
+UK distributor David Westnedge Limited (<script type="text/javascript">
+obfuscate('btconnect.com','davidwestnedgeltd','davidwestnedgeltd (at) btconnect (dot) com') 
+</script>). None of the card designs included in
+this website may be reproduced, by any means whatsoever, other than
+for purposes directly related to this contest.</p>
+
+<p class="smaller">This document is copyright (c) Nick Levine
+2007. All rights reserved. It is provided "as is", without any express
+or implied warranty. In no event will the author be held liable for
+any damages arising from the use of this document. You may make and
+use verbatim copies of this document for purposes directly related to
+this contest. You may not mirror this document or any of the images
+herein on another website. You may not charge anyone for the use of
+this document.</p>
+
+<p class="smaller">"Windows" is a registered trademark of Microsoft
+Corporation. Other brand or product names are the registered
+trademarks or trademarks of their respective holders.</p>
+
+
+
+    <br /> <br />
+
+    <address>
+        <noscript><font class="alarm">--&gt; please enable Javascript to see this email address &lt;--</font></noscript>
+        <script type="text/javascript">
+            obfuscate('alu.org',
+	         
+		  
+			'ilc07-lisp-contest','ILC 2007 Lisp Contest'
+		   
+		
+		      )
+	</script>
+    </address>
+      <p><small>&copy; alu 2007</small></p>
+    </div>
+
+    <div id="Menu">
+      <a href="http://international-lisp-conference.org/2007/welcome">Welcome</a><br />
+<a href="http://international-lisp-conference.org/2007/venue">Venue</a><br />
+<a href="http://international-lisp-conference.org/2007/cambridge">Cambridge</a><br />
+<a href="http://international-lisp-conference.org/2007/tours">Tours</a><br />
+<a href="http://international-lisp-conference.org/2007/price-list">Price list</a><br />
+<hr /><a href="http://international-lisp-conference.org/2007/submissions">Submissions</a><br />
+<a href="http://international-lisp-conference.org/2007/schedule">Schedule</a><br />
+<a href="http://international-lisp-conference.org/2007/speakers">Speakers</a><br />
+<a href="http://international-lisp-conference.org/2007/tutorials">Tutorials</a><br />
+<span>Contest</span><br />
+<hr /><a href="http://international-lisp-conference.org/2007/mailing-lists">Mailing lists</a><br />
+<a href="http://international-lisp-conference.org/2007/publicity">Publicity</a><br />
+<a href="http://international-lisp-conference.org/2007/sponsorship">Sponsorship</a><br />
+<a href="http://international-lisp-conference.org/2007/previous">Past events</a><br />
+<a href="http://international-lisp-conference.org/2007/committee">Committee</a><br />
+<a href="http://international-lisp-conference.org/2007/about">About...</a><br />
+
+    </div>
+
+  </body>
+
+<!-- Mirrored from nicklevine.org/contest/2007/contest.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:29 GMT -->
+</html>
+
+
+
+
+
+
+<!--
+     FILE ARCHIVED ON 4:01:49 Jul 5, 2008 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 13:17:24 Apr 27, 2014.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+-->

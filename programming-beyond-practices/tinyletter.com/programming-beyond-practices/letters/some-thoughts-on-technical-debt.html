@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/some-thoughts-on-technical-debt by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:00 GMT -->
+<head>
+    <title> Some thoughts on Technical Debt </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="some-thoughts-on-technical-debt.html">
+    <meta property="og:title" content="Some thoughts on Technical Debt">
+    <meta property="og:description" content="In a world with infinite time and resources, every codebase we worked in would be kept in a perfect state of internal health. Incremental refactoring would always be done alongside each new improvemen...">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Some thoughts on Technical Debt" />
+	<meta name="twitter:description" content="In a world with infinite time and resources, every codebase we worked in would be kept in a perfect state of internal health. Incremental refactoring would always be done alongside each new improvemen" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> September 16, 2015 </div>
+            <h1 class="subject"> Some thoughts on Technical Debt </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> In a world with infinite time and resources, every codebase we worked in would be kept in a perfect state of internal health. Incremental refactoring would always be done alongside each new improvement, and the domain model would map perfectly to the business requirements at all times.<br>
+<br>
+Much to our chagrin, our world is far too messy for it to be a programmer&#39;s paradise. And so we invent ugly terms to match our reality, such as <strong>technical debt</strong>.<br>
+<br>
+Although <a href="https://en.wikipedia.org/wiki/Technical_debt">Wikipedia has a better definition</a>, it&#39;s fine to think of technical debt as any work that we don&#39;t do up front on a project which ends up creating more work for us in the future. There is always at least a little bit of interest to be paid on this debt (because at a minimum, we must re-familiarize ourselves with old code, which has a cost no matter how elegant your designs are) -- and sometimes the interest rates are so high that they make payday loans look like a bargain. In this sense, like all forms of debt, accruing technical debt involves some degree of risk.<br>
+<br>
+Some programmers look at this and assume immediately that technical debt is bad, and that those who accrue it should feel bad; that getting out of technical debt as soon as possible is the only way to build sustainable projects. Unfortunately, this is a dangerous line of thinking, and can easily lead to something that we don&#39;t often talk about: <strong>technical</strong><strong>&nbsp;over-investment.</strong><br>
+<br>
+Put simply, technical over-investment is any time we put into improving internal code quality that would have had more economic value if we had spent it somewhere else:
+<ul>
+	<li>If we build&nbsp;a nicely tested, cleanly designed implementation of a feature that never ships, or ends up being killed shortly after it reaches production... that&#39;s a technical over-investment.<br>
+	&nbsp;</li>
+	<li>If we build an abstraction for the purposes of later code&nbsp;reuse, and it&nbsp;never gets reused, that&#39;s a technical over-investment.<br>
+	&nbsp;</li>
+	<li>If we build an abstraction that gets reused once, but in the process of reusing it we realize the problem wasn&#39;t actual as generalizable as we had hoped it would be, that&#39;s a&nbsp;<em>major</em>&nbsp;technical over-investment.<br>
+	&nbsp;</li>
+	<li>If we write clean, nicely tested, well designed code that never needs to be changed or fixed, and the external&nbsp;business problem could have been solved equally well by a terribly messy&nbsp;script, that&#39;s a technical over-investment too.</li>
+</ul>
+The tricky thing is that because most software projects tend to run on for a very long time, it&#39;s hard to quantify whether an effort to improve internal code quality was an over-investment or not -- that can only be determined at some far future date. So perhaps it&#39;s better to look at intentional technical over-investment as a form of&nbsp;<strong>technical insurance. </strong>Like all other forms of insurance, technical insurance carries a risk: it only pays off if you need to make a claim, and only if you paid less for the insurance than what your claim was worth.<br>
+<br>
+There is also a psychological component to all of this, which is perhaps more important than the net economic gains or losses. We pay for insurance on things like houses and medical care because if we didn&#39;t, we may end up in a situation where a single negative event might bankrupt us instantly. So rather than living in fear of that, we pay a premium to guarantee some degree of stability in our lives.<br>
+<br>
+Some of our technical choices involve this kind of severe payoff equation, but most are far more subtle. Upon closer inspection, a good chunk of the technical debt vs. technical insurance decisions we make are quite a bit closer to the exorbitantly high protection plans for consumer electronics than they are to homeowners insurance. Paying $100 on a device that costs $200 and has a near zero chance of failure within a year is obviously a bad deal, and so we need to look for situations in our code where over-investing is likely to hurt us rather than help us.<br>
+<br>
+Below is a concrete example for you to explore these ideas with:
+<blockquote>
+<p>Suppose that there is a&nbsp;small report that you need to build that will&nbsp;help with medical scheduling in a legacy clinic management system.<br>
+<br>
+The report will verify that any&nbsp;new appointment book&nbsp;entries&nbsp;have a few pieces of useful metadata that is aggregated by a secondary&nbsp;reporting system.<br>
+<br>
+New appointment book entries are keyed in&nbsp;at least one year in advance, but the secondary reporting system only ever looks out six weeks into the future at any point in time.<br>
+<br>
+If the required metadata is missing from any records that show up in the secondary system, it is possible to spot the problem and fix it at that time, but each error takes up to a minute to fix and can potentially distract the scheduling manager whenever it happens.</p>
+</blockquote>
+
+<p>There is a clear benefit to resolving these errors before they show up in the secondary reporting system: By doing so, the person working with that system won&#39;t be pulled off task to correct minor data entry problems at seemingly random intervals.<br>
+<br>
+You come up with two possible solutions to the problem:</p>
+
+<ul>
+	<li>OPTION #1: &nbsp;A hastily thrown&nbsp;together auditing report which will be completely undocumented and untested. It will be run manually once every three months, and any errors in the system will be resolved in one large batch.<strong>&nbsp;</strong>This program&nbsp;will take you&nbsp;<strong>30 minutes&nbsp;</strong>to write, and&nbsp;<strong>2 minutes</strong>&nbsp;to run whenever the report is&nbsp;needed, plus however long it takes for you to get around to actually running it.<br>
+	&nbsp;</li>
+	<li>OPTION #2: An automated system that sends out alerts whenever a new appointment book entry is added to&nbsp;the system without the required metadata, along with a weekly batch report that lists any entries that haven&#39;t been fixed yet. This program will take you <strong>six</strong><strong>&nbsp;hours</strong>&nbsp;to write, and will deliver results automatically without the need for a human to run the process. However, an active monitoring system will need to be running at all times and configured correctly for this program to work. <em>(You can assume clean code here, and enough test coverage and documentation to make the decently code maintainable)</em></li>
+</ul>
+If you needed to pick one of these options right now, would you be able to choose one over the other with confidence? If so, which approach would you pick, and why? If not, what questions would need to be answered before you knew which program was the right one to build?<br>
+<br>
+I will share my own answers some time within the next few days, but I&#39;d love to hear your thoughts between now and then. I&#39;ll be watching my inbox for your replies!<br>
+<br>
+-greg </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="thoughts-on-technical-debt-part-ii.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="a-handful-of-practicing-ruby-articles-that-are-more-than-just-code.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/some-thoughts-on-technical-debt by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:01 GMT -->
+</html>

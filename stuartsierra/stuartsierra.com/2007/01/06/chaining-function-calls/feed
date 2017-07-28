@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Chaining Function Calls</title>
+	<atom:link href="https://stuartsierra.com/2007/01/06/chaining-function-calls/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2007/01/06/chaining-function-calls</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Cameron</title>
+		<link>https://stuartsierra.com/2007/01/06/chaining-function-calls/comment-page-1#comment-5679</link>
+		<dc:creator><![CDATA[Cameron]]></dc:creator>
+		<pubDate>Wed, 28 Feb 2007 20:56:32 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/01/06/chaining-function-calls#comment-5679</guid>
+		<description><![CDATA[This could use a lot of cleanup, but it&#039;s one solution that actual looks pretty nice and makes the iterative process clear.  If this were for production it would probably be a good idea to write the macro&#039;s output as a series of functional compositions rather than wasteful assignments, but it was the interface that I was concerned with in this case:
+
+&lt;code&gt;(defmacro with-default (starting-val &#038;rest body)
+  `(let ((_ ,starting-val))
+     ,@(mapcar #&#039;(lambda (line)
+                   `(setf _ ,line))
+               body)))
+
+(with-default &quot;this is a new foo&quot;
+  (regex-replace-all &quot;this&quot; _ &quot;that&quot;)
+  (regex-replace-all &quot;old&quot;  _ &quot;new&quot;)
+  (regex-replace-all &quot;foo&quot;  _ &quot;bar&quot;))
+&lt;/code&gt;]]></description>
+		<content:encoded><![CDATA[<p>This could use a lot of cleanup, but it&#8217;s one solution that actual looks pretty nice and makes the iterative process clear.  If this were for production it would probably be a good idea to write the macro&#8217;s output as a series of functional compositions rather than wasteful assignments, but it was the interface that I was concerned with in this case:</p>
+<p><code>(defmacro with-default (starting-val &amp;rest body)<br />
+  `(let ((_ ,starting-val))<br />
+     ,@(mapcar #'(lambda (line)<br />
+                   `(setf _ ,line))<br />
+               body)))</p>
+<p>(with-default "this is a new foo"<br />
+  (regex-replace-all "this" _ "that")<br />
+  (regex-replace-all "old"  _ "new")<br />
+  (regex-replace-all "foo"  _ "bar"))<br />
+</code></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2007/01/06/chaining-function-calls/comment-page-1#comment-4050</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Mon, 15 Jan 2007 18:32:24 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/01/06/chaining-function-calls#comment-4050</guid>
+		<description><![CDATA[Kim Minh Kaplan wrote: &lt;em&gt;&quot;Would putting the function in the last position of the S-exp instead of the first position do what you want?&quot;&lt;/em&gt;
+
+That&#039;s an idea I&#039;ve toyed with too, but I&#039;m not sure how well it would work with macros.  For example, if a macro wanted to add extra arguments to a function call, it would have to insert them before the last item in the list.  Certainly doable, but less convenient than just sticking them on the end.
+
+And reversing the order of the S-exps wouldn&#039;t help the readability of deeply-nested expressions.  Indeed, it might make them harder to read.  No, it&#039;s an interesting solution, but not the one I&#039;m looking for.]]></description>
+		<content:encoded><![CDATA[<p>Kim Minh Kaplan wrote: <em>&#8220;Would putting the function in the last position of the S-exp instead of the first position do what you want?&#8221;</em></p>
+<p>That&#8217;s an idea I&#8217;ve toyed with too, but I&#8217;m not sure how well it would work with macros.  For example, if a macro wanted to add extra arguments to a function call, it would have to insert them before the last item in the list.  Certainly doable, but less convenient than just sticking them on the end.</p>
+<p>And reversing the order of the S-exps wouldn&#8217;t help the readability of deeply-nested expressions.  Indeed, it might make them harder to read.  No, it&#8217;s an interesting solution, but not the one I&#8217;m looking for.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Kim Minh Kaplan</title>
+		<link>https://stuartsierra.com/2007/01/06/chaining-function-calls/comment-page-1#comment-4035</link>
+		<dc:creator><![CDATA[Kim Minh Kaplan]]></dc:creator>
+		<pubDate>Mon, 15 Jan 2007 10:54:37 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/01/06/chaining-function-calls#comment-4035</guid>
+		<description><![CDATA[Stuart Sierra wrote:
+
+&quot;I like to think it would be possible to combine the flexibility of Lisp’s S-expressions with the left-to-write readability of object.method, but I don’t know what that would be.&quot;
+
+Would putting the function in the last position of the S-exp instead of the first position do what you want?  As in:
+
+(((string &quot;this&quot; &quot;that&quot; regex-replace-all) &quot;old&quot; &quot;new&quot; regex-replace-all) &quot;foo&quot; &quot;bar&quot; regex-replace-all)]]></description>
+		<content:encoded><![CDATA[<p>Stuart Sierra wrote:</p>
+<p>&#8220;I like to think it would be possible to combine the flexibility of Lisp’s S-expressions with the left-to-write readability of object.method, but I don’t know what that would be.&#8221;</p>
+<p>Would putting the function in the last position of the S-exp instead of the first position do what you want?  As in:</p>
+<p>(((string &#8220;this&#8221; &#8220;that&#8221; regex-replace-all) &#8220;old&#8221; &#8220;new&#8221; regex-replace-all) &#8220;foo&#8221; &#8220;bar&#8221; regex-replace-all)</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2007/01/06/chaining-function-calls/comment-page-1#comment-3541</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Sun, 07 Jan 2007 03:23:22 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/01/06/chaining-function-calls#comment-3541</guid>
+		<description><![CDATA[Arto Bendiken Says:
+&lt;em&gt;&quot;Why not just code up a CL procedure or macro...&quot;&lt;/em&gt;
+
+I thought about doing that, but never got around to it.  Maybe I&#039;m just lazy.]]></description>
+		<content:encoded><![CDATA[<p>Arto Bendiken Says:<br />
+<em>&#8220;Why not just code up a CL procedure or macro&#8230;&#8221;</em></p>
+<p>I thought about doing that, but never got around to it.  Maybe I&#8217;m just lazy.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Arto Bendiken</title>
+		<link>https://stuartsierra.com/2007/01/06/chaining-function-calls/comment-page-1#comment-3529</link>
+		<dc:creator><![CDATA[Arto Bendiken]]></dc:creator>
+		<pubDate>Sun, 07 Jan 2007 01:18:40 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/01/06/chaining-function-calls#comment-3529</guid>
+		<description><![CDATA[Why not just code up a CL procedure or macro (per your preference) so that you can do the following:
+
+&lt;code&gt;(gsub string &#039;((&quot;this&quot; &quot;that&quot;) (&quot;old&quot; &quot;new&quot;) (&quot;foo&quot; &quot;bar&quot;)))&lt;/code&gt;
+
+This even manages to be a couple of characters shorter than the Ruby version, which is saying something.
+
+Shorthand like this should arguably already be provided by CL-PPCRE, but if it&#039;s missing, it&#039;s trivial enough to add - which is the whole point of Lisp, anyway. Any new abstraction you can imagine, you can build.]]></description>
+		<content:encoded><![CDATA[<p>Why not just code up a CL procedure or macro (per your preference) so that you can do the following:</p>
+<p><code>(gsub string '(("this" "that") ("old" "new") ("foo" "bar")))</code></p>
+<p>This even manages to be a couple of characters shorter than the Ruby version, which is saying something.</p>
+<p>Shorthand like this should arguably already be provided by CL-PPCRE, but if it&#8217;s missing, it&#8217;s trivial enough to add &#8211; which is the whole point of Lisp, anyway. Any new abstraction you can imagine, you can build.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.282 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:02:56 -->
+
+<!-- Compression = gzip -->

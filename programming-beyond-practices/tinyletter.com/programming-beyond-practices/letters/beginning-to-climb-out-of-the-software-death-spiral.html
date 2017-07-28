@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/beginning-to-climb-out-of-the-software-death-spiral by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:58 GMT -->
+<head>
+    <title> Beginning to climb out of the software death spiral </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="beginning-to-climb-out-of-the-software-death-spiral.html">
+    <meta property="og:title" content="Beginning to climb out of the software death spiral">
+    <meta property="og:description" content="Imagine that you work at the kind of place where there is a new fire to be put out almost every day.">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Beginning to climb out of the software death spiral" />
+	<meta name="twitter:description" content="Imagine that you work at the kind of place where there is a new fire to be put out almost every day" />
+	<meta name="twitter:image" content="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/8b977976-8131-456c-bea6-de62d9dd9234.png" />
+	<meta name="og:image" content="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/8b977976-8131-456c-bea6-de62d9dd9234.png" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> January 04, 2016 </div>
+            <h1 class="subject"> Beginning to climb out of the software death spiral </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> Imagine that you work at the kind of place where there is a new fire to be put out almost every day.<br>
+<br>
+It hasn&#39;t always been that way, but things have been in a near constant state of crisis for the last few months.<br>
+<br>
+On calm days, you try to get some useful feature work done. But before you can really get anywhere, something urgent comes up&nbsp;that pulls you away from the task you are working on. By the time that issue is resolved, you need to struggle to remember what you were doing before you were interrupted.<br>
+<br>
+In the time it takes you to get some new functionality ready to ship, you might have been interrupted half a dozen times. Because of this, your code isn&#39;t especially high quality or very well tested... it&#39;s just enough to (possibly)&nbsp;get the job done.<br>
+<br>
+Everyone else on your team is in pretty much the same state, so code reviews are rushed if they&#39;re done at all, and not a whole lot of attention is paid to the integration points between what you&#39;re working on and what others are building. Merge conflicts, broken builds, and escaped defects in production are all common side effects of this broken process. Regressions can make it so that one new feature or fixed bug yields many new problems soon after the new work lands in production.<br>
+<br>
+Despite the fact that the codebase is getting progressively worse under the pressure to ship as quickly as possible, the demands from the business and its customers show no sign of slowing. You look back on the last four months of data in your issue tracker, and it paints a grim picture:<br>
+<br>
+<img class="tl-email-image" data-id="548029" height="452" src="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/8b977976-8131-456c-bea6-de62d9dd9234.png" style="width: 640px; max-width: 640px;" width="640">After a brief period in March where the team was closing tickets in the backlog about as fast as new issues were being recorded, things took a major turn for the worse.<br>
+<br>
+From early April to mid-July, almost 450 new tickets had been opened, but only 100 backlog issues were closed. A good portion&nbsp;of the closed issues had been around for months or years before they were finally resolved, and it seems inevitable&nbsp;that most of the newly reported issues will end up in a similar state. To make matters worse, the graph clearly shows that this problem is compounding over time:&nbsp;the average issue response time and backlog length are trending towards infinity.<br>
+<br>
+It&#39;s highly likely that many of the issues in the tracker are either duplicates or are very low-priority and can be deferred indefinitely. However, the general state of chaos throughout the organization makes it hard to tell what is what. The people who are supposed to be helping on the front lines are actually making things worse for the development team, even if their intentions are good.<br>
+<br>
+It is common to get pinged for status updates or estimates on tickets that will almost certainly never get resolved if things do not change -- and this is a frustrating waste of time for everyone involved. Many other tickets are stuck in a work-in-progress state and will likely remain there forever, because constantly shifting priorities prevent your team from sticking with something long enough to see it through to completion.<br>
+<br>
+The issue tracker itself is not to blame for this, but it has become an enabler for a broken triage and prioritization process. It is every bit as disorganized as the organization that is feeding it, and that has caused it to completely break down as a project planning tool.<br>
+<br>
+In a crisis situation, effective communication is absolutely critical. A tracker that isn&#39;t serving this purpose is often actively working against it. To get out of a death spiral, this problem must be noticed and dealt with quickly to stop the bleeding before the real healing work can begin.<br>
+<br>
+So what can be done about this?<br>
+<br>
+Well... you could work with your organization to schedule some time to actively review the entire backlog of issues, and clean things up as best as you can. In doing this, you can eliminate duplicate tickets, close bug reports that can&#39;t be reproduced, request feedback on tickets that have missing information, notice patterns and group together related tickets, etc.<br>
+<br>
+But if you can&#39;t even find time to do your day-to-day work, how will you free up the time to do this? And even if you can find the time, how will you deal with all the coordination costs of tracking down all the relevant people to get the information you need to cleanup the tickets? And even if you could get the time and the support you need to do all of this, how will you deal with the fact that a good portion of the tickets you review will ultimately be of no use to think about because they&#39;re stale and no longer represent the needs of the business?<br>
+<br>
+With each passing day, the backlog grows, and the prospects of doing a comprehensive audit become increasingly unrealistic. This is where the idea of declaring &quot;issue bankruptcy&quot; starts to sound like the most reasonable path forward. If you mark every ticket as stale and close it, it could give you an artificial but useful blank slate to work with, and potentially set the stage for restoring some order.<br>
+<br>
+The upside of this approach is that it allows the team to focus exclusively on the kinds of improvements and fixes that are clearly still relevant in the project. New issues will still roll in, and the old ones that are still having an impact on customers will resurface. All the stale or low priority tickets will stay dead, and so no one will expect status updates on them or consider them during prioritization meetings. With most of the clutter swept under the rug, it&#39;s easier to spot patterns and reason about ways to improve the process, and that&#39;s the main motivation for taking this approach.<br>
+<br>
+Issue bankruptcy comes at a high cost though, and is a very emotionally charged decision. Non-technical members of the organization and its customers may have a hard time understanding why this sort of change is necessary, and they may feel uncomfortable seeing many real issues being closed, even if in practice they would have never been acted on anyway. Software products are made by and for humans, and so we cannot discount that fact even if what we want to do is rationally justifiable.<br>
+<br>
+There are other problems with the issue bankruptcy approach, too. If you don&#39;t execute it well, it can be awkward or even impractical to reverse. And although having a clean slate to work with will help diagnose the problems an organization is going through, it does nothing to improve those issues on its own. The false impression of an empty backlog can even serve as an excuse for the business to pile more work onto the development team, which begins the cycle all over again!<br>
+<br>
+All this said, declaring issue bankruptcy is an option that&#39;s always worth considering, especially in organizations in which a simple plan is likely to be considered but anything more elaborate would be rejected out of hand. If you decide to go that route, just try to make sure that you can easily re-open stale issues in bulk if it turns out that this approach isn&#39;t working for you.<br>
+<br>
+That said, there is a technique that can beat both comprehensive backlog audits and issue bankruptcy in any organization that has more than a few people involved in its projects. It combines the benefits of both approaches, while also putting some measures in place that drive up accountability and encourage continuous improvement of the product development process. It is completely reversible with no real costs if it fails, and it&#39;s relatively easy to explain.<br>
+<br>
+For starters, you create a brand new &quot;work queue&quot; for the development team. If all the tickets in the tracker represent the problems and improvements that could be worked on along with the relevant notes about those change requests, the work queue represents what developers are actually working on (or soon will be working on) at any point in time. A kanban board works well for this, but a whiteboard with issue numbers and names scrawled on it would do just fine, too.<br>
+<br>
+The work queue becomes the entire world for the development team: Any ticket that does not appear within the queue is something that does not require status updates, estimates, or any other form of discussion. In fact, even the things that are in the backlog for the work queue are generally not discussed until they&#39;re assigned to a particular developer, so this greatly improves everyone&#39;s ability to focus.<br>
+<br>
+Strict rules need to be put in place on who can add items to the work queue, and when. In the project I&#39;ve described in this essay and the <a href="the-sad-graph-of-software-death.html">Sad Graph of Software Death</a> essay, we restricted the ability to move tickets into the work queue to the product owner and the CEO. When I did something similar on the PrawnPDF project... I took this responsibility myself as its lead maintainer.<br>
+<br>
+Every organization is different, but the goal would be to put as few people as possible in charge of making the decision of what can go into the work queue, and make sure those people are the right ones to make the tough calls about what gets in and what doesn&#39;t.<br>
+<br>
+It&#39;s important to distinguish between what I&#39;m describing here and traditional micro-management: I&#39;m not describing a process in which the people who manage the work queue are the only ones involved in the process of deciding what to work on, nor are they responsible for keeping track of the complete flow of work through the queue. This would create too much overhead, and wouldn&#39;t produce great results.<br>
+<br>
+Instead, what I&#39;m describing is a simple sign-off mechanism.&nbsp;Anyone may request elevation of a ticket to the queue, and then product owner responds quickly with either &quot;OK&quot;, &quot;Not right now&quot;, &quot;Not gonna happen ever&quot;, or &quot;We&#39;ll review this at the next prioritization meeting&quot;. The answer to this question gives the requester immediate feedback on what to expect, which helps them decide what actions to take next.<br>
+<br>
+If a request gets elevated to the work queue, a developer will pick the task up as soon as they have availability to work on it. Once that happens, conversation happens directly between the developer and whoever has the necessary information to see the feature through to successful completion.<br>
+<br>
+When urgent issues crop up, it&#39;s the product owner&#39;s call to decide whether some work-in-progress needs to be dropped from the work queue temporarily, but otherwise there&#39;s no need for active involvement on the project management side &nbsp;once a task has entered the queue.<br>
+<br>
+This new work queue is designed to reflect the actual capacity of the developers, rather than the fantasy land schedule of iteration planning or project milestones. For that reason, very tight limits need to be put in place on both the backlog size within the work queue, as well as the number of tickets assigned to each developer. In the project described in this essay, we allowed for two tickets to be assigned to developers at any point in time, and a backlog size that was no greater than two times the number of developers on the team. These are numbers that can and should be tweaked based on the circumstances, but these particular values seemed to work well as a starting point.<br>
+<br>
+If a particular developer needs to switch to some new urgent task, their current work in progress is either reassigned, cancelled, bumped back into the backlog of the work queue if there is room, or dumped back into the general pool of issues if there isn&#39;t. This forces the work queue to always reflect the real capacity of the developers on the team, rather than the imagined and aspirational goals of iteration planning. Although this process does not prevent frequent context switches, it formalizes and adds friction to them, and in practice, this discourages them from happening so often.<br>
+<br>
+Nothing else needs to immediately change in order to put this plan in place. You educate everyone in the organization on how to request that an issue gets entered into the work queue, you explain the rule of &quot;no discussions with the developers until they&#39;ve been assigned the task&quot;, and then the product owner implements the process of transferring work into and out of the queue. The CEO (or someone who can act in a similar decision-making role) gets involved via prioritization meetings or when there&#39;s a conflict, but otherwise it&#39;s more of an oversight role than anything else -- something that is unfortunately needed in projects under crisis.<br>
+<br>
+The net effect of this process is transparency and clear communication at the critical interaction points in the process. It becomes easier to see where things are getting stuck or failing, and then from there the organization works to address those failures. By measuring the throughput through the work queue, you can get a better guess at true velocity, and try out different things to improve it. With the right effort and practice, the &quot;sad graph of death&quot; can be fixed, but even if that doesn&#39;t happen right away this process helps make sure that at least the most important problems are being worked on in a timely fashion.<br>
+<br>
+This is the first step of a journey of a thousand miles. If you&#39;re experiencing this sort of problem in your own projects, expect a lot more from me on this topic in the coming months.<br>
+<br>
+---<br>
+<br>
+To leave you with just one idea of something you can throw into the mix with this kind of work queue is to start adding additional rules of when things can move from one state to the next.<br>
+<br>
+For example, suppose you&#39;re trying to improve the quality and consistency of code reviews. You can add a rule that no more than one change per developer is in the review phase at any point in time. By doing this, you&#39;d have to halt assigning new work if the total number of tickets in the review phase is at or above the total number of developers.<br>
+<br>
+Building on top of that, you could put in a rule that made it so that a ticket could not move from the &quot;review&quot; to &quot;deployed&quot; phase unless it was the reviewer who did the deploy process, rather than the developer who submitted the review. By making the reviewer responsible for the code&#39;s success or failure in production, it will inevitably encourage more careful reviews and coordination (possibly including pairing) between the reviewer and the developer who wrote the code.<br>
+<br>
+Using this as a guide, you can probably think of a thousand different things that you can tie to the state transitions within the work queue as well as the total counts of each ticket in each state. As you do this, you can experiment with different ideas and add or remove them as needed.<br>
+<br>
+If you try adding a work queue for a few weeks and it doesn&#39;t produce good results, reversing it is a matter of just deleting whatever board or report you built and going back to however you were doing things before. So it really can&#39;t hurt, and the setup cost is almost nothing. It&#39;s not guaranteed to work, but it does more than a backlog audit or issue bankruptcy to nudge you in the right direction.<br>
+<br>
+Please do let me know what you think of this approach -- I&#39;ve used it with success a few times before, but your mileage may vary. I&#39;m especially interested in hearing from those of you who are now or have in the past worked in troubled projects, but any and all feedback is welcome!<br>
+<br>
+-greg </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="debugging-silent-failures-with-breadcrumb-trails.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="the-sad-graph-of-software-death.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/beginning-to-climb-out-of-the-software-death-spiral by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:58 GMT -->
+</html>

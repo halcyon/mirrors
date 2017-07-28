@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Tests Are Code</title>
+	<atom:link href="https://stuartsierra.com/2009/01/18/tests-are-code/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2009/01/18/tests-are-code</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: BDD: Links, News and Resources (1) &#171; Angel &#8220;Java&#8221; Lopez on Blog</title>
+		<link>https://stuartsierra.com/2009/01/18/tests-are-code/comment-page-1#comment-44348</link>
+		<dc:creator><![CDATA[BDD: Links, News and Resources (1) &#171; Angel &#8220;Java&#8221; Lopez on Blog]]></dc:creator>
+		<pubDate>Tue, 29 Nov 2011 09:36:47 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=195#comment-44348</guid>
+		<description><![CDATA[[...] Tests Are Code http://stuartsierra.com/2009/01/18/tests-are-code [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] Tests Are Code <a href="http://stuartsierra.com/2009/01/18/tests-are-code" rel="nofollow">http://stuartsierra.com/2009/01/18/tests-are-code</a> [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2009/01/18/tests-are-code/comment-page-1#comment-42149</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Wed, 25 Feb 2009 02:44:24 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=195#comment-42149</guid>
+		<description><![CDATA[Linh wrote: &lt;em&gt;&quot;Wouldn’t it be better to set the *load-tests* variable to false by default?&quot;&lt;/em&gt;
+
+I thought about that, but decided against it because it would be confusing for new users.  And I don&#039;t think it&#039;s all that terrible if tests are loaded in production code, anyway.]]></description>
+		<content:encoded><![CDATA[<p>Linh wrote: <em>&#8220;Wouldn’t it be better to set the *load-tests* variable to false by default?&#8221;</em></p>
+<p>I thought about that, but decided against it because it would be confusing for new users.  And I don&#8217;t think it&#8217;s all that terrible if tests are loaded in production code, anyway.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Linh</title>
+		<link>https://stuartsierra.com/2009/01/18/tests-are-code/comment-page-1#comment-42147</link>
+		<dc:creator><![CDATA[Linh]]></dc:creator>
+		<pubDate>Tue, 24 Feb 2009 10:39:21 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=195#comment-42147</guid>
+		<description><![CDATA[I think test-is is very useful. Wouldn&#039;t it be better to set the *load-tests* variable to false by default? in case you forget to set it to false in production code.]]></description>
+		<content:encoded><![CDATA[<p>I think test-is is very useful. Wouldn&#8217;t it be better to set the *load-tests* variable to false by default? in case you forget to set it to false in production code.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Timothy Fitz</title>
+		<link>https://stuartsierra.com/2009/01/18/tests-are-code/comment-page-1#comment-42113</link>
+		<dc:creator><![CDATA[Timothy Fitz]]></dc:creator>
+		<pubDate>Wed, 21 Jan 2009 19:50:56 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=195#comment-42113</guid>
+		<description><![CDATA[Joe,
+
+Doctest has another interesting property, in that you can write documentation in a straightforward manner, and it just so happens that documentation is a test. Which means your doc&#039;s sample code is going to be correct and working, and when those tests fail you&#039;ll know to update the documentation. 
+
+A practice every language and library should adopt.]]></description>
+		<content:encoded><![CDATA[<p>Joe,</p>
+<p>Doctest has another interesting property, in that you can write documentation in a straightforward manner, and it just so happens that documentation is a test. Which means your doc&#8217;s sample code is going to be correct and working, and when those tests fail you&#8217;ll know to update the documentation. </p>
+<p>A practice every language and library should adopt.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Ryszard Szopa</title>
+		<link>https://stuartsierra.com/2009/01/18/tests-are-code/comment-page-1#comment-42112</link>
+		<dc:creator><![CDATA[Ryszard Szopa]]></dc:creator>
+		<pubDate>Wed, 21 Jan 2009 14:45:28 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=195#comment-42112</guid>
+		<description><![CDATA[Wow, this is a nice way of grouping the function and tests together. Thanks!]]></description>
+		<content:encoded><![CDATA[<p>Wow, this is a nice way of grouping the function and tests together. Thanks!</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Joe W.</title>
+		<link>https://stuartsierra.com/2009/01/18/tests-are-code/comment-page-1#comment-42111</link>
+		<dc:creator><![CDATA[Joe W.]]></dc:creator>
+		<pubDate>Wed, 21 Jan 2009 13:29:04 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=195#comment-42111</guid>
+		<description><![CDATA[It&#039;s not that far of a departure.  Python has a doctest library where you can store console input and expected output in the docstring of a function.  
+
+That&#039;s how it&#039;s intended to be used, but in practice, I&#039;ve mostly seen them stored separately.  Personally, I think that&#039;s because tests are a helpful supplement to documentation, but often aren&#039;t clear documentation by themselves.]]></description>
+		<content:encoded><![CDATA[<p>It&#8217;s not that far of a departure.  Python has a doctest library where you can store console input and expected output in the docstring of a function.  </p>
+<p>That&#8217;s how it&#8217;s intended to be used, but in practice, I&#8217;ve mostly seen them stored separately.  Personally, I think that&#8217;s because tests are a helpful supplement to documentation, but often aren&#8217;t clear documentation by themselves.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.270 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:58:28 -->
+
+<!-- Compression = gzip -->

@@ -1,0 +1,308 @@
+;;;; parse.lisp
+
+;;; STRUCTURE DEFINITIONS
+
+;; structure for holding results of parse. name is the type (eg
+;; compilation-module, declaration, etc), contents is a list
+;; containing a mixture of (a) other nodes (b) keywords (which appear
+;; as strings in the mod2-ebnf.lisp file, for example "MODULE") and
+;; (c) the constants and identifier names of which the program
+;; consists. 
+
+(defstruct node
+  name
+  contents)
+
+;; structure for holding the string (called here the "buffer") which
+;; we are attempting to parse and an index into that string to show
+;; how far along it the parse has progressed. When state is created,
+;; position is initially zero.  As the parse progresses, position is
+;; incremented to point to the character at which parsing can resume.
+;; Note that position might point to whitespace and / or comments, so
+;; each parsing operation has to commence by skipping over these to
+;; get to a real token.
+
+(defstruct state
+  buffer 
+  position)
+
+;; control how these structures print to the listener. you can comment
+;; these out if you want, but might find your listener choked with
+;; lengthy output if you do.
+
+(defmethod print-object ((self node) stream)
+  (print-unreadable-object
+      (self stream)
+    (format stream "~a" (node-name self))))
+
+;; if a state prints as (eg) #<STATE 0/23> that means we are currently
+;; looking at position 0 of a string whose length is 23.
+(defmethod print-object ((self state) stream)
+  (print-unreadable-object
+      (self stream :type t)
+    (format stream "~a/~a"
+            (state-position self)
+            (length (state-buffer self)))))
+
+;;; MACROS
+
+;; defparse - used extensively in mod2-ebnf.lisp - expands as below.
+;; Note well that this means that every time a defparse form is
+;; evaluated, a defun takes place behind your back.
+
+#|
+	(defparse compilation-module
+	  (choice program-module
+	          definition-module
+	          implementation-module))
+->
+	(defun compilation-module (state)
+	  (make-node :name 'compilation-module
+	             :contents
+	             (satisfy '(choice program-module
+	                               definition-module
+	                               implementation-module)
+	                      state)))
+|#
+(defmacro defparse (name contents)
+  `(defun ,name (state)
+     (make-node :name ',name
+                :contents (satisfy ',contents state))))
+
+;; defparse-from-string - not used in any of _my_ code - might be
+;; called upon to expand thus
+#|
+	(defparse-from-string octal-digit
+	   "01234567")
+->
+	(defparse octal-digit 
+	          (choice "0" "1" "2" "3" "4" "5" "6" "7"))
+|#
+
+(defmacro defparse-from-string (name string)
+  `(defparse ,name
+             (choice ,@(loop for i below (length string) collect
+                             (string (aref string i))))))
+
+;; fail-catch - macro expands like this
+#|
+        (fail-catch (satisfy type state)          
+                    state)
+->
+        (block fail-catch
+          (setf (state-position state)
+                (prog1 (state-position state)
+                  (catch 'fail
+                    (return-from fail-catch
+                      (satisfy type state)))))
+          nil)
+|#
+;; How does the above code (the expanded code, I'm not asking you
+;; about the macro-expansion process) work? Can you explain it?
+
+(defmacro fail-catch (thing state)
+  `(block fail-catch
+     (setf (state-position ,state) 
+           (prog1 (state-position ,state)
+             (catch 'fail
+               (return-from fail-catch ,thing))))
+     nil))
+
+;;; FUNCTIONS
+
+;; This function should be called whenever an attempt to parse has
+;; failed. It will transfer control back to where the "wrong choice"
+;; was made and allow a different route through the syntax to be
+;; explored. 
+
+(defun fail ()
+  (throw 'fail nil))
+
+;; It is recommended that all character lookup into the state-buffer
+;; should be through this function as it will check that you are not
+;; running off the end of the buffer first
+
+(defun buffer-char (buffer position)
+  (if (< position (length buffer))
+      (aref buffer position)
+    (fail)))
+
+;; These two functions do nothing of any use whatsoever, but you may
+;; care to canibalize them for spare parts
+
+;; Function count-semicolons: takes a state, returns the number of
+;; semicolons starting from current position, sets position to final
+;; semicolon, calls (fail) if none found
+
+(defun count-semicolons (state)
+  (let* ((buffer (state-buffer state))
+         (position (state-position state))
+         (previous-position nil)
+         (count 0))
+    ;; loop just keeps going round forever, until (return) is called
+    (loop (let ((next (fail-catch (buffer-char buffer position)
+                                  state)))
+            (if (not next)
+                ;; position is at end of buffer
+                (return)
+              ;; did we find a character of interest?
+              (if (char= next #\;)  
+                  ;; yes! store current position, increment count
+                  (progn 
+                    (setf previous-position position)
+                    (incf count)))))
+          ;; move on
+          (incf position))
+    ;; we're out of the loop - did we find any semicolons?
+    (if (= count 0)
+        (fail)) ; nope! complain to caller
+    ;; still here? yes! set position to location of last semicolon
+    ;; found 
+    (setf (state-position state) previous-position)
+    count))
+
+;; (test-count-semicolons ";; ; ")
+;; (test-count-semicolons " ")
+
+(defun test-count-semicolons (string)
+  (let* ((state (make-state :buffer string :position 0))
+         (count (fail-catch (count-semicolons state)
+                            state)))
+    (if count 
+        (list count state)
+      (warn "No semicolons in ~s." string))))
+
+;; We now come to implementations of the four types of search pattern.
+;; A call to ordered requires that everything in the list must be
+;; satisfied. If any of them fail, then the call to ordered will also
+;; fail. 
+
+;; The results from each call to satisfy - each return value is a list
+;; - are spliced together by mapcan Note: mapcan behaves like mapcar
+;; except that instead of building all the return values into a new
+;; list, it expects each return value to be a list and splices them
+;; together destructively. Try, eg, 
+;; (mapcan 'identity (list (list 'one) (list 'two) (list 'three 'four)))
+
+(defun ordered (things state)
+  (mapcan #'(lambda (required)
+              (satisfy required state))
+          things))
+
+;; A call to optional can fail for all we care. So if anything does
+;; fail inside this call to satisfy, it doesn't matter - optional will
+;; return normally
+
+(defun optional (thing state)
+  (fail-catch
+   (satisfy thing state)
+   state))
+
+;; A choice: we try each thing in turn, not bothering if any of them
+;; fail, so long as one of them succeeds. (If none succeed then the
+;; choice itself fails). As soon as one thing does succeed we consider
+;; the choice taken. [This is a serious weakness in the parsing model;
+;; it requires the things to be ordered such that if one of them
+;; succeeds then it is guaranteed in advance that this is the correct
+;; one. There were intially several places in mod2-ebnf.lisp where
+;; this was not the case. I have fixed all but one of those which I
+;; found.]
+
+(defun choice (things state)
+  (or (some #'(lambda (choseable)
+                (fail-catch
+                 (satisfy choseable state)
+                 state))
+            things)
+      (fail)))
+
+;; If a thing is repeated then it can happen any number of times
+;; (including zero). The results (as always, lists) are spliced
+;; together 
+
+(defun repeated (thing state)
+  (let (repetitions)
+    (loop (let ((repetition (fail-catch 
+                             (satisfy thing state)
+                             state)))
+            (if repetition
+                ;; nconc performs destructive splice. Beware of 
+                ;; careless misuse (append is safer but slower).
+                (setf repetitions (nconc repetitions repetition)) 
+              (return repetitions))))))
+
+;; here is where requirements are satisfied. note that they always
+;; come back as lists, to allow them to be spliced togther in calls to
+;; ordered and repeated above.
+
+(defun satisfy (requirement state)
+  (etypecase requirement
+    ;; if it's a symbol then it's typically one of the functions
+    ;; created by defparse forms in mod2-ebnf.lisp. exceptions being
+    ;; functions such as string-literal which you have been invited to
+    ;; code yourselves
+    (symbol (list (funcall requirement state)))
+    ;; to satisfy a string it must be matched exactly
+    (string (prog1 (list (match-string requirement state))
+              (check-matched-string-terminated requirement state)))
+    ;; dispatch calls to ordered &co
+    (cons (let* ((type (car requirement))
+                 (arguments (ecase type
+                              ((ordered choice) (cdr requirement))
+                              ((optional repeated) (cadr requirement)))))
+            (funcall type arguments state)))))
+
+;; check string-match was terminated cleanly - if the string we
+;; matched ends with an alphabetic character then we may not have a
+;; alphanumeric immediately following it. For instance, neither
+;; "BEGINEND" nor "BEGIN99" should match the requirement "BEGIN".
+
+(defun check-matched-string-terminated (requirement state)
+  (when (fail-catch
+         (and (alpha-char-p (aref requirement
+                                  (1- (length requirement))))
+              (alphanumericp (buffer-char (state-buffer state)
+                                          (state-position state))))
+         state)
+    (fail)))
+
+
+;;; TOP LEVEL FUNCTIONS
+
+;; parse-string takes a required type and a string and attempts to
+;; parse the latter in the shape defined by of the former. 
+
+(defun parse-string (type string)
+  (let ((state (make-state :buffer string
+                           :position 0)))
+    (car (or (fail-catch (satisfy type state) 
+                         state)
+             (error "Failed to parse ~s."
+                    state)))))
+
+;; parse-file will parse the contents of a file, assuming them to be
+;; a complete program. Eg
+;; (parse-file "c:/windows/desktop/source/test.mod")
+
+(defun parse-file (file)
+  (parse-string 'compilation-module
+                (file-string file)))
+
+
+;;; FINALLY 
+
+;; read in the parse data
+;; [current-pathname is a Harlequin extension which gives you
+;; relative filenames]
+
+(compile-file-if-needed (current-pathname "mod2-ebnf" "lisp")
+                        :load t)
+
+;; uncomment the following to read in your own code, once you've
+;; written it 
+
+;; (compile-file-if-needed (current-pathname "input-output" "lisp")
+;;                         :load t)
+
+;; Best of luck!
+

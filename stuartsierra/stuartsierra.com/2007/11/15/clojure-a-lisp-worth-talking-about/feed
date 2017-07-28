@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Clojure: A Lisp Worth Talking About</title>
+	<atom:link href="https://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Tim</title>
+		<link>https://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about/comment-page-1#comment-43131</link>
+		<dc:creator><![CDATA[Tim]]></dc:creator>
+		<pubDate>Tue, 13 Jul 2010 22:17:31 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about#comment-43131</guid>
+		<description><![CDATA[In 2007, md said: &quot;Clojure’s concurrency model ala ‘transactions’ is broken. Might work fine on 2-4 cores CPU. When we will have CPUs having 8 and more cores, centralized approach to concurrency like locks, transactions, ‘lockless’ data structures (where your lock is ‘lock’ instruction) will break. The only right way to model concurrency is the way Erlang does it. And forget about that using crappy java vm&quot;
+
+Well, it&#039;s 2010, and Clojure has been run on systems with dozens (hundreds?) of CPUs, and gets good CPU utilization and throughput there.  Clojure has problems, and the JVM has problems, but its concurrency model hasn&#039;t shown itself to be a showstopper just yet.]]></description>
+		<content:encoded><![CDATA[<p>In 2007, md said: &#8220;Clojure’s concurrency model ala ‘transactions’ is broken. Might work fine on 2-4 cores CPU. When we will have CPUs having 8 and more cores, centralized approach to concurrency like locks, transactions, ‘lockless’ data structures (where your lock is ‘lock’ instruction) will break. The only right way to model concurrency is the way Erlang does it. And forget about that using crappy java vm&#8221;</p>
+<p>Well, it&#8217;s 2010, and Clojure has been run on systems with dozens (hundreds?) of CPUs, and gets good CPU utilization and throughput there.  Clojure has problems, and the JVM has problems, but its concurrency model hasn&#8217;t shown itself to be a showstopper just yet.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: -= Linkage 2007.12.04 =-</title>
+		<link>https://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about/comment-page-1#comment-42115</link>
+		<dc:creator><![CDATA[-= Linkage 2007.12.04 =-]]></dc:creator>
+		<pubDate>Mon, 26 Jan 2009 15:40:51 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about#comment-42115</guid>
+		<description><![CDATA[[...] On Clojure&#060;br/&#062; I haven’t been this excited about Lisp since Peter Seibel came to talk about Practical Common Lisp. [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] On Clojure&lt;br/&gt; I haven’t been this excited about Lisp since Peter Seibel came to talk about Practical Common Lisp. [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Digital Digressions by Stuart Sierra &#187; Blog Archive &#187; More Clojure Love</title>
+		<link>https://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about/comment-page-1#comment-30204</link>
+		<dc:creator><![CDATA[Digital Digressions by Stuart Sierra &#187; Blog Archive &#187; More Clojure Love]]></dc:creator>
+		<pubDate>Tue, 10 Jun 2008 20:45:22 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about#comment-30204</guid>
+		<description><![CDATA[[...] I didn&#8217;t make it clear in my first post about Clojure, I like this language.  Here&#8217;s some more reasons [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] I didn&#8217;t make it clear in my first post about Clojure, I like this language.  Here&#8217;s some more reasons [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Mercurial &#187; Blog Archive &#187; Clojure, a new Lisp is born</title>
+		<link>https://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about/comment-page-1#comment-21687</link>
+		<dc:creator><![CDATA[Mercurial &#187; Blog Archive &#187; Clojure, a new Lisp is born]]></dc:creator>
+		<pubDate>Tue, 11 Dec 2007 17:09:34 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about#comment-21687</guid>
+		<description><![CDATA[[...] A new Lisp WTA. A link to the talk presenting Clojure. The website for Clojure. [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] A new Lisp WTA. A link to the talk presenting Clojure. The website for Clojure. [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Rich Hickey</title>
+		<link>https://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about/comment-page-1#comment-21495</link>
+		<dc:creator><![CDATA[Rich Hickey]]></dc:creator>
+		<pubDate>Thu, 06 Dec 2007 14:59:04 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about#comment-21495</guid>
+		<description><![CDATA[md, it&#039;s a matter of right tool for the job. STM is great for some problems. Just because you have N cores doesn&#039;t mean you have N processes contending for the exact same data. Many multithreaded apps have occasional interaction with small, but potentially overlapping sets of shared data. STM makes doing the right thing easy and scalable. Doing a real transaction, i.e. read x from here, modify it, put it there without it being in both places, or no place, or changed by anything else, is very cumbersome (impossible?) in a pure asynchronous message passing system (cf Mnesia, which does plenty of locking: http://www.erlang.org/doc/apps/mnesia/Mnesia_chap4.html#4). Of course there are also merits to asynchronous concurrency systems and Clojure has that too, in its Agents (http://clojure.sourceforge.net/reference/agents.html), a slightly different take on actors (Erlang&#039;s model). 
+
+Erlang is very cool and Clojure is not designed to compete with it, but saying there is only one way, or presuming that a specific method will not work for an unspecified class of problems, is unproductive. Sorry you don&#039;t like the JVM, but I find it pretty impressive, even if not suitable for all problems.]]></description>
+		<content:encoded><![CDATA[<p>md, it&#8217;s a matter of right tool for the job. STM is great for some problems. Just because you have N cores doesn&#8217;t mean you have N processes contending for the exact same data. Many multithreaded apps have occasional interaction with small, but potentially overlapping sets of shared data. STM makes doing the right thing easy and scalable. Doing a real transaction, i.e. read x from here, modify it, put it there without it being in both places, or no place, or changed by anything else, is very cumbersome (impossible?) in a pure asynchronous message passing system (cf Mnesia, which does plenty of locking: <a href="http://www.erlang.org/doc/apps/mnesia/Mnesia_chap4.html#4" rel="nofollow">http://www.erlang.org/doc/apps/mnesia/Mnesia_chap4.html#4</a>). Of course there are also merits to asynchronous concurrency systems and Clojure has that too, in its Agents (<a href="http://clojure.sourceforge.net/reference/agents.html" rel="nofollow">http://clojure.sourceforge.net/reference/agents.html</a>), a slightly different take on actors (Erlang&#8217;s model). </p>
+<p>Erlang is very cool and Clojure is not designed to compete with it, but saying there is only one way, or presuming that a specific method will not work for an unspecified class of problems, is unproductive. Sorry you don&#8217;t like the JVM, but I find it pretty impressive, even if not suitable for all problems.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Sp3w</title>
+		<link>https://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about/comment-page-1#comment-21377</link>
+		<dc:creator><![CDATA[Sp3w]]></dc:creator>
+		<pubDate>Tue, 04 Dec 2007 16:34:55 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about#comment-21377</guid>
+		<description><![CDATA[[...] On Clojure I haven’t been this excited about Lisp since Peter Seibel came to talk about Practical Common Lisp. [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] On Clojure I haven’t been this excited about Lisp since Peter Seibel came to talk about Practical Common Lisp. [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Mike McNally</title>
+		<link>https://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about/comment-page-1#comment-21346</link>
+		<dc:creator><![CDATA[Mike McNally]]></dc:creator>
+		<pubDate>Mon, 03 Dec 2007 23:35:13 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about#comment-21346</guid>
+		<description><![CDATA[Well md, the thing is that there are projects out there that are doomed to be Java projects. In such an environment, the availability of a sophisticated higher-level language like Clojure is a really nice thing. I suspect that the large Java OLTP application I&#039;m most familiar with isn&#039;t much different than others like it, and I can imagine a good deal of the Java code at certain layers being replaced by Clojure.
+
+I don&#039;t mean to suggest that Clojure should not be a potential choice as a primary implementation language. I really don&#039;t feel I can offer a respectable opinion on that. All I can say is that from what I&#039;ve seen, Clojure has a lot going for it compared to Javascript (Rhino), Groovy, or JRuby.]]></description>
+		<content:encoded><![CDATA[<p>Well md, the thing is that there are projects out there that are doomed to be Java projects. In such an environment, the availability of a sophisticated higher-level language like Clojure is a really nice thing. I suspect that the large Java OLTP application I&#8217;m most familiar with isn&#8217;t much different than others like it, and I can imagine a good deal of the Java code at certain layers being replaced by Clojure.</p>
+<p>I don&#8217;t mean to suggest that Clojure should not be a potential choice as a primary implementation language. I really don&#8217;t feel I can offer a respectable opinion on that. All I can say is that from what I&#8217;ve seen, Clojure has a lot going for it compared to Javascript (Rhino), Groovy, or JRuby.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: md</title>
+		<link>https://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about/comment-page-1#comment-21345</link>
+		<dc:creator><![CDATA[md]]></dc:creator>
+		<pubDate>Mon, 03 Dec 2007 22:59:45 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about#comment-21345</guid>
+		<description><![CDATA[I always welcome new Lisps, and Clojure seems to have some nice properties, however there are couple showstoppers:
+- while you may think java vm is a great think, it&#039;s not. when you do some java threaded server software, you will find out that java VM is quite unpredictable, sometimes giving delays for dozens of milliseconds in the executing context of the thread for no reason
+- Clojure&#039;s concurrency model ala &#039;transactions&#039; is broken. Might work fine on 2-4 cores CPU. When we will have CPUs having 8 and more cores, centralized approach to concurrency like locks, transactions, &#039;lockless&#039; data structures (where your lock is &#039;lock&#039; instruction) will break. The only right way to model concurrency is the way Erlang does it. And forget about that using crappy java vm]]></description>
+		<content:encoded><![CDATA[<p>I always welcome new Lisps, and Clojure seems to have some nice properties, however there are couple showstoppers:<br />
+&#8211; while you may think java vm is a great think, it&#8217;s not. when you do some java threaded server software, you will find out that java VM is quite unpredictable, sometimes giving delays for dozens of milliseconds in the executing context of the thread for no reason<br />
+&#8211; Clojure&#8217;s concurrency model ala &#8216;transactions&#8217; is broken. Might work fine on 2-4 cores CPU. When we will have CPUs having 8 and more cores, centralized approach to concurrency like locks, transactions, &#8216;lockless&#8217; data structures (where your lock is &#8216;lock&#8217; instruction) will break. The only right way to model concurrency is the way Erlang does it. And forget about that using crappy java vm</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: unClog &#187; Clojure, Clojure, we want Clojure</title>
+		<link>https://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about/comment-page-1#comment-21289</link>
+		<dc:creator><![CDATA[unClog &#187; Clojure, Clojure, we want Clojure]]></dc:creator>
+		<pubDate>Sun, 02 Dec 2007 20:16:58 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/15/clojure-a-lisp-worth-talking-about#comment-21289</guid>
+		<description><![CDATA[[...] Sierra heard the talk in person and has a great overview on his [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] Sierra heard the talk in person and has a great overview on his [&#8230;]</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.295 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:00:28 -->
+
+<!-- Compression = gzip -->

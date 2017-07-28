@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/thoughts-on-technical-debt-part-iii by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:00 GMT -->
+<head>
+    <title> Thoughts on Technical Debt, Part III </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="thoughts-on-technical-debt-part-iii.html">
+    <meta property="og:title" content="Thoughts on Technical Debt, Part III">
+    <meta property="og:description" content="*Today we'll wrap up this three part exploration of technical debt. It's a long email, but keep digging... there's gold in them hills down there!*">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="Thoughts on Technical Debt, Part III" />
+	<meta name="twitter:description" content="*Today we'll wrap up this three part exploration of technical debt. It's a long email, but keep digging... there's gold in them hills down there!*" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> September 20, 2015 </div>
+            <h1 class="subject"> Thoughts on Technical Debt, Part III </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> <div>Hello Developer Friend!<br>
+<br>
+<em>Today we&#39;ll wrap up this three part exploration of technical debt. It&#39;s a long email, but keep digging... there&#39;s gold in them hills down there!</em><br>
+<br>
+In part I, I discussed the idea of <em>technical debt</em> in general, as well as two less commonly discussed terms: <em>technical insurance</em>, and &nbsp;<em>technical over-investment</em>. &nbsp;You may want to&nbsp;<a href="some-thoughts-on-technical-debt.html">read the full email for part I</a>, but here&#39;s how I&#39;m using each of those terms in these essays:<br>
+&nbsp;</div>
+
+<ul>
+	<li>Technical debt is work that you choose not to do up front on a project that will lead to more work that needs to be done in the future. There is always some interest that accrues on your unfinished work, because at a minimum your knowledge of a system will decay and you will have to spend time re-learning a piece of code before you can work with again. The hope is that by reducing time and money invested up front, that effort can be redirected elsewhere for greater net gain.<br>
+	&nbsp;</li>
+	<li>Technical insurance is work you do up front in the hopes that it will either (a) save development time in the future, (b) result in a more stable, dependable solution over the long haul, or (c) provide a better overall experience for the people using your software. Because it is based on anticipated future benefits rather than existing needs, technical insurance also represents a form of risk in software development.<br>
+	&nbsp;</li>
+	<li>Technical over-investment is work you choose to do up front on a project that is meant to save you time or effort in the future, but for whatever reason, things do not go as planned and the extra work never pays off. In other words, technical over-investment is what you end up with when you spent time or money on technical insurance that wasn&#39;t strictly necessary.</li>
+</ul>
+
+<div><br>
+The challenge of working on any problem is that it&#39;s not possible to know the true cost of technical debt until a good amount of time has passed, and it&#39;s also difficult to know the true benefit of technical insurance until it starts paying off in some way.&nbsp;<br>
+<br>
+In an absolute sense, any work we do will never be perfectly balanced, so we&#39;re always under-investing in some things and over-investing in others. Without any way to know for certain what the outcome of a technical decision will be, &nbsp;the best we can strive for is an educated guess.<br>
+<br>
+Because there is no general rule to follow, I had introduced a specific example for us to work through together. Since I&#39;ve already repeated it in full twice in other emails, here&#39;s an abridged version of the problem:</div>
+
+<ul>
+	<li>You need to build an auditing report to detect missing metadata on appointment book records in a medical scheduling system.<br>
+	&nbsp;</li>
+	<li>New records get created at least a year in advance. Some additional metadata is supposed to be added to each newly created record, but employees sometimes forget to complete this step.<br>
+	&nbsp;</li>
+	<li>The secondary reporting system that depends on this metadata only looks six weeks out into the future, so the missing metadata will only be detected many months or even years after the mistake was made.<br>
+	&nbsp;</li>
+	<li>Incomplete records show up in the secondary reporting system at random intervals and need to be fixed to ensure accurate reporting. Even though each record only takes a minute or so to fix, this is a frustrating chore for the scheduling manager to deal with several times per week.</li>
+</ul>
+
+<div>After laying out the back story, I gave you two possible solutions that represent the difference between <em>leveraging technical debt</em>&nbsp;and <em>investing in technical insurance</em>. Here they are again, in all their pragmatic glory:<br>
+<br>
+&nbsp;</div>
+
+<div style="margin-left: 40px;">OPTION #1: &nbsp;Build a hastily thrown together auditing report which will be completely undocumented and untested. It will be run manually once every three months, and any errors in the system will be resolved in one large batch. This program will take you 30 minutes to write, and 2 minutes to run whenever the report is needed, plus however long it takes for you to get around to actually running it.<br>
+&nbsp;<br>
+OPTION #2: Build an automated system that sends out alerts whenever a new appointment book entry is added to the system without the required metadata, along with a weekly batch report that lists any entries that haven&#39;t been fixed yet. This program will take you six hours to write, and will deliver results automatically without the need for a human to run the process. However, an active monitoring system will need to be running at all times and configured correctly for this program to work. (You can assume clean code here, and enough test coverage and documentation to make the decently code maintainable)</div>
+
+<div><br>
+The first option represents a quick hack meant to solve an immediate problem, while the second option may be more durable and easier to manage&nbsp;over the long haul.<br>
+<br>
+In the last email I sent out, I shared feedback from a reader that strongly favored spending the extra time up front, for the following reasons:<br>
+&nbsp;</div>
+
+<ul>
+	<li>Software can live forever, so any unpaid technical debt will eventually be inherited by a second or even third maintainer of a project.<br>
+	&nbsp;</li>
+	<li>Software grows over time, and ought to become more mature as it grows. &nbsp;Every new change is an opportunity to drive up overall code quality.<br>
+	&nbsp;</li>
+	<li>Hastily written code might take much longer to read in the future than it took to write, even for the person who wrote it.<br>
+	&nbsp;</li>
+</ul>
+
+<div>In this issue, I promised to share my own thoughts. Perhaps you&#39;ve already guessed that I don&#39;t fully agree with these points, otherwise there would be no need for a Part III, right? :-P<br>
+<br>
+Well, it&#39;s actually a little more complicated than that. If we were trying to identify the benefits of writing code cleanly, i.e. the potential payoff of investing in *technical insurance* -- the points listed above are quite convincing. Clean code means maintainable code means easier changes in the future and a more robust development process. In general, that&#39;s the right mindset to have, and it will lead to good results on average.<br>
+<br>
+That said, the whole point of leveraging technical debt is not to produce good results *on average*, but instead to exploit local factors to beat the average by a large margin. In other words, the risks and rewards need to be pretty lopsided for it ever to make sense to intentionally enter into technical debt. With that in mind, I designed this exercise to illustrate what a heavily unbalanced payoff function looks like in practice.<br>
+<br>
+Let&#39;s break the example down into a few different dimensions, to see where the inequalities come from:<br>
+<br>
+<strong>Differences in time invested</strong><br>
+<br>
+A half hour of development time is almost negligible, by any measure. Lots of different kinds of chores and minor fixes/improvements can be done in this time frame, but it is also the same amount of time that can be spent arguing on something incredibly mundane like whether to use single quotes or double quotes for string literals, or whether a fibonacci benchmark is sufficient evidence that a language is indeed &quot;web scale&quot;.&nbsp;<br>
+<br>
+By contrast, six hours of development time is substantial. It&#39;s the kind of time you&#39;d use to build out a full feature, or to dig into a gnarly bug, or to think through a significant design problem. This is the kind of time you set aside in advance, and you shut your door (or if you work in a fishbowl, put on headphones) and get into the zone.<br>
+<br>
+If humans were perfectly efficent, a six hour time block would be exactly equal to 12 half hour time blocks. But because our puny human minds just don&#39;t work that way, the practical difference in time investment is actually much higher than 12:1 between the two solutions.&nbsp;<br>
+<br>
+<strong>Differences in feedback loops</strong><br>
+<br>
+Implementation time is only part of the overall picture when delivering working software. Once a tool is built, you&nbsp;need to verify that it does the job that it is actually meant to do, and this typically means user testing.<br>
+<br>
+A script hacked together in a half hour allows you to very quickly generate some output and then send it along for feedback. In doing so, you may discover some bugs and missed assumptions, or some unexpected obstacles that will force you to go back and rethink the problem in some way.&nbsp;<br>
+<br>
+In the best case scenario, the script will be either suitable unchanged or require only minor changes. In the worst case, you&#39;ll need to throw the whole thing away and start fresh with a new plan. Either way, you&#39;ll know this very quickly and with minimal wasted development effort.<br>
+<br>
+By contrast, if you spend six hours working on the more robust solution to this problem, and only share your results after you&#39;ve written tests and docs, you end up generating feedback only after a full day&#39;s work.<br>
+<br>
+&nbsp;In the best case scenario, you&#39;ve implemented everything correctly and so neither your tests nor your documentation need to be changed. In the worst case, you&#39;ve missed major details or discovered only after user testing that some obstacle will prevent you from using the code you&#39;ve written. Then, all your tests, documentations, and refactoring will be for naught.<br>
+&nbsp;<br>
+This is an important point to remember: high quality, well tested, well documented code only has utility if it is solving the correct problem. Before first contact with the real users of a system, there is no way to know for sure that you&#39;ve built the right thing, and so all technical investments without that knowledge are risky.&nbsp;<br>
+<br>
+<strong>Differences in overall solution complexity</strong><br>
+<br>
+A small standalone script is about as simple as a program can get. The code itself may end up being completely incomprehensible, but if you think of the program as a read-only artifact, there&#39;s not much that can go wrong.<br>
+<br>
+The basic maintenance plan for any adhoc script looks like this: you run the program on an as needed basis, and if it ever fails, you take five or ten minutes to try to figure out why. If that doesn&#39;t work, you burn the whole thing down and start all over again, because the initial implementation only cost you a lunch break&#39;s worth of time to build. Not exactly a story of elegant engineering, but ruthlessly pragmatism is the name of the game here.<br>
+<br>
+There is a big caveat here: you need some way of recovering the requirements discussions and materials that lead to the creation of the script in the first place. Remember that without tests or documentation, your code will not help you here, and so you need a way to look back at old conversations to remind you of what it was you had built in the first place. If you&#39;re missing this key piece of the puzzle, then instutional knowledge will inevitably decay, and you will encounter exactly the sort of problem that those who warn against technical debt tried to save you from.<br>
+<br>
+Now consider the alternate solution, which consists of well-written, well-documented, well-tested code. In theory, it should be much easier to understand even if you haven&#39;t touched it in a while. In practice, unless you wrote incredibly thorough tests and documentation, those artifacts will be more likely to remind you of how the code works rather than what the business requirements were. So here, having access to the original requirements discussion will still be necessary if you really want&nbsp;<br>
+to play things safe.<br>
+<br>
+Another caveat is that the more robust solution to this problem also is quite a bit more complex. The robust solution involves active monitoring of the appointment book data set, which implies some sort of polling or callback mechanism. It also needs to be able to trigger alerts, so that means network interactions of some variety (could be a webhook on the reporting system, an email, or anything else you might imagine). And because it sends weekly reminders of the records that haven&#39;t been fixed yet, there will also need to be some sort of batch scheduler. To make sure all of this stuff actually stays running, you&#39;d probably need some sort of monitoring tool, too.<br>
+<br>
+Did you have time to document all of those secondary dependencies and configuration details in your six hours of work? Did you set up proper end-to-end tests for all of them? If not, good luck! &nbsp;The underplumbing is just as likely to be a source of problems as the audit reporting code itself, but it is extremely common for these things to left underdocumented and undertested even in teams that take TDD and clean code very seriously.<br>
+<br>
+Oh and by the way... did you remember to set up proper logging for your automated solution? Did you take care to make sure it doesn&#39;t go crazy and cause failure cascades if things go wrong?<br>
+<br>
+Maybe you did all of this! But I&#39;d be willing to bet that &quot;six hours&quot; estimate was for the feature itself, and the underplumbing got its own budget assigned to it. It&#39;s easy to overlook the true costs of doing things properly.<br>
+<br>
+<strong>Differences in total pain relief</strong><br>
+<br>
+The root cause of pain in this scenario is that lots of minor data entry errors have accumulated in the scheduling system, and the lead time between when the errors happen and when they get discovered is at best 10.5 months and at worst several years.<br>
+<br>
+As soon as a single list of records with missing metadata is generated, the scheduling manager can set aside some time to go through and fix the broken records, starting with the first few months of data and then working outwards from there. After no more than couple hours of manual record editing labor, the system will be in a clean state and the next error will not be encountered for almost another year.<br>
+<br>
+To get that result, only one auditing report needs to be generated. In other words, if you built the hackish script and ran it once, and threw it away entirely, the time investment bottleneck would still be on the scheduling manager and the problem would be completely solved for a full year.<br>
+If the script had a self-destruct routine that caused it to disappear once you ran it once, it would still be very useful!<br>
+<br>
+The downside of a manually run script is that whenever this chore needs to be done again, the scheduling manager will need to ask you to run it for them. And you may be busy, so you may not respond right away. You may not even fully remember how to run the script or what the tool even did, or what setup you needed to run it. So in that situation, you have another risk: there&#39;s a variable amount of lead time baked into in any human-based activity, and by making this script something that a programmer needs to run, you&#39;re also creating a resource bottleneck.&nbsp;<br>
+<br>
+This limitation may turn out to be no problem at all, or it may turn into a minor headache for the scheduling manager. In any case, the script was meant to help automate a workflow that had been done completely manually for quite some time, and so the cost of total and complete failure is still fairly small.&nbsp;<br>
+<br>
+Note that this is a unique property of the particular problem being solved! &nbsp;In other situations, it&#39;d be crazy to introduce a manual system if for example, failure for a programmer to run the right thing at the right time would end up crashing some mission-critical system. There&#39;s no getting around using situational judgement here.<br>
+<br>
+Contrast this to the automated solution. In theory, it&#39;s better, because it doesn&#39;t require continuous attention from a programmer. But scheduling systems do fail, as do notification mechanisms. You can&#39;t completely escape this sort of thing, even with a highly sophisticated setup.<br>
+<br>
+One fundamental difference between the two approaches is that an automated system may help with accountability, because it will help the scheduling manager catch erroneous records early and often, which may make it easier to remind those who are entering data into the system to fill out the necessary metadata. With some tweaks, maybe the alerts could be sent directly to the people who entered the data to notify them of the problem, and so the system could be kept in a consistent state of health.<br>
+<br>
+And as we ruminate on all of those ideas, those who would have invested in the robust solution may feel as if suddenly, they are vindicated! Not so fast...</div>
+
+<ul style="margin-left: 40px;">
+	<li>What is the average data entry error rate per week, across the whole system?&nbsp;<br>
+	&nbsp;</li>
+	<li>What else is in the improvement backlog that could have been worked on instead of spending 6+ hours on this one feature?</li>
+</ul>
+
+<div>If you didn&#39;t ask those questions first, you didn&#39;t do your homework, and are in dangerous risk of technical over-investment.<br>
+<br>
+---<br>
+<br>
+These are not simple problems to think about, and there is no single one-size-fits-all answer that can be provided here. My goal with this thought experiment was to challenge you to think a little more about the potential benefits of intentionally taking on some technical debt, and also (more importantly) to be aware of the costs of technical over-investment.<br>
+<br>
+Going back to what I said at the beginning of this email, a general desire to build robust systems while adhering to high code quality standards is quite healthy. When you look at two possible solutions and the risks and rewards aren&#39;t obviously stacked one way or the other, it makes sense to favor the technically superior solution.<br>
+<br>
+However, it is just as important to frame your cost and benefits analysis so that it captures the bigger picture of your software development work. This means going beyond the narrowly-scoped technical decision framework and digging into murkier topics like the economic value of your work, the limited cognitive resources of your team, and the cultural expectations within your organization. For the most part, these extra dimensions are where the real productivity optimizations happen, and they can easily be overlooked by programmers.<br>
+<br>
+The moral of the story? Always be willing to spend a half hour to buy yourself some useful information and a temporary fix to a non-mission-critical problem. Then from there, decide whether another six hours is worth it now, whether it can wait a year or so, or whether the dozen other problems that were sitting in your backlog now look a little more urgent.<br>
+<br>
+-greg<br>
+<br>
+PS: Would love to hear your thoughts on this very long email. My inbox is always open to you!</div> </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="strategic-vs-tactical-decision-making.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="thoughts-on-technical-debt-part-ii.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/thoughts-on-technical-debt-part-iii by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:35:00 GMT -->
+</html>

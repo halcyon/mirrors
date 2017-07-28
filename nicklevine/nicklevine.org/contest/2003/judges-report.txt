@@ -1,0 +1,119 @@
+		ILC 2003 Programming Contest
+		      Judges' Report
+         Nick Levine and Nicholas Barnes, 2003-10-02
+
+The "Last Piece Puzzle" consists of fourteen polyominos which have to
+be fitted into a square frame. The position of one of the pieces (the
+triomino) is constrained. It turns out that there are five ways in
+which the other pieces can be fitted around it. The aim of the
+programming contest was for contestants to solve the puzzle, in
+Common Lisp.
+
+Details of the contest were posted on June 14th. Two entries were
+received late the following day and four more over the following
+week. We had a bit of a lull over the summer and then a mad scramble
+at the end with 6 entries in the final four days bringing the total
+number to 15 by the closing date of September 27th.
+
+Many thanks to everyone who took the time to have a go at this.
+
+The judges have awarded prizes as follows. In some cases we have made
+an "honourable mention" of someone who did almost as well.
+
+First working entry received: Carlos Ungil, with an honourable mention
+for Pierpaolo Bernardi who was only a couple of hours behind.
+
+The prize for elegance is awarded to Russ Ross, in particular for his
+elegant description of the pieces:
+
+        ("JJJJLLLL"
+         "NNsJL3QQ"
+         "TNss33Qj"
+         "TNNstQQj"
+         "TTWtttjj"
+         "TWWZZZll"
+         "WWSSFZZl"
+         "SSSFFFFl")
+
+Russ generated this description from a diagram in the contest rules
+which showed the pieces in the frame but not satisfying the constraint
+on the triomino.
+
+An honourable mention for elegant coding goes to Conrad Barski, for
+the following piece description:
+
+        ((  *    )
+         (  * *  )
+         (  *    )
+         (  *    ))
+
+However, Conrad also gets an honourable mention in the Obscure Coding
+category, for burying labels statements 6 deep. The winner for Obscure
+Coding is Denis Mashkevich, for his cunning though somewhat
+inpenetrable use of a "non deterministic lisp" package (which turns
+out to be non-portable and so the application doesn't terminate under
+LispWorks).
+
+We also award Denis an "added value" prize, for taking the trouble to
+learn lisp from scratch in order to enter the competition.
+
+The "under 21" is prize shared by Scott Fenton and Vladimir Sedach.
+
+Finally, we come to the speed trials. The contest rules state that
+this category means: the shortest total time taken to read source,
+expand macros, compile code, load compiled code, and then execute
+it. No type declarations were permitted.
+
+Because not all the entrants had found more than one solution, we
+levelled the playing field by running timings on code modified to halt
+after finding the first solution. However we also ran the fastest two
+entries over the complete solution space and this test served to
+confirm our earlier results.
+
+Additionally, in the name of fairness, we undid the manual
+precomputation in one entry. Finally, we placed the set of pieces in
+the same canonical order in all entries. This made several entries run
+slower (and one much slower); it also made one entry run much faster.
+
+The test platform was a 566Mhz Celeron with 128MB memory (16k level 1
+cache, 128k level 2), running LispWorks 4.2.7 on Windows XP.
+
+We compiled, loaded and ran six shortlisted entries, 100 times
+each. The averaged results for one run, with times in milliseconds,
+are as follows. Note that for the top three entries, the algorithm is
+so efficient that compilation times dominate.
+
+                      Compile  Load  Run    Total
+
+    Russ Ross           366    23    172    561
+    Nils Goesche        490    95    66     651
+    Edi Weitz           1296   102   452    1850
+    Michael Naunton     843    61    1288   2192
+    Pierpaolo Bernardi  439    35    3605   4079
+    Gabor Melis         1195   100   4209   5504
+
+We therefore declare that Russ' code ran the fastest and that Nils
+came in second. Perhaps these two would like to collaborate to combine
+fast compile time with fast runtime.
+
+
+-------------
+
+The "Last Piece Puzzle" is copyright (c) Blue Opal Australia Pty
+Ltd. None of the puzzle designs included in this website may be
+reproduced, by any means whatsoever, other than for purposes directly
+related to this contest.
+
+This document is copyright (c) Nick Levine 2003. All rights
+reserved. It is provided "as is", without any express or implied
+warranty. In no event will the author be held liable for any damages
+arising from the use of this document. You may make and use verbatim
+copies of this document for purposes directly related to this
+contest. You may not mirror this document on another website. You may
+not charge anyone for the use of this document.
+
+"Windows" is a registered trademark of Microsoft Corporation. Other
+brand or product names are the registered trademarks or trademarks of
+their respective holders.
+
+$Id: //info.ravenbrook.com/user/ndl/lisp/contest/2003/judges-report.txt#1 $

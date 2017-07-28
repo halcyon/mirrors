@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en-US" prefix="og: http://ogp.me/ns#">
+
+<!-- Mirrored from malisper.me/2015/08/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:46:28 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>August 2015 - Macrology</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="../../xmlrpc.php">
+
+
+<!-- This site is optimized with the Yoast SEO plugin v3.4.2 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="robots" content="noindex,follow"/>
+<link rel="canonical" href="index.html" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="object" />
+<meta property="og:title" content="August 2015 - Macrology" />
+<meta property="og:url" content="index.html" />
+<meta property="og:site_name" content="Macrology" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="August 2015 - Macrology" />
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Feed" href="../../feed/index.html" />
+<link rel="alternate" type="application/rss+xml" title="Macrology &raquo; Comments Feed" href="../../comments/feed/index.html" />
+<link rel='stylesheet' id='scrawl-style-css'  href='../../wp-content/themes/scrawl-wpcom/style167b.css?ver=4.6' type='text/css' media='all' />
+<link rel='stylesheet' id='scrawl-fonts-css'  href='https://fonts.googleapis.com/css?family=Lora:400,700|Merriweather:400italic,400,700,700italic&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../../wp-content/themes/scrawl-wpcom/fonts/genericons6de8.css?ver=3.3' type='text/css' media='all' />
+<script type='text/javascript' src='../../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<link rel='https://api.w.org/' href='../../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../../wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-63547056-1']);
+_gaq.push(['_trackPageview']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+<style type="text/css" id="syntaxhighlighteranchor"></style>
+
+<script type="text/javascript">
+  window.heap=window.heap||[],heap.load=function(e,t){window.heap.appid=e,window.heap.config=t=t||{};var n=t.forceSSL||"https:"===document.location.protocol,a=document.createElement("script");a.type="text/javascript",a.async=!0,a.src=(n?"https:":"http:")+"//cdn.heapanalytics.com/js/heap-"+e+".js";var o=document.getElementsByTagName("script")[0];o.parentNode.insertBefore(a,o);for(var r=function(e){return function(){heap.push([e].concat(Array.prototype.slice.call(arguments,0)))}},p=["clearEventProperties","identify","setEventProperties","track","unsetEventProperty"],c=0;c<p.length;c++)heap[p[c]]=r(p[c])};
+    heap.load("931515525");
+</script>
+</head>
+
+<body class="archive date">
+	<button class="menu-toggle x">
+		<span class="lines"></span>
+		<span class="screen-reader-text">Primary Menu</span>
+	</button>
+	<div class="slide-menu">
+				
+		<h1 class="site-title"><a href="../../index.html" rel="home">Macrology</a></h1>
+		<h2 class="site-description">Case Studies in Lisp Macros</h2>
+		
+				
+				
+			<div id="secondary" class="widget-area" role="complementary">
+		<aside id="search-2" class="widget widget_search"><form role="search" method="get" class="search-form" action="http://malisper.me/">
+				<label>
+					<span class="screen-reader-text">Search for:</span>
+					<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+				</label>
+				<input type="submit" class="search-submit" value="Search" />
+			</form></aside><aside id="pages-3" class="widget widget_pages"><h1 class="widget-title">Pages</h1>		<ul>
+			<li class="page_item page-item-55"><a href="../../about-me/index.html">About Michael Malis</a></li>
+<li class="page_item page-item-44"><a href="../../about-this-site-2/index.html">About This Site</a></li>
+		</ul>
+		</aside><aside id="nav_menu-3" class="widget widget_nav_menu"><h1 class="widget-title">Contact Me</h1><div class="menu-contact-me-container"><ul id="menu-contact-me" class="menu"><li id="menu-item-60" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-60"><a href="mailto:michaelmalis2@gmail.com">Email</a></li>
+<li id="menu-item-58" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-58"><a href="https://github.com/malisper">Github</a></li>
+<li id="menu-item-59" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-59"><a href="https://news.ycombinator.com/user?id=malisper">Hacker News</a></li>
+</ul></div></aside><aside id="archives-2" class="widget widget_archive"><h1 class="widget-title">Archives</h1>		<ul>
+			<li><a href='../../2016/06/index.html'>June 2016</a></li>
+	<li><a href='../../2016/04/index.html'>April 2016</a></li>
+	<li><a href='../../2016/01/index.html'>January 2016</a></li>
+	<li><a href='../12/index.html'>December 2015</a></li>
+	<li><a href='../11/index.html'>November 2015</a></li>
+	<li><a href='../10/index.html'>October 2015</a></li>
+	<li><a href='../09/index.html'>September 2015</a></li>
+	<li><a href='index.html'>August 2015</a></li>
+	<li><a href='../07/index.html'>July 2015</a></li>
+	<li><a href='../06/index.html'>June 2015</a></li>
+	<li><a href='../05/index.html'>May 2015</a></li>
+		</ul>
+		</aside><aside id="categories-2" class="widget widget_categories"><h1 class="widget-title">Categories</h1>		<ul>
+	<li class="cat-item cat-item-2"><a href="../../category/basics/index.html" title="These are basic Lisp macros that should be trivial to understand.">Basic Macros</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="../../category/intermediate-macros/index.html" >Intermediate Macros</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="../../category/advanced-macros/index.html" >Advanced Macros</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="../../category/debugging-common-lisp/index.html" >Debugging Lisp</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="../../category/loops-in-lisp/index.html" >Loops in Lisp</a>
+</li>
+		</ul>
+</aside>	</div><!-- #secondary -->
+	</div><!-- .slide-menu -->
+<div id="page" class="hfeed site">
+	<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+	<header id="masthead" class="site-header" role="banner">
+
+		<div class="site-branding">
+						<h1 class="site-title"><a href="../../index.html" rel="home">Macrology</a></h1>
+		</div>
+
+	</header><!-- #masthead -->
+
+	
+	
+	<div id="content" class="site-content">
+
+
+	<section id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			<header class="page-header">
+				<h1 class="page-title">Month: August 2015</h1>			</header><!-- .page-header -->
+
+			
+				
+					
+<article id="post-735" class="post-735 post type-post status-publish format-standard hentry category-intermediate-macros">
+	<header class="entry-header">
+					<h1 class="entry-title"><a href="27/defaddress/index.html" rel="bookmark">Defaddress</a></h1>			</header><!-- .entry-header -->
+			<div class="entry-content">
+			<p><em>This post is the first part of a two part series exploring the emulator <a href="https://github.com/kingcons/cl-6502">cl-6502</a>. This post will cover how addressing modes are implemented in cl-6502. The second part will go over the implementation of the opcodes.</em></p>
+<p>cl-6502 is an emulator for the MOS 6502 processor, used in devices such as the Apple II and the NES. As an emulator, cl-6502 has three distinct roles. It needs to be able to convert assembly code into machine code (assembly), it needs to be able to convert machine code back into assembly (disassembly), and it needs to be able to actually interpret the machine code (execution). By using macros in clever ways, cl-6502 is able to create multiple DSLs for defining different components of the emulator. One of those macros is <strong>defaddress</strong>, which makes it easy to add addressing modes to the emulator. First some background.</p>
+<p>Assembly language has what are known as &#8220;addressing modes&#8221;. Depending on which addressing mode is being used, the argument to the instruction will be calculated in a different manner. The programmer is able to specify different addressing modes by using slightly different syntaxes. As an example here is the same jump instruction just with two different addressing modes:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+JMP $0
+JMP ($0)
+</pre>
+<p>From here on out, I&#8217;m going to use the term &#8220;operand&#8221; to refer to the value given to the instruction before the addressing mode has been taken into account and the term &#8220;argument&#8221; to refer to the value after the addressing mode has been considered. As you should be able to tell, both instructions above are passed the same operand of zero, but because they are using different addressing modes, they will calculate their arguments in two different ways.</p>
+<p>Since the first instruction doesn&#8217;t use any extra syntax (except the dollar sign which just means base 16), it uses &#8220;absolute&#8221; addressing. With absolute addressing the argument is the same as the operand.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='27/defaddress/index.html#easy-footnote-bottom-1' title='Actually it isn&#8217;t. The operand is actually the address of the argument. The real argument to jump is the instruction being jumped to. Just for simplicity sake I am removing a layer of indirection. What I am saying only makes sense for jump. For pretty much every other instruction, the operand is the address of the argument.'><sup>1</sup></a></span> The first instruction can be read as, continue execution at the instruction at address zero.</p>
+<p>Since the second instruction has parens around the operand, it uses what is known as &#8220;indirect&#8221; addressing. For indirect addressing, the operand is actually the memory location of the argument.<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='27/defaddress/index.html#easy-footnote-bottom-2' title='As I said in the previous footnote there is actually an extra layer of indirection that I am removing for simplicity.'><sup>2</sup></a></span> The second instruction can be read as, get the address that is stored at address zero, and continue execution at the instruction at that location in memory. Assuming the value 123 was stored at address zero, the operand would be zero, the argument would be 123, and the instruction would cause execution to be resumed at the instruction at location 123.</p>
+<p>In total there are 13 different addressing modes for the 6502. In order to make it easy to define all of these different addressing modes, cl-6502 creates a macro <strong>defaddress</strong>. <strong>Defaddress</strong> is a DSL for the sole purpose of defining addressing modes. Each one of the main arguments to <strong>defaddress</strong> handles one of the jobs (assembly/disassembly/execution) that an emulator has to perform with respect to the addressing mode. As to what the <strong>defaddress</strong> DSL looks like, here is the code that defines the absolute addressing mode.</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defaddress absolute (:reader &quot;^_$&quot; :writer &quot;$~{~2,'0x~}&quot;)
+  (get-word (cpu-pc cpu)))
+</pre>
+<p>The code above has three distinct parts. The first piece is the reader, which is used to parse the assembly code:</p>
+<pre class="brush: plain; title: ; notranslate" title=""> &quot;^_$&quot; </pre>
+<p>The reader argument is a regular expression that recognizes the syntax of the addressing mode being defined, in this case aboslute addressing. The regex is a normal perl compatible regex except it may use an underscore to match (and capture) an operand. The regex above matches a lone operand, which is exactly the syntax for absolute addressing. After the reader is the writer:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+&quot;$~{2,'0x~}&quot;
+</pre>
+<p>The writer is a format string that is able to reproduce the original assembly (with the proper syntax for the addressing mode) from the machine code. The writer for absolute addressing says to print the operand as a zero padded, two digit, hexadecimal number. Basically, it just prints the lone operand in assembly language without any additional syntax. Since there is no extra syntax, that means the generated code is using absolute addressing.</p>
+<p>The last part is the body. The body is a block of code that calculates the argument from the operands.<span id='easy-footnote-3' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='27/defaddress/index.html#easy-footnote-bottom-3' title='As I have said in previous footnotes it should actually calculate the address of the real argument. Jump is just a bit weird since the real argument is the instruction being jumped to, but it needs the address of it to get there. For simplicity sake I have been pretending the address of the argument is the actual argument, but this makes sense only for jump and pretty much nothing else.'><sup>3</sup></a></span> For absolute addressing the body is:</p>
+<pre class="brush: plain; title: ; notranslate" title=""> 
+(get-word (cpu-pc cpu)) 
+</pre>
+<p>When this code is ran, the variable <em>cpu</em> will be bound to an object representing the current state of the cpu. The pc of the cpu normally points to the current instruction being executed, but cl-6502 uses a slight trick. By incrementing the pc, it will now point to the first operand of the instruction! All the body does is take the value of the pc (which is the address of the argument/operand), and looks up the value at that address<span id='easy-footnote-4' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='27/defaddress/index.html#easy-footnote-bottom-4' title='Get-word is just a function which looks up the 16-bit value at the given memory address.'><sup>4</sup></a></span> to get the actual argument.</p>
+<p>As a second example of <strong>defaddress</strong>, here is the code for indirect addressing:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defaddress indirect (:reader &quot;^\\(_\\)$&quot; 
+                      :writer &quot;($~{~2,'0x~})&quot;)
+  (get-word (get-word (cpu-pc cpu)) t))
+</pre>
+<p>There are only a few differences between the code for indirect and absolute addressing. In the reader and writer, there are now an extra pair of parens around the operand. This is because the syntax for indirect addressing is an operand surrounded by parens. Another difference is with the body. Since there is an extra layer of indirection with indirect addressing, there is an additional call to <strong>get-word</strong>. For indirect addressing, the body says to calculate the argument, get the value of the pc (the address of the operand or the address of the address of the argument), get the value at that address (the operand or the address of the argument), and then get the value at that address (the actual argument).</p>
+<p>Since I have already shown you some examples of how to use <strong>defaddress</strong>, I am now going to explain how <strong>defaddress</strong> works. Here is the complete definition of <strong>defaddress</strong>:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defmacro defaddress (name (&amp;key reader writer cpu-reg)
+                      &amp;body body)
+  `(progn 
+    (defmethod reader ((mode (eql ',name)))
+      ,(cl-ppcre:regex-replace-all 
+         &quot;_&quot; reader &quot;([^,()#&amp;]+)&quot;))
+     (defmethod writer ((mode (eql ',name))) ,writer)
+     (push ',name *address-modes*)
+     (defun ,name (cpu) ,@body)
+     (defun (setf ,name) (value cpu)
+       ,(if cpu-reg
+            `(setf ,@body value)
+            `(setf (get-byte ,@body) value)))))
+</pre>
+<p>I&#8217;m going to break down the code for <strong>defaddress</strong> one part at a time. After explaining a piece does, I will show you what the expansion of that piece looks like when defining absolute addressing. The first part of <strong>defaddress</strong> handles the reader:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+ (defmethod reader ((mode (eql ',name)))
+   ,(cl-ppcre:regex-replace-all &quot;_&quot; reader &quot;([^,()#&amp;]+)&quot;)) 
+</pre>
+<p>This part generates code which will define a method on the generic (virtual) function <strong>reader</strong>. <strong>Reader</strong> takes in the name of the mode as an argument and is supposed to return a regex (a true perl compatible regex, i.e. no underscores) that will recognize the mode and extract the operands:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(reader 'absolute)
+=&gt; &quot;^([^,()#&amp;]+)$&quot;
+</pre>
+<p>To produce the method, <strong>defaddress</strong> just takes the reader argument, substitutes the underscore with a regex that can be used to recognize operands, and uses that as the value <strong>reader</strong> should return for the mode being defined. Here is what the piece of code expands into for absolute addressing:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defmethod reader ((mode (eql 'absolute))) &quot;^([^,()#&amp;]+)$&quot;)
+</pre>
+<p>The next part does pretty much the exact same thing, only for the writer:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defmethod writer ((mode (eql ',name))) ,writer)
+</pre>
+<p>It generates the code for a method for the generic function <strong>writer</strong>. Since the format string is used unmodified, <strong>defaddress</strong> just inserts the string into the body of the function. There result winds up being:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defmethod writer ((mode (eql 'absolute))) &quot;$~{~2,'0x~}&quot;)
+</pre>
+<p>Next up is the piece:</p>
+<pre class="brush: plain; title: ; notranslate" title=""> (push ',name *address-modes*) </pre>
+<p>This piece of code adds the mode being defined to a list of all of the addressing modes. The list is used to find all of the addressing modes that match the syntax of a given instruction. The snippet simply expands into:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(push 'absolute *address-modes*)
+</pre>
+<p>Now for the most important part of <strong>defaddress </strong>&#8211; the code that handles the body:</p>
+<pre class="brush: plain; title: ; notranslate" title=""> (defun ,name (cpu) ,@body) </pre>
+<p>It just puts the body inside of a function named by the addressing mode. The function is supposed to take the in the current state of the cpu as an object and return the argument used for the current instruction. Note that the variable <em>cpu</em> is available to the body. This is how the body of <strong>defaddress</strong> is able to access the cpu object. The expansion winds up looking like:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun absolute (cpu) (get-word (cpu-pc cpu)))
+</pre>
+<p>There is just one more part, a <strong>setf</strong> function for the addressing mode:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun (setf ,name) (value cpu)
+  ,(if cpu-reg
+       `(setf ,@body value)
+       `(setf (get-byte ,@body) value)))
+</pre>
+<p>This code generates a <strong>setf</strong> function, basically a way to modify the argument of the instruction. Many instructions not only use the argument, but they store a new value to the memory location of the argument. The <strong>setf</strong> function defined by <strong>defaddress</strong> is just a way to do that. I&#8217;m not going to go in depth about it, but this is the only piece of code that uses the <em>cpu-reg</em> argument. The <em>cpu-reg</em> argument is just used to smooth out some differences between different addressing modes. The code generated by the above code winds up looking like:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun (setf absolute) (value cpu)
+   (setf (get-byte (get-word (cpu-pc cpu))) value))
+</pre>
+<p>As I just said, the <strong>setf</strong> function defined can be used to set the value of the argument. To do it for absolute addressing, get the operand and set the value at that memory location.<span id='easy-footnote-5' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='27/defaddress/index.html#easy-footnote-bottom-5' title='Get-byte is just like get-word only it access the 8-bit value at the given memory address.'><sup>5</sup></a></span><span id='easy-footnote-6' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='27/defaddress/index.html#easy-footnote-bottom-6' title='If jump were to modify the argument, it would actually be modifying the instruction being jumped to.'><sup>6</sup></a></span></p>
+<p>And that is pretty much everything there is to know about <strong>defaddress</strong>. In the next post I am going to talk a bout <strong>defasm, </strong>a macro that makes it easy to define different instructions for the emulator. It piggybacks off of the information provided by <strong>defaddress</strong> in order to handle all of the instructions in all of the different possible addressing modes.</p>
+					</div><!-- .entry-content -->
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="27/defaddress/index.html" rel="bookmark"><time class="entry-date published" datetime="2015-08-27T00:53:45+00:00">August 27, 2015</time><time class="updated" datetime="2015-08-27T01:05:12+00:00">August 27, 2015</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../author/malisper/index.html">malisper</a></span></span>			<span class="secondary-entry-meta">
+																	<span class="comments-link"><a href="27/defaddress/index.html#comments">1</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</article><!-- #post-## -->
+
+				
+					
+<article id="post-698" class="post-698 post type-post status-publish format-standard hentry category-debugging-common-lisp">
+	<header class="entry-header">
+					<h1 class="entry-title"><a href="19/debugging-lisp-part-5-miscellaneous/index.html" rel="bookmark">Debugging Lisp Part 5: Miscellaneous</a></h1>			</header><!-- .entry-header -->
+			<div class="entry-content">
+			<p><em>This post is for all of the miscellaneous features that aren&#8217;t large enough to get their own individual posts. If you haven&#8217;t read all of them, here are the links to the previous posts on <em><a href="../07/07/debugging-lisp-part-1-recompilation/index.html">recompilation</a>, <a href="../07/14/debugging-lisp-part-2-inspecting/index.html">inspection</a>, <a href="../07/22/debugging-lisp-part-3-redefining-classes/index.html">class redefinition</a>, and <a href="05/debugging-lisp-part-4-restarts/index.html">restarts</a>.</em></em></p>
+<p>One somewhat obscure tool for debugging is SBCL&#8217;s <strong>trace</strong>. SBCL&#8217;s <strong>trace</strong> goes way beyond what most other implementations provide. In SBCL, <strong>trace</strong> takes several additional keyword arguments.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='19/debugging-lisp-part-5-miscellaneous/index.html#easy-footnote-bottom-1' title='A keyword argument is an optional named argument. To use a keyword argument you pass in the the name of the argument, followed by the value. By using keyword arguments, a function can accept multiple optional arguments of which any subset can be used.'><sup>1</sup></a></span> For example, <strong>trace</strong> accepts a keyword argument, <em>:break</em>. The expression passed in as the value of <em>:break</em> will be evaluated every time the traced function is called. When that expression evaluates to true, the debugger will be invoked. For example if you have a Fibonacci function:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun fib (n)
+  (if (&lt;= 0 n 1)
+      n
+      (+ (fib (- n 1))
+         (fib (- n 2)))))
+</pre>
+<p>you can use <strong>trace</strong> to break specifically when <strong>fib</strong> is called with an argument of zero:</p>
+<p>&nbsp;</p>
+<p><a href="../../wp-content/uploads/2015/08/ezgif.com-optimize-4.gif"><img class="aligncenter wp-image-713" src="../../wp-content/uploads/2015/08/ezgif.com-optimize-4.gif" alt="ezgif.com-optimize (4)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>A bit of mangling has to be done (using <strong>sb-debug:arg)</strong> since the expression refers to variables within the <strong>fib</strong> function. <strong>Trace</strong> also accepts several variants of <em>:break</em>, such as <em>:break-after</em>, which evaluate the expression after the function has been called instead of before. There are also arguments <em>:print</em> and <em>:</em><em>print-after</em>, which are like their break counterparts, only they print the value of the expression before/after the function is called. You could use <em>:print-after</em> to say, print the time (Unix time) whenever <strong>fib</strong> returns:</p>
+<p>&nbsp;</p>
+<p><a href="../../wp-content/uploads/2015/08/ezgif.com-optimize-6.gif"><img class="aligncenter wp-image-714" src="../../wp-content/uploads/2015/08/ezgif.com-optimize-6.gif" alt="ezgif.com-optimize (6)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>For a complete list of all of the arguments that <strong>trace</strong> can accept, check out<b> </b><a href="http://www.sbcl.org/1.0/manual/Function-Tracing.html">this</a> page of the SBCL manual.</p>
+<p>Another relatively unknown group of features are the cross referencing commands. The cross referencing commands are commands which lookup all of the places where something is referenced. All of the bindings for the cross referencing commands begin with C-c C-w.<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='19/debugging-lisp-part-5-miscellaneous/index.html#easy-footnote-bottom-2' title='C-c is pressed because that is the binding Slime uses. C-w is pressed for &#8220;who&#8221;, which is binding for all of the cross referencing commands.'><sup>2</sup></a></span> The cross referencing command I find myself using the most, &#8220;slime-who-calls&#8221;, which is bound to C-c C-w C-c, shows you all of the places where a function is called from. Here is what it would look like if you were to lookup all of the places where the <strong>scan</strong> function is used in <a href="http://weitz.de/cl-ppcre/">cl-ppcre</a> and then scroll through them:<span id='easy-footnote-3' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='19/debugging-lisp-part-5-miscellaneous/index.html#easy-footnote-bottom-3' title='All of the places that use a macro whose expansion uses the function being cross referenced will also be pulled up.'><sup>3</sup></a></span></p>
+<p>&nbsp;</p>
+<p><a href="../../wp-content/uploads/2015/08/ezgif.com-optimize-7.gif"><img class="aligncenter wp-image-717" src="../../wp-content/uploads/2015/08/ezgif.com-optimize-7.gif" alt="ezgif.com-optimize (7)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>Slime-who-calls makes it easy to figure out how a function is supposed be used. You can pull up all of the usages of a function and just look at them. There are also several analogs of slime-who-calls. There is slime-who-macroexpands (C-c C-w RET), which pulls up all of the places where a macro is used and there is also slime-who-references (C-C C-w C-r) which is the same thing only for variables.</p>
+<p>Another important feature is how to pull up the source code of a function on the stack while inside of the debugger. One way to do it is to press the &#8216;v&#8217; key with the cursor on the frame you want to view the source of. An alternative option is to use M-p (the alt key and the &#8216;p&#8217; key at the same time) and M-n to move up and down the stack frame. When using these commands instead of the normal C-p and C-n for movement, Slime will automatically pull up the source code as you are moving through the stack. Here is what it would look like if you were to pass a malformed regular expression to cl-ppcre (so that an error will be signaled and you will enter the debugger), and then scroll through the stack trace using M-n:</p>
+<p>&nbsp;</p>
+<p><a href="../../wp-content/uploads/2015/08/ezgif.com-optimize-9.gif"><img class="aligncenter wp-image-732" src="../../wp-content/uploads/2015/08/ezgif.com-optimize-9.gif" alt="ezgif.com-optimize (9)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>And now for the most common of all IDE commands, jumping to source. I was recently talking with someone and he mentioned that the only feature he uses an IDE for is to easily find definitions in source code. In Emacs with Slime, it is possible to jump to the source of pretty much anything by hitting &#8220;M-.&#8221; (that is the control key followed by a period). This command works on functions, variables, classes, and more! When you jump to the source of a generic (virtual) function, you are given a list of all of the different methods that implement that function. For example if you weret to jump to the source of <strong>create-matcher-aux</strong> (the function that does most of the work in cl-ppcre), here is what you would see:</p>
+<p>&nbsp;</p>
+<p><a href="../../wp-content/uploads/2015/08/ezgif.com-optimize-8.gif"><img class="aligncenter wp-image-720" src="../../wp-content/uploads/2015/08/ezgif.com-optimize-8.gif" alt="ezgif.com-optimize (8)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>To jump back to wherever you were previously, use &#8220;M-,&#8221;.</p>
+<p>And that is everything you should need to know about debugging Common Lisp.</p>
+					</div><!-- .entry-content -->
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="19/debugging-lisp-part-5-miscellaneous/index.html" rel="bookmark"><time class="entry-date published" datetime="2015-08-19T13:36:31+00:00">August 19, 2015</time><time class="updated" datetime="2015-10-08T10:26:55+00:00">October 8, 2015</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../author/malisper/index.html">malisper</a></span></span>			<span class="secondary-entry-meta">
+																	<span class="comments-link"><a href="19/debugging-lisp-part-5-miscellaneous/index.html#comments">5</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</article><!-- #post-## -->
+
+				
+					
+<article id="post-401" class="post-401 post type-post status-publish format-standard hentry category-debugging-common-lisp">
+	<header class="entry-header">
+					<h1 class="entry-title"><a href="05/debugging-lisp-part-4-restarts/index.html" rel="bookmark">Debugging Lisp Part 4: Restarts</a></h1>			</header><!-- .entry-header -->
+			<div class="entry-content">
+			<p><em>This is part four of Debugging Lisp. Here are the previous parts on <a href="../07/07/debugging-lisp-part-1-recompilation/index.html">recompilation</a>, <a href="../07/14/debugging-lisp-part-2-inspecting/index.html">inspecting</a>, and <a href="../07/22/debugging-lisp-part-3-redefining-classes/index.html">class redefinition</a>. The next post on miscellaneous debugging techniques can be found <a href="19/debugging-lisp-part-5-miscellaneous/index.html">here</a>.</em></p>
+<p>Many languages provide error handling as two distinct parts, throw and catch. Throw is the part that detects something has gone wrong and in some way signals that an error has occurred. In the process, throw creates an exception object which contains information about the problem. The other part, catch, takes the exception object signaled by throw and attempts to recover from the error.</p>
+<p>The issue with throw/catch is that throw acts like an unconditional goto to the catch part. Because of this, all of the state information that is available when throw is used that is not given to the exception object is lost. This becomes problematic if the code that catches the error wants to use some information about what happened when the error occurred in order to recover.</p>
+<p>As an example, let&#8217;s say you are implementing a library which takes several files and parses a list of numbers from each one. One way to implement this library is as two functions. The first function, <strong>read-file</strong>, will read the contents of a single file and return a list of the results. The second, <strong>read-files</strong>, will take a list of files and return a list of the contents of each one. Here is what the code for those two functions might look like if they did not have any error handling:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun read-file (file)
+  (with-open-file (in file :direction :input)
+    (loop for line = (read-line in nil in)
+          until (eq in line)
+          collect (parse-integer line))))
+
+(defun read-files (files)
+  (loop for file in files
+        collect (read-file file)))
+</pre>
+<p>To test the library you have two files. The first file contains the numbers 5, 10, 15, 20, 25 and the second contains 5, 10, 15, 20, a, 30, 40. In order to make sure your library handles errors properly, you decided to put a line which is just &#8220;a&#8221; in the second file. As it stands, <strong>parse-integer</strong> will signal an error when it comes across this line. To make testing the library easy, you have stored a list containing the pathnames of the two files in the variable <em>*files*</em>. Here is what happens when you try running the library on the two files:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(read-files *files*)
+
+=&gt; ERROR
+</pre>
+<p>An error occurred due to the &#8220;a&#8221; in the second file. As the designer of the library you have to decide what should happen when a situation like this one comes up. Below are several different options you could choose from if your language only provided catch/throw.</p>
+<p>Your first option is to just skip the entry that caused the error. To do this, you could use <strong>handler-case</strong>, Common Lisp&#8217;s version of catch:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun read-file (file)
+  (with-open-file (in file :direction :input)
+    (loop for line = (read-line in nil in)
+          until (eq in line)
+          when (handler-case (parse-integer line)
+                 ;; C is the name being used to
+                 ;; refer to the exception object.
+                 (error (c)
+                   (declare (ignore c))
+                   nil))
+          collect it)))
+
+(read-files *files*)
+
+=&gt; ((5 10 15 20 25) (5 10 15 20 30 40))
+</pre>
+<p>Another option is to provide a dynamic variable<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='05/debugging-lisp-part-4-restarts/index.html#easy-footnote-bottom-1' title='A dynamic variable is basically a global variable that can be shadowed. When a dynamic variable is shadowed, any reference to it refers to the new binding. Once execution leaves the form that shadowed the dynamic variable, the dynamic variable reverts back to its previous binding.'><sup>1</sup></a></span> which the user of the library can use to specify a value to be used in place of the malformed entry:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defvar *malformed-value* nil)
+
+(defun read-file (file)
+  (with-open-file (in file :direction :input)
+    (loop for line = (read-line in nil in)
+          until (eq in line)
+          when (handler-case (parse-integer line)
+                 (error (c)
+                   (declare (ignore c))
+                   *malformed-value*))
+          collect it)))
+
+(let ((*malformed-value* :malformed))
+  (read-files *files*))
+
+=&gt; ((5 10 15 20 25) (5 10 15 20 :MALFORMED 30 40))
+</pre>
+<p>A third option is to have <strong>read-files</strong> catch the error and skip the entire file with the malformed entry:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun read-files (files)
+  (loop for file in files
+        when (handler-case (read-file file)
+               (error (c)
+                 (declare (ignore c))
+                 nil))
+        collect it))
+
+(read-files *files*)
+
+=&gt; ((5 10 15 20 25))
+</pre>
+<p>Your last option is to let the user of the library handle the exception themselves:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(handler-case (read-files *files*)
+  (error (c) (do-something)))
+</pre>
+<p>To the user, this last option is somewhat useful because it gives them some flexibility into how the error is handled. As mentioned above, the problem with doing this is that it becomes difficult for the user to properly recover from the error. If the user just wanted to skip the one corrupted file, there is no easy way to for them to do that due to the fact that by the time their error handling code is ran, execution would have left <strong>read-files</strong>. This means all of the state information, such as the remaining files that need to be read from, is completely lost by the time their code catches the exception.</p>
+<p>Another problem with catch/throw is that of the four possible ways above you could handle the problem, you only get to choose one of them. Any one of them is in conflict with all of the others. Again, this is because throw acts like goto. Once you decide where you are jumping to, you have no control over what happens next. And, if you let the user handle the error themselves, they have no easy way to handle the error gracefully since all of the state information is lost.</p>
+<p>This is where restarts come in. In Common Lisp, catch is provided as two separate pieces: handlers and restarts. A handler is bound by the user of the library in order to specify what should happen when an exception is thrown and a restart is defined by the library in order to provide a recovery option to the user. If you are using a language that supports restarts, you could implement the first three options above as restarts. Then when a user is using the library, they will get to select which of those restarts they want to have run when an error occurs. If they do not want to use any of the restarts, they can run their own code instead. Here is the code for the file reading library, but reimplemented to support three different restarts, one for each of the first three ways to handle errors.</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun ask (string)
+  (princ string *query-io*)
+  (read *query-io*))
+
+(defun read-file (file)
+  (with-open-file (in file :direction :input)
+    (loop for line = (read-line in nil in)
+          until (eq in line)
+          when (restart-case (parse-integer line)
+                 (use-value (value)
+                   :report &quot;Use a new value.&quot;
+                   :interactive (lambda ()
+                                  (list (ask &quot;Value: &quot;)))
+                   value)
+                 (skip-entry ()
+                   :report &quot;Skip the entry.&quot;
+                   nil))
+          collect it)))
+
+(defun read-files (files)
+  (loop for file in files
+        when (restart-case (read-file file)
+               (skip-file ()
+                 :report &quot;Skip the entire file.&quot;
+                 nil))
+        collect it))
+
+;;; The three functions below are predefined
+;;; handlers for the most common ways the user
+;;; will interact with the restarts.
+(defun skip-entry (c)
+  (declare (ignore c))
+  (invoke-restart 'skip-entry))
+
+(defun skip-file  (c)
+  (declare (ignore c))
+  (invoke-restart 'skip-file))
+
+(defun use-value-handler (value)
+  (lambda (c)
+    (declare (ignore c))
+    (invoke-restart 'use-value value)))
+</pre>
+<p>A restart is defined with the macro <strong>restart-case</strong>, and invoked by the function <strong>invoke-restart</strong>. This is a bit of a simplification, but invoking a restart is effectively equivalent to jumping to the body of the restart <em>from where the error was signaled</em>. This means that all of the state stored on the stack before the restart was established is still available when the restart is invoked. This gives the user of the library much finer grained control over what happens when an error is thrown.</p>
+<p>To specify what should happen, all the user needs to do is use the macro <strong>handler-bind</strong>. <strong>Handler-bind</strong> takes an error type and a handler (which should be a function) to call when an error of that type is thrown. The handler can then call <strong>invoke-restart</strong> in order to invoke one of the restarts provided by the library. As part of the library, there is one handler per restart provided, since those are the most common kinds of handlers. Here is what happens when each of the handlers are used when running the library on the two test files:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(handler-bind ((error #'skip-entry))
+  (read-files files*))
+
+=&gt; ((5 10 15 20 25) (5 10 15 20 30 40))
+
+(handler-bind ((error #'skip-file))
+  (read-files files*))
+
+=&gt; ((5 10 15 20 25))
+
+(handler-bind ((error (use-value-handler 0)))
+  (read-files files*))
+
+=&gt; ((5 10 15 20 25) (5 10 15 20 0 30 40))
+</pre>
+<p>The really cool thing about restarts is what happens when the user doesn&#8217;t handle the error. When this happens they will enter the Slime Debugger. From there they will be given a list of the restarts that are available to them and they will be able to invoke them as if the error had been handled in the first place! Here is what happens when a user doesn&#8217;t handle the error, and then invokes the skip-entry restart on the fly:</p>
+<p>&nbsp;</p>
+<p><a href="../../wp-content/uploads/2015/08/ezgif.com-optimize-3.gif"><img class="aligncenter wp-image-678" src="../../wp-content/uploads/2015/08/ezgif.com-optimize-3.gif" alt="ezgif.com-optimize (3)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>What&#8217;s really cool about this is that this &#8220;interactive restarting&#8221; can use it to implement breakpoints! As I said in Part 1, Common Lisp provides breakpoints as a function &#8220;<b>break</b>&#8221; instead of as a feature of the editor. Here is code that could be used to implement <strong>break</strong>:</p>
+<pre class="brush: plain; title: ; notranslate" title="">
+(defun break (&amp;optional (format-control &quot;Break&quot;)
+              &amp;rest format-arguments)
+   (with-simple-restart (continue &quot;Return from BREAK.&quot;)
+     (let ((*debugger-hook* nil))
+       (invoke-debugger
+         (make-condition 'simple-condition
+           :format-control   format-control
+           :format-arguments format-arguments))))
+   nil)
+</pre>
+<p>The code for <strong>break</strong> works by signalling an error while providing a &#8220;continue&#8221; restart. This means that as soon as the function <strong>break</strong> is called, you will enter the debugger with a restart available which will continue normal execution. Exactly what a breakpoint actually is.</p>
+<p>Restarts are another fantastic part of debugging Common Lisp. They give you better control over what happens when an error occurs. And, if your code doesn&#8217;t handle the error itself, you can still recover the process by using an interactive restart.</p>
+					</div><!-- .entry-content -->
+				<div class="entry-meta clear">
+			<span class="posted-on">Posted on <a href="05/debugging-lisp-part-4-restarts/index.html" rel="bookmark"><time class="entry-date published" datetime="2015-08-05T04:00:03+00:00">August 5, 2015</time><time class="updated" datetime="2016-01-04T12:25:34+00:00">January 4, 2016</time></a></span><span class="byline"> by <span class="author vcard"><a class="url fn n" href="../../author/malisper/index.html">malisper</a></span></span>			<span class="secondary-entry-meta">
+																	<span class="comments-link"><a href="05/debugging-lisp-part-4-restarts/index.html#comments">5</a></span>							</span>
+		</div><!-- .entry-meta -->
+	</article><!-- #post-## -->
+
+				
+			
+		
+		</main><!-- #main -->
+	</section><!-- #primary -->
+
+
+	</div><!-- #content -->
+
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="site-info">
+			<a href="http://wordpress.org/">Proudly powered by WordPress</a>
+			<span class="sep"> ~ </span>
+			Theme: Scrawl by <a href="https://wordpress.com/themes/" rel="designer">WordPress.com</a>.		</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+
+<script type='text/javascript' src='../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shCore09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript' src='../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/scripts/shBrushPlain09b1.js?ver=3.0.9b'></script>
+<script type='text/javascript'>
+	(function(){
+		var corecss = document.createElement('link');
+		var themecss = document.createElement('link');
+		var corecssurl = "../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shCore09b1.css?ver=3.0.9b";
+		if ( corecss.setAttribute ) {
+				corecss.setAttribute( "rel", "stylesheet" );
+				corecss.setAttribute( "type", "text/css" );
+				corecss.setAttribute( "href", corecssurl );
+		} else {
+				corecss.rel = "stylesheet";
+				corecss.href = corecssurl;
+		}
+		document.getElementsByTagName("head")[0].insertBefore( corecss, document.getElementById("syntaxhighlighteranchor") );
+		var themecssurl = "../../wp-content/plugins/syntaxhighlighter/syntaxhighlighter3/styles/shThemeEclipse09b1.css?ver=3.0.9b";
+		if ( themecss.setAttribute ) {
+				themecss.setAttribute( "rel", "stylesheet" );
+				themecss.setAttribute( "type", "text/css" );
+				themecss.setAttribute( "href", themecssurl );
+		} else {
+				themecss.rel = "stylesheet";
+				themecss.href = themecssurl;
+		}
+		//document.getElementById("syntaxhighlighteranchor").appendChild(themecss);
+		document.getElementsByTagName("head")[0].insertBefore( themecss, document.getElementById("syntaxhighlighteranchor") );
+	})();
+	SyntaxHighlighter.config.strings.expandSource = '+ expand source';
+	SyntaxHighlighter.config.strings.help = '?';
+	SyntaxHighlighter.config.strings.alert = 'SyntaxHighlighter\n\n';
+	SyntaxHighlighter.config.strings.noBrush = 'Can\'t find brush for: ';
+	SyntaxHighlighter.config.strings.brushNotHtmlScript = 'Brush wasn\'t configured for html-script option: ';
+	SyntaxHighlighter.defaults['pad-line-numbers'] = false;
+	SyntaxHighlighter.defaults['toolbar'] = false;
+	SyntaxHighlighter.all();
+</script>
+<link rel='stylesheet' id='qtipstyles-css'  href='../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='easyfootnotescss-css'  href='../../wp-content/plugins/easy-footnotes/assets/easy-footnotes167b.css?ver=4.6' type='text/css' media='' />
+<link rel='stylesheet' id='dashicons-css'  href='../../wp-includes/css/dashicons.min167b.css?ver=4.6' type='text/css' media='all' />
+<script type='text/javascript' src='../../wp-content/themes/scrawl-wpcom/js/scrawld56c.js?ver=20150309'></script>
+<script type='text/javascript' src='../../wp-content/themes/scrawl-wpcom/js/skip-link-focus-fix08e0.js?ver=20130115'></script>
+<script type='text/javascript' src='../../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../wp-includes/js/imagesloaded.min55a0.js?ver=3.2.0'></script>
+<script type='text/javascript' src='../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtip.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../../wp-content/plugins/easy-footnotes/assets/qtip/jquery.qtipcall167b.js?ver=4.6'></script>
+
+</body>
+
+<!-- Mirrored from malisper.me/2015/08/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:46:28 GMT -->
+</html>
+<!-- Dynamic page generated in 0.090 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:22:16 -->
+
+<!-- super cache -->

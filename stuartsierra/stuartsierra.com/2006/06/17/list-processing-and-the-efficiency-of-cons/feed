@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: List Processing and the Efficiency of CONS</title>
+	<atom:link href="https://stuartsierra.com/2006/06/17/list-processing-and-the-efficiency-of-cons/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2006/06/17/list-processing-and-the-efficiency-of-cons</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Ruslan Abdulkhalikov</title>
+		<link>https://stuartsierra.com/2006/06/17/list-processing-and-the-efficiency-of-cons/comment-page-1#comment-52</link>
+		<dc:creator><![CDATA[Ruslan Abdulkhalikov]]></dc:creator>
+		<pubDate>Thu, 22 Jun 2006 13:43:49 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=30#comment-52</guid>
+		<description><![CDATA[Recursion in Lisp should be used with caution. Most of the Lisp implementation do not support tail recursion by default so you more likely end up with stack overflow on long lists. loop macro and other iteration macros should be used in Lisp.]]></description>
+		<content:encoded><![CDATA[<p>Recursion in Lisp should be used with caution. Most of the Lisp implementation do not support tail recursion by default so you more likely end up with stack overflow on long lists. loop macro and other iteration macros should be used in Lisp.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Ben</title>
+		<link>https://stuartsierra.com/2006/06/17/list-processing-and-the-efficiency-of-cons/comment-page-1#comment-46</link>
+		<dc:creator><![CDATA[Ben]]></dc:creator>
+		<pubDate>Thu, 22 Jun 2006 00:53:41 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=30#comment-46</guid>
+		<description><![CDATA[As in any programming language, you should &quot;just write&quot; the code first, then profile. Often (not always, but often) you&#039;ll find some function that&#039;s consing (not necessarily literally `cons&#039;) some huge amount, possibly non-obviously, and you can get a dramatic speedup just by changing that one spot.
+
+The advice isn&#039;t unique to Lisp. The difference is that in Lisp this particular issue happens to be one of the easier ways to find and get improvements.
+And there&#039;s more awareness (with a catchy name) for this issue in Lisp.]]></description>
+		<content:encoded><![CDATA[<p>As in any programming language, you should &#8220;just write&#8221; the code first, then profile. Often (not always, but often) you&#8217;ll find some function that&#8217;s consing (not necessarily literally `cons&#8217;) some huge amount, possibly non-obviously, and you can get a dramatic speedup just by changing that one spot.</p>
+<p>The advice isn&#8217;t unique to Lisp. The difference is that in Lisp this particular issue happens to be one of the easier ways to find and get improvements.<br />
+And there&#8217;s more awareness (with a catchy name) for this issue in Lisp.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: guy</title>
+		<link>https://stuartsierra.com/2006/06/17/list-processing-and-the-efficiency-of-cons/comment-page-1#comment-45</link>
+		<dc:creator><![CDATA[guy]]></dc:creator>
+		<pubDate>Tue, 20 Jun 2006 22:10:48 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=30#comment-45</guid>
+		<description><![CDATA[Right - &quot;shalt not cons &lt;i&gt;in vain&lt;/i&gt;.&quot;  That&#039;s hardly a condemnation of CONS (is it ever, in fact, good to do something in vain?).
+
+CONS is not &quot;computationally inefficient.&quot;  At least, I don&#039;t think it is, since it&#039;s not clear what that phrase is supposed to mean.  CONS is a totally efficient function, but calling it &lt;b&gt;unnecessarily&lt;/b&gt; will lead to a more painful GC.  But this is only a problem when it&#039;s a problem.  Avoiding CONS &quot;just because&quot; is silly.
+
+I find simple recursive patterns like PROCESS repulsive.  Every time I look at a function like PROCESS, I have to walk through it in my head and then realize that, &quot;Oh, it&#039;s just an instance of Pattern X.  I&#039;ve seen this a million times.&quot;  I would try to use LOOP here, so that it&#039;s immediately apparent what you&#039;re doing.]]></description>
+		<content:encoded><![CDATA[<p>Right &#8211; &#8220;shalt not cons <i>in vain</i>.&#8221;  That&#8217;s hardly a condemnation of CONS (is it ever, in fact, good to do something in vain?).</p>
+<p>CONS is not &#8220;computationally inefficient.&#8221;  At least, I don&#8217;t think it is, since it&#8217;s not clear what that phrase is supposed to mean.  CONS is a totally efficient function, but calling it <b>unnecessarily</b> will lead to a more painful GC.  But this is only a problem when it&#8217;s a problem.  Avoiding CONS &#8220;just because&#8221; is silly.</p>
+<p>I find simple recursive patterns like PROCESS repulsive.  Every time I look at a function like PROCESS, I have to walk through it in my head and then realize that, &#8220;Oh, it&#8217;s just an instance of Pattern X.  I&#8217;ve seen this a million times.&#8221;  I would try to use LOOP here, so that it&#8217;s immediately apparent what you&#8217;re doing.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Jon Philpott</title>
+		<link>https://stuartsierra.com/2006/06/17/list-processing-and-the-efficiency-of-cons/comment-page-1#comment-38</link>
+		<dc:creator><![CDATA[Jon Philpott]]></dc:creator>
+		<pubDate>Mon, 19 Jun 2006 21:24:12 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=30#comment-38</guid>
+		<description><![CDATA[I agree, sometimes it is better to write a recursive procedure instead of mapcar&#039;ing if you need to do something a little more funky.]]></description>
+		<content:encoded><![CDATA[<p>I agree, sometimes it is better to write a recursive procedure instead of mapcar&#8217;ing if you need to do something a little more funky.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Joe Marshall</title>
+		<link>https://stuartsierra.com/2006/06/17/list-processing-and-the-efficiency-of-cons/comment-page-1#comment-37</link>
+		<dc:creator><![CDATA[Joe Marshall]]></dc:creator>
+		<pubDate>Mon, 19 Jun 2006 16:17:29 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=30#comment-37</guid>
+		<description><![CDATA[These days, with modern generational garbage collectors, you shouldn&#039;t have to worry about consing.  I rarely give it a second thought.]]></description>
+		<content:encoded><![CDATA[<p>These days, with modern generational garbage collectors, you shouldn&#8217;t have to worry about consing.  I rarely give it a second thought.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: stuart</title>
+		<link>https://stuartsierra.com/2006/06/17/list-processing-and-the-efficiency-of-cons/comment-page-1#comment-36</link>
+		<dc:creator><![CDATA[stuart]]></dc:creator>
+		<pubDate>Mon, 19 Jun 2006 14:53:59 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=30#comment-36</guid>
+		<description><![CDATA[Christophe Rhodes Says: &lt;em&gt;Do articles and books really say “CONS is expensive”, let alone “avoid [CONS] where possible”?&lt;/em&gt;
+
+I can only find one specific &lt;a href=&quot;http://www.cs.utexas.edu/~novak/lispeff.html&quot; rel=&quot;nofollow&quot;&gt;example&lt;/a&gt; right now, which gives the &quot;eleventh commandment&quot; for Lisp programmers as &quot;Thou shalt not cons in vain.&quot;  I think it&#039;s an impression I got from newsgroup and mailing list discussions.  One frequently hears &quot;consing is expensive,&quot; which can lead the less-experienced Lisp programmer (e.g. me) to believe &quot;consing is bad.&quot;]]></description>
+		<content:encoded><![CDATA[<p>Christophe Rhodes Says: <em>Do articles and books really say “CONS is expensive”, let alone “avoid [CONS] where possible”?</em></p>
+<p>I can only find one specific <a href="http://www.cs.utexas.edu/~novak/lispeff.html" rel="nofollow">example</a> right now, which gives the &#8220;eleventh commandment&#8221; for Lisp programmers as &#8220;Thou shalt not cons in vain.&#8221;  I think it&#8217;s an impression I got from newsgroup and mailing list discussions.  One frequently hears &#8220;consing is expensive,&#8221; which can lead the less-experienced Lisp programmer (e.g. me) to believe &#8220;consing is bad.&#8221;</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Janis Dzerins</title>
+		<link>https://stuartsierra.com/2006/06/17/list-processing-and-the-efficiency-of-cons/comment-page-1#comment-35</link>
+		<dc:creator><![CDATA[Janis Dzerins]]></dc:creator>
+		<pubDate>Mon, 19 Jun 2006 14:37:41 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=30#comment-35</guid>
+		<description><![CDATA[Another thing is that in Lisp, to &quot;cons&quot; means to allocate memory, not necessarily by means of calling the CONS function.  Actually, calling other functions, like MAKE-ARRAY will usually &quot;cons&quot; a lot more.
+
+And my advice: do things the functional way and create new lists -- it will save you a lot of debugging time.]]></description>
+		<content:encoded><![CDATA[<p>Another thing is that in Lisp, to &#8220;cons&#8221; means to allocate memory, not necessarily by means of calling the CONS function.  Actually, calling other functions, like MAKE-ARRAY will usually &#8220;cons&#8221; a lot more.</p>
+<p>And my advice: do things the functional way and create new lists &#8212; it will save you a lot of debugging time.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Christophe Rhodes</title>
+		<link>https://stuartsierra.com/2006/06/17/list-processing-and-the-efficiency-of-cons/comment-page-1#comment-34</link>
+		<dc:creator><![CDATA[Christophe Rhodes]]></dc:creator>
+		<pubDate>Mon, 19 Jun 2006 14:36:17 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=30#comment-34</guid>
+		<description><![CDATA[Do articles and books really say &quot;CONS is expensive&quot;, let alone &quot;avoid [CONS] where possible&quot;?  I can believe that they say that &quot;consing&quot; is potentially undesireable; the Lisp community uses the verb &quot;cons&quot; to mean heap-allocation, and typical lisp implementations with their garbage collectors will suffer latency at some later point when enough heap allocation has been done to trigger a collection; for time-critical or low-latency code, these collections can cause trouble.
+
+As you note, there&#039;s no need to optimize code beyond its speed requirements, and certainly no need to do so at the expense of clarity or correctness.  But I don&#039;t think that anyone is actually advocating that, and it&#039;s a little disingenuous to suggest that they are.]]></description>
+		<content:encoded><![CDATA[<p>Do articles and books really say &#8220;CONS is expensive&#8221;, let alone &#8220;avoid [CONS] where possible&#8221;?  I can believe that they say that &#8220;consing&#8221; is potentially undesireable; the Lisp community uses the verb &#8220;cons&#8221; to mean heap-allocation, and typical lisp implementations with their garbage collectors will suffer latency at some later point when enough heap allocation has been done to trigger a collection; for time-critical or low-latency code, these collections can cause trouble.</p>
+<p>As you note, there&#8217;s no need to optimize code beyond its speed requirements, and certainly no need to do so at the expense of clarity or correctness.  But I don&#8217;t think that anyone is actually advocating that, and it&#8217;s a little disingenuous to suggest that they are.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Faré</title>
+		<link>https://stuartsierra.com/2006/06/17/list-processing-and-the-efficiency-of-cons/comment-page-1#comment-33</link>
+		<dc:creator><![CDATA[Faré]]></dc:creator>
+		<pubDate>Mon, 19 Jun 2006 14:32:33 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=30#comment-33</guid>
+		<description><![CDATA[In Exscribe, I have a macro to recurse through the user-constructed tree of text and tags, side-effecting the structure as I go. It&#039;s very effective to rewrite the Scribe-like tree into HTML.]]></description>
+		<content:encoded><![CDATA[<p>In Exscribe, I have a macro to recurse through the user-constructed tree of text and tags, side-effecting the structure as I go. It&#8217;s very effective to rewrite the Scribe-like tree into HTML.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Zach Beane</title>
+		<link>https://stuartsierra.com/2006/06/17/list-processing-and-the-efficiency-of-cons/comment-page-1#comment-32</link>
+		<dc:creator><![CDATA[Zach Beane]]></dc:creator>
+		<pubDate>Mon, 19 Jun 2006 14:05:05 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=30#comment-32</guid>
+		<description><![CDATA[Lisp doesn&#039;t use recursion, people do. Part of the trick of programming in any language is learning what is available and when it&#039;s appropriate to employ it. Fortunately, CL gives you a lot of options.]]></description>
+		<content:encoded><![CDATA[<p>Lisp doesn&#8217;t use recursion, people do. Part of the trick of programming in any language is learning what is available and when it&#8217;s appropriate to employ it. Fortunately, CL gives you a lot of options.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.307 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:03:01 -->
+
+<!-- Compression = gzip -->

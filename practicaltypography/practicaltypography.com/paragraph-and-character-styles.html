@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from practicaltypography.com/paragraph-and-character-styles.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 17:01:27 GMT -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript">
+if (navigator.appVersion.indexOf("Win")!=-1) {
+    document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-a.css" />');
+} else if (navigator.appVersion.indexOf("Mac")!=-1) {
+    if (navigator.userAgent.match(/iPad/i) != null) {
+        document.write('<link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="fonts/equity-b.css" type="text/css" />');
+        document.write('<link rel="stylesheet" media="only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2)" type="text/css" href="fonts/equity-a.css" />');
+    } else {
+        document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-b.css" />');
+    }
+} else {
+    document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-a.css" />');
+}
+
+</script>
+
+<title>Paragraph & character styles | Butterick’s Practical Typography</title>
+<link rel="stylesheet" type="text/css" media="all" href="styles.css" />
+<link rel="stylesheet" type="text/css" media="all" href="fonts/1406-fonts.css" />
+<meta name="format-detection" content="telephone=no">
+
+
+
+
+
+<script type="text/javascript">
+var isFirefox = typeof InstallTrigger !== 'undefined';
+if (isFirefox) {
+document.write('<link rel="stylesheet" type="text/css" media="all" href="firefox.css" />');
+}
+var isChromium = window.chrome,
+    winNav = window.navigator,
+    vendorName = winNav.vendor,
+    isOpera = winNav.userAgent.indexOf("OPR") > -1,
+    isIEedge = winNav.userAgent.indexOf("Edge") > -1,
+    isIOSChrome = winNav.userAgent.match("CriOS");
+if(isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isIEedge == false) {
+   // is Google Chrome or Opera
+   document.write('<link rel="stylesheet" type="text/css" media="all" href="chrome.css" />');
+}
+</script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-19281911-7']);
+  _gaq.push(['_setDomainName', 'practicaltypography.com']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+
+<body>
+<div class="content"><div id="doc"><title-block><topic>paragraph &amp; character styles</topic><short-rule>The secret to typographic success</short-rule></title-block><p>Im­ple­ment­ing good ty­pog­ra­phy is of­ten a chore and a bore. But <first-use>para­graph and char­ac­ter styles</first-use> elim­i­nate most of the <span class="no-hyphens">drudgery.</span></p><p>A full tu­to­r­ial on im­ple­ment­ing styles, ei­ther in your word proces­sor or in CSS, is be­yond the scope of this book, be­cause so many de­tails are <span class="no-hyphens">software-specific.</span></p><p>But I can tell you the ad­van­tages of us­ing styles, which are the same <span class="no-hyphens">everywhere.</span></p><p>Styles are the DNA of doc­u­ment lay­out. Styles make it easy to con­trol ty­pog­ra­phy across a doc­u­ment or web­site. They can also be reused across mul­ti­ple doc­u­ments or web­sites. The re­sult is bet­ter, more con­sis­tent ty­pog­ra­phy with less work each <span class="no-hyphens">time.</span></p><p>Thus, it’s al­ways cu­ri­ous to me that so many writ­ers don’t know how to use styles. They for­mat their doc­u­ments the old-fash­ioned way: word by word and para­graph by <span class="no-hyphens">paragraph.</span></p><p>Do you check your spelling by hav­ing a hu­man be­ing read your draft? No, you use an au­to­mated spelling checker. Do you copy a doc­u­ment by putting each page on the pho­to­copier glass? No, you put the whole thing in the sheet <span class="no-hyphens">feeder.</span></p><p>If you plan to have a long-term re­la­tion­ship with good ty­pog­ra­phy, I rec­om­mend you learn how to use styles <span class="no-hyphens">too.</span></p><div class="subhead" id="why-you-should-care-about-styles"><a href="#why-you-should-care-about-styles">Why you should care about styles</a></div><ol><li><p>Styles let you <em>de­fine sets of for­mat­ting at­trib­utes</em> that get ap­plied to­gether. So in­stead of se­lect­ing a head­ing, chang­ing it to 13 point, bold, and all caps, you can de­fine a style that in­cludes these three at­trib­utes, and ap­ply the style to the <span class="no-hyphens">heading.</span></p><p>What’s the ben­e­fit? When you come across the next head­ing, you don’t need to in­di­vid­u­ally ap­ply those three at­trib­utes. You ap­ply the style you de­fined be­fore. The head­ings will then <span class="no-hyphens">match.</span></p></li><li><p>Styles let you <em>change for­mat­ting</em> across a class of re­lated el­e­ments. Sup­pose you want to change your head­ings from 13 point to 13.5 point. In­stead of se­lect­ing each head­ing sep­a­rately and chang­ing the point size—a te­dious project—you can change the point size in the head­ing style de­f­i­n­i­tion from 13 point to 13.5 point. Head­ings us­ing that style will be au­to­mat­i­cally <span class="no-hyphens">updated.</span></p><p>What’s the ben­e­fit? Up­dat­ing the for­mat­ting is cen­tral­ized and au­to­matic. You can ex­per­i­ment with for­mat­ting and lay­out ideas with lit­tle man­ual <span class="no-hyphens">effort.</span></p></li><li><p>Styles can <em>in­herit for­mat­ting</em> from other styles. A change to the par­ent style will prop­a­gate to all the sub­styles. But a change to the sub­style will only af­fect that one <span class="no-hyphens">style.</span></p><p>What’s the ben­e­fit? In­her­i­tance adds an­other layer of cen­tral­ized au­toma­tion—it’s like hav­ing styles of styles. You can de­fine a set of foun­da­tion styles and use them as the ba­sis for more elab­o­rate <span class="no-hyphens">styles.</span></p></li></ol><div class="subhead" id="how-to-use-styles-effectively"><a href="#how-to-use-styles-effectively">How to use styles effectively</a></div><p>As a rule of thumb, any time you have two doc­u­ment el­e­ments that should be for­mat­ted iden­ti­cally, you’ll want to use a <span class="no-hyphens">style.</span></p><p>In word proces­sors, <em>char­ac­ter styles</em> can in­cor­po­rate at­trib­utes of words and sen­tences, like font, <a href="point-size.html" class="xref">point size</a>, <a href="letterspacing.html" class="xref">let­terspac­ing</a>, <a href="bold-or-italic.html" class="xref">bold or italic</a>, <a href="all-caps.html" class="xref">all caps</a>, and <a href="small-caps.html" class="xref">small caps</a>. <em>Para­graph styles</em> can in­cor­po­rate those at­trib­utes and also lay­out at­trib­utes like <a href="line-spacing.html" class="xref">line spac­ing</a>, <a href="first-line-indents.html" class="xref">first-line in­dents</a>, and <a href="rules-and-borders.html" class="xref">rules and bor­ders</a>. (CSS doesn’t make a dis­tinc­tion be­tween these two kinds of styles, but it’s anal­o­gous to styles ap­plied to in­line el­e­ments (like <code>&lt;em&gt;</code>) vs. block-level el­e­ments (like <code>&lt;div&gt;</code>).)</p><p><quo>Ini­tially, you may be in­clined to de­fine styles like<dquo-push></dquo-push><dquo-pull> “</dquo-pull>Caslon Bold 11.5 point.” That’s bet­ter than ap­ply­ing the same for­mat­ting man­u­ally. But it over­looks an­other ben­e­fit of styles, which is to de­fine for­mat­ting in terms of what each para­graph is used for, rather than how it looks. If you’re cre­at­ing a style for a block quo­ta­tion, the name<dquo-push></dquo-push><dquo-pull> “</dquo-pull>Caslon Bold 11.5 point” is not as good as<dquo-push></dquo-push><dquo-pull> “</dquo-pull>Block Quo­ta­tion.” And later, if you change the for­mat­ting, the name will still be <span class="no-hyphens">accurate.</span></quo></p><p>Word proces­sors come with a long list of built-in styles. Word, for in­stance, has <ui>Heading 1</ui> through <ui>Heading 9</ui>, <ui>Quote</ui>, <ui>Caption</ui>, <ui>Header</ui>, <ui>Footer</ui>, and so on. Many of these styles are wired into other func­tions. It’s good prac­tice to mod­ify the built-in styles when pos­si­ble rather than cre­ate new <span class="no-hyphens">ones.</span></p><p>When you do this, you’ll also no­tice that many built-in styles are hor­ri­bly ugly. For ex­am­ple, Word’s <ui>Header 1</ui> is 14-point blue Cam­bria, a style with no re­deem­ing qual­i­ties. I’m not wor­ried that you’d use it with­out fix­ing it first. At this point, you know <span class="no-hyphens">better.</span></p></div><a id="links"></a><div style="height:1em"></div><ul class="children"></ul></div>
+
+
+<!-- top nav -->
+<div class="nav-outer" id="top"><a href="index-2.html#toc"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="up"><a href="page-layout.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="prev"><a href="line-numbers.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="next"><a href="maxims-of-page-layout.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="bottom"><div class="nav-inner"><div id="navtable">
+
+<div id="left">
+
+<a class="xref box-link" href="line-numbers.html"><span class="arrow">←</span>&nbsp;line numbers</a></div>
+
+
+<div id="center-left"><a class="xref box-link" href="index-2.html#toc">top</a></div>
+
+<div id="center-right"><a class="xref box-link" href="page-layout.html#links">Chapter</a></div>
+
+<div id="right">
+<a class="xref box-link" href="maxims-of-page-layout.html">maxims of page layout&nbsp;<span class="arrow">→</span></a></div>
+
+
+
+</div></div></div> 
+
+</body>
+
+<!-- Mirrored from practicaltypography.com/paragraph-and-character-styles.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 17:01:27 GMT -->
+</html>
+
+<!-- © 2013–16 Matthew Butterick -->
+

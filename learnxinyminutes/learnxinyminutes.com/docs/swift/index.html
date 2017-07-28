@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/swift/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:59 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn swift in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../css/normalize.css">
+        <link rel="stylesheet" href="../../css/main.css">
+        <link href="../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fswift%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3Dswift">
+        Share this page
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../index.html">Learn X in Y minutes</a></h2>
+  <h2>Where X=swift</h2>
+  
+    <p class="filelink">
+    Get the code:
+    <a href="../files/learnswift.swift">learnswift.swift</a>
+    </p>
+  
+  <div id="doc">
+    <p>Swift is a programming language for iOS and OS X development created by Apple. Designed to coexist with Objective-C and to be more resilient against erroneous code, Swift was introduced in 2014 at Apple&rsquo;s developer conference WWDC. It is built with the LLVM compiler included in Xcode 6+.</p>
+
+<p>The official <a href="https://itunes.apple.com/us/book/swift-programming-language/id881256329">Swift Programming Language</a> book from Apple is now available via iBooks.</p>
+
+<p>See also Apple&rsquo;s <a href="https://developer.apple.com/library/prerelease/ios/referencelibrary/GettingStarted/DevelopiOSAppsSwift/">getting started guide</a>, which has a complete tutorial on Swift.</p>
+<pre class="highlight swift"><code><span class="c1">// import a module</span>
+<span class="kd">import</span> <span class="kt">UIKit</span>
+
+<span class="c1">//</span>
+<span class="c1">// MARK: Basics</span>
+<span class="c1">//</span>
+
+<span class="c1">// Xcode supports landmarks to annotate your code and lists them in the jump bar</span>
+<span class="c1">// MARK: Section mark</span>
+<span class="c1">// MARK: - Section mark with a separator line</span>
+<span class="c1">// TODO: Do something soon</span>
+<span class="c1">// FIXME: Fix this code</span>
+
+<span class="c1">// In Swift 2, println and print were combined into one print method. Print automatically appends a new line.</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Hello, world"</span><span class="p">)</span> <span class="c1">// println is now print</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Hello, world"</span><span class="p">,</span> <span class="nv">terminator</span><span class="p">:</span> <span class="s">""</span><span class="p">)</span> <span class="c1">// printing without appending a newline</span>
+
+<span class="c1">// variables (var) value can change after being set</span>
+<span class="c1">// constants (let) value can NOT be changed after being set</span>
+
+<span class="k">var</span> <span class="nv">myVariable</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="k">let</span> <span class="nv">øπΩ</span> <span class="o">=</span> <span class="s">"value"</span> <span class="c1">// unicode variable names</span>
+<span class="k">let</span> <span class="nv">π</span> <span class="o">=</span> <span class="mf">3.1415926</span>
+<span class="k">let</span> <span class="nv">convenience</span> <span class="o">=</span> <span class="s">"keyword"</span> <span class="c1">// contextual variable name</span>
+<span class="k">let</span> <span class="nv">weak</span> <span class="o">=</span> <span class="s">"keyword"</span><span class="p">;</span> <span class="k">let</span> <span class="nv">override</span> <span class="o">=</span> <span class="s">"another keyword"</span> <span class="c1">// statements can be separated by a semi-colon</span>
+<span class="kd">let</span> <span class="err">`</span><span class="kd">class</span><span class="err">`</span> <span class="o">=</span> <span class="s">"keyword"</span> <span class="c1">// backticks allow keywords to be used as variable names</span>
+<span class="k">let</span> <span class="nv">explicitDouble</span><span class="p">:</span> <span class="kt">Double</span> <span class="o">=</span> <span class="mi">70</span>
+<span class="k">let</span> <span class="nv">intValue</span> <span class="o">=</span> <span class="mo">0007</span> <span class="c1">// 7</span>
+<span class="k">let</span> <span class="nv">largeIntValue</span> <span class="o">=</span> <span class="mi">77_000</span> <span class="c1">// 77000</span>
+<span class="k">let</span> <span class="nv">label</span> <span class="o">=</span> <span class="s">"some text "</span> <span class="o">+</span> <span class="kt">String</span><span class="p">(</span><span class="n">myVariable</span><span class="p">)</span> <span class="c1">// String construction</span>
+<span class="k">let</span> <span class="nv">piText</span> <span class="o">=</span> <span class="s">"Pi = </span><span class="se">\(</span><span class="n">π</span><span class="se">)</span><span class="s">, Pi 2 = </span><span class="se">\(</span><span class="n">π</span> <span class="o">*</span> <span class="mi">2</span><span class="se">)</span><span class="s">"</span> <span class="c1">// String interpolation</span>
+
+<span class="c1">// Build Specific values</span>
+<span class="c1">// uses -D build configuration</span>
+<span class="cp">#if false</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Not printed"</span><span class="p">)</span>
+    <span class="k">let</span> <span class="nv">buildValue</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="cp">#else</span>
+    <span class="k">let</span> <span class="nv">buildValue</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="cp">#endif</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Build value: </span><span class="se">\(</span><span class="n">buildValue</span><span class="se">)</span><span class="s">"</span><span class="p">)</span> <span class="c1">// Build value: 7</span>
+
+<span class="cm">/*
+Optionals are a Swift language feature that either contains a value,
+or contains nil (no value) to indicate that a value is missing.
+A question mark (?) after the type marks the value as optional.
+
+Because Swift requires every property to have a value, even nil must be
+explicitly stored as an Optional value.
+
+Optional&lt;T&gt; is an enum.
+*/</span>
+<span class="k">var</span> <span class="nv">someOptionalString</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="s">"optional"</span> <span class="c1">// Can be nil</span>
+<span class="c1">// same as above, but ? is a postfix operator (syntax candy)</span>
+<span class="k">var</span> <span class="nv">someOptionalString2</span><span class="p">:</span> <span class="kt">Optional</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span> <span class="o">=</span> <span class="s">"optional"</span>
+
+<span class="k">if</span> <span class="n">someOptionalString</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+    <span class="c1">// I am not nil</span>
+    <span class="k">if</span> <span class="n">someOptionalString</span><span class="o">!.</span><span class="nf">hasPrefix</span><span class="p">(</span><span class="s">"opt"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"has the prefix"</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">let</span> <span class="nv">empty</span> <span class="o">=</span> <span class="n">someOptionalString</span><span class="p">?</span><span class="o">.</span><span class="n">isEmpty</span>
+<span class="p">}</span>
+<span class="n">someOptionalString</span> <span class="o">=</span> <span class="kc">nil</span>
+
+<span class="cm">/*
+Trying to use ! to access a non-existent optional value triggers a runtime
+error. Always make sure that an optional contains a non-nil value before
+using ! to force-unwrap its value.
+*/</span>
+
+<span class="c1">// implicitly unwrapped optional</span>
+<span class="k">var</span> <span class="nv">unwrappedString</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span> <span class="o">=</span> <span class="s">"Value is expected."</span>
+<span class="c1">// same as above, but ! is a postfix operator (more syntax candy)</span>
+<span class="k">var</span> <span class="nv">unwrappedString2</span><span class="p">:</span> <span class="kt">ImplicitlyUnwrappedOptional</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span> <span class="o">=</span> <span class="s">"Value is expected."</span>
+
+<span class="c1">// If let structure - </span>
+<span class="c1">// If let is a special structure in Swift that allows you to check if an Optional rhs holds a value, and in case it does - unwraps and assigns it to the lhs.</span>
+<span class="k">if</span> <span class="k">let</span> <span class="nv">someOptionalStringConstant</span> <span class="o">=</span> <span class="n">someOptionalString</span> <span class="p">{</span>
+    <span class="c1">// has `Some` value, non-nil</span>
+    <span class="k">if</span> <span class="o">!</span><span class="n">someOptionalStringConstant</span><span class="o">.</span><span class="nf">hasPrefix</span><span class="p">(</span><span class="s">"ok"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// does not have the prefix</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Swift has support for storing a value of any type.</span>
+<span class="c1">// AnyObject == id</span>
+<span class="c1">// Unlike Objective-C `id`, AnyObject works with any value (Class, Int, struct, etc.)</span>
+<span class="k">var</span> <span class="nv">anyObjectVar</span><span class="p">:</span> <span class="kt">AnyObject</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="n">anyObjectVar</span> <span class="o">=</span> <span class="s">"Changed value to a string, not good practice, but possible."</span>
+
+<span class="cm">/*
+    Comment here
+
+    /*
+        Nested comments are also supported
+    */
+*/</span>
+
+<span class="c1">//</span>
+<span class="c1">// MARK: Collections</span>
+<span class="c1">//</span>
+
+<span class="cm">/*
+Array and Dictionary types are structs. So `let` and `var` also indicate
+that they are mutable (var) or immutable (let) when declaring these types.
+*/</span>
+
+<span class="c1">// Array</span>
+<span class="k">var</span> <span class="nv">shoppingList</span> <span class="o">=</span> <span class="p">[</span><span class="s">"catfish"</span><span class="p">,</span> <span class="s">"water"</span><span class="p">,</span> <span class="s">"lemons"</span><span class="p">]</span>
+<span class="n">shoppingList</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s">"bottle of water"</span>
+<span class="k">let</span> <span class="nv">emptyArray</span> <span class="o">=</span> <span class="p">[</span><span class="kt">String</span><span class="p">]()</span> <span class="c1">// let == immutable</span>
+<span class="k">let</span> <span class="nv">emptyArray2</span> <span class="o">=</span> <span class="kt">Array</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">()</span> <span class="c1">// same as above</span>
+<span class="k">var</span> <span class="nv">emptyMutableArray</span> <span class="o">=</span> <span class="p">[</span><span class="kt">String</span><span class="p">]()</span> <span class="c1">// var == mutable</span>
+<span class="k">var</span> <span class="nv">explicitEmptyMutableStringArray</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1">// same as above</span>
+
+
+<span class="c1">// Dictionary</span>
+<span class="k">var</span> <span class="nv">occupations</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">"Malcolm"</span><span class="p">:</span> <span class="s">"Captain"</span><span class="p">,</span>
+    <span class="s">"kaylee"</span><span class="p">:</span> <span class="s">"Mechanic"</span>
+<span class="p">]</span>
+<span class="n">occupations</span><span class="p">[</span><span class="s">"Jayne"</span><span class="p">]</span> <span class="o">=</span> <span class="s">"Public Relations"</span>
+<span class="k">let</span> <span class="nv">emptyDictionary</span> <span class="o">=</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Float</span><span class="p">]()</span> <span class="c1">// let == immutable</span>
+<span class="k">let</span> <span class="nv">emptyDictionary2</span> <span class="o">=</span> <span class="kt">Dictionary</span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span> <span class="kt">Float</span><span class="o">&gt;</span><span class="p">()</span> <span class="c1">// same as above</span>
+<span class="k">var</span> <span class="nv">emptyMutableDictionary</span> <span class="o">=</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Float</span><span class="p">]()</span> <span class="c1">// var == mutable</span>
+<span class="k">var</span> <span class="nv">explicitEmptyMutableDictionary</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Float</span><span class="p">]</span> <span class="o">=</span> <span class="p">[:]</span> <span class="c1">// same as above</span>
+
+
+<span class="c1">//</span>
+<span class="c1">// MARK: Control Flow</span>
+<span class="c1">//</span>
+
+<span class="c1">// Condition statements support "where" clauses, which can be used</span>
+<span class="c1">// to help provide conditions on optional values.</span>
+<span class="c1">// Both the assignment and the "where" clause must pass.</span>
+<span class="k">let</span> <span class="nv">someNumber</span> <span class="o">=</span> <span class="kt">Optional</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+<span class="k">if</span> <span class="k">let</span> <span class="nv">num</span> <span class="o">=</span> <span class="n">someNumber</span> <span class="k">where</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"num is greater than 3"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// for loop (array)</span>
+<span class="k">let</span> <span class="nv">myArray</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">value</span> <span class="k">in</span> <span class="n">myArray</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">{</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"One!"</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Not one!"</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// for loop (dictionary)</span>
+<span class="k">var</span> <span class="nv">dict</span> <span class="o">=</span> <span class="p">[</span><span class="s">"one"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">"two"</span><span class="p">:</span> <span class="mi">2</span><span class="p">]</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">in</span> <span class="n">dict</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"</span><span class="se">\(</span><span class="n">key</span><span class="se">)</span><span class="s">: </span><span class="se">\(</span><span class="n">value</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// for loop (range)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">-</span><span class="mi">1</span><span class="o">...</span><span class="n">shoppingList</span><span class="o">.</span><span class="n">count</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="n">shoppingList</span><span class="p">[</span><span class="mi">1</span><span class="o">...</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">"steak"</span><span class="p">,</span> <span class="s">"peacons"</span><span class="p">]</span>
+<span class="c1">// use ..&lt; to exclude the last number</span>
+
+<span class="c1">// while loop</span>
+<span class="k">var</span> <span class="nv">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1000</span> <span class="p">{</span>
+    <span class="n">i</span> <span class="o">*=</span> <span class="mi">2</span>
+<span class="p">}</span>
+
+<span class="c1">// repeat-while loop</span>
+<span class="k">repeat</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"hello"</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">while</span> <span class="mi">1</span> <span class="o">==</span> <span class="mi">2</span>
+
+<span class="c1">// Switch</span>
+<span class="c1">// Very powerful, think `if` statements with syntax candy</span>
+<span class="c1">// They support String, object instances, and primitives (Int, Double, etc)</span>
+<span class="k">let</span> <span class="nv">vegetable</span> <span class="o">=</span> <span class="s">"red pepper"</span>
+<span class="k">switch</span> <span class="n">vegetable</span> <span class="p">{</span>
+<span class="k">case</span> <span class="s">"celery"</span><span class="p">:</span>
+    <span class="k">let</span> <span class="nv">vegetableComment</span> <span class="o">=</span> <span class="s">"Add some raisins and make ants on a log."</span>
+<span class="k">case</span> <span class="s">"cucumber"</span><span class="p">,</span> <span class="s">"watercress"</span><span class="p">:</span>
+    <span class="k">let</span> <span class="nv">vegetableComment</span> <span class="o">=</span> <span class="s">"That would make a good tea sandwich."</span>
+<span class="k">case</span> <span class="k">let</span> <span class="nv">localScopeValue</span> <span class="k">where</span> <span class="n">localScopeValue</span><span class="o">.</span><span class="nf">hasSuffix</span><span class="p">(</span><span class="s">"pepper"</span><span class="p">):</span>
+    <span class="k">let</span> <span class="nv">vegetableComment</span> <span class="o">=</span> <span class="s">"Is it a spicy </span><span class="se">\(</span><span class="n">localScopeValue</span><span class="se">)</span><span class="s">?"</span>
+<span class="k">default</span><span class="p">:</span> <span class="c1">// required (in order to cover all possible input)</span>
+    <span class="k">let</span> <span class="nv">vegetableComment</span> <span class="o">=</span> <span class="s">"Everything tastes good in soup."</span>
+<span class="p">}</span>
+
+<span class="c1">//</span>
+<span class="c1">// MARK: Functions</span>
+<span class="c1">//</span>
+
+<span class="c1">// Functions are a first-class type, meaning they can be nested</span>
+<span class="c1">// in functions and can be passed around</span>
+
+<span class="c1">// Function with Swift header docs (format as Swift-modified Markdown syntax)</span>
+
+<span class="o">/**</span>
+<span class="kt">A</span> <span class="n">greet</span> <span class="n">operation</span>
+
+<span class="o">-</span> <span class="kt">A</span> <span class="n">bullet</span> <span class="k">in</span> <span class="n">docs</span>
+<span class="o">-</span> <span class="kt">Another</span> <span class="n">bullet</span> <span class="k">in</span> <span class="n">the</span> <span class="n">docs</span>
+
+<span class="o">-</span> <span class="kt">Parameter</span> <span class="nv">name</span>    <span class="p">:</span> <span class="kt">A</span> <span class="n">name</span>
+<span class="o">-</span> <span class="kt">Parameter</span> <span class="nv">day</span> <span class="p">:</span> <span class="kt">A</span> <span class="n">day</span>
+<span class="o">-</span> <span class="kt">Returns</span> <span class="p">:</span> <span class="kt">A</span> <span class="n">string</span> <span class="n">containing</span> <span class="n">the</span> <span class="n">name</span> <span class="n">and</span> <span class="n">day</span> <span class="n">value</span><span class="o">.</span>
+<span class="o">*/</span>
+<span class="kd">func</span> <span class="nf">greet</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">day</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s">"Hello </span><span class="se">\(</span><span class="n">name</span><span class="se">)</span><span class="s">, today is </span><span class="se">\(</span><span class="n">day</span><span class="se">)</span><span class="s">."</span>
+<span class="p">}</span>
+<span class="nf">greet</span><span class="p">(</span><span class="s">"Bob"</span><span class="p">,</span> <span class="nv">day</span><span class="p">:</span> <span class="s">"Tuesday"</span><span class="p">)</span>
+
+<span class="c1">// similar to above except for the function parameter behaviors</span>
+<span class="kd">func</span> <span class="nf">greet2</span><span class="p">(</span><span class="n">requiredName</span> <span class="nv">requiredName</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="n">externalParamName</span> <span class="nv">localParamName</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s">"Hello </span><span class="se">\(</span><span class="n">requiredName</span><span class="se">)</span><span class="s">, the day is </span><span class="se">\(</span><span class="n">localParamName</span><span class="se">)</span><span class="s">"</span>
+<span class="p">}</span>
+<span class="nf">greet2</span><span class="p">(</span><span class="nv">requiredName</span><span class="p">:</span> <span class="s">"John"</span><span class="p">,</span> <span class="nv">externalParamName</span><span class="p">:</span> <span class="s">"Sunday"</span><span class="p">)</span>
+
+<span class="c1">// Function that returns multiple items in a tuple</span>
+<span class="kd">func</span> <span class="nf">getGasPrices</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="kt">Double</span><span class="p">,</span> <span class="kt">Double</span><span class="p">,</span> <span class="kt">Double</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">return</span> <span class="p">(</span><span class="mf">3.59</span><span class="p">,</span> <span class="mf">3.69</span><span class="p">,</span> <span class="mf">3.79</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="k">let</span> <span class="nv">pricesTuple</span> <span class="o">=</span> <span class="nf">getGasPrices</span><span class="p">()</span>
+<span class="k">let</span> <span class="nv">price</span> <span class="o">=</span> <span class="n">pricesTuple</span><span class="o">.</span><span class="mi">2</span> <span class="c1">// 3.79</span>
+<span class="c1">// Ignore Tuple (or other) values by using _ (underscore)</span>
+<span class="nf">let</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">price1</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">pricesTuple</span> <span class="c1">// price1 == 3.69</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">price1</span> <span class="o">==</span> <span class="n">pricesTuple</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span> <span class="c1">// true</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Gas price: </span><span class="se">\(</span><span class="n">price</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+
+<span class="c1">// Labeled/named tuple params</span>
+<span class="kd">func</span> <span class="nf">getGasPrices2</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nv">lowestPrice</span><span class="p">:</span> <span class="kt">Double</span><span class="p">,</span> <span class="nv">highestPrice</span><span class="p">:</span> <span class="kt">Double</span><span class="p">,</span> <span class="nv">midPrice</span><span class="p">:</span> <span class="kt">Double</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">return</span> <span class="p">(</span><span class="mf">1.77</span><span class="p">,</span> <span class="mf">37.70</span><span class="p">,</span> <span class="mf">7.37</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="k">let</span> <span class="nv">pricesTuple2</span> <span class="o">=</span> <span class="nf">getGasPrices2</span><span class="p">()</span>
+<span class="k">let</span> <span class="nv">price2</span> <span class="o">=</span> <span class="n">pricesTuple2</span><span class="o">.</span><span class="n">lowestPrice</span>
+<span class="nf">let</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">price3</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">pricesTuple2</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">pricesTuple2</span><span class="o">.</span><span class="n">highestPrice</span> <span class="o">==</span> <span class="n">pricesTuple2</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span> <span class="c1">// true</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Highest gas price: </span><span class="se">\(</span><span class="n">pricesTuple2</span><span class="o">.</span><span class="n">highestPrice</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+
+<span class="c1">// guard statements</span>
+<span class="kd">func</span> <span class="nf">testGuard</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// guards provide early exits or breaks, placing the error handler code near the conditions.</span>
+    <span class="c1">// it places variables it declares in the same scope as the guard statement.</span>
+    <span class="k">guard</span> <span class="k">let</span> <span class="nv">aNumber</span> <span class="o">=</span> <span class="kt">Optional</span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+
+    <span class="nf">print</span><span class="p">(</span><span class="s">"number is </span><span class="se">\(</span><span class="n">aNumber</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="nf">testGuard</span><span class="p">()</span>
+
+<span class="c1">// Variadic Args</span>
+<span class="kd">func</span> <span class="nf">setup</span><span class="p">(</span><span class="nv">numbers</span><span class="p">:</span> <span class="kt">Int</span><span class="o">...</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// its an array</span>
+    <span class="k">let</span> <span class="nv">_</span> <span class="o">=</span> <span class="n">numbers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">let</span> <span class="nv">_</span> <span class="o">=</span> <span class="n">numbers</span><span class="o">.</span><span class="n">count</span>
+<span class="p">}</span>
+
+<span class="c1">// Passing and returning functions</span>
+<span class="kd">func</span> <span class="nf">makeIncrementer</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="kt">Int</span> <span class="o">-&gt;</span> <span class="kt">Int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">addOne</span><span class="p">(</span><span class="nv">number</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">number</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">addOne</span>
+<span class="p">}</span>
+<span class="k">var</span> <span class="nv">increment</span> <span class="o">=</span> <span class="nf">makeIncrementer</span><span class="p">()</span>
+<span class="nf">increment</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="c1">// pass by ref</span>
+<span class="kd">func</span> <span class="nf">swapTwoInts</span><span class="p">(</span><span class="k">inout</span> <span class="nv">a</span><span class="p">:</span> <span class="kt">Int</span><span class="p">,</span> <span class="k">inout</span> <span class="nv">b</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">tempA</span> <span class="o">=</span> <span class="n">a</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">b</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">tempA</span>
+<span class="p">}</span>
+<span class="k">var</span> <span class="nv">someIntA</span> <span class="o">=</span> <span class="mi">7</span>
+<span class="k">var</span> <span class="nv">someIntB</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="nf">swapTwoInts</span><span class="p">(</span><span class="o">&amp;</span><span class="n">someIntA</span><span class="p">,</span> <span class="nv">b</span><span class="p">:</span> <span class="o">&amp;</span><span class="n">someIntB</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">someIntB</span><span class="p">)</span> <span class="c1">// 7</span>
+
+
+<span class="c1">//</span>
+<span class="c1">// MARK: Closures</span>
+<span class="c1">//</span>
+<span class="k">var</span> <span class="nv">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+
+<span class="c1">// Functions are special case closures ({})</span>
+
+<span class="c1">// Closure example.</span>
+<span class="c1">// `-&gt;` separates the arguments and return type</span>
+<span class="c1">// `in` separates the closure header from the closure body</span>
+<span class="n">numbers</span><span class="o">.</span><span class="nf">map</span><span class="p">({</span>
+    <span class="p">(</span><span class="nv">number</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="k">in</span>
+    <span class="k">let</span> <span class="nv">result</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">number</span>
+    <span class="k">return</span> <span class="n">result</span>
+<span class="p">})</span>
+
+<span class="c1">// When the type is known, like above, we can do this</span>
+<span class="n">numbers</span> <span class="o">=</span> <span class="n">numbers</span><span class="o">.</span><span class="nf">map</span><span class="p">({</span> <span class="n">number</span> <span class="k">in</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">number</span> <span class="p">})</span>
+<span class="c1">// Or even this</span>
+<span class="c1">//numbers = numbers.map({ $0 * 3 })</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span> <span class="c1">// [3, 6, 18]</span>
+
+<span class="c1">// Trailing closure</span>
+<span class="n">numbers</span> <span class="o">=</span> <span class="n">numbers</span><span class="o">.</span><span class="n">sort</span> <span class="p">{</span> <span class="nv">$0</span> <span class="o">&gt;</span> <span class="nv">$1</span> <span class="p">}</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="n">numbers</span><span class="p">)</span> <span class="c1">// [18, 6, 3]</span>
+
+<span class="c1">//</span>
+<span class="c1">// MARK: Structures</span>
+<span class="c1">//</span>
+
+<span class="c1">// Structures and classes have very similar capabilities</span>
+<span class="kd">struct</span> <span class="kt">NamesTable</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">names</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span>
+
+    <span class="c1">// Custom subscript</span>
+    <span class="nf">subscript</span><span class="p">(</span><span class="nv">index</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">names</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Structures have an auto-generated (implicit) designated initializer</span>
+<span class="k">let</span> <span class="nv">namesTable</span> <span class="o">=</span> <span class="kt">NamesTable</span><span class="p">(</span><span class="nv">names</span><span class="p">:</span> <span class="p">[</span><span class="s">"Me"</span><span class="p">,</span> <span class="s">"Them"</span><span class="p">])</span>
+<span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">namesTable</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Name is </span><span class="se">\(</span><span class="n">name</span><span class="se">)</span><span class="s">"</span><span class="p">)</span> <span class="c1">// Name is Them</span>
+
+<span class="c1">//</span>
+<span class="c1">// MARK: Error Handling</span>
+<span class="c1">//</span>
+
+<span class="c1">// The `ErrorType` protocol is used when throwing errors to catch</span>
+<span class="kd">enum</span> <span class="kt">MyError</span><span class="p">:</span> <span class="kt">ErrorType</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="kt">BadValue</span><span class="p">(</span><span class="nv">msg</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span>
+    <span class="k">case</span> <span class="kt">ReallyBadValue</span><span class="p">(</span><span class="nv">msg</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// functions marked with `throws` must be called using `try`</span>
+<span class="kd">func</span> <span class="nf">fakeFetch</span><span class="p">(</span><span class="nv">value</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">String</span> <span class="p">{</span>
+    <span class="k">guard</span> <span class="mi">7</span> <span class="o">==</span> <span class="n">value</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="kt">MyError</span><span class="o">.</span><span class="kt">ReallyBadValue</span><span class="p">(</span><span class="nv">msg</span><span class="p">:</span> <span class="s">"Some really bad value"</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="s">"test"</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">testTryStuff</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// assumes there will be no error thrown, otherwise a runtime exception is raised</span>
+    <span class="k">let</span> <span class="nv">_</span> <span class="o">=</span> <span class="k">try!</span> <span class="nf">fakeFetch</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+
+    <span class="c1">// if an error is thrown, then it proceeds, but if the value is nil</span>
+    <span class="c1">// it also wraps every return value in an optional, even if its already optional</span>
+    <span class="k">let</span> <span class="nv">_</span> <span class="o">=</span> <span class="k">try</span><span class="p">?</span> <span class="nf">fakeFetch</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="c1">// normal try operation that provides error handling via `catch` block</span>
+        <span class="k">try</span> <span class="nf">fakeFetch</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="kt">MyError</span><span class="o">.</span><span class="kt">BadValue</span><span class="p">(</span><span class="k">let</span> <span class="nv">msg</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"Error message: </span><span class="se">\(</span><span class="n">msg</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+        <span class="c1">// must be exhaustive</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nf">testTryStuff</span><span class="p">()</span>
+
+<span class="c1">//</span>
+<span class="c1">// MARK: Classes</span>
+<span class="c1">//</span>
+
+<span class="c1">// Classes, structures and its members have three levels of access control</span>
+<span class="c1">// They are: internal (default), public, private</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="kt">Shape</span> <span class="p">{</span>
+    <span class="kd">public</span> <span class="kd">func</span> <span class="nf">getArea</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// All methods and properties of a class are public.</span>
+<span class="c1">// If you just need to store data in a</span>
+<span class="c1">// structured object, you should use a `struct`</span>
+
+<span class="kd">internal</span> <span class="kd">class</span> <span class="kt">Rect</span><span class="p">:</span> <span class="kt">Shape</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">sideLength</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1">// Custom getter and setter property</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">perimeter</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">sideLength</span>
+        <span class="p">}</span>
+        <span class="k">set</span> <span class="p">{</span>
+            <span class="c1">// `newValue` is an implicit variable available to setters</span>
+            <span class="n">sideLength</span> <span class="o">=</span> <span class="n">newValue</span> <span class="o">/</span> <span class="mi">4</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Computed properties must be declared as `var`, you know, cause' they can change</span>
+    <span class="k">var</span> <span class="nv">smallestSideLength</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">self</span><span class="o">.</span><span class="n">sideLength</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Lazily load a property</span>
+    <span class="c1">// subShape remains nil (uninitialized) until getter called</span>
+    <span class="kd">lazy</span> <span class="k">var</span> <span class="nv">subShape</span> <span class="o">=</span> <span class="kt">Rect</span><span class="p">(</span><span class="nv">sideLength</span><span class="p">:</span> <span class="mi">4</span><span class="p">)</span>
+
+    <span class="c1">// If you don't need a custom getter and setter,</span>
+    <span class="c1">// but still want to run code before and after getting or setting</span>
+    <span class="c1">// a property, you can use `willSet` and `didSet`</span>
+    <span class="k">var</span> <span class="nv">identifier</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"defaultID"</span> <span class="p">{</span>
+        <span class="c1">// the `willSet` arg will be the variable name for the new value</span>
+        <span class="nf">willSet</span><span class="p">(</span><span class="n">someIdentifier</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">someIdentifier</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="nf">init</span><span class="p">(</span><span class="nv">sideLength</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">sideLength</span> <span class="o">=</span> <span class="n">sideLength</span>
+        <span class="c1">// always super.init last when init custom properties</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">init</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">shrink</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">sideLength</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
+            <span class="o">--</span><span class="n">sideLength</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">getArea</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">sideLength</span> <span class="o">*</span> <span class="n">sideLength</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// A simple class `Square` extends `Rect`</span>
+<span class="kd">class</span> <span class="kt">Square</span><span class="p">:</span> <span class="kt">Rect</span> <span class="p">{</span>
+    <span class="n">convenience</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="nf">init</span><span class="p">(</span><span class="nv">sideLength</span><span class="p">:</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">var</span> <span class="nv">mySquare</span> <span class="o">=</span> <span class="kt">Square</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">mySquare</span><span class="o">.</span><span class="nf">getArea</span><span class="p">())</span> <span class="c1">// 25</span>
+<span class="n">mySquare</span><span class="o">.</span><span class="nf">shrink</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">mySquare</span><span class="o">.</span><span class="n">sideLength</span><span class="p">)</span> <span class="c1">// 4</span>
+
+<span class="c1">// cast instance</span>
+<span class="k">let</span> <span class="nv">aShape</span> <span class="o">=</span> <span class="n">mySquare</span> <span class="k">as</span> <span class="kt">Shape</span>
+
+<span class="c1">// compare instances, not the same as == which compares objects (equal to)</span>
+<span class="k">if</span> <span class="n">mySquare</span> <span class="o">===</span> <span class="n">mySquare</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Yep, it's mySquare"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1">// Optional init</span>
+<span class="kd">class</span> <span class="kt">Circle</span><span class="p">:</span> <span class="kt">Shape</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">radius</span><span class="p">:</span> <span class="kt">Int</span>
+    <span class="k">override</span> <span class="kd">func</span> <span class="nf">getArea</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">radius</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Place a question mark postfix after `init` is an optional init</span>
+    <span class="c1">// which can return nil</span>
+    <span class="nf">init</span><span class="p">?(</span><span class="nv">radius</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">init</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">radius</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="kc">nil</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">var</span> <span class="nv">myCircle</span> <span class="o">=</span> <span class="kt">Circle</span><span class="p">(</span><span class="nv">radius</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">myCircle</span><span class="p">?</span><span class="o">.</span><span class="nf">getArea</span><span class="p">())</span>    <span class="c1">// Optional(3)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">myCircle</span><span class="o">!.</span><span class="nf">getArea</span><span class="p">())</span>    <span class="c1">// 3</span>
+<span class="k">var</span> <span class="nv">myEmptyCircle</span> <span class="o">=</span> <span class="kt">Circle</span><span class="p">(</span><span class="nv">radius</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">myEmptyCircle</span><span class="p">?</span><span class="o">.</span><span class="nf">getArea</span><span class="p">())</span>    <span class="c1">// "nil"</span>
+<span class="k">if</span> <span class="k">let</span> <span class="nv">circle</span> <span class="o">=</span> <span class="n">myEmptyCircle</span> <span class="p">{</span>
+    <span class="c1">// will not execute since myEmptyCircle is nil</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"circle is not nil"</span><span class="p">)</span>
+<span class="p">}</span>
+
+
+<span class="c1">//</span>
+<span class="c1">// MARK: Enums</span>
+<span class="c1">//</span>
+
+<span class="c1">// Enums can optionally be of a specific type or on their own.</span>
+<span class="c1">// They can contain methods like classes.</span>
+
+<span class="kd">enum</span> <span class="kt">Suit</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="kt">Spades</span><span class="p">,</span> <span class="kt">Hearts</span><span class="p">,</span> <span class="kt">Diamonds</span><span class="p">,</span> <span class="kt">Clubs</span>
+    <span class="kd">func</span> <span class="nf">getIcon</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span> <span class="p">{</span>
+        <span class="k">switch</span> <span class="k">self</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="o">.</span><span class="kt">Spades</span><span class="p">:</span> <span class="k">return</span> <span class="s">"♤"</span>
+        <span class="k">case</span> <span class="o">.</span><span class="kt">Hearts</span><span class="p">:</span> <span class="k">return</span> <span class="s">"♡"</span>
+        <span class="k">case</span> <span class="o">.</span><span class="kt">Diamonds</span><span class="p">:</span> <span class="k">return</span> <span class="s">"♢"</span>
+        <span class="k">case</span> <span class="o">.</span><span class="kt">Clubs</span><span class="p">:</span> <span class="k">return</span> <span class="s">"♧"</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Enum values allow short hand syntax, no need to type the enum type</span>
+<span class="c1">// when the variable is explicitly declared</span>
+<span class="k">var</span> <span class="nv">suitValue</span><span class="p">:</span> <span class="kt">Suit</span> <span class="o">=</span> <span class="o">.</span><span class="kt">Hearts</span>
+
+<span class="c1">// String enums can have direct raw value assignments</span>
+<span class="c1">// or their raw values will be derived from the Enum field</span>
+<span class="kd">enum</span> <span class="kt">BookName</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="kt">John</span>
+    <span class="k">case</span> <span class="kt">Luke</span> <span class="o">=</span> <span class="s">"Luke"</span>
+<span class="p">}</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Name: </span><span class="se">\(</span><span class="kt">BookName</span><span class="o">.</span><span class="kt">John</span><span class="o">.</span><span class="n">rawValue</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+
+<span class="c1">// Enum with associated Values</span>
+<span class="kd">enum</span> <span class="kt">Furniture</span> <span class="p">{</span>
+    <span class="c1">// Associate with Int</span>
+    <span class="k">case</span> <span class="kt">Desk</span><span class="p">(</span><span class="nv">height</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span>
+    <span class="c1">// Associate with String and Int</span>
+    <span class="k">case</span> <span class="kt">Chair</span><span class="p">(</span><span class="kt">String</span><span class="p">,</span> <span class="kt">Int</span><span class="p">)</span>
+
+    <span class="kd">func</span> <span class="nf">description</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">String</span> <span class="p">{</span>
+        <span class="k">switch</span> <span class="k">self</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="o">.</span><span class="kt">Desk</span><span class="p">(</span><span class="k">let</span> <span class="nv">height</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s">"Desk with </span><span class="se">\(</span><span class="n">height</span><span class="se">)</span><span class="s"> cm"</span>
+        <span class="k">case</span> <span class="o">.</span><span class="kt">Chair</span><span class="p">(</span><span class="k">let</span> <span class="nv">brand</span><span class="p">,</span> <span class="k">let</span> <span class="nv">height</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s">"Chair of </span><span class="se">\(</span><span class="n">brand</span><span class="se">)</span><span class="s"> with </span><span class="se">\(</span><span class="n">height</span><span class="se">)</span><span class="s"> cm"</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">var</span> <span class="nv">desk</span><span class="p">:</span> <span class="kt">Furniture</span> <span class="o">=</span> <span class="o">.</span><span class="kt">Desk</span><span class="p">(</span><span class="nv">height</span><span class="p">:</span> <span class="mi">80</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">desk</span><span class="o">.</span><span class="nf">description</span><span class="p">())</span>     <span class="c1">// "Desk with 80 cm"</span>
+<span class="k">var</span> <span class="nv">chair</span> <span class="o">=</span> <span class="kt">Furniture</span><span class="o">.</span><span class="kt">Chair</span><span class="p">(</span><span class="s">"Foo"</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">chair</span><span class="o">.</span><span class="nf">description</span><span class="p">())</span>    <span class="c1">// "Chair of Foo with 40 cm"</span>
+
+
+<span class="c1">//</span>
+<span class="c1">// MARK: Protocols</span>
+<span class="c1">//</span>
+
+<span class="c1">// `protocol`s can require that conforming types have specific</span>
+<span class="c1">// instance properties, instance methods, type methods,</span>
+<span class="c1">// operators, and subscripts.</span>
+
+<span class="kd">protocol</span> <span class="kt">ShapeGenerator</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">enabled</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="k">set</span> <span class="p">}</span>
+    <span class="kd">func</span> <span class="nf">buildShape</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Shape</span>
+<span class="p">}</span>
+
+<span class="c1">// Protocols declared with @objc allow optional functions,</span>
+<span class="c1">// which allow you to check for conformance</span>
+<span class="kd">@objc</span> <span class="kd">protocol</span> <span class="kt">TransformShape</span> <span class="p">{</span>
+    <span class="kd">optional</span> <span class="kd">func</span> <span class="nf">reshape</span><span class="p">()</span>
+    <span class="kd">optional</span> <span class="kd">func</span> <span class="nf">canReshape</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Bool</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="kt">MyShape</span><span class="p">:</span> <span class="kt">Rect</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">delegate</span><span class="p">:</span> <span class="kt">TransformShape</span><span class="p">?</span>
+
+    <span class="kd">func</span> <span class="nf">grow</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">sideLength</span> <span class="o">+=</span> <span class="mi">2</span>
+
+        <span class="c1">// Place a question mark after an optional property, method, or</span>
+        <span class="c1">// subscript to gracefully ignore a nil value and return nil</span>
+        <span class="c1">// instead of throwing a runtime error ("optional chaining").</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">reshape</span> <span class="o">=</span> <span class="k">self</span><span class="o">.</span><span class="n">delegate</span><span class="p">?</span><span class="o">.</span><span class="nf">canReshape</span><span class="p">?()</span> <span class="k">where</span> <span class="n">reshape</span> <span class="p">{</span>
+            <span class="c1">// test for delegate then for method</span>
+            <span class="k">self</span><span class="o">.</span><span class="n">delegate</span><span class="p">?</span><span class="o">.</span><span class="nf">reshape</span><span class="p">?()</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="c1">//</span>
+<span class="c1">// MARK: Other</span>
+<span class="c1">//</span>
+
+<span class="c1">// `extension`s: Add extra functionality to an already existing type</span>
+
+<span class="c1">// Square now "conforms" to the `CustomStringConvertible` protocol</span>
+<span class="kd">extension</span> <span class="kt">Square</span><span class="p">:</span> <span class="kt">CustomStringConvertible</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">description</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s">"Area: </span><span class="se">\(</span><span class="k">self</span><span class="o">.</span><span class="nf">getArea</span><span class="p">()</span><span class="se">)</span><span class="s"> - ID: </span><span class="se">\(</span><span class="k">self</span><span class="o">.</span><span class="n">identifier</span><span class="se">)</span><span class="s">"</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="s">"Square: </span><span class="se">\(</span><span class="n">mySquare</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+
+<span class="c1">// You can also extend built-in types</span>
+<span class="kd">extension</span> <span class="kt">Int</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">customProperty</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s">"This is </span><span class="se">\(</span><span class="k">self</span><span class="se">)</span><span class="s">"</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">multiplyBy</span><span class="p">(</span><span class="nv">num</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">num</span> <span class="o">*</span> <span class="k">self</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="mi">7</span><span class="o">.</span><span class="n">customProperty</span><span class="p">)</span> <span class="c1">// "This is 7"</span>
+<span class="nf">print</span><span class="p">(</span><span class="mi">14</span><span class="o">.</span><span class="nf">multiplyBy</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span> <span class="c1">// 42</span>
+
+<span class="c1">// Generics: Similar to Java and C#. Use the `where` keyword to specify the</span>
+<span class="c1">//   requirements of the generics.</span>
+
+<span class="kd">func</span> <span class="n">findIndex</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">:</span> <span class="kt">Equatable</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">array</span><span class="p">:</span> <span class="p">[</span><span class="kt">T</span><span class="p">],</span> <span class="n">_</span> <span class="nv">valueToFind</span><span class="p">:</span> <span class="kt">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Int</span><span class="p">?</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">in</span> <span class="n">array</span><span class="o">.</span><span class="nf">enumerate</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="n">valueToFind</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">index</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="kc">nil</span>
+<span class="p">}</span>
+<span class="k">let</span> <span class="nv">foundAtIndex</span> <span class="o">=</span> <span class="nf">findIndex</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="mi">3</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">foundAtIndex</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="c1">// true</span>
+
+<span class="c1">// Operators:</span>
+<span class="c1">// Custom operators can start with the characters:</span>
+<span class="c1">//      / = - + * % &lt; &gt; ! &amp; | ^ . ~</span>
+<span class="c1">// or</span>
+<span class="c1">// Unicode math, symbol, arrow, dingbat, and line/box drawing characters.</span>
+<span class="k">prefix</span> <span class="k">operator</span> <span class="o">!!!</span> <span class="p">{}</span>
+
+<span class="c1">// A prefix operator that triples the side length when used</span>
+<span class="k">prefix</span> <span class="kd">func</span> <span class="o">!!!</span> <span class="p">(</span><span class="k">inout</span> <span class="nv">shape</span><span class="p">:</span> <span class="kt">Square</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Square</span> <span class="p">{</span>
+    <span class="n">shape</span><span class="o">.</span><span class="n">sideLength</span> <span class="o">*=</span> <span class="mi">3</span>
+    <span class="k">return</span> <span class="n">shape</span>
+<span class="p">}</span>
+
+<span class="c1">// current value</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">mySquare</span><span class="o">.</span><span class="n">sideLength</span><span class="p">)</span> <span class="c1">// 4</span>
+
+<span class="c1">// change side length using custom !!! operator, increases size by 3</span>
+<span class="o">!!!</span><span class="n">mySquare</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">mySquare</span><span class="o">.</span><span class="n">sideLength</span><span class="p">)</span> <span class="c1">// 12</span>
+
+<span class="c1">// Operators can also be generics</span>
+<span class="k">infix</span> <span class="k">operator</span> <span class="o">&lt;-&gt;</span> <span class="p">{}</span>
+<span class="kd">func</span> <span class="o">&lt;-&gt;&lt;</span><span class="kt">T</span><span class="p">:</span> <span class="kt">Equatable</span><span class="o">&gt;</span> <span class="p">(</span><span class="k">inout</span> <span class="nv">a</span><span class="p">:</span> <span class="kt">T</span><span class="p">,</span> <span class="k">inout</span> <span class="nv">b</span><span class="p">:</span> <span class="kt">T</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">c</span> <span class="o">=</span> <span class="n">a</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">b</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">c</span>
+<span class="p">}</span>
+
+<span class="k">var</span> <span class="nv">foo</span><span class="p">:</span> <span class="kt">Float</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="k">var</span> <span class="nv">bar</span><span class="p">:</span> <span class="kt">Float</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="n">foo</span> <span class="o">&lt;-&gt;</span> <span class="n">bar</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"foo is </span><span class="se">\(</span><span class="n">foo</span><span class="se">)</span><span class="s">, bar is </span><span class="se">\(</span><span class="n">bar</span><span class="se">)</span><span class="s">"</span><span class="p">)</span> <span class="c1">// "foo is 20.0, bar is 10.0"</span>
+</code></pre>
+
+    <hr>
+    <p>Got a suggestion? A correction, perhaps? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Open an Issue</a> on the Github Repo, or make a pull request yourself!
+    </p>
+    <p class="contributed">
+    Originally contributed by Grant Timmerman, and updated by <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/swift.html.markdown">18 contributor(s)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://github.com/grant">Grant Timmerman</a>,
+      
+    
+      
+        <a href="http://github.com/cbess">Christopher Bess</a>,
+      
+    
+      
+        <a href="http://github.com/kamidox">Joey Huang</a>,
+      
+    
+      
+        <a href="http://github.com/anthonyn60">Anthony Nguyen</a>,
+      
+    
+      
+        <a href="https://github.com/cwalk">Clayton Walker</a>,
+      
+    
+      
+        <a href="http://visualcosita.xyz/">Fernando Valverde</a>
+      
+    
+    </p>
+
+    <p>
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/swift/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:59 GMT -->
+</html>

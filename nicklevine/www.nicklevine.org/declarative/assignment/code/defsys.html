@@ -1,0 +1,23 @@
+(in-package "CL-USER")
+
+;; nick 2000-09-15
+
+;; Description of the server system
+
+(defsystem server ()
+  :members (
+            "server"
+            "macros"
+            "html-tags"
+            "application" 
+            ("hidden" :load-only t) ; source code not provided...
+            )
+  :rules ((:in-order-to :compile :all (:requires (:load :previous)))))
+
+
+;; Editor setup - loading this file (in particular, evaluating the
+;; following form) will make with-tag forms indent more nicely
+
+(eval-when (eval load compile)
+  (editor:setup-indent 'with-tag 1))
+

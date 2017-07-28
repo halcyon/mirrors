@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: A Journey of a Thousand Lines Begins with a Single Test</title>
+	<atom:link href="https://stuartsierra.com/2010/07/05/lazytest-status-report/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2010/07/05/lazytest-status-report</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Clojure&#8230; ¿Por dónde empezar? &#124; Agilogy</title>
+		<link>https://stuartsierra.com/2010/07/05/lazytest-status-report/comment-page-1#comment-44257</link>
+		<dc:creator><![CDATA[Clojure&#8230; ¿Por dónde empezar? &#124; Agilogy]]></dc:creator>
+		<pubDate>Mon, 22 Aug 2011 11:40:49 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=458#comment-44257</guid>
+		<description><![CDATA[[...]  Y cuando ya me dispongo a aprender clojure.test descubro que el propio Stuart Sierra hace una crítica del mismo en la que dice que va a empezar un nuevo framework desde 0 para el mismo propósito: [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;]  Y cuando ya me dispongo a aprender clojure.test descubro que el propio Stuart Sierra hace una crítica del mismo en la que dice que va a empezar un nuevo framework desde 0 para el mismo propósito: [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Different tools to help you test your clojure code &#171; Tech behind Tech</title>
+		<link>https://stuartsierra.com/2010/07/05/lazytest-status-report/comment-page-1#comment-43145</link>
+		<dc:creator><![CDATA[Different tools to help you test your clojure code &#171; Tech behind Tech]]></dc:creator>
+		<pubDate>Sat, 24 Jul 2010 00:58:10 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=458#comment-43145</guid>
+		<description><![CDATA[[...] discussion on why he is writing another testing framework in clojure. It is a good read checkout http://stuartsierra.com/2010/07/05/lazytest-status-report. This library follows BDD philosophy. If you like BDD than you could give lazytest a [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] discussion on why he is writing another testing framework in clojure. It is a good read checkout http://stuartsierra.com/2010/07/05/lazytest-status-report. This library follows BDD philosophy. If you like BDD than you could give lazytest a [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Ron</title>
+		<link>https://stuartsierra.com/2010/07/05/lazytest-status-report/comment-page-1#comment-43135</link>
+		<dc:creator><![CDATA[Ron]]></dc:creator>
+		<pubDate>Sat, 17 Jul 2010 18:35:37 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=458#comment-43135</guid>
+		<description><![CDATA[I read your &quot;which I have been working on since February&quot; as &quot;which I have been working on since Friday&quot; (which would have been July 2), and still wasn&#039;t really surprised: things go quickly in Clojure.]]></description>
+		<content:encoded><![CDATA[<p>I read your &#8220;which I have been working on since February&#8221; as &#8220;which I have been working on since Friday&#8221; (which would have been July 2), and still wasn&#8217;t really surprised: things go quickly in Clojure.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Continuous Testing &#171; Echo One</title>
+		<link>https://stuartsierra.com/2010/07/05/lazytest-status-report/comment-page-1#comment-43130</link>
+		<dc:creator><![CDATA[Continuous Testing &#171; Echo One]]></dc:creator>
+		<pubDate>Tue, 13 Jul 2010 22:05:36 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=458#comment-43130</guid>
+		<description><![CDATA[[...] each new command (the second is dependency resolution, SBT favours Ivy). Fortunately Lazytest by Stuart Sierra can hopefully save us here. Although still alpha Lazytest is an awesome way of developing Clojure [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] each new command (the second is dependency resolution, SBT favours Ivy). Fortunately Lazytest by Stuart Sierra can hopefully save us here. Although still alpha Lazytest is an awesome way of developing Clojure [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Mike</title>
+		<link>https://stuartsierra.com/2010/07/05/lazytest-status-report/comment-page-1#comment-43125</link>
+		<dc:creator><![CDATA[Mike]]></dc:creator>
+		<pubDate>Wed, 07 Jul 2010 22:13:47 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=458#comment-43125</guid>
+		<description><![CDATA[Could you amplify your point about code templates?  I don&#039;t see any discussion in the clojure google group about the downside of using templates.  Could you describe in more detail a better alternative (other than &quot;use a map&quot;)?  Thanks.]]></description>
+		<content:encoded><![CDATA[<p>Could you amplify your point about code templates?  I don&#8217;t see any discussion in the clojure google group about the downside of using templates.  Could you describe in more detail a better alternative (other than &#8220;use a map&#8221;)?  Thanks.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.268 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:58:27 -->
+
+<!-- Compression = gzip -->

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Premature Cleverization</title>
+	<atom:link href="https://stuartsierra.com/2006/10/05/premature-cleverization/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2006/10/05/premature-cleverization</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: rtfa.net &#124; read the fucking article &#187; Blog Archive &#187; Regarding &#8220;premature cleverization&#8221;</title>
+		<link>https://stuartsierra.com/2006/10/05/premature-cleverization/comment-page-1#comment-16746</link>
+		<dc:creator><![CDATA[rtfa.net &#124; read the fucking article &#187; Blog Archive &#187; Regarding &#8220;premature cleverization&#8221;]]></dc:creator>
+		<pubDate>Thu, 30 Aug 2007 19:20:49 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2006/10/05/premature-cleverization#comment-16746</guid>
+		<description><![CDATA[[...] descended into that series of tubes known as the Internet(s) and came up with this obscure post about premature cleverization. The essence is that it&#8217;s a waste of time to over-design a solution without completely [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] descended into that series of tubes known as the Internet(s) and came up with this obscure post about premature cleverization. The essence is that it&#8217;s a waste of time to over-design a solution without completely [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: idm from rtfa</title>
+		<link>https://stuartsierra.com/2006/10/05/premature-cleverization/comment-page-1#comment-977</link>
+		<dc:creator><![CDATA[idm from rtfa]]></dc:creator>
+		<pubDate>Tue, 10 Oct 2006 02:57:58 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2006/10/05/premature-cleverization#comment-977</guid>
+		<description><![CDATA[While I can&#039;t claim to have excelled at (or even acclimated to) the idea, I picked up a great-sounding mantra from a recent software engineering class: make the simplest thing that could possibly work.
+
+Yes, yes...  but what about the library that could generalize this solution to all sorts of other tasks?  Wouldn&#039;t that be simpler in the long run?
+
+No, no.  It just won&#039;t be, and exactly for the reason you described.  The only way to responsibly leverage your code-hours across many different projects is to map ALL projects out to ensure that no fatal flaws exist.
+
+So what&#039;s easier?  If you can&#039;t make it simple enough, then use someone else&#039;s library.  Also from that class: one sure-fire way to become a super-programmer is to reuse code.  Reusing code isn&#039;t trivial - you may still spend 3 days - but it reduces the complexity of the problem.  
+
+Coding a library AND software to use it is attacking one problem from two sides.  &quot;Shoe-horning&quot; an existing library into your software produces a better-defined problem, so hopefully a proper solution is forthcoming.]]></description>
+		<content:encoded><![CDATA[<p>While I can&#8217;t claim to have excelled at (or even acclimated to) the idea, I picked up a great-sounding mantra from a recent software engineering class: make the simplest thing that could possibly work.</p>
+<p>Yes, yes&#8230;  but what about the library that could generalize this solution to all sorts of other tasks?  Wouldn&#8217;t that be simpler in the long run?</p>
+<p>No, no.  It just won&#8217;t be, and exactly for the reason you described.  The only way to responsibly leverage your code-hours across many different projects is to map ALL projects out to ensure that no fatal flaws exist.</p>
+<p>So what&#8217;s easier?  If you can&#8217;t make it simple enough, then use someone else&#8217;s library.  Also from that class: one sure-fire way to become a super-programmer is to reuse code.  Reusing code isn&#8217;t trivial &#8211; you may still spend 3 days &#8211; but it reduces the complexity of the problem.  </p>
+<p>Coding a library AND software to use it is attacking one problem from two sides.  &#8220;Shoe-horning&#8221; an existing library into your software produces a better-defined problem, so hopefully a proper solution is forthcoming.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Savadeep Speaks! &#187; Premature Cleverization: a most interesting computer programming malady!</title>
+		<link>https://stuartsierra.com/2006/10/05/premature-cleverization/comment-page-1#comment-921</link>
+		<dc:creator><![CDATA[Savadeep Speaks! &#187; Premature Cleverization: a most interesting computer programming malady!]]></dc:creator>
+		<pubDate>Sun, 08 Oct 2006 23:45:31 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2006/10/05/premature-cleverization#comment-921</guid>
+		<description><![CDATA[[...] My word! It was of today that I was a reader of this written piece by Stuart Sierra about a most interesting programming malady: premature cleverization. It is but a condition where one does so many efforts to be of a nature most clever when thinking about softwares. But so much cleverity means one pays but little attention to real world details and so difficulties soon arise. [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] My word! It was of today that I was a reader of this written piece by Stuart Sierra about a most interesting programming malady: premature cleverization. It is but a condition where one does so many efforts to be of a nature most clever when thinking about softwares. But so much cleverity means one pays but little attention to real world details and so difficulties soon arise. [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2006/10/05/premature-cleverization/comment-page-1#comment-892</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Fri, 06 Oct 2006 13:57:30 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2006/10/05/premature-cleverization#comment-892</guid>
+		<description><![CDATA[Stephen De Gabrielle Says: &lt;i&gt;Oh so familiar. What is your solution?&lt;/i&gt;
+
+Haven&#039;t found one yet.  Possibly beating myself with a stick.  Or maybe just throwing away my entire supply of scrap paper.]]></description>
+		<content:encoded><![CDATA[<p>Stephen De Gabrielle Says: <i>Oh so familiar. What is your solution?</i></p>
+<p>Haven&#8217;t found one yet.  Possibly beating myself with a stick.  Or maybe just throwing away my entire supply of scrap paper.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stephen De Gabrielle</title>
+		<link>https://stuartsierra.com/2006/10/05/premature-cleverization/comment-page-1#comment-891</link>
+		<dc:creator><![CDATA[Stephen De Gabrielle]]></dc:creator>
+		<pubDate>Fri, 06 Oct 2006 13:53:39 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2006/10/05/premature-cleverization#comment-891</guid>
+		<description><![CDATA[Oh so familiar. What is your solution?]]></description>
+		<content:encoded><![CDATA[<p>Oh so familiar. What is your solution?</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.271 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:59:59 -->
+
+<!-- Compression = gzip -->

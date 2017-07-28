@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/wires/recap.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:41 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Imagine a language: wires</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;imagine-a-language-wires&quot;)"></div><h1 anchor="imagine-a-language-wires" id="imagine-a-language-wires" hyphens="none">Imagine a language: <span class="my-code" decode="exclude">wires</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-reader.html">3&emsp;the reader</a></li><li><a href="the-expander.html">4&emsp;the expander</a></li><li><a href="testing-the-language.html">5&emsp;test­ing the lan­guage</a></li><li><a class="here" href="recap.html">6&emsp;recap</a></li><li><a href="source-listing.html">7&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_jyxs4&quot;)"></div><p id="a_jyxs4">Apolo­gies to those who were hop­ing for longer, more bor­ing tuto­ri­als at this point. But <span class="my-code" decode="exclude">wires</span> helps us fin­ish debunk­ing two objec­tions to mak­ing pro­gram­ming lan­guages, and <a class="glossary" href="../appendix/glossary.html#domain-specific-language"><span class="glossary-link-text">domain-spe­cific lan­guages</span></a> in par­tic­u­lar:</p></div><ol><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_MCdOS&quot;)"></div><p id="a_MCdOS"><em>“It’s cum­ber­some and dif­fi­cult.”</em> Not at all. Racket has the capac­ity to make com­plex pro­gram­ming lan­guages. But as we’ve seen in <span class="my-code" decode="exclude">wires</span> and the other tuto­ri­als so far, it can also make very sim­ple DSLs. Because of this, Racket makes DSL-build­ing a tech­nique that’s prac­ti­cal for a wide range of pro­gram­ming prob­lems—even lit­tle ones.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_PiNN8&quot;)"></div><p id="a_PiNN8"><em>“Few prob­lems are nat­u­rally suited to DSLs.”</em> This objec­tion mostly arises from a lack of cre­ative per­spec­tive. Sure, not every prob­lem demands a DSL. But with <span class="my-code" decode="exclude">wires</span>, we approached the prob­lem by ask­ing a sim­ple but reveal­ing ques­tion: what if we treated our puz­zle input as code for a not-yet-exist­ing lan­guage? It turns out that we can ask this ques­tion about a lot of pos­si­ble inputs. (In the <a href="../jsonic/index.html"><span class="my-code" decode="exclude">jsonic</span></a> tuto­r­ial, we asked it about JSON.)</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Mxi14&quot;)"></div><p id="a_Mxi14">More­over, have a look at some of the <a class=" ext" href="https://www.reddit.com/r/adventofcode/comments/3vr4m4/day_7_solutions/">other approaches</a> to solv­ing this puz­zle. Essen­tially they’re all doing the same work as <span class="my-code" decode="exclude">wires</span>, but with bru­tal inef­fi­ciency: first they break the input data into pieces (like our <a href="the-reader.html">reader</a>) and then assign mean­ing to those pieces (like our <a href="the-expander.html">expander</a>).</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Ss3rO&quot;)"></div><p id="a_Ss3rO">Why not use the right tool for the job? The plea­sure of build­ing lan­guages with Racket is that we always have access to the deep­est abstrac­tions of the Racket lan­guage—includ­ing <a class="glossary" href="../appendix/glossary.html#macro"><span class="glossary-link-text">macros</span></a>, <a class="glossary" href="../appendix/glossary.html#lexical-context"><span class="glossary-link-text">lex­i­cal con­texts</span></a>, <a class="glossary" href="../appendix/glossary.html#identifier"><span class="glossary-link-text">iden­ti­fiers</span></a>, and <a class="glossary" href="../appendix/glossary.html#binding"><span class="glossary-link-text">bind­ings</span></a>. There­fore, we can often make tricky prob­lems much sim­pler by map­ping our prob­lem directly onto these deep abstrac­tions.</p></div></li></ol><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_1g14f&quot;)"></div><p id="a_1g14f">And if our pro­grams end up shorter than every­one else’s—well, that’s a bur­den we can learn to live with.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-reader.html">3&emsp;the reader</a></li><li><a href="the-expander.html">4&emsp;the expander</a></li><li><a href="testing-the-language.html">5&emsp;test­ing the lan­guage</a></li><li><a class="here" href="recap.html">6&emsp;recap</a></li><li><a href="source-listing.html">7&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="testing-the-language.html">← prev</a>
+    <a class="nav-right" href="source-listing.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

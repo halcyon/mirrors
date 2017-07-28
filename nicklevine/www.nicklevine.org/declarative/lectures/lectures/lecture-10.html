@@ -1,0 +1,622 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-10.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:51 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Lecture Ten</title>
+</head>
+<body>
+
+<center><b><font size=+3>Declarative Languages</font></b>
+<br><b><font size=+3>Lecture #10</font></b></center>
+
+<p><b>Purpose: Variables and flexible argument lists and a number of interesting
+"that-reminds-me"s</b>
+<p><b>10.1 Variables and symbols</b>
+<p>A number of lisp forms (such as <tt>let* defun dolist </tt>etc.) bind
+symbol names as local (<i>lexical</i>) variables. Within such a binding,
+"evaluating the symbol" returns its value exactly as if (locally to this
+binding!) that symbol really did exist at run-time with the given value:
+<blockquote><tt>(let* ((foo "hello")) foo)&nbsp; =>&nbsp; "hello"</tt></blockquote>
+Be warned however that a local binding does not create an actual symbol
+at run-time, not does it set the value of an existing symbol <b>unless
+that symbol has been declared to be global by defparameter</b>:
+<ol>
+<li>
+<tt>(makunbound 'foo)</tt></li>
+
+<br><tt>(let* ((foo "hello"))</tt>
+<br><tt>&nbsp; (symbol-value 'foo))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; Error: The variable FOO is unbound....</tt>
+<br>&nbsp;
+<li>
+<tt>(setf foo 99)</tt></li>
+
+<br><tt>(let* ((foo "hello"))</tt>
+<br><tt>&nbsp; (list foo (symbol-value 'foo)))&nbsp; =>&nbsp; ("hello"
+99)</tt>
+<br>&nbsp;
+<li>
+<tt>(defparameter foo 99)&nbsp; ; foo is now global</tt></li>
+
+<br><tt>(let* ((foo "hello"))</tt>
+<br><tt>&nbsp; (list foo (symbol-value 'foo)))&nbsp; =>&nbsp; ("hello"
+"hello")</tt>
+<br><tt>foo&nbsp; =>&nbsp; 99&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; outside the binding again</tt></ol>
+
+<ul>
+<li>
+In (1) foo is <i>lexically</i> (i.e. locally) bound. The symbol has no
+global value and so accessing its <tt>symbol-value</tt> is an error.</li>
+
+<li>
+In (2) foo is still lexically bound and so, even though it does have a
+global value, the <tt>let*</tt> binding will not touch this. However <tt>symbol-value</tt>
+can access this global value.</li>
+
+<li>
+In (3) foo is now <i>dynamically</i> bound.</li>
+</ul>
+In all three cases, the effect of the binding is transient - when you exit
+the binding form a lexical variable disappears, and a global variable returns
+to its old value (no matter how many times it has been reset within the
+binding):
+<blockquote><tt>(defparameter foo 99)&nbsp;&nbsp;&nbsp;&nbsp; =>&nbsp;
+foo</tt>
+<br><tt>(let* ((foo "hello"))</tt>
+<br><tt>&nbsp; (setf foo nil)</tt>
+<br><tt>&nbsp; foo)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; nil</tt>
+<br><tt>foo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; 99</tt></blockquote>
+Note: another name for a global (dynamic) variable is <i>special variable</i>.
+If you go <tt>(setf foo 99)</tt> in your code without first declaring <tt>foo</tt>
+to be either global (by <tt>defparameter</tt>) or local (by binding it
+via <tt>let*</tt> &amp;co), you see the familiar rant:
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Warning: Syntactic warning
+for form (SETF FOO 99):</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FOO
+assumed special.</tt>
+<br>(which you will now understand).
+<p><b>10.2 Some interesting global variables - *features* and read-time
+conditionals</b>
+<p>Common Lisp ships with a few dozen dynamic variables which are used
+to describe and control the state of the lisp system. We'll take a look
+at a small number of them here, starting with the variable <tt>*features*</tt>.
+<p>This is a list of symbols - typically keywords - used to enumerate "<i>features</i>"
+(whatever those might be) currently present in the image. Its initial value
+is implementation dependent and fairly horrid, but you come to depend on
+which features are present in which products.
+<p>You are allowed to add more features to the list yourself:
+<br><tt>&nbsp;&nbsp;&nbsp; (push :likes-aadvarks *features*)</tt>
+<br>Although you can interrogate the list directly:
+<br><tt>&nbsp;&nbsp;&nbsp; (if (find :likes-aadvarks *features*)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (go-get-an-aardvark)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (have-a-wombat-instead))</tt>
+<br>the main use of <tt>*features*</tt> is to drive conditional behaviour
+at read-time.
+<p>The syntax for read-time conditionals is
+<br><tt>&nbsp;&nbsp;&nbsp; #+<i>feature-expression conditional-form</i></tt>
+<br>At its simplest, the <i><tt>feature-expression </tt></i>will be a single
+feature, thus:
+<br><tt>&nbsp;&nbsp;&nbsp; #+likes-aardvarks (go-get-an-aardvark)</tt>
+<br>When the reader sees this, it looks the feature up in <tt>*features*</tt>.
+If the feature is present then the next form <tt>(go-get-an-aardvark)</tt>
+is read as if the <tt>#+</tt> hadn't been there; if the feature is absent
+then reader skips the next form altogether.
+<p>You can assume that all features are <i>keywords</i>. These, you will
+recall, are symbols whose name is preceeded by a colon. Note however that
+the <tt>#+</tt> syntax assumes the colon for you.
+<p>Features can be combined in the feature expression by <tt>and</tt>,
+<tt>or</tt>
+and <tt>not.</tt> The syntax <tt>#-feature-expression</tt> is equivalent
+to <tt>#+(not feature-expression)</tt>. For example, if we read the form
+<br><tt>&nbsp;&nbsp;&nbsp; (1 2 #+foo 3 4 #-foo 5)</tt>
+<br>and
+<tt>:foo</tt> is a feature (i.e. the symbol <tt>:foo</tt> is to
+be found in the list
+<tt>*features*</tt>) then we get <tt>(1 2 3 4)</tt>
+but if
+<tt>:foo</tt> is not a feature then we get <tt>(1 2 4 5)</tt>. Another
+example: to read a form if <tt>:foo</tt> is a feature (and simply skip
+it otherwise):
+<br><tt>&nbsp;&nbsp;&nbsp; #+foo (do-something-specific-to-foo)</tt>
+<p>Typical uses of <tt>#+</tt> and <tt>#-</tt> are
+<ul>
+<li>
+to distinguish lisp products and therefore use the appropriate language
+extensions:</li>
+
+<br><tt>(defun pipe-to-executable (command)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #+allegro (excl:run-shell-command
+command</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+:input :stream :output :stream)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #+lispworks (win32::open-pipe :command-line
+command))</tt>
+<li>
+to distinuguish between different releases or editions of a lisp product:</li>
+
+<br><tt>(defun do-it ()</tt>
+<br><tt>&nbsp; (sleep 3)</tt>
+<br><tt>&nbsp; (let* ((proc (multiprocessing:process-name-to-process</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+#+mswindows "*common-lisp*"</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+#-mswindows "Initial Lisp Listener"))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (stream #+mswindows
+(mp::symeval-in-process '*standard-output* proc)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+#-mswindows (mp::symeval-in-stack-group</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'*standard-output*</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(mp::process-stack-group proc))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (format stream "The emacs-lisp interface has
+started...~%")</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (force-output stream)))</tt>
+<li>
+to tell whether or not part of your own system is present:</li>
+
+<br><tt>#-wizzy-application</tt>
+<br><tt>(progn (load "wizzy-application.lisp")</tt>
+<br><tt>&nbsp; (push :wizzy-application *features*))</tt></ul>
+(Incidentally, the first two of the above examples are both real-life code
+from vendors' support sites.)
+<p>This facility is lisp's answer to C's #ifdef. It wins in a seriously
+big way because, unlike #ifdef, (a) it isn't pegged to the left hand margin
+or to a line of its own and (b) you don't have to go hunting for an #endif,
+so readability isn't destroyed and (c) you can combine features with <tt>and</tt>
+etc. rather than having to nest several #ifdef lines.
+<p><b>10.3 Some interesting global variables - *read-base* / *print-base*</b>
+<p>There are 20 variables (named <tt>*print-<i>mumble</i>*</tt> for various
+mumbles) for controlling the printer, and 5 more which control the reader.
+We'll take a look at two of them here and you can look the rest up in some
+moment of leisure.
+<p>The lisp reader and printer are by default set up to operate in base
+ten. You can modify this by setting or binding <tt>*read-base*</tt> and
+<tt>*print-base*</tt>
+respectively.
+<p>For example:
+<blockquote><tt>;; set *print-base* permanently to sixteen</tt>
+<br><tt>(setf *print-base* 16)</tt>
+<p><tt>;; bind *print-base* to two for the duration of the call to print-values</tt>
+<br><tt>(defun print-values-in-binary (values)</tt>
+<br><tt>&nbsp; (let* ((*print-base* 2))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (print-values values)))</tt>
+<p><tt>;; another idiom for binding a special variable. In this case,</tt>
+<br><tt>;; *print-base* is bound to the value of the second argument to</tt>
+<br><tt>;; the function</tt>
+<br><tt>(defun print-values-in-base (values *print-base*)</tt>
+<br><tt>&nbsp; (print-values values))</tt>
+<p><tt>(defun print-values (values)</tt>
+<br><tt>&nbsp;&nbsp; (mapc 'print values))</tt>
+<p><tt>;; (print-values-in-base '(3 4 5) 2) prints 11 100 and 101</tt></blockquote>
+If you want to enter numbers in a different base to <tt>*read-base*</tt>,
+use <tt>#x</tt> for hexadecimal (<tt>#x10</tt> is sixteen), <tt>#o</tt>
+and <tt>#b</tt> for octal and binary respectively, and <tt>#r</tt> for
+the base of your choice (<tt>#3r102</tt> expresses eleven in base three,
+and <tt>#11R32</tt> expresses thirty five in base eleven). Note that the
+x, o, b, r can be either upper or lower case.
+<p>If you want a quick and clean way of ensuring a number is in base ten,
+enter it with a decimal point:
+<br><tt>&nbsp;&nbsp;&nbsp; (setf *read-base* 10)&nbsp;&nbsp; ; pointless
+at top-level</tt>
+<br>won't change anything at the top level (why?) but
+<br><tt>&nbsp;&nbsp;&nbsp; (setf *read-base* 10.)&nbsp; ; rescue the situation</tt>
+<br>is guaranteed to deliver a base ten number. (Warning: <tt>10.</tt>
+is an integer but <tt>10.0</tt> is a float.)
+<p>If you want to print numbers in a different base to <tt>*print-base*</tt>,
+then <tt>format</tt> has various directives to help you. <tt>~x</tt> gives
+you hexadecimal, <tt>~o</tt> and <tt>~b</tt> give you octal and binary,
+and <tt>~r</tt> can give you the base of your choice:
+<br><tt>&nbsp;&nbsp;&nbsp; (format nil "~x&nbsp; ~8r" 10 #o777)&nbsp; =>&nbsp;
+"A&nbsp; 777"</tt>
+<ul>
+<li>
+Note: if you omit the number (e.g. the <tt>8</tt>) between the <tt>~</tt>
+and the <tt>r</tt> you will get entertaining results. Type the following
+very carefully:</li>
+
+<br><tt>&nbsp;&nbsp; (format nil "~r ~:r ~@r" 14 14 14)</tt>
+<br>and see what happens.</ul>
+
+<p><br><b>10.4 Some interesting global variables - *standard-input* / *standard-output*</b>
+<p>By default, all user input comes from a stream called <tt>*standard-input*</tt>
+and all output goes to a stream called <tt>*standard-output*</tt>. For
+example, in the LispWorks listener you can evaluate these two symbols and
+get one set of ugliness, and in the editor you can evaluate them again
+and get a different set of ugliness.
+<ul>
+<li>
+To evaluate a lisp form in the context of the LispWorks editor, type ESCAPE
+ESCAPE and you will be prompted for a lisp form.</li>
+</ul>
+The function <tt>format</tt> actually takes a <i>destination </i>as its
+first argument. The value <tt>t</tt> stands for <tt>*standard-output*</tt>
+and <tt>nil</tt> stands for writing to a string, but you can give any output
+stream instead. Functions like <tt>print</tt> take a destination as an
+optional second argument; functions like <tt>read</tt> and <tt>read-line</tt>
+take an input stream as an optional second argument.
+<p>To open files for input / output, call the function <tt>open</tt> (which
+returns a stream if successful). By default the stream will be opened for
+input:
+<blockquote><tt>(open "foo.txt")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; input stream from foo.txt</tt>
+<br><tt>(open "foo.txt" :direction :output)&nbsp; => output stream to foo.txt</tt></blockquote>
+Don't forget to close the stream afterwards!
+<blockquote><tt>(let* ((istream (open "/etc/passwd")))</tt>
+<br><tt>&nbsp; (prog1</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (loop (let* ((line (read-line istream)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(when (and (> (length line) 5)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(string= line "root" :end1 4))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(return (subseq line 5</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(position #\: line :start 5))))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (close istream)))</tt></blockquote>
+But cleaner than the above is the macro <tt>with-open-file</tt> which,
+as mentioned last week, uses <tt>unwind-protect</tt> to guarantee that
+the stream will be closed cleanly:
+<ul><tt>(with-open-file (ostream "c:/temp/debug" :direction :output)</tt>
+<br><tt>&nbsp; (format ostream (debugging-info)))</tt></ul>
+or (more or less equivalently)
+<ul><tt>(with-open-file (*standard-output* "c:/temp/debug" :direction :output)</tt>
+<br><tt>&nbsp; (print (debugging-info)))</tt></ul>
+To see streams in action, you can also try the following:
+<ul>
+<li>
+In the editor, evaluate the form <tt>(setf foo *standard-output*)</tt></li>
+
+<li>
+Press the editor's "Output" tab (you are now looking at the editor's <tt>*standard-output*</tt>)</li>
+
+<li>
+Arrange the listener so you can type into it but still see the end of any
+text in the editor output pane.</li>
+
+<li>
+Evaluate the form <tt>(format foo "~&amp;Hello, world")</tt> in the listener</li>
+</ul>
+<b>10.5 Flexible argument lists (the final word) and apply</b>
+<p>We have already met two ways of specifying variable numbers of arguments
+to a function; now let's meet the third plus the function most often used
+to drive it.
+<br>&nbsp;
+<table BORDER CELLPADDING=5 WIDTH="100%" >
+<tr>
+<td>
+<center>Name</center>
+</td>
+
+<td>
+<center>Description</center>
+</td>
+
+<td>
+<center>Example</center>
+</td>
+</tr>
+
+<tr>
+<td VALIGN=TOP><tt>&amp;optional</tt></td>
+
+<td VALIGN=TOP WIDTH="30%">Named set, typically small, of optional arguments,
+specified by position. Each argument defaults to <tt>nil</tt> unless otherwise
+specified.</td>
+
+<td VALIGN=TOP><tt>(defun opt-args (x &amp;optional y z)</tt>
+<br><tt>&nbsp;&nbsp; (list x y z))</tt>
+<p><tt>(opt-args 1 2)&nbsp; =>&nbsp; (1 2 nil)</tt></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP><tt>&amp;key</tt></td>
+
+<td VALIGN=TOP>Named set, not necessarily small,&nbsp;
+<br>of optional arguments specified
+<br>by name. Each argument defaults&nbsp;
+<br>to <tt>nil</tt> unless otherwise specified.</td>
+
+<td VALIGN=TOP><tt>(defun key-args (x &amp;key y z)</tt>
+<br><tt>&nbsp;&nbsp; (list x y z))</tt>
+<p><tt>(key-args 1 :z 2)&nbsp; =>&nbsp; (1 nil 2)</tt></td>
+</tr>
+
+<tr>
+<td VALIGN=TOP><tt>&amp;rest</tt></td>
+
+<td VALIGN=TOP>One variable, bound to the list of
+<br><u>all</u> arguments after this point.</td>
+
+<td><tt>(defun rest-args (x &amp;rest y)</tt>
+<br><tt>&nbsp;&nbsp; (list x y))</tt>
+<p><tt>(rest-args 1 2 3 4)&nbsp; =>&nbsp; (1 (2 3 4))</tt></td>
+</tr>
+</table>
+
+<p>The value of <tt>&amp;rest</tt> is that it gives us a handle on the
+arguments to a function even when we don't know how may it was called with.
+We have met several functions with "indefinite" numbers of arguments (e.g.
+<tt>+
+- * = &lt; > list vector funcall mapcar mapc format</tt>) - these all use
+<tt>&amp;rest</tt>
+to pick up and manipulate a list of arguments. For example, the argument
+list of <tt>+</tt> is
+<br><tt>&nbsp;&nbsp;&nbsp; (&amp;rest numbers)</tt>
+<br>and the argument list of <tt>format</tt> is
+<br><tt>&nbsp;&nbsp;&nbsp; (destination control-string &amp;rest format-arguments)</tt>
+<p>Quite often, <tt>&amp;rest</tt> is used alongside the function <tt>apply</tt>.
+Recall from last week the function <tt>funcall</tt>, which takes a function
+and some arguments and invokes that function with those arguments:
+<br><tt>&nbsp;&nbsp;&nbsp; (funcall '+ 1 2 3 4 5 6 7 8 9)&nbsp;&nbsp; =>
+45</tt>
+<br><tt>apply</tt> is similar, in that it takes as its parameters a function
+and some arguments for that function. However, the final argument to <tt>apply
+</tt><u>must
+be a list</u>, and the members of that list are passed to the destination
+function as individual arguments.
+<br><tt>&nbsp;&nbsp;&nbsp; (apply '+ 1 2 3 4 '(5 6 7 8 9))&nbsp; => 45</tt>
+<p>The link with <tt>&amp;rest</tt> feels fairly natural, on the grounds
+that once we have everything in a list it seems a shame not to carry on
+like that:
+<blockquote><tt>(defun make-window (type)</tt>
+<br><tt>&nbsp; (let* ((window (create-window type))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (initialization-args
+(obtain-initargs window)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (apply 'initialize-window window initialization-args)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (make-visible window)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; window))</tt>
+<p><tt>(defun initialize-window (window &amp;rest initialization-args)</tt>
+<br><tt>&nbsp; ...)</tt></blockquote>
+This warm feeling is usually misleading. Both <tt>apply</tt> and <tt>&amp;rest</tt>
+come at a cost, particularly if the number of arguments concerned is very
+large (e.g. several hundred). The above fragment could be rewritten
+<blockquote><tt>(defun make-window (type)</tt>
+<br><tt>&nbsp; (let* ((window (create-window type))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (initialization-args
+(obtain-initargs window)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (initialize-window window initialization-args)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (make-visible window)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; window))</tt>
+<p><tt>(defun initialize-window (window initialization-args)</tt>
+<br><tt>&nbsp; ...)</tt></blockquote>
+and would work just as well while stressing the system that bit less.
+<p>Don't use <tt>apply</tt> unless you need to. Pass lists of arguments
+around as lists, as in the above example, and do not forget <tt>reduce</tt>:
+<ul>
+<li>
+<tt>&nbsp;&nbsp;&nbsp; (apply '+ '(1 2 3 4 5 6 7 8 9)) </tt>calls <tt>+</tt>
+once with 9 arguments</li>
+
+<li>
+<tt>&nbsp;&nbsp;&nbsp; (reduce '+ '(1 2 3 4 5 6 7 8 9) </tt>calls <tt>+</tt>
+eight times, but never with more than 2 arguments</li>
+</ul>
+Incidentally, you can combine <tt>&amp;optional</tt> <tt>&amp;key</tt>
+and <tt>&amp;rest</tt> in a single argument list. The rule is that they
+must come in the following order:
+<br><tt>&nbsp;&nbsp;&nbsp; &amp;optional &amp;rest &amp;key</tt>
+<br>Thus <tt>&amp;rest</tt> can be used to bind one variable to the full
+list of keyword name-and-value pairs.
+<p>Be particularly warned that the combination of <tt>&amp;optional</tt>
+with <tt>&amp;key</tt> is a trap for the unwary - you must specify the
+<tt>&amp;optional</tt>
+values before you can get to the <tt>&amp;key</tt> arguments. The following
+Common Lisp functions display this baroque tendency:
+<br><tt>&nbsp;&nbsp;&nbsp; parse-namestring read-from-string write-string
+write-line</tt>
+<br>For example, the lambda list of <tt>write-string</tt> is
+<br><tt>&nbsp;&nbsp;&nbsp; (string &amp;optional stream &amp;key (start
+0) end)</tt>
+<br>so to write all but but the first character of a string to <tt>*standard-output*</tt>
+you must make the following call
+<br><tt>&nbsp;&nbsp;&nbsp; (write-string "Hello, world" *standard-output*
+:start 1)</tt>
+<ul>
+<li>
+<b>Hideous warning:</b> <tt>write-string</tt>, <tt>write-line</tt> and
+<tt>print</tt>
+etc. print by default (i.e. if <tt>stream</tt> is not specified) to <tt>*standard-output*</tt>.&nbsp;
+If <tt>stream</tt> has the values
+<tt>t</tt> or <tt>nil</tt>, these are
+interpreted specially (as for <tt>format</tt>)
+<u>but not with the same
+meanings as <tt>format</tt>.</u> Go look them up before using them!</li>
+</ul>
+
+<p><br><b>10.6 A couple of examples of &amp;rest functions: complement
+and append</b>
+<p>The common lisp function <tt>complement</tt> takes <u>any</u> function
+as its argument and returns another function. The new function accepts
+the same arguments as the first one and returns false where the first function
+would have returned true, and vice versa.
+<blockquote><tt>(defun my-complement (fn)</tt>
+<br><tt>&nbsp; #'(lambda (&amp;rest args)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (not (apply fn args))))</tt>
+<p><tt>(funcall (my-complement 'listp) 9)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; t</tt>
+<br><tt>(funcall (my-complement 'listp) '(1 2 3))&nbsp; =>&nbsp; nil</tt></blockquote>
+This is an occasion where the use of <tt>apply</tt> is justified (it would
+be nigh impossible to code this function otherwise), and we get to play
+with both closures and <tt>&amp;rest</tt> at the same time. What more could
+you ask for?
+<p>Finally for today, the functions <tt>append</tt> and <tt>nconc</tt>,
+used for joining lists end-to-end. Both have lambda list <tt>(&amp;rest
+lists)</tt>. Example:
+<blockquote><tt>(append '(1 2 3 4) '(a b c d) '(5 6))&nbsp; =>&nbsp; (1
+2 3 4 a b c d 5 6)</tt></blockquote>
+<tt>append</tt> is non-destructive: it works by making a copy of the top-level
+structure of all (apart from the last) of the lists handed to it, and splicing
+the final list to the end. However, <tt>nconc</tt> is destructive and splices
+each list into the one following.
+<blockquote><tt>(let* ((list1 (list 1 2 3 4))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list2 (list 'a 'b 'c 'd))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list3 (list 5 6 7)))</tt>
+<br><tt>&nbsp; (mapc 'print (list (nconc list1 list2 list3)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+list1 list2 list3)))</tt></blockquote>
+prints the following
+<blockquote><tt>(1 2 3 4 a b c d 5 6 7)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;
+result of nconc</tt>
+<br><tt>(1 2 3 4 a b c d 5 6 7)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ; destructively
+modified list1</tt>
+<br><tt>(a b c d 5 6 7)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; destructively modified list2</tt>
+<br><tt>(5 6 7)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; only list3 undamaged</tt></blockquote>
+
+<p><br><b>10.7 Parting shot</b>
+<blockquote><tt>(defun baroque-p (sym)</tt>
+<br><tt>&nbsp; (and (fboundp sym)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (let* ((lambda-list (function-lambda-list
+sym)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (and (listp lambda-list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(find '&amp;optional lambda-list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(find '&amp;key lambda-list)))))</tt>
+<p><tt>(defun hunt-for-baroque ()</tt>
+<br><tt>&nbsp; (let* ((baroque nil))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (do-external-symbols (sym "COMMON-LISP")</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (baroque-p sym)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (push sym
+baroque)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; baroque))</tt>
+<p><tt>(hunt-for-baroque)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =>&nbsp; (parse-namestring write-line
+write-string read-from-string)</tt>
+<p><tt>(find-if (complement 'baroque-p) '(write-string write-line write))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =>&nbsp; write</tt></blockquote>
+<b>10.8 Practical session / Suggested activity</b>
+<ul>
+<li>
+Write a function which takes any number of arguments, and computes the
+square root of the sum of their squares.</li>
+
+<li>
+Rewrite <tt>better-equal</tt> (week 6 exercises) to take a variable number
+of arguments (the way that <tt>=</tt> does).</li>
+
+<li>
+Try implementing some of the following yourself:</li>
+
+<ul>
+<li>
+<tt>append</tt></li>
+
+<li>
+<tt>nconc </tt>Hint: use <tt>(setf (cdr (last x)) ...)</tt></li>
+
+<li>
+(harder) <tt>mapcar</tt></li>
+</ul>
+
+<li>
+Functions [<tt>read</tt> and] <tt>read-line</tt> take an optional second
+argument <tt>eof-error-p</tt> (defaults to <tt>t</tt>) which determines
+what to do when end-of-file is reached. If true, an error is signalled;
+if false the reading functions simply return <tt>nil</tt>. Implement a
+function to copy (line by line) a file of text to a new location.</li>
+</ul>
+<b>10.9 Further reading &amp; exercises</b>
+<ul>
+<li>
+Graham section 6.7 and chapter 7. You should be able, at least, to do exercises
+7.1 and 7.3.</li>
+
+<li>
+Extend your implementation of <tt>position</tt> from last week's exercises
+to respond correctly to the <tt>:test</tt> argument too.</li>
+
+<li>
+Find out how the code in 10.7 above works, using Graham or the HyperSpec
+to look up any symbols which are new to you. Use this information to write
+a function which will return in alphabetical order the list of all Common
+Lisp symbols which have a variable binding and which have the character
+<tt>*</tt>
+somewhere in their name (e.g. <tt>*print-base*</tt>). Look up the interesting
+ones.</li>
+
+<li>
+As noted above, feature expressions can be combined using <tt>and</tt>,
+<tt>or</tt>
+and <tt>not.</tt> Write a function which will take a general feature expression
+and determine whether or not it represents a combination of currently defined
+features. For example, supposing <tt>:foo</tt> and <tt>:bar </tt>are features
+but <tt>:wombat</tt> is not, we would have</li>
+
+<ul><tt>(featurep :foo)&nbsp; =>&nbsp; t</tt>
+<br><tt>(featurep :wombat)&nbsp; =>&nbsp; nil</tt>
+<br><tt>(featurep (and :foo (or (not :bar) (not :wombat))))&nbsp; =>&nbsp;
+t</tt></ul>
+
+<li>
+Figure out what each of the following would return. Try to work them out
+rather then typing them into a lisp and saying, "Oh yes that was obvious".</li>
+
+<ul>&nbsp;
+<br><tt>(funcall (lambda (a &amp;optional (x 2) (y 3) &amp;rest z)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list
+a x y z))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1)</tt>
+<p><tt>(funcall (lambda (a &amp;optional (x 2) (y 3) &amp;rest z)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list
+a x y z))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 2 3 4 5 6)</tt>
+<p><tt>(funcall (lambda (a b &amp;key x (y 4))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list
+a b x y))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 2 :x 9)</tt>
+<p><tt>(funcall (lambda (a b &amp;key x (y 4))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list
+a b x y))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :y 7 :x 9)</tt>
+<p><tt>(funcall (lambda (a &amp;optional (b 7) &amp;rest z &amp;key x (y
+4))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list
+a b x y z))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 6 :x 8)</tt></ul>
+
+<li>
+In my days working on the LispWorks support we used to get this one on
+a regular basis. Write a <b><u>polite</u></b> reply resolving this "difficulty".</li>
+
+<br>&nbsp;
+<p>&nbsp;
+<p><tt>To: "lisp support desk"</tt>
+<br><tt>Subject: bug in read-from-string</tt>
+<br><tt>--text follows this line--</tt>
+<p><tt>Dear sir / madam,</tt>
+<p><tt>I wish to report a bug in your implementation of read-from-string,</tt>
+<br><tt>which is not responding to the :start argument. For example:</tt>
+<br>&nbsp;
+<p><tt>&nbsp; CL-USER 7 > (read-from-string "foo bar wibble")</tt>
+<br><tt>&nbsp; FOO</tt>
+<br><tt>&nbsp; 4</tt>
+<p><tt>&nbsp; CL-USER 8 > (read-from-string "foo bar wibble" :start 4)</tt>
+<br><tt>&nbsp; FOO</tt>
+<br><tt>&nbsp; 4</tt>
+<p><tt>&nbsp; CL-USER 9 ></tt>
+<p><tt>I expected the second call to return "bar".</tt>
+<p><tt>Best regards,</tt>
+<p><tt>R.T. Manual</tt>
+<br>&nbsp;</ul>
+
+<div align=right>Copyright (C) <a href="mailto:ndl@ravenbrook.com">Nick
+Levine</a> 1999. All rights reserved.</div>
+
+<div align=right>Last modified 2000-09-14
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/lectures/lecture-10.html#2 $</div>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-10.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:51 GMT -->
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/basic/the-tokenizer.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:42 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Go with the flow: basic</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;go-with-the-flow-basic&quot;)"></div><h1 anchor="go-with-the-flow-basic" id="go-with-the-flow-basic" hyphens="none">Go with the flow: <span class="my-code" decode="exclude">basic</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-lexer.html">3&emsp;the lexer</a></li><li><a class="here" href="the-tokenizer.html">4&emsp;the tok­enizer</a></li><li><a href="the-parser.html">5&emsp;the parser</a></li><li><a href="the-reader.html">6&emsp;the reader</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_EPuK0&quot;)"></div><p id="a_EPuK0">We already did most of the heavy lift­ing in <a href="the-lexer.html">the lexer</a>, so our tok­enizer mod­ule can be sim­pler than before. We can use <a href="../jsonic/the-tokenizer.html">the <span class="my-code" decode="exclude">jsonic</span> tok­enizer</a> as a tem­plate. But instead of hav­ing the lexer embed­ded inside, we import <span class="my-code" decode="exclude">basic-lexer</span> from our <span class="my-code" decode="exclude">"basic/lexer.rkt"</span> mod­ule:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/tokenizer.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_MAU92&quot;)"></div><div class="highlight-container" id="a_MAU92"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br<br/>(require "lexer.rkt" brag/support)<br/><br/>(define (make-tokenizer ip)<br/>  (port-count-lines! ip)<br/>  (define (next-token) (basic-lexer ip))<br/>  next-token)<br/><br/>(provide make-tokenizer)</div><div class="highlight" form="false" id="a_IpnPR"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="s2">"lexer.rkt"</span> <span class="n">brag/support</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">make-tokenizer</span> <span class="n">ip</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/linecol.html#(def._((quote._~23~25kernel)._port-count-lines!))" class="docs" hyphens="none">port-count-lines!</a></span> <span class="n">ip</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">next-token</span><span class="p">)</span> <span class="p">(</span><span class="n">basic-lexer</span> <span class="n">ip</span><span class="p">))</span>
+  <span class="n">next-token</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="n">make-tokenizer</span><span class="p">)</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_JP62Z&quot;)"></div><p id="a_JP62Z">But since we’re now rely­ing on <a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._lexer-srcloc))" class="docs" hyphens="none">lexer-srcloc</a> to gather source loca­tions for us, we make one update. <a href="../jsonic-2/source-locations.html#introducing-source-locations">One of the fields</a> tracked in a source-loca­tion struc­ture is the path to the file con­tain­ing the source code. But our <span class="my-code" decode="exclude">basic-lexer</span> only gets an input port as an argu­ment, not a path. With­out that extra path argu­ment, its source loca­tions will be incom­plete.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_XrmHg&quot;)"></div><p id="a_XrmHg">We can fix this in two steps:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/tokenizer.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Z69h2&quot;)"></div><div class="highlight-container" id="a_Z69h2"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br<br/>(require "lexer.rkt" brag/support)<br/><br/>(define (make-tokenizer ip [path #f])<br/>  (port-count-lines! ip)<br/>  (lexer-file-path path)<br/>  (define (next-token) (basic-lexer ip))<br/>  next-token)<br/><br/>(provide make-tokenizer)</div><div class="highlight" form="false" id="a_Paqkx"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="s2">"lexer.rkt"</span> <span class="n">brag/support</span><span class="p">)</span>
+
+<span class="hll"><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">make-tokenizer</span> <span class="n">ip</span> <span class="p">[</span><span class="n">path</span> <span class="no">#f</span><span class="p">])</span>
+</span>  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/linecol.html#(def._((quote._~23~25kernel)._port-count-lines!))" class="docs" hyphens="none">port-count-lines!</a></span> <span class="n">ip</span><span class="p">)</span>
+<span class="hll">  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._lexer-file-path))" class="docs" hyphens="none">lexer-file-path</a></span> <span class="n">path</span><span class="p">)</span>
+</span>  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">next-token</span><span class="p">)</span> <span class="p">(</span><span class="n">basic-lexer</span> <span class="n">ip</span><span class="p">))</span>
+  <span class="n">next-token</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="n">make-tokenizer</span><span class="p">)</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><ol><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_IAuF4&quot;)"></div><p id="a_IAuF4">We mod­ify <span class="my-code" decode="exclude">make-tokenizer</span> to take an optional path argu­ment. Later, when we invoke the tok­enizer from <a href="the-reader.html">the reader</a>, we pass it both an input port and a path. For test­ing pur­poses, we might not want to always use a path, so we have a default argu­ment of <span class="my-code" decode="exclude">#f</span> for the path.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_gQWFM&quot;)"></div><p id="a_gQWFM">We set the <a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(def._((lib._br-parser-tools/lex..rkt)._lexer-file-path))" class="docs" hyphens="none">lexer-file-path</a> para­me­ter to this value. A <em><a class="glossary" href="../appendix/glossary.html#parameter"><span class="glossary-link-text">para­me­ter</span></a></em> is a spe­cial kind of Racket value that approx­i­mates a global vari­able. Unlike a global vari­able, which is a sim­ple value, a para­me­ter is a func­tion that is used to store and retrieve a value. So what­ever argu­ment we pass to <span class="my-code" decode="exclude">lexer-file-path</span> “sets” it, and it can then be retrieved by other func­tions that rely on it, includ­ing <a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._lexer-srcloc))" class="docs" hyphens="none">lexer-srcloc</a>. <span class="tooltip" onclick="this.classList.toggle('tooltip_visible')"> + <span class="tooltip-inner">True, para­me­ters go some­what against the grain of func­tional pro­gram­ming. Thus, they are used spar­ingly in Racket. But some­times they’re the clean­est way to do things.</span></span></p></div></li></ol><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_FjEhl&quot;)"></div><p id="a_FjEhl">With those changes, we’re done with the tok­enizer.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-lexer.html">3&emsp;the lexer</a></li><li><a class="here" href="the-tokenizer.html">4&emsp;the tok­enizer</a></li><li><a href="the-parser.html">5&emsp;the parser</a></li><li><a href="the-reader.html">6&emsp;the reader</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="the-lexer.html">← prev</a>
+    <a class="nav-right" href="the-parser.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

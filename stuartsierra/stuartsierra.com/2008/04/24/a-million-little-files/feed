@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: A Million Little Files</title>
+	<atom:link href="https://stuartsierra.com/2008/04/24/a-million-little-files/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2008/04/24/a-million-little-files</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: bin</title>
+		<link>https://stuartsierra.com/2008/04/24/a-million-little-files/comment-page-1#comment-44750</link>
+		<dc:creator><![CDATA[bin]]></dc:creator>
+		<pubDate>Sun, 06 Jan 2013 07:56:09 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=151#comment-44750</guid>
+		<description><![CDATA[You may use one or more file as one split for tasks.]]></description>
+		<content:encoded><![CDATA[<p>You may use one or more file as one split for tasks.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2008/04/24/a-million-little-files/comment-page-1#comment-44621</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Fri, 13 Jul 2012 13:33:55 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=151#comment-44621</guid>
+		<description><![CDATA[Nitin- If I recall correctly, you can&#039;t use bzip2-compressed TAR files as Hadoop input files because they are not splittable.]]></description>
+		<content:encoded><![CDATA[<p>Nitin- If I recall correctly, you can&#8217;t use bzip2-compressed TAR files as Hadoop input files because they are not splittable.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: nitin</title>
+		<link>https://stuartsierra.com/2008/04/24/a-million-little-files/comment-page-1#comment-44620</link>
+		<dc:creator><![CDATA[nitin]]></dc:creator>
+		<pubDate>Fri, 13 Jul 2012 08:53:34 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=151#comment-44620</guid>
+		<description><![CDATA[Wouldn&#039;t it be more efficient to write InputFormat/ RecordReader implementation for tar files instead of converting them to SequenceFormat? It would duplicate data otherwise? no?]]></description>
+		<content:encoded><![CDATA[<p>Wouldn&#8217;t it be more efficient to write InputFormat/ RecordReader implementation for tar files instead of converting them to SequenceFormat? It would duplicate data otherwise? no?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: net_ma</title>
+		<link>https://stuartsierra.com/2008/04/24/a-million-little-files/comment-page-1#comment-44385</link>
+		<dc:creator><![CDATA[net_ma]]></dc:creator>
+		<pubDate>Wed, 18 Jan 2012 15:32:43 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=151#comment-44385</guid>
+		<description><![CDATA[Hi Stuart,
+
+I downloaded your tool. But when I tried to convert a tar file, I got the following error.
+
+The tar file I tried to convert is about 4.5GB in size and contains about 200 files.
+
+Could you tell me what I should do?
+
+Thank you.
+
+java -jar tar-to-seq.jar /home/hduser/sample-archive/2011/a-250.tar a-250.seq
+log4j:WARN No appenders could be found for logger (org.apache.hadoop.conf.Configuration).
+log4j:WARN Please initialize the log4j system properly.
+Exception in thread &quot;main&quot; java.lang.OutOfMemoryError: Java heap space
+	at java.util.Arrays.copyOf(Arrays.java:2786)
+	at java.io.ByteArrayOutputStream.write(ByteArrayOutputStream.java:94)
+	at java.io.DataOutputStream.write(DataOutputStream.java:90)
+	at org.apache.hadoop.io.compress.CompressorStream.compress(CompressorStream.java:78)
+	at org.apache.hadoop.io.compress.CompressorStream.write(CompressorStream.java:71)
+	at java.io.BufferedOutputStream.write(BufferedOutputStream.java:105)
+	at java.io.DataOutputStream.write(DataOutputStream.java:90)
+	at org.apache.hadoop.io.SequenceFile$BlockCompressWriter.writeBuffer(SequenceFile.java:1224)
+	at org.apache.hadoop.io.SequenceFile$BlockCompressWriter.sync(SequenceFile.java:1247)
+	at org.apache.hadoop.io.SequenceFile$BlockCompressWriter.append(SequenceFile.java:1297)
+	at org.altlaw.hadoop.TarToSeqFile.execute(TarToSeqFile.java:95)
+	at org.altlaw.hadoop.TarToSeqFile.main(TarToSeqFile.java:165)]]></description>
+		<content:encoded><![CDATA[<p>Hi Stuart,</p>
+<p>I downloaded your tool. But when I tried to convert a tar file, I got the following error.</p>
+<p>The tar file I tried to convert is about 4.5GB in size and contains about 200 files.</p>
+<p>Could you tell me what I should do?</p>
+<p>Thank you.</p>
+<p>java -jar tar-to-seq.jar /home/hduser/sample-archive/2011/a-250.tar a-250.seq<br />
+log4j:WARN No appenders could be found for logger (org.apache.hadoop.conf.Configuration).<br />
+log4j:WARN Please initialize the log4j system properly.<br />
+Exception in thread &#8220;main&#8221; java.lang.OutOfMemoryError: Java heap space<br />
+	at java.util.Arrays.copyOf(Arrays.java:2786)<br />
+	at java.io.ByteArrayOutputStream.write(ByteArrayOutputStream.java:94)<br />
+	at java.io.DataOutputStream.write(DataOutputStream.java:90)<br />
+	at org.apache.hadoop.io.compress.CompressorStream.compress(CompressorStream.java:78)<br />
+	at org.apache.hadoop.io.compress.CompressorStream.write(CompressorStream.java:71)<br />
+	at java.io.BufferedOutputStream.write(BufferedOutputStream.java:105)<br />
+	at java.io.DataOutputStream.write(DataOutputStream.java:90)<br />
+	at org.apache.hadoop.io.SequenceFile$BlockCompressWriter.writeBuffer(SequenceFile.java:1224)<br />
+	at org.apache.hadoop.io.SequenceFile$BlockCompressWriter.sync(SequenceFile.java:1247)<br />
+	at org.apache.hadoop.io.SequenceFile$BlockCompressWriter.append(SequenceFile.java:1297)<br />
+	at org.altlaw.hadoop.TarToSeqFile.execute(TarToSeqFile.java:95)<br />
+	at org.altlaw.hadoop.TarToSeqFile.main(TarToSeqFile.java:165)</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2008/04/24/a-million-little-files/comment-page-1#comment-44235</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Fri, 05 Aug 2011 21:28:44 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=151#comment-44235</guid>
+		<description><![CDATA[Chris: the source code is included in the .tar.gz download. Apache license.]]></description>
+		<content:encoded><![CDATA[<p>Chris: the source code is included in the .tar.gz download. Apache license.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Chris</title>
+		<link>https://stuartsierra.com/2008/04/24/a-million-little-files/comment-page-1#comment-44233</link>
+		<dc:creator><![CDATA[Chris]]></dc:creator>
+		<pubDate>Fri, 05 Aug 2011 19:39:06 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=151#comment-44233</guid>
+		<description><![CDATA[Would you be willing to share the source code?  It would be very helpful if i could rewrite it to have your Seq file as Key: Filename Value: File Text instead of a BytesWritable for the Value.]]></description>
+		<content:encoded><![CDATA[<p>Would you be willing to share the source code?  It would be very helpful if i could rewrite it to have your Seq file as Key: Filename Value: File Text instead of a BytesWritable for the Value.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2008/04/24/a-million-little-files/comment-page-1#comment-44160</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Wed, 09 Mar 2011 22:25:29 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=151#comment-44160</guid>
+		<description><![CDATA[Sorry, I don&#039;t know anything else about Hadoop Streaming.]]></description>
+		<content:encoded><![CDATA[<p>Sorry, I don&#8217;t know anything else about Hadoop Streaming.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Bowen</title>
+		<link>https://stuartsierra.com/2008/04/24/a-million-little-files/comment-page-1#comment-44159</link>
+		<dc:creator><![CDATA[Bowen]]></dc:creator>
+		<pubDate>Wed, 09 Mar 2011 21:41:08 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=151#comment-44159</guid>
+		<description><![CDATA[Thanks for the prompt reply.
+
+So is there anyway for Hadoop Streaming to take binary files as input? Currently, I have to first download those files from HDFS to the local machine, and then process. It&#039;s super slow...
+
+Thanks,
+Bowen]]></description>
+		<content:encoded><![CDATA[<p>Thanks for the prompt reply.</p>
+<p>So is there anyway for Hadoop Streaming to take binary files as input? Currently, I have to first download those files from HDFS to the local machine, and then process. It&#8217;s super slow&#8230;</p>
+<p>Thanks,<br />
+Bowen</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2008/04/24/a-million-little-files/comment-page-1#comment-44158</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Wed, 09 Mar 2011 13:52:38 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=151#comment-44158</guid>
+		<description><![CDATA[The file contents are stored as a normal Hadoop BytesWritable object.  You would access it as you would any other Hadoop Writable datatype.  But if I recall correctly, Hadoop Streaming only supports text.]]></description>
+		<content:encoded><![CDATA[<p>The file contents are stored as a normal Hadoop BytesWritable object.  You would access it as you would any other Hadoop Writable datatype.  But if I recall correctly, Hadoop Streaming only supports text.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Bowen</title>
+		<link>https://stuartsierra.com/2008/04/24/a-million-little-files/comment-page-1#comment-44157</link>
+		<dc:creator><![CDATA[Bowen]]></dc:creator>
+		<pubDate>Wed, 09 Mar 2011 05:26:01 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=151#comment-44157</guid>
+		<description><![CDATA[Stuart,
+
+I&#039;m using Hadoop Streaming (C code) to process binary input files. After using your code to get the sequence file, how to read the data in my C code? Should I read it byte by byte?
+
+Thanks,
+Bowen]]></description>
+		<content:encoded><![CDATA[<p>Stuart,</p>
+<p>I&#8217;m using Hadoop Streaming (C code) to process binary input files. After using your code to get the sequence file, how to read the data in my C code? Should I read it byte by byte?</p>
+<p>Thanks,<br />
+Bowen</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.286 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:57:10 -->
+
+<!-- Compression = gzip -->

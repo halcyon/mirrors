@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/de-de/ruby-de/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:42 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn ruby in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../../css/normalize.css">
+        <link rel="stylesheet" href="../../../css/main.css">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fde-de%2Fruby-de%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3Druby">
+        Teile diese Seite mit anderen
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">Lerne X in Y Minuten</a></h2>
+  <h2>Wobei X=ruby</h2>
+  
+    <p class="filelink">
+    Lade den Code herunter:
+    <a href="../../files/ruby-de.rb">ruby-de.rb</a>
+    </p>
+  
+  <div id="doc">
+    <h1>Dies ist ein Kommentar</h1>
+
+<p>=begin
+Dies sind multi-line
+Kommentare. Niemand benutzt
+die wirklich.
+=end</p>
+
+<h1>Objekte - Alles ist ein Objekt</h1>
+
+<h2>Zahlen sind Objekte</h2>
+<pre class="highlight plaintext"><code>3.class #=&gt; Fixnum
+3.to_s #=&gt; "3"
+</code></pre>
+
+<h3>Simple Arithmetik</h3>
+<pre class="highlight plaintext"><code>1 + 1 #=&gt; 2
+8 - 1 #=&gt; 7
+10 * 2 #=&gt; 20
+35 / 5 #=&gt; 7
+2**5 #=&gt; 32
+</code></pre>
+
+<p>// Arithmetik ist aber eigentlich nur syntaktischer Zucker
+// um eine Methode eines Objekt aufzurufen
+<code>
+1.+(3) #=&gt; 4
+10.* 5 #=&gt; 50
+</code></p>
+
+<h2>Special values sind Objekte</h2>
+<pre class="highlight plaintext"><code>nil # Nothing to see here
+true # truth
+false # falsehood
+
+nil.class #=&gt; NilClass
+true.class #=&gt; TrueClass
+false.class #=&gt; FalseClass
+</code></pre>
+
+<h2>Objektvergleiche</h2>
+
+<h3>Gleicheit</h3>
+<pre class="highlight plaintext"><code>1 == 1 #=&gt; true
+2 == 1 #=&gt; false
+</code></pre>
+
+<h3>Ungleichheit</h3>
+<pre class="highlight plaintext"><code>1 != 1 #=&gt; false
+2 != 1 #=&gt; true
+</code></pre>
+
+<h3>Neben false selbst, nil ist ein anderer &lsquo;falsey&rsquo; Wert</h3>
+<pre class="highlight plaintext"><code>!nil   #=&gt; true
+!false #=&gt; true
+!0     #=&gt; false
+</code></pre>
+
+<h3>Weitere Vergleiche</h3>
+<pre class="highlight plaintext"><code>1 &lt; 10 #=&gt; true
+1 &gt; 10 #=&gt; false
+2 &lt;= 2 #=&gt; true
+2 &gt;= 2 #=&gt; true
+</code></pre>
+
+<h3>Logische Operatoren</h3>
+<pre class="highlight plaintext"><code>true &amp;&amp; false #=&gt; false
+true || false #=&gt; true
+!true #=&gt; false
+</code></pre>
+
+<p>Es gibt alternative Versionen der logischen Operatoren mit niedrigerer
+Wertigkeit. Diese werden meistens bei Flow-Control eingesetzt, um
+verschiedenen Ausdrücke zu verketten bis einer true oder false zurück
+liefert.</p>
+
+<h4>and</h4>
+
+<h5><code>do_something_else</code> wird nur ausgewertet wenn <code>do_something</code> true ist.</h5>
+
+<p>do<em>something() and do</em>something_else()</p>
+
+<h4>or</h4>
+
+<h5><code>log_error</code> wird nur ausgewertet wenn <code>do_something</code> false ist.</h5>
+
+<p>do<em>something() or log</em>error()</p>
+
+<h2>Strings sind Objekte</h2>
+<pre class="highlight plaintext"><code>'I am a string'.class #=&gt; String
+"I am a string too".class #=&gt; String
+
+
+platzhalter = 'Ruby'
+"Ich kann in #{placeholder} Platzhalter mit doppelten Anführungsstrichen füllen."
+</code></pre>
+
+<p>Einfache Anführungszeichen sollten bevorzugt werden.
+Doppelte Anführungszeichen führen interne Berechnungen durch.</p>
+
+<h3>Strings können verbunden werden, aber nicht mit Zahlen</h3>
+<pre class="highlight plaintext"><code>'hello ' + 'world'  #=&gt; "hello world"
+'hello ' + 3 #=&gt; TypeError: can't convert Fixnum into String
+</code></pre>
+
+<h4>Zahl muss in String konvertiert werden</h4>
+<pre class="highlight plaintext"><code>'hello ' + 3.to_s #=&gt; "hello 3"
+</code></pre>
+
+<h3>Text ausgeben</h3>
+<pre class="highlight plaintext"><code>puts "I'm printing!"
+</code></pre>
+
+<h1>Variablen</h1>
+
+<h2>Zuweisungen</h2>
+
+<h3>Diese Zuweisung gibt den zugeordneten Wert zurück</h3>
+<pre class="highlight plaintext"><code>x = 25 #=&gt; 25
+x #=&gt; 25
+</code></pre>
+
+<h3>Damit funktionieren auch mehrfache Zuweisungen</h3>
+<pre class="highlight plaintext"><code>x = y = 10 #=&gt; 10
+x #=&gt; 10
+y #=&gt; 10
+</code></pre>
+
+<h2>Benennung</h2>
+
+<h3>Konvention ist snake_case</h3>
+<pre class="highlight plaintext"><code>snake_case = true
+</code></pre>
+
+<h3>Benutze verständliche Variablennamen</h3>
+<pre class="highlight plaintext"><code>path_to_project_root = '/good/name/'
+path = '/bad/name/'
+</code></pre>
+
+<h1>Symbols (sind auch Objekte)</h1>
+
+<p>Symbols sind unveränderliche, wiederverwendbare Konstanten, welche intern<br>
+als integer repräsentiert werden. Sie werden häufig anstelle von Strings<br>
+verwendet, um sinnvoll Werte zu übermitteln.<br>
+Symbols werden mit dem Doppelpunkt gekennzeichnet.</p>
+<pre class="highlight plaintext"><code>:pending.class #=&gt; Symbol
+status = :pending
+status == :pending #=&gt; true
+status == 'pending' #=&gt; false
+status == :approved #=&gt; false
+</code></pre>
+
+<h1>Arrays</h1>
+
+<h2>Ein Array anlegen</h2>
+<pre class="highlight plaintext"><code>array = [1, 2, 3, 4, 5] #=&gt; [1, 2, 3, 4, 5]
+</code></pre>
+
+<h2>Array können verschiedene Typen beinhalten</h2>
+<pre class="highlight plaintext"><code>[1, 'hello', false] #=&gt; [1, "hello", false]
+</code></pre>
+
+<h2>Wie bei arithmetischen Ausdrücken auch wird beim Zugriff auf</h2>
+
+<h2>[0] eigentlich die Methode [] des Array Objekts aufgerufen.</h2>
+<pre class="highlight plaintext"><code>array.[] 0 #=&gt; 1
+array.[] 12 #=&gt; nil
+</code></pre>
+
+<h2>Arrays können von vorne indiziert werden</h2>
+<pre class="highlight plaintext"><code>array[0] #=&gt; 1
+array[12] #=&gt; nil
+</code></pre>
+
+<h2>Arrays können von hinten indiziert werden</h2>
+<pre class="highlight plaintext"><code>array[-1] #=&gt; 5
+</code></pre>
+
+<h2>Arrays können mit Stard Index und Länge indiziert werden</h2>
+<pre class="highlight plaintext"><code>array[2, 3] #=&gt; [3, 4, 5]
+</code></pre>
+
+<h2>Arrays können mit einer Range indiziert werden</h2>
+<pre class="highlight plaintext"><code>array[1..3] #=&gt; [2, 3, 4]
+</code></pre>
+
+<h2>Einen Wert hinzufügen</h2>
+<pre class="highlight plaintext"><code>array &lt;&lt; 6 #=&gt; [1, 2, 3, 4, 5, 6]
+array.push(6) #=&gt; [1, 2, 3, 4, 5, 6]
+</code></pre>
+
+<h2>Testen, ob ein Element schon vorhanden ist</h2>
+<pre class="highlight plaintext"><code>array.include?(1) #=&gt; true
+</code></pre>
+
+<h1>Hashes</h1>
+
+<p>Hashes sind das Hauptfeature um Key/Values zu speichern</p>
+<pre class="highlight plaintext"><code>
+## Ein Hash anlegen
+</code></pre>
+
+<p>hash = { &lsquo;color&rsquo; =&gt; &lsquo;green&rsquo;, &lsquo;number&rsquo; =&gt; 5 }
+hash.keys #=&gt; [&lsquo;color&rsquo;, &lsquo;number&rsquo;]
+&ldquo;`</p>
+
+<h2>Wert per key herausfinden</h2>
+<pre class="highlight plaintext"><code>hash['color'] #=&gt; 'green'
+hash['number'] #=&gt; 5
+hash['nothing here'] #=&gt; nil 
+// Asking a hash for a key that doesn't exist returns nil:
+</code></pre>
+
+<h2>Symbols können auch keys sein</h2>
+<pre class="highlight plaintext"><code>new_hash = { defcon: 3, action: true }
+new_hash.keys #=&gt; [:defcon, :action]
+</code></pre>
+
+<h2>Testen ob ein Key oder ein Value existiert</h2>
+<pre class="highlight plaintext"><code>new_hash.has_key?(:defcon) #=&gt; true
+new_hash.has_value?(3) #=&gt; true
+</code></pre>
+
+<h3>Tip:  Arrays und Hashes sind Enumerable</h3>
+
+<h3>Und haben gemeinsame, hilfreiche Methoden wie:</h3>
+
+<h3>each, map, count, and more</h3>
+
+<h1>Kontrolstrukturen</h1>
+
+<h2>if</h2>
+<pre class="highlight plaintext"><code>if true
+  'if statement'
+elsif false
+  'else if, optional'
+else
+  'else, also optional'
+end
+</code></pre>
+
+<h2>for - Allerdings werden for Schleifen nicht oft vewendet.</h2>
+<pre class="highlight plaintext"><code>for counter in 1..5
+  puts "iteration #{counter}"
+end
+</code></pre>
+
+<h2>Stattdessen: &quot;each&rdquo; Methode und einen Bloch übergeben</h2>
+
+<p>Ein Block ist ein Codeteil, den man einer Methode übergeben kann<br>
+Ähnelt stark lambdas, anonymen Funktionen oder Closures in anderen<br>
+Programmiersprachen.</p>
+<pre class="highlight plaintext"><code>(1..5).each do |counter|
+  puts "iteration #{counter}"
+end
+</code></pre>
+
+<p>Die each Methode einer Range führt den Block für jedes Element der Range aus.</p>
+
+<p>Dem Block wird ein &ldquo;counter&rdquo; parameter übergeben.</p>
+
+<h3>Den Block kann man auch in geschweiften Klammern schreiben</h3>
+<pre class="highlight plaintext"><code>(1..5).each { |counter| puts "iteration #{counter}" }
+</code></pre>
+
+<h3>Each kann auch über den Inhalt von Datenstrukturen iterieren</h3>
+<pre class="highlight plaintext"><code>array.each do |element|
+  puts "#{element} is part of the array"
+end
+hash.each do |key, value|
+  puts "#{key} is #{value}"
+end
+
+counter = 1
+while counter &lt;= 5 do
+  puts "iteration #{counter}"
+  counter += 1
+end
+</code></pre>
+
+<h2>case</h2>
+<pre class="highlight plaintext"><code>grade = 'B'
+
+case grade
+when 'A'
+  puts 'Way to go kiddo'
+when 'B'
+  puts 'Better luck next time'
+when 'C'
+  puts 'You can do better'
+when 'D'
+  puts 'Scraping through'
+when 'F'
+  puts 'You failed!'
+else
+  puts 'Alternative grading system, eh?'
+end
+=&gt; "Better luck next time"
+</code></pre>
+
+<h3>Case können auch ranges</h3>
+<pre class="highlight plaintext"><code>grade = 82
+case grade
+when 90..100
+  puts 'Hooray!'
+when 80...90
+  puts 'OK job'
+else
+  puts 'You failed!'
+end
+=&gt; "OK job"
+</code></pre>
+
+<h1>exception handling:</h1>
+<pre class="highlight plaintext"><code>begin
+  # code here that might raise an exception
+  raise NoMemoryError, 'You ran out of memory.'
+rescue NoMemoryError =&gt; exception_variable
+  puts 'NoMemoryError was raised', exception_variable
+rescue RuntimeError =&gt; other_exception_variable
+  puts 'RuntimeError was raised now'
+else
+  puts 'This runs if no exceptions were thrown at all'
+ensure
+  puts 'This code always runs no matter what'
+end
+</code></pre>
+
+<h1>Funktionen</h1>
+<pre class="highlight plaintext"><code>def double(x)
+  x * 2
+end
+</code></pre>
+
+<h2>Funktionen (und Blocks)</h2>
+
+<h2>geben implizit den Wert des letzten Statements zurück</h2>
+<pre class="highlight plaintext"><code>double(2) #=&gt; 4
+</code></pre>
+
+<h3>Klammern sind optional wenn das Ergebnis nicht mehdeutig ist</h3>
+<pre class="highlight plaintext"><code>double 3 #=&gt; 6
+double double 3 #=&gt; 12
+def sum(x, y)
+  x + y
+end
+</code></pre>
+
+<h3>Methoden Parameter werden per Komma getrennt</h3>
+<pre class="highlight plaintext"><code>sum 3, 4 #=&gt; 7
+sum sum(3, 4), 5 #=&gt; 12
+</code></pre>
+
+<h2>yield</h2>
+
+<h3>Alle Methoden haben einen impliziten, optionalen block Parameter</h3>
+
+<h3>Dieser wird mit dem Schlüsselword &ldquo;yield&rdquo; aufgerufen</h3>
+<pre class="highlight plaintext"><code>def surround
+  puts '{'
+  yield
+  puts '}'
+end
+surround { puts 'hello world' }
+</code></pre>
+
+<h2>Einen Block kann man auch einer Methoden übergeben</h2>
+
+<h3>&ldquo;&amp;&rdquo; kennzeichnet die Referenz zum übergebenen Block</h3>
+<pre class="highlight plaintext"><code>def guests(&amp;block)
+  block.call 'some_argument'
+end
+</code></pre>
+
+<h3>Eine Liste von Parametern kann man auch übergeben,</h3>
+
+<h3>Diese wird in ein Array konvertiert</h3>
+
+<h3>&ldquo;*&rdquo; kennzeichnet dies.</h3>
+<pre class="highlight plaintext"><code>def guests(*array)
+  array.each { |guest| puts guest }
+end
+</code></pre>
+
+<h1>Klassen</h1>
+
+<h2>Werden mit dem class Schlüsselwort definiert</h2>
+<pre class="highlight plaintext"><code>class Human
+</code></pre>
+
+<h3>Konstruktor bzw. Initializer</h3>
+<pre class="highlight plaintext"><code>  def initialize(name, age = 0)
+    # Assign the argument to the "name" instance variable for the instance
+    @name = name
+    # If no age given, we will fall back to the default in the arguments list.
+    @age = age
+  end
+</code></pre>
+
+<h3>setter Methode</h3>
+<pre class="highlight plaintext"><code>  def name=(name)
+    @name = name
+  end
+</code></pre>
+
+<h3>getter Methode</h3>
+<pre class="highlight plaintext"><code>  def name
+    @name
+  end
+</code></pre>
+
+<h4>getter können mit der attr_accessor Methode vereinfacht definiert werden</h4>
+<pre class="highlight plaintext"><code>  attr_accessor :name
+  # Getter/setter methods can also be created individually like this
+  attr_reader :name
+  attr_writer :name
+  # A class method uses self to distinguish from instance methods.
+  # It can only be called on the class, not an instance.
+  def self.say(msg)
+    puts msg
+  end
+  def species
+    @@species
+  end
+end
+</code></pre>
+
+<h2>Eine Klasse instanziieren</h2>
+<pre class="highlight plaintext"><code>jim = Human.new('Jim Halpert')
+dwight = Human.new('Dwight K. Schrute')
+</code></pre>
+
+<h2>Methodenaufrufe</h2>
+<pre class="highlight plaintext"><code>jim.species #=&gt; "H. sapiens"
+jim.name #=&gt; "Jim Halpert"
+jim.name = "Jim Halpert II" #=&gt; "Jim Halpert II"
+jim.name #=&gt; "Jim Halpert II"
+dwight.species #=&gt; "H. sapiens"
+dwight.name #=&gt; "Dwight K. Schrute"
+</code></pre>
+
+<h2>Eine Klassenmethode aufrufen</h2>
+<pre class="highlight plaintext"><code>Human.say('Hi') #=&gt; "Hi"
+</code></pre>
+
+<h2>Variable Gültigkeit</h2>
+
+<h3>Variablen die mit &ldquo;$&rdquo; starten, gelten global</h3>
+<pre class="highlight plaintext"><code>$var = "I'm a global var"
+defined? $var #=&gt; "global-variable"
+</code></pre>
+
+<h3>Variablen die mit &ldquo;@&rdquo; starten, gelten für die Instanz</h3>
+<pre class="highlight plaintext"><code>@var = "I'm an instance var"
+defined? @var #=&gt; "instance-variable"
+</code></pre>
+
+<h3>Variablen die mit &ldquo;@@&rdquo; starten, gelten für die Klasse</h3>
+<pre class="highlight plaintext"><code>@@var = "I'm a class var"
+defined? @@var #=&gt; "class variable"
+</code></pre>
+
+<h3>Variablen die mit einem Großbuchstaben anfangen, sind Konstanten</h3>
+<pre class="highlight plaintext"><code>Var = "I'm a constant"
+defined? Var #=&gt; "constant"
+</code></pre>
+
+<h2>Class ist auch ein Objekt</h2>
+
+<h3>Hat also auch Instanzvariablen</h3>
+
+<h3>Eine Klassenvariable wird innerhalb der Klasse und Ableitungen geteilt.</h3>
+
+<h3>Basis Klasse</h3>
+<pre class="highlight plaintext"><code>class Human
+  @@foo = 0
+  def self.foo
+    @@foo
+  end
+  def self.foo=(value)
+    @@foo = value
+  end
+end
+</code></pre>
+
+<h3>Abgeleitete Klasse</h3>
+<pre class="highlight plaintext"><code>class Worker &lt; Human
+end
+Human.foo # 0
+Worker.foo # 0
+Human.foo = 2 # 2
+Worker.foo # 2
+</code></pre>
+
+<h3>Eine Klasseninstanzvariable wird nicht geteilt</h3>
+<pre class="highlight plaintext"><code>class Human
+  @bar = 0
+  def self.bar
+    @bar
+  end
+  def self.bar=(value)
+    @bar = value
+  end
+end
+</code></pre>
+<pre class="highlight plaintext"><code>class Doctor &lt; Human
+end
+</code></pre>
+<pre class="highlight plaintext"><code>Human.bar # 0
+Doctor.bar # nil
+</code></pre>
+<pre class="highlight plaintext"><code>module ModuleExample
+  def foo
+    'foo'
+  end
+end
+</code></pre>
+
+<h3>Module einbinden, heisst ihre Methoden an die Instanzen der Klasse zu binden</h3>
+
+<h3>Module erweitern, heisst ihre Mothden an die Klasse selbst zu binden</h3>
+<pre class="highlight plaintext"><code>class Person
+  include ModuleExample
+end
+</code></pre>
+<pre class="highlight plaintext"><code>class Book
+  extend ModuleExample
+end
+</code></pre>
+<pre class="highlight plaintext"><code>Person.foo     # =&gt; NoMethodError: undefined method `foo' for Person:Class
+Person.new.foo # =&gt; 'foo'
+Book.foo       # =&gt; 'foo'
+Book.new.foo   # =&gt; NoMethodError: undefined method `foo'
+</code></pre>
+
+<h3>Callbacks werden ausgeführt, wenn ein Modul eingebunden oder erweitert wird</h3>
+<pre class="highlight plaintext"><code>  module ConcernExample
+    def self.included(base)
+      base.extend(ClassMethods)
+      base.send(:include, InstanceMethods)
+    end
+    module ClassMethods
+      def bar
+        'bar'
+      end
+    end
+    module InstanceMethods
+      def qux
+        'qux'
+      end
+    end
+  end
+  class Something
+    include ConcernExample
+  end
+</code></pre>
+<pre class="highlight plaintext"><code>Something.bar     # =&gt; 'bar'
+Something.qux     # =&gt; NoMethodError: undefined method `qux'
+Something.new.bar # =&gt; NoMethodError: undefined method `bar'
+Something.new.qux # =&gt; 'qux'
+</code></pre>
+
+<h2>Weiterführende Hinweise</h2>
+
+<p>//EN  </p>
+
+<ul>
+<li><a href="http://www.learneroo.com/modules/61/nodes/338">Learn Ruby by Example with Challenges</a> - A variant of this reference with in-browser challenges.</li>
+<li><a href="http://www.ruby-doc.org/core-2.1.1/">Official Documentation</a></li>
+<li><a href="https://www.ruby-lang.org/en/documentation/ruby-from-other-languages/">Ruby from other languages</a></li>
+<li><a href="http://www.amazon.com/Programming-Ruby-1-9-2-0-Programmers/dp/1937785491/">Programming Ruby</a> - An older <a href="http://ruby-doc.com/docs/ProgrammingRuby/">free edition</a> is available online.</li>
+<li><a href="https://github.com/bbatsov/ruby-style-guide">Ruby Style Guide</a> - A community-driven Ruby coding style guide.</li>
+</ul>
+
+    <hr>
+    <p>Du hast einen Verbesserungsvorschlag oder einen Fehler gefunden? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Erstelle ein Ticket</a> im offiziellen Github Repo, oder du erstellst einfach gleich einen Pull Request!
+    </p>
+    <p class="contributed">
+    Originalversion von David Underwood, mit Updates von <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/de-de/ruby-de.html.markdown">8 contributor(s)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://theflyingdeveloper.com/">David Underwood</a>,
+      
+    
+      
+        <a href="http://joelwalden.net/">Joel Walden</a>,
+      
+    
+      
+        <a href="http://twitter.com/lukeholder">Luke Holder</a>,
+      
+    
+      
+        <a href="http://thume.ca/">Tristan Hume</a>,
+      
+    
+      
+        <a href="https://github.com/NickLaMuro">Nick LaMuro</a>,
+      
+    
+      
+        <a href="http://www.about.me/marcosbrizeno">Marcos Brizeno</a>,
+      
+    
+      
+        <a href="http://www.learneroo.com/">Ariel Krakowski</a>,
+      
+    
+      
+        <a href="https://github.com/dskecse">Dzianis Dashkevich</a>,
+      
+    
+      
+        <a href="https://github.com/levibostian">Levi Bostian</a>,
+      
+    
+      
+        <a href="https://github.com/iamrahil">Rahil Momin</a>
+      
+    
+    </p>
+
+    <p>
+    
+      Translated by:
+      
+        <a href="https://github.com/coastalchief">Christian Albrecht</a>
+      
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/de-de/ruby-de/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:42 GMT -->
+</html>

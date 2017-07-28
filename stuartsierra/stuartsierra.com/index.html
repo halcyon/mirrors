@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+
+<!-- Mirrored from stuartsierra.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:54:59 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+		<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+<title>Digital Digressions by Stuart Sierra &#8211; From programming to everything else</title>
+<link rel='dns-prefetch' href='http://s0.wp.com/'>
+<link rel='dns-prefetch' href='http://secure.gravatar.com/'>
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel='dns-prefetch' href='http://s.w.org/'>
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Comments Feed" href="comments/feed" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/stuartsierra.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.6"}};
+			!function(a,b,c){function d(a){var c,d,e,f,g,h=b.createElement("canvas"),i=h.getContext&&h.getContext("2d"),j=String.fromCharCode;if(!i||!i.fillText)return!1;switch(i.textBaseline="top",i.font="600 32px Arial",a){case"flag":return i.fillText(j(55356,56806,55356,56826),0,0),!(h.toDataURL().length<3e3)&&(i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,65039,8205,55356,57096),0,0),c=h.toDataURL(),i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,55356,57096),0,0),d=h.toDataURL(),c!==d);case"diversity":return i.fillText(j(55356,57221),0,0),e=i.getImageData(16,16,1,1).data,f=e[0]+","+e[1]+","+e[2]+","+e[3],i.fillText(j(55356,57221,55356,57343),0,0),e=i.getImageData(16,16,1,1).data,g=e[0]+","+e[1]+","+e[2]+","+e[3],f!==g;case"simple":return i.fillText(j(55357,56835),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode8":return i.fillText(j(55356,57135),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode9":return i.fillText(j(55358,56631),0,0),0!==i.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity","unicode9"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='twentysixteen-jetpack-css'  href='wp-content/plugins/jetpack/modules/theme-tools/compat/twentysixteen3a05.css?ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-fonts-css'  href='https://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%2C900%2C400italic%2C700italic%2C900italic%7CMontserrat%3A400%2C700%7CInconsolata%3A400&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='wp-content/plugins/jetpack/_inc/genericons/genericons/genericons128b.css?ver=3.1' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-style-css'  href='wp-content/themes/twentysixteen/style167b.css?ver=4.6' type='text/css' media='all' />
+<!--[if lt IE 10]>
+<link rel='stylesheet' id='twentysixteen-ie-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentysixteen-ie8-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie8.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='twentysixteen-ie7-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie7.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='wp-content/plugins/jetpack/css/jetpack3a05.css?ver=4.2.2' type='text/css' media='all' />
+<script type='text/javascript' src='wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://stuartsierra.com/wp-content/themes/twentysixteen/js/html5.js?ver=3.7.3'></script>
+<![endif]-->
+<link rel='https://api.w.org/' href='wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+<link rel='shortlink' href='https://wp.me/bl3J' />
+
+<link rel='dns-prefetch' href='http://v0.wordpress.com/'>
+
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Digital Digressions by Stuart Sierra" />
+<meta property="og:description" content="From programming to everything else" />
+<meta property="og:url" content="https://stuartsierra.com/" />
+<meta property="og:site_name" content="Digital Digressions by Stuart Sierra" />
+<meta property="og:image" content="https://s0.wp.com/i/blank.jpg" />
+<meta property="og:locale" content="en_US" />
+</head>
+
+<body class="home blog hfeed">
+<div id="page" class="site">
+	<div class="site-inner">
+		<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+		<header id="masthead" class="site-header" role="banner">
+			<div class="site-header-main">
+				<div class="site-branding">
+					
+											<h1 class="site-title"><a href="index.html" rel="home">Digital Digressions by Stuart Sierra</a></h1>
+											<p class="site-description">From programming to everything else</p>
+									</div><!-- .site-branding -->
+
+									<button id="menu-toggle" class="menu-toggle">Menu</button>
+
+					<div id="site-header-menu" class="site-header-menu">
+													<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Primary Menu">
+								<div class="menu-main-menu-container"><ul id="menu-main-menu" class="primary-menu"><li id="menu-item-635" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="about-me.html">About Me</a></li>
+<li id="menu-item-633" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="writing.html">Writing</a></li>
+<li id="menu-item-634" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="presentations.html">Presentations</a></li>
+<li id="menu-item-636" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="software.html">Software</a></li>
+<li id="menu-item-637" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="contact.html">Contact</a></li>
+</ul></div>							</nav><!-- .main-navigation -->
+						
+											</div><!-- .site-header-menu -->
+							</div><!-- .site-header-main -->
+
+											<div class="header-image">
+					<a href="index.html" rel="home">
+						<img src="wp-content/uploads/2015/12/header.jpg" srcset="https://stuartsierra.com/wp-content/uploads/2015/12/header-300x70.jpg 300w, https://stuartsierra.com/wp-content/uploads/2015/12/header-768x179.jpg 768w, https://stuartsierra.com/wp-content/uploads/2015/12/header-1024x239.jpg 1024w, https://stuartsierra.com/wp-content/uploads/2015/12/header.jpg 1200w" sizes="(max-width: 709px) 85vw, (max-width: 909px) 81vw, (max-width: 1362px) 88vw, 1200px" width="1200" height="280" alt="Digital Digressions by Stuart Sierra">
+					</a>
+				</div><!-- .header-image -->
+					</header><!-- .site-header -->
+
+		<div id="content" class="site-content">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			
+			
+<article id="post-969" class="post-969 post type-post status-publish format-standard hentry category-programming tag-clojure tag-ns tag-syntax">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="2016/08/27/how-to-ns.html" rel="bookmark">How to ns</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Quick link: <a href="2016/clojure-how-to-ns.html">Stuart&#8217;s ns Style Guide</a></p>
+<p>Everyone has their own personal quirks when it comes to syntax. No matter how hard you try to lock it down with code review, IDEs, scripts, or check-in hooks, individual differences will emerge.</p>
+<p><img src="http://imgs.xkcd.com/comics/code_quality_2.png"></p>
+<p>In Clojure the situation is generally pretty stable: most people follow the same general patterns, which are implemented fairly consistently across editors and IDEs.</p>
+<p>With one exception: the <code>ns</code> macro at the top of every file.</p>
+<p>The <a href="https://github.com/clojure/clojure/blob/833f9f368d2274766aa4699195b3fba3f9e4e8f0/src/clj/clojure/core.clj#L3476-L3479">original implementation</a> of the <code>ns</code> macro in Clojure was short, simple, and effective. It was also spectacularly over-generalized. <code>ns</code> will take almost any combination of symbols, keywords, vectors, and lists and find something to evaluate.</p>
+<p>There&#8217;s a spec of sorts in the docstring, but of course nobody reads that.</p>
+<p>The laxness of the <code>ns</code> implementation was a constant thorn in my side as I worked on <a href="https://github.com/clojure/tools.namespace">tools.namespace</a>. Now it&#8217;s causing more headaches as macro specs introduced in Clojure 1.9.0-alpha11 uncover a <a href="http://dev.clojure.org/display/design/Errors+found+with+core+specs">bevy of bad syntax</a> in libraries.</p>
+<p>I&#8217;ll admit to having my own syntactic quirks when it comes to <code>ns</code>, but I make an effort to be consistent. After years of collecting preferences, I finally decided to write it all down.</p>
+<p>So now you can read <a href="2016/clojure-how-to-ns.html">Stuart’s Opinionated Style Guide for Clojure Namespace Declarations</a> and link to it during your next syntactic flamewar.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="2016/08/27/how-to-ns.html" rel="bookmark"><time class="entry-date published updated" datetime="2016-08-27T16:12:44+00:00">August 27, 2016</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="tag/clojure.html" rel="tag">Clojure</a>, <a href="tag/ns.html" rel="tag">ns</a>, <a href="tag/syntax.html" rel="tag">syntax</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-966" class="post-966 post type-post status-publish format-standard hentry category-uncategorized tag-journalism tag-newspapers">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="2016/08/23/end-of-the-free-lunch.html" rel="bookmark">End of the Free Lunch</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>I’m part of that awkward, in-between cohort, a little too young to fit in with Gen Xers but — although we grew up with computers like our younger siblings, the much-loathed Millennials — still old enough to recall life before the Internet. The <a href="https://socialmediaweek.org/blog/2015/04/oregon-trail-generation/">Oregon Trail Generation</a> still remembers, dimly, the screech of a dial-up modem on a phone line that went into the wall.</p>
+<p>When I was a kid, my family subscribed to three daily newspapers. My favorite was the Washington <i>Post</i>, because it had the most comic strips.</p>
+<p>We didn&#8217;t buy newspapers because we wanted to read the news — that came free from radio or television. Buying newspapers was just what you did if you wanted to know what was going on: movie showtimes, restaurant hours, job listings, or who was selling a boat trailer.</p>
+<p>Sure, there were other ways to get that information. With the Yellow Pages (remember those?) and some patience (remember that?) you could find just about anything. But it would take hours to gather up all the information conveniently dropped on your doorstep every morning. So we bought newspapers. And because we bought newspapers, so did advertisers.</p>
+<p>Nobody minded if a little journalism happened along the way. It gave the whole enterprise a kind of public-spirited sheen, as if you were fulfilling a civic duty by skimming the “World” headlines before turning with a sigh to “Arts &#038; Leisure” (in my case, for the comics).</p>
+<p>As an Oregon Trail adult, I have never subscribed to a newspaper. I don&#8217;t recall having <em>bought</em> a newspaper since about 2003. In that time, newspaper revenues <a href="https://gigaom.com/2013/04/11/two-charts-that-tell-you-everything-you-need-to-know-about-the-future-of-newspapers/">dropped by half</a> while Google <a href="https://www.wolframalpha.com/input/?i=value+of+Google+from+2003+to+2016">grew 1,452%</a>. You, as my generation used to say, do the math.</p>
+<p>Whenever I read another article (on the web) bemoaning the decline of newspapers, the end of journalism, and the collapse of civilization — these are, of course, written by journalists — I wonder what business they thought newspapers were in. Nobody ever paid for <em>news</em>. News is a commodity. Being the sole gatekeeper for information, now, that’s a good business to be in.</p>
+<p>Today Google is the gatekeeper. So we go to Google, so go the advertisers, so no more subsidized journalism. Instead, we get subsidized email, calendars, word processors, spreadsheets, maps, directions, translations, web browsers, operating systems, and self-driving cars. All we had to give up was a little privacy.</p>
+<p>And it’s not as if journalism is going to disappear completely. It will just have to get used to surviving like all the other unprofitable civic institutions: on the <a href="https://www.washingtonpost.com/business/bezoss-impending-buy-harks-back-to-days-of-the-wealthy-at-newspapers-helms/2013/08/05/0f5f6070-fe29-11e2-9711-3708310f6f4d_story.html">philanthropic whims</a> of rich people.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="2016/08/23/end-of-the-free-lunch.html" rel="bookmark"><time class="entry-date published updated" datetime="2016-08-23T08:19:23+00:00">August 23, 2016</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="category/uncategorized.html" rel="category tag">Uncategorized</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="tag/journalism.html" rel="tag">journalism</a>, <a href="tag/newspapers.html" rel="tag">newspapers</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-953" class="post-953 post type-post status-publish format-standard hentry category-programming tag-hadoop tag-open-source">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="2016/07/18/apathy-of-the-commons.html" rel="bookmark">Apathy of the Commons</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Eight years ago, I filed a bug on an open-source project.</p>
+<p><a href="https://issues.apache.org/jira/browse/HADOOP-3733">HADOOP-3733</a> appeared to be a minor problem with special characters in URLs. I hadn’t bothered to examine the source code, but I assumed it would be an easy fix. Who knows, maybe it would even give some eager young programmer the opportunity to make their first contribution to open-source.</p>
+<p>I moved on; I wasn&#8217;t using Hadoop day-to-day anymore. About once a year, though, I got a reminder email from JIRA when someone else stumbled across the bug and chimed in. Three patches were submitted, with a brief discussion around each, but the bug remained unresolved. A clumsy workaround was suggested.</p>
+<p><a href="http://www.catb.org/esr/writings/cathedral-bazaar/cathedral-bazaar/ar01s04.html" title="The Cathedral and the Bazaar: Release Early, Release Often">Linus’s Law</a> decrees that <em>Given enough eyeballs, all bugs are shallow.</em> But there&#8217;s a correlary: Given enough hands, all bugs are <em>trivial</em>. Which is not the same as <em>easy</em>.</p>
+<p>The bug I reported clearly affected other people: It accumulated nine votes, making it the fourth-most-voted-on Hadoop ticket. And it seems like something easy to fix: just a simple character-escaping problem, a missed edge case. A beginning Java programmer should be able to fix it, right?</p>
+<p>Perhaps that’s why no one <em>wanted</em> to fix it. HADOOP-3733 is not going to give anyone the opportunity to flex their algorithmic muscles or show off to their peers. It’s exactly the kind of tedious, persistent bug that programmers hate. It’s <em>boring</em>. And hey, there’s an easy workaround. <a href="https://en.wikipedia.org/wiki/Somebody_else%27s_problem">Somebody else</a> will fix it, right?</p>
+<p>Eventually it <em>was</em> fixed. The final patch touched 12 files and added 724 lines: clearly non-trivial work requiring knowledge of Hadoop internals, a “deep” bug rather than a shallow one.</p>
+<p>One day later, someone reported a <a href="https://issues.apache.org/jira/browse/HADOOP-13287">second bug</a> for the same issue with a different special character.</p>
+<p><a href="https://xkcd.com/1700/"><img src="http://imgs.xkcd.com/comics/new_bug.png" title="XKCD comic: New Bug"></a></p>
+<p>If there’s a lesson to draw from this, it’s that programming is not just hard, it’s often slow, tedious, and boring. It’s <em>work</em>. When programmers express a desire to contribute to open-source software, we think of grand designs, flashy new tools, and cheering crowds at conferences.</p>
+<p>A reward system based on <a href="http://www.catb.org/esr/writings/cathedral-bazaar/cathedral-bazaar/ar01s11.html" title="The Cathedral and the Bazaar: The Social Context of Open-Source Software">ego satisfaction and reputation</a> optimizes for interesting, novel work. Everyone wants to be the master architect of the groundbreaking new framework in the hip new language. No one wants to dig through dozens of Java files for a years-old parsing bug.</p>
+<p>But sometimes that’s the work that needs to be done.</p>
+<p>* * *</p>
+<p><strong>Edit 2016-07-19:</strong> The author of the final patch, Steve Loughran,  wrote up his analysis of the problem and its solution: <a href="http://steveloughran.blogspot.co.uk/2016/07/gardening-commons.html">Gardening the Commons</a>. He deserves a lot of credit for being willing to take the (considerable) time needed to dig into the details of such an old bug and then work out a solution that addresses the root cause.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="2016/07/18/apathy-of-the-commons.html" rel="bookmark"><time class="entry-date published" datetime="2016-07-18T08:22:13+00:00">July 18, 2016</time><time class="updated" datetime="2016-07-19T09:14:00+00:00">July 19, 2016</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="tag/hadoop.html" rel="tag">Hadoop</a>, <a href="tag/open-source.html" rel="tag">open-source</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-941" class="post-941 post type-post status-publish format-standard hentry category-programming tag-clojure tag-clojure-test tag-testing">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="2016/05/19/fixtures-as-caches.html" rel="bookmark">Fixtures as Caches</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>I am responsible &mdash; for better or for worse &mdash; for the library which eventually became <a href="http://clojure.github.io/clojure/#clojure.test">clojure.test</a>. It has remained largely the same since it was first added to the language distribution back in the pre-1.0 days. While there are many things about clojure.test which I would do differently now &mdash; dynamic binding, var metadata, side effects &mdash; it has held up remarkably well.</p>
+<p>I consider <em>fixtures</em> to be one of the less-well-thought-out features of clojure.test. A clojure.test <em>fixture</em> is a function which wraps a test function, typically for the purpose of setting up and tearing down the environment in which the test should run. Because test functions do not take arguments, the only way for a fixture to pass state to the test function is through dynamic binding. A typical fixture looks like this:</p>
+<pre>
+ (<span class="keyword">ns</span> <span class="type">fixtures-example</span>
+   (<span class="clojure-keyword">:require</span> [<span class="type">clojure.test</span> <span class="clojure-keyword">:as</span> test <span class="clojure-keyword">:refer</span> [deftest is]]))
+ 
+ (<span class="keyword">def</span> ^<span class="clojure-keyword">:dynamic</span> <span class="variable-name">*fix*</span>)
+ 
+ (<span class="keyword">defn</span> <span class="function-name">my-fixture</span> [test-fn]
+   (println <span class="string">"Set up *fix*"</span>)
+   (<span class="keyword">binding</span> [<span class="variable-name">*fix*</span> 42]
+     (test-fn))
+   (println <span class="string">"Tear down *fix*"</span>))
+ 
+ (<span class="type">test</span><span class="default">/</span>use-fixtures <span class="clojure-keyword">:each</span> my-fixture)
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t1</span>
+   (println <span class="string">"Do test t1"</span>)
+   (is (= <span class="variable-name">*fix*</span> 42)))
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t2</span>
+   (println <span class="string">"Do test t2"</span>)
+   (is (= <span class="variable-name">*fix*</span> (* 7 6))))
+</pre>
+<p>There are two kinds of fixtures in clojure.test:</p>
+<p><code>:each</code> fixtures run once per test, for every test in the namespace.</p>
+<p><code>:once</code> fixtures run once per namespace, wrapped around all tests in that namespace.</p>
+<p>I think the design of fixtures has a lot of problems. Firstly, attaching them to namespaces was a bad idea, since namespaces typically contain many different tests, only some of which actually need the fixture. This increases the likelihood of unintended coupling between fixtures and test code.</p>
+<p>Secondly, <code>:each</code> fixtures are redundant. If you need to wrap every test in some piece of shared code, all you need to do is put the shared code in a function or macro and call it in the body of each test function. There&#8217;s a small amount of duplication, but you gain flexibility to add tests which do <strong>not</strong> use the same shared code.</p>
+<p>(Another common complaint about fixtures is that they make it difficult to execute single tests in isolation, although the addition of <a href="http://clojure.github.io/clojure/clojure.test-api.html#clojure.test/test-vars"><code>test-vars</code></a> in Clojure 1.6 ameliorated that problem.)</p>
+<p>So <code>:once</code> fixtures are the only ones that matter. But if you want true isolation between your tests then they should not share any state at all. The only reason for sharing fixtures across tests is when the fixture does something expensive or time-consuming. Here again, namespaces are often the wrong level of granularity. If some resource is expensive to prepare, you may only want to pay the cost of preparing it <strong>once</strong> for all tests in your project, not once per namespace.</p>
+<p>So the purpose of <code>:once</code> fixtures is to <em>cache</em> their initialized state in between tests. What if we were to use fixtures <em>only</em> for caching? It might look something like this:</p>
+<pre>
+ (<span class="keyword">ns</span> <span class="type">caching-example</span>
+   (<span class="clojure-keyword">:require</span> [<span class="type">clojure.test</span> <span class="clojure-keyword">:refer</span> [deftest is]]))
+ 
+ (<span class="keyword">def</span> ^<span class="clojure-keyword">:dynamic</span> ^<span class="clojure-keyword">:private</span> <span class="variable-name">*fix*</span> <span class="constant">nil</span>)
+ 
+ (<span class="keyword">defn</span> <span class="function-name">new-fix</span>
+   <span class="doc">"Computes a new 'fix' value for tests."</span>
+   []
+   (println <span class="string">"Computing fixed value"</span>)
+   42)
+ 
+ (<span class="keyword">defn</span> <span class="function-name">fix</span>
+   <span class="doc">"Returns the current 'fix' value for
+   tests, creating one if needed."</span>
+   []
+   (<span class="keyword">or</span> <span class="variable-name">*fix*</span> (new-fix)))
+ 
+ (<span class="keyword">defn</span> <span class="function-name">fix-fixture</span>
+   <span class="doc">"A fixture function to provide a reusable
+   'fix' value for all tests in a namespace."</span>
+   [test-fn]
+   (<span class="keyword">binding</span> [<span class="variable-name">*fix*</span> (new-fix)]
+     (test-fn)))
+ 
+ (<span class="type">clojure.test</span><span class="default">/</span>use-fixtures <span class="clojure-keyword">:once</span> fix-fixture)
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t1</span>
+   (is (= (fix) 42)))
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t2</span>
+   (is (= (fix) (* 7 6))))
+</pre>
+<p>This still avoids repeated computation of the <code>fix</code> value, but clearly shows exactly which tests use it. The <code>:once</code> fixture is just an optimization: You could remove it and the tests would still work, perhaps more slowly. Best of all, you can run the individual test functions in the REPL without any additional setup.</p>
+<p>The same idea works even if the fixture requires tear-down after tests are finished:</p>
+<pre>
+ (<span class="keyword">ns</span> <span class="type">resource-example</span>
+   (<span class="clojure-keyword">:require</span> [<span class="type">clojure.test</span> <span class="clojure-keyword">:refer</span> [deftest is]]))
+ 
+ (<span class="keyword">defn</span> <span class="function-name">acquire-resource</span> []
+   (println <span class="string">"Acquiring resource"</span>)
+   <span class="clojure-keyword">:the-resource</span>)
+ 
+ (<span class="keyword">defn</span> <span class="function-name">release-resource</span> [resource]
+   (println <span class="string">"Releasing resource"</span>))
+ 
+ (<span class="keyword">def</span> ^<span class="clojure-keyword">:dynamic</span> ^<span class="clojure-keyword">:private</span> <span class="variable-name">*resource*</span> <span class="constant">nil</span>)
+ 
+ (<span class="keyword">defmacro</span> <span class="function-name">with-resource</span>
+   <span class="doc">"Acquires resource and binds it locally to
+   symbol while executing body. Ensures resource
+   is released after body completes. If called in
+   a dynamic context in which *resource* is
+   already bound, reuses the existing resource and
+   does not release it."</span>
+   [symbol &amp; body]
+   `(<span class="keyword">let</span> [~symbol (<span class="keyword">or</span> <span class="variable-name">*resource*</span>
+                      (acquire-resource))]
+      (<span class="keyword">try</span> ~@body
+           (<span class="keyword">finally</span>
+             (<span class="keyword">when-not</span> <span class="variable-name">*resource*</span>
+               (release-resource ~symbol))))))
+ 
+ (<span class="keyword">defn</span> <span class="function-name">resource-fixture</span>
+   <span class="doc">"Fixture function to acquire a resource for all
+   tests in a namespace."</span>
+   [test-fn]
+   (<span class="keyword">with-resource r
+     (<span class="keyword">binding</span> [<span class="variable-name">*resource*</span> r]
+       (test-fn))))
+ 
+ (<span class="type">clojure.test</span><span class="default">/</span>use-fixtures <span class="clojure-keyword">:once</span> resource-fixture)
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t1</span>
+   (with-resource r
+     (is (keyword? r))))
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t2</span>
+   (with-resource r
+     (is (= <span class="string">"the-resource"</span> (name r)))))
+ 
+ (<span class="keyword">deftest</span> <span class="function-name">t3</span>
+   (with-resource r
+     (is (nil? (namespace r)))))
+</pre>
+<p>Again, each of these tests can be run individually at the REPL with no extra ceremony. If you don&#8217;t want to keep paying the resource-setup cost in the REPL, you could temporarily redefine the <code>*resource*</code> var in its initialized state.</p>
+<p>The key in both cases is that the &#8220;fixtures&#8221; are designed to nest without duplicating effort. Each test function specifies exactly what state or resources it needs, but only creates them if they do not already exist. Some of those resources may be shared among multiple tests, but that fact is hidden from the individual tests.</p>
+<p>With this in mind, it becomes possible to share a resource across <strong>all</strong> tests in a project, not just within a namespace. All you need is an &#8220;entry point&#8221; which kicks off all the tests. clojure.test provides <a href="http://clojure.github.io/clojure/clojure.test-api.html#clojure.test/run-tests"><code>run-tests</code></a> for specifying individual namespaces and <a href="http://clojure.github.io/clojure/clojure.test-api.html#clojure.test/run-all-tests"><code>run-all-tests</code></a> to search for namespaces by regex. All you have to do is make sure your test namespaces are loaded, either via direct <code>require</code> or a utility such as <a href="https://github.com/clojure/tools.namespace">tools.namespace</a>. Then you can run a full test suite that only executes the expensive setup/teardown code once:</p>
+<pre>
+ (<span class="keyword">ns</span> <span class="type">main-test</span>
+   (<span class="clojure-keyword">:require</span> [<span class="type">clojure.test</span> <span class="clojure-keyword">:as</span> test]
+             [<span class="type">my.app.a-test</span>]))
+ 
+ (<span class="keyword">defn</span> <span class="function-name">-main</span> [&amp; _]
+   (with-resource-1
+     (with-resource-2
+       <span class="comment-delimiter">;;; </span><span class="comment">... more fixture wrappers ...
+</span>       (<span class="type">test</span><span class="default">/</span>run-all-tests #<span class="string">"^my\.app\..+-test$"</span>))))
+</pre>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="2016/05/19/fixtures-as-caches.html" rel="bookmark"><time class="entry-date published updated" datetime="2016-05-19T08:36:10+00:00">May 19, 2016</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="tag/clojure.html" rel="tag">Clojure</a>, <a href="tag/clojure-test.html" rel="tag">clojure.test</a>, <a href="tag/testing.html" rel="tag">testing</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-927" class="post-927 post type-post status-publish format-standard hentry category-programming tag-bundling tag-clojure tag-engineering tag-java tag-open-source-software">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="2016/03/21/open-source-bundling.html" rel="bookmark">Open-source Bundling</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Cast your mind back to the halcyon days of the late &#8217;90s. Windows 95/98. Internet Explorer 4. Before you laugh, consider that <a href="https://en.wikipedia.org/wiki/Internet_Explorer_4">IE4</a> included some pretty cutting-edge technology for the time: Dynamic HTML, TLS 1.0, single sign-on, streaming media, and &#8220;Channels&#8221; before RSS. IE4 even pioneered — unsuccessfully — the idea of &#8220;web browser as operating system&#8221; a decade before Google Apps.</p>
+<p>But if you remember anything about IE in the &#8217;90s, it&#8217;s probably the word <em>bundling</em>. <a href="https://en.wikipedia.org/wiki/United_States_v._Microsoft_Corp."><i>United States v. Microsoft</i></a> centered on the tight integration of IE with Windows. If you had Windows, you had to have IE. By the time the lawsuit reached a settlement, IE was entrenched as the dominant browser.</p>
+<p>Fast forward to the present. What an enlightened age we live in. <a href="http://www.zdnet.com/article/linux-and-open-source-have-won-get-over-it/">Open-source has won</a> and the <a href="https://en.wikipedia.org/wiki/Usage_share_of_web_browsers">browser market has fragmented</a>. Firefox broke the IE hegemony, and Chrome killed it. The web browser really is an operating system.</p>
+<p>But if you look around at software today, &#8220;bundling&#8221; is still with us, even in open-source software, that champion of choice and touchstone of tinkering.</p>
+<p>To take an example (and to get the taste of IE out of your brain) let&#8217;s look at <a href="https://github.com/Netflix/Hystrix">Hystrix</a>, a Java fault-tolerance framework written at Netflix. First let me say that Hystrix is a fantastic piece of engineering. Netflix has given a great gift to the open-source community by releasing, for free, an essential part of their software infrastructure. I&#8217;ve learned a lot by studying the Hystrix documentation and source code.</p>
+<p>But if you want to use Hystrix in your application, you have to use <a href="https://github.com/ReactiveX/RxJava">RxJava</a> and Netflix&#8217;s <a href="https://github.com/Netflix/archaius">Archaius</a> configuration management framework. Via transitive dependencies, you also have to use Google&#8217;s <a href="https://github.com/google/guava">Guava</a>, the <a href="http://wiki.fasterxml.com/JacksonHome">Jackson</a> JSON processor, <a href="http://slf4j.org/">SLF4J</a>, and Apache&#8217;s <a href="https://commons.apache.org/proper/commons-configuration/">Commons Configuration</a>, <a href="https://commons.apache.org/proper/commons-lang/">Commons Lang</a>, and <a href="https://commons.apache.org/proper/commons-logging/">Commons Logging</a>. For those of you keeping score at home, that&#8217;s two different logging APIs, two configuration APIs, and two grab-bag &#8220;utility&#8221; libraries.</p>
+<p>There&#8217;s nothing wrong with these library choices. They may be suitable for your application or they may not. But either way, <em>you</em> don&#8217;t get a choice. If you want Hystrix, you have to have RxJava and all the rest. Even if you choose to ignore, say, Archaius, it&#8217;s still there, linked into your application code, with whatever bugs and security holes it might carry.</p>
+<p>I don&#8217;t mean to pick on Netflix here either. As I said, Hystrix is a fantastic piece of engineering, and I&#8217;m very happy that Netflix released it. But it points to a mismatch between the goals of &#8220;internal-use&#8221; software and &#8220;open-source&#8221; software.</p>
+<p>If you&#8217;re developing a tool or library for internal use within an organization, it makes sense to integrate closely with other software internal to that organization. It saves time, reduces development effort, and makes the software organization more efficient. When software is <em>tightly integrated</em>, each new tool or library <em>multiplies the value</em> of all the other software which came before it. That&#8217;s how technology companies like Netflix or Google can deliver consistently high-quality products and rapid innovation at scale.</p>
+<p>The downside to this approach, from the open-source point of view, is that each new tool or library released by a software organization tends to be <em>tightly coupled</em> to the software which preceded it. More dependencies mean more opportunities for bugs, security holes, and misconfiguration. For the application developer using open-source libraries, each new dependency <em>multiplies the cost</em> of development and maintenance.</p>
+<p>It&#8217;s not just corporate-sponsored open source that suffers from this problem — just look at the dependency tree of any Apache project.</p>
+<p>The root problem is that great, hairy Minotaur which stalks the labyrinthine passages of any large code base: <strong>cross-cutting concerns</strong>. Almost any piece of code in an application will need, at some point, to deal with <em>at least some of:</em></p>
+<ul>
+<li>Logging</li>
+<li>Configuration</li>
+<li>Error handling &amp; recovery</li>
+<li>Process/thread management</li>
+<li>Resource management</li>
+<li>Startup/shutdown</li>
+<li>Network communication</li>
+<li>Filesystems</li>
+<li>Data persistence</li>
+<li>(De)serialization</li>
+<li>Caching</li>
+<li>Internationalization/translation</li>
+<li>Build/provisioning/deployment</li>
+</ul>
+<p>It&#8217;s much easier to write code if you know how each of these cross-cutting concerns will be handled. So when you&#8217;re developing something in-house, obviously you use the tools and libraries your organization has standardized on. Even if you&#8217;re writing something which you plan to make open-source, it&#8217;s easier to rely on the tools and patterns you already know.</p>
+<p>It&#8217;s difficult to avoid coupling library code to one or more of these concerns. Take logging, for example. Java has had a <a href="http://docs.oracle.com/javase/8/docs/api/java/util/logging/package-summary.html">built-in logging framework</a> since 1.4. But many developers preferred <a href="https://logging.apache.org/log4j/1.2/">Log4j</a> or one of a handful of others. To avoid coupling libraries to a single logging framework, there is <a href="https://commons.apache.org/proper/commons-logging/">Apache Commons Logging</a>, which tries to abstract over different logging frameworks with clever class-loading tricks. That turned out to be a brittle solution, so we got <a href="http://slf4j.org/">SLF4J</a>, which puts responsibility for linking the correct logging APIs back in the hands of the application developer. But no one wants to take an entire day to slog through the SLF4J manual in the middle of building an application. Throw in the mysterious interactions of transitive dependencies in Maven-style build tools, and it&#8217;s no wonder every Java app starts up with an <a href="https://twitter.com/PatrickMcFadin/status/661202930972790785">error message about logging</a>. And logging is the <em>easy</em> case — most programmers could probably agree on what, broadly speaking, a logging framework needs to do. But still we have half a dozen widely-used, slightly-different logging APIs.</p>
+<p>Developing a library which avoids making decisions about cross-cutting concerns is <em>possible</em>, but it takes painstaking attention to detail, with lots of extra extension points. (See Chris Houser&#8217;s talk on <a href="https://www.youtube.com/watch?v=zp0OEDcAro0">Exception Handling</a> for an example.) Unfortunately, the resulting library is often less-than-satisfying to potential users because it has so many &#8220;holes&#8221; that need to be filled in. Who wants to spend half a day writing &#8220;glue&#8221; code and callbacks before you can even <em>try out</em> a new library? Busy application developers have an incentive to choose libraries that work &#8220;out of the box,&#8221; so library creators have an incentive to make <em>arbitrary</em> decisions about cross-cutting concerns. We justify this with the oxymoron &#8220;<a href="https://twitter.com/stuartsierra/status/701900838046982144">sensible defaults</a>.&#8221;</p>
+<p>The conclusion I draw from all this is that modern programming languages have succeeded at making software out of <em>reusable</em> parts, but have largely failed at making software out of <em>interchangeable</em> parts. You cannot just &#8220;swap in,&#8221; say, a different thread-management library. Hystrix itself exists to solve a problem with libraries and cross-cutting concerns in a services architecture. Quoting from the <a href="https://github.com/Netflix/Hystrix/wiki/Home/ee70469de121a1991ec4631b3876bedcc2be785e#what-problem-does-hystrix-solve">Hystrix docs</a>:</p>
+<blockquote><p>
+Applications in complex distributed architectures have dozens of dependencies, each of which will inevitably fail at some point. If the host application is not isolated from these external failures, it risks being taken down with them.</p>
+<p>…</p>
+<p>These issues are exacerbated when network access is performed through a third-party client — a &#8220;black box&#8221; where implementation details are hidden and can change at any time, and network or resource configurations are different for each client library and often difficult to monitor and change.</p>
+<p>Even worse are transitive dependencies that perform potentially expensive or fault-prone network calls without being explicitly invoked by the application.
+</p></blockquote>
+<p>Netflix has so many &#8220;API client&#8221; libraries, each making their own network calls with unpredictable behavior, that to make their systems robust they have to <a href="https://github.com/Netflix/Hystrix/wiki/Home/ee70469de121a1991ec4631b3876bedcc2be785e#how">isolate each library in its own thread pool</a>. Again, this is amazing engineering, but it was necessary precisely because too many libraries came bundled with their own networking, error handling, and resource management decisions.</p>
+<p>A robust solution would seem to require everyone to agree on <a href="https://xkcd.com/927/">standards</a> for every possible cross-cutting concern. That will obviously never happen. Even a so-called <a href="https://docs.python.org/2/tutorial/stdlib.html#batteries-included">batteries-included</a> language <a href="http://radar.oreilly.com/2013/10/dead-batteries-included.html">cannot</a> <a href="http://www.protocolostomy.com/2010/01/22/what-batteries-included-means/">keep</a> the <a href="https://www.python.org/dev/peps/pep-0411/">same</a> <a href="https://www.python.org/dev/peps/pep-3108/">batteries</a> forever. This is a hard problem, and like all truly hard problems in software, it&#8217;s more about people than code.</p>
+<p>I wish I had a perfect solution, but the best I can offer is some guidance. If you&#8217;re writing an open-source library, do everything in your power to avoid dependencies. Use only the features of the core language, and use those conservatively. Don&#8217;t pull in a library that deals with some cross-cutting concern just because it <em>might</em> be more convenient for your users. Build your API around plain functions and standard data structures. </p>
+<p>Some examples, specific to Clojure:</p>
+<ul>
+<li>
+<p>Don&#8217;t depend on a logging framework unless it&#8217;s SLF4J.</p>
+</li>
+<li>
+<p>Don&#8217;t use an error-handling framework: Throw <code>ex-info</code> with enough data for a handler to decide what to do.</p>
+</li>
+<li>
+<p>If you need to do something asynchronous, use callbacks instead of <a href="https://github.com/clojure/core.async">core.async</a>. Callbacks are easily integrated with core.async if that&#8217;s what the user wants to do. Likewise, if you need some kind of inversion of control, use function callbacks or protocols.</p>
+</li>
+<li>
+<p>Don&#8217;t depend on any state-management framework or &#8220;ambient&#8221; state. Pass everything needed by an API function in its arguments. Provide operations for resource initialization and termination as part of your API. Same for configuration: pass a Clojure map as an argument.</p>
+</li>
+<li>
+<p>Network communication and serialization: these are, admittedly, almost impossible to avoid if you&#8217;re writing a library for some network API. But you can at least give users the <em>option</em> of controlling their own networking by providing APIs to prepare requests and parse responses independently of making the actual network calls.</p>
+</li>
+</ul>
+<p>On the other hand, some &#8220;libraries&#8221; really are more like &#8220;embeddable services,&#8221; with their own internal state. Large frameworks like Hystrix fall into this category, as do a few sophisticated &#8220;client&#8221; libraries. These libraries might be expected to manage their own resources and state &#8220;under the hood.&#8221; That&#8217;s a reasonable design choice, but at least be clear about which goal you&#8217;re pursuing and what trade-offs you&#8217;re making. In most language runtimes, the behavior and dependencies of these libraries cannot be fully isolated from the rest of the code. As an application developer, I might be willing to invest time and effort arranging my code to accommodate one or two embedded services that offer significant power in exchange for the added complexity. For everything else, when I need a library, just give me some ordinary functions.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="2016/03/21/open-source-bundling.html" rel="bookmark"><time class="entry-date published updated" datetime="2016-03-21T08:32:54+00:00">March 21, 2016</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="tag/bundling.html" rel="tag">bundling</a>, <a href="tag/clojure.html" rel="tag">Clojure</a>, <a href="tag/engineering.html" rel="tag">engineering</a>, <a href="tag/java.html" rel="tag">Java</a>, <a href="tag/open-source-software.html" rel="tag">Open-Source Software</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-920" class="post-920 post type-post status-publish format-standard hentry category-programming tag-clojure">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="2016/01/09/how-to-name-clojure-functions.html" rel="bookmark">How to Name Clojure Functions</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<link href="css/org-clojure-1.css" type="text/css" rel="stylesheet">
+<p> This is a guide on naming Clojure functions. There are exceptions to every rule. When you&#8217;re defining something based on natural language, there are more exceptions than rules. I break these rules more often than I follow them. This guide is just a starting point for <b>thinking</b> about how to name things. </p>
+<div id="outline-container-orgheadline1" class="outline-2">
+<h2 id="orgheadline1">Pure functions</h2>
+<div class="outline-text-2" id="text-orgheadline1">
+<p> Pure functions which return values are named with <b>nouns</b> describing the value they return. </p>
+<p> If I have a function to compute a user&#8217;s age based on their birthdate, it is called <code>age</code>, not <code>calculate-age</code> or <code>get-age</code>. </p>
+<p> Think of the definition: a pure function is one which can be <b>replaced with its value</b> without affecting the result. So why not make that evident in the name? </p>
+<p> This is particularly good for constructors and accessors. No need to clutter up your function names with meaningless prefixes like <code>get-</code> and <code>make-</code>. </p>
+</div>
+</div>
+<div id="outline-container-orgheadline2" class="outline-2">
+<h2 id="orgheadline2">Don&#8217;t repeat the name of the namespace</h2>
+<div class="outline-text-2" id="text-orgheadline2">
+<p> Function names should not repeat the name of the namespace. </p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">ns</span> <span class="org-type">products</span><span class="org-rainbow-delimiters-depth-1">)</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Bad, redundant:</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defn</span> <span class="org-function-name">product-price</span> <span class="org-rainbow-delimiters-depth-2">[</span>product<span class="org-rainbow-delimiters-depth-2">]</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">...</span>
+  <span class="org-rainbow-delimiters-depth-1">)</span>
+
+<span class="org-comment-delimiter">;; </span><span class="org-comment">Good:</span>
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defn</span> <span class="org-function-name">price</span> <span class="org-rainbow-delimiters-depth-2">[</span>product<span class="org-rainbow-delimiters-depth-2">]</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">...</span>
+  <span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+<p> Assume that consumers of a function will use it with a <a href="2015/05/10/clojure-namespace-aliases.html">namespace alias</a>. </p>
+</div>
+</div>
+<div id="outline-container-orgheadline3" class="outline-2">
+<h2 id="orgheadline3">Conversions and coercions</h2>
+<div class="outline-text-2" id="text-orgheadline3">
+<p> I don&#8217;t much like <code>-&gt;</code> arrows in function names, and I try to avoid them. </p>
+<p> If the function is a <b>coercion</b>, that is, it is meant to convert any of several input types into the desired output type, then name it for the output type. For example, in <code>clojure.java.io</code> the functions <code>file</code>, <code>reader</code>, and <code>writer</code> are all coercions. </p>
+<p> If there are different functions for different input types, then each one is a <b>conversion</b>. In that case, use <code>input-type-&gt;output-type</code> names. </p>
+</div>
+</div>
+<div id="outline-container-orgheadline4" class="outline-2">
+<h2 id="orgheadline4">Functions with side effects</h2>
+<div class="outline-text-2" id="text-orgheadline4">
+<p> Functions which have side-effects are named with <b>verbs</b> describing what they do. </p>
+<p> Constructor functions with side-effects, such as adding a record to a database, have names starting with <code>create-</code>. (I borrowed this idea from Stuart Halloway&#8217;s Datomic tutorials.) </p>
+<p> Functions which perform side-effects to retrieve some information (e.g. query a web service) have names starting with <code>get-</code>. </p>
+<p> For words which could be either nouns or verbs, assume noun by default then add words to make verb phrases. E.g. <code>message</code> constructs a new object representing a message, <code>send-message</code> transmits it. </p>
+<p> I don&#8217;t use the exclamation-mark convention (e.g. <code>swap!</code>) much. Different people use it to mean different things (side effect, state change, transaction-unsafe) so the meaning is vague at best. If I do use an exclamation mark, it&#8217;s to signal a change to a mutable reference, not other side-effects such as I/O. </p>
+</div>
+</div>
+<div id="outline-container-orgheadline5" class="outline-2">
+<h2 id="orgheadline5">Local name clashes</h2>
+<div class="outline-text-2" id="text-orgheadline5">
+<p> One problem I find is in <code>let</code> blocks, when the obvious name for a local is the same as the function which computes it. If you&#8217;re not careful, this can lead to clashes: </p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defn</span> <span class="org-function-name">shipping-label</span>
+  <span class="org-doc">"Returns a new label to ship product to customer."</span>
+  <span class="org-rainbow-delimiters-depth-2">[</span>customer product<span class="org-rainbow-delimiters-depth-2">]</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">let</span> <span class="org-rainbow-delimiters-depth-3">[</span>address <span class="org-rainbow-delimiters-depth-4">(</span>address customer<span class="org-rainbow-delimiters-depth-4">)</span>
+        weight <span class="org-rainbow-delimiters-depth-4">(</span>weight product<span class="org-rainbow-delimiters-depth-4">)</span>
+        supplier <span class="org-rainbow-delimiters-depth-4">(</span>supplier product<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">]</span>
+    <span class="org-rainbow-delimiters-depth-3">{</span><span class="org-clojure-keyword">:from</span> <span class="org-rainbow-delimiters-depth-4">(</span>address supplier<span class="org-rainbow-delimiters-depth-4">)</span>  <span class="org-comment">; oops, 'address' clashes!</span>
+     <span class="org-clojure-keyword">:to</span> address
+     <span class="org-clojure-keyword">:weight</span> weight<span class="org-rainbow-delimiters-depth-3">}</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+<p> This is less of a problem when the functions are defined in a different namespace and referenced via an alias: </p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defn</span> <span class="org-function-name">shipping-label</span>
+  <span class="org-doc">"Returns a new label to ship product to customer."</span>
+  <span class="org-rainbow-delimiters-depth-2">[</span>customer product<span class="org-rainbow-delimiters-depth-2">]</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">let</span> <span class="org-rainbow-delimiters-depth-3">[</span>address <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-type">mailing</span><span class="org-default">/</span>address customer<span class="org-rainbow-delimiters-depth-4">)</span>
+        weight <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-type">product</span><span class="org-default">/</span>weight product<span class="org-rainbow-delimiters-depth-4">)</span>
+        supplier <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-type">product</span><span class="org-default">/</span>supplier product<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">]</span>
+    <span class="org-rainbow-delimiters-depth-3">{</span><span class="org-clojure-keyword">:from</span> <span class="org-rainbow-delimiters-depth-4">(</span><span class="org-type">mailing</span><span class="org-default">/</span>address supplier<span class="org-rainbow-delimiters-depth-4">)</span>  <span class="org-comment">; OK</span>
+     <span class="org-clojure-keyword">:to</span> address
+     <span class="org-clojure-keyword">:weight</span> weight<span class="org-rainbow-delimiters-depth-3">}</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+<p> If name-clashes become a problem, add prefixes to the function names, <code>new-</code> for constructors and <code>get-</code> for accessors. If you are bothered that this contradicts the previous section, re-read the first paragraph of this article. </p>
+</div>
+</div>
+<div id="outline-container-orgheadline6" class="outline-2">
+<h2 id="orgheadline6">Function returning functions</h2>
+<div class="outline-text-2" id="text-orgheadline6">
+<p> In general, I try to avoid defining top-level functions which return functions <b>if</b> I can write make the intent clearer using anonymous functions instead. </p>
+<p> For example, writing something like this makes me feel clever: </p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defn</span> <span class="org-function-name">foo</span>
+  <span class="org-doc">"Returns a function to compute foo of value."</span>
+  <span class="org-rainbow-delimiters-depth-2">[</span>option<span class="org-rainbow-delimiters-depth-2">]</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">fn</span> <span class="org-rainbow-delimiters-depth-3">[</span>value<span class="org-rainbow-delimiters-depth-3">]</span>
+    <span class="org-comment-delimiter">;;</span><span class="org-comment">... do stuff with value ...</span>
+    <span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defn</span> <span class="org-function-name">computation</span>
+  <span class="org-doc">"Does stuff with values."</span>
+  <span class="org-rainbow-delimiters-depth-2">[</span>option values<span class="org-rainbow-delimiters-depth-2">]</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">-&gt;&gt;</span> values
+       <span class="org-rainbow-delimiters-depth-3">(</span>map <span class="org-rainbow-delimiters-depth-4">(</span>foo option<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span>  <span class="org-comment">; look at me!</span>
+       <span class="org-comment-delimiter">;; </span><span class="org-comment">...</span>
+       <span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+<p> But it&#8217;s easier for someone else to read when the closure is created close to where it&#8217;s used: </p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defn</span> <span class="org-function-name">foo</span>
+  <span class="org-doc">"Returns the foo of value"</span>
+  <span class="org-rainbow-delimiters-depth-2">[</span>value option<span class="org-rainbow-delimiters-depth-2">]</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">... </span>
+  <span class="org-rainbow-delimiters-depth-1">)</span>
+
+<span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defn</span> <span class="org-function-name">computation</span> <span class="org-rainbow-delimiters-depth-2">[</span>option values<span class="org-rainbow-delimiters-depth-2">]</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">-&gt;&gt;</span> values
+       <span class="org-rainbow-delimiters-depth-3">(</span>map #<span class="org-rainbow-delimiters-depth-4">(</span>foo <span class="org-variable-name">%</span> option<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span>  <span class="org-comment">; I see what this does</span>
+       <span class="org-comment-delimiter">;; </span><span class="org-comment">...</span>
+       <span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+<p> I allow an exception to this rule when returning functions is part of a repeated pattern. For example, the transducer versions of <code>map</code>, <code>filter</code>, and other sequence functions all return functions, but that&#8217;s a standard part of the language since Clojure 1.7 so users can be expected to know about it. Occasionally I discover a similar pattern in my own code. </p>
+<p> When functions returning functions are <b>not</b> part of a repeated pattern but for some reason I want them anyway, I call them out with a suffix <code>-fn</code>, like: </p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defn</span> <span class="org-function-name">foo-fn</span>
+  <span class="org-doc">"Returns a function to compute the foo of a value."</span>
+  <span class="org-rainbow-delimiters-depth-2">[</span>param<span class="org-rainbow-delimiters-depth-2">]</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span><span class="org-keyword">fn</span> <span class="org-rainbow-delimiters-depth-3">[</span>value<span class="org-rainbow-delimiters-depth-3">]</span>
+    <span class="org-comment-delimiter">;; </span><span class="org-comment">...</span>
+    <span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+</div>
+</div>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="2016/01/09/how-to-name-clojure-functions.html" rel="bookmark"><time class="entry-date published" datetime="2016-01-09T14:36:00+00:00">January 9, 2016</time><time class="updated" datetime="2016-01-09T15:59:56+00:00">January 9, 2016</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="tag/clojure.html" rel="tag">Clojure</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-913" class="post-913 post type-post status-publish format-standard hentry category-programming tag-clojure tag-clojurescript">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="2015/12/31/clojure-2015-year-in-review.html" rel="bookmark">Clojure 2015 Year in Review</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Another year, another year-in-review post. To be honest, I feel like any attempt I make to summarize what happened in the Clojure world this year is largely moot. Clojure has gotten so big, so — dare I say it? — <em>mainstream</em> that I can&#8217;t even begin to keep up with all the interesting things that are happening. But it&#8217;s a tradition, so I&#8217;ll stick to it. Once again, here is my incomplete, thoroughly-biased list of notable Clojurey things this year.</p>
+<p>As I said of JVM Clojure in 2012, I think I can safely say that 2015 was the year <strong>ClojureScript grew up</strong>. It got a real release number, improved REPL support, and the ability to compile itself. But you don&#8217;t have to take my word for it: David Nolen has written his own <a href="http://swannodette.github.io/2015/12/23/year-in-review/">ClojureScript Year in Review</a>.</p>
+<h2>Clojure in the World</h2>
+<p>We already knew Clojure was being used at big companies like Walmart and Amazon. Based on public job postings, we&#8217;ve also seen places like Reuters, Capital One, and Oracle interested in Clojure developers.</p>
+<p>Big corporations tend to be cagey about their technology choices, but Walmart&#8217;s Anthony Marcar came to Clojure/West to talk about how they do <a href="https://www.youtube.com/watch?v=av9Xi6CNqq4">Clojure at Scale</a>.</p>
+<p>In other big-tech news, <a href="https://wit.ai/blog/2015/01/05/wit-ai-facebook">Facebook acquired Wit.ai</a>, a Clojure startup that released an open-source <a href="https://duckling.wit.ai/">library to parse structured data</a> from text. Clojure early-adopter Prismatic <a href="https://web.archive.org/web/20151224104148/http://prismatic.github.io/next-chapter/">pivoted away</a> from its popular news-recommendation app to focus full-time on the A.I. business as well.</p>
+<h2>Language, Tools, and Libraries</h2>
+<p><a href="http://blog.cognitect.com/blog/2015/6/30/clojure-17">Clojure 1.7 was released</a>, bringing <a href="http://clojure.org/transducers">Transducers</a> and the much-anticipated <a href="http://clojure.org/reader#The%20Reader--Reader%20Conditionals">Reader Conditionals</a> to support mixed Clojure-ClojureScript projects. Writing cross-platform libraries suddenly got easier. A bunch of popular Clojure libraries were ported to ClojureScript, including <a href="https://github.com/clojure/test.check">test.check</a>, <a href="https://github.com/clojure/tools.reader">tools.reader</a>, and my <a href="https://github.com/stuartsierra/component">Component</a>.</p>
+<p><a href="https://github.com/clojure/core.async">core.async</a> got a major new release, with the added features <a href="http://clojure.github.io/core.async/#clojure.core.async/promise-chan">promise-chan</a>, <a href="http://clojure.github.io/core.async/#clojure.core.async/offer!">offer!</a>, and <a href="http://clojure.github.io/core.async/#clojure.core.async/poll!">poll!</a>.</p>
+<p>The big news on the tooling front was the 1.0 release of <a href="https://cursive-ide.com/">Cursive</a>, the first commercial IDE for Clojure. On the open-source side, both <a href="http://lighttable.com/">Light Table</a> and <a href="https://github.com/clojure-emacs/cider">CIDER</a> got major new releases.</p>
+<p>In the ClojureScript tooling world, <a href="https://github.com/bhauman/lein-figwheel">Figwheel</a> and <a href="https://github.com/bhauman/devcards">Devcards</a> really took off this year.</p>
+<p><a href="https://clojars.org/">Clojars</a> started getting <a href="https://www.bountysource.com/teams/clojars/updates/1-thank-you-for-supporting-clojars">financial support</a> from the community, and <a href="http://cljsjs.github.io/">CLJSJS</a> started offering JavaScript libraries conveniently packaged for ClojureScript and the Google Closure Compiler.</p>
+<h2>Books and Docs</h2>
+<p><a href="http://blog.cognitect.com/blog/2015/11/10/lets-make-clojure-org-better">clojure.org went open-source</a> for contributions from the community.</p>
+<p>New books: <a href="https://pragprog.com/book/vmclojeco/clojure-applied">Clojure Applied</a> (<a href="2015/10/18/clojure-applied-review.html">my review</a>), <a href="http://www.braveclojure.com/">Clojure for the Brave and True</a> in print, <a href="http://shop.oreilly.com/product/0636920034292.do">Living Clojure</a>, <a href="http://clojurerecipes.net/">Clojure Recipes</a>, and many more.</p>
+<h2>Events and Community</h2>
+<p>The <a href="http://clojurians.net/">Clojurians Slack</a> community rocketed from just an idea to over four thousand members. If you don&#8217;t care for Slack, the <a href="http://irc.lc/freenode/clojure/irctc">#clojure IRC</a> channel on <a href="http://www.freenode.org/">Freenode</a> is still going.</p>
+<p>The <a href="https://groups.google.com/forum/#!forum/clojure">Clojure mailing list</a> hit <strong>ten thousand</strong> members.</p>
+<p>At Clojure/conj this year, we had the first-ever <strong>Datomic conference</strong>. You can binge-watch Clojure conference videos (Clojure/conj, EuroClojure, and Clojure/West) on the <a href="https://www.youtube.com/user/ClojureTV">ClojureTV YouTube channel</a>. Also check out <a href="https://skillsmatter.com/conferences/6861-clojure-exchange-2015">Clojure eXchange</a> and <a href="http://www.clojured.de/archive/2015/">:clojureD</a>.</p>
+<p>Clojure is attracting some interest from academic computer science, including a new paper on <a href="http://blog.acolyer.org/2015/11/27/hamt/">optimizing immutable hash maps</a>.</p>
+<h2>Summary</h2>
+<p>There&#8217;s not much more to say. Or rather, there is very much more to say than what I can capture in a single post. Clojure is here to stay. Let&#8217;s enjoy it.</p>
+<p>Thanks to David Nolen, Alex Miller, Timothy Baldridge, Carin Meier, and Daemian Mack for their help preparing this post.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="2015/12/31/clojure-2015-year-in-review.html" rel="bookmark"><time class="entry-date published updated" datetime="2015-12-31T17:31:48+00:00">December 31, 2015</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="tag/clojure.html" rel="tag">Clojure</a>, <a href="tag/clojurescript.html" rel="tag">ClojureScript</a></span><span class="comments-link"><a href="2015/12/31/clojure-2015-year-in-review.html#comments">2 Comments<span class="screen-reader-text"> on Clojure 2015 Year in Review</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-903" class="post-903 post type-post status-publish format-standard hentry category-programming tag-clojure tag-review">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="2015/10/18/clojure-applied-review.html" rel="bookmark">An Opinionated Review of Clojure Applied</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p> Why write a book about open-source software? (Not for the money. Trust me.) I&#8217;ve seen far too many “technical books” that merely regurgitate the documentation of a bunch of open source libraries. I&#8217;m happy to say that <i>Clojure Applied</i>, by my friends and colleagues Alex Miller and Ben Vandgrift, is <b>not</b> in this category. They sent me a free copy in return for review, so here it is. </p>
+<p> As my other colleague Luke VanderHart pointed out in his <a href="https://www.youtube.com/watch?v=2YmmfS5YTQ0">recent talk at ClojureTRE</a>, the biggest gap in written material about about Clojure &#x2014; and a good candidate for the source of most “documentation” complaints &#x2014; has been the lack of <b>narrative</b>. Clojure has great reference documentation, and lots of Clojure libraries come with great tutorials, but there aren’t many comprehensive stories about building complete applications. </p>
+<p> <i>Clojure Applied</i> tells a story about how to write Clojure applications. This is not just a book about Clojure, it&#8217;s a book about how to write software which assumes you&#8217;re going to use Clojure to do it. <i>Clojure Applied</i> would probably not be a good choice as your <b>first</b> Clojure book, although it would be an excellent book to read <b>while</b> you are learning Clojure. </p>
+<p> The narrative develops like most successful Clojure programs: from the bottom up, starting with data. Instead of primitives or abstract concepts, the first chapter begins with modeling domain data using maps and records. This is the right place to start, and I could wish this chapter went into even more detail. For example, I would have liked to see a comparison of nested versus “flat” map structures (“flatter” is easier to work with). </p>
+<p> Domain modeling is a difficult concept to describe, so I can’t fairly criticize Ben &amp; Alex’s efforts here, but I do think they lose their way slightly by introducing Prismatic&#8217;s Schema library very early on. To be sure, Schema is a powerful library that a lot of Clojure developers find useful. But placed here, along with discussions of type-based dispatch, it leaves the reader with the idea that types are a central feature of domain modeling in Clojure. I disagree. Thinking in terms of types early in the design process often leads to unnecessarily restrictive choices, producing inflexible designs. </p>
+<p> Further compounding the error of focusing on types, this chapter wanders into more advanced topics such as protocols and multimethods. There&#8217;s even a technique for dynamically extending protocols at runtime, an advanced tactic I would not recommend under most circumstances. </p>
+<p> Embracing the possibilities of design in a dynamically-typed language requires a willingness to work with values whose types may be unknown <b>at certain points</b>. For example, the type of the “accumulator” value in a transducer is hard to define, because for most transducers its type is irrelevant. The ability to <b>ignore</b> types when they are not needed is what makes dynamic languages so expressive. </p>
+<p> On the other hand, I have seen many large Clojure programs drift into incomprehensibility by failing to constrain their types in any way, passing complex nested structures everywhere. In this case, the lack of validation leads to a kind of inside-out spaghetti code in which it’s impossible to deduce the type of something by reading the code which uses it. Given the choice between these two extremes, “over-typed” code will be easier to untangle than “under-typed,” so perhaps introducing validation early is a good idea. </p>
+<p> Moving along, Chapter Two covers the other Clojure collection types. This is beginner material, but presented in terms of how and why you might want to use each type of collection. This chapter also covers some common beginner questions, such as how to search a sequential collection. Another advanced topic which I would not recommend &#x2014; defining a new collection type implementing Clojure&#8217;s interfaces &#x2014; sneaks in here, but I&#8217;ll give it a pass because it helps you understand the collection interfaces. </p>
+<p> Chapter Three zeroes in on the sequential collections, in particular the sequence library. Here the narrative is about <b>combining</b> sequence functions, in particular the pattern of filter-map-reduce. This pattern is so fundamental that an experienced Clojure programmer (or Lisp, or any functional language) might not even think about it, but it’s a critical step to becoming an effective user of Clojure. This chapter also introduces Transducers. Even though Transducers might be considered an “advanced” topic, I think they belong here alongside sequences. The concepts are the same, and Transducers are really quite straightforward if you’re only looking, as this chapter does, at how to <b>use</b> them and not how they are implemented. </p>
+<p> Part II, “Applications,” is probably the best section in the book. This is the critical piece missing from the first-round books about Clojure (including my own). How do you start <b>combining</b> all these little functional pieces into a working program? </p>
+<p> The first chapter in this section describes mutable references with the most comprehensible real-world example I have seen, and also includes an excellent explanation of <b>identity</b> versus <b>state</b>. Another chapter describes all the various techniques for using multiple cores, including an important discussion of <b>pipelines</b> and core.async <code>go</code> blocks as <b>processes</b>. </p>
+<p> Then there’s an entire chapter devoted to <b>components</b> as they are expressed in namespaces. Ben &amp; Alex introduce all the concepts necessary to design and implement components <b>without</b> using my <a href="https://github.com/stuartsierra/component">Component</a> library, which I think is a smart choice. The Component library arrives in the following chapter, along with the idea of composing an application out of many components. </p>
+<p> Part III, “Practices,” covers testing, output formats, and deployment. </p>
+<p> The chapter on testing has a good description of the trade-offs between example-based and property-based testing, but doesn’t delve into the more difficult areas of integration or whole-system testing. Advanced testing techniques really deserve an entire book of their own. </p>
+<p> “Formatting data” covers the usual suspects: JSON, EDN, and Transit. In my experience, the choice of data format is usually dictated by external constraints, but this chapter at least makes the trade-offs clear. </p>
+<p> Finally, the chapter on deployment is a high-level overview of everything from GitHub to Elastic Beanstalk. There’s even a discussion of open-source licensing and contributor agreements. Heroku gets the most attention, which makes sense for a book targeted at mostly-beginners, but at least this chapter introduces some of the concerns one might want to think about when choosing a deployment platform. </p>
+<p> After the last chapter, there’s a bonus pair of appendices. The first briefly covers the “roots” of Clojure, with links to source material. The second summarizes some principal motivations behind Clojure’s design as a guide to “Thinking in Clojure.” This latter section might have been more usefully incorporated into the text of the book, but that&#8217;s harder to write and can tend toward the preachy, so I can’t complain. </p>
+<p> Circling back to where I started, <i>Clojure Applied</i> is a great book to read <b>while</b> learning Clojure. It’s not a language tutorial. It’s not stuffed with revolutionary ideas. Most importantly, it doesn’t try to do too much. It’s just solid, practical advice. Even the recommendations I disagree with are not bad ideas, just different preferences. Follow Ben &amp; Alex’s advice while building your first Clojure program, and you’ll have a solid foundation to explore your own ideas and preferences. </p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="2015/10/18/clojure-applied-review.html" rel="bookmark"><time class="entry-date published" datetime="2015-10-18T12:29:00+00:00">October 18, 2015</time><time class="updated" datetime="2015-10-19T08:11:46+00:00">October 19, 2015</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="tag/clojure.html" rel="tag">Clojure</a>, <a href="tag/review.html" rel="tag">review</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-883" class="post-883 post type-post status-publish format-standard hentry category-programming tag-clojure tag-dos-and-donts">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="2015/08/25/clojure-donts-lazy-effects.html" rel="bookmark">Clojure Don’ts: Lazy Effects</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<link href="css/org-clojure-1.css" type="text/css" rel="stylesheet">
+<p> This is probably my number one <a href="tag/dos-and-donts.html">Clojure Don’t</a>. </p>
+<p> Laziness is often useful. It allows you to express “infinite” computations, and only pay for as much of the computation as you need. </p>
+<p> Laziness also allows you to express computations without specifying <b>when</b> they should happen. And that’s a problem when you add side-effects. </p>
+<p> By definition, a side-effect is something that changes the world outside your program. You almost certainly want it to happen at a specific time. Laziness takes away your control of when things happen. </p>
+<p> So the rule is simple: <b>Never mix side effects with lazy operations.</b> </p>
+<p> For example, if you need to do something to every element in a collection, you might reach for <code>map</code>. If thing you’re doing is a pure function, that’s fine. But if the thing you’re doing has side effects, <code>map</code> can lead to very unexpected results. </p>
+<p> For example, this is a common new-to-Clojure mistake: </p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span class="org-rainbow-delimiters-depth-1">(</span>take 5 <span class="org-rainbow-delimiters-depth-2">(</span>map prn <span class="org-rainbow-delimiters-depth-3">(</span>range 10<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+<p> which prints </p>
+<pre class="example">
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre>
+<p> This is the old “chunked sequence” conundrum. Like many other lazy sequence functions, <code>map</code> has an optimization which allows it to evaluate batches of 32 elements at a time. </p>
+<p> Then there’s the issue of lazy sequences not being evaluated at all. For example: </p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">do</span> <span class="org-rainbow-delimiters-depth-2">(</span>map prn <span class="org-rainbow-delimiters-depth-3">[</span>0 1 2 3 4 5 6 7 8 9 10<span class="org-rainbow-delimiters-depth-3">]</span><span class="org-rainbow-delimiters-depth-2">)</span>
+    <span class="org-rainbow-delimiters-depth-2">(</span>println <span class="org-string">"Hello, world!"</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+<p> which prints only: </p>
+<pre class="example">
+Hello, world!
+</pre>
+<p> You might get the advice that you can “force” a lazy sequence to be evaluated with <code>doall</code> or <code>dorun</code>. There are also snippets floating around that purport to “unchunk” a sequence. </p>
+<p> In my opinion, the presence of <code>doall</code>, <code>dorun</code>, or even “unchunk” is almost always a sign that something never should have been a lazy sequence in the first place. </p>
+<p> Only use pure functions with the lazy sequence operations like <code>map</code>, <code>filter</code>, <code>take-while</code>, etc. When you need side effects, use one of these alternatives: </p>
+<ul class="org-ul">
+<li><code>doseq</code>: good default choice, clearly indicates side effects</li>
+<li><code>run!</code>: new in Clojure 1.7, can take the place of <code>(dorun (map ...))</code></li>
+<li><code>reduce</code>, <code>transduce</code>, or something built on them</li>
+</ul>
+<p> The last requires some more explanation. <code>reduce</code> and <code>transduce</code> are both <b>non-lazy</b> ways of consuming sequences or collections. As such, they are technically safe to use with side-effecting operations. </p>
+<p> For example, this composition of <code>take</code> and <code>map</code>: </p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span class="org-rainbow-delimiters-depth-1">(</span>transduce <span class="org-rainbow-delimiters-depth-2">(</span>comp <span class="org-rainbow-delimiters-depth-3">(</span>take 5<span class="org-rainbow-delimiters-depth-3">)</span>
+                 <span class="org-rainbow-delimiters-depth-3">(</span>map prn<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span>
+           conj
+           <span class="org-rainbow-delimiters-depth-2">[]</span>
+           <span class="org-rainbow-delimiters-depth-2">(</span>range 10<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+<p> only prints 5 elements of the sequence, as requested: </p>
+<pre class="example">
+0
+1
+2
+3
+4
+</pre>
+<p> The single-argument version of <code>map</code> returns a transducer which calls its function once for each element. The <code>map</code> transducer can’t control <b>when</b> the function gets evaluated — that’s in the hands of <code>transduce</code>, which is eager (non-lazy). The single-argument <code>take</code> limits the reduction to the first five elements. </p>
+<p> As a general rule, I would <b>not</b> recommend using side-effecting operations in transducers. But if you know that the transducer will be used <b>only</b> in non-lazy operations — such as <code>transduce</code>, <code>run!</code>, or <code>into</code> — then it may be convenient. </p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defn</span> <span class="org-function-name">operation</span> <span class="org-rainbow-delimiters-depth-2">[</span>input<span class="org-rainbow-delimiters-depth-2">]</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">do something with input, return result</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>str <span class="org-string">"Result for "</span> input<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+
+<span class="org-rainbow-delimiters-depth-1">(</span>prn <span class="org-rainbow-delimiters-depth-2">(</span>into #<span class="org-rainbow-delimiters-depth-3">{}</span>
+           <span class="org-rainbow-delimiters-depth-3">(</span>comp <span class="org-rainbow-delimiters-depth-4">(</span>take 3<span class="org-rainbow-delimiters-depth-4">)</span>
+                 <span class="org-rainbow-delimiters-depth-4">(</span>map operation<span class="org-rainbow-delimiters-depth-4">)</span><span class="org-rainbow-delimiters-depth-3">)</span>
+           <span class="org-rainbow-delimiters-depth-3">(</span>range 100<span class="org-rainbow-delimiters-depth-3">)</span><span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+<p> <code>reduce</code>, <code>transduce</code>, and <code>into</code> are useful when you need to collect the return value of the side-effecting operation. </p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="2015/08/25/clojure-donts-lazy-effects.html" rel="bookmark"><time class="entry-date published" datetime="2015-08-25T12:35:00+00:00">August 25, 2015</time><time class="updated" datetime="2015-08-25T12:37:30+00:00">August 25, 2015</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="tag/clojure.html" rel="tag">Clojure</a>, <a href="tag/dos-and-donts.html" rel="tag">do's and don'ts</a></span><span class="comments-link"><a href="2015/08/25/clojure-donts-lazy-effects.html#comments">5 Comments<span class="screen-reader-text"> on Clojure Don’ts: Lazy Effects</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-877" class="post-877 post type-post status-publish format-standard hentry category-programming tag-clojure tag-dos-and-donts">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="2015/08/10/clojure-donts-redundant-map.html" rel="bookmark">Clojure Don’ts: Redundant map</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<link href="css/org-clojure-1.css" type="text/css" rel="stylesheet">
+<p>Today’s <a href="tag/dos-and-donts.html">Clojure Don’t</a> is the opposite side of the coin to the <a href="2015/06/10/clojure-donts-heisenparameter.html">heisenparameter</a>.</p>
+<p>If you have an operation on a single object, you don’t need to define another version just to operate on a collection of those objects.</p>
+<p>That is, if you have a function like this:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defn</span> <span class="org-function-name">process-thing</span> <span class="org-rainbow-delimiters-depth-2">[</span>thing<span class="org-rainbow-delimiters-depth-2">]</span>
+  <span class="org-comment-delimiter">;; </span><span class="org-comment">process one thing</span>
+  <span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+<p>There is no reason to also write this:</p>
+<div class="org-src-container">
+<pre class="src src-clojure"><span class="org-rainbow-delimiters-depth-1">(</span><span class="org-keyword">defn</span> <span class="org-function-name">process-many-things</span> <span class="org-rainbow-delimiters-depth-2">[</span>things<span class="org-rainbow-delimiters-depth-2">]</span>
+  <span class="org-rainbow-delimiters-depth-2">(</span>map process-thing things<span class="org-rainbow-delimiters-depth-2">)</span><span class="org-rainbow-delimiters-depth-1">)</span>
+</pre>
+</div>
+<p>The idiom “map a function over a collection” is so universal that any Clojure programmer should be able to write it without thinking twice.</p>
+<p>Having a separate definition for processing a group of things implies that there is something special about processing a group instead of a single item. (For example, a more efficient batch implementation.) If that’s the case, then by all means write the batch version as well. But if not, then a function like <code>process-many-things</code> just clutters up your code while providing no benefit.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="2015/08/10/clojure-donts-redundant-map.html" rel="bookmark"><time class="entry-date published" datetime="2015-08-10T09:00:00+00:00">August 10, 2015</time><time class="updated" datetime="2015-08-10T08:57:43+00:00">August 10, 2015</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="tag/clojure.html" rel="tag">Clojure</a>, <a href="tag/dos-and-donts.html" rel="tag">do's and don'ts</a></span><span class="comments-link"><a href="2015/08/10/clojure-donts-redundant-map.html#comments">4 Comments<span class="screen-reader-text"> on Clojure Don’ts: Redundant map</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+	<nav class="navigation pagination" role="navigation">
+		<h2 class="screen-reader-text">Posts navigation</h2>
+		<div class="nav-links"><span class='page-numbers current'><span class="meta-nav screen-reader-text">Page </span>1</span>
+<a class='page-numbers' href='page/2.html'><span class="meta-nav screen-reader-text">Page </span>2</a>
+<span class="page-numbers dots">&hellip;</span>
+<a class='page-numbers' href='page/24.html'><span class="meta-nav screen-reader-text">Page </span>24</a>
+<a class="next page-numbers" href="page/2.html">Next page</a></div>
+	</nav>
+		</main><!-- .site-main -->
+	</div><!-- .content-area -->
+
+
+	<aside id="secondary" class="sidebar widget-area" role="complementary">
+		<section id="search-3" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://stuartsierra.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+	</label>
+	<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</section><section id="text-4" class="widget widget_text">			<div class="textwidget"><ul>
+<li><a href="http://feeds2.feedburner.com/StuartSierra" title="Syndicate this site using RSS 2.0">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="comments/feed" title="The latest comments to all posts in RSS">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+</ul>
+<ul>
+<li><a href="https://twitter.com/stuartsierra">Twitter</a></li>
+<li><a href="https://github.com/stuartsierra">GitHub</a></li>
+</ul></div>
+		</section><section id="tag-widget-2" class="widget TagWidget"><h2 class="widget-title">Clojure Do’s and Don’ts</h2><ul class = "posts-by-tag-list"><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-883"><a class = "posts-by-tag-item-title" href="2015/08/25/clojure-donts-lazy-effects.html">Clojure Don’ts: Lazy Effects</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-877"><a class = "posts-by-tag-item-title" href="2015/08/10/clojure-donts-redundant-map.html">Clojure Don’ts: Redundant map</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-870"><a class = "posts-by-tag-item-title" href="2015/06/16/clojure-donts-single-branch-if.html">Clojure Don’ts: Single-branch if</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-854"><a class = "posts-by-tag-item-title" href="2015/06/10/clojure-donts-heisenparameter.html">Clojure Don’ts: The Heisenparameter</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-849"><a class = "posts-by-tag-item-title" href="2015/06/01/clojure-donts-optional-arguments-with-varargs.html">Clojure Don’ts: Optional Arguments with Varargs</a></li><li class="posts-by-tag-item Clojure do's and don'ts errors" id="posts-by-tag-item-836"><a class = "posts-by-tag-item-title" href="2015/05/27/clojure-uncaught-exceptions.html">Clojure Do’s: Uncaught Exceptions</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-831"><a class = "posts-by-tag-item-title" href="2015/05/17/clojure-record-constructors.html">Record Constructors</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-826"><a class = "posts-by-tag-item-title" href="2015/05/10/clojure-namespace-aliases.html">Clojure Do’s: Namespace Aliases</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-820"><a class = "posts-by-tag-item-title" href="2015/05/02/clojure-donts-isa.html">Clojure Don’ts: isa?</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-812"><a class = "posts-by-tag-item-title" href="2015/04/26/clojure-donts-concat.html">Clojure Don’ts: Concat</a></li></ul></section>	</aside><!-- .sidebar .widget-area -->
+
+		</div><!-- .site-content -->
+
+		<footer id="colophon" class="site-footer" role="contentinfo">
+							<nav class="main-navigation" role="navigation" aria-label="Footer Primary Menu">
+					<div class="menu-main-menu-container"><ul id="menu-main-menu-1" class="primary-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="about-me.html">About Me</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="writing.html">Writing</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="presentations.html">Presentations</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="software.html">Software</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="contact.html">Contact</a></li>
+</ul></div>				</nav><!-- .main-navigation -->
+			
+			
+			<div class="site-info">
+								<span class="site-title"><a href="index.html" rel="home">Digital Digressions by Stuart Sierra</a></span>
+				<a href="https://wordpress.org/">Proudly powered by WordPress</a>
+			</div><!-- .site-info -->
+		</footer><!-- .site-footer -->
+	</div><!-- .site-inner -->
+</div><!-- .site -->
+
+	<div style="display:none">
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	</div>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201635'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2016Sepaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='wp-content/plugins/jetpack/modules/wpgroho167b.js?ver=4.6'></script>
+<script type='text/javascript' src='wp-content/themes/twentysixteen/js/skip-link-focus-fix8de4.js?ver=20160816'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var screenReaderText = {"expand":"expand child menu","collapse":"collapse child menu"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='wp-content/themes/twentysixteen/js/functions8de4.js?ver=20160816'></script>
+<script type='text/javascript' src='wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='https://stats.wp.com/e-201635.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.2.2',blog:'2702563',post:'0',tz:'-4',srv:'stuartsierra.com'} ]);
+	_stq.push([ 'clickTrackerInit', '2702563', '0' ]);
+</script>
+</body>
+
+<!-- Mirrored from stuartsierra.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:55:22 GMT -->
+</html>
+
+<!-- Dynamic page generated in 0.486 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:54:59 -->
+
+<!-- Compression = gzip -->

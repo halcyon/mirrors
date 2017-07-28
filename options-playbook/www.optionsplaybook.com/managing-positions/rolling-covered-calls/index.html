@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Mirrored from www.optionsplaybook.com/managing-positions/rolling-covered-calls/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 17 Jan 2017 15:49:50 GMT -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Rolling a Covered Call | How to Roll a Covered Call - The Options Playbook</title>
+<meta name="googlebot" content="noarchive">
+<meta name="description" content="You may need to roll a covered call up (in strike price) and out (in expiration) if the option is approaching expiration and the stock has risen above the strike price.">
+<meta name="google-site-verification" content="NsjvPWxMMZVpkiykGK6J97u4cuQ2B9SO5oWLV8BSdRM"/>
+<meta name="keywords" content="rolling a covered call, roll a covered call">
+<link media="screen" rel="stylesheet" type="text/css" href="../../media/css/reset.css"/>
+<link media="screen" rel="stylesheet" type="text/css" href="../../media/css/homepage.css"/>
+<link media="screen" rel="stylesheet" type="text/css" href="../../media/css/style.css"/>
+<link media="screen" rel="stylesheet" type="text/css" href="../../media/css/google.feed.css"/>
+<link rel="canonical" href="index.html"/> <!--[if IE]>
+		<link media="screen" rel="stylesheet" type="text/css" href="/media/css/ie.css" />
+	<![endif]-->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAA7Lpovkcjj4DYQUgKG-9PjRSajGErE3tUPAiGpxEjLkYj5HLcuhRNLyKWOmNLu9Mp4VU63O8Q0X4VVw"></script>
+<script type="text/javascript" src="../../media/js/jquery.equalheight.js"></script>
+<script type="text/javascript" src="../../media/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="../../media/js/jquery.gfeed.js"></script>
+<script type="text/javascript" src="../../media/js/jquery.app.js"></script>
+<script type="text/javascript" src="../../media/js/cufon-yui.js"></script>
+<script type="text/javascript" src="../../media/js/DINOT-Medium_500.font.js"></script>
+<script type="text/javascript">
+		Cufon.replace('h1%2c%20h2%2c%20.html');
+		Cufon.replace('.nav li a', { hover: true });
+	</script>
+ 
+<script type="text/javascript">
+if(document.location.protocol=='index.html'){
+ var Tynt=Tynt||[];Tynt.push('bfgPem6qSr37B_adbi-bpO');Tynt.i={"ap":"Read more at:"};
+ (function(){var s=document.createElement('script');s.async="async";s.type="text/javascript";s.src='http://tcr.tynt.com/ti.js';var h=document.getElementsByTagName('script')[0];h.parentNode.insertBefore(s,h);})();
+}
+</script>
+ 
+</head>
+<body id="managing-positions" class="rolling-covered-calls">
+<div id="wrapper">
+<div id="wrapper-in">
+<div class="header">
+<h4><a href="../../index.html">The Options Playbook</a></h4>
+<span class="tagline">Featuring 40 options strategies for bulls, bears, rookies, all-stars and everyone in between</span>
+<a href="http://www.tradeking.com/"><img src="../../media/images/poweredby.png" alt="TradeKing" title="The Options Playbook is powered by TradeKing"/></a>
+</div>
+<ul class="nav clear">
+<li><a href="../../index.html" class="nav-home">Home</a></li>
+<li><a href="../../options-introduction/index.html" class="nav-options-introduction">Options Basics</a></li>
+<li><a href="../../rookies-corner/learn-options-trading/index.html" class="nav-rookies-corner">Rookie's Corner</a></li>
+<li><a href="../../option-strategies/index.html" class="nav-option-strategies">Option Strategies</a></li>
+<li><a href="../index.html" class="nav-managing-positions">Managing Positions</a></li>
+<li><a href="../../glossary/index.html" class="nav-glossary">Glossary</a></li>
+<li><a href="http://community.tradeking.com/" class="nav-tradeking">Trader Network</a></li>
+</ul>
+<div class="inside clear">
+<div class="content">
+<h1>Rolling a Covered Call</h1>
+<p>Imagine you&rsquo;re running a 30-day <a href="../../option-strategies/covered-call/index.html">covered call</a> on stock XYZ with a strike price of $90. That means you own 100 shares of XYZ stock, and you&rsquo;ve sold one 90-strike call a month from expiration. When you sold the call, the stock price was $87.50, and you received a premium of $1.30, or $130 total, since one contract equals 100 shares. Now, with expiration fast approaching, the stock has gone up to $92. In all probability you will be assigned and have to sell the stock at $90.</p>
+<p>The only way to avoid assignment for sure is to buy back the 90-strike call before it is assigned, and cancel your obligation. However, the 90-strike call is now trading for $2.10, so it will hurt a bit to buy it back. To help offset the cost of buying back the call, you&rsquo;re going to &ldquo;roll up and out.&rdquo;</p>
+<p>That means you want to go &ldquo;up&rdquo; in strike price and &ldquo;out&rdquo; in time. The idea is to balance the decrease in premium for selling a higher OTM strike price versus the greater premium you&rsquo;ll receive for selling an option that is further from expiration (and thus has more &ldquo;time value&rdquo;).</p>
+<p>Here&rsquo;s an example of how that might work.</p>
+<p>Using TradeKing&rsquo;s spread order screen, you enter a buy-to-close order for the front-month 90-strike call. In the same trade, you sell to open an OTM 95-strike call (rolling up) that&rsquo;s 60 days from expiration (rolling out). Due to higher time value, the back-month 95-strike call will be trading for $2.30. Since you&rsquo;re paying $2.10 to buy back the front-month call and receiving $2.30 for the back-month call, this trade can be accomplished for a net credit of $0.20 ($2.30 sale price - $2.10 purchase price) or $20 total.</p>
+<p>Let&rsquo;s look at all the good news and bad news surrounding this trade. As you&rsquo;ll see, it&rsquo;s a double-edged sword.</p>
+<p>Since you&rsquo;ve raised the strike price to $95, you have more profit potential on the stock. The obligation to sell was at $90, but now it&rsquo;s at $95. The bad news is, you had to buy back the front-month call for 80 cents more than you received when selling it ($2.10 paid to close - $1.30 received to open). On the other hand, you&rsquo;ve more than covered the cost of buying it back by selling the back-month 95-strike call for more premium. So that&rsquo;s good.</p>
+<p>But you have to consider the fact that there are still 60 days before the new options expire, and you don&rsquo;t really know what will happen with the stock during that time. You&rsquo;ll just have to keep your fingers crossed.</p>
+<p>If the back-month 95-strike short call expires worthless in 60 days, you wind up with a $1.50 net credit. Here&rsquo;s the math: You lost a total of $0.80 after buying back the 90-strike front-month call. However, you received a premium of $2.30 for the 95-strike call, so you netted $1.50 ($2.30 back-month premium - $0.80 front-month loss) or $150 total. That&rsquo;s not a bad outcome (see Ex.1).</p>
+<p>However, if the market makes a big move upward in the next 60 days, you might be tempted to roll up and out again. But beware.</p>
+<img src="../../media/images/graphics/rolling_call.gif" alt="Rolling a Covered Call Up and Out" title="Details on rolling up and out with your covered call" style="display:block; padding:0 0 20px 80px;"/>
+<p>Every time you roll up and out, you may be taking a loss on the front-month call. Furthermore, you still have not secured any gains on the back-month call or on the stock appreciation, because the market still has time to move against you. And that means you could wind up compounding your losses. So come to think of it, rolling&rsquo;s not really a double-edged sword. It&rsquo;s more like a quadruple-edged shaving razor.</p>
+<div class="back-to-top">
+<p><a href="#" class="top">Back to the top</a></p>
+</div>
+<script type="text/javascript">
+	$(document).ready(function() { 
+		$('#all-star-feed').gFeed({ url: 'http://community.tradeking.com/members/tk-all-star/blogs.atom', max: 3, title: null });
+		$('#overby-feed').gFeed({ url: 'http://community.tradeking.com/members/optionsguy/blogs.atom', max: 3, title: null });
+	});
+</script>
+<div class="todays-trader-network">
+<h3>Today's Trader Network</h3>
+<div class="todays-trader-network-in">
+<table cellspacing="0">
+<tr>
+<td>
+<p><strong>All-Star Trade Report</strong></p>
+<div id="all-star-feed"></div>
+</td>
+<td>
+<p><strong>Options Guy Blog</strong></p>
+<div id="overby-feed"></div>
+</td>
+<td>
+<p><strong>Videos, webinars and more</strong></p>
+<div class="gf-result"><a href="http://www.tradeking.com/education/videos/stock">Stock trading videos</a></div>
+<div class="gf-result"><a href="http://community.tradeking.com/members/live-events/blogs/13007-tk-all-star-webinar-series">TradeKing All-Star Webinar Series and Live Events</a></div>
+<div class="gf-result"><a href="http://community.tradeking.com/forum">Trader Network Forum</a></div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sidebar">
+<div class="box subnav">
+<ul>
+<li class="subnav-managing-positions"><a href="../index.html">An Introduction to Rolling</a></li>
+<li class="subnav-rolling-covered-calls"><a href="index.html">Rolling a Covered Call</a></li>
+<li class="subnav-rolling-cash-secured-puts"><a href="../rolling-cash-secured-puts/index.html">Rolling a Cash-Secured Put</a></li>
+<li class="subnav-rolling-short-spreads"><a href="../rolling-short-spreads/index.html">Rolling a Short Call Spread</a></li>
+<li class="subnav-early-options-exercise"><a href="../early-options-exercise/index.html">What is Early Exercise<br/>and Assignment?</a></li>
+<li class="subnav-position-delta"><a href="../position-delta/index.html">Keeping an Eye on Position Delta</a></li>
+</ul>
+</div>
+<a href="http://theoptionsinsider.com/options-playbook" style="display:block; margin: 0 0 13px;"><img src="../../media/images/graphics/opb_radio_offer.png" style="width:100%"/></a>
+ 
+ 
+<script type="text/javascript" src="http://adfarm.mediaplex.com/ad/js/17113-209952-32166-1?mpt=1484668160&amp;mpvc=">
+</script>
+<noscript>
+<a href="http://adfarm.mediaplex.com/ad/nc/17113-209952-32166-1?mpt=1484668160">
+<img src="http://adfarm.mediaplex.com/ad/nb/17113-209952-32166-1?mpt=1484668160" alt="Click Here" border="0">
+</a>
+</noscript>
+<div class="box intel-report">
+<div class="intel-report-in">
+<h3>Download Free Intelligence Reports</h3>
+<p>Learn trading tips &amp; strategies<br/>from TradeKing&rsquo;s experts</p>
+<img src="../../media/images/intel_report.png"/>
+<ul>
+<li><a href="https://www.tradeking.com/trading-options/top-10-options-trading-mistakes" target="_blank">Top Ten Option Mistakes</a></li>
+<li><a href="https://www.tradeking.com/trading-options/5-tips-for-successful-covered-calls" target="_blank">Five Tips for Successful Covered Calls</a></li>
+<li><a href="https://www.tradeking.com/trading-options/option-trades-for-any-market-outlook" target="_blank">Option Plays for Any Market Condition</a></li>
+<li><a href="https://www.tradeking.com/trading-options/advanced-options-strategies" target="_blank">Advanced Option Plays</a></li>
+<li><a href="https://www.tradeking.com/trading-options/how-to-use-volatility" target="_blank">Top Five Things Stock & Option Traders Should Know About Volatility</a></li>
+</ul>
+</div>
+</div> </div>
+</div>
+<div class="footer">
+<p class="odd">Options involve risk and are not suitable for all investors. For more information, please review the <a href="http://www.tradeking.com/odd">Characteristics and Risks of Standardized Options</a> brochure before you begin trading options. Options investors may lose the entire amount of their investment in a relatively short period of time.</p>
+<p>Multiple leg options strategies involve <a href="http://content.tradeking.com/wiki/display/tkservice/Multi-Leg+Option+Orders">additional risks</a>, and may result in complex tax treatments. Please consult a tax professional prior to implementing these strategies. Implied volatility represents the consensus of the marketplace as to the future level of stock price volatility or the probability of reaching a specific price point. The Greeks represent the consensus of the marketplace as to how the option will react to changes in certain variables associated with the pricing of an option contract. There is no guarantee that the forecasts of implied volatility or the Greeks will be correct.</p>
+<p>System response and access times may vary due to market conditions, system performance, and other factors.</p>
+<p>TradeKing provides self-directed investors with discount brokerage services, and does not make recommendations or offer investment, financial, legal or tax advice. You alone are responsible for evaluating the merits and risks associated with the use of TradeKing's systems, services or products. Content, research, tools, and stock or option symbols are for educational and illustrative purposes only and do not imply a recommendation or solicitation to buy or sell a particular security or to engage in any particular investment strategy. The projections or other information regarding the likelihood of various investment outcomes are hypothetical in nature, are not guaranteed for accuracy or completeness, do not reflect actual investment results and are not guarantees of future results. All investments involve risk, losses may exceed the principal invested, and the past performance of a security, industry, sector, market, or financial product does not guarantee future results or returns.</p>
+<p>Your use of the TradeKing Trader Network is conditioned to your acceptance of all <a href="http://content.tradeking.com/wiki/display/tkservice/Disclosures">TradeKing Disclosures</a> and of the <a href="http://content.tradeking.com/wiki/x/6Ac">Trader Network Terms of Service</a>.</p>
+<p>Anything mentioned is for educational purposes and is not a recommendation or advice. The Options Playbook Radio is brought to you by TradeKing Group, Inc.</p>
+<p>&copy; 2017 TradeKing Group, Inc. All rights reserved. TradeKing Group, Inc. is a wholly owned subsidiary of Ally Financial Inc. Securities offered through TradeKing Securities, LLC. All rights reserved. Member <a href="http://www.finra.org/">FINRA</a> and <a href="http://www.sipc.org/">SIPC</a>.</p>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+/* <![CDATA[ */
+var google_conversion_id = 1068355653;
+var google_conversion_label = "XvlfCPeanxQQxaC3_QM";
+var google_custom_params = window.google_tag_params;
+var google_remarketing_only = true;
+/* ]]> */
+</script>
+<script type="text/javascript" src="http://www.googleadservices.com/pagead/conversion.js">;
+</script>
+<noscript>
+<div style="display:inline;">
+<img height="1" width="1" style="border-style:none;" alt="" src="http://googleads.g.doubleclick.net/pagead/viewthroughconversion/1068355653/?value=0&amp;label=XvlfCPeanxQQxaC3_QM&amp;guid=ON&amp;script=0"/>
+</div>
+</noscript>
+ 
+<noscript><iframe src="http://www.googletagmanager.com/ns.html?id=GTM-NMB799" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'http://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NMB799');</script>
+ 
+ 
+<script type='text/javascript'>
+    /* <![CDATA[ */
+    var s_img_src=('https:' == document.location.protocol ? 'https://ci38.actonsoftware.com' : 'http://info.tradeking.com') + '/acton/bn/5302/visitor.gif?ts=' + new Date().getTime() + '&ref='+escape(document.referrer);
+    document.write('<img src=' + s_img_src + ' />');
+    /* ]]> */
+  </script>
+ 
+</body>
+
+<!-- Mirrored from www.optionsplaybook.com/managing-positions/rolling-covered-calls/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 17 Jan 2017 15:49:50 GMT -->
+</html>

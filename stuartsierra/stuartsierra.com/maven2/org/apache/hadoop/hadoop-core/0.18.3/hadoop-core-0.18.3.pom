@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <properties>
+    <hadoop.version>0.18.3</hadoop.version>
+  </properties>
+  <groupId>org.apache.hadoop</groupId>
+  <artifactId>hadoop-core</artifactId>
+  <name>Hadoop Core (MapReduce) Library ${hadoop.version}</name>
+  <packaging>jar</packaging>
+  <version>${hadoop.version}</version>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copyFiles</id>
+            <phase>package</phase>
+            <configuration>
+              <tasks>
+                <copy file="hadoop-0.18.3-core.jar"
+                      tofile="target/hadoop-core-0.18.3.jar"
+                      overwrite="true" verbose="true" failonerror="true"/>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ftp</artifactId>
+        <version>1.0-alpha-6</version>
+      </extension>
+    </extensions>
+  </build>
+  <distributionManagement>
+    <repository>
+      <id>stuartsierra-ftp</id>
+      <url>ftp://stuartsierra.com/public_html/stuartsierra/maven2</url>
+    </repository>
+  </distributionManagement>
+</project>

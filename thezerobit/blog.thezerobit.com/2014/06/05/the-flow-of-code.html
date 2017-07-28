@@ -1,0 +1,368 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+
+<!-- Mirrored from blog.thezerobit.com/2014/06/05/the-flow-of-code.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:24:57 GMT -->
+<head>
+  <meta charset="utf-8">
+  <title>The Flow of Code - the zero bit stream</title>
+  <meta name="author" content="Stephen A. Goss">
+
+  
+  <meta name="description" content="Here is a very simple piece of code that could be from any number of programming languages: X = somefunction(Expression); An explanation of how this &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="the-flow-of-code.html">
+  <link href="../../../favicon.png" rel="icon">
+  <link href="../../../stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="../../../atom.xml" rel="alternate" title="the zero bit stream" type="application/atom+xml">
+  <script src="../../../javascripts/modernizr-2.0.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="../../../javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="../../../index.html">the zero bit stream</a></h1>
+  
+    <h2>programmer things</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="../../../atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://duckduckgo.com/" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:blog.thezerobit.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="../../../index.html">Blog</a></li>
+  <li><a href="../../../blog/archives/index.html">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">The Flow of Code</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-06-05T00:00:00-07:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Here is a very simple piece of code that could be from any number of programming languages:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">X</span> <span class="o">=</span> <span class="nx">somefunction</span><span class="p">(</span><span class="nx">Expression</span><span class="p">);</span></code></pre></div>
+
+
+<p>An explanation of how this code is evaluated (assuming strict evaluation) might be something like this, &ldquo;Expression is evaluated and then passed to somefunction. The value returned from the function is bound to X.&rdquo; Right to left. This is unfortunate because we read from left to right. A few programming languages and environments treat left-to-right reading of code as an opportunity to structure the flow of data in a way that aids in comprehension and almost all have some tricks to simulate this in various ways, but none seem to fully embrace it in a practical way. I think we should.</p>
+
+<!--more-->
+
+
+<p>Shell programming with pipes is the most immediately recognizable environment for programming with data flowing left to right. Here is a silly example which abuses the <code>cat</code> command to achieve this flow:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">cat robots.txt <span class="p">|</span> sort <span class="p">|</span> grep <span class="s2">&quot;login&quot;</span></code></pre></div>
+
+
+<p>The &ldquo;correct&rdquo; way to write this according to pedants is this:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sort &lt; robots.txt <span class="p">|</span> grep <span class="s2">&quot;login&quot;</span></code></pre></div>
+
+
+<p>I always write my shell scripts the first way because you can follow the flow of data literally from left to right and it makes sense. You can also compose the functions (commands in this case, really, which act like functions on streams of bytes) and move them around more easily.</p>
+
+<p>Forth and related concatenative programming languages actually use this left to right flow, each element being a function which takes a stack and returns a new stack. Here is some code to do some very simple math and print the result:</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="mi">1</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="o">.</span></code></pre></div>
+
+
+<p>The evaluation of that code is something like &ldquo;Push 1 on the stack. Push 2 on the stack. Pop the top two values off the stack, add them and push the result. Push 3 on the stack. Pop the top two values off the stack, multiply them and push the result. Print the top value of the stack.&rdquo; Evaluation is left to right and the code is extremely succinct. The problem with Forth (and similar languages) is that longer and more complicated functions are difficult to read; you have to keep track of the stack in your head and what each value in the stack might represent (a whole bunch of unlabeled intermediate values which are lexically removed from where they are consumed). The value resulting from one operation will be used by another operation later on without any visual way to know this other than carefully considering the effects of the intermediate stack operations. That said, Joy, a concatenative language in the Forth tradition, is on my list of languages to learn.</p>
+
+<p>All C-like languages have the capability of building so-called fluent interfaces, where the object methods return objects such that operations can be chained from left to right using the dot (.) or arrow (->) operator. Here is a made-up example:</p>
+
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">myObject</span><span class="p">.</span><span class="nx">operation1</span><span class="p">().</span><span class="nx">operation2</span><span class="p">(</span><span class="nx">param</span><span class="p">).</span><span class="nx">operation3</span><span class="p">()</span></code></pre></div>
+
+
+<p>Of course, the word &ldquo;fluent&rdquo; shares etymology and meaning with &ldquo;flow.&rdquo; When I am working with languages in this family (pretty much 100% of the time when working for money) I tend to gravitate towards libraries with fluent interfaces. Even when I should be writing SQL, I’m generally writing code in a fluent interface that generates actual SQL queries behind the scenes. jQuery is a JavaScript library with a fluent interface that is used on a majority of JavaScript enabled websites. I believe it is, in part, the fluent nature of the interface that made it so popular. It also worked nicely to hide many browser differences and incompatibilities. Remember that when jQuery appeared, plenty of other libraries dealt with browser differences, but none had as nice a programming interface.</p>
+
+<p>Lisps have the power of macros to rearrange the structure of code before evaluation. Clojure creates something of a fluent interface with the threading macros (not related to execution threads). The (->) macro allows this code:</p>
+
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">last </span><span class="p">(</span><span class="nb">second </span><span class="p">(</span><span class="nb">first </span><span class="nv">object</span><span class="p">)</span> <span class="nv">param</span><span class="p">))</span></code></pre></div>
+
+
+<p>to be written like this:</p>
+
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">-&gt; </span><span class="nv">object</span> <span class="nb">first </span><span class="p">(</span><span class="nb">second </span><span class="nv">param</span><span class="p">)</span> <span class="nv">last</span><span class="p">)</span></code></pre></div>
+
+
+<p>There are limitations with this model as the language was not designed around this concept so while the (->) macro threads the values through the first argument of the functions, the (->>) macro threads the values through the last argument of each function and therefore they are only useful if you are working with an API designed to support one or the other. Clojure also has the doto macro which allows ugly, imperative Java APIs like this:</p>
+
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="n">object</span><span class="o">.</span><span class="na">foo</span><span class="o">();</span>
+<span class="n">object</span><span class="o">.</span><span class="na">bar</span><span class="o">(</span><span class="n">param</span><span class="o">);</span>
+<span class="n">object</span><span class="o">.</span><span class="na">baz</span><span class="o">();</span></code></pre></div>
+
+
+<p>To be consumed in Clojure like this:</p>
+
+<div class="highlight"><pre><code class="language-clojure" data-lang="clojure"><span class="p">(</span><span class="nb">doto </span><span class="nv">object</span> <span class="p">(</span><span class="nf">.foo</span><span class="p">)</span> <span class="p">(</span><span class="nf">.bar</span> <span class="nv">param</span><span class="p">)</span> <span class="p">(</span><span class="nf">.baz</span><span class="p">))</span></code></pre></div>
+
+
+<p>The functional language F# that came from Microsoft Research comes with the forward pipe operator (|>) which is defined thus:</p>
+
+<div class="highlight"><pre><code class="language-fsharp" data-lang="fsharp"><span class="k">let</span> <span class="o">(|&gt;)</span> <span class="n">x</span> <span class="n">f</span> <span class="o">=</span> <span class="n">f</span> <span class="n">x</span></code></pre></div>
+
+
+<p>All it does is take the value on the left and apply it to the function on the right. F# allows partial application and operators are left associative so this code:</p>
+
+<div class="highlight"><pre><code class="language-fsharp" data-lang="fsharp"><span class="n">third</span> <span class="o">(</span><span class="n">second</span> <span class="n">param</span> <span class="o">(</span><span class="n">first</span> <span class="n">value</span><span class="o">))</span></code></pre></div>
+
+
+<p>Can be rewritten like this, creating a nice flow:</p>
+
+<div class="highlight"><pre><code class="language-fsharp" data-lang="fsharp"><span class="n">value</span> <span class="o">|&gt;</span> <span class="n">first</span> <span class="o">|&gt;</span> <span class="n">second</span> <span class="n">param</span> <span class="o">|&gt;</span> <span class="n">third</span></code></pre></div>
+
+
+<p>In Haskell the (|>) operator can be defined in exactly the same way as F# and appears to work the same way (with lazy evaluation). However, a discussion of Haskell in incomplete if you aren’t talking about monads. Consider that the second law of monads is this:</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="nf">return</span> <span class="n">x</span> <span class="o">&gt;&gt;=</span> <span class="n">f</span> <span class="ow">=</span> <span class="n">f</span> <span class="n">x</span></code></pre></div>
+
+
+<p>If we combine this with the Identity monad which doesn’t really do anything useful (like ordering a burrito without the tortilla), we should be able to use the bind operator (>>=) to get the effect of switching the order of function application and hence have our values flow through the functions from left to right. To reduce confusion, let’s give &ldquo;return&rdquo; a better name:</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kr">let</span> <span class="n">burrito</span> <span class="n">x</span> <span class="ow">=</span> <span class="n">return</span> <span class="n">x</span></code></pre></div>
+
+
+<p>Here is a function for adding ingredients that can chain this way:</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="kr">let</span> <span class="n">addIngredient</span> <span class="n">i</span> <span class="n">x</span> <span class="ow">=</span> <span class="n">burrito</span> <span class="p">(</span><span class="n">x</span> <span class="o">++</span> <span class="s">&quot; &quot;</span> <span class="o">++</span> <span class="n">i</span><span class="p">)</span></code></pre></div>
+
+
+<p>Now we can do this:</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="nf">burrito</span> <span class="s">&quot;beans&quot;</span> <span class="o">&gt;&gt;=</span> <span class="n">addIngredient</span> <span class="s">&quot;cheese&quot;</span> <span class="o">&gt;&gt;=</span> <span class="n">addIngredient</span> <span class="s">&quot;rice&quot;</span></code></pre></div>
+
+
+<p>Which produces the value &ldquo;beans cheese rice&rdquo;; more evidence that Haskell is the greatest programming language in the world and monads can do anything. That would be great if it were the whole story, but Haskell has as a strange motto, &ldquo;Avoid Success at All Costs!&rdquo;, and the preferred way to write monadic code is with the &ldquo;do&rdquo; notation which breaks the flow and looks a lot like drab, imperative code.</p>
+
+<p>Prolog is interesting because a clause in Prolog has two interpretations, the logical meaning and the resolution which is left to right. Consider this Prolog predicate (a predicate is similar to a function):</p>
+
+<div class="highlight"><pre><code class="language-prolog" data-lang="prolog"><span class="nf">happy</span><span class="p">(</span><span class="nv">X</span><span class="p">)</span> <span class="p">:-</span> <span class="nf">healthy</span><span class="p">(</span><span class="nv">X</span><span class="p">),</span><span class="o">not</span><span class="p">(</span><span class="nf">incarcerated</span><span class="p">(</span><span class="nv">X</span><span class="p">)),</span><span class="nf">wealthy</span><span class="p">(</span><span class="nv">X</span><span class="p">).</span></code></pre></div>
+
+
+<p>The logical meaning of this predicate is something like &ldquo;X is happy if X is healthy, and X is not incarcerated, and X is wealthy.&rdquo; The way it is resolved is more like, &ldquo;check if X is healthy, if not fail, if so check if X is incarcerated, if so fail, if not check if X is wealthy, if so succeed.&rdquo; The (:-) is pronounced &ldquo;if&rdquo; and represents logical implication (it is supposed to resemble an arrow pointing to the left) and the comma (,) is pronounced &ldquo;and&rdquo; and represents logical conjunction. Conjunctions are checked left to right and the associated predicates are called much like functions. Some predicates can have side effects. For example the &ldquo;write&rdquo; predicate prints the value passed to it, and then succeeds deterministically.</p>
+
+<p>Predicates are nondeterministic which means they may succeed or fail (no further predicates in the conjunction are called on failure) or may succeed multiple times, re-binding variables passed to it in different ways. However, if you stick to deterministic predicates (those that are guaranteed to succeed once and only once) you can write code that reads and executes left to right. Also, starting a line with (:-) is a way to call predicates in a Prolog script. The following Prolog program prints &ldquo;22&rdquo;:</p>
+
+<div class="highlight"><pre><code class="language-prolog" data-lang="prolog"><span class="nf">double</span><span class="p">(</span><span class="nv">In</span><span class="p">,</span> <span class="nv">Out</span><span class="p">)</span> <span class="p">:-</span> <span class="nv">Out</span> <span class="o">is</span> <span class="nv">In</span> <span class="o">+</span> <span class="nv">In</span><span class="p">.</span>
+<span class="nf">plus2</span><span class="p">(</span><span class="nv">In</span><span class="p">,</span> <span class="nv">Out</span><span class="p">)</span> <span class="p">:-</span> <span class="nv">Out</span> <span class="o">is</span> <span class="nv">In</span> <span class="o">+</span> <span class="mi">2</span> <span class="p">.</span>
+<span class="p">:-</span> <span class="nf">double</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="nv">X</span><span class="p">),</span><span class="nf">plus2</span><span class="p">(</span><span class="nv">X</span><span class="p">,</span> <span class="nv">Y</span><span class="p">),</span><span class="nf">write</span><span class="p">(</span><span class="nv">Y</span><span class="p">).</span></code></pre></div>
+
+
+<p>This works because the &ldquo;is&rdquo; operator evaluates the structure on the right side according to mathematical rules and unifies it with the left side. If the left side is a variable, this works a bit like binding or assignment. This can get tedious if you are stringing a lot of predicates together, since you have to come up with names for each output/input variable combination:</p>
+
+<div class="highlight"><pre><code class="language-prolog" data-lang="prolog"><span class="p">:-</span> <span class="nf">double</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="nv">X</span><span class="p">),</span><span class="nf">plus2</span><span class="p">(</span><span class="nv">X</span><span class="p">,</span> <span class="nv">Y</span><span class="p">),</span><span class="nf">plus2</span><span class="p">(</span><span class="nv">Y</span><span class="p">,</span> <span class="nv">Z</span><span class="p">),</span><span class="nf">double</span><span class="p">(</span><span class="nv">Z</span><span class="p">,</span> <span class="nv">W</span><span class="p">),</span><span class="nf">write</span><span class="p">(</span><span class="nv">W</span><span class="p">).</span></code></pre></div>
+
+
+<p>Fortunately, there is a thing called Definite Clause Grammar (DCG) which is actually designed to help parse lists easily but it assumes that you are going to combine a bunch of predicates that take an input and output variable as the last two parameters, passing the output of one to the input of the next one, and elides all of that. It uses the (&ndash;>) operator instead of (:-). This bit of code is roughly equivalent to the last, both print &ldquo;48&rdquo;:</p>
+
+<div class="highlight"><pre><code class="language-prolog" data-lang="prolog"><span class="nf">double_plus_good</span> <span class="o">--&gt;</span> <span class="s-Atom">double</span><span class="p">,</span><span class="s-Atom">plus2</span><span class="p">,</span><span class="s-Atom">plus2</span><span class="p">,</span><span class="s-Atom">double</span><span class="p">.</span>
+<span class="p">:-</span> <span class="nf">double_plus_good</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="nv">X</span><span class="p">),</span><span class="nf">write</span><span class="p">(</span><span class="nv">X</span><span class="p">).</span></code></pre></div>
+
+
+<p>I submit that most programmers end up coercing the languages they work in into a left to right flow style because it is natural. An algorithm is a series of steps to produce a calculation, like a recipe. Programming is encoding algorithms, so it is natural to want to view them as steps. While this may sound like imperative style, it is entirely orthogonal. The steps in an algorithm can (and most often should) be pure functions, even if the language does not enforce it.</p>
+
+<p>I propose a programming language that is built around this left to right flow like Forth and friends (minus the stack manipulation). Here is some code in a version of my imaginary language:</p>
+
+<div class="highlight"><pre><code class="language-haskell" data-lang="haskell"><span class="s">&quot;localhost:customerdb&quot;</span> <span class="n">getDatabase</span> <span class="p">(</span><span class="n">get</span> <span class="s">&quot;people&quot;</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">PeopleRecords</span>
+<span class="s">&quot;output.log&quot;</span> <span class="n">getFile</span> <span class="n">recordParse</span> <span class="ow">-&gt;</span> <span class="kt">LogRecords</span>
+<span class="kt">PeopleRecords</span> <span class="p">(</span><span class="s">&quot;customer&quot;</span> <span class="ow">=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">(</span><span class="n">project</span> <span class="s">&quot;cookie&quot;</span><span class="p">)</span> <span class="ow">-&gt;</span> <span class="kt">CustCookies</span>
+<span class="kt">LogRecords</span> <span class="p">(</span><span class="s">&quot;cookie&quot;</span> <span class="kr">in</span> <span class="kt">CustCookies</span><span class="p">)</span> <span class="n">count</span> <span class="ow">-&gt;</span> <span class="kt">CustomerHits</span>
+<span class="kt">LogRecords</span> <span class="n">count</span> <span class="ow">-&gt;</span> <span class="kt">AllHits</span>
+<span class="kt">CustomerHits</span> <span class="p">(</span><span class="n">divBy</span> <span class="kt">AllHits</span><span class="p">)</span> <span class="n">print</span></code></pre></div>
+
+
+<p>Each new line starts with a value, and then that value gets passed through successive functions which return new values (at least that is the semantics of it, evaluation could occur in many ways and the compiler/runtime could optimize in any number of ways). Functions start with a lower case character, locally bound values start with upper case letter and all names are camel cased, though these conventions are arbitrary. The arrow operator (->) signifies binding the value returned from previous function to a name. Functions which have parameters are enclosed with those parameters in parentheses and may be infix as in the case of (=) and &ldquo;in&rdquo;. Nothing is nested more than 1 level. I believe nesting of all kinds to be a source of confusion and complexity that hinders reading code, although I admit there are benefits, too, like terse code and the power of closures. There is no invisible stack to keep track of. The types are mostly obvious and easily inferred. PeopleRecords and LogRecords are of a different internal type (handle to database table with constraints and handle to parsed log file) but have the same interface (conceptual model) which is &ldquo;bag of records.&rdquo; The code reads from left to right, top to bottom.</p>
+
+<p>Some other things that I didn’t address are function definition and code branching (conditionals, switch, etc), record types, interfaces. I think pattern matching in the function head would be sufficient for all branching. Disallowing other types of branching within a function could improve code readability dramatically. Record types could have a F#-style type provider mechanism. Go’s statically duck-typed interface system is nice. That combined with multimethod dispatch, pattern matching and generic/abstract types could solve the so-called expression problem and most use cases. Most of these details are unrelated to the main feature, and are matters of taste or practicality.</p>
+
+<p>If you have any thoughts on this, tweet me.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Stephen A. Goss</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-06-05T00:00:00-07:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://blog.thezerobit.com/2014/06/05/the-flow-of-code.html" data-via="thezerobit" data-counturl="http://blog.thezerobit.com/2014/06/05/the-flow-of-code.html" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="../../05/25/python-3-is-killing-python.html" title="Previous Post: Python 3 is Killing Python">&laquo; Python 3 is Killing Python</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="the-flow-of-code.html">The Flow of Code</a>
+      </li>
+    
+      <li class="post">
+        <a href="../../05/25/python-3-is-killing-python.html">Python 3 Is Killing Python</a>
+      </li>
+    
+      <li class="post">
+        <a href="../../../2012/09/01/beautiful-quicksort-in-common-lisp.html">Beautiful Quicksort in Common Lisp</a>
+      </li>
+    
+      <li class="post">
+        <a href="../../../2012/08/26/concurrency-in-common-lisp-with-chanl.html">Concurrency in Common Lisp With ChanL</a>
+      </li>
+    
+      <li class="post">
+        <a href="../../../2012/07/28/lazy-sequences-in-common-lisp.html">Lazy Sequences in Common Lisp</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>About Me</h1>
+  <p><a href="http://twitter.com/thezerobit">@thezerobit</a> on Twitter.</p>
+  <p>Email is <strong>steveth45</strong> at <strong>gmail</strong>.</p>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/thezerobit">@thezerobit</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '../../../javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'thezerobit',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="../../../javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Stephen A. Goss -
+  <span class="credit">Powered by <a href="http://octopress.org/">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+
+<!-- Mirrored from blog.thezerobit.com/2014/06/05/the-flow-of-code.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:24:57 GMT -->
+</html>

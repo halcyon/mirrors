@@ -1,0 +1,87 @@
+;; -*- mode: lisp; -*-
+;;
+;; $Id: //info.ravenbrook.com/user/ndl/lisp/cl-rabbit/java-classes.lisp.src#2 $
+
+(in-package "JFLI")
+
+;;                         JAVA-CLASSES.LISP
+;;           Nick Levine, Ravenbrook Limited, 2007-09-03
+;; 
+;; 1.  INTRODUCTION
+;;
+;; The purpose of java-classes.lisp is to store macroexpansions of
+;; def-java-class forms so that we don't need to connect to the Java
+;; VM at build time.
+;;
+;; See Appendix C below for copyright and license.
+;;
+;;
+;; The source for java-classes.lisp is java-classes.lisp.src - edit
+;; the latter file and use the JFLI file build-java-classes.lisp (in a
+;; fresh image) to handle the macroexpansions.
+
+
+;; 2. DEF-JAVA-CLASS FORMS
+;;
+;; 2.1. java.*
+
+(def-java-class "java.io.IOException")
+(def-java-class "java.lang.Object")
+(def-java-class "java.lang.String")
+(def-java-class "java.util.Collection")
+(def-java-class "java.util.Date")
+(def-java-class "java.util.Map")
+(def-java-class "java.util.Set")
+
+
+;; 2.2. com.rabbitmq.client.*
+
+(def-java-class "com.rabbitmq.client.AMQP")
+(def-java-class "com.rabbitmq.client.AMQP$BasicProperties")
+(def-java-class "com.rabbitmq.client.Channel")
+(def-java-class "com.rabbitmq.client.Connection")
+(def-java-class "com.rabbitmq.client.ConnectionParameters")
+(def-java-class "com.rabbitmq.client.ConnectionFactory")
+(def-java-class "com.rabbitmq.client.Envelope")
+(def-java-class "com.rabbitmq.client.GetResponse")
+(def-java-class "com.rabbitmq.client.impl.AMQConnection")
+(def-java-class "com.rabbitmq.client.impl.AMQChannel")
+(def-java-class "com.rabbitmq.client.impl.ChannelN")
+(def-java-class "com.rabbitmq.client.impl.LongStringHelper$ByteArrayLongString")
+(def-java-class "com.rabbitmq.client.MessageProperties")
+(def-java-class "com.rabbitmq.client.QueueingConsumer")
+(def-java-class "com.rabbitmq.client.QueueingConsumer$Delivery")
+
+
+;; A.  REFERENCES
+;;
+;;
+;; B.  HISTORY
+;;
+;; 2007-09-03 NDL Created.
+;;
+;;
+;; C.  COPYRIGHT
+;;
+;; Copyright (c) 2007 Wiinz Limited. 
+;;
+;; Permission is hereby granted, free of charge, to any person
+;; obtaining a copy of this software and associated documentation
+;; files (the "Software"), to deal in the Software without
+;; restriction, including without limitation the rights to use, copy,
+;; modify, merge, publish, distribute, sublicense, and/or sell copies
+;; of the Software, and to permit persons to whom the Software is
+;; furnished to do so, subject to the following conditions:
+;;
+;; The above copyright notice and this permission notice shall be
+;; included in all copies or substantial portions of the Software.
+;; 
+;; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+;; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+;; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+;; NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+;; HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+;; WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+;; DEALINGS IN THE SOFTWARE.
+

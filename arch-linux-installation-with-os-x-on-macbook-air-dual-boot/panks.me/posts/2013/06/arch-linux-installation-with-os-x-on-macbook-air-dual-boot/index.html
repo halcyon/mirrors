@@ -1,0 +1,511 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+
+<!-- Mirrored from panks.me/posts/2013/06/arch-linux-installation-with-os-x-on-macbook-air-dual-boot/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 29 Nov 2016 18:22:37 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+<meta charset="utf-8">
+<title>Arch Linux Installation with OS X on Macbook Air (Dual Boot) &#8211; Code Greenhorn</title>
+<meta name="description" content="in search for the next abstraction">
+<meta name="keywords" content="arch, linux, macbook, os x">
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://panks.me/images/">
+<meta name="twitter:title" content="Arch Linux Installation with OS X on Macbook Air (Dual Boot)">
+<meta name="twitter:description" content="in search for the next abstraction">
+<meta name="twitter:creator" content="@pankajxdx">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Arch Linux Installation with OS X on Macbook Air (Dual Boot)">
+<meta property="og:description" content="in search for the next abstraction">
+<meta property="og:url" content="index.html">
+<meta property="og:site_name" content="Code Greenhorn">
+
+
+
+
+
+<link rel="canonical" href="index.html">
+<link href="http://panks.me/feed.xml" type="application/atom+xml" rel="alternate" title="Code Greenhorn Feed">
+<link rel="author" href="http://plus.google.com/u/1/+PankajKumar42?rel=author">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://panks.me/assets/css/main.min.css">
+<!-- Webfonts -->
+<link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script src="http://panks.me/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="http://panks.me/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="http://panks.me/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="http://panks.me/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://panks.me/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://panks.me/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://panks.me/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="http://panks.me/">Home</a></li>
+		<li>
+			<a href="#">About</a>
+			<ul class="dl-submenu">
+				<li>
+					<img src="http://panks.me/images/avatar.png" alt="Pankaj Kumar photo" class="author-photo">
+					<h4>Pankaj Kumar</h4>
+					<p>A Pluviophile and Brogrammer</p>
+				</li>
+				<li><a href="http://panks.me/about/">More about me</a></li>
+				
+				<li>
+					<a href="http://github.com/panks"><i class="icon-github"></i> GitHub</a>
+				</li>
+				<li>
+					<a href="http://facebook.com/panks.cogito"><i class="icon-facebook"></i> Facebook</a>
+				</li>
+				<li>
+					<a href="http://plus.google.com/u/1/+PankajKumar42"><i class="icon-google-plus"></i> Google+</a>
+				</li>
+				<li>
+					<a href="http://twitter.com/pankajxdx"><i class="icon-twitter"></i> Twitter</a>
+				</li>
+				<li>
+					<a href="http://linkedin.com/in/panks42"><i class="icon-linkedin"></i> LinkedIn</a>
+				</li>
+				
+				
+				
+				
+			</ul><!-- /.dl-submenu -->
+		</li>
+		<li>
+			<a href="#">Posts</a>
+			<ul class="dl-submenu">
+				<li><a href="http://panks.me/posts/">List all posts</a></li>
+				<li><a href="http://panks.me/tags/">Tag list</a></li>
+			</ul>
+		</li>
+		
+	</ul><!-- /.dl-menu -->
+</nav><!-- /.dl-menuwrapper -->
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h1 class="entry-title"><a href="index.html" rel="bookmark" title="Arch Linux Installation with OS X on Macbook Air (Dual Boot)">Arch Linux Installation with OS X on Macbook Air (Dual Boot)</a></h1>
+        
+        <h2>June 27, 2013</h2>
+      </div><!-- /.header-title-wrap -->
+    </header>
+    <div class="entry-content">
+      <center><img class="noborder" src="http://panks.me/images/posts/arch-apple_logo.png" /></center>
+
+<p>Second day and finally now I can Dual boot my Macbook Air with <a href="https://www.archlinux.org/">Arch Linux</a> and OS X (Mountain lion). Moments of happiness :D
+If you are a regular Windows user the rest of the article would probably be of no use (also boring may be) to you, so I recommend you check out my other posts.</p>
+
+<p>Phew.. So with Windows fan gone, lets go on to the next level, if you have been a Linux user for a while using Linux in a virtual machine or one of those <a href="http://www.ubuntu.com/about/about-ubuntu/derivatives">[<strong>fillAnyThingHere</strong>]untus</a> then you must be wondering why I wrote this post, as Linux installation unlike in 90s is pretty straight forward nowadays.</p>
+
+<!--more-->
+
+<p>So just to put some light, I was using Ubuntu(and it’s variants) since last few years, but as they started adding lots and lots of bells and whistles to it, just to attracted the newly migrated (Windows) users, it turned into an ugly OS which takes few seconds just to open the unity launcher(or whatever fancy name they gave it).</p>
+
+<p>Check out this video on <a href="http://www.youtube.com/watch?v=Sh-cnaJoGCw">Why Linux (read Ubuntu) Sucks</a>, just for fun.</p>
+
+<p>One more reason as to why I got stuck to these -untus was because we have a clone of Ubuntu’s repository in our local server at my college so installing anything was just a matter of seconds. Getting irritated (read Saturated if you are a -untu user) I finally decided to make a switch to Arch Linux. Which is a bare bone GNU/Linux OS which come with minimal set of packages and you add everything on your own whatever you wish to, a true DIY OS. Arch FTW! :D</p>
+
+<p><del>But there was cost to it, once I made the switch I would be accessing package repositories at my internet speed (which is usually pathetic in my college),</del> (My college got Arch repo mirror finally, <a href="ftp://ftp.iitm.ac.in/archlinux">ftp://ftp.iitm.ac.in/archlinux</a>) so I kept procrastinating it, but finally while my internship at Microsoft India (writing this post from my cabin right now) I got a good internet bandwidth and finally made the switch.</p>
+
+<p>Unlike those -untus the process of installing Arch Linux (I’m talking about Dual boot here, not just Arch on your entire hard disk) on Macbook Air is not just a ‘Press Next’ process. You have to configure everything on your own starting from hard disk partition and type to your networking and even bootloader.
+It took me two days to get it the way I wanted. So I thought I would document it down for the <a href="http://xkcd.com/979/">people from the future</a>.</p>
+
+<p>Before I start I would like to point it out that <a href="https://wiki.archlinux.org/index.php/Beginners'_Guide">Arch Linux’s wiki</a> is one of the best documentations out there, though some people might argue that Gentoo has the best documentation, to which I won’t disagree. So read it up, have it at your side while installation, it’s THE Bible.</p>
+
+<h2>Prepare the USB for booting</h2>
+
+<ul>
+<li><a href="https://www.archlinux.org/download/">Download</a> the latest ISO of Arch Linux</li>
+<li>Make a bootable USB of Arch linux while you are in your OS X using <strong>dd</strong></li>
+</ul>
+
+<p><code>'dd if==&lt;path to .iso file&gt; of==/dev/<yourdevice> bs==1M'&lt;/code&gt;</yourdevice></code></p>
+
+<p>(You can find your device Id by using <strong>diskutil</strong> type <code>diskutil list</code> in your OS X terminal)</p>
+
+<p>Plug in your USB key and hold ‘alt/option’ button while your system boots up, choose the USB to boot from.</p>
+
+<h2>Partitioning</h2>
+
+<p>Use <strong>cgdisk</strong></p>
+
+<p>When the system is up and running. open cgdisk.</p>
+
+<div class="highlight"><pre><code class="bash">cgdisk /dev/sda
+</code></pre></div>
+
+<p>It would list you existing partion, don’t mess up with the Mac partition (there would be 3, normally) just use the free space and create 4 new partition (You can create more, I used same partion for root and home and had a swap partition).</p>
+
+<p>Press down arrow key to select the free space and create new partitions, leave a free space of at least 128MB after Mac partitions before making the first partition.</p>
+
+<p>Make the following 4 partitions:</p>
+
+<div class="highlight"><pre><code class="bash">Size            Partition Type          Partition Name
+
+128 MB          Apple HFS+              Boot Loader
+256 MB          Linux filesystem        Boot
+X MB            Linux Swap              Swap space
+Rest of space   Linux filesystem        Root
+</code></pre></div>
+
+<p>Try to keep swap space (X) double the size of your physical memory (RAM).</p>
+
+<h2>Keep the network ready</h2>
+
+<p>As you are gonna download lot many packages you need to be online, so plugin your ethernet cable via adapter. Or you can do USB tethering from your smartphone. </p>
+
+<p>To connect to WiFi network run </p>
+
+<div class="highlight"><pre><code class="bash">wifi-menu
+</code></pre></div>
+
+<p>To check run:</p>
+
+<div class="highlight"><pre><code class="bash">ping google.com
+</code></pre></div>
+
+<h2>Format and mount partition</h2>
+
+<div class="highlight"><pre><code class="bash">mkfs.ext4 /dev/sda5
+mkswap /dev/sda6
+mkfs.ext4 /dev/sda7
+mount /dev/sda7 /mnt
+mkdir /mnt/boot <span class="o">&amp;&amp;</span> mount /dev/sda5 /mnt/boot
+swapon /dev/sda6
+</code></pre></div>
+
+<h2>Installation</h2>
+
+<div class="highlight"><pre><code class="bash">pacstrap /mnt base base-devel
+genfstab -p /mnt &gt;&gt; /mnt/etc/fstab
+</code></pre></div>
+
+<p>[<strong>VERY IMP</strong>]
+If your hard disk in SSD the change your fstab file parameters, open your fstab file </p>
+
+<div class="highlight"><pre><code class="bash">nano /mnt/etc/fstab
+</code></pre></div>
+
+<p>and make changes in it as below:</p>
+
+<div class="highlight"><pre><code class="bash">/dev/sda5      /boot  ext2  defaults,relatime,stripe<span class="o">=</span>4    0 2
+/dev/sda7        /      ext4  defaults,noatime,discard,data<span class="o">=</span>writeback   0 1
+</code></pre></div>
+
+<h2>Configure system</h2>
+
+<div class="highlight"><pre><code class="bash">arch-chroot /mnt /bin/bash 
+<span class="nb">echo </span>archer &gt; /etc/hostname     <span class="c">#Replace archer by whatever hostname you want to use</span>
+ln -s /usr/share/zoneinfo/Asia/Calcutta /etc/localtime 
+hwclock --systohc --utc 
+useradd -m -g users -G wheel -s /bin/bash myusername <span class="o">&amp;&amp;</span> passwd mypassword   <span class="c">#Replace myusername and mypassword</span>
+sudo pacman -S sudo
+</code></pre></div>
+
+<p>Give yourself sudo right:</p>
+
+<div class="highlight"><pre><code class="bash">nano /etc/sudoers <span class="c"># uncomment wheel line</span>
+</code></pre></div>
+
+<p>To set up your locale, run:</p>
+
+<div class="highlight"><pre><code class="bash">sudo nano /etc/locale.gen
+</code></pre></div>
+
+<p>Uncomment the desired locals. For me this was:</p>
+
+<p><code>en_US.UTF-8 UTF-8</code></p>
+
+<p><code>en_CA.UTF-8 UTF-8</code></p>
+
+<p>Generate these locales by running:</p>
+
+<div class="highlight"><pre><code class="bash">locale-gen
+<span class="nb">echo </span><span class="nv">LANG</span><span class="o">=</span>en_US.UTF8 &gt; /etc/locale.conf
+<span class="nb">export </span><span class="nv">LANG</span><span class="o">=</span>en_US.UTF-8
+</code></pre></div>
+
+<p>Modify your <strong>/etc/mkinitcpio.conf</strong> file to insert <code>keyboard</code> after <code>autodetect</code> in the <strong>HOOK</strong> section.
+Then run:</p>
+
+<div class="highlight"><pre><code class="bash">mkinitcpio -p linux
+</code></pre></div>
+
+<h2>Here comes the Bootloader</h2>
+
+<p>This is the trickiest part, so don’t go anywhere.</p>
+
+<p>What we will be doing is to boot using OS X native EFI boot loader, so install <strong>grub-efi-x86_64</strong></p>
+
+<div class="highlight"><pre><code class="bash">pacman -S grub-efi-x86_64
+</code></pre></div>
+
+<p>change <strong>/etc/default/grub</strong> to look like</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nv">GRUB_CMDLINE_LINUX_DEFAULT</span><span class="o">=</span><span class="s2">&quot;quiet rootflags=data=writeback&quot;</span>
+</code></pre></div>
+
+<p>Now generate <strong>boot.efi</strong> with GRUB</p>
+
+<div class="highlight"><pre><code class="bash">grub-mkconfig -o boot/grub/grub.cfg
+grub-mkstandalone -o boot.efi -d usr/lib/grub/x86_64-efi -O x86_64-efi -C xz boot/grub/grub.cfg
+</code></pre></div>
+
+<p>Now <strong>boot.efi</strong> would be present in the current directly (or somewhere else if you changed the path in the command above), copy it somewhere.</p>
+
+<p>How?</p>
+
+<p>You can mount your USB and copy to it:</p>
+
+<div class="highlight"><pre><code class="bash">mkdir /mnt/usbdisk <span class="o">&amp;&amp;</span> mount /dev/sdb /mnt/usbdisk 
+cp boot.efi /mnt/usbdisk/
+</code></pre></div>
+
+<p>Or you can SCP it to some other computer (for SSH you need to install <strong>openssh</strong> package).</p>
+
+<p>If you only have WiFi at your disposal and don’t have an ethernet then you might wanna install the following packages before rebooting for the WiFi to work on reboot:</p>
+
+<div class="highlight"><pre><code class="bash">pacman install iw wireless_tools wpa_supplicant dialog
+</code></pre></div>
+
+<p>also install <code>networkmanager</code> and enable it using <code>NetworkManager.service</code>. Read <a href="https://wiki.archlinux.org/index.php/NetworkManager">Arch wiki</a> for more info.</p>
+
+<h2>Reboot (Back to the Mac world)</h2>
+
+<ul>
+<li>exit chroot: <code>exit</code></li>
+<li>Reboot your system <code>sudo reboot</code></li>
+<li>Launch <strong>Disk Utility</strong></li>
+<li>Format the partition made for boot (<strong>/dev/sda4</strong>), using Max OS X(Journaled) filesystem.</li>
+<li>Create the following the directories and file in /dev/sda4:
+</li>
+</ul>
+
+<pre><code>|___mach_kernel
+|___System
+       |
+       |___Library
+              |
+              |___CoreServices
+                      |
+                      |___SystemVersion.plist
+                      |___boot.efi
+</code></pre>
+
+<p>Commands for above:</p>
+
+<div class="highlight"><pre><code class="bash"><span class="nb">cd</span> /Volumes/disk0s4
+mkdir System mach_kernel
+<span class="nb">cd </span>System
+mkdir Library
+<span class="nb">cd </span>Library
+mkdir CoreServices
+<span class="nb">cd </span>CoreServices
+touch SystemVersion.plist
+</code></pre></div>
+
+<p>Copy the <strong>boot.efi</strong> generated while installation to <strong>CoreServices</strong> directory, and paste the following in <strong>SystemVersion.plist</strong></p>
+
+<div class="highlight"><pre><code class="bash">&lt;xml <span class="nv">version</span><span class="o">=</span><span class="s2">&quot;1.0&quot;</span> <span class="nv">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span>?&gt;
+&lt;plist <span class="nv">version</span><span class="o">=</span><span class="s2">&quot;1.0&quot;</span>&gt;
+&lt;dict&gt;
+    &lt;key&gt;ProductBuildVersion&lt;/key&gt;
+    &lt;string&gt;&lt;/string&gt;
+    &lt;key&gt;ProductName&lt;/key&gt;
+    &lt;string&gt;Linux&lt;/string&gt;
+    &lt;key&gt;ProductVersion&lt;/key&gt;
+    &lt;string&gt;Arch Linux&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre></div>
+
+<p>and now <strong>bless</strong> this partition to make it bootable</p>
+
+<div class="highlight"><pre><code class="bash">sudo bless --device /dev/disk0s4 --setBoot
+</code></pre></div>
+
+<p>Now you are all set, you can reboot and hold ‘alt/option’ key and choose <strong>disk0s4</strong> to boot from to boot into Arch Linux.</p>
+
+<h2>Post Installtion</h2>
+
+<h3>Xorg</h3>
+
+<p>Install Xorg server</p>
+
+<div class="highlight"><pre><code class="bash">pacman -S xorg xf86-input-synaptics acpid
+systemctl <span class="nb">enable </span>acpid
+</code></pre></div>
+
+<h3>Network</h3>
+
+<ul>
+<li>Use <code>iwconfig</code> to check the ethernet and run
+<code>systemctl start dhcpcd.service@eth0</code> #or whatever your ethernet name is</li>
+<li>You can use <code>wifi-menu</code> to connect to Wi-Fi Networks</li>
+</ul>
+
+<h3>Sound</h3>
+
+<ul>
+<li>Install <strong>ALSA</strong>
+
+ <code>pacman -S alsa-utils</code></li>
+<li>Unmute the master channel
+
+ <code>amixer sset Master unmute</code></li>
+</ul>
+
+<h3>Screen Backlight</h3>
+
+<p>Works OTB</p>
+
+<h3>Keyboard Backlight</h3>
+
+<p>You can control by echoing values to</p>
+
+<p><strong>/sys/devices/platform/applesmc.768/leds/smc::kbd_backlight/brightness</strong></p>
+
+<div class="highlight"><pre><code class="bash"><span class="nb">echo </span>40 &gt; /sys/devices/platform/applesmc.768/leds/smc<span class="se">\:\:</span>kbd_backlight/brightness
+</code></pre></div>
+
+<h3>GUI</h3>
+
+<p>There are lot many options for it, some might prefer living without it, some might go for something light, like <a href="https://wiki.archlinux.org/index.php/Awesome">awesome</a> or <a href="https://wiki.archlinux.org/index.php/Enlightenment">enlightenment</a>. But as of now I’m mentoring a student under <a href="http://www.google-melange.com/">GSoC</a> for a project which is in <a href="http://www.digikam.org/">digiKam</a> so I prefered going for <a href="http://www.kde.org/">KDE</a>.</p>
+
+<p>For minimal install, install <strong>kdebase</strong> for full install of all the basic KDE packages install <strong>kde</strong></p>
+
+<div class="highlight"><pre><code class="bash">pacman -S kdebase
+</code></pre></div>
+
+<p>For launching KDE:</p>
+
+<ul>
+<li>Using <strong>xinitrc</strong>
+
+<ul>
+<li>Add <code>exec startkde</code> to <strong>~/.xinitrc</strong></li>
+<li>After log-in run <code>startx</code> to launch KDE GUI</li>
+</ul>
+</li>
+<li>Using KDM
+
+<ul>
+<li>Install <strong>kdm</strong></li>
+<li>Enable it <code>systemctl start kdm.service</code>, from next start  you would get a GUI asking for your password to login</li>
+</ul>
+</li>
+</ul>
+
+<h3>rEFInd</h3>
+
+<p>If you find this whole business of holding ‘alt/option’ key for few seconds on system start to choose OS irritation, then you can install <a href="http://www.rodsbooks.com/refind/">rEFInd</a> it would present you with a nice GUI on system start where you can choose which OS to boot.</p>
+
+<h2>Install Application</h2>
+
+<p>You can install any package using <strong>pacman</strong></p>
+
+<div class="highlight"><pre><code class="bash">pacman -S &lt;package name&gt;
+</code></pre></div>
+
+<p>You can go <a href="https://wiki.archlinux.org/index.php/List_of_Applications">here</a> and check the list of Application which you might wanna use/install.</p>
+
+<p>Well, so that’s all about it.</p>
+
+      <footer class="entry-meta">
+        <span class="entry-tags"><a href="http://panks.me/tags/#arch" title="Pages tagged arch" class="tag">arch</a><a href="http://panks.me/tags/#linux" title="Pages tagged linux" class="tag">linux</a><a href="http://panks.me/tags/#macbook" title="Pages tagged macbook" class="tag">macbook</a><a href="http://panks.me/tags/#os x" title="Pages tagged os x" class="tag">os x</a></span>
+        <span><a href="index.html" rel="bookmark" title="Arch Linux Installation with OS X on Macbook Air (Dual Boot)">Arch Linux Installation with OS X on Macbook Air (Dual Boot)</a> was published on <span class="entry-date date published updated"><time datetime="2013-06-27T12:59:00+05:30">June 27, 2013</time></span></span>
+        
+        <span class="author vcard"><span class="fn"><a href="http://panks.me/about/" title="About Pankaj Kumar">Pankaj Kumar</a></span></span>
+        
+        <div class="social-share">
+          <ul class="socialcount socialcount-small inline-list">
+            <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=http://panks.me/posts/2013/06/arch-linux-installation-with-os-x-on-macbook-air-dual-boot/" title="Share on Facebook"><span class="count"><i class="icon-facebook-sign"></i> Like</span></a></li>
+            <li class="twitter"><a href="https://twitter.com/intent/tweet?text=http://panks.me/posts/2013/06/arch-linux-installation-with-os-x-on-macbook-air-dual-boot/" title="Share on Twitter"><span class="count"><i class="icon-twitter-sign"></i> Tweet</span></a></li>
+            <li class="googleplus"><a href="https://plus.google.com/share?url=http://panks.me/posts/2013/06/arch-linux-installation-with-os-x-on-macbook-air-dual-boot/" title="Share on Google Plus"><span class="count"><i class="icon-google-plus-sign"></i> +1</span></a></li>
+          </ul>
+        </div><!-- /.social-share -->
+        
+      </footer>
+    </div><!-- /.entry-content -->
+    <section id="disqus_thread"></section><!-- /#disqus_thread -->
+</article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2015 Pankaj Kumar
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="http://panks.me/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="http://panks.me/assets/js/scripts.min.js"></script>
+
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'panksblogtest'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>	        
+
+</body>
+
+<!-- Mirrored from panks.me/posts/2013/06/arch-linux-installation-with-os-x-on-macbook-air-dual-boot/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 29 Nov 2016 18:22:37 GMT -->
+</html>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Loops in Lisp Part 1: Goto</title>
+	<atom:link href="http://malisper.me/2015/11/24/loops-lisp-part-1-goto/feed/" rel="self" type="application/rss+xml" />
+	<link>http://malisper.me/2015/11/24/loops-lisp-part-1-goto/</link>
+	<description>Case Studies in Lisp Macros</description>
+	<lastBuildDate>Thu, 14 Apr 2016 08:46:03 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: malisper</title>
+		<link>http://malisper.me/2015/11/24/loops-lisp-part-1-goto/#comment-2020</link>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+		<pubDate>Mon, 07 Dec 2015 17:24:02 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=1106#comment-2020</guid>
+		<description><![CDATA[The point of the post was that you can build these really awesome constructs out of just goto and macros. While loops were just an example. You absolutely should not do this when you can use loop or do instead.]]></description>
+		<content:encoded><![CDATA[<p>The point of the post was that you can build these really awesome constructs out of just goto and macros. While loops were just an example. You absolutely should not do this when you can use loop or do instead.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Marco Antoniotti</title>
+		<link>http://malisper.me/2015/11/24/loops-lisp-part-1-goto/#comment-2018</link>
+		<dc:creator><![CDATA[Marco Antoniotti]]></dc:creator>
+		<pubDate>Mon, 07 Dec 2015 14:41:56 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=1106#comment-2018</guid>
+		<description><![CDATA[Yes.  Common Lisp has WHILE loops (and a ton o other iteration constructs).
+
+You just write
+
+(loop while (peek-char nil stream nil nil) do
+           (write-char (read-char stream)))
+
+No need for yet another WHILE macro.
+
+Cheers
+
+Marco]]></description>
+		<content:encoded><![CDATA[<p>Yes.  Common Lisp has WHILE loops (and a ton o other iteration constructs).</p>
+<p>You just write</p>
+<p>(loop while (peek-char nil stream nil nil) do<br />
+           (write-char (read-char stream)))</p>
+<p>No need for yet another WHILE macro.</p>
+<p>Cheers</p>
+<p>Marco</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Drew</title>
+		<link>http://malisper.me/2015/11/24/loops-lisp-part-1-goto/#comment-1817</link>
+		<dc:creator><![CDATA[Drew]]></dc:creator>
+		<pubDate>Thu, 26 Nov 2015 18:35:59 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=1106#comment-1817</guid>
+		<description><![CDATA[Why not `(loop :while ,test :do ,@body) ? Is that not a &quot;While Loop&quot; ... or in CL, a &quot;Loop While&quot;?]]></description>
+		<content:encoded><![CDATA[<p>Why not `(loop :while ,test :do ,@body) ? Is that not a &#8220;While Loop&#8221; &#8230; or in CL, a &#8220;Loop While&#8221;?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: malisper</title>
+		<link>http://malisper.me/2015/11/24/loops-lisp-part-1-goto/#comment-1814</link>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+		<pubDate>Thu, 26 Nov 2015 04:18:37 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=1106#comment-1814</guid>
+		<description><![CDATA[That is actually standard behavior of the normal looping macros. For example, see the note at the bottom of the CLHS page for &lt;a href=&quot;http://clhs.lisp.se/Body/m_dotime.htm#dotimes&quot; rel=&quot;nofollow&quot;&gt;dotimes&lt;/a&gt;.]]></description>
+		<content:encoded><![CDATA[<p>That is actually standard behavior of the normal looping macros. For example, see the note at the bottom of the CLHS page for <a href="http://clhs.lisp.se/Body/m_dotime.htm#dotimes" rel="nofollow">dotimes</a>.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Joram</title>
+		<link>http://malisper.me/2015/11/24/loops-lisp-part-1-goto/#comment-1784</link>
+		<dc:creator><![CDATA[Joram]]></dc:creator>
+		<pubDate>Tue, 24 Nov 2015 21:01:15 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=1106#comment-1784</guid>
+		<description><![CDATA[One issue with the WHILE macro defined here is that any bare symbols in the body become valid labels to GO to, which you might want to avoid. The body should probably be wrapped in a PROGN.]]></description>
+		<content:encoded><![CDATA[<p>One issue with the WHILE macro defined here is that any bare symbols in the body become valid labels to GO to, which you might want to avoid. The body should probably be wrapped in a PROGN.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: PuercoPop</title>
+		<link>http://malisper.me/2015/11/24/loops-lisp-part-1-goto/#comment-1781</link>
+		<dc:creator><![CDATA[PuercoPop]]></dc:creator>
+		<pubDate>Tue, 24 Nov 2015 17:26:05 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=1106#comment-1781</guid>
+		<description><![CDATA[One may argue that recursion in CL is not a provided primitive as tail call elimination is not guaranteed so it is not encouraged.]]></description>
+		<content:encoded><![CDATA[<p>One may argue that recursion in CL is not a provided primitive as tail call elimination is not guaranteed so it is not encouraged.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.075 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:23:20 -->

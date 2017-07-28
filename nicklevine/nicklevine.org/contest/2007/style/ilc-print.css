@@ -1,0 +1,27 @@
+
+
+
+
+
+/*
+     FILE ARCHIVED ON 7:10:12 Jul 20, 2007 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 13:21:10 Apr 27, 2014.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/* $Id: //bibop.alu.org/ilc/www/2007/ilc-print.css#2 $ */
+
+@import "../../../web/20070720071012/http_/www.international-lisp-conference.org/2007/ilc.html";
+
+#Content {
+    margin: 5mm 5mm 5mm 5mm;
+    padding: 5mm;
+}
+
+#Menu {
+  display: none;
+  width: 0mm;
+  height: 0mm;
+}

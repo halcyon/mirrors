@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/building-a-better-timeclock-with-event-modeling by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:53 GMT -->
+<head>
+    <title> Building a better timeclock with event modeling </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content="width=device-width" name="viewport">
+    <meta content="IE=7, IE=9" http-equiv="X-UA-Compatible">
+    <link rel="stylesheet" type="text/css" href="http://app.tinyletter.com/css/message.css">
+    <link rel="icon" href="http://tinyletter.com/site/favicon.ico" type="image/x-icon">
+    <!--[if IE]>
+    <style type="text/css">
+        .tl-logo a { background:url(http://gallery.mailchimp.com/7f1f3a0cca670414e2146e475/images/tinyletter_sprite.png) no-repeat -148px 0 transparent; }
+    </style>
+    <![endif]-->
+    
+    <meta name="og:url" content="building-a-better-timeclock-with-event-modeling.html">
+    <meta property="og:title" content="Building a better timeclock with event modeling">
+    <meta property="og:description" content="Back on Monday, I had asked you to imagine that you were building a time tracking system for a small business. The purpose of this system would be to track hours worked by employees, who would punch a...">
+    <meta property="og:site_name" content="TinyLetter">
+    <meta property="og:type" content="article">
+
+    	<meta name="twitter:site" content="@tinyletter" />
+	<meta name="twitter:domain" content="tinyletter.com" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Building a better timeclock with event modeling" />
+	<meta name="twitter:description" content="Back on Monday, I had asked you to imagine that you were building a time tracking system for a small business. The purpose of this system would be to track hours worked by employees, who would punch a" />
+	<meta name="twitter:image" content="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/d231c63f-3622-4121-939d-a943fd666af5.png" />
+	<meta name="og:image" content="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/d231c63f-3622-4121-939d-a943fd666af5.png" />
+
+    <style type="text/css">
+    /* Customizable Theme Bits */
+    body {
+        background-color: #DDDDDD;
+            }
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <div class="container paper-stack">
+        <div id="message-heading">
+            <div class="date"> March 10, 2016 </div>
+            <h1 class="subject"> Building a better timeclock with event modeling </h1>
+            <div class="by-line"> by <a class="tl_twitter_handle" href="https://twitter.com/practicingdev">Gregory Brown</a> </div>
+            <div class="header-arrow-border"></div>
+            <div class="header-arrow"></div>
+        </div>
+        <div class="message-body"> Back on Monday, I had asked you to imagine that you were building a time tracking system for a small business. The purpose of this system would be to track hours worked by employees, who would punch a clock each time they started and finished working.<br>
+<br>
+At first glance, this problem seems solvable with a single WorkSession model, which consists of an employee id, a start time, and a finish time. To compute how much time an employee has worked in a day, week, or month, you&#39;d simply need to aggregate the duration of each work session in that time period.<br>
+<br>
+The only problem with this approach is that because humans are in the loop, we cannot count on the data to be perfectly consistent and complete. An employee who misses their first punch of the day at 8:30 AM but then remembers to record their punches for the rest of the day will end up with a broken timesheet that needs to be completely rewritten:<br>
+<br>
+<img class="tl-email-image" data-id="662201" height="344" src="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/d231c63f-3622-4121-939d-a943fd666af5.png" style="width: 480px; max-width: 480px;" width="480"><br>
+<br>
+Does that look a bit confusing? It is, and we can do better!<br>
+<br>
+The first step is to recognize that there is a fundamental disconnect between the real-world information we are modeling and the data that our system is able to collect. It feels natural to model work sessions as intervals, because that is what they are... a period of time where an employee is being paid to work with a defined start and end time.<br>
+<br>
+But to the time tracking application, an interval is an abstract concept: it is what you get as a result of two sequential punches in the system. With perfect data entry, the system aligns exactly with reality and everyone is happy. With any missing or incorrect data, the system is now in an inconsistent state and cannot represent reality until the error is corrected.<br>
+<br>
+This is a subtle distinction but a very important one: That the definition of a work session by human standards is quite different than the definition of a work session in our data model. In the time tracking system a work session is <em>constructed&nbsp;</em>from punch events, so we might as well model those events directly.<br>
+<br>
+Suppose that instead of using a physical WorkSession model at the database layer, we instead use a Punch model which records individual timestamps and associates them with an employee id. Using this approach, it wouldn&#39;t be necessary to modify any existing data to add a missed punch; simply inserting a new record would do the trick:<br>
+<img class="tl-email-image" data-id="661901" height="327" src="http://gallery.tinyletterapp.com/14b34a3094ef5360c8e0fb79cedae1d7d48a0c6d/images/43b1cfb7-8517-42a0-be88-6f1daba5873c.png" style="width: 300px; max-width: 300px;" width="300"><br>
+We could still easily generate IN/OUT pairs of punches and present them in a timesheet view by sorting the punches in chronological order and then grouping them by consecutive pairs. This would most likely be done at the programming logic level rather than the database level, but it is an easy transformation.<br>
+<br>
+The difference between these two styles is subtle but profound. The first approach turns punches directly into semantically meaningful data (i.e. it clearly labels each punch as a start or finish time within a single work session), while the second approach dynamically generates work sessions as a projection of raw punch events.<br>
+<br>
+Whenever data is both complete and comprehensive, the benefits of directly mapping it to meaningful structures might outweigh the costs. But in this particular case, with an unreliable input source, it makes sense to represent the data in terms of raw events, because it makes correcting errors a whole lot easier.<br>
+<br>
+On a more philosophical note, there is another important thing to consider about the differences between these two models. In the first model, a single mistake results in inaccurate data until the error is corrected: a record will be created that shows a work session from 1:30 PM - 2:30 PM even though that actually never existed. In the second model, the projections of the data may be inaccurate, but the raw data itself will remain factually correct: That there was a punch at 1:30 PM, 2:30 PM, and 5:15 PM.<br>
+<br>
+It is better to assume that a projection may be inaccurate due to incomplete or incorrectly entered data than it is to allow for corrupted records by design. This is especially true when humans are not just responsible for triggering the events that generate the data in the first place, but are also responsible for correcting errors when they occur. It is unambiguously easier to add a single missed punch to correct an error than it would be to edit four values spread across two intervals to fix corrupt records.<br>
+<br>
+Could you build an easier admin workflow on top of the original interval based modeling? Probably. But in doing so, you&#39;d have to write quite a bit more code, and would still end up with your raw data being out of sync with reality whenever there was an error. For these reasons, the event-based modeling is almost certainly a better solution to this particular problem.<br>
+<br>
+Going beyond that, this scenario isn&#39;t in any way an obscure special case. If you look at your own projects, you&#39;ll find at least one example of where modeling things in terms of raw system events rather than higher level domain concepts would probably pay off. If you have a few minutes to spare, please reply to this email and share your story.<br>
+<br>
+Thanks!<br>
+-greg </div>
+
+        <div class="tl-logo">
+            <a href="http://tinyletter.com/" target="_blank"> tinyletter </a>
+        </div>
+    </div>
+</div>
+
+<div id="message-pager">
+    <div class="controls">
+        <a class="tl-button subscribe" href="http://tinyletter.com/programming-beyond-practices"> Subscribe </a>
+
+        <div class="paging">
+            <a href="../archive.html" class="archive-link"> 
+                Archive
+             </a> 
+
+                         <a class="paging-button prev" href="making-decisions-under-pressure.html"> &lt; </a> 
+            
+                         <a class="paging-button next" href="the-curious-case-of-the-poorly-modeled-time-clock.html"> &gt; </a> 
+                     </div>
+    </div>
+</div>
+
+</body>
+
+
+<!-- Mirrored from tinyletter.com/programming-beyond-practices/letters/building-a-better-timeclock-with-event-modeling by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 03:34:53 GMT -->
+</html>

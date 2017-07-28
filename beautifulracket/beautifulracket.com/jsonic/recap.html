@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/jsonic/recap.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:18 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Extend a data format: jsonic</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;extend-a-data-format-jsonic&quot;)"></div><h1 anchor="extend-a-data-format-jsonic" id="extend-a-data-format-jsonic" hyphens="none">Extend a data format: <span class="my-code" decode="exclude">jsonic</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification.html">2&emsp;spec­i­fi­ca­tion</a></li><li><a href="setup.html">3&emsp;setup</a></li><li><a href="the-reader.html">4&emsp;the reader</a></li><li><a href="the-tokenizer.html">5&emsp;the tok­enizer</a></li><li><a href="the-parser.html">6&emsp;the parser</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a class="here" href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_HFhtr&quot;)"></div><p id="a_HFhtr"><span class="my-code" decode="exclude">jsonic</span> proves that a DSL can be a sim­ple &amp; prac­ti­cal tool for solv­ing a pro­gram­ming prob­lem. We needed fewer than <a href="source-listing.html">50 lines of code</a> for <span class="my-code" decode="exclude">jsonic</span>—mak­ing it even shorter than <a href="../bf/source-listing.html"><span class="my-code" decode="exclude">bf</span></a>. Undoubt­edly, writ­ing a whole JSON-gen­er­a­tion library in our favorite pro­gram­ming lan­guage would’ve been more work.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_MZLe5&quot;)"></div><p id="a_MZLe5">Of course, one rea­son <span class="my-code" decode="exclude">jsonic</span> can be small is that it relies heav­ily on Racket: as an imple­men­ta­tion lan­guage, as the lan­guage for the embed­ded expres­sions, and for the <span class="my-code" decode="exclude">json</span> library, which han­dles the heavy lift­ing.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_XXpwr&quot;)"></div><p id="a_XXpwr">But that’s a good thing. All we need to do is design and imple­ment the inter­face for our lit­tle lan­guage.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_fnMCT&quot;)"></div><p id="a_fnMCT">The other rea­son <span class="my-code" decode="exclude">jsonic</span> is small is that we’ve treated it as a tool for per­sonal use. If we were shar­ing this DSL with oth­ers, we’d want to include tests, doc­u­men­ta­tion, bet­ter error mes­sages, and inte­gra­tion with DrRacket (about which, <a href="../jsonic-2/index.html">more shortly</a>).</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_F5pac&quot;)"></div><p id="a_F5pac">Mostly, this <span class="my-code" decode="exclude">jsonic</span> tuto­r­ial was meant to nail down the basic two-part frame­work of a Racket-imple­mented lan­guage that we saw in <a href="../stacker/index.html"><span class="my-code" decode="exclude">stacker</span></a> and <a href="../bf/index.html"><span class="my-code" decode="exclude">bf</span></a>:</p></div><ol><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_G7nx3&quot;)"></div><p id="a_G7nx3">A <a class="glossary" href="../appendix/glossary.html#reader"><span class="glossary-link-text">reader</span></a> that con­verts the source code into paren­the­sized S-expres­sions. We made our reader by chain­ing a <a class="glossary" href="../appendix/glossary.html#tokenizer"><span class="glossary-link-text">tok­enizer</span></a> to a <a class="glossary" href="../appendix/glossary.html#grammar"><span class="glossary-link-text">gram­mar</span></a>-based <a class="glossary" href="../appendix/glossary.html#parser"><span class="glossary-link-text">parser</span></a>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ivaey&quot;)"></div><p id="a_ivaey">An <a class="glossary" href="../appendix/glossary.html#expander"><span class="glossary-link-text">expander</span></a> that adds bind­ings to the code pro­duced by the reader, so the code can be eval­u­ated as a Racket pro­gram. We made our expander by rely­ing on <a class="glossary" href="../appendix/glossary.html#macro"><span class="glossary-link-text">macros</span></a> and helper func­tions.</p></div></li></ol><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_xM1ce&quot;)"></div><p id="a_xM1ce">The next tuto­ri­als are going to assume that we’re com­pletely cool with these ingre­di­ents. If any of these con­cepts are unclear, this is a good moment to review.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;choose-your-own-adventure&quot;)"></div><h3 anchor="choose-your-own-adventure" class="subhead" id="choose-your-own-adventure"><a href="#choose-your-own-adventure">Choose your own adven­ture</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_l4AN0&quot;)"></div><p id="a_l4AN0">As a junior JSON engi­neer at Mega­Corp, your inven­tion of <span class="my-code" decode="exclude">jsonic</span> pro­vided a huge boost to your pro­duc­tiv­ity. Sure, it’s a toy lan­guage. But a very use­ful toy. In fact, by cre­at­ing a JSON pre­proces­sor, you dis­cov­ered that you were able to com­plete your weekly JSON assign­ments in 1/3 the usual time.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_do8qw&quot;)"></div><p id="a_do8qw">What’s your next thought?</p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_5Dewx&quot;)"></div><p id="a_5Dewx">“Wow, I’d really like a pro­mo­tion and a raise. I’m going to use <span class="my-code" decode="exclude">jsonic</span> to get three times as much work done as before. My boss will be so impressed.” <a href="../jsonic-2/index.html">Click here for your next tuto­r­ial.</a></p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_VQmjx&quot;)"></div><p id="a_VQmjx">“This is great—it’s going to free up so much time dur­ing the day for pro­gram­ming puz­zles. I’ll be get­ting just as much work done, so my boss will never know.” <a href="../wires/index.html">Click here for your next tuto­r­ial.</a></p></div></li></ul><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification.html">2&emsp;spec­i­fi­ca­tion</a></li><li><a href="setup.html">3&emsp;setup</a></li><li><a href="the-reader.html">4&emsp;the reader</a></li><li><a href="the-tokenizer.html">5&emsp;the tok­enizer</a></li><li><a href="the-parser.html">6&emsp;the parser</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a class="here" href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="testing-the-language.html">← prev</a>
+    <a class="nav-right" href="source-listing.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

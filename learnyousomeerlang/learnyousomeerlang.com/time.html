@@ -1,0 +1,260 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+	
+<!-- Mirrored from learnyousomeerlang.com/time by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:58:24 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="Content-Style-Type" content="text/css" />
+		<meta name="keywords" content="time, warp, monotonic, clock, now, skew, drift, correction, POSIX, seconds" />
+		<meta name="description" content="A guide on time handling in Erlang. Topics such as time correction and warping to handle clock skew and drifting are covered, along with new BIFs introduced in Erlang 18.0." />
+        <meta name="google-site-verification" content="mi1UCmFD_2pMLt2jsYHzi_0b6Go9xja8TGllOSoQPVU" />
+		<link rel="stylesheet" type="text/css" href="static/css/screen43a0.css?v3" media="screen" />
+		<link rel="stylesheet" type="text/css" href="static/css/sh/shCore.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="static/css/sh/shThemeLYSE2.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="static/css/print.css" media="print" />
+		<link href="rss" type="application/rss+xml" rel="alternate" title="LYSE news" />
+		<link rel="icon" type="image/png" href="favicon.ico" />
+		<link rel="apple-touch-icon" href="static/img/touch-icon-iphone.png" />
+		<link rel="apple-touch-icon" sizes="72x72" href="static/img/touch-icon-ipad.png" />
+		<link rel="apple-touch-icon" sizes="114x114" href="static/img/touch-icon-iphone4.png" />
+		<title>Postscript: Time Goes On | Learn You Some Erlang for Great Good!</title>
+	</head>
+	<body>
+		<div id="wrapper">
+			<div id="header">
+				<h1>Learn you some Erlang</h1>
+				<span>for great good!</span>
+			</div> <!-- header -->
+			<div id="menu">
+				<ul>
+					<li><a href="content.html" title="Home">Home</a></li>
+					<li><a href="faq.html" title="Frequently Asked Questions">FAQ</a></li>
+					<li><a href="rss" title="Latest News">RSS</a></li>
+					<li><a href="static/erlang/learn-you-some-erlang.zip" title="Source Code">Code</a></li>
+				</ul>
+			</div><!-- menu -->
+			<div id="content">
+            <div class="noscript"><noscript>Hey there, it appears your Javascript is disabled. That's fine, the site works without it. However, you might prefer reading it with syntax highlighting, which requires Javascript!</noscript></div>
+<h2>Postscript: Time Goes On</h2>
+<h3><a class="section" name="on-time-for-time">On Time for Time</a></h3>
+
+<p>Time is a very, very tricky thing. In the physical every day world, we at least have one certainty: time moves forward, and generally at a constant rate. If we start looking at fancypants physics (anything where relativity is involved, so not <em>that</em> fancypants), then time starts drifting and shifting around. A clock on a plane goes slower than a clock on the ground, and someone nearing a black hole ages at a different speed from someone orbiting the moon.</p>
+
+<img class="left" src="static/img/hook.png" width="279" height="254" alt="a pirate with a hook scared of time and clocks" />
+
+<p>Unfortunately for programmers and computer people, there is no need for nifty phenomena like that to be involved for time to go weird; clocks on computers are just not that great. They spring forwards, spring backwards, stall or accelerate, get <a class="external" href="https://en.wikipedia.org/wiki/Leap_second">leap seconds</a>, get readjusted, and so on. On distributed systems, different processors run at different speeds, and protocols such as <a class="external" href="https://en.wikipedia.org/wiki/Network_Time_Protocol">NTP</a> will play around with time corrections but may crash at any time.</p>
+
+<p>There is therefore no need to leave the room for computer time to dilate and ruin your understanding of the world. Even on a single computer, it is possible for time to move in frustrating ways. It's just not very reliable.</p>
+
+<p>In the context of Erlang, we care a lot about time. We want low latencies, and we can specify timeouts and delays in milliseconds on almost every operation out there: sockets, message receiving, event scheduling, and so on. We also want fault tolerance and to be able to write reliable systems. The question is how can we make something solid out of such unreliable things? Erlang takes a somewhat unique approach, and since release 18, it has seen some very interesting evolution.</p>
+
+<h3><a class="section" name="how-things-were">How Things Were</a></h3>
+
+<p>Before release 18, Erlang time works in one of two major ways:</p>
+
+<ol>
+    <li>The operating system's clock, represented as a tuple of the form <code>{MegaSeconds, Seconds, MicroSeconds}</code> (<code>os:timestamp()</code>)</li>
+    <li>The virtual machine's clock, represented as a tuple of the form <code>{MegaSeconds, Seconds, MicroSeconds}</code> (<code>erlang:now()</code>, auto-imported as <code>now()</code>)</li>
+</ol>
+
+<p>The operating system clock can follow any pattern whatsoever:</p>
+
+<img class="center explanation" src="static/img/clock-os.png" width="241" height="256" alt="A curve with the x-axis being real time and the y-axis being OS time; the curve goes up and down randomly although generally trending up" />
+
+<p>It can move however the OS feels like moving it.</p>
+
+<p>The VM's clock can only move forward, and can never return the same value twice. This is a property named being <em>strictly monotonic</em>:</p>
+
+<img class="center explanation" src="static/img/clock-vm.png" width="241" height="256" alt="A curve with the x-axis being real time and the y-axis being VM time; the curve goes up steadily though at irregular rates" />
+
+<p>In order for <code>now()</code> to respect such properties, it requires coordinated access by all Erlang processes. Whenever it is called twice in a row at close intervals or while time has gone backwards, the VM will increment microseconds to make sure the same value isn't returned twice. This coordination mechanism (acquiring locks and whatnot) can act as a bottleneck in a busy system.</p>
+
+<div class="note">
+    <p><strong>Note:</strong> monotonicity comes in two main flavors: strict and non-strict.</p>
+    <p>Strict monotonic counters or clocks are guaranteed to return always increasing values (or always decreasing values). The sequence <code>1, 2, 3, 4, 5</code> is strictly monotonic.</p>
+    <p>Regular (non-strict) monotonic counters otherwise only require to return non-decreasing values (or non-increasing values). The sequence <code>1, 2, 2, 2, 3, 4</code> is monotonic, but not strictly monotonic.</p>
+</div>
+
+<p>Now, having time that never goes back is a useful property, but there are many cases when that is not enough. One of them is a common one encountered by people programming Erlang on their home laptop. You're sitting at the computer, running Erlang tasks at frequent intervals. This works well and has never failed you. But one day, you hear the chime of an ice cream truck outdoors, and put your computer to sleep before running outdoors to grab something to eat. After 15 minutes, you come back, wake your laptop up, and everything starts exploding in your program. What happened?</p>
+
+<p>The answer depends on how time is accounted for. If it's counted in cycles ("I have seen <var>N</var> instructions fly by on the CPU, that's 12 seconds!"), you could be fine. If it's counted by looking at the clock on the wall and going "gee golly, it's 6:15 now and it was 4:20 last time! that's 1h55 that went past!", then going to sleep would hurt a lot for tasks that are expected to run every few seconds or so.</p>
+
+<p>On the other hand, if you use cycles and keep them stable, you'll never really see the clock from the program synchronize up with the underlying operating systems. This means that either we can get an accurate <code>now()</code> value, or accurate intervals, but not both at once.</p>
+
+<p>For this reason, the Erlang VM introduces <em>time correction</em>. Time correction makes it so the VM, for timers having to do with <code>now()</code>, <code>after</code> bits in <code>receive</code>, <code>erlang:start_timer/3</code> and <code>erlang:send_after/3</code> along with the <code>timer</code> module, will dampen sudden changes by adjusting the clock frequency to go slightly faster or slower.</p>
+
+<p>So instead of seeing either of these curves:</p>
+
+<img class="center explanation" src="static/img/clock-uncorrected.png" width="248" height="306" alt="Two curves with the x-axis being real time and the y-axis being uncorrected VM time; the first curve (labelled 'frequency-based') goes up, plateaus, then goes up again. The second curve (labelled 'clock-based') goes up, plateaus, jumps up directly, then resumes going up" />
+
+<p>We would see:</p>
+
+<img class="center explanation" src="static/img/clock-corrected.png" width="248" height="306" alt="Three curves with the x-axis being real time and the y-axis being VM time; the first curve (labelled 'frequency-based') goes up, plateaus, then goes up again. The second curve (labelled 'clock-based') goes up, plateaus, jumps up directly, then resumes going up. The third curve, labelled 'corrected time' closes the gap between both other curves after the plateau" />
+
+<p>Time correction in versions prior to 18.0, if undesired, can be turned off by passing the <code>+c</code> argument to the Erlang VM.</p>
+
+<h3><a class="section" name="how-things-are">How Things Are (18.0+)</a></h3>
+
+<p>The model seen for versions prior to 18.0 was fairly good, but it ended up being annoying in a few specific ways:</p>
+
+<ul>
+    <li>Time correction was a compromise between skewed clocks and inaccurate clock frequencies. We would trade some accelerated or slowed frequency in order to get closer to the proper OS time. To avoid breaking events, the clock can only be corrected very slowly, so we could have both inaccurate clocks <em>and</em> inaccurate intervals for very long periods of time</li>
+    <li>People used <code>now()</code> when they wanted monotonic <em>and</em> strictly monotonic time (useful to order events)</li>
+    <li>people used <code>now()</code> when they wanted unique values (for the lifetime of a given node)</li>
+    <li>Having the time as <code>{MegaSecs, Secs, MicroSecs}</code> is annoying and a remnant of times when bigger integers were impractical for the VM to represent and converting to proper time units is a pain. There is no good reason to use this format when Erlang integers can be of any size.</li>
+    <li>Backwards leap in time would stall the Erlang clock (it would only progress microseconds at a time, between each call)</li>
+</ul>
+
+<p>In general, the problem is that there were two tools (<code>os:timestamp()</code> and <code>now()</code>) to fill all of the following tasks:</p>
+
+<ul>
+    <li>Find the system's time</li>
+    <li>Measure time elapsed between two events</li>
+    <li>Determine the order of events (by tagging each event with <code>now()</code>)</li>
+    <li>Create unique values</li>
+</ul>
+
+<p>All of these are made clearer by exploding the time in Erlang into multiple components, starting in 18.0:</p>
+
+<ul>
+    <li>OS system time, also known as the POSIX time.</li>
+    <li>OS Monotonic time; some operating systems provide it, some don't. It tends to be fairly stable when available, and avoids leaps in time.</li>
+    <li>Erlang system time. It's the VM's take on POSIX time. The VM will try to align it with POSIX, but it may move around a bit depending on the chosen strategy (the strategies are described in <a class="local chapter" href="#time-warp">Time Warp</a>).</li>
+    <li>Erlang monotonic time. This is Erlang's view of the OS monotonic time if available, or the VM's own monotonic version of the system time if not available. This is the adjusted clock that is used for events, timers, and so on. Its stability makes it ideal to count a time interval. Do note that this time is <em>monotonic</em>, but not <em>strictly monotonic</em>, meaning that the clock can't go backwards, but it can return the same value many times!</li>
+    <li>Time offset; because the Erlang Monotonic time is a stable source of authority, the Erlang system time will be calculated by having a given offset relative to the Erlang monotonic time. The reason for this is that it will allow Erlang to adjust the system time without modifying the monotonic time frequency.</li>
+</ul>
+
+<p>Or more visually:</p>
+
+<img class="center explanation" src="static/img/clock-compare.png" width="564" height="291" alt="comparison of timelines for real time, os monotonic time, Erlang monotonic time, Erlang system time, and OS system time, with their respective synchronization points and offsets." />
+
+<p>If the offset is a constant 0, then the VM's monotonic and system times will be the same. If the offset is modified positively or negatively, the Erlang system time may be made to match the OS system time while the Erlang monotonic time is left independent. In practice, it is possible for the monotonic clock to be some large negative number, and the system clock to be modified by the offset to represent the positive POSIX timestamp.</p>
+
+<p>With all these new components, another use case remains: unique values that <em>always</em> increment. The high cost of the <code>now()</code> function was due to this necessity that it never returns the same number twice. As mentioned earlier, the Erlang monotonic time is not <em>strictly</em> monotonic: it will possibly return the same number twice if it's called at the same time on two different cores, for example. By comparison, <code>now()</code> wouldn't. To compensate for this, a strictly monotonic number generator was added to the VM, so that time and unique integers could be handled separately.</p>
+
+<p>The new components of the VM are exposed to the user with the following functions:</p>
+
+<ul>
+    <li><a class="docs" href="http://erldocs.com/18.0/erts/erlang.html#monotonic_time/0"><code>erlang:monotonic_time()</code></a> and <a class="docs" href="http://erldocs.com/18.0/erts/erlang.html#monotonic_time/0"><code>erlang:monotonic_time(Unit)</code></a> for the Erlang monotonic time. It may return very low negative numbers, but they'll never get more negative.</li>
+    <li><a class="docs" href="http://erldocs.com/18.0/erts/erlang.html#system_time/0"><code>erlang:system_time()</code></a> and <a class="docs" href="http://erldocs.com/18.0/erts/erlang.html#system_time/1"><code>erlang:system_time(Unit)</code></a>, for the Erlang system time (after the offset has been applied)</li>
+    <li><a class="docs" href="http://erldocs.com/18.0/erts/erlang.html#timestamp/0"><code>erlang:timestamp()</code></a> returns the Erlang system time under the <code>{MegaSecs, Secs, MicroSecs}</code> format for backwards compatibility</li>
+    <li><a class="docs" href="http://erldocs.com/18.0/erts/erlang.html#time_offset/0"><code>erlang:time_offset()</code></a> and <a class="docs" href="http://erldocs.com/18.0/erts/erlang.html#time_offset/1"><code>erlang:time_offset(Unit)</code></a> to figure out the difference between the Erlang monotonic and Erlang system clocks</li>
+    <li><a class="docs" href="http://erldocs.com/18.0/erts/erlang.html#unique_integer/0"><code>erlang:unique_integer()</code></a> and <a class="docs" href="http://erldocs.com/18.0/erts/erlang.html#unique_integer/1"><code>erlang:unique_integer(Options)</code></a>, which returns unique values. The <var>Options</var> list can contain either or both of <code>positive</code> (to force numbers greater than 0) and <code>monotonic</code> (so they always grow larger). <var>Options</var> defaults to <code>[]</code>, which means that while the integers are unique, they might be positive or negative, and greater or smaller than previous ones given.</li>
+    <li><a class="docs" href="http://erldocs.com/18.0/erts/erlang.html#system_info/1"><code>erlang:system_info(os_system_time_source)</code></a>, which gives access to the tolerance, intervals, and values of the OS system time.</li>
+    <li><a class="docs" href="http://erldocs.com/18.0/erts/erlang.html#system_info/1"><code>erlang:system_info(os_monotonic_time_source)</code></a>: if the OS has a monotonic clock, its tolerance, intervals, and values can be fetched there.</li>
+</ul>
+
+<p>The <var>Unit</var> option in all the functions above can be either <code>seconds</code>, <code>milli_seconds</code>, <code>micro_seconds</code>, <code>nano_seconds</code>, or <code>native</code>. By default, the type of timestamp returned is in the <code>native</code> format. The unit is determined at run time, and a function to convert between time units may be used to convert between them:</p>
+
+<pre class="brush:eshell">
+1&gt; erlang:convert_time_unit(1, seconds, native).
+1000000000
+</pre>
+
+<p>Meaning that my linux VPS has a unit in nanoseconds. The actual resolution may be lower than that (it's possible that only milliseconds are accurate), but nonetheless, it natively works in nanoseconds.</p>
+
+<p>The last tool in the arsenal is a new type of monitor, usable to detect when the time offset jumps. It can be called as <code>erlang:monitor(time_offset, clock_service)</code>. It returns a reference and when time drifts, the message received will be <code>{'CHANGE', MonitorRef, time_offset, clock_service, NewTimeOffset}</code>.</p>
+
+<p>So how does time get adjusted? Get ready for time warp!</p>
+
+<h3><a class="section" name="time-warp">Time Warp</a></h3>
+
+<img class="right" src="static/img/clock-melt.png" width="224" height="193" alt="A Dali-style melting clock" />
+
+<p>The old style Erlang stuff would just make clocks drifts faster and slower until they matched whatever the OS gave. This was okay to keep some semblance of real time when clocks jumped around, but also meant that over time, events and timeouts would occur faster and slower by a small percentage across multiple nodes. You also had a single switch for the VM, <code>+c</code>, which disabled time correction altogether.</p>
+
+<p>Erlang 18.0 introduces a distinction between how things are done and makes it a lot more powerful and complex. Whereas versions prior to 18.0 only had time drift, meaning the clocks would accelerate or slow down, 18.0 introduced both time correction and a thing called <em>time warp</em>.</p>
+
+<p>Basically, <em>time warp</em>, configured with <code>+C</code>, is about choosing how the <em>offset</em> (and therefore the <em>Erlang system time</em>) jumps around to stay aligned with the OS. Time warp is a time jump. Then there's <em>time correction</em>, configured with <code>+c</code>, which is how the <em>Erlang monotonic time</em> behaves when the OS monotonic clock jumps.</p>
+
+<p>There's only two strategies for time correction, but there's three for time warp. The problem is that the time warp strategy chosen impacts the time correction impact, and therefore we end up with a stunning <em>6</em> possible behaviours. To make sense out of this the following table might help:</p>
+
+<table>
+    <tr>
+        <td><code>+C no_time_warp</code></td>
+        <td>
+            <table>
+                <tr>
+                    <td><code>+c true</code></td>
+                    <td>Works exactly as it did before 18.0. Time does not warp (does not jump), but clock frequency is adjusted to compensate. This is the default, for backwards compatibility.</td>
+                </tr>
+                <tr>
+                    <td><code>+c false</code></td>
+                    <td>If the OS system time jumps backwards, the Erlang Monotonic clock stalls until the OS system time jumps back forward, which can take a while.</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td><code>+C multi_time_warp</code></td>
+        <td>
+            <table>
+                <tr>
+                    <td><code>+c true</code></td>
+                    <td>The Erlang system time is adjusted backwards and forwards via the offset to match the OS system time. The monotonic clock can remain as stable and accurate as possible.</td>
+                </tr>
+                <tr>
+                    <td><code>+c false</code></td>
+                    <td>The Erlang system time is adjusted backwards and forwards via the offset, but because there's no time correction, the monotonic clock may pause briefly (without freezing long).</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td><code>+C single_time_warp</code></td>
+        <td>
+            <p>This is a special hybrid mode to be used on embedded hardware when you know Erlang boots before the OS clock is synchronized. It works in two phases:</p>
+            <ol>
+                <li>
+                    <ol style="list-style-type: lower-alpha;">
+                        <li>(with <code>+c true</code>) When the system boots, the monotonic clock is kept as stable as possible, but no system time adjustments are made</li>
+                        <li>(with <code>+c false</code>) Same as <code>no_time_warp</code></li>
+                    </ol>
+                </li>
+                <li>The user calls <code>erlang:system_flag(time_offset, finalize)</code>, the Erlang system time warps once to match the OS system time, and then the clocks become equivalent to those under <code>no_time_warp</code>.</li>
+            </ol>
+        </td>
+    </tr>
+</table>
+
+<p>Whew. In short, the best course of action is to make sure your code can deal with time warping, and go into multi time warp mode. If your code isn't safe, stick to no time warp.</p>
+
+
+<h3><a class="section" name="survive-time-warps">How to Survive Time Warps</a></h3>
+
+<ul>
+    <li>To find system time: <code>erlang:system_time/0-1</code></li>
+    <li>To measure time differences: call <code>erlang:monotonic_time/0-1</code> twice and subtract them</li>
+    <li>To define an absolute order between events on a node: <code>erlang:unique_integer([monotonic])</code></li>
+    <li>Measure time <em>and</em> make sure an absolute order is defined: <code>{erlang:monotonic_time(), erlang:unique_integer([monotonic])}</code></li>
+    <li>Create a unique name: <code>erlang:unique_integer([positive])</code>. Couple it with a node name if you want the value to be unique in a cluster, or try using <a class="external" href="https://github.com/okeuday/uuid">UUIDv1</a>s.</li>
+</ul>
+
+<p>By following these concepts, your code should be fine to use in multi time warp mode with time correction enabled, and benefit from its better accuracy and lower overhead.</p>
+
+<p> With all this information in hand, you should now be able to drift and warp through time!</p>
+				<ul class="navigation">
+											<li><a href="maps.html" title="Previous chapter">&lt; Previous</a></li>
+										
+					<li><a href="contents.html" title="Index">Index</a></li>
+					
+											<li style="visibility:hidden;"><a href="content.html" title="Next chapter">Next &gt;</a></li>
+									</ul>
+			</div><!-- content -->
+			<div id="footer">
+				<a href="http://creativecommons.org/licenses/by-nc-nd/3.0/" title="Creative Commons License Details"><img src="static/img/cc.png" width="88" height="31" alt="Creative Commons Attribution Non-Commercial No Derivative License" /></a>
+				<p>Except where otherwise noted, content on this site is licensed under a Creative Commons Attribution Non-Commercial No Derivative License</p>
+			</div> <!-- footer -->
+		</div> <!-- wrapper -->
+		<div id="grass" />
+	<script type="text/javascript" src="static/js/shCore.js"></script>
+	<script type="text/javascript" src="static/js/shBrushErlang26512.js?11"></script>
+	<script type="text/javascript">
+		SyntaxHighlighter.defaults.gutter = false;
+		SyntaxHighlighter.all();
+	</script>
+	</body>
+
+<!-- Mirrored from learnyousomeerlang.com/time by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 01 Sep 2016 17:58:27 GMT -->
+</html>

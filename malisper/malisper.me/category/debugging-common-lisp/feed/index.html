@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Debugging Lisp &#8211; Macrology</title>
+	<atom:link href="http://malisper.me/category/debugging-common-lisp/feed/" rel="self" type="application/rss+xml" />
+	<link>http://malisper.me</link>
+	<description>Case Studies in Lisp Macros</description>
+	<lastBuildDate>Thu, 16 Jun 2016 21:54:14 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>Debugging Lisp Part 5: Miscellaneous</title>
+		<link>http://malisper.me/2015/08/19/debugging-lisp-part-5-miscellaneous/</link>
+		<comments>http://malisper.me/2015/08/19/debugging-lisp-part-5-miscellaneous/#comments</comments>
+		<pubDate>Wed, 19 Aug 2015 18:36:31 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Debugging Lisp]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=698</guid>
+		<description><![CDATA[<p>This post is for all of the miscellaneous features that aren&#8217;t large enough to get their own individual posts. If you haven&#8217;t read all of them, here are the links to the previous posts on recompilation, inspection, class redefinition, and restarts. One somewhat obscure tool for debugging is SBCL&#8217;s trace. SBCL&#8217;s trace goes way beyond what most other [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/08/19/debugging-lisp-part-5-miscellaneous/">Debugging Lisp Part 5: Miscellaneous</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p><em>This post is for all of the miscellaneous features that aren&#8217;t large enough to get their own individual posts. If you haven&#8217;t read all of them, here are the links to the previous posts on <em><a href="http://malisper.me/2015/07/07/debugging-lisp-part-1-recompilation/">recompilation</a>, <a href="http://malisper.me/2015/07/14/debugging-lisp-part-2-inspecting/">inspection</a>, <a href="http://malisper.me/2015/07/22/debugging-lisp-part-3-redefining-classes/">class redefinition</a>, and <a href="http://malisper.me/2015/08/05/debugging-lisp-part-4-restarts/">restarts</a>.</em></em></p>
+<p>One somewhat obscure tool for debugging is SBCL&#8217;s <strong>trace</strong>. SBCL&#8217;s <strong>trace</strong> goes way beyond what most other implementations provide. In SBCL, <strong>trace</strong> takes several additional keyword arguments.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/08/19/debugging-lisp-part-5-miscellaneous/#easy-footnote-bottom-1' title='A keyword argument is an optional named argument. To use a keyword argument you pass in the the name of the argument, followed by the value. By using keyword arguments, a function can accept multiple optional arguments of which any subset can be used.'><sup>1</sup></a></span> For example, <strong>trace</strong> accepts a keyword argument, <em>:break</em>. The expression passed in as the value of <em>:break</em> will be evaluated every time the traced function is called. When that expression evaluates to true, the debugger will be invoked. For example if you have a Fibonacci function:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defun fib (n)
+  (if (&lt;= 0 n 1)
+      n
+      (+ (fib (- n 1))
+         (fib (- n 2)))))
+</pre>
+<p>you can use <strong>trace</strong> to break specifically when <strong>fib</strong> is called with an argument of zero:</p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/08/ezgif.com-optimize-4.gif"><img class="aligncenter wp-image-713" src="http://malisper.me/wp-content/uploads/2015/08/ezgif.com-optimize-4.gif" alt="ezgif.com-optimize (4)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>A bit of mangling has to be done (using <strong>sb-debug:arg)</strong> since the expression refers to variables within the <strong>fib</strong> function. <strong>Trace</strong> also accepts several variants of <em>:break</em>, such as <em>:break-after</em>, which evaluate the expression after the function has been called instead of before. There are also arguments <em>:print</em> and <em>:</em><em>print-after</em>, which are like their break counterparts, only they print the value of the expression before/after the function is called. You could use <em>:print-after</em> to say, print the time (Unix time) whenever <strong>fib</strong> returns:</p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/08/ezgif.com-optimize-6.gif"><img class="aligncenter wp-image-714" src="http://malisper.me/wp-content/uploads/2015/08/ezgif.com-optimize-6.gif" alt="ezgif.com-optimize (6)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>For a complete list of all of the arguments that <strong>trace</strong> can accept, check out<b> </b><a href="http://www.sbcl.org/1.0/manual/Function-Tracing.html">this</a> page of the SBCL manual.</p>
+<p>Another relatively unknown group of features are the cross referencing commands. The cross referencing commands are commands which lookup all of the places where something is referenced. All of the bindings for the cross referencing commands begin with C-c C-w.<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/08/19/debugging-lisp-part-5-miscellaneous/#easy-footnote-bottom-2' title='C-c is pressed because that is the binding Slime uses. C-w is pressed for &#8220;who&#8221;, which is binding for all of the cross referencing commands.'><sup>2</sup></a></span> The cross referencing command I find myself using the most, &#8220;slime-who-calls&#8221;, which is bound to C-c C-w C-c, shows you all of the places where a function is called from. Here is what it would look like if you were to lookup all of the places where the <strong>scan</strong> function is used in <a href="http://weitz.de/cl-ppcre/">cl-ppcre</a> and then scroll through them:<span id='easy-footnote-3' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/08/19/debugging-lisp-part-5-miscellaneous/#easy-footnote-bottom-3' title='All of the places that use a macro whose expansion uses the function being cross referenced will also be pulled up.'><sup>3</sup></a></span></p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/08/ezgif.com-optimize-7.gif"><img class="aligncenter wp-image-717" src="http://malisper.me/wp-content/uploads/2015/08/ezgif.com-optimize-7.gif" alt="ezgif.com-optimize (7)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>Slime-who-calls makes it easy to figure out how a function is supposed be used. You can pull up all of the usages of a function and just look at them. There are also several analogs of slime-who-calls. There is slime-who-macroexpands (C-c C-w RET), which pulls up all of the places where a macro is used and there is also slime-who-references (C-C C-w C-r) which is the same thing only for variables.</p>
+<p>Another important feature is how to pull up the source code of a function on the stack while inside of the debugger. One way to do it is to press the &#8216;v&#8217; key with the cursor on the frame you want to view the source of. An alternative option is to use M-p (the alt key and the &#8216;p&#8217; key at the same time) and M-n to move up and down the stack frame. When using these commands instead of the normal C-p and C-n for movement, Slime will automatically pull up the source code as you are moving through the stack. Here is what it would look like if you were to pass a malformed regular expression to cl-ppcre (so that an error will be signaled and you will enter the debugger), and then scroll through the stack trace using M-n:</p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/08/ezgif.com-optimize-9.gif"><img class="aligncenter wp-image-732" src="http://malisper.me/wp-content/uploads/2015/08/ezgif.com-optimize-9.gif" alt="ezgif.com-optimize (9)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>And now for the most common of all IDE commands, jumping to source. I was recently talking with someone and he mentioned that the only feature he uses an IDE for is to easily find definitions in source code. In Emacs with Slime, it is possible to jump to the source of pretty much anything by hitting &#8220;M-.&#8221; (that is the control key followed by a period). This command works on functions, variables, classes, and more! When you jump to the source of a generic (virtual) function, you are given a list of all of the different methods that implement that function. For example if you weret to jump to the source of <strong>create-matcher-aux</strong> (the function that does most of the work in cl-ppcre), here is what you would see:</p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/08/ezgif.com-optimize-8.gif"><img class="aligncenter wp-image-720" src="http://malisper.me/wp-content/uploads/2015/08/ezgif.com-optimize-8.gif" alt="ezgif.com-optimize (8)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>To jump back to wherever you were previously, use &#8220;M-,&#8221;.</p>
+<p>And that is everything you should need to know about debugging Common Lisp.</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/08/19/debugging-lisp-part-5-miscellaneous/">Debugging Lisp Part 5: Miscellaneous</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2015/08/19/debugging-lisp-part-5-miscellaneous/feed/</wfw:commentRss>
+		<slash:comments>5</slash:comments>
+		</item>
+		<item>
+		<title>Debugging Lisp Part 4: Restarts</title>
+		<link>http://malisper.me/2015/08/05/debugging-lisp-part-4-restarts/</link>
+		<comments>http://malisper.me/2015/08/05/debugging-lisp-part-4-restarts/#comments</comments>
+		<pubDate>Wed, 05 Aug 2015 09:00:03 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Debugging Lisp]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=401</guid>
+		<description><![CDATA[<p>This is part four of Debugging Lisp. Here are the previous parts on recompilation, inspecting, and class redefinition. The next post on miscellaneous debugging techniques can be found here. Many languages provide error handling as two distinct parts, throw and catch. Throw is the part that detects something has gone wrong and in some way signals that [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/08/05/debugging-lisp-part-4-restarts/">Debugging Lisp Part 4: Restarts</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p><em>This is part four of Debugging Lisp. Here are the previous parts on <a href="http://malisper.me/2015/07/07/debugging-lisp-part-1-recompilation/">recompilation</a>, <a href="http://malisper.me/2015/07/14/debugging-lisp-part-2-inspecting/">inspecting</a>, and <a href="http://malisper.me/2015/07/22/debugging-lisp-part-3-redefining-classes/">class redefinition</a>. The next post on miscellaneous debugging techniques can be found <a href="http://malisper.me/2015/08/19/debugging-lisp-part-5-miscellaneous/">here</a>.</em></p>
+<p>Many languages provide error handling as two distinct parts, throw and catch. Throw is the part that detects something has gone wrong and in some way signals that an error has occurred. In the process, throw creates an exception object which contains information about the problem. The other part, catch, takes the exception object signaled by throw and attempts to recover from the error.</p>
+<p>The issue with throw/catch is that throw acts like an unconditional goto to the catch part. Because of this, all of the state information that is available when throw is used that is not given to the exception object is lost. This becomes problematic if the code that catches the error wants to use some information about what happened when the error occurred in order to recover.</p>
+<p>As an example, let&#8217;s say you are implementing a library which takes several files and parses a list of numbers from each one. One way to implement this library is as two functions. The first function, <strong>read-file</strong>, will read the contents of a single file and return a list of the results. The second, <strong>read-files</strong>, will take a list of files and return a list of the contents of each one. Here is what the code for those two functions might look like if they did not have any error handling:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defun read-file (file)
+  (with-open-file (in file :direction :input)
+    (loop for line = (read-line in nil in)
+          until (eq in line)
+          collect (parse-integer line))))
+
+(defun read-files (files)
+  (loop for file in files
+        collect (read-file file)))
+</pre>
+<p>To test the library you have two files. The first file contains the numbers 5, 10, 15, 20, 25 and the second contains 5, 10, 15, 20, a, 30, 40. In order to make sure your library handles errors properly, you decided to put a line which is just &#8220;a&#8221; in the second file. As it stands, <strong>parse-integer</strong> will signal an error when it comes across this line. To make testing the library easy, you have stored a list containing the pathnames of the two files in the variable <em>*files*</em>. Here is what happens when you try running the library on the two files:</p>
+<pre class="brush: plain; title: ; notranslate">
+(read-files *files*)
+
+=&gt; ERROR
+</pre>
+<p>An error occurred due to the &#8220;a&#8221; in the second file. As the designer of the library you have to decide what should happen when a situation like this one comes up. Below are several different options you could choose from if your language only provided catch/throw.</p>
+<p>Your first option is to just skip the entry that caused the error. To do this, you could use <strong>handler-case</strong>, Common Lisp&#8217;s version of catch:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defun read-file (file)
+  (with-open-file (in file :direction :input)
+    (loop for line = (read-line in nil in)
+          until (eq in line)
+          when (handler-case (parse-integer line)
+                 ;; C is the name being used to
+                 ;; refer to the exception object.
+                 (error (c)
+                   (declare (ignore c))
+                   nil))
+          collect it)))
+
+(read-files *files*)
+
+=&gt; ((5 10 15 20 25) (5 10 15 20 30 40))
+</pre>
+<p>Another option is to provide a dynamic variable<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/08/05/debugging-lisp-part-4-restarts/#easy-footnote-bottom-1' title='A dynamic variable is basically a global variable that can be shadowed. When a dynamic variable is shadowed, any reference to it refers to the new binding. Once execution leaves the form that shadowed the dynamic variable, the dynamic variable reverts back to its previous binding.'><sup>1</sup></a></span> which the user of the library can use to specify a value to be used in place of the malformed entry:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defvar *malformed-value* nil)
+
+(defun read-file (file)
+  (with-open-file (in file :direction :input)
+    (loop for line = (read-line in nil in)
+          until (eq in line)
+          when (handler-case (parse-integer line)
+                 (error (c)
+                   (declare (ignore c))
+                   *malformed-value*))
+          collect it)))
+
+(let ((*malformed-value* :malformed))
+  (read-files *files*))
+
+=&gt; ((5 10 15 20 25) (5 10 15 20 :MALFORMED 30 40))
+</pre>
+<p>A third option is to have <strong>read-files</strong> catch the error and skip the entire file with the malformed entry:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defun read-files (files)
+  (loop for file in files
+        when (handler-case (read-file file)
+               (error (c)
+                 (declare (ignore c))
+                 nil))
+        collect it))
+
+(read-files *files*)
+
+=&gt; ((5 10 15 20 25))
+</pre>
+<p>Your last option is to let the user of the library handle the exception themselves:</p>
+<pre class="brush: plain; title: ; notranslate">
+(handler-case (read-files *files*)
+  (error (c) (do-something)))
+</pre>
+<p>To the user, this last option is somewhat useful because it gives them some flexibility into how the error is handled. As mentioned above, the problem with doing this is that it becomes difficult for the user to properly recover from the error. If the user just wanted to skip the one corrupted file, there is no easy way to for them to do that due to the fact that by the time their error handling code is ran, execution would have left <strong>read-files</strong>. This means all of the state information, such as the remaining files that need to be read from, is completely lost by the time their code catches the exception.</p>
+<p>Another problem with catch/throw is that of the four possible ways above you could handle the problem, you only get to choose one of them. Any one of them is in conflict with all of the others. Again, this is because throw acts like goto. Once you decide where you are jumping to, you have no control over what happens next. And, if you let the user handle the error themselves, they have no easy way to handle the error gracefully since all of the state information is lost.</p>
+<p>This is where restarts come in. In Common Lisp, catch is provided as two separate pieces: handlers and restarts. A handler is bound by the user of the library in order to specify what should happen when an exception is thrown and a restart is defined by the library in order to provide a recovery option to the user. If you are using a language that supports restarts, you could implement the first three options above as restarts. Then when a user is using the library, they will get to select which of those restarts they want to have run when an error occurs. If they do not want to use any of the restarts, they can run their own code instead. Here is the code for the file reading library, but reimplemented to support three different restarts, one for each of the first three ways to handle errors.</p>
+<pre class="brush: plain; title: ; notranslate">
+(defun ask (string)
+  (princ string *query-io*)
+  (read *query-io*))
+
+(defun read-file (file)
+  (with-open-file (in file :direction :input)
+    (loop for line = (read-line in nil in)
+          until (eq in line)
+          when (restart-case (parse-integer line)
+                 (use-value (value)
+                   :report &quot;Use a new value.&quot;
+                   :interactive (lambda ()
+                                  (list (ask &quot;Value: &quot;)))
+                   value)
+                 (skip-entry ()
+                   :report &quot;Skip the entry.&quot;
+                   nil))
+          collect it)))
+
+(defun read-files (files)
+  (loop for file in files
+        when (restart-case (read-file file)
+               (skip-file ()
+                 :report &quot;Skip the entire file.&quot;
+                 nil))
+        collect it))
+
+;;; The three functions below are predefined
+;;; handlers for the most common ways the user
+;;; will interact with the restarts.
+(defun skip-entry (c)
+  (declare (ignore c))
+  (invoke-restart 'skip-entry))
+
+(defun skip-file  (c)
+  (declare (ignore c))
+  (invoke-restart 'skip-file))
+
+(defun use-value-handler (value)
+  (lambda (c)
+    (declare (ignore c))
+    (invoke-restart 'use-value value)))
+</pre>
+<p>A restart is defined with the macro <strong>restart-case</strong>, and invoked by the function <strong>invoke-restart</strong>. This is a bit of a simplification, but invoking a restart is effectively equivalent to jumping to the body of the restart <em>from where the error was signaled</em>. This means that all of the state stored on the stack before the restart was established is still available when the restart is invoked. This gives the user of the library much finer grained control over what happens when an error is thrown.</p>
+<p>To specify what should happen, all the user needs to do is use the macro <strong>handler-bind</strong>. <strong>Handler-bind</strong> takes an error type and a handler (which should be a function) to call when an error of that type is thrown. The handler can then call <strong>invoke-restart</strong> in order to invoke one of the restarts provided by the library. As part of the library, there is one handler per restart provided, since those are the most common kinds of handlers. Here is what happens when each of the handlers are used when running the library on the two test files:</p>
+<pre class="brush: plain; title: ; notranslate">
+(handler-bind ((error #'skip-entry))
+  (read-files files*))
+
+=&gt; ((5 10 15 20 25) (5 10 15 20 30 40))
+
+(handler-bind ((error #'skip-file))
+  (read-files files*))
+
+=&gt; ((5 10 15 20 25))
+
+(handler-bind ((error (use-value-handler 0)))
+  (read-files files*))
+
+=&gt; ((5 10 15 20 25) (5 10 15 20 0 30 40))
+</pre>
+<p>The really cool thing about restarts is what happens when the user doesn&#8217;t handle the error. When this happens they will enter the Slime Debugger. From there they will be given a list of the restarts that are available to them and they will be able to invoke them as if the error had been handled in the first place! Here is what happens when a user doesn&#8217;t handle the error, and then invokes the skip-entry restart on the fly:</p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/08/ezgif.com-optimize-3.gif"><img class="aligncenter wp-image-678" src="http://malisper.me/wp-content/uploads/2015/08/ezgif.com-optimize-3.gif" alt="ezgif.com-optimize (3)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>What&#8217;s really cool about this is that this &#8220;interactive restarting&#8221; can use it to implement breakpoints! As I said in Part 1, Common Lisp provides breakpoints as a function &#8220;<b>break</b>&#8221; instead of as a feature of the editor. Here is code that could be used to implement <strong>break</strong>:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defun break (&amp;optional (format-control &quot;Break&quot;)
+              &amp;rest format-arguments)
+   (with-simple-restart (continue &quot;Return from BREAK.&quot;)
+     (let ((*debugger-hook* nil))
+       (invoke-debugger
+         (make-condition 'simple-condition
+           :format-control   format-control
+           :format-arguments format-arguments))))
+   nil)
+</pre>
+<p>The code for <strong>break</strong> works by signalling an error while providing a &#8220;continue&#8221; restart. This means that as soon as the function <strong>break</strong> is called, you will enter the debugger with a restart available which will continue normal execution. Exactly what a breakpoint actually is.</p>
+<p>Restarts are another fantastic part of debugging Common Lisp. They give you better control over what happens when an error occurs. And, if your code doesn&#8217;t handle the error itself, you can still recover the process by using an interactive restart.</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/08/05/debugging-lisp-part-4-restarts/">Debugging Lisp Part 4: Restarts</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2015/08/05/debugging-lisp-part-4-restarts/feed/</wfw:commentRss>
+		<slash:comments>5</slash:comments>
+		</item>
+		<item>
+		<title>Debugging Lisp Part 3: Redefining Classes</title>
+		<link>http://malisper.me/2015/07/22/debugging-lisp-part-3-redefining-classes/</link>
+		<comments>http://malisper.me/2015/07/22/debugging-lisp-part-3-redefining-classes/#comments</comments>
+		<pubDate>Wed, 22 Jul 2015 08:00:03 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Debugging Lisp]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=530</guid>
+		<description><![CDATA[<p>This is part 3 of Debugging Common Lisp. If you haven&#8217;t read either of the previous parts, you can find part 1 here, and part 2 here. You can find part 4, which is on restarts, here. The Common Lisp Object System (CLOS) is pretty powerful. It gives you multiple inheritance, multiple dispatch, and many different [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/07/22/debugging-lisp-part-3-redefining-classes/">Debugging Lisp Part 3: Redefining Classes</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p><em>This is part 3 of Debugging Common Lisp</em>. If you haven&#8217;t read either of the previous parts, you can find part 1 <a href="http://malisper.me/2015/07/07/debugging-lisp-part-1-recompilation/">here</a>, and part 2 <a href="http://malisper.me/2015/07/14/debugging-lisp-part-2-inspecting/">here</a>. <em>You can find part 4, which is on restarts, <a href="http://malisper.me/2015/08/05/debugging-lisp-part-4-restarts/">here</a>.</em></p>
+<p>The Common Lisp Object System (CLOS) is pretty powerful. It gives you multiple inheritance, multiple dispatch, and many different ways to extend the behavior of methods. Underneath, most implementations use the Metaobject Protocol (MOP), a way of defining CLOS in terms of itself. As part of the MOP, classes are implemented as objects with several instance variables. Among those are variables that hold the class&#8217;s name, its superclasses, and a list of the class&#8217;s own instance variables. If you don&#8217;t believe me, take the point class from the previous post:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defclass point ()
+  ((x :accessor point-x :initarg :x :initform 0)
+   (y :accessor point-y :initarg :y :initform 0)))
+</pre>
+<p>And use the Slime Inspector to inspect the point class object, which can be obtained by calling <strong>find-class</strong>:</p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize1.gif"><img class="aligncenter wp-image-569" src="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize1.gif" alt="ezgif.com-optimize" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>The advantage of using the MOP is that it makes it possible to fine tune the behavior of CLOS by using ordinary object-oriented programming. A great example of this is the <a href="https://common-lisp.net/project/closer/filtered.html">filtered-functions</a> library which adds arbitrary predicate based dispatch to CLOS. But enough about the MOP.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/07/22/debugging-lisp-part-3-redefining-classes/#easy-footnote-bottom-1' title='If you are interested in learning more about the MOP, look for a copy of &#8220;The Art of the Metaobject Protocol&#8221;. Alan Kay, the creator of object-oriented programming, called it &#8220;The best book anybody has written in ten years&#8221; in his 1997 OOPSLA talk.'><sup>1</sup></a></span> In this post I&#8217;m going to talk about one tiny piece of CLOS, <strong>update-instance-for-redefined-class</strong>.</p>
+<p><strong>Update-instance-for-redefined-class</strong> is a method which is called whenever a class is redefined (at runtime). By overriding it, you can customize what exactly happens at that point in time. For example, let&#8217;s say you are using the above point class to represent complex numbers for some sort of simulation. As part of the simulation, you have a point object saved inside of the <em>*location*</em> variable<em>:</em></p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize-1.gif"><img class="aligncenter wp-image-577" src="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize-1.gif" alt="ezgif.com-optimize (1)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>After profiling the simulation, you find that one of the bottlenecks is complex multiplication. Since multiplication of complex numbers is much more efficient when they are represented in polar form, you decide that you want to change the implementation of the point class from Cartesian to polar coordinates. To do that (at runtime), all you need to do is run the following code:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defmethod update-instance-for-redefined-class :before
+     ((pos point) added deleted plist &amp;key)
+  (let ((x (getf plist 'x))
+        (y (getf plist 'y)))
+    (setf (point-rho pos) (sqrt (+ (* x x) (* y y)))
+          (point-theta pos) (atan y x))))
+
+(defclass point ()
+  ((rho :initform 0 :accessor point-rho)
+   (theta :initform 0 :accessor point-theta)))
+
+(defmethod point-x ((pos point))
+  (with-slots (rho theta) pos (* rho (cos theta))))
+
+(defmethod point-y ((pos point))
+  (with-slots (rho theta) pos (* rho (sin theta))))
+</pre>
+<p>Basically, the code extends <strong>update-instance-for-redefined-class</strong> to calculate the values of <em>rho</em> and <em>theta</em> for the polar implementation in terms of the variables x and y from the Cartesian one. After extending <strong>update-instance-for-redefined-class</strong> the code then redefines the class, causing all of the existing instances to be changed over to the new implementation.<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/07/22/debugging-lisp-part-3-redefining-classes/#easy-footnote-bottom-2' title='Actually the time at which update-instance-for-redefined-class is called is unspecified. The only guarantee is that it will be called on an instance before a variable of that instance is accessed.'><sup>2</sup></a></span> Finally, two methods are defined, <strong>point-x</strong> and <strong>point-y</strong>, which preserve the interface for the point class.<span id='easy-footnote-3' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/07/22/debugging-lisp-part-3-redefining-classes/#easy-footnote-bottom-3' title='There are several other functions that need to be redefined such as initialize-instance in order to truly preserve the interface.'><sup>3</sup></a></span> After running the code and then inspecting the contents of <em>*location*</em>, you should see:</p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize-21.gif"><img class="aligncenter wp-image-581" src="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize-21.gif" alt="ezgif.com-optimize (2)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>Even though the object inside of <em>*location*</em> is still the same object, it is now implemented using polar coordinates! To make sure that it was converted from Cartesian to polar correctly, you decide to call <strong>point-x</strong> on the object to check that the x-coordinate is still the same:</p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-crop1.gif"><img class="aligncenter wp-image-585" src="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-crop1.gif" alt="ezgif.com-crop" width="600" height="330" /></a><a href="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize-22.gif"><br />
+</a></p>
+<p>Amazingly, all of the code continues to work even though the implementation of an entire class was completely changed. So anytime you want to change the implementation of a class that is part of a service that needs to be up 24/7 and just happens to be written in Common Lisp, remember to use <strong>update-instance-for-redefined-class</strong>.</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/07/22/debugging-lisp-part-3-redefining-classes/">Debugging Lisp Part 3: Redefining Classes</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2015/07/22/debugging-lisp-part-3-redefining-classes/feed/</wfw:commentRss>
+		<slash:comments>3</slash:comments>
+		</item>
+		<item>
+		<title>Debugging Lisp Part 2: Inspecting</title>
+		<link>http://malisper.me/2015/07/14/debugging-lisp-part-2-inspecting/</link>
+		<comments>http://malisper.me/2015/07/14/debugging-lisp-part-2-inspecting/#comments</comments>
+		<pubDate>Tue, 14 Jul 2015 21:12:12 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Debugging Lisp]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=492</guid>
+		<description><![CDATA[<p>This is part 2 of Debugging Lisp. If you haven&#8217;t read part 1 on dynamic recompilation, you can find it here. For the next post in the series on redefining classes, click here. In this post I am going to discuss another tool used for debugging Common Lisp &#8211; the Slime Inspector. The Slime inspector [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/07/14/debugging-lisp-part-2-inspecting/">Debugging Lisp Part 2: Inspecting</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p><em>This is part 2 of Debugging Lisp. If you haven&#8217;t read part 1 on dynamic recompilation, you can find it <a href="http://malisper.me/2015/07/07/debugging-lisp-part-1-recompilation/">here</a>. For the next post in the series on redefining classes, click <a href="http://malisper.me/2015/07/22/debugging-lisp-part-3-redefining-classes/">here</a>.</em></p>
+<p>In this post I am going to discuss another tool used for debugging Common Lisp &#8211; the Slime Inspector. The Slime inspector makes it possible to manipulate objects directly from the repl. You can do many different things with it, including clicking on objects to look at their contents and being able to copy and paste objects in order to reuse them in future function calls.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/07/14/debugging-lisp-part-2-inspecting/#easy-footnote-bottom-1' title='Technically these aren&#8217;t features of the Inspector, they are features of &#8220;Presentations&#8221;. The Inspector is just the part that lets you look inside of the objects.'><sup>1</sup></a></span> Let&#8217;s say you have the following point class:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defclass point ()
+  ((x :accessor point-x :initarg :x :initform 0)
+   (y :accessor point-y :initarg :y :initform 0)))
+</pre>
+<p>If you were to make an instance of the above class:</p>
+<pre class="brush: plain; title: ; notranslate">
+(make-instance 'point :x 10 :y 20)
+</pre>
+<p>You can then right click on it and click on the &#8220;inspect&#8221; option, or just use the Emacs shortcut &#8220;C-c C-v TAB&#8221; to peek inside the object:</p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize-5.gif"><img class="aligncenter wp-image-501" src="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize-5.gif" alt="ezgif.com-optimize (5)" width="600" height="329" /></a></p>
+<p>&nbsp;</p>
+<p>This will show you the current values of all of the instance variables of the object. Not only can you look at the object&#8217;s instance variables, you can modify them as well. Note that the power comes from being able to do all of this from within the debugger at runtime.</p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize-7.gif"><img class="aligncenter wp-image-510" src="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize-7.gif" alt="ezgif.com-optimize (7)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>To make sure that the value of that object was actually changed, you can copy and paste the point object and then call the <strong>point-x</strong> function on it.</p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-crop-5.gif"><img class="aligncenter wp-image-522" src="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-crop-5.gif" alt="ezgif.com-crop (5)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>One more really cool tool that hooks into the Inspector is the Slime Trace Dialog. The Slime Trace Dialog is like ordinary trace, but it also allows for inspection on the objects that were passed to or returned from the traced functions. For example, let&#8217;s say you are writing a tail call optimized function, <strong>sum</strong>, that sums all of the numbers in a list.</p>
+<pre class="brush: plain; title: ; notranslate">
+(defun sum (xs &amp;optional (acc 0))
+  (if (null xs)
+      acc
+      (sum (cdr xs) (+ (car xs) acc))))
+
+(sum '(1 2 3))
+=&gt; 6
+</pre>
+<p>You can toggle the use the Slime Trace Dialog to trace <strong>sum</strong> by typing the shortcut &#8220;C-c M-t&#8221; and then typing in the name of function, &#8220;<strong>sum</strong>”. After tracing it and running the code, you can press &#8220;C-c T&#8221; to enter the interactive Trace Dialog buffer. From there you can press &#8220;G&#8221; to refresh it and obtain the most recent trace.</p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-crop-4.gif"><img class="aligncenter wp-image-512" src="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-crop-4.gif" alt="ezgif.com-crop (4)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>The trace will look like the output from ordinary trace, except it will have some addition goodies. As I said above you can inspect all of the arguments and return values. You can also hide/show branches of the trace tree in order to make it easier to find what you are looking for.</p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize-8.gif"><img class="aligncenter wp-image-513" src="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize-8.gif" alt="ezgif.com-optimize (8)" width="600" height="330" /></a></p>
+<p>&nbsp;</p>
+<p>The Slime Trace Dialog is invaluable when you have code which is passing lots of objects around and you aren&#8217;t exactly sure what the value of each variable in each object is. You can just use the Slime Trace Dialog and have it keep track of all of the information for you.</p>
+<p>All in all, the Slime Inspector is another amazing part of the Common Lisp debugging tool set. It comes in handy when the program crashes and you are unaware of the current state of the program. When combined with the rest of the features for debugging Common Lisp, the Slime Inspector is just incredible.</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/07/14/debugging-lisp-part-2-inspecting/">Debugging Lisp Part 2: Inspecting</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2015/07/14/debugging-lisp-part-2-inspecting/feed/</wfw:commentRss>
+		<slash:comments>8</slash:comments>
+		</item>
+		<item>
+		<title>Debugging Lisp Part 1: Recompilation</title>
+		<link>http://malisper.me/2015/07/07/debugging-lisp-part-1-recompilation/</link>
+		<comments>http://malisper.me/2015/07/07/debugging-lisp-part-1-recompilation/#comments</comments>
+		<pubDate>Tue, 07 Jul 2015 20:37:43 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Debugging Lisp]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=425</guid>
+		<description><![CDATA[<p>This post is the start of a series on how to debug Common Lisp code, specifically with Emacs, Slime, and SBCL. If you do not understand Common Lisp, you should still be able to follow along and recognize just how powerful the facilities provided by the Common Lisp debugger are. Nathan Marz asked me to write [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/07/07/debugging-lisp-part-1-recompilation/">Debugging Lisp Part 1: Recompilation</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p><em>This post is the start of a series on how to debug Common Lisp code, specifically with Emacs, Slime, and SBCL. If you do not understand Common Lisp, you should still be able to follow along and recognize just how powerful the facilities provided by the Common Lisp debugger are. Nathan Marz asked me to write these posts since he thought many of the tools for debugging Common Lisp were pretty cool.</em></p>
+<p><em>For the next post in the series on inspecting, click <a href="http://malisper.me/2015/07/14/debugging-lisp-part-2-inspecting/">here</a>.</em></p>
+<p>The first thing you need to do in order to get started debugging Common Lisp is to set your Lisp&#8217;s optimization qualities. Optimization qualities are basically a group of settings which allow you to specify what the compiler should optimize for. These qualities include speed, space, compilation speed, safety, and debugging. If you do not run the code below, which tells the compiler to optimize for debugging, almost none of the examples in this post will work.</p>
+<pre class="brush: plain; title: ; notranslate">
+CL-USER&gt; (declaim (optimize (debug 3)))
+NIL
+
+CL-USER&gt; (your-program)
+...
+</pre>
+<p>With the compiler optimized for debugging, it becomes possible to do pretty much everything at runtime. This post will show you how Tom, an experienced Lisp developer would debug and patch a buggy function at runtime. Let&#8217;s say that Tom has the following code which implements the well known Fibonacci function:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defun fib (n)
+  (if (&lt;= 0 n 1)
+      (/ 1 0)
+      (+ (fib (- n 1))
+         (fib (- n 2)))))
+</pre>
+<p>There&#8217;s just one problem, the code isn&#8217;t correct! Instead of returning <em>n</em> in the base case, the code winds up dividing by zero. When Tom tries to calculate the tenth Fibonacci with this code, a debugger window pops up because an error was signaled.<a href="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-resize.gif"><br />
+</a></p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-crop.gif"><img class="aligncenter wp-image-436" src="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-crop.gif" alt="ezgif.com-crop" width="600" height="329" /></a></p>
+<p>&nbsp;</p>
+<p>Realizing that he has entered the debugger, Tom wonders what has gone wrong. In order to find the bug, Tom decides to insert a breakpoint into the function.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/07/07/debugging-lisp-part-1-recompilation/#easy-footnote-bottom-1' title='He may be a great programmer, but he still doesn&#8217;t read the error messages.'><sup>1</sup></a></span> In Common Lisp, breakpoints are implemented as a function called &#8216;<strong>break</strong>’.<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/07/07/debugging-lisp-part-1-recompilation/#easy-footnote-bottom-2' title='Break is itself implemented in terms of the Common Lisp restart system which I will cover in Debugging Lisp Part 4.'><sup>2</sup></a></span> To insert his breakpoint, Tom adds a call to <strong>break</strong> at the beginning of <strong>fib</strong>. After adding the breakpoint, Tom then puts his cursor next to one of the frames and hits the &#8216;r&#8217; key in order to restart it. In this case, Tom decided to restart the frame where <em>n</em> was three.</p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize.gif"><img class="aligncenter wp-image-441" src="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize.gif" alt="ezgif.com-optimize" width="600" height="329" /></a></p>
+<p>&nbsp;</p>
+<p>By restarting the frame, Tom basically traveled back in time to the beginning of the frame he restarted. After restarting the frame, the debugger immediately hits the breakpoint Tom had just added. From there Tom steps through the code by hitting the &#8216;s&#8217; key. He eventually realizes that the base case is implemented incorrectly and that that is why he received the error.</p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize.gif"><img class="aligncenter wp-image-444" src="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize-2.gif" alt="ezgif.com-optimize (2)" width="600" height="329" /></a></p>
+<p>&nbsp;</p>
+<p>After finding the source of the problem, similar to how he had previously inserted the breakpoint, Tom patches the code. He replaces the base case with <em>n</em> and removes the breakpoint he had previously inserted.</p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize-3.gif"><img class="aligncenter wp-image-445" src="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-optimize-3.gif" alt="ezgif.com-optimize (3)" width="600" height="329" /></a></p>
+<p>&nbsp;</p>
+<p>After recompiling the code, Tom once again restarts one of the frames. Since he was previously stepping through code, the debugger starts stepping through the frame Tom decided to restart. Tom just taps the &#8216;0&#8217;  (zero) key in order to invoke the step-continue restart<span id='easy-footnote-3' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/07/07/debugging-lisp-part-1-recompilation/#easy-footnote-bottom-3' title='Again, restarts will be covered in part four.'><sup>3</sup></a></span> and continue normal execution. Because Tom restarted a frame which occurred before the bug, and now that the bug is gone, the code runs as if there had never a bug in the first place!</p>
+<p>&nbsp;</p>
+<p><a href="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-crop-3.gif"><img class="aligncenter wp-image-446" src="http://malisper.me/wp-content/uploads/2015/07/ezgif.com-crop-3.gif" alt="ezgif.com-crop (3)" width="600" height="329" /></a></p>
+<p>&nbsp;</p>
+<p>Let&#8217;s recap what happened. After the code signaled an error, Tom found himself in the debugger. Tom was able to insert a breakpoint and poke around until he found the source of the problem. After finding the problem, Tom patched the code and restarted the process from a point before it had signaled an error. Because Tom had corrected the code, after he restarted the frame, it acted as if nothing had ever gone wrong!</p>
+<p>The ability to recompile code at runtime is just one of the many incredible features provided by Common Lisp. Next time, I&#8217;m going to talk about the Slime inspector, which makes it possible to look into and modify objects from within debugger.</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/07/07/debugging-lisp-part-1-recompilation/">Debugging Lisp Part 1: Recompilation</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2015/07/07/debugging-lisp-part-1-recompilation/feed/</wfw:commentRss>
+		<slash:comments>24</slash:comments>
+		</item>
+	</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.100 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:23:16 -->

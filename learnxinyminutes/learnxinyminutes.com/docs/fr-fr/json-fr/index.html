@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/fr-fr/json-fr/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:34:13 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn json in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../../css/normalize.css">
+        <link rel="stylesheet" href="../../../css/main.css">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Ffr-fr%2Fjson-fr%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3Djson">
+        Partager cette page
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">Apprendre X en Y minutes</a></h2>
+  <h2>Où X=json</h2>
+  
+    <p class="filelink">
+    Récupérer le code :
+    <a href="../../files/learnjson-fr.json">learnjson-fr.json</a>
+    </p>
+  
+  <div id="doc">
+    <p>Comme JSON est un format d&#39;échange de données extrêmement simple, ce Apprendre X en Y minutes
+est susceptible d&#39;être le plus simple jamais réalisé.</p>
+
+<p>JSON dans son état le plus pur n&#39;a aucun commentaire, mais la majorité des parseurs accepterons
+les commentaires du langage C (<code>//</code>, <code>/* */</code>). Pour les besoins de ce document, cependant,
+tout sera du JSON 100% valide. Heureusement, il s&#39;explique par lui-même.</p>
+<pre class="highlight json"><code><span class="p">{</span><span class="w">
+  </span><span class="nt">"Clé"</span><span class="p">:</span><span class="w"> </span><span class="s2">"valeur"</span><span class="p">,</span><span class="w">
+
+  </span><span class="nt">"Clés"</span><span class="p">:</span><span class="w"> </span><span class="s2">"devront toujours être entourées par des guillemets"</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"nombres"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"chaînes de caractères"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Hellø, wørld. Tous les caractères Unicode sont autorisés, accompagné d'un \"caractère d'échappement\"."</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"a des booléens ?"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nt">"rien"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+
+  </span><span class="nt">"grand nombre"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.2e+100</span><span class="p">,</span><span class="w">
+
+  </span><span class="nt">"objets"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"commentaire"</span><span class="p">:</span><span class="w"> </span><span class="s2">"La majorité de votre strucutre sera des objets."</span><span class="p">,</span><span class="w">
+
+    </span><span class="nt">"tableau"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="s2">"Les tableaux peuvent contenir n'importe quoi."</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">],</span><span class="w">
+
+    </span><span class="nt">"un autre objet"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"commentaire"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Ces choses peuvent être imbriquées. C'est très utile."</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+
+  </span><span class="nt">"bêtises"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"sources de potassium"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"bananes"</span><span class="p">]</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">[</span><span class="w">
+      </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span><span class="w">
+      </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span><span class="w">
+      </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="s2">"neo"</span><span class="p">],</span><span class="w">
+      </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+
+  </span><span class="nt">"style alternatif"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nt">"commentaire"</span><span class="p">:</span><span class="w"> </span><span class="s2">"regarde ça !"</span><span class="w">
+  </span><span class="p">,</span><span class="w"> </span><span class="nt">"position de la virgule"</span><span class="p">:</span><span class="w"> </span><span class="s2">"n'a pas d'importance - aussi longtemps qu'elle est avant la valeur, alors elle est valide."</span><span class="w">
+  </span><span class="p">,</span><span class="w"> </span><span class="nt">"un autre commentaire"</span><span class="p">:</span><span class="w"> </span><span class="s2">"comme c'est gentil"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+
+  </span><span class="nt">"C'était court"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Et, vous avez terminé. Maintenant, vous savez tout ce que JSON a à offrir."</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+    <hr>
+    <p>Vous avez une suggestion ? Peut-être une correction ? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Ouvrez un ticket</a> sur Github, ou faites vous-même une pull request !
+    </p>
+    <p class="contributed">
+    Version originale par Anna Harren, mis à jour par <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/fr-fr/json-fr.html.markdown">0 contributeur(s)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="https://github.com/iirelu">Anna Harren</a>,
+      
+    
+      
+        <a href="https://github.com/marcoms">Marco Scannadinari</a>
+      
+    
+    </p>
+
+    <p>
+    
+      Translated by:
+      
+        <a href="https://github.com/aloisdg">Alois de Gouvello</a>
+      
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/fr-fr/json-fr/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:34:13 GMT -->
+</html>

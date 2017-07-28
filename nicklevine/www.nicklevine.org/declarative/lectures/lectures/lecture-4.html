@@ -1,0 +1,429 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-4.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:45 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Lecture Four</title>
+</head>
+<body>
+
+<center><b><font size=+3>Declarative Languages</font></b>
+<br><b><font size=+3>Lecture #4</font></b></center>
+
+<p><b>Purpose:</b> Mainly to do with lists...
+<p><b>4.1 Assigning values: the macro setf</b>
+<p>We have seen two ways of creating variables. Both methods assign values
+to the variables at creation time. For example:
+<blockquote><tt>CL-USER 11 > (defun test-it (x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(format t "~&amp;Value supplied was ~a." x)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(let* ((y (list x)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(format t "~&amp;Bung ~a in a list and you get ~a." x y)))</tt>
+<br><tt>TEST-IT</tt>
+<p><tt>CL-USER 12 > (test-it 'foo)</tt>
+<br><tt>Value supplied was FOO.</tt>
+<br><tt>Bung FOO in a list and you get (FOO).</tt>
+<br><tt>NIL</tt>
+<p><tt>CL-USER 13 ></tt></blockquote>
+What we haven't seen yet is how to change the value of a variable once
+it's been created. All will now be revealed...
+<blockquote><tt>CL-USER 15 > (defun look-at-setf (thing)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(format t "~&amp;Value supplied was ~a" thing)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(setf thing 99)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(format t "~&amp;Value has been changed to ~a" thing)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+thing)</tt>
+<br><tt>LOOK-AT-SETF</tt>
+<p><tt>CL-USER 16 > (look-at-setf 'foo)</tt>
+<br><tt>Value supplied was FOO</tt>
+<br><tt>Value has been changed to 99</tt>
+<br><tt>99</tt>
+<p><tt>CL-USER 17 ></tt></blockquote>
+The macro <tt>setf</tt> (at its simplest) takes a variable name and a new
+value. The variable is reset to the new value (and, incidentally, <tt>setf</tt>
+returns that value.) For example:
+<blockquote><tt>(defun smallest-of-three (first second third)</tt>
+<br><tt>&nbsp; (let* ((smallest first))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (if (&lt; second smallest)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (setf smallest second))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (if (&lt; third smallest)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (setf smallest third))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; smallest))</tt></blockquote>
+<b>4.2 The danger of setf</b>
+<p>Look carefully at the following interaction
+<blockquote><tt>CL-USER 17 >&nbsp; (defun look-again-at-setf (thing)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(format t "~&amp;Value supplied was ~a" thing)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(setf thnig 99)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(format t "~&amp;Value has been changed to ~a" thnig)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+thing)</tt>
+<br><tt>Warning: Syntactic warning for form (SETF THNIG 99):</tt>
+<br><tt>&nbsp;&nbsp; THNIG assumed special.</tt>
+<br><tt>LOOK-AGAIN-AT-SETF</tt>
+<p><tt>CL-USER 18 > (look-again-at-setf 'foo)</tt>
+<br><tt>Value supplied was FOO</tt>
+<br><tt>Value has been changed to 99</tt>
+<br><tt>FOO</tt>
+<p><tt>CL-USER 19 > thnig</tt>
+<br><tt>99</tt>
+<p><tt>CL-USER 20 ></tt></blockquote>
+Even though the function <tt>look-again-at-setf</tt> has a "typo" in the
+<tt>setf</tt>
+statement it appears to run happily (though spot the different return value).
+Heed the warning message! It's trying to tell you that your code is going
+to set a value into a symbol which was not one of your local variables
+- <tt>thnig</tt> is neither the name of a function argument nor bound in
+<tt>let*</tt>.&nbsp;
+When we set <tt>thnig</tt> we are making a change which is globally and
+permanently visible: if a symbol has a global value then that value can
+be accessed by any function.
+<p>If you get the warning "<tt>FOO assumed special"</tt>, it means either
+that you have a typo (as above) or that you are using and setting a variable
+which you have not bound in that function.
+<p>If you really mean to preserve values globally, please tell the lisp
+system that you intend to do so in advance.
+<blockquote><tt>CL-USER 20 > (defparameter *my-global-variable* '(99 kangaroos))</tt>
+<br><tt>*MY-GLOBAL-VARIABLE*</tt>
+<p><tt>CL-USER 21 > *my-global-variable*</tt>
+<br><tt>(99 KANGAROOS)</tt>
+<p><tt>CL-USER 22 > (setf *my-global-variable* '(100 elephants))</tt>
+<br><tt>(100 ELEPHANTS)</tt>
+<p><tt>CL-USER 23 > *my-global-variable*</tt>
+<br><tt>(100 ELEPHANTS)</tt>
+<p><tt>CL-USER 24 ></tt></blockquote>
+This way you (a) suppress the warning message and (b) have to stop and
+think for 10 microseconds about why you wanted this value to be held globally..
+<p>Note by the way the lisp coding convention that global variables have
+a <tt>*</tt> at the beginning and end of their name. This makes them stand
+out in your code. If the screen starts looking cluttered with all the asterisks
+everywhere maybe you'll get the message and find another way of coding
+it.
+<p><b>4.3 Lists revisited</b>
+<p>Very early on we met the function <tt>list</tt>, which allocates fresh
+lists from scratch:
+<br><tt>&nbsp;&nbsp;&nbsp; (list 1 2 3 4 5)&nbsp; =>&nbsp; (1 2 3 4 5)</tt>
+<br>We now introduce the function <tt>cons</tt> which takes two arguments,
+the second of which should (for novice lispers) be a list, and returns
+an extended list thus:
+<br><tt>&nbsp;&nbsp;&nbsp; (cons 'foo (list 1 2 3 4 5))&nbsp; =>&nbsp;
+(foo 1 2 3 4 5)</tt>
+<br>The <tt>first</tt> of the new list is the first argument to <tt>cons</tt>;
+the <tt>rest</tt> of this list is the second argument to <tt>cons</tt>.&nbsp;
+In other words,
+<br><tt>&nbsp;&nbsp;&nbsp; (first (cons foo bar))&nbsp; ==&nbsp; foo</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (rest (cons foo bar))&nbsp; ==&nbsp; bar</tt>
+<p>You can keep extending lists (and make them arbitrarily long) with cons:
+<br><tt>&nbsp;&nbsp;&nbsp; (cons 'penguin (cons 1 '(van 19)))&nbsp; =>
+(penguin 1 van 19)</tt>
+<br>but note this very carefully: you have not changed the original list,
+nor have you changed the value of any variable (local or global) whose
+value was (<i>which pointed to</i>) that list:
+<blockquote><tt>(setf *survey* (list 'penguin 1 'van 19))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =>&nbsp;
+(PENGUIN 1 VAN 19)</tt>
+<br><tt>(cons 'horseless-carriage (cons 1 *survey*))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =>&nbsp;
+(HORSELESS-CARRIAGE 1 PENGUIN 1 VAN 19)</tt>
+<br><tt>*survey*&nbsp; =>&nbsp; (PENGUIN 1 VAN 19)</tt>
+<br><tt>(setf *survey* (cons 'horseless-carriage (cons 1 *survey*)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =>&nbsp;
+(HORSELESS-CARRIAGE 1 PENGUIN 1 VAN 19)</tt>
+<br><tt>*survey*&nbsp; =>&nbsp; (HORSELESS-CARRIAGE 1 PENGUIN 1 VAN 19)</tt></blockquote>
+If you're lucky, the lecturer might get enthusiastic at this point and
+start illustrating what's going on here. (Remind him.)
+<p><b>4.4 The empty list and nil (again)</b>
+<p>Recall that (a) <tt>nil</tt> (apart from standing for <i>logical false</i>)
+is identical to the empty list:
+<br><tt>&nbsp;&nbsp;&nbsp; ()&nbsp; =>&nbsp; nil</tt>
+<br>and (b) I invited you to use <tt>cons</tt> to extend lists (any lists).
+So enquiring minds will wonder what happens if you try to extend an empty
+list. We might ask: what does the following return?
+<br><tt>&nbsp;&nbsp;&nbsp; (cons 'foo nil)</tt>
+<p><b>4.5 Building yucky lists, and another spoonful of syntactic sugar</b>
+<p>We now have perfectly useful ways of building and extending lists. Let's
+quote an example
+<blockquote><tt>(list 'let*</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list (list 'first-evaluated first-subform))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list 'if</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'first-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'first-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(list 'let*</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(list (list 'second-evaluated second-subform))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(list 'if</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'second-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'second-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+third-subform))))</tt></blockquote>
+Revolting! (Because it looks ugly, it hides your meaning, it's error prone
+and it takes all night to type and debug it.) It's a shame we couldn't
+just quote the whole of the list structure we were trying to generate here.
+(Why not?) Never fear, help is at hand:
+<blockquote><tt>`(let* ((first-evaluated ,first-subform))</tt>
+<br><tt>&nbsp;&nbsp; (if first-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; first-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp; (let* ((second-evaluated ,second-subform))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if second-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; second-evaluated</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ,third-subform))))</tt></blockquote>
+The syntax we have introduced here is the backquote character, typically
+on the top row of the keyboard, to the left of the number 1. Do not confuse
+it with the (forward) quote which on UK keyboards lives underneath the
+@ sign.
+<p>The way backquote works is that everything in the following form is
+protected from evaluation (as with <tt>quote</tt>) UNLESS it follows a
+comma, in which case that item is evaluated normally. Simpler example:
+<br><tt>&nbsp;&nbsp;&nbsp; (list 'foo bar 'wombat)</tt>
+<br>is exactly the same as
+<br><tt>&nbsp;&nbsp;&nbsp; `(foo ,bar wombat)</tt>
+<br>It's up to you how you want to type this stuff, but I suspect that
+for anything other than flat lists (i.e. structures which you can build
+with a single call to <tt>list</tt> or <tt>cons</tt>) you will find backquoting
+simpler.
+<p>To add to the fun, backquote also supports list <i>splicing</i>. For
+example:
+<br><tt>&nbsp;&nbsp;&nbsp; (let* ((foo '(1 2))) `(wibble ,foo wobble))&nbsp;
+=>&nbsp; (wibble (1 2) wobble)</tt>
+<br>but
+<br><tt>&nbsp;&nbsp;&nbsp; (let* ((foo '(1 2))) `(wibble ,@foo wobble))&nbsp;
+=>&nbsp; (wibble 1 2 wobble)</tt>
+<br>The comma-at syntax is dead handy.
+<p><b>4.6 I am obliged to tell you the following</b>
+<p>There are two functions in lisp called <tt>car</tt> and <tt>cdr</tt>.
+These are 100% identical to <tt>first</tt> and <tt>rest </tt>and come to
+us from some very ancient past, when one of them stood for "Contents of
+Address part of the Register" and the other for "Contents of Decrement
+part of the Register".
+<p>The ugly part of the story is the way you can combine calls to <tt>car</tt>
+and <tt>cdr</tt>. For instance instead of writing
+<br><tt>&nbsp;&nbsp;&nbsp; (car (cdr foo))</tt>
+<br>you can use the function <tt>cadr</tt> (but I would prefer you to use
+<tt>second</tt>).
+You can stack <tt>car</tt>s and <tt>cdr</tt>s up to four deep, with function
+names which start with a <tt>c</tt>, have up to four
+<tt>a</tt>s and <tt>d</tt>s,
+and end with an <tt>r</tt>.
+<p>Please don't be tempted to use functions like <tt>cddadr</tt> though,
+as your code will convey nothing other than your bloody-mindedness to the
+next reader. Only the following are in common use:
+<br><tt>&nbsp;&nbsp;&nbsp; car cdr cadr cddr caddr</tt>
+<br>and all but one of the above (which?) has a more readable name anyway.
+<p>Oh, and since both <tt>(first nil)</tt> and <tt>(rest nil)</tt> evaluate
+to <tt>nil</tt>,&nbsp; so do <tt>(caadar nil)</tt> and all that lot.
+<p><b>4.7 Two macros - push and pop</b>
+<p>We saw above that <tt>setf</tt> is used to reset the value of a variable
+back where you found it. You'll frequently find yourself using it to <tt>cons</tt>
+something onto the front of a list and store the result, like this:
+<br><tt>&nbsp;&nbsp;&nbsp; (setf my-list (cons something-new my-list))</tt>
+<br>This construct is used so often that there's a macro to save your fingers
+from wear and tear:
+<br><tt>&nbsp;&nbsp;&nbsp; (push something-new my-list)</tt>
+<br>These two forms are equivalent.
+<p>The opposite of <tt>push</tt> is <tt>pop</tt>. The form
+<br><tt>&nbsp;&nbsp;&nbsp; (pop my-list)</tt>
+<br>is equivalent to
+<br><tt>&nbsp;&nbsp;&nbsp; (let* ((something-old (car my-list)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (setf my-list (cdr my-list))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; something-old)</tt>
+<br>So to <tt>pop</tt> a <i>location</i> containing a list, you set the
+tail of the list back into that location and return the head of the original
+list.
+<p>Note that in both cases, the original list structure is unchanged. All
+that has altered is the value of the variable (location) that was <tt>push</tt>ed
+or <tt>pop</tt>ped. For example:
+<blockquote><tt>(setf words '(opposite of push))&nbsp; =>&nbsp; (opposite
+of push)</tt>
+<br><tt>(setf same-words words)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; (opposite of push)</tt>
+<br><tt>(push 'the words)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; (the opposite of push)</tt>
+<br><tt>words&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; (the opposite of push)</tt>
+<br><tt>same-words&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; (opposite of push)</tt>
+<br><tt>(pop same-words)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; opposite</tt>
+<br><tt>words&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; (the opposite of push)</tt>
+<br><tt>same-words&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; (of push)</tt></blockquote>
+Incidentally, related to <tt>push</tt> is the macro <tt>pushnew</tt>, which
+only pushes an object onto a list if it wasn't already there.
+<br><tt>&nbsp;&nbsp;&nbsp; (pushnew 'push same-words)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; (of push)</tt>
+<p><b>4.8 Incf and decf</b>
+<p>Another useful pair of macros is <tt>incf</tt> and <tt>decf</tt>, which
+can be used to add (or subtract) 1 to / from locations. So:
+<br><tt>&nbsp;&nbsp;&nbsp; (incf foo)&nbsp; ==&nbsp; (setf foo (+ foo 1))&nbsp;
+== (setf foo (1+ foo))</tt>
+<br>(And note, in the above, the function <tt>1+</tt> which adds 1 to its
+argument.) Similarly:
+<br><tt>&nbsp;&nbsp;&nbsp; (decf foo)&nbsp; ==&nbsp; (setf foo (- foo 1))&nbsp;
+== (setf foo (1- foo))</tt>
+<p>By the way, both <tt>incf</tt> and <tt>decf</tt> take an optional second
+argument, if you want to increment / decrement by some value other than
+1, e.g. <tt>(incf foo 2.3)&nbsp; ==&nbsp; (setf foo (+ foo 2.3))</tt>
+<p><b>4.9 More about setf</b>
+<p>I started talking about <tt>setf</tt> as setting values to <i>variables</i>,
+and I then drifted into talking about it setting values into <i>locations</i>.
+The truth is, there are all sorts of places you can <tt>setf</tt> a value.
+<p>For instance,
+<br><tt>&nbsp;&nbsp;&nbsp; (setf my-list (list 'foo 'bar 'baz))&nbsp;&nbsp;&nbsp;
+=>&nbsp; (foo bar baz)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (setf (first my-list)) 'wombat)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=>&nbsp; wombat</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; my-list&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+=> (wombat bar baz)</tt>
+<p>We say that <tt>first</tt> is <i>setfable</i>, or that it is a <i>setfable
+accessor</i>, or that <tt>(first <i>anything</i>)</tt> is a <i>setfable
+location</i>.
+<p>So far, the we have met the following accessors which are setfable:
+<br>&nbsp;&nbsp;&nbsp; <tt>first second ... tenth car cdr ...&nbsp; cddddr</tt>
+<br>We will meet several more in weeks to come.
+<p>Further examples:
+<blockquote><tt>(let* ((buried (list (list (list 0)))))</tt>
+<br><tt>&nbsp; (decf (first (first (first buried))))</tt>
+<br><tt>&nbsp; buried)</tt>
+<br><tt>=></tt>
+<br><tt>(((-1)))</tt>
+<p><tt>(let* ((things (list 'this nil 'that)))</tt>
+<br><tt>&nbsp; (push 'other (second things))</tt>
+<br><tt>&nbsp; things)</tt>
+<br><tt>=></tt>
+<br><tt>(this (other) that)</tt>
+<blockquote>
+<blockquote>
+<center><b>Note that when you <tt>setf</tt> into a location you are destructively
+modifying its contents. You should always be wary of code that attempts
+to do this as it can and frequently will have horrible and unforeseen consequences.</b></center>
+</blockquote>
+</blockquote>
+</blockquote>
+<b>4.10&nbsp; Practical session - recursive pratice</b>
+<ol>
+<li>
+Write a lisp function which takes two arguments - a list and a number -
+and returns true if (and only if) the number is <tt>= </tt>to the first
+element of the list.</li>
+
+<li>
+Write a lisp function which takes two arguments - a list and a number -
+and returns true if (and only if) the number is
+<tt>=
+</tt>to any element
+of the list.</li>
+
+<li>
+Write a lisp function which takes two arguments - a list and a number -
+and if the number is
+<tt>=
+</tt>to the any element of the list then return
+the position of that element in the list. (So if the number matches the
+first element in the list return
+<tt>0</tt>, if it matches the second return
+<tt>1</tt>,
+and so on.)</li>
+</ol>
+<b>4.11 Suggested activity / exercises etc</b>
+<ol>
+<li>
+Go through the above notes and answer all the rhetorical questions.</li>
+
+<li>
+Graham: chapter 2, sections 1-12 and 15-16; chapter 3 sections 1-6, 9,
+12, 16. At this stage in your learning, treat <tt>eql</tt> and <tt>equal</tt>
+as the same thing (they aren't but don't worry), and similarly for <tt>let</tt>
+and <tt>let*</tt>.</li>
+
+<li>
+Graham: pp 29-30 questions 1-5, 6a, 6b, 8 (recursive versions only), 9b.</li>
+
+<li>
+Rewrite the following using backquote notation. How are you going to test
+your answer?</li>
+
+<br><tt>&nbsp;&nbsp;&nbsp; (list 'if</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; first-subform</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list 'if
+second-subform third-subform nil)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nil)</tt>
+<li>
+Consider the following code to determine the maximum number in a list (of
+arbitrary length):</li>
+
+<ol><tt>(defparameter *maximum* nil)</tt>
+<p><tt>(defun maximum (list)</tt>
+<br><tt>&nbsp; (if list</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (progn</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if *maximum*</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+;; it's set hence this is not the first iteration</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(let* ((first-number (first list)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(if (&lt; *maximum* first-number)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(setf *maximum* first-number)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;; first
+time around</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (setf *maximum*
+(first list)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (maximum (rest list)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; ;; list exhausted so return *maximum*</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; *maximum*))</tt></ol>
+Why is this a poor style of coding? (Consider what happens the second time
+the function is called.) It's better to use a "helper" function to pass
+state around, thus:
+<ol><tt>(defun better-maximum (list)</tt>
+<br><tt>&nbsp; (in-better-maximum (first list) (rest list)))</tt>
+<p><tt>(defun in-better-maximum (previous-best list)</tt>
+<br><tt>&nbsp;&nbsp; )</tt></ol>
+Implement <tt>in-better-maximum</tt>
+<li>
+Given that lisp defines for you a function <tt>last</tt> which returns
+the final <tt>cons</tt> in a list (NB as opposed to the final element),
+how do you access that final element? Why do you think <tt>last</tt> was
+designed like this?</li>
+
+<li>
+Consider the following:</li>
+
+<ol><tt>(let* ((whatever (list 0)))</tt>
+<br><tt>&nbsp; (1+ (first whatever))</tt>
+<br><tt>&nbsp; whatever)</tt></ol>
+and
+<ol><tt>(let* ((whatever (list 0)))</tt>
+<br><tt>&nbsp; (incf (first whatever))</tt>
+<br><tt>&nbsp; whatever)</tt></ol>
+Explain why they produce different results.</ol>
+If you get seriously stuck, look at the <a href="../solutions/solutions-4.html">solutions</a>
+but please have a good go at each problem first.
+<br>&nbsp;
+<div align=right><a href="mailto:ndl@ravenbrook.com">Nick Levine</a>
+<br>last modified 2000-09-13
+<br>Copyright (C) Nick Levine 1999. All rights reserved.
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/lectures/lecture-4.html#2
+$</div>
+
+<br>&nbsp;
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-4.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:45 GMT -->
+</html>

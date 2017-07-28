@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: The Amateur Problem</title>
+	<atom:link href="https://stuartsierra.com/2013/07/28/the-amateur-problem/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2013/07/28/the-amateur-problem</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Ralph Möritz</title>
+		<link>https://stuartsierra.com/2013/07/28/the-amateur-problem/comment-page-1#comment-45514</link>
+		<dc:creator><![CDATA[Ralph Möritz]]></dc:creator>
+		<pubDate>Thu, 08 Aug 2013 07:14:11 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=731#comment-45514</guid>
+		<description><![CDATA[While I agree that simplifying assumptions in libraries can lead to brittle, simplistic code that doesn&#039;t work under realistic conditions, my experience re. professional vs hobbyist developers has been quite the opposite. Most of the code I&#039;ve seen, written by professionals, has been far worse, both in design and actual code quality, than most open-source code I&#039;ve seen.]]></description>
+		<content:encoded><![CDATA[<p>While I agree that simplifying assumptions in libraries can lead to brittle, simplistic code that doesn&#8217;t work under realistic conditions, my experience re. professional vs hobbyist developers has been quite the opposite. Most of the code I&#8217;ve seen, written by professionals, has been far worse, both in design and actual code quality, than most open-source code I&#8217;ve seen.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Dmitri Sotnikov</title>
+		<link>https://stuartsierra.com/2013/07/28/the-amateur-problem/comment-page-1#comment-45503</link>
+		<dc:creator><![CDATA[Dmitri Sotnikov]]></dc:creator>
+		<pubDate>Fri, 02 Aug 2013 03:36:53 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=731#comment-45503</guid>
+		<description><![CDATA[As you say,  it can be hard to find quality libraries especially if you&#039;re evaluating a new language or a platform. The question becomes how do you identify what libraries to use, which ones work well together, or are well maintained. If you are a professional you probably don&#039;t have a lot of time to try this and that till something works.
+
+I agree that frameworks in a traditional sense don&#039;t add much value. However, I think there is certainly a need for having sets of curated libraries and patterns for doing things. Another advantage is in standardizing patterns.
+
+For example, let&#039;s say you want to evaluate Clojure for web development. Where do you start? What libraries do you use, how do you organize them, what are your deployment options, and so on. Also, without any standardization it becomes difficult to move from one project to another.]]></description>
+		<content:encoded><![CDATA[<p>As you say,  it can be hard to find quality libraries especially if you&#8217;re evaluating a new language or a platform. The question becomes how do you identify what libraries to use, which ones work well together, or are well maintained. If you are a professional you probably don&#8217;t have a lot of time to try this and that till something works.</p>
+<p>I agree that frameworks in a traditional sense don&#8217;t add much value. However, I think there is certainly a need for having sets of curated libraries and patterns for doing things. Another advantage is in standardizing patterns.</p>
+<p>For example, let&#8217;s say you want to evaluate Clojure for web development. Where do you start? What libraries do you use, how do you organize them, what are your deployment options, and so on. Also, without any standardization it becomes difficult to move from one project to another.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Johannes Lundberg</title>
+		<link>https://stuartsierra.com/2013/07/28/the-amateur-problem/comment-page-1#comment-45500</link>
+		<dc:creator><![CDATA[Johannes Lundberg]]></dc:creator>
+		<pubDate>Tue, 30 Jul 2013 08:56:22 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=731#comment-45500</guid>
+		<description><![CDATA[While I do agree fully with Joseph Wilk&#039;s post, the author does have a good point here. Though, I do not see the main distinction between professional and amateur, but rather the reasons for creating the software. It&#039;s more important that software is created for real world use than by experienced or paid professional developers.]]></description>
+		<content:encoded><![CDATA[<p>While I do agree fully with Joseph Wilk&#8217;s post, the author does have a good point here. Though, I do not see the main distinction between professional and amateur, but rather the reasons for creating the software. It&#8217;s more important that software is created for real world use than by experienced or paid professional developers.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: frank vilhelmsen</title>
+		<link>https://stuartsierra.com/2013/07/28/the-amateur-problem/comment-page-1#comment-45498</link>
+		<dc:creator><![CDATA[frank vilhelmsen]]></dc:creator>
+		<pubDate>Tue, 30 Jul 2013 07:48:56 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=731#comment-45498</guid>
+		<description><![CDATA[A wise man at a conference said, any framework is the first day in jail, you never know quite what&#039;s going to happen! I consider myself to be professinel because I live well by developing software and keep me up to date with what is happening in the field. I try as much as possible to avoid framework. First, I do not often need more than one or two operations from the framework and its partly annoy me when a framework is often updated or, on the other hand, is totally stalled. Another reason to avoid frameworks, especially in an expressive platform as Clojure, is that you can avoid different abstraction levels in the software, which is important if the software has to be easy to maintain over many years. 
+
+Thanks for a great article, dead simple problems is like turtles, all the way down :-)]]></description>
+		<content:encoded><![CDATA[<p>A wise man at a conference said, any framework is the first day in jail, you never know quite what&#8217;s going to happen! I consider myself to be professinel because I live well by developing software and keep me up to date with what is happening in the field. I try as much as possible to avoid framework. First, I do not often need more than one or two operations from the framework and its partly annoy me when a framework is often updated or, on the other hand, is totally stalled. Another reason to avoid frameworks, especially in an expressive platform as Clojure, is that you can avoid different abstraction levels in the software, which is important if the software has to be easy to maintain over many years. </p>
+<p>Thanks for a great article, dead simple problems is like turtles, all the way down :-)</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2013/07/28/the-amateur-problem/comment-page-1#comment-45495</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Tue, 30 Jul 2013 01:03:29 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=731#comment-45495</guid>
+		<description><![CDATA[John Hurst- I&#039;d like to visit that ideal world some time.]]></description>
+		<content:encoded><![CDATA[<p>John Hurst- I&#8217;d like to visit that ideal world some time.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: John Hurst</title>
+		<link>https://stuartsierra.com/2013/07/28/the-amateur-problem/comment-page-1#comment-45493</link>
+		<dc:creator><![CDATA[John Hurst]]></dc:creator>
+		<pubDate>Mon, 29 Jul 2013 22:32:37 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=731#comment-45493</guid>
+		<description><![CDATA[The irony is that in an ideal world, open source developers need to be *more* disciplined and professional than enterprise or in-house developers. Enterprise developers can change/expand/refine their APIs when they find issues. They can follow their preferred choice of agile methodology and build minimal products that hardly work, and grow them iteratively in response to customer feedback. In-house developers can gradually evolve their frameworks from working code.
+
+If an open source library becomes widely used, then changes to it affect a lot of people. So the early API design has to be rather careful.]]></description>
+		<content:encoded><![CDATA[<p>The irony is that in an ideal world, open source developers need to be *more* disciplined and professional than enterprise or in-house developers. Enterprise developers can change/expand/refine their APIs when they find issues. They can follow their preferred choice of agile methodology and build minimal products that hardly work, and grow them iteratively in response to customer feedback. In-house developers can gradually evolve their frameworks from working code.</p>
+<p>If an open source library becomes widely used, then changes to it affect a lot of people. So the early API design has to be rather careful.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Geraldo Lopes de Souza</title>
+		<link>https://stuartsierra.com/2013/07/28/the-amateur-problem/comment-page-1#comment-45492</link>
+		<dc:creator><![CDATA[Geraldo Lopes de Souza]]></dc:creator>
+		<pubDate>Mon, 29 Jul 2013 19:15:49 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=731#comment-45492</guid>
+		<description><![CDATA[Open Source is driven by natural selection process. It&#039;s awesome!
+I ll always consider myself an amateur.
+I don&#039;t consider my code good quality to shared, but I learn a lot from snippets.
+The way it is today is a bless.
+I remember when internet connection was a dream, when I imported Object Pascal Library for Turbo Pascal.
+Knowlegde is at hand nowadays. The valuable skill is to be able to filter it.]]></description>
+		<content:encoded><![CDATA[<p>Open Source is driven by natural selection process. It&#8217;s awesome!<br />
+I ll always consider myself an amateur.<br />
+I don&#8217;t consider my code good quality to shared, but I learn a lot from snippets.<br />
+The way it is today is a bless.<br />
+I remember when internet connection was a dream, when I imported Object Pascal Library for Turbo Pascal.<br />
+Knowlegde is at hand nowadays. The valuable skill is to be able to filter it.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2013/07/28/the-amateur-problem/comment-page-1#comment-45491</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Mon, 29 Jul 2013 16:01:56 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=731#comment-45491</guid>
+		<description><![CDATA[Joseph Wilk- The word &quot;dichotomy&quot; shows you&#039;re taking this too seriously. ;)]]></description>
+		<content:encoded><![CDATA[<p>Joseph Wilk- The word &#8220;dichotomy&#8221; shows you&#8217;re taking this too seriously. ;)</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Joseph Wilk</title>
+		<link>https://stuartsierra.com/2013/07/28/the-amateur-problem/comment-page-1#comment-45490</link>
+		<dc:creator><![CDATA[Joseph Wilk]]></dc:creator>
+		<pubDate>Mon, 29 Jul 2013 15:48:56 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=731#comment-45490</guid>
+		<description><![CDATA[Thanks for your post, a couple of thoughts:
+
+I believe there lies a false dichotomy in dividing into amateurs and professionals. I&#039;m not sure I see that distinction as clearly,  professionals can be amateurs and amateurs can be professionals. In fact everyone is an amateur.  
+
+Open source is free, and hence It is hard to judge value and quality. If someone was giving away free code on a street corner I doubt I would think its good quality. What quantifies a open source project  being professional? Quality? Upon whose judgement?  Maybe all code projects start as amateur? We rarely know all the unknowns or tech upfront and our decisions and code contain amateur mistakes that help us and the community learn.
+
+&quot;Amateurs&quot; also feels slightly like a straw-man, in reality software is written by people who no matter how professional are prone to mistakes and flaws.
+
+One final note: the discussion starts by dividing the groups into them and us (or &quot;we&quot; as you say). This gives the impression if I disagree with you I am not one of you and hence I must be an amateur. 
+
+Thanks.]]></description>
+		<content:encoded><![CDATA[<p>Thanks for your post, a couple of thoughts:</p>
+<p>I believe there lies a false dichotomy in dividing into amateurs and professionals. I&#8217;m not sure I see that distinction as clearly,  professionals can be amateurs and amateurs can be professionals. In fact everyone is an amateur.  </p>
+<p>Open source is free, and hence It is hard to judge value and quality. If someone was giving away free code on a street corner I doubt I would think its good quality. What quantifies a open source project  being professional? Quality? Upon whose judgement?  Maybe all code projects start as amateur? We rarely know all the unknowns or tech upfront and our decisions and code contain amateur mistakes that help us and the community learn.</p>
+<p>&#8220;Amateurs&#8221; also feels slightly like a straw-man, in reality software is written by people who no matter how professional are prone to mistakes and flaws.</p>
+<p>One final note: the discussion starts by dividing the groups into them and us (or &#8220;we&#8221; as you say). This gives the impression if I disagree with you I am not one of you and hence I must be an amateur. </p>
+<p>Thanks.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Reply to: Jan-Paul Bultmann</title>
+		<link>https://stuartsierra.com/2013/07/28/the-amateur-problem/comment-page-1#comment-45489</link>
+		<dc:creator><![CDATA[Reply to: Jan-Paul Bultmann]]></dc:creator>
+		<pubDate>Mon, 29 Jul 2013 13:51:29 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=731#comment-45489</guid>
+		<description><![CDATA[And some of us do. I&#039;ve worked in settings where induction engines are being used for lemma generation and code proofs.]]></description>
+		<content:encoded><![CDATA[<p>And some of us do. I&#8217;ve worked in settings where induction engines are being used for lemma generation and code proofs.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.291 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:58:59 -->
+
+<!-- Compression = gzip -->

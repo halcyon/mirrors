@@ -1,0 +1,126 @@
+;; $Id: //info.ravenbrook.com/user/ndl/lisp/cl-rabbit/connection.lisp#2 $
+
+(in-package "RABBITMQ")
+
+;;                          CONNECTION.LISP
+;;           Nick Levine, Ravenbrook Limited, 2007-09-20
+;; 
+;; 1.  INTRODUCTION
+;;
+;; The purpose of this document is to implement a lisp interface to
+;; RabbitMQ connections.
+;;
+;; See Appendix C below for copyright and license.
+
+
+;; 2.  OPEN & CLOSE
+
+(defun new-connection (host vhost &key port &allow-other-keys)
+  (initialize-rabbitmq)
+  (let* ((parameters (new-connection-parameters vhost))
+         (factory (new ConnectionFactory. parameters)))
+    (make-typed-ref (if port
+                        (ConnectionFactory.newConnection factory host port)
+                      (ConnectionFactory.newConnection factory host)))))    
+
+(defmethod print-object ((self AMQConnection.) stream)
+  (print-unreadable-object (self stream :type t :identity t)
+    (format stream "~a"
+            (Object.toString self))))
+
+(defun new-connection-parameters (vhost)
+  (let ((parameters (new ConnectionParameters.)))
+    (ConnectionParameters.setVirtualHost parameters vhost)
+    (ConnectionParameters.setRequestedHeartbeat parameters *rabbitmq-timeout*)
+    parameters))
+
+(defmacro with-alive-connection ((connection &key (if-dead :error)) &body body)
+  (rebinding (connection)   
+    `(if (connection-alive ,connection)
+         (progn ,@body)
+       ,@(case if-dead
+           ((:error)
+            `((progn (connection-not-alive ,connection)
+		     ;; prevent tail call, aid debugging
+		     nil)))))))
+
+(defun connection-not-alive (connection)
+  (error 'connection-not-alive :connection connection))
+
+(define-condition connection-not-alive (error)
+  ((connection :reader connection-not-alive-connection :initform nil :initarg :connection))
+  (:report (lambda (condition stream)
+             (format stream "Connection~@[ ~a~] is no longer alive"
+                     (connection-not-alive-connection condition)))))
+
+(defun check-connection-alive (connection)
+  (with-alive-connection (connection)
+    ()))
+
+(defun destroy-connection (connection &key (code 0) (message "closed by application"))                                      
+  (with-alive-connection (connection :if-dead nil)
+    (handler-case
+	(Connection.close connection code message)
+      (connection-not-alive () ())))
+  connection)
+
+
+;; 3.  PROPERTIES
+
+(defun connection-alive (connection)
+  (AMQConnection.isOpen connection))
+
+(defun connection-client-property (connection property)
+  (let* ((properties (AMQConnection.buildClientPropertiesTable connection))
+         (value (Map.get properties (string-downcase property))))
+    (LongStringHelper$ByteArrayLongString.toString value)))
+
+(defun connection-server-product (connection)
+  (connection-client-property connection :product))
+
+(defun connection-server-platform (connection)
+  (connection-client-property connection :platform))
+
+(defun connection-server-version (connection)
+  (connection-client-property connection :version))
+
+(defun connection-server-copyright (connection)
+  (connection-client-property connection :copyright))
+
+(defun connection-server-info (connection)
+  (connection-client-property connection :information))
+    
+
+
+;; A.  REFERENCES
+;;
+;;
+;; B.  HISTORY
+;;
+;; 2007-09-20 NDL Created.
+;;
+;;
+;; C.  COPYRIGHT
+;;
+;; Copyright (c) 2007 Wiinz Limited. 
+;;
+;; Permission is hereby granted, free of charge, to any person
+;; obtaining a copy of this software and associated documentation
+;; files (the "Software"), to deal in the Software without
+;; restriction, including without limitation the rights to use, copy,
+;; modify, merge, publish, distribute, sublicense, and/or sell copies
+;; of the Software, and to permit persons to whom the Software is
+;; furnished to do so, subject to the following conditions:
+;;
+;; The above copyright notice and this permission notice shall be
+;; included in all copies or substantial portions of the Software.
+;; 
+;; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+;; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+;; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+;; NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+;; HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+;; WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+;; DEALINGS IN THE SOFTWARE.
+

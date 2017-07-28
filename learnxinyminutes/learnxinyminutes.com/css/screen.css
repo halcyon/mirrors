@@ -1,0 +1,149 @@
+@import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700|Roboto+Slab:700|Open+Sans:400,700&amp;subset=latin,latin-ext,cyrillic);
+/* line 6, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+body {
+  font-family: "Open Sans", sans-serif;
+  line-height: 22pt; }
+
+/* line 10, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Roboto Slab", serif; }
+
+/* line 13, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+h1, h2, h3, h4, h5, h6, p, li, hr {
+  padding: 0;
+  margin: 22pt 0 0 0;
+  line-height: 22pt; }
+
+/* line 18, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+li + li {
+  margin-top: 0; }
+
+/* line 21, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+.container {
+  max-width: 840px;
+  margin: 0px auto; }
+  @media all and (max-width: 880px) {
+    /* line 21, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+    .container {
+      margin: 0px 20px; } }
+
+/* line 28, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+#doc {
+  font-size: 14pt; }
+  /* line 30, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+  #doc .highlight {
+    font-family: "Ubuntu Mono", monospace;
+    line-height: 18pt;
+    display: block; }
+  /* line 34, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+  #doc img {
+    max-width: 100%; }
+  /* line 37, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+  #doc footer {
+    margin-top: 60px;
+    text-align: right;
+    color: #777; }
+
+/* line 43, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+.highlight {
+  background: #eee;
+  padding: 18pt;
+  overflow-x: auto;
+  margin: 0; }
+  /* line 48, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+  .highlight.c {
+    font-style: normal; }
+  /* line 50, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+  .highlight .c1 {
+    font-style: normal; }
+  /* line 52, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+  .highlight .nb, .highlight .nf, .highlight .k {
+    font-weight: 700; }
+  /* line 54, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+  .highlight .n {
+    color: #333; }
+
+/* line 58, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+table {
+  margin-top: 22pt;
+  width: 100%; }
+
+/* line 62, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+th, td {
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  line-height: 33pt; }
+  /* line 67, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+  th h1:first-child, th h2:first-child, th h3:first-child, th h4:first-child, th h5:first-child, th h6:first-child, th p:first-child, td h1:first-child, td h2:first-child, td h3:first-child, td h4:first-child, td h5:first-child, td h6:first-child, td p:first-child {
+    margin-top: 0; }
+
+/* line 71, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+th.name {
+  width: 50%; }
+
+/* line 74, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+th.lang {
+  width: 50%; }
+
+/* line 77, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+td.name a {
+  font-size: 1.2em;
+  font-weight: bold; }
+
+/* line 81, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+td.lang a {
+  background: #eee;
+  border-bottom: 2px solid #ddd;
+  border-radius: 3px;
+  padding: 0 5px;
+  text-decoration: none; }
+  /* line 87, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+  td.lang a:hover {
+    background: #f5f5f5; }
+  /* line 89, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+  td.lang a.selected {
+    background: #ff9; }
+
+@media all and (max-width: 620px) {
+  /* line 96, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+  tr {
+    display: block;
+    border-bottom: 3px solid #eee;
+    margin-bottom: 10px; }
+
+  /* line 101, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+  th.name {
+    display: block;
+    width: 100%; }
+
+  /* line 105, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+  th.lang {
+    display: none; }
+
+  /* line 108, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+  td.name {
+    display: block;
+    font-size: 16pt;
+    line-height: 24pt; }
+
+  /* line 113, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+  td.lang {
+    display: block;
+    text-align: right; } }
+/* line 117, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+.share {
+  float: right;
+  text-align: center;
+  line-height: 40px;
+  background: #eee;
+  padding: 0 20px;
+  border-radius: 3px;
+  border-bottom: 2px solid #ddd; }
+  /* line 125, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+  .share .sharemsg {
+    font-weight: bold;
+    display: block; }
+
+/* line 129, /opt/apps/learnxinyminutes/source/css/screen.css.sass */
+.lang-choice {
+  float: right; }

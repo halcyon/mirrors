@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from practicaltypography.com/tables.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 17:01:26 GMT -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript">
+if (navigator.appVersion.indexOf("Win")!=-1) {
+    document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-a.css" />');
+} else if (navigator.appVersion.indexOf("Mac")!=-1) {
+    if (navigator.userAgent.match(/iPad/i) != null) {
+        document.write('<link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="fonts/equity-b.css" type="text/css" />');
+        document.write('<link rel="stylesheet" media="only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2)" type="text/css" href="fonts/equity-a.css" />');
+    } else {
+        document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-b.css" />');
+    }
+} else {
+    document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-a.css" />');
+}
+
+</script>
+
+<title>Tables | Butterick’s Practical Typography</title>
+<link rel="stylesheet" type="text/css" media="all" href="styles.css" />
+<link rel="stylesheet" type="text/css" media="all" href="fonts/1406-fonts.css" />
+<meta name="format-detection" content="telephone=no">
+
+
+
+
+
+<script type="text/javascript">
+var isFirefox = typeof InstallTrigger !== 'undefined';
+if (isFirefox) {
+document.write('<link rel="stylesheet" type="text/css" media="all" href="firefox.css" />');
+}
+var isChromium = window.chrome,
+    winNav = window.navigator,
+    vendorName = winNav.vendor,
+    isOpera = winNav.userAgent.indexOf("OPR") > -1,
+    isIEedge = winNav.userAgent.indexOf("Edge") > -1,
+    isIOSChrome = winNav.userAgent.match("CriOS");
+if(isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isIEedge == false) {
+   // is Google Chrome or Opera
+   document.write('<link rel="stylesheet" type="text/css" media="all" href="chrome.css" />');
+}
+</script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-19281911-7']);
+  _gaq.push(['_setDomainName', 'practicaltypography.com']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+
+<body>
+<div class="content"><div id="doc"><title-block><topic>tables</topic><short-rule>The best tool for gridded or complex layouts</short-rule></title-block><p>The good news: <first-use>ta­bles</first-use> are one of the hand­i­est tools in your word proces­sor and web browser. A ta­ble can be the right so­lu­tion for lay­out prob­lems where <a href="white-space-characters.html" class="xref">white-space char­ac­ters</a> aren’t up to the <span class="no-hyphens">task.</span></p><p>The bad news: ta­bles can be dif­fi­cult to use. The user in­ter­face for edit­ing them is com­plex and finicky. While I can’t give you a full tu­to­r­ial on us­ing ta­bles, I can pro­vide a few di­rec­tional <span class="no-hyphens">tips.</span></p><p>I’ve al­ready pointed out the ways in which <a href="typewriter-habits.html" class="xref">type­writer habits</a> have en­dured. But the un­for­tu­nate truth about word proces­sors and web browsers is that their ba­sic model for page lay­out is sim­i­lar to that of the type­writer of a hun­dred years ago: the doc­u­ment is han­dled as one big col­umn of text. That’s great if all you need is one big col­umn of text. It’s not so great <span class="no-hyphens">otherwise.</span></p><p>Ta­bles are <span class="no-hyphens">useful—</span></p><ol><li><p>For spread­sheet-style <a href="grids-of-numbers.html" class="xref">grids of num­bers</a> or other data. In the type­writer era, grids like this would’ve been made with <a href="tabs-and-tab-stops.html" class="xref">tabs and tab stops</a>. These days, you’d use a <span class="no-hyphens">table.</span></p></li><li><p>For lay­outs where text needs to be po­si­tioned side-by-side or float­ing at spe­cific lo­ca­tions on the page. If mak­ing these is frus­trat­ing with the usual lay­out tools, try us­ing a <span class="no-hyphens">table.</span></p></li></ol><div class="howto"><div class="howto-name">How to insert a table</div><p><program>Word</program> <ui>Insert</ui> → <ui>Tables</ui> panel →  <ui>Table</ui> →  drag your cur­sor around the grid to set the num­ber of rows and <span class="no-hyphens">columns.</span></p><p><program>OS X Word 2011</program> <ui>Tables</ui> tab → <ui>New</ui> → drag your cur­sor around the grid to set the num­ber of rows and <span class="no-hyphens">columns.</span></p><p><program>OS X Word 2016</program> <ui>Insert</ui> tab → <ui>Table</ui> → drag your cur­sor around the grid to set the num­ber of rows and <span class="no-hyphens">columns.</span></p><p><program>Pages</program> <ui>Insert</ui> → <ui>Table</ui> → <ui>Basic</ui>. Pages will in­sert a small ta­ble, and open the ta­ble ed­i­tor in the In­spec­tor to al­low fur­ther <span class="no-hyphens">adjustments.</span></p><p><program>HTML</program> The three ba­sic tags are <code>&lt;ta­ble&gt;</code>, <code>&lt;tr&gt;</code> (for each row), and <code>&lt;td&gt;</code> (for each cell). HTML also sup­ports op­tional tags for cer­tain other ta­ble <span class="no-hyphens">elements.</span></p></div><p>There are many ways to for­mat a ta­ble. But de­fault ta­bles have two for­mat­ting de­fects you should al­ways fix: <em>cell bor­ders</em> and <em>cell mar­gins</em>.</p><aside>Web browsers used to turn on cell bor­ders by de­fault, but these days, they <span class="no-hyphens">don’t.</span></aside><p><em>Cell bor­ders</em> are the lines around each cell in the ta­ble. Cell bor­ders are help­ful as guides when you’re load­ing in­for­ma­tion into the ta­ble. They’re less use­ful once the ta­ble is full. The text in the cells will cre­ate an im­plied grid. Cell bor­ders can make the grid clut­tered and dif­fi­cult to read, es­pe­cially in ta­bles with many small <span class="no-hyphens">cells.</span></p><style type="text/css">
+.table-cluttered td, .table-cluttered th {
+    border: 0.2em solid black;
+    padding: 0;
+}
+
+.table-cluttered td, .table-clean td,
+.table-cluttered th, .table-clean th {
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+        font-size: 90%;
+}
+
+.table-clean td, .table-clean th, .table-clean tr {
+    border: 0;
+    padding: 0;
+}
+
+.table-clean td {
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+}
+
+.text-left{
+    text-align: left;
+}
+</style><div style="height:0.7em"></div><div class="indented"><table class="table-cluttered"><tr><th class="text-left">Cluttered</th><th>Athos</th><th>Porthos</th><th>Aramis</th></tr><tr><td class="text-left">Priors?</td><td>Yes</td><td>No</td><td>Yes</td></tr><tr><td class="text-left">Alibi?</td><td>No</td><td>Yes</td><td>Yes</td></tr><tr><td class="text-left">Confession?</td><td>No</td><td>No</td><td>No</td></tr></table></div><div class="indented"><table class="table-clean"><tr><th class="text-left">Clean</th><th>Athos</th><th>Porthos</th><th>Aramis</th></tr><tr><td class="text-left">Priors?</td><td>Yes</td><td>No</td><td>Yes</td></tr><tr><td class="text-left">Alibi?</td><td>No</td><td>Yes</td><td>Yes</td></tr><tr><td class="text-left">Confession?</td><td>No</td><td>No</td><td>No</td></tr></table></div><p>In this ex­am­ple, cell bor­ders are un­nec­es­sary. In other cases, they can be use­ful. The goal is to im­prove the leg­i­bil­ity of the ta­ble. When you’re ready to for­mat your ta­ble, I rec­om­mend that you start by turn­ing off all the cell bor­ders, and then se­lec­tively re­ac­ti­vate them as needed. (See <a href="rules-and-borders.html" class="xref">rules and bor­ders</a> for more <span class="no-hyphens">tips.)</span></p><div class="howto"><div class="howto-name">How to turn off cell borders</div><p><program>Word</program> Right-click in the ta­ble to dis­play menu → <ui>Borders and Shading</ui> → <ui>Borders</ui> tab. In the col­umn on the left la­beled <ui>Setting</ui>, click the but­ton next to <ui>None</ui>. Click <ui>OK</ui>.</p><p><program>Pages</program> Click the ta­ble to se­lect it. Go to <ui>View</ui> → <ui>Show Toolbar</ui> (or op­tion + ⌘ + t) → <ui>Format</ui> but­ton → <ui>Table</ui> pane. Un­der <ui>Table Outline</ui>, se­lect <ui>None</ui>, and un­der <ui>Gridlines</ui>, de­s­e­lect the two but­tons on the left (that con­trol hor­i­zon­tal and ver­ti­cal cell bor­ders, <span class="no-hyphens">respectively)</span></p><p><program>CSS</program> <code>bor­der: none</code> (though be care­ful: ta­bles, ta­ble rows, and ta­ble cells can all have sep­a­rate bor­der <span class="no-hyphens">settings)</span></p></div><p><em>Cell mar­gins</em> cre­ate space be­tween the cell bor­ders and the text of the cell. In­creas­ing the cell mar­gins is the best way to im­prove the leg­i­bil­ity of a dense <span class="no-hyphens">table.</span></p><style type="text/css">
+.table-dense td, .table-dense th,
+.table-less-dense td, .table-less-dense th {
+    border: 0.1em solid black;
+    padding: 0;
+}
+
+.table-dense td, .table-less-dense td,
+.table-dense th, .table-less-dense th {
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    font-size: 90%;
+}
+
+.table-less-dense td, .table-less-dense th, .table-less-dense tr {
+   padding-top: 0.5em;
+   padding-bottom: 0.5em;
+}
+
+.text-left{
+    text-align: left;
+}
+</style><div style="height:0.7em"></div><div class="indented"><table class="table-dense"><tr><th class="text-left">Dense</th><th>Athos</th><th>Porthos</th><th>Aramis</th></tr><tr><td class="text-left">Phone</td><td>(617) 555 1453</td><td>(508) 555 3232</td><td>(603) 555 8490</td></tr><tr><td class="text-left">Cell</td><td>(617) 555 3145</td><td>(508) 555 2323</td><td>(603) 555 8491</td></tr><tr><td class="text-left">Fax</td><td>(617) 555 5413</td><td>(508) 555 4545</td><td>(603) 555 8492</td></tr></table></div><div class="indented"><table class="table-less-dense"><tr><th class="text-left">Not</th><th>Athos</th><th>Porthos</th><th>Aramis</th></tr><tr><td class="text-left">Phone</td><td>(617) 555 1453</td><td>(508) 555 3232</td><td>(603) 555 8490</td></tr><tr><td class="text-left">Cell</td><td>(617) 555 3145</td><td>(508) 555 2323</td><td>(603) 555 8491</td></tr><tr><td class="text-left">Fax</td><td>(617) 555 5413</td><td>(508) 555 4545</td><td>(603) 555 8492</td></tr></table></div><p>The de­fault cell mar­gins, es­pe­cially in Word, are too tight. But add space gin­gerly—a lit­tle goes a long way. Also, there’s no need to make the cell mar­gins the same on all sides. The top and bot­tom mar­gins can be big­ger than the side mar­gins, if that looks <span class="no-hyphens">right.</span></p><div class="howto"><div class="howto-name">How to set cell margins</div><p><program>Word</program> Right-click in the ta­ble to dis­play menu → <ui>Table Properties</ui> → <ui>Table</ui> tab → <ui>Options</ui>. Un­der <ui>Default cell margins</ui>, en­ter the val­ues. You can also use the up and down ar­row keys to change the val­ues in in­cre­ments of <span class="no-hyphens">0.01″.</span></p><p><program>Pages</program> Click in­side the ta­ble and press ⌘ + a to se­lect all cells. Then do <ui>View</ui> → <ui>Show Toolbar</ui> (or op­tion + ⌘ + t) → <ui>Format</ui> but­ton → <ui>Text</ui> pane → <ui>Layout</ui> pane → en­ter the mea­sure­ment in <ui>Text <span class="no-hyphens">Inset</span></ui></p><p><program>CSS</program> Add <code>padding</code> to your <code>td</code> (ta­ble cell) <span class="no-hyphens">selector.</span></p></div><div class="btw"><div class="btw-title">by the way</div><ul><li><p><quo>Web purists like to note that se­man­ti­cally, ta­bles shouldn’t be used purely for lay­out pur­poses in web pages.<dquo-push></dquo-push><dquo-pull> “</dquo-pull>Use CSS floats,” they say. Un­for­tu­nately, CSS floats can’t do every­thing that ta­bles can. A new CSS lay­out mode called </quo><first-use>flexbox</first-use> has <a href="http://caniuse.com/#search=flexbox">in­creas­ing sup­port</a> in browsers, and may fi­nally bring ta­ble-qual­ity con­trol to CSS. But if you need com­pat­i­bil­ity with older browsers,  a ta­ble might still be the best tool for the <span class="no-hyphens">job.</span></p></li></ul></div></div><a id="links"></a><div style="height:1em"></div><ul class="children"></ul></div>
+
+
+<!-- top nav -->
+<div class="nav-outer" id="top"><a href="index-2.html#toc"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="up"><a href="page-layout.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="prev"><a href="bulleted-and-numbered-lists.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="next"><a href="rules-and-borders.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="bottom"><div class="nav-inner"><div id="navtable">
+
+<div id="left">
+
+<a class="xref box-link" href="bulleted-and-numbered-lists.html"><span class="arrow">←</span>&nbsp;bulleted and numbered lists</a></div>
+
+
+<div id="center-left"><a class="xref box-link" href="index-2.html#toc">top</a></div>
+
+<div id="center-right"><a class="xref box-link" href="page-layout.html#links">Chapter</a></div>
+
+<div id="right">
+<a class="xref box-link" href="rules-and-borders.html">rules & borders&nbsp;<span class="arrow">→</span></a></div>
+
+
+
+</div></div></div> 
+
+</body>
+
+<!-- Mirrored from practicaltypography.com/tables.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 17:01:26 GMT -->
+</html>
+
+<!-- © 2013–16 Matthew Butterick -->
+

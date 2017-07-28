@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/zh-cn/r-cn/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:40 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn R in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../../css/normalize.css">
+        <link rel="stylesheet" href="../../../css/main.css">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fzh-cn%2Fr-cn%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3DR">
+        分享此页
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">X分钟速成Y</a></h2>
+  <h2>其中 Y=R</h2>
+  
+    <p class="filelink">
+    源代码下载：
+    <a href="../../files/learnr-zh.r">learnr-zh.r</a>
+    </p>
+  
+  <div id="doc">
+    <p>R 是一门统计语言。它有很多数据分析和挖掘程序包。可以用来统计、分析和制图。
+你也可以在 LaTeX 文档中运行 <code>R</code> 命令。</p>
+<pre class="highlight r"><code><span class="c1"># 评论以 # 开始
+</span>
+<span class="c1"># R 语言原生不支持 多行注释
+# 但是你可以像这样来多行注释
+</span>
+<span class="c1"># 在窗口里按回车键可以执行一条命令
+</span>
+
+<span class="c1">###################################################################
+# 不用懂编程就可以开始动手了
+###################################################################
+</span>
+<span class="n">data</span><span class="p">()</span>  <span class="c1"># 浏览内建的数据集
+</span><span class="n">data</span><span class="p">(</span><span class="n">rivers</span><span class="p">)</span>    <span class="c1"># 北美主要河流的长度（数据集）
+</span><span class="n">ls</span><span class="p">()</span>    <span class="c1"># 在工作空间中查看「河流」是否出现
+</span><span class="n">head</span><span class="p">(</span><span class="n">rivers</span><span class="p">)</span>    <span class="c1"># 撇一眼数据集
+# 735 320 325 392 524 450
+</span><span class="n">length</span><span class="p">(</span><span class="n">rivers</span><span class="p">)</span>  <span class="c1"># 我们测量了多少条河流？
+# 141
+</span><span class="n">summary</span><span class="p">(</span><span class="n">rivers</span><span class="p">)</span>
+<span class="c1">#   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+#  135.0   310.0   425.0   591.2   680.0  3710.0
+</span><span class="n">stem</span><span class="p">(</span><span class="n">rivers</span><span class="p">)</span>    <span class="c1"># 茎叶图（一种类似于直方图的展现形式）
+#
+#  The decimal point is 2 digit(s) to the right of the |
+#
+#   0 | 4
+#   2 | 011223334555566667778888899900001111223333344455555666688888999
+#   4 | 111222333445566779001233344567
+#   6 | 000112233578012234468
+#   8 | 045790018
+#  10 | 04507
+#  12 | 1471
+#  14 | 56
+#  16 | 7
+#  18 | 9
+#  20 |
+#  22 | 25
+#  24 | 3
+#  26 |
+#  28 |
+#  30 |
+#  32 |
+#  34 |
+#  36 | 1
+</span>
+
+<span class="n">stem</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">rivers</span><span class="p">))</span>   <span class="c1"># 查看数据集的方式既不是标准形式，也不是取log后的结果! 看起来，是钟形曲线形式的基本数据集
+</span>
+<span class="c1">#  The decimal point is 1 digit(s) to the left of the |
+#
+#  48 | 1
+#  50 |
+#  52 | 15578
+#  54 | 44571222466689
+#  56 | 023334677000124455789
+#  58 | 00122366666999933445777
+#  60 | 122445567800133459
+#  62 | 112666799035
+#  64 | 00011334581257889
+#  66 | 003683579
+#  68 | 0019156
+#  70 | 079357
+#  72 | 89
+#  74 | 84
+#  76 | 56
+#  78 | 4
+#  80 |
+#  82 | 2
+</span>
+
+<span class="n">hist</span><span class="p">(</span><span class="n">rivers</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">"#333333"</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span> <span class="n">breaks</span><span class="o">=</span><span class="m">25</span><span class="p">)</span>  <span class="c1"># 试试用这些参数画画 （译者注：给 river 做统计频数直方图，包含了这些参数：数据源，颜色，边框，空格）
+</span><span class="n">hist</span><span class="p">(</span><span class="n">log</span><span class="p">(</span><span class="n">rivers</span><span class="p">),</span> <span class="n">col</span><span class="o">=</span><span class="s2">"#333333"</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span> <span class="n">breaks</span><span class="o">=</span><span class="m">25</span><span class="p">)</span> <span class="c1">#你还可以做更多式样的绘图
+</span>
+<span class="c1"># 还有其他一些简单的数据集可以被用来加载。R 语言包括了大量这种 data()
+</span><span class="n">data</span><span class="p">(</span><span class="n">discoveries</span><span class="p">)</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">discoveries</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">"#333333"</span><span class="p">,</span> <span class="n">lwd</span><span class="o">=</span><span class="m">3</span><span class="p">,</span> <span class="n">xlab</span><span class="o">=</span><span class="s2">"Year"</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="s2">"Number of important discoveries per year"</span><span class="p">)</span>
+<span class="c1"># 译者注：参数为（数据源，颜色，线条宽度，X 轴名称，标题）
+</span><span class="n">plot</span><span class="p">(</span><span class="n">discoveries</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">"#333333"</span><span class="p">,</span> <span class="n">lwd</span><span class="o">=</span><span class="m">3</span><span class="p">,</span> <span class="n">type</span> <span class="o">=</span> <span class="s2">"h"</span><span class="p">,</span> <span class="n">xlab</span><span class="o">=</span><span class="s2">"Year"</span><span class="p">,</span> <span class="n">main</span><span class="o">=</span><span class="s2">"Number of important discoveries per year"</span><span class="p">)</span>
+
+
+<span class="c1"># 除了按照默认的年份排序，我们还可以排序来发现特征
+</span><span class="n">sort</span><span class="p">(</span><span class="n">discoveries</span><span class="p">)</span>
+<span class="c1">#  [1]  0  0  0  0  0  0  0  0  0  1  1  1  1  1  1  1  1  1  1  1  1  2  2  2  2
+# [26]  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  3  3  3
+# [51]  3  3  3  3  3  3  3  3  3  3  3  3  3  3  3  3  3  4  4  4  4  4  4  4  4
+# [76]  4  4  4  4  5  5  5  5  5  5  5  6  6  6  6  6  6  7  7  7  7  8  9 10 12
+</span>
+<span class="n">stem</span><span class="p">(</span><span class="n">discoveries</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="m">2</span><span class="p">)</span> <span class="c1"># 译者注：茎叶图（数据，放大系数）
+#
+#  The decimal point is at the |
+#
+#   0 | 000000000
+#   1 | 000000000000
+#   2 | 00000000000000000000000000
+#   3 | 00000000000000000000
+#   4 | 000000000000
+#   5 | 0000000
+#   6 | 000000
+#   7 | 0000
+#   8 | 0
+#   9 | 0
+#  10 | 0
+#  11 |
+#  12 | 0
+</span>
+<span class="n">max</span><span class="p">(</span><span class="n">discoveries</span><span class="p">)</span>
+<span class="c1"># 12
+</span>
+<span class="n">summary</span><span class="p">(</span><span class="n">discoveries</span><span class="p">)</span>
+<span class="c1">#   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+#    0.0     2.0     3.0     3.1     4.0    12.0
+</span>
+
+
+
+<span class="c1">#基本的统计学操作也不需要任何编程知识
+</span>
+<span class="c1">#随机生成数据
+</span><span class="n">round</span><span class="p">(</span><span class="n">runif</span><span class="p">(</span><span class="m">7</span><span class="p">,</span> <span class="n">min</span><span class="o">=</span><span class="m">.5</span><span class="p">,</span> <span class="n">max</span><span class="o">=</span><span class="m">6.5</span><span class="p">))</span>
+<span class="c1"># 译者注：runif 产生随机数，round 四舍五入
+# 1 4 6 1 4 6 4
+</span>
+<span class="c1"># 你输出的结果会和我们给出的不同，除非我们设置了相同的随机种子 random.seed(31337)
+</span>
+
+<span class="c1">#从标准高斯函数中随机生成 9 次
+</span><span class="n">rnorm</span><span class="p">(</span><span class="m">9</span><span class="p">)</span>
+<span class="c1"># [1]  0.07528471  1.03499859  1.34809556 -0.82356087  0.61638975 -1.88757271
+# [7] -0.59975593  0.57629164  1.08455362
+</span>
+
+
+
+
+
+
+
+
+<span class="c1">#########################
+# 基础编程
+#########################
+</span>
+<span class="c1"># 数值
+</span>
+<span class="c1">#“数值”指的是双精度的浮点数
+</span><span class="m">5</span>   <span class="c1"># 5
+</span><span class="n">class</span><span class="p">(</span><span class="m">5</span><span class="p">)</span>    <span class="c1"># "numeric"
+</span><span class="m">5e4</span> <span class="c1"># 50000             # 用科学技术法方便的处理极大值、极小值或者可变的量级
+</span><span class="m">6.02e23</span> <span class="c1"># 阿伏伽德罗常数#
+</span><span class="m">1.6e-35</span> <span class="c1"># 布朗克长度
+</span>
+<span class="c1"># 长整数并用 L 结尾
+</span><span class="m">5L</span>  <span class="c1"># 5
+#输出5L
+</span><span class="n">class</span><span class="p">(</span><span class="m">5L</span><span class="p">)</span>   <span class="c1"># "integer"
+</span>
+<span class="c1"># 可以自己试一试？用 class() 函数获取更多信息
+# 事实上，你可以找一些文件查阅 `xyz` 以及xyz的差别
+# `xyz` 用来查看源码实现，?xyz 用来看帮助
+</span>
+<span class="c1"># 算法
+</span><span class="m">10</span> <span class="o">+</span> <span class="m">66</span> <span class="c1"># 76
+</span><span class="m">53.2</span> <span class="o">-</span> <span class="m">4</span>    <span class="c1"># 49.2
+</span><span class="m">2</span> <span class="o">*</span> <span class="m">2.0</span> <span class="c1"># 4
+</span><span class="m">3L</span> <span class="o">/</span> <span class="m">4</span>  <span class="c1"># 0.75
+</span><span class="m">3</span> <span class="o">%%</span> <span class="m">2</span>  <span class="c1"># 1
+</span>
+<span class="c1"># 特殊数值类型
+</span><span class="n">class</span><span class="p">(</span><span class="n">NaN</span><span class="p">)</span>  <span class="c1"># "numeric"
+</span><span class="n">class</span><span class="p">(</span><span class="n">Inf</span><span class="p">)</span>  <span class="c1"># "numeric"
+</span><span class="n">class</span><span class="p">(</span><span class="o">-</span><span class="n">Inf</span><span class="p">)</span> <span class="c1"># "numeric"     # 在以下场景中会用到 integrate( dnorm(x), 3, Inf ) -- 消除 Z 轴数据
+</span>
+<span class="c1"># 但要注意，NaN 并不是唯一的特殊数值类型……
+</span><span class="n">class</span><span class="p">(</span><span class="n">NA</span><span class="p">)</span>   <span class="c1"># 看上面
+</span><span class="n">class</span><span class="p">(</span><span class="n">NULL</span><span class="p">)</span> <span class="c1"># NULL
+</span>
+
+<span class="c1"># 简单列表
+</span><span class="n">c</span><span class="p">(</span><span class="m">6</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">9</span><span class="p">)</span>  <span class="c1"># 6 8 7 5 3 0 9
+</span><span class="n">c</span><span class="p">(</span><span class="s1">'alef'</span><span class="p">,</span> <span class="s1">'bet'</span><span class="p">,</span> <span class="s1">'gimmel'</span><span class="p">,</span> <span class="s1">'dalet'</span><span class="p">,</span> <span class="s1">'he'</span><span class="p">)</span>
+<span class="n">c</span><span class="p">(</span><span class="s1">'Z'</span><span class="p">,</span> <span class="s1">'o'</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">,</span> <span class="s1">'o'</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"Zoro"</span> <span class="c1"># FALSE FALSE FALSE FALSE
+</span>
+<span class="c1"># 一些优雅的内置功能
+</span><span class="m">5</span><span class="o">:</span><span class="m">15</span>    <span class="c1"># 5  6  7  8  9 10 11 12 13 14 15
+</span>
+<span class="n">seq</span><span class="p">(</span><span class="n">from</span><span class="o">=</span><span class="m">0</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="m">31337</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="m">1337</span><span class="p">)</span>
+<span class="c1">#  [1]     0  1337  2674  4011  5348  6685  8022  9359 10696 12033 13370 14707
+# [13] 16044 17381 18718 20055 21392 22729 24066 25403 26740 28077 29414 30751
+</span>
+<span class="n">letters</span>
+<span class="c1">#  [1] "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s"
+# [20] "t" "u" "v" "w" "x" "y" "z"
+</span>
+<span class="n">month.abb</span>   <span class="c1"># "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"
+</span>
+
+<span class="c1"># Access the n'th element of a list with list.name[n] or sometimes list.name[[n]]
+# 使用 list.name[n] 来访问第 n 个列表元素，有时候需要使用 list.name[[n]]
+</span><span class="n">letters</span><span class="p">[</span><span class="m">18</span><span class="p">]</span> <span class="c1"># "r"
+</span><span class="n">LETTERS</span><span class="p">[</span><span class="m">13</span><span class="p">]</span> <span class="c1"># "M"
+</span><span class="n">month.name</span><span class="p">[</span><span class="m">9</span><span class="p">]</span>   <span class="c1"># "September"
+</span><span class="n">c</span><span class="p">(</span><span class="m">6</span><span class="p">,</span> <span class="m">8</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">9</span><span class="p">)[</span><span class="m">3</span><span class="p">]</span>   <span class="c1"># 7
+</span>
+
+
+<span class="c1"># 字符串
+</span>
+<span class="c1"># 字符串和字符在 R 语言中没有区别
+</span><span class="s2">"Horatio"</span>   <span class="c1"># "Horatio"
+</span><span class="n">class</span><span class="p">(</span><span class="s2">"Horatio"</span><span class="p">)</span> <span class="c1"># "character"
+</span><span class="n">substr</span><span class="p">(</span><span class="s2">"Fortuna multis dat nimis, nulli satis."</span><span class="p">,</span> <span class="m">9</span><span class="p">,</span> <span class="m">15</span><span class="p">)</span> <span class="c1"># "multis "
+</span><span class="n">gsub</span><span class="p">(</span><span class="s1">'u'</span><span class="p">,</span> <span class="s1">'ø'</span><span class="p">,</span> <span class="s2">"Fortuna multis dat nimis, nulli satis."</span><span class="p">)</span>   <span class="c1"># "Fortøna møltis dat nimis, nølli satis."
+</span>
+
+
+<span class="c1"># 逻辑值
+</span>
+<span class="c1"># 布尔值
+</span><span class="n">class</span><span class="p">(</span><span class="n">TRUE</span><span class="p">)</span> <span class="c1"># "logical"
+</span><span class="n">class</span><span class="p">(</span><span class="n">FALSE</span><span class="p">)</span>    <span class="c1"># "logical"
+# 和我们预想的一样
+</span><span class="n">TRUE</span> <span class="o">==</span> <span class="n">TRUE</span>    <span class="c1"># TRUE
+</span><span class="n">TRUE</span> <span class="o">==</span> <span class="n">FALSE</span>   <span class="c1"># FALSE
+</span><span class="n">FALSE</span> <span class="o">!=</span> <span class="n">FALSE</span>  <span class="c1"># FALSE
+</span><span class="n">FALSE</span> <span class="o">!=</span> <span class="n">TRUE</span>   <span class="c1"># TRUE
+# 缺失数据（NA）也是逻辑值
+</span><span class="n">class</span><span class="p">(</span><span class="n">NA</span><span class="p">)</span>   <span class="c1"># "logical"
+#定义NA为逻辑型
+</span>
+
+
+<span class="c1"># 因子
+# 因子是为数据分类排序设计的（像是排序小朋友们的年级或性别）
+</span><span class="n">levels</span><span class="p">(</span><span class="n">factor</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="s2">"female"</span><span class="p">,</span> <span class="s2">"male"</span><span class="p">,</span> <span class="s2">"male"</span><span class="p">,</span> <span class="s2">"female"</span><span class="p">,</span> <span class="s2">"NA"</span><span class="p">,</span> <span class="s2">"female"</span><span class="p">)))</span>   <span class="c1"># "female" "male"   "NA"
+</span>
+<span class="n">factor</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="s2">"female"</span><span class="p">,</span> <span class="s2">"female"</span><span class="p">,</span> <span class="s2">"male"</span><span class="p">,</span> <span class="s2">"NA"</span><span class="p">,</span> <span class="s2">"female"</span><span class="p">))</span>
+<span class="c1">#  female female male   NA     female
+# Levels: female male NA
+</span>
+<span class="n">data</span><span class="p">(</span><span class="n">infert</span><span class="p">)</span>    <span class="c1"># 自然以及引产导致的不育症
+</span><span class="n">levels</span><span class="p">(</span><span class="n">infert</span><span class="o">$</span><span class="n">education</span><span class="p">)</span>    <span class="c1"># "0-5yrs"  "6-11yrs" "12+ yrs"
+</span>
+
+
+<span class="c1"># 变量
+</span>
+<span class="c1"># 有许多种方式用来赋值
+</span><span class="n">x</span> <span class="o">=</span> <span class="m">5</span> <span class="c1"># 这样可以
+</span><span class="n">y</span> <span class="o">&lt;-</span> <span class="s2">"1"</span> <span class="c1"># 更推荐这样
+</span><span class="n">TRUE</span> <span class="o">-&gt;</span> <span class="n">z</span> <span class="c1"># 这样可行，但是很怪
+</span>
+<span class="c1">#我们还可以使用强制转型
+</span><span class="n">as.numeric</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>   <span class="c1"># 1
+</span><span class="n">as.character</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># "5"
+</span>
+<span class="c1"># 循环
+</span>
+<span class="c1"># for 循环语句
+</span><span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="k">in</span> <span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1"># while 循环
+</span><span class="n">a</span> <span class="o">&lt;-</span> <span class="m">10</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">a</span> <span class="o">&gt;</span> <span class="m">4</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">cat</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s2">"..."</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s2">""</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">&lt;-</span> <span class="n">a</span> <span class="o">-</span> <span class="m">1</span>
+<span class="p">}</span>
+
+<span class="c1"># 记住，在 R 语言中 for / while 循环都很慢
+# 建议使用 apply()（我们一会介绍）来操作一串数据（比如一列或者一行数据）
+</span>
+<span class="c1"># IF/ELSE
+</span>
+<span class="c1"># 再来看这些优雅的标准
+</span><span class="k">if</span> <span class="p">(</span><span class="m">4</span> <span class="o">&gt;</span> <span class="m">3</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">print</span><span class="p">(</span><span class="s2">"Huzzah! It worked!"</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">print</span><span class="p">(</span><span class="s2">"Noooo! This is blatantly illogical!"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1"># =&gt;
+# [1] "Huzzah! It worked!"
+</span>
+<span class="c1"># 函数
+</span>
+<span class="c1"># 定义如下
+</span><span class="n">jiggle</span> <span class="o">&lt;-</span> <span class="k">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">+</span> <span class="n">rnorm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sd</span><span class="o">=</span><span class="m">.1</span><span class="p">)</span> <span class="c1">#add in a bit of (controlled) noise
+</span>    <span class="k">return</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="c1"># 和其他 R 语言函数一样调用
+</span><span class="n">jiggle</span><span class="p">(</span><span class="m">5</span><span class="p">)</span>   <span class="c1"># 5±ε. 使用 set.seed(2716057) 后， jiggle(5)==5.005043
+</span>
+<span class="c1">#########################
+# 数据容器：vectors, matrices, data frames, and arrays
+#########################
+</span>
+<span class="c1"># 单维度
+# 你可以将目前我们学习到的任何类型矢量化，只要它们拥有相同的类型
+</span><span class="n">vec</span> <span class="o">&lt;-</span> <span class="n">c</span><span class="p">(</span><span class="m">8</span><span class="p">,</span> <span class="m">9</span><span class="p">,</span> <span class="m">10</span><span class="p">,</span> <span class="m">11</span><span class="p">)</span>
+<span class="n">vec</span> <span class="c1">#  8  9 10 11
+# 矢量的类型是这一组数据元素的类型
+</span><span class="n">class</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>  <span class="c1"># "numeric"
+# If you vectorize items of different classes, weird coercions happen
+#如果你强制的将不同类型数值矢量化，会出现特殊值
+</span><span class="n">c</span><span class="p">(</span><span class="n">TRUE</span><span class="p">,</span> <span class="m">4</span><span class="p">)</span>  <span class="c1"># 1 4
+</span><span class="n">c</span><span class="p">(</span><span class="s2">"dog"</span><span class="p">,</span> <span class="n">TRUE</span><span class="p">,</span> <span class="m">4</span><span class="p">)</span>   <span class="c1"># "dog"  "TRUE" "4"
+</span>
+<span class="c1">#我们这样来取内部数据，（R 的下标索引顺序 1 开始）
+</span><span class="n">vec</span><span class="p">[</span><span class="m">1</span><span class="p">]</span>  <span class="c1"># 8
+# 我们可以根据条件查找特定数据
+</span><span class="n">which</span><span class="p">(</span><span class="n">vec</span> <span class="o">%%</span> <span class="m">2</span> <span class="o">==</span> <span class="m">0</span><span class="p">)</span>    <span class="c1"># 1 3
+# 抓取矢量中第一个和最后一个字符
+</span><span class="n">head</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>    <span class="c1"># 8
+</span><span class="n">tail</span><span class="p">(</span><span class="n">vec</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>    <span class="c1"># 11
+#如果下标溢出或不存会得到 NA
+</span><span class="n">vec</span><span class="p">[</span><span class="m">6</span><span class="p">]</span>  <span class="c1"># NA
+# 你可以使用 length() 获取矢量的长度
+</span><span class="n">length</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span> <span class="c1"># 4
+</span>
+<span class="c1"># 你可以直接操作矢量或者矢量的子集
+</span><span class="n">vec</span> <span class="o">*</span> <span class="m">4</span> <span class="c1"># 16 20 24 28
+</span><span class="n">vec</span><span class="p">[</span><span class="m">2</span><span class="o">:</span><span class="m">3</span><span class="p">]</span> <span class="o">*</span> <span class="m">5</span>    <span class="c1"># 25 30
+# 这里有许多内置的函数，来表现向量
+</span><span class="n">mean</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>   <span class="c1"># 9.5
+</span><span class="n">var</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>    <span class="c1"># 1.666667
+</span><span class="n">sd</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span> <span class="c1"># 1.290994
+</span><span class="n">max</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>    <span class="c1"># 11
+</span><span class="n">min</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>    <span class="c1"># 8
+</span><span class="n">sum</span><span class="p">(</span><span class="n">vec</span><span class="p">)</span>    <span class="c1"># 38
+</span>
+<span class="c1"># 二维（相同元素类型）
+</span>
+<span class="c1">#你可以为同样类型的变量建立矩阵
+</span><span class="n">mat</span> <span class="o">&lt;-</span> <span class="n">matrix</span><span class="p">(</span><span class="n">nrow</span> <span class="o">=</span> <span class="m">3</span><span class="p">,</span> <span class="n">ncol</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">6</span><span class="p">))</span>
+<span class="n">mat</span>
+<span class="c1"># =&gt;
+#      [,1] [,2]
+# [1,]    1    4
+# [2,]    2    5
+# [3,]    3    6
+# 和 vector 不一样的是，一个矩阵的类型真的是 「matrix」，而不是内部元素的类型
+</span><span class="n">class</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span> <span class="c1"># =&gt; "matrix"
+# 访问第一行的字符
+</span><span class="n">mat</span><span class="p">[</span><span class="m">1</span><span class="p">,]</span> <span class="c1"># 1 4
+# 操作第一行数据
+</span><span class="m">3</span> <span class="o">*</span> <span class="n">mat</span><span class="p">[,</span><span class="m">1</span><span class="p">]</span> <span class="c1"># 3 6 9
+# 访问一个特定数据
+</span><span class="n">mat</span><span class="p">[</span><span class="m">3</span><span class="p">,</span><span class="m">2</span><span class="p">]</span>    <span class="c1"># 6
+# 转置整个矩阵（译者注：变成 2 行 3 列）
+</span><span class="n">t</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+<span class="c1"># =&gt;
+#      [,1] [,2] [,3]
+# [1,]    1    2    3
+# [2,]    4    5    6
+</span>
+<span class="c1"># 使用 cbind() 函数把两个矩阵按列合并，形成新的矩阵
+</span><span class="n">mat2</span> <span class="o">&lt;-</span> <span class="n">cbind</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="p">,</span> <span class="n">c</span><span class="p">(</span><span class="s2">"dog"</span><span class="p">,</span> <span class="s2">"cat"</span><span class="p">,</span> <span class="s2">"bird"</span><span class="p">,</span> <span class="s2">"dog"</span><span class="p">))</span>
+<span class="n">mat2</span>
+<span class="c1"># =&gt;
+#      [,1] [,2]
+# [1,] "1"  "dog"
+# [2,] "2"  "cat"
+# [3,] "3"  "bird"
+# [4,] "4"  "dog"
+</span><span class="n">class</span><span class="p">(</span><span class="n">mat2</span><span class="p">)</span> <span class="c1"># matrix
+# Again, note what happened!
+# 注意
+# 因为矩阵内部元素必须包含同样的类型
+# 所以现在每一个元素都转化成字符串
+</span><span class="n">c</span><span class="p">(</span><span class="n">class</span><span class="p">(</span><span class="n">mat2</span><span class="p">[,</span><span class="m">1</span><span class="p">]),</span> <span class="n">class</span><span class="p">(</span><span class="n">mat2</span><span class="p">[,</span><span class="m">2</span><span class="p">]))</span>
+
+<span class="c1"># 按行合并两个向量，建立新的矩阵
+</span><span class="n">mat3</span> <span class="o">&lt;-</span> <span class="n">rbind</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">5</span><span class="p">),</span> <span class="n">c</span><span class="p">(</span><span class="m">6</span><span class="p">,</span><span class="m">7</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">4</span><span class="p">))</span>
+<span class="n">mat3</span>
+<span class="c1"># =&gt;
+#      [,1] [,2] [,3] [,4]
+# [1,]    1    2    4    5
+# [2,]    6    7    0    4
+# 哈哈，数据类型都一样的，没有发生强制转换，生活真美好
+</span>
+<span class="c1"># 二维(不同的元素类型)
+</span>
+<span class="c1"># 利用 data frame 可以将不同类型数据放在一起
+</span><span class="n">dat</span> <span class="o">&lt;-</span> <span class="n">data.frame</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">4</span><span class="p">),</span> <span class="n">c</span><span class="p">(</span><span class="s2">"dog"</span><span class="p">,</span> <span class="s2">"cat"</span><span class="p">,</span> <span class="s2">"bird"</span><span class="p">,</span> <span class="s2">"dog"</span><span class="p">))</span>
+<span class="n">names</span><span class="p">(</span><span class="n">dat</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="n">c</span><span class="p">(</span><span class="s2">"number"</span><span class="p">,</span> <span class="s2">"species"</span><span class="p">)</span> <span class="c1"># 给数据列命名
+</span><span class="n">class</span><span class="p">(</span><span class="n">dat</span><span class="p">)</span>  <span class="c1"># "data.frame"
+</span><span class="n">dat</span>
+<span class="c1"># =&gt;
+#   number species
+# 1      5     dog
+# 2      2     cat
+# 3      1    bird
+# 4      4     dog
+</span><span class="n">class</span><span class="p">(</span><span class="n">dat</span><span class="o">$</span><span class="n">number</span><span class="p">)</span>   <span class="c1"># "numeric"
+</span><span class="n">class</span><span class="p">(</span><span class="n">dat</span><span class="p">[,</span><span class="m">2</span><span class="p">])</span>  <span class="c1"># "factor"
+# data.frame() 会将字符向量转换为 factor 向量
+</span>
+<span class="c1"># 有很多精妙的方法来获取 data frame 的子数据集
+</span><span class="n">dat</span><span class="o">$</span><span class="n">number</span>  <span class="c1"># 5 2 1 4
+</span><span class="n">dat</span><span class="p">[,</span><span class="m">1</span><span class="p">]</span> <span class="c1"># 5 2 1 4
+</span><span class="n">dat</span><span class="p">[,</span><span class="s2">"number"</span><span class="p">]</span>  <span class="c1"># 5 2 1 4
+</span>
+<span class="c1"># 多维（相同元素类型）
+</span>
+<span class="c1"># 使用 arry 创造一个 n 维的表格
+# You can make a two-dimensional table (sort of like a matrix)
+# 你可以建立一个 2 维表格（有点像矩阵）
+</span><span class="n">array</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">5</span><span class="p">),</span><span class="n">c</span><span class="p">(</span><span class="m">8</span><span class="p">,</span><span class="m">9</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">6</span><span class="p">)),</span> <span class="n">dim</span><span class="o">=</span><span class="n">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">4</span><span class="p">))</span>
+<span class="c1"># =&gt;
+#      [,1] [,2] [,3] [,4]
+# [1,]    1    4    8    3
+# [2,]    2    5    9    6
+#你也可以利用数组建立一个三维的矩阵
+</span><span class="n">array</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="m">300</span><span class="p">,</span><span class="m">4</span><span class="p">),</span><span class="n">c</span><span class="p">(</span><span class="m">8</span><span class="p">,</span><span class="m">9</span><span class="p">,</span><span class="m">0</span><span class="p">)),</span><span class="n">c</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="m">60</span><span class="p">,</span><span class="m">0</span><span class="p">),</span><span class="n">c</span><span class="p">(</span><span class="m">66</span><span class="p">,</span><span class="m">7</span><span class="p">,</span><span class="m">847</span><span class="p">))),</span> <span class="n">dim</span><span class="o">=</span><span class="n">c</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">2</span><span class="p">))</span>
+<span class="c1"># =&gt;
+# , , 1
+#
+#      [,1] [,2]
+# [1,]    2    8
+# [2,]  300    9
+# [3,]    4    0
+#
+# , , 2
+#
+#      [,1] [,2]
+# [1,]    5   66
+# [2,]   60    7
+# [3,]    0  847
+</span>
+<span class="c1">#列表（多维的，不同类型的）
+</span>
+<span class="c1"># R语言有列表的形式
+</span><span class="n">list1</span> <span class="o">&lt;-</span> <span class="n">list</span><span class="p">(</span><span class="n">time</span> <span class="o">=</span> <span class="m">1</span><span class="o">:</span><span class="m">40</span><span class="p">)</span>
+<span class="n">list1</span><span class="o">$</span><span class="n">price</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="n">rnorm</span><span class="p">(</span><span class="m">40</span><span class="p">,</span><span class="m">.5</span><span class="o">*</span><span class="n">list1</span><span class="o">$</span><span class="n">time</span><span class="p">,</span><span class="m">4</span><span class="p">))</span> <span class="c1"># 随机
+</span><span class="n">list1</span>
+
+<span class="c1"># You can get items in the list like so
+# 你可以这样获得列表的元素
+</span><span class="n">list1</span><span class="o">$</span><span class="n">time</span>
+<span class="c1"># You can subset list items like vectors
+# 你也可以和矢量一样获取他们的子集
+</span><span class="n">list1</span><span class="o">$</span><span class="n">price</span><span class="p">[</span><span class="m">4</span><span class="p">]</span>
+
+<span class="c1">#########################
+# apply()函数家族
+#########################
+</span>
+<span class="c1"># 还记得 mat 么？
+</span><span class="n">mat</span>
+<span class="c1"># =&gt;
+#      [,1] [,2]
+# [1,]    1    4
+# [2,]    2    5
+# [3,]    3    6
+# Use apply(X, MARGIN, FUN) to apply function FUN to a matrix X
+# 使用(X, MARGIN, FUN)将函数 FUN 应用到矩阵 X 的行 (MAR = 1) 或者 列 (MAR = 2)
+# That is, R does FUN to each row (or column) of X, much faster than a
+# R 在 X 的每一行/列使用 FUN，比循环要快很多
+</span><span class="n">apply</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">MAR</span> <span class="o">=</span> <span class="m">2</span><span class="p">,</span> <span class="n">myFunc</span><span class="p">)</span>
+<span class="c1"># =&gt;
+#      [,1] [,2]
+# [1,]    3   15
+# [2,]    7   19
+# [3,]   11   23
+# 还有其他家族函数 ?lapply, ?sapply
+</span>
+<span class="c1"># 不要被吓到，虽然许多人在此都被搞混
+# plyr 程序包的作用是用来改进 apply() 函数家族
+</span>
+<span class="n">install.packages</span><span class="p">(</span><span class="s2">"plyr"</span><span class="p">)</span>
+<span class="n">require</span><span class="p">(</span><span class="n">plyr</span><span class="p">)</span>
+<span class="o">?</span><span class="n">plyr</span>
+
+<span class="c1">#########################
+# 载入数据
+#########################
+</span>
+<span class="c1"># "pets.csv" 是网上的一个文本
+</span><span class="n">pets</span> <span class="o">&lt;-</span> <span class="n">read.csv</span><span class="p">(</span><span class="s2">"http://learnxinyminutes.com/docs/pets.csv"</span><span class="p">)</span>
+<span class="n">pets</span>
+<span class="n">head</span><span class="p">(</span><span class="n">pets</span><span class="p">,</span> <span class="m">2</span><span class="p">)</span> <span class="c1"># 前两行
+</span><span class="n">tail</span><span class="p">(</span><span class="n">pets</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span> <span class="c1"># 最后一行
+</span>
+<span class="c1"># 以 .csv 格式来保存数据集或者矩阵
+</span><span class="n">write.csv</span><span class="p">(</span><span class="n">pets</span><span class="p">,</span> <span class="s2">"pets2.csv"</span><span class="p">)</span> <span class="c1"># 保存到新的文件 pets2.csv
+# set working directory with setwd(), look it up with getwd()
+# 使用 setwd() 改变工作目录，使用 getwd() 查看当前工作目录
+</span>
+<span class="c1"># 尝试使用 ?read.csv 和 ?write.csv 来查看更多信息
+</span>
+<span class="c1">#########################
+# 画图
+#########################
+</span>
+<span class="c1"># 散点图
+</span><span class="n">plot</span><span class="p">(</span><span class="n">list1</span><span class="o">$</span><span class="n">time</span><span class="p">,</span> <span class="n">list1</span><span class="o">$</span><span class="n">price</span><span class="p">,</span> <span class="n">main</span> <span class="o">=</span> <span class="s2">"fake data"</span><span class="p">)</span> <span class="c1"># 译者注：横轴 list1$time，纵轴 wlist1$price，标题 fake data
+# 回归图
+</span><span class="n">linearModel</span> <span class="o">&lt;-</span> <span class="n">lm</span><span class="p">(</span><span class="n">price</span>  <span class="o">~</span> <span class="n">time</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">list1</span><span class="p">)</span> <span class="c1"># 译者注：线性模型，数据集为list1，以价格对时间做相关分析模型
+</span><span class="n">linearModel</span> <span class="c1"># 拟合结果
+# 将拟合结果展示在图上，颜色设为红色
+</span><span class="n">abline</span><span class="p">(</span><span class="n">linearModel</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="s2">"red"</span><span class="p">)</span>
+<span class="c1"># 也可以获取各种各样漂亮的分析图
+</span><span class="n">plot</span><span class="p">(</span><span class="n">linearModel</span><span class="p">)</span>
+
+<span class="c1"># 直方图
+</span><span class="n">hist</span><span class="p">(</span><span class="n">rpois</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="m">10000</span><span class="p">,</span> <span class="n">lambda</span> <span class="o">=</span> <span class="m">5</span><span class="p">),</span> <span class="n">col</span> <span class="o">=</span> <span class="s2">"thistle"</span><span class="p">)</span> <span class="c1"># 译者注：统计频数直方图
+</span>
+<span class="c1"># 柱状图
+</span><span class="n">barplot</span><span class="p">(</span><span class="n">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">5</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">),</span> <span class="n">names.arg</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="s2">"red"</span><span class="p">,</span><span class="s2">"blue"</span><span class="p">,</span><span class="s2">"purple"</span><span class="p">,</span><span class="s2">"green"</span><span class="p">,</span><span class="s2">"yellow"</span><span class="p">))</span>
+
+<span class="c1"># 可以尝试着使用 ggplot2 程序包来美化图片
+</span><span class="n">install.packages</span><span class="p">(</span><span class="s2">"ggplot2"</span><span class="p">)</span>
+<span class="n">require</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+<span class="o">?</span><span class="n">ggplot2</span>
+
+</code></pre>
+
+<h2>获得 R</h2>
+
+<ul>
+<li>从 <a href="http://www.r-project.org/">http://www.r-project.org/</a> 获得安装包和图形化界面</li>
+<li><a href="http://www.rstudio.com/ide/">RStudio</a> 是另一个图形化界面</li>
+</ul>
+
+    <hr>
+    <p>有建议？或者发现什么错误？在Github上<a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">开一个issue</a>，或者你自己也可以写一个pull request！
+    </p>
+    <p class="contributed">
+    原著e99n09，并由<a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/zh-cn/r-cn.html.markdown">0个好心人</a>修改。
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://github.com/e99n09">e99n09</a>,
+      
+    
+      
+        <a href="http://twitter.com/isomorphisms">isomorphismes</a>
+      
+    
+    </p>
+
+    <p>
+    
+      Translated by:
+      
+        <a href="http://weibo.com/u/2328126220">小柒</a>
+      
+        <a href="https://github.com/alswl">alswl</a>
+      
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/zh-cn/r-cn/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:40 GMT -->
+</html>

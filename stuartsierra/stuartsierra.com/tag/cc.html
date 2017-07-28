@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js">
+
+<!-- Mirrored from stuartsierra.com/tag/cc by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:58:47 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+		<script>(function(html){html.className = html.className.replace(/\bno-js\b/,'js')})(document.documentElement);</script>
+<title>C/C++ &#8211; Digital Digressions by Stuart Sierra</title>
+<link rel='dns-prefetch' href='http://s0.wp.com/'>
+<link rel='dns-prefetch' href='http://secure.gravatar.com/'>
+<link rel='dns-prefetch' href='http://fonts.googleapis.com/'>
+<link rel='dns-prefetch' href='http://s.w.org/'>
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; Comments Feed" href="../comments/feed" />
+<link rel="alternate" type="application/rss+xml" title="Digital Digressions by Stuart Sierra &raquo; C/C++ Tag Feed" href="http://feeds2.feedburner.com/StuartSierra" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/stuartsierra.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.6"}};
+			!function(a,b,c){function d(a){var c,d,e,f,g,h=b.createElement("canvas"),i=h.getContext&&h.getContext("2d"),j=String.fromCharCode;if(!i||!i.fillText)return!1;switch(i.textBaseline="top",i.font="600 32px Arial",a){case"flag":return i.fillText(j(55356,56806,55356,56826),0,0),!(h.toDataURL().length<3e3)&&(i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,65039,8205,55356,57096),0,0),c=h.toDataURL(),i.clearRect(0,0,h.width,h.height),i.fillText(j(55356,57331,55356,57096),0,0),d=h.toDataURL(),c!==d);case"diversity":return i.fillText(j(55356,57221),0,0),e=i.getImageData(16,16,1,1).data,f=e[0]+","+e[1]+","+e[2]+","+e[3],i.fillText(j(55356,57221,55356,57343),0,0),e=i.getImageData(16,16,1,1).data,g=e[0]+","+e[1]+","+e[2]+","+e[3],f!==g;case"simple":return i.fillText(j(55357,56835),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode8":return i.fillText(j(55356,57135),0,0),0!==i.getImageData(16,16,1,1).data[0];case"unicode9":return i.fillText(j(55358,56631),0,0),0!==i.getImageData(16,16,1,1).data[0]}return!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g,h,i;for(i=Array("simple","flag","unicode8","diversity","unicode9"),c.supports={everything:!0,everythingExceptFlag:!0},h=0;h<i.length;h++)c.supports[i[h]]=d(i[h]),c.supports.everything=c.supports.everything&&c.supports[i[h]],"flag"!==i[h]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[i[h]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='twentysixteen-jetpack-css'  href='../wp-content/plugins/jetpack/modules/theme-tools/compat/twentysixteen3a05.css?ver=4.2.2' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-fonts-css'  href='https://fonts.googleapis.com/css?family=Merriweather%3A400%2C700%2C900%2C400italic%2C700italic%2C900italic%7CMontserrat%3A400%2C700%7CInconsolata%3A400&amp;subset=latin%2Clatin-ext' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='../wp-content/plugins/jetpack/_inc/genericons/genericons/genericons128b.css?ver=3.1' type='text/css' media='all' />
+<link rel='stylesheet' id='twentysixteen-style-css'  href='../wp-content/themes/twentysixteen/style167b.css?ver=4.6' type='text/css' media='all' />
+<!--[if lt IE 10]>
+<link rel='stylesheet' id='twentysixteen-ie-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentysixteen-ie8-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie8.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<!--[if lt IE 8]>
+<link rel='stylesheet' id='twentysixteen-ie7-css'  href='https://stuartsierra.com/wp-content/themes/twentysixteen/css/ie7.css?ver=20160816' type='text/css' media='all' />
+<![endif]-->
+<link rel='stylesheet' id='jetpack_css-css'  href='../wp-content/plugins/jetpack/css/jetpack3a05.css?ver=4.2.2' type='text/css' media='all' />
+<script type='text/javascript' src='../wp-includes/js/jquery/jqueryb8ff.js?ver=1.12.4'></script>
+<script type='text/javascript' src='../wp-includes/js/jquery/jquery-migrate.min330a.js?ver=1.4.1'></script>
+<!--[if lt IE 9]>
+<script type='text/javascript' src='https://stuartsierra.com/wp-content/themes/twentysixteen/js/html5.js?ver=3.7.3'></script>
+<![endif]-->
+<link rel='https://api.w.org/' href='../wp-json/index.html' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="../xmlrpc0db0.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="../wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.6" />
+
+<link rel='dns-prefetch' href='http://v0.wordpress.com/'>
+</head>
+
+<body class="archive tag tag-cc tag-17 hfeed">
+<div id="page" class="site">
+	<div class="site-inner">
+		<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+		<header id="masthead" class="site-header" role="banner">
+			<div class="site-header-main">
+				<div class="site-branding">
+					
+											<p class="site-title"><a href="../index.html" rel="home">Digital Digressions by Stuart Sierra</a></p>
+											<p class="site-description">From programming to everything else</p>
+									</div><!-- .site-branding -->
+
+									<button id="menu-toggle" class="menu-toggle">Menu</button>
+
+					<div id="site-header-menu" class="site-header-menu">
+													<nav id="site-navigation" class="main-navigation" role="navigation" aria-label="Primary Menu">
+								<div class="menu-main-menu-container"><ul id="menu-main-menu" class="primary-menu"><li id="menu-item-635" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../about-me.html">About Me</a></li>
+<li id="menu-item-633" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../writing.html">Writing</a></li>
+<li id="menu-item-634" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../presentations.html">Presentations</a></li>
+<li id="menu-item-636" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../software.html">Software</a></li>
+<li id="menu-item-637" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../contact.html">Contact</a></li>
+</ul></div>							</nav><!-- .main-navigation -->
+						
+											</div><!-- .site-header-menu -->
+							</div><!-- .site-header-main -->
+
+											<div class="header-image">
+					<a href="../index.html" rel="home">
+						<img src="../wp-content/uploads/2015/12/header.jpg" srcset="https://stuartsierra.com/wp-content/uploads/2015/12/header-300x70.jpg 300w, https://stuartsierra.com/wp-content/uploads/2015/12/header-768x179.jpg 768w, https://stuartsierra.com/wp-content/uploads/2015/12/header-1024x239.jpg 1024w, https://stuartsierra.com/wp-content/uploads/2015/12/header.jpg 1200w" sizes="(max-width: 709px) 85vw, (max-width: 909px) 81vw, (max-width: 1362px) 88vw, 1200px" width="1200" height="280" alt="Digital Digressions by Stuart Sierra">
+					</a>
+				</div><!-- .header-image -->
+					</header><!-- .site-header -->
+
+		<div id="content" class="site-content">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			<header class="page-header">
+				<h1 class="page-title">Tag: C/C++</h1>			</header><!-- .page-header -->
+
+			
+<article id="post-105" class="post-105 post type-post status-publish format-standard hentry category-programming tag-cc tag-ruby">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2007/07/15/the-weirdness-of-c.html" rel="bookmark">The Weirdness of C++</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>I&#8217;ve been dredging up my C++ for a class recently, and I&#8217;m struck by just how weird it feels now that I spend most of my time with Ruby.  </p>
+<p>I was all proud of myself for remembering how to write a copy constructor.  Then I ran into a situation like this:</p>
+<pre>
+MyClass a = foo;
+MyClass c;
+c = foo;
+</pre>
+<p>The first line was fine; the last segfaulted.  What the heck?</p>
+<p>I had hit upon the subtle difference between assignment at construction time and normal assignment.  The former calls the copy constructor, the latter calls operator=.</p>
+<pre>
+MyClass a = foo;  // calls copy constructor MyClass(foo)
+MyClass c;
+c = foo;  // calls operator=
+</pre>
+<p>I had neglected to provide an operator= for MyClass, so the compiler invented one for me.  Since MyClass contained pointers to other structures, that naturally led to problems pretty quickly.</p>
+<p>Had I not known to look up the specific behavior of operator=, and then implement a correct one for MyClass, I would have been really confused.  This sort of subtlety is what makes me think of C++ as a &#8220;hard&#8221; language and Ruby as an &#8220;easy&#8221; language.</p>
+<p>To be sure, Ruby has its subtle quirks too, but they occur less frequently and usually around &#8220;advanced&#8221; topics like metaprogramming.  In C++, even a fundamental operation like assignment can have strange, unpredictable properties.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2007/07/15/the-weirdness-of-c.html" rel="bookmark"><time class="entry-date published updated" datetime="2007-07-15T00:57:45+00:00">July 15, 2007</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="cc.html" rel="tag">C/C++</a>, <a href="ruby.html" rel="tag">Ruby</a></span><span class="comments-link"><a href="../2007/07/15/the-weirdness-of-c.html#comments">1 Comment<span class="screen-reader-text"> on The Weirdness of C++</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-87" class="post-87 post type-post status-publish format-standard hentry category-programming tag-cc tag-java tag-lisp tag-ruby">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2006/11/22/not-so-slow.html" rel="bookmark">Not So Slow</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Perhaps I was premature worrying about how slow Ruby is.  <a href="http://lemonodor.com/">John Wiseman</a> was benchmarking <a href="http://projects.heavymeta.org/montezuma/">Montezuma</a>, his Common Lisp port of <a href="http://ferret.davebalmain.com/trac">Ferret</a>/<a href="http://lucene.apache.org/">Lucene</a>, and found out in the process that <a href="http://lemonodor.com/archives/001455.html">Ferret is 10 times faster than Java Lucene</a>!  As he says, Ferret gets help from about 65,000 lines of C code.</p>
+<p>I&#8217;ve heard this before, perhaps not often enough to make a generalization, but at least enough to identify a trend: if you want performance from Ruby code, rewrite it in C.  (The same is sometimes said of Python, or really any interpreted language.)  The basic approach seems to be to extract the most performance-critical parts of your dynamic, interpreted language program and rewrite them in a static, compiled language, thus retaining most of the benefits of both.</p>
+<p>It&#8217;s an interesting contrast to what I see as the Common Lisp approach to optimization, which is to keep everything in Lisp but add compiler <a href="http://www.lispworks.com/documentation/HyperSpec/Body/s_declar.htm">declarations</a> in hopes of speeding it up.  Trouble is, unless you&#8217;re an expert on the inner workings of your compiler (or can read the <a href="http://www.lispworks.com/documentation/HyperSpec/Body/f_disass.htm">disassemble</a>d code) it&#8217;s hard to know exactly what effects a particular declaration will have.</p>
+<p>Eventually, I think manual optimization will become unnecessary.  Experimental compilers like <a href="http://cobweb.ecn.purdue.edu/~qobi/software.html">Stalin</a> have been shown to produce faster machine code than hand-coded C.  Stalin compiles a subset of Scheme down to a subset of C, making heavy use of type-inferencing and static analysis.  If it can be done with Scheme, surely it can be done with Python, Ruby, or any other dynamic language.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2006/11/22/not-so-slow.html" rel="bookmark"><time class="entry-date published updated" datetime="2006-11-22T11:29:34+00:00">November 22, 2006</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="cc.html" rel="tag">C/C++</a>, <a href="java.html" rel="tag">Java</a>, <a href="lisp.html" rel="tag">Lisp</a>, <a href="ruby.html" rel="tag">Ruby</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-58" class="post-58 post type-post status-publish format-standard hentry category-programming tag-cc">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2006/08/02/literally-literal.html" rel="bookmark">Literally Literal</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>This is just an random idea that popped into my head. Tell me if I&#8217;m crazy.</p>
+<p>Is there enough distinction between literals in code and values generated at runtime?  In other words, what should be the difference between this:</p>
+<p><code>x = "Hello, World!"</code></p>
+<p>and this (syntax made up):</p>
+<p><code>x = new String("Hello, World!")</code></p>
+<p>In general, I understand literal values in code to be immutable, or at least it&#8217;s undefined what happens if you modify them.  So should two identical literals be pointers to the same block of memory?  Does this C code:</p>
+<pre>
+char x[] = "Hello!";
+char y[] = "Hello!";
+if (x == y) printf("True");
+else printf("False");
+</pre>
+<p>print True?  (I tried it, and the answer is no, it doesn&#8217;t.)</p>
+<p>This gets more confusing when you can have object literals as in JavaScript:</p>
+<pre>
+myFriend = {
+  name : "Bob",
+  age : 32,
+  friends : ["Jack", "Jill", "Joe"],
+  talk : function(){alert("Hi, I'm "+myFriend.name)}
+};
+</pre>
+<p>Is <code>myFriend</code> mutable?  As it turns out, in JavaScript, the answer is yes.  For an interpreted language embedded in web pages that makes sense.  But what about a compiled language &#8212; is efficiency lost when values could be compiled in but aren&#8217;t because the compiler doesn&#8217;t <em>know</em> the value never changes?  I suppose that&#8217;s the reason for all those annoying <code>const</code> declarations in C++, but is that a complete solution?</p>
+<p>So my question is this: would it be worthwhile to have specific syntax for compile-time contants?  C has preprocessor constants, but they&#8217;re text-based and don&#8217;t carry type information.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2006/08/02/literally-literal.html" rel="bookmark"><time class="entry-date published" datetime="2006-08-02T05:53:26+00:00">August 2, 2006</time><time class="updated" datetime="2006-08-02T10:55:03+00:00">August 2, 2006</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="cc.html" rel="tag">C/C++</a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-42" class="post-42 post type-post status-publish format-standard hentry category-programming tag-cc tag-java tag-lisp">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2006/07/13/the-naming-of-namespaces.html" rel="bookmark">The Naming of Namespaces</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Or, <strong>How the Lisp-<em>n</em> Shall Inherit the Earth</strong></p>
+<p>Humans like to name things.  Like ourselves, <em>Homo sapiens</em>, Latin for &#8220;Primate that has taken leave of its senses.&#8221;</p>
+<p>Then there are engineers.  Engineers like to name things too.  Like SCSI, pronounced &#8220;scuzzy.&#8221;  Or WYSIWYG, pronounced &#8220;wizzy-wig.&#8221;  Or TTY, pronounced (I couldn&#8217;t believe this at first) &#8220;titty.&#8221;</p>
+<p>Then there are programmers, who are singularly uncreative when it comes to naming things.  With Apache&#8217;s <a href="http://thedailywtf.com/forums/thread/81156.aspx">Gregor Samsa</a> class as a brilliant exception, programmers tend to give their variables and functions dull, predictable names like <code>string</code>, <code>number</code>, or <code>do_not_use_this_variable_ever</code>.</p>
+<p>Of course, in most programming languages a given name can refer to one thing and one thing only for ever and ever until your program crashes and dumps core Amen.  To get around this sad limitation, programming boldly took advantage of the eighth-century&#8217;s greatest typographical innovation, lower case letters.  Thus we have the Dada-esque beauty of case-sensitive code:</p>
+<p><code>Widget* WIDGET = new Widget.widget();</code></p>
+<p>As languages got more complex, adding first-class functions and first-class types, there were more and more things that needed to be called by the same name.  Few programming languages picked up the idea of meaning based on context.  So hierarchical namespaces were born:</p>
+<p><code>java.awt.event.ActionEvent myEvent = new java.awt.event.ActionEvent();</code></p>
+<p>My tendinitis starts acting up at the mere sight of that.</p>
+<p>Common Lisp to the rescue!  As many have pointed out, CL is not just a Lisp-2 (functions and variables in separate namespaces), but more of a Lisp-<em>n</em>.  It has many overlapping namespaces &#8212; functions, variables, type specifiers, block names, tagbody tags.  With a few macros and a hash table, one can easily add a new namespace to the language.  For example, testing frameworks like <a href="http://common-lisp.net/project/bese/FiveAM.html">FiveAM</a> and <a href="http://www.cs.northwestern.edu/academics/courses/325/readings/lisp-unit.html">LispUnit</a> put test names in a separate namespace.  A programmer using these libraries doesn&#8217;t have to think about the extra namespace.  Just type symbols and Lisp will do the right thing.</p>
+<p>I like to think of this approach as <em>parallel namespaces</em>.  Everything is kept neatly separated, without endless qualifiers attached to every symbol.  Macros determine how symbols will be evaluated &#8212; or not &#8212; in a block of code.</p>
+<p>This isn&#8217;t perfect.  For one thing, there&#8217;s no canonical way to add a new namespace to a language.  Some macros require names to be quoted symbols, some not.  Some use keywords.  Sometimes an unquoted symbol will pollute the namespace of the current package; sometimes it won&#8217;t.</p>
+<p>The solution, to my mind, would be something that lets us do this:</p>
+<p><code><br />
+(define-namespace foo)<br />
+(defmacro-with-namespaces my-macro ((arg1 foo))<br />
+  . . . )<br />
+</code></p>
+<p>Then <code>my-macro</code> would always treat its first argument as a symbol which is not evaluated, internally binding <code>arg1</code> to whatever value the given symbol holds in the <code>foo</code> namespace.  I&#8217;m not going to attempt to implement such a beast just now, but I&#8217;m sure an experienced macro-writer (i.e. someone else) could dash it off in half an hour.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2006/07/13/the-naming-of-namespaces.html" rel="bookmark"><time class="entry-date published" datetime="2006-07-13T18:06:35+00:00">July 13, 2006</time><time class="updated" datetime="2006-07-13T10:39:42+00:00">July 13, 2006</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="cc.html" rel="tag">C/C++</a>, <a href="java.html" rel="tag">Java</a>, <a href="lisp.html" rel="tag">Lisp</a></span><span class="comments-link"><a href="../2006/07/13/the-naming-of-namespaces.html#comments">3 Comments<span class="screen-reader-text"> on The Naming of Namespaces</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+<article id="post-35" class="post-35 post type-post status-publish format-standard hentry category-programming tag-cc tag-java tag-lisp tag-perl tag-ruby">
+	<header class="entry-header">
+		
+		<h2 class="entry-title"><a href="../2006/06/22/permutations-of-iteration.html" rel="bookmark">Permutations of Iteration</a></h2>	</header><!-- .entry-header -->
+
+	
+	
+	<div class="entry-content">
+		<p>Ah, the loop, so fundamental to programming it&#8217;s hard to imagine a single program without one.  After all, what&#8217;s the use of calculating just <em>one</em> thing?  Usually you have a big pile of things you want to calculate, which is why you need a computer in the first place.</p>
+<p>I think one of the quickest ways to get a feel for a language is to study its looping constructs.  I make no pretense that this is a complete or even an accurate list, but these are some of the general iteration patterns I&#8217;ve noticed in different languages.</p>
+<h3>Counter Variable Loop</h3>
+<pre>
+for ( int i = 0; i &lt;= 10; ++i ) {
+  do stuff with list[i];
+}
+</pre>
+<p>The old C classic, with deeper roots, I believe, in FORTRAN or PASCAL or both.  Successive values of an integer counter are used to retrieve input from an array.  Very efficient for small data sets, but requires the entire input to be stored as an array in memory.  Also requires the looping code to know about the structure of the input, so not very adaptable.  But surprisingly resiliant: Perl and Java support the same syntax.</p>
+<h3>For-Each Loop</h3>
+<pre>
+foreach item in list
+   do stuff with item
+done
+</pre>
+<p>Probably the most popular syntactic looping construct, and easy to see why: it&#8217;s very easy to read and understand.  The for-each loop shows up in Perl, Python, Visual Basic, and a host of other languages.  Because it&#8217;s usually built in to the language syntax, it can rarely be extended to non-standard container types.</p>
+<h3>Container Method Loop</h3>
+<pre>
+list.each do |item|
+   do stuff with item
+end
+</pre>
+<p>In purely object-oriented languages like Smalltalk and Ruby (shown above), looping constructs can be implemented as methods of container classes.  This has the great advantages that new looping constructs can be added and standard loops can be implemented for new container types.  Since the code &#8220;inside&#8221; the loop is just an anonymous function that takes a single item as its argument, it doesn&#8217;t need to know anything about the structure or type of the container.</p>
+<h3>List Comprehensions</h3>
+<pre>
+[ item.do_stuff() for item in list ]
+</pre>
+<p>Although Python (syntax above) has gotten a lot of press, both good and bad, for its adoption of list comprehensions, they&#8217;ve been around a lot longer.  I believe they were originally developed to describe lists in a way that looks more like mathematics.  For simple patterns list comprehensions are easy to understand, but I don&#8217;t yet grok their full significance.  They can be nested and combined to produce complex looping patterns that would be awkward to write with C-style iteration.</p>
+<h3>Half-Nelson Functional Loop</h3>
+<pre>
+(map  (lambda (item)  <em>do stuff with item</em>)  list)
+</pre>
+<p>(<strong>Update 26 July 2006</strong>: Replaced the idiotic example <code>(map (lambda (item) (process item)) list)</code> with the above.  I&#8217;m talking about block structures in code here, using the body of the lambda like the body of a for loop in the other languages.  Obviously, if your loop body was just a single function, you would just use <code>(map #'process list)</code>.  Same changes apply to the next example below.)</p>
+<p>Functional languages, including most dialects of Lisp, usually have a <code>map</code> operator that takes a function and a list and applies that function successively to each element of that list.  I call this the Half-Nelson Functional Loop because it&#8217;s not, to my mind, the ultimate of functional behavior.  For that, we turn to&#8230;</p>
+<h3>Full-Nelson Functional Loop</h3>
+<pre>
+((lift (lambda (item)  <em>do stuff with item</em>))  list)
+</pre>
+<p>This looks pretty much like the previous example.  But here, instead of <code>map</code>, we have <code>lift</code>, which takes only one argument, a function, and returns a new function that applies that function to every element of a list.  That new function is then applied (here, in a Scheme-like syntax) to the <code>list</code> argument.  I learned about <code>lift</code> from <a href="http://jaortega.wordpress.com/2006/03/17/programmers-go-bananas/">this blog article</a>.</p>
+	</div><!-- .entry-content -->
+
+	<footer class="entry-footer">
+		<span class="byline"><span class="author vcard"><img alt='' src='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=49&amp;d=blank&amp;r=g' srcset='https://secure.gravatar.com/avatar/55878d0196b91803f9cb2c372b0551d3?s=98&amp;d=blank&amp;r=g 2x' class='avatar avatar-49 photo' height='49' width='49' /><span class="screen-reader-text">Author </span> <a class="url fn n" href="../author/stuart.html">Stuart</a></span></span><span class="posted-on"><span class="screen-reader-text">Posted on </span><a href="../2006/06/22/permutations-of-iteration.html" rel="bookmark"><time class="entry-date published" datetime="2006-06-22T21:12:04+00:00">June 22, 2006</time><time class="updated" datetime="2006-07-26T22:06:45+00:00">July 26, 2006</time></a></span><span class="cat-links"><span class="screen-reader-text">Categories </span><a href="../category/programming.html" rel="category tag">Programming</a></span><span class="tags-links"><span class="screen-reader-text">Tags </span><a href="cc.html" rel="tag">C/C++</a>, <a href="java.html" rel="tag">Java</a>, <a href="lisp.html" rel="tag">Lisp</a>, <a href="perl.html" rel="tag">Perl</a>, <a href="ruby.html" rel="tag">Ruby</a></span><span class="comments-link"><a href="../2006/06/22/permutations-of-iteration.html#comments">6 Comments<span class="screen-reader-text"> on Permutations of Iteration</span></a></span>			</footer><!-- .entry-footer -->
+</article><!-- #post-## -->
+
+		</main><!-- .site-main -->
+	</div><!-- .content-area -->
+
+
+	<aside id="secondary" class="sidebar widget-area" role="complementary">
+		<section id="search-3" class="widget widget_search">
+<form role="search" method="get" class="search-form" action="https://stuartsierra.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" />
+	</label>
+	<button type="submit" class="search-submit"><span class="screen-reader-text">Search</span></button>
+</form>
+</section><section id="text-4" class="widget widget_text">			<div class="textwidget"><ul>
+<li><a href="http://feeds2.feedburner.com/StuartSierra" title="Syndicate this site using RSS 2.0">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="../comments/feed" title="The latest comments to all posts in RSS">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+</ul>
+<ul>
+<li><a href="https://twitter.com/stuartsierra">Twitter</a></li>
+<li><a href="https://github.com/stuartsierra">GitHub</a></li>
+</ul></div>
+		</section><section id="tag-widget-2" class="widget TagWidget"><h2 class="widget-title">Clojure Do’s and Don’ts</h2><ul class = "posts-by-tag-list"><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-883"><a class = "posts-by-tag-item-title" href="../2015/08/25/clojure-donts-lazy-effects.html">Clojure Don’ts: Lazy Effects</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-877"><a class = "posts-by-tag-item-title" href="../2015/08/10/clojure-donts-redundant-map.html">Clojure Don’ts: Redundant map</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-870"><a class = "posts-by-tag-item-title" href="../2015/06/16/clojure-donts-single-branch-if.html">Clojure Don’ts: Single-branch if</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-854"><a class = "posts-by-tag-item-title" href="../2015/06/10/clojure-donts-heisenparameter.html">Clojure Don’ts: The Heisenparameter</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-849"><a class = "posts-by-tag-item-title" href="../2015/06/01/clojure-donts-optional-arguments-with-varargs.html">Clojure Don’ts: Optional Arguments with Varargs</a></li><li class="posts-by-tag-item Clojure do's and don'ts errors" id="posts-by-tag-item-836"><a class = "posts-by-tag-item-title" href="../2015/05/27/clojure-uncaught-exceptions.html">Clojure Do’s: Uncaught Exceptions</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-831"><a class = "posts-by-tag-item-title" href="../2015/05/17/clojure-record-constructors.html">Record Constructors</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-826"><a class = "posts-by-tag-item-title" href="../2015/05/10/clojure-namespace-aliases.html">Clojure Do’s: Namespace Aliases</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-820"><a class = "posts-by-tag-item-title" href="../2015/05/02/clojure-donts-isa.html">Clojure Don’ts: isa?</a></li><li class="posts-by-tag-item Clojure do's and don'ts" id="posts-by-tag-item-812"><a class = "posts-by-tag-item-title" href="../2015/04/26/clojure-donts-concat.html">Clojure Don’ts: Concat</a></li></ul></section>	</aside><!-- .sidebar .widget-area -->
+
+		</div><!-- .site-content -->
+
+		<footer id="colophon" class="site-footer" role="contentinfo">
+							<nav class="main-navigation" role="navigation" aria-label="Footer Primary Menu">
+					<div class="menu-main-menu-container"><ul id="menu-main-menu-1" class="primary-menu"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-635"><a href="../about-me.html">About Me</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-633"><a href="../writing.html">Writing</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-634"><a href="../presentations.html">Presentations</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-636"><a href="../software.html">Software</a></li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-637"><a href="../contact.html">Contact</a></li>
+</ul></div>				</nav><!-- .main-navigation -->
+			
+			
+			<div class="site-info">
+								<span class="site-title"><a href="../index.html" rel="home">Digital Digressions by Stuart Sierra</a></span>
+				<a href="https://wordpress.org/">Proudly powered by WordPress</a>
+			</div><!-- .site-info -->
+		</footer><!-- .site-footer -->
+	</div><!-- .site-inner -->
+</div><!-- .site -->
+
+	<div style="display:none">
+	<div class="grofile-hash-map-55878d0196b91803f9cb2c372b0551d3">
+	</div>
+	</div>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201635'></script>
+<script type='text/javascript' src='https://secure.gravatar.com/js/gprofiles.js?ver=2016Sepaa'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var WPGroHo = {"my_hash":""};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../wp-content/plugins/jetpack/modules/wpgroho167b.js?ver=4.6'></script>
+<script type='text/javascript' src='../wp-content/themes/twentysixteen/js/skip-link-focus-fix8de4.js?ver=20160816'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var screenReaderText = {"expand":"expand child menu","collapse":"collapse child menu"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='../wp-content/themes/twentysixteen/js/functions8de4.js?ver=20160816'></script>
+<script type='text/javascript' src='../wp-includes/js/wp-embed.min167b.js?ver=4.6'></script>
+<script type='text/javascript' src='https://stats.wp.com/e-201635.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:4.2.2',blog:'2702563',post:'0',tz:'-4',srv:'stuartsierra.com'} ]);
+	_stq.push([ 'clickTrackerInit', '2702563', '0' ]);
+</script>
+</body>
+
+<!-- Mirrored from stuartsierra.com/tag/cc by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:58:49 GMT -->
+</html>
+
+<!-- Dynamic page generated in 0.344 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:56:28 -->
+
+<!-- Compression = gzip -->

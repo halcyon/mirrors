@@ -1,0 +1,171 @@
+;; $Id: //info.ravenbrook.com/user/ndl/lisp/jfli/import/jfli/build-java-classes.lisp#1 $
+
+(in-package "CL-USER")
+
+;;                     BUILD-JAVA-CLASSES.LISP
+;;           Nick Levine, Ravenbrook Limited, 2007-09-04
+;;
+;; The purpose of this document is to automate a clean macroexpansion
+;; of def-java-class forms. One of the requirements (to support diffs
+;; in the SCM) is that subsequent runs with the same data must
+;; generate the same output. We meet this requirement by sorting
+;; (alphabetically) all constructors, methods and fields.
+
+;; Note:
+;;
+;; * Unless you want a fight with non-existent packages etc on your
+;; hands, build-java-classes is best loaded as source and not
+;; compiled.
+
+
+;; Copyright (c) 2007 Nick Levine.
+;;
+;; The use and distribution terms for this software are covered by the
+;; Common Public License 1.0 (http://opensource.org/licenses/cpl.php)
+;; which can be found in the file CPL.TXT at the root of this
+;; distribution. By using this software in any fashion, you are
+;; agreeing to be bound by the terms of this license.
+;; You must not remove this notice, or any other, from this software.
+
+
+(eval-when (compile)
+  (error "Unless you want a fight with non-existent packages etc on your~@
+          hands, build-java-classes is best loaded as source and not~@
+          compiled."))
+
+(exit-compile-file)
+
+#||
+CL-USER 1 > (load "/home/nick/p4/project/frob/master/code/build-java-classes.lisp")
+; Loading text file /home/nick/p4/project/frob/master/code/build-java-classes.lisp
+;  Loading text file /home/nick/p4/project/frob/master/code/jfli/defsys.lisp
+;; Creating system JFLI
+;  Loading fasl file /home/nick/p4/project/frob/master/code/jfli/jni.ufasl
+;  Loading fasl file /home/nick/p4/project/frob/master/code/jfli/jfli.ufasl
+;  Loading fasl file /home/nick/p4/project/frob/master/code/jfli/process.ufasl
+#P"/home/nick/p4/project/frob/master/code/build-java-classes.lisp"
+
+CL-USER 2 > (build-java-classes "../utils/wombat/java-classes.lisp" (directory "../utils/wombat/*.jar"))
+"../utils/wombat/java-classes.lisp"
+
+CL-USER 3 >
+||#
+
+(load (current-pathname "defsys"))
+
+(compile-system 'jfli :load t)
+
+(export 'build-java-classes)
+
+(defun build-java-classes (output-file &optional class-paths option-strings)
+
+  "Generate forms in output-file from def-java-class forms in source file located
+   by adding .src to name of output-file. Connects to jvm if necessary, using
+   class-paths and option-strings. Class definitions will be loaded (using the
+   class-paths) to inform macroexpansions."
+
+  (unless jni:*pvm*
+    ;; Connect to JVM
+    (jni:connect-jvm class-paths option-strings)
+    ;; Bootstrap java.lang.Object, but don't leave exports sat around because the
+    ;; the lisp reader won't thank us for them
+    (jfli:def-java-class "java.lang.Object")
+    (do-external-symbols (x "java.lang") (unexport x "java.lang"))
+    ;; This is all we need to do to get def-java-constructors and def-java-fields
+    ;; to be stable. def-java-methods is a tad more complicated and has to be redefined
+    (defadvice (jfli::get-ctor-list stable-get-ctor-list :around) (full-class-name)
+      (let ((ctor-list (call-next-advice full-class-name)))
+        (sort ctor-list 'string<
+              :key '|java.lang|::Object.toString)))
+    (defadvice (jfli::Class.getFields stable-class-getfields :around) (class)
+      (let* ((fields-as-list (jfli::jarray-to-list (call-next-advice class)))
+             (sorted (sort fields-as-list 'string<
+                           :key '|java.lang|::Object.toString))
+             (jarray (jfli:make-new-array "java.lang.reflect.Field" (length sorted))))
+        (loop for field in sorted as i from 0 do
+              (setf (jfli:jref jarray i) field))
+        jarray))
+    )
+  (let ((input-file (format nil "~a.src" (namestring output-file))))
+    (format t "~&;; Reading ~a" input-file)
+    (with-open-file (istream input-file)
+      (let ((string (make-string (length (file-string istream))))     ; Don't call file-length as it counts cr-lf line ends as two chars
+            (end 0)
+            (count 0))
+        (read-sequence string istream)
+        (with-open-file (ostream output-file
+                                 :direction :output
+                                 :if-exists :supersede
+                                 :element-type (stream-element-type istream)
+                                 :external-format (stream-external-format istream))
+          (loop (let ((start (search "(def-java-class "
+                                     string :start2 end))
+                      (*package* (find-package "JFLI")))
+                  (write-string (subseq string end start) ostream)
+                  (unless start
+                    (return))
+                  (incf count)
+                  (multiple-value-bind (form next)
+                      (read-from-string string nil nil :start start)
+                    (setf end next)
+                    (let* ((expansions (process-def-java-class form))
+                           (*print-case* :downcase))
+                      (format ostream "~2%;; ~s~2%" form)
+                      (dolist (expansion expansions)
+                        (pprint expansion ostream)
+                        (terpri ostream)))))))
+        (format t "~&;; ~d def-java-class form~:p processed" count))))
+  output-file)
+
+(defun process-def-java-class (form)
+  (let ((form (macroexpand-1 form)))
+    (assert (eq (car form) 'locally))
+    (loop for subform in (cdr form) collect
+          (case (car subform)
+            ((jfli::ensure-package) `(eval-when (compile load eval) ,subform))
+            ((jfli::def-java-constructors
+              jfli::def-java-fields) (macroexpand-1 subform))
+            ((jfli::def-java-methods) (macroexpand-1 `(def-java-methods ,@(cdr subform))))
+            (otherwise subform)))))
+
+
+(in-package "JFLI")
+
+;; CLosely modelled on jfli:def-java-methods
+(defmacro cl-user::def-java-methods (full-class-name)
+  (let ((methods-by-name (sort-methods-by-name (get-methods-by-name full-class-name)))
+        (defs nil))
+    (loop for (name methods) in methods-by-name do
+          (let ((method-sym (member-symbol full-class-name name)))
+            (push `(defun ,method-sym (&rest args)
+                     ,(build-method-doc-string name methods)
+                     (apply #'install-methods-and-call ,full-class-name ,name args))
+                  defs)
+            (push `(export ',method-sym (symbol-package ',method-sym))
+                  defs)
+                 ;build setters when finding beans property protocol
+            (flet ((add-setter-if (prefix)
+                     (when (eql 0 (search prefix name))
+                       (let ((setname (string-append "set" (subseq name (length prefix)))))
+                         (when (assoc setname methods-by-name)
+                           (push `(defun (setf ,method-sym) (val &rest args)
+                                    (progn
+                                      (apply #',(member-symbol full-class-name setname)
+                                             (append args (list val)))
+                                      val))
+                                 defs))))))
+              (add-setter-if "get")
+              (add-setter-if "is"))))
+    `(locally ,@(nreverse defs))))
+
+(defun sort-methods-by-name (methods-by-name)
+  (let ((methods-as-lists nil))
+    (maphash (lambda (name methods)
+               (push `(,name
+                       ,(sort methods 'string<
+                              :key '|java.lang|::Object.toString))
+                     methods-as-lists))
+             methods-by-name)
+    (sort methods-as-lists 'string<
+          :key 'car)))
+

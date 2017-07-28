@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from practicaltypography.com/hyphenation.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 17:01:25 GMT -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript">
+if (navigator.appVersion.indexOf("Win")!=-1) {
+    document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-a.css" />');
+} else if (navigator.appVersion.indexOf("Mac")!=-1) {
+    if (navigator.userAgent.match(/iPad/i) != null) {
+        document.write('<link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="fonts/equity-b.css" type="text/css" />');
+        document.write('<link rel="stylesheet" media="only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2)" type="text/css" href="fonts/equity-a.css" />');
+    } else {
+        document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-b.css" />');
+    }
+} else {
+    document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-a.css" />');
+}
+
+</script>
+
+<title>Hyphenation | Butterick’s Practical Typography</title>
+<link rel="stylesheet" type="text/css" media="all" href="styles.css" />
+<link rel="stylesheet" type="text/css" media="all" href="fonts/1406-fonts.css" />
+<meta name="format-detection" content="telephone=no">
+
+
+
+
+
+<script type="text/javascript">
+var isFirefox = typeof InstallTrigger !== 'undefined';
+if (isFirefox) {
+document.write('<link rel="stylesheet" type="text/css" media="all" href="firefox.css" />');
+}
+var isChromium = window.chrome,
+    winNav = window.navigator,
+    vendorName = winNav.vendor,
+    isOpera = winNav.userAgent.indexOf("OPR") > -1,
+    isIEedge = winNav.userAgent.indexOf("Edge") > -1,
+    isIOSChrome = winNav.userAgent.match("CriOS");
+if(isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isIEedge == false) {
+   // is Google Chrome or Opera
+   document.write('<link rel="stylesheet" type="text/css" media="all" href="chrome.css" />');
+}
+</script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-19281911-7']);
+  _gaq.push(['_setDomainName', 'practicaltypography.com']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+
+<body>
+<div class="content"><div id="doc"><title-block><topic>hyphenation</topic><short-rule>Mandatory for justified text; optional otherwise</short-rule></title-block><p><first-use>Hy­phen­ation</first-use> is the au­to­mated process of break­ing words be­tween lines to cre­ate more con­sis­tency across a text <span class="no-hyphens">block.</span></p><p>In <a href="justified-text.html" class="xref">jus­ti­fied text</a>, hy­phen­ation is <span class="no-hyphens">mandatory.</span></p><p>In left-aligned text, hy­phen­ation evens the ir­reg­u­lar right edge of the text, called the <em>rag</em>. Hy­phen­ation is op­tional for left-aligned text be­cause the rag will still be some­what ir­reg­u­lar, even with hy­phen­ation. Hy­phen­ation doesn’t im­prove text leg­i­bil­ity. Con­sider turn­ing it <span class="no-hyphens">off.</span></p><p>As <a href="line-length.html" class="xref">line length</a> gets shorter, hy­phen­ation be­comes es­sen­tial. Why? With hy­phen­ation off, your word proces­sor or web browser can only break lines at word spaces. As the lines get shorter, there are fewer words and hence fewer pos­si­ble break points, mak­ing awk­ward breaks more <span class="no-hyphens">likely.</span></p><div class="howto"><div class="howto-name">How to turn hyphenation on (or off)</div><p><program>Word</program> <ui>Page Layout</ui> → <ui>Page Setup</ui> panel → <ui>Hyphenation</ui> → <ui>Automatic</ui> (or <ui>None</ui>)</p><p><program>OS X Word</program> <ui>Tools</ui>  → <ui>Hyphenatation</ui> → check (or uncheck) <ui>Automatically hyphenate <span class="no-hyphens">document</span></ui></p><p><program>Pages</program> <ui>View</ui> → <ui>Show Toolbar</ui> (or op­tion + ⌘ + t) → <ui>Document</ui> but­ton → <ui>Document</ui> pane → check (or uncheck) <ui>Hyphenation</ui></p><p><program>CSS</program> Use <code>hy­phens: auto</code>, though sup­port is <a href="http://caniuse.com/#search=hyphens">still <span class="no-hyphens">spotty</span></a></p></div><p>Some­times you may want to sup­press au­to­matic hy­phen­ation. For in­stance, <a href="headings.html" class="xref">head­ings</a> are rel­a­tively short, so hy­phen­ation of­ten causes more prob­lems than it <span class="no-hyphens">solves.</span></p><table class="example"><tr><td style="font-size:120%"><example-text><span>B. Your proposal contains contradic-<br/>tions that render it utterly use-<br/>less for our current needs.</span></example-text></td><td><example-caption>wrong</example-caption></td></tr><tr><td style="font-size:120%"><example-text><span>B. Your proposal contains <br/>contradictions that render it utterly <br/>useless for our current needs.</span></example-text></td><td><example-caption>right</example-caption></td></tr></table><p>Hy­phen­ation can be sup­pressed in a sin­gle para­graph, or a set of para­graphs, if you sup­press hy­phen­ation within <a href="paragraph-and-character-styles.html" class="xref">para­graph and char­ac­ter styles</a>.</p><div class="howto"><div class="howto-name">How to suppress hyphenation in a paragraph</div><p><program>Word</program> Right-click in the text and se­lect <ui>Paragraph</ui> → <ui>Line and Page Breaks</ui> → <ui>Don’t <span class="no-hyphens">hyphenate</span></ui></p><p><program>Pages</program> <ui>View</ui> → <ui>Show Toolbar</ui> (or op­tion + ⌘ + t) → <ui>Format</ui> but­ton → <ui>More</ui> pane → <ui>Remove paragraph <span class="no-hyphens">hyphenation</span></ui></p><p><program>CSS</program> Use <code>hy­phens: <span class="no-hyphens">none</span></code></p></div><div class="btw"><div class="btw-title">by the way</div><ul><li><p><quo>In word proces­sors, you can ex­ert rudi­men­tary con­trol over au­to­matic hy­phen­ation. If you’re cu­ri­ous, search your help file for<dquo-push></dquo-push><dquo-pull> “</dquo-pull>hy­phen­ation op­tions.” Over the years, I’ve never touched these, so I doubt you’ll need to ei­ther. The </quo><a href="#" class="xref">non­break­ing hy­phen</a> and the <a href="optional-hyphens.html" class="xref">op­tional hy­phen</a> solve most hy­phen­ation prob­lems, and even those are pretty <span class="no-hyphens">rare.</span></p></li><li><p>In pro page-lay­out pro­grams, you can ex­ert a lot of con­trol over au­to­matic hy­phen­ation (usu­ally in con­junc­tion with jus­ti­fi­ca­tion, so all the set­tings to­gether are known as <first-use>H&amp;Js</first-use>).</p></li><li><p>In web browsers, you can ex­ert al­most no con­trol over au­to­matic hy­phen­ation, so if you use CSS hy­phen­ation, be pre­pared for some <span class="no-hyphens">clunkers.</span></p></li><li><p>If you’re us­ing a web con­tent-man­age­ment sys­tem like Word­Press, an al­ter­na­tive hy­phen­ation method is to use a plu­gin that puts soft hy­phens (aka <a href="optional-hyphens.html" class="xref">op­tional hy­phens</a>) in the text. Soft hy­phens are well sup­ported in web browsers, even browsers that don’t sup­port CSS hy­phen­ation (e.g., desk­top Chrome). This also al­lows some­what more con­trol over hy­phen­ation. But it’s more work. If your project de­mands full jus­ti­fi­ca­tion, this might be worth it. Oth­er­wise, prob­a­bly <span class="no-hyphens">not.</span></p></li></ul></div></div><a id="links"></a><div style="height:1em"></div><ul class="children"></ul></div>
+
+
+<!-- top nav -->
+<div class="nav-outer" id="top"><a href="index-2.html#toc"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="up"><a href="page-layout.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="prev"><a href="body-text.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="next"><a href="block-quotations.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="bottom"><div class="nav-inner"><div id="navtable">
+
+<div id="left">
+
+<a class="xref box-link" href="body-text.html"><span class="arrow">←</span>&nbsp;body text</a></div>
+
+
+<div id="center-left"><a class="xref box-link" href="index-2.html#toc">top</a></div>
+
+<div id="center-right"><a class="xref box-link" href="page-layout.html#links">Chapter</a></div>
+
+<div id="right">
+<a class="xref box-link" href="block-quotations.html">block quotations&nbsp;<span class="arrow">→</span></a></div>
+
+
+
+</div></div></div> 
+
+</body>
+
+<!-- Mirrored from practicaltypography.com/hyphenation.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 17:01:25 GMT -->
+</html>
+
+<!-- © 2013–16 Matthew Butterick -->
+

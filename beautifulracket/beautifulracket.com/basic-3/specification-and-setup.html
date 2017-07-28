@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/basic-3/specification-and-setup.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:48:13 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Closing the loop: basic</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;closing-the-loop-basic&quot;)"></div><h1 anchor="closing-the-loop-basic" id="closing-the-loop-basic" hyphens="none">Closing the loop: <span class="my-code" decode="exclude">basic</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a class="here" href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="functions.html">3&emsp;func­tions</a></li><li><a href="imports.html">4&emsp;imports</a></li><li><a href="exports.html">5&emsp;exports</a></li><li><a href="the-repl.html">6&emsp;the repl</a></li><li><a href="command-line-arguments.html">7&emsp;com­mand-line argu­ments</a></li><li><a href="recap.html">8&emsp;recap</a></li><li><a href="source-listing.html">9&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;specification&quot;)"></div><h3 anchor="specification" class="subhead" id="specification"><a href="#specification">Spec­i­fi­ca­tion</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_weBLQ&quot;)"></div><p id="a_weBLQ">Here’s what we’ll add to our <span class="my-code" decode="exclude">basic</span> lan­guage in this tuto­r­ial. (This is also the point when our imple­men­ta­tion stop resem­bling tra­di­tional BASIC, so purists may want to look away.)</p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_BkCZ8&quot;)"></div><p id="a_BkCZ8">We’ll add the <span class="my-code" decode="exclude">def</span> state­ment, which will let us cre­ate callable <a href="functions.html">func­tions</a>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Qum97&quot;)"></div><p id="a_Qum97">We’ll sup­port <a href="imports.html">imports</a> from exist­ing Racket libraries by adding an <span class="my-code" decode="exclude">import</span> state­ment that’s equiv­a­lent to Racket’s <a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Le8to&quot;)"></div><p id="a_Le8to">We’ll alter our lan­guage so every pro­gram auto­mat­i­cally <a href="exports.html">exports</a> its defined func­tions and vari­ables.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_zwpgB&quot;)"></div><p id="a_zwpgB">We’ll see how to repro­gram <a href="the-repl.html">the REPL</a> to under­stand BASIC-style state­ments and expres­sions.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_azvye&quot;)"></div><p id="a_azvye">For fun, we’ll see how we can han­dle <a href="shell-input.html">shell input</a>.</p></div></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;setup&quot;)"></div><h3 anchor="setup" class="subhead" id="setup"><a href="#setup">Setup</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_jWmKs&quot;)"></div><p id="a_jWmKs">We’ll start with the code we were left with at the <a href="../basic-2/source-listing.html">end of the pre­vi­ous tuto­r­ial</a>. We’ll also assume that we’ve cre­ated a <span class="my-code" decode="exclude">basic</span> direc­tory and installed it as a pack­age as described in the first <a href="../basic/specification-and-setup.html">spec­i­fi­ca­tion and setup</a>.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a class="here" href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="functions.html">3&emsp;func­tions</a></li><li><a href="imports.html">4&emsp;imports</a></li><li><a href="exports.html">5&emsp;exports</a></li><li><a href="the-repl.html">6&emsp;the repl</a></li><li><a href="command-line-arguments.html">7&emsp;com­mand-line argu­ments</a></li><li><a href="recap.html">8&emsp;recap</a></li><li><a href="source-listing.html">9&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="intro.html">← prev</a>
+    <a class="nav-right" href="functions.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

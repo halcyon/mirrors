@@ -1,0 +1,135 @@
+
+;; $Id: //info.ravenbrook.com/user/ndl/lisp/cl-rabbit/pkg.lisp#2 $
+
+(in-package "CL-USER")
+
+;;                              PKG.LISP
+;;           Nick Levine, Ravenbrook Limited, 2007-09-04
+;; 
+;; 1.  INTRODUCTION
+;;
+;; The purpose of this document is to define the RABBITMQ package.
+;;
+;; See Appendix C below for copyright and license.
+
+
+(pushnew :rabbitmq *features*)
+
+(defpackage "RABBITMQ"
+  (:use
+   "JFLI"
+   "java.io"
+   "java.lang"
+   "java.util"
+   "com.rabbitmq.client"
+   "com.rabbitmq.client.impl")
+  (:add-use-defaults t)
+  (:import-from "JFLI"
+   "INITIALIZE-RABBITMQ")
+  (:export
+   ;; Connection
+   "NEW-CONNECTION"                 ; Open new connection with plain login as guest/guest, e.g. (new-connection "localhost" "/")
+   "DESTROY-CONNECTION"             ; Clean shut-down preferred. This will destroy any outstanding sessions
+   ;; Connection properties
+   "CONNECTION-ALIVE"               ; (boolean) - nil when connection has had an error
+   "CONNECTION-SERVER-PRODUCT"      ; (string) - product name reported by server
+   "CONNECTION-SERVER-VERSION"      ; (string) - product version reported by server
+   "CONNECTION-SERVER-PLATFORM"     ; (string) - operating system platform reported by server
+   "CONNECTION-SERVER-COPYRIGHT"    ; (string) - copyright notice reported by server
+   "CONNECTION-SERVER-INFO"         ; (string) - other information reported by server
+   ;;
+   ;; Channel (aka session)
+   "NEW-CHANNEL"                    ; Creates a new channel on this connection. Create as many as you like
+   "DESTROY-CHANNEL"                ; Clean shut-down for this channel
+   "NEXT-MESSAGE"                   ; Returns next incoming message, or nil if there weren't any
+   "CHANNEL-ARRIVED-COUNT"          ; How many incoming messages are there?
+   "CHANNEL-WAIT"                   ; Wait for server content, timeout given in ms (non-zero). Return value is either nil or number of messages which have arrived
+   "CHANNEL-WAIT-FOREVER"           ; Wait for server content as above, no timeout
+   ;;
+   ;; Channel properties
+   "CHANNEL-ALIVE"                  ; (boolean) - nil when channel has had an error
+   ;;
+   ;; Channel properties set by server, in response to various methods
+   "CHANNEL-CONSUMER-COUNT"         ; (integer) number of consumers
+   "CHANNEL-CONSUMER-TAG"           ; (integer as string) consumer tag
+   ;;
+   ;; Exchange
+   "DECLARE-EXCHANGE"               ; Creates an exchange with the given name, if none such already exists, and with the given type (:fanout / :direct / :topic)
+   "DELETE-EXCHANGE"                ; Deletes exchange with given name
+   "TEST-EXCHANGE"                  ; Tests for existence of named exchange
+   ;;
+   ;; Queue
+   "DECLARE-QUEUE"                  ; Creates a queue with the given name, if none such already exists. Note that the auto-delete flag will be set.
+   "DELETE-QUEUE"                   ; Deletes queue with given name
+   "BIND-QUEUE"                     ; Binds named queue to exchange and routing key
+   "TEST-QUEUE"                     ; Tests for existence of named queue
+   ;;
+   ;; Message processing
+   "CONSUME-QUEUE"                  ; Start a queue consumer
+   "CANCEL-QUEUE"                   ; End a queue consumer
+   "DESTROY-MESSAGE"                ; Destroy a message (no-op for RabbitMQ)
+   "PUBLISH"                        ; Publish a message
+   ;;
+   ;; Message
+   "NEW-MESSAGE"                    ; Creates a new message. It'll need a body-string and an ID before you publish it
+   "MESSAGE-BODY"                   ; [setfable] Payload of message, as vector (see below), string (ditto) or null. Reads / sets message-content-type. 
+   "MESSAGE-BODY-DATA"              ; [setfable] Payload of message as SIGNED bytes. Reader takes :element-type argument, default is t (i.e. simple-vector)
+   "MESSAGE-BODY-STRING"            ; [setfable] Payload of message, as a simple-base-string. ** NO NULLS! JNI WILL TRUNCATE!! **
+   "MESSAGE-BODY-SIZE"              ; (integer) Size of content
+   "MESSAGE-FIRST-BYTE"             ; (byte) Peek, without having to build full sequence
+   "MESSAGE-ID"                     ; [setfable] (string) Message identifier. In the examnples these are short unique strings. Is uniqueness required? I don't _think_ so.
+   "MESSAGE-EXCHANGE"               ; (string) Exchange to which content was published (incoming messages only)
+   "MESSAGE-ROUTING-KEY"            ; (string) Original routing key specified by publisher (incoming messages only)
+   "MESSAGE-APPLICATION-ID"         ; [optionally setfable] (string) ID of creating application
+   "MESSAGE-CONTENT-ENCODING"       ; [optionally setfable] (string) MIME content encoding
+   "MESSAGE-CONTENT-TYPE"           ; [optionally setfable] MIME content type; both :string and :octets are currently supported
+   "MESSAGE-CORRELATION-ID"         ; [optionally setfable] (string) Application correlation identifier
+   "MESSAGE-EXPIRATION"             ; [optionally setfable] (string) Expiration specification
+   "MESSAGE-REPLY-TO"               ; [optionally setfable] (string) Destination to reply to
+   "MESSAGE-TYPE"                   ; [optionally setfable] (string) Message type name
+   "MESSAGE-USER-ID"                ; [optionally setfable] (string) ID of creating user
+   "MESSAGE-DELIVERY-PERSISTENT"    ; [setfable] (boolean) does message persist should server be restarted?
+   "MESSAGE-PRIORITY"               ; [setfable] (integer) in the range 0...9 - it doesn't say anywhere which end of the scale gets there first
+   "MESSAGE-TIMESTAMP"              ; [setfable] (float) univeral-time with 3 decimal places
+   "MESSAGE-ORIGIN"                 ; Defined as (format nil "~a/~a" message-reply-to message-id)
+   ;;
+   ;; Conditions
+   "CONNECTION-NOT-ALIVE"           ; Signalled if a connection is found not to be alive
+   "CONNECTION-NOT-ALIVE-CONNECTION" ; Reader: the connection which was not alive (if known)
+   "CHANNEL-NOT-ALIVE"              ; Signalled if a channel is found not to be alive
+   "CHANNEL-NOT-ALIVE-CHANNEL"      ; Reader: the channel which was not alive (if known)
+   ))
+
+
+;; A.  REFERENCES
+;;
+;;
+;; B.  HISTORY
+;;
+;; 2007-09-04 NDL Created.
+;;
+;;
+;; C.  COPYRIGHT
+;;
+;; Copyright (c) 2007 Wiinz Limited. 
+;;
+;; Permission is hereby granted, free of charge, to any person
+;; obtaining a copy of this software and associated documentation
+;; files (the "Software"), to deal in the Software without
+;; restriction, including without limitation the rights to use, copy,
+;; modify, merge, publish, distribute, sublicense, and/or sell copies
+;; of the Software, and to permit persons to whom the Software is
+;; furnished to do so, subject to the following conditions:
+;;
+;; The above copyright notice and this permission notice shall be
+;; included in all copies or substantial portions of the Software.
+;; 
+;; THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+;; EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+;; MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+;; NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+;; HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+;; WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+;; OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+;; DEALINGS IN THE SOFTWARE.
+

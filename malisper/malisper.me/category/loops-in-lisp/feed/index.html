@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>Loops in Lisp &#8211; Macrology</title>
+	<atom:link href="http://malisper.me/category/loops-in-lisp/feed/" rel="self" type="application/rss+xml" />
+	<link>http://malisper.me</link>
+	<description>Case Studies in Lisp Macros</description>
+	<lastBuildDate>Thu, 16 Jun 2016 21:54:14 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>Loops in Lisp Part 4: Series</title>
+		<link>http://malisper.me/2016/04/13/loops-in-lisp-part-4-series/</link>
+		<comments>http://malisper.me/2016/04/13/loops-in-lisp-part-4-series/#comments</comments>
+		<pubDate>Wed, 13 Apr 2016 08:06:36 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Advanced Macros]]></category>
+		<category><![CDATA[Loops in Lisp]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=1366</guid>
+		<description><![CDATA[<p>This is part four of Loops in Lisp. Follow one of the following links for part one, two, or three). One of the many advantages of programming in a functional style (by this, I mean manipulating your data through the operations, map, fold, and filter) is that your program winds up being made up a bunch of tiny and [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2016/04/13/loops-in-lisp-part-4-series/">Loops in Lisp Part 4: Series</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p><em>This is part four of Loops in Lisp. Follow one of the following links for part <a href="http://malisper.me/2015/11/24/loops-lisp-part-1-goto/">one</a>, <a href="http://malisper.me/2015/12/15/loops-in-lisp-part-2-loop/">two</a>, or <a href="http://malisper.me/2016/01/12/loops-in-lisp-part-3-iterate/">three</a>).</em></p>
+<p>One of the many advantages of programming in a functional style (by this, I mean manipulating your data through the operations, map, fold, and filter) is that your program winds up being made up a bunch of tiny and composable pieces. Since each piece is so small, usually only a few lines each, it becomes trivial to unit test the entire program. Additionally, it is easy to express new features as just the composition of several existing functions. One disadvantage of programming through map and friends, is that there is fairly large time penalty for allocating the intermediate results. For example, every time filter is called on a list, a new list needs to be allocated. These costs add up pretty quickly and can make a functional program much slower than its imperative equivalent.</p>
+<p>One solution to this problem is laziness. Instead of allocating a new list every time an operation is performed on a list, you instead keep track of all of the transformations made on the list. Then when you fold over the list, you perform all of the transformations as you are folding over it. By doing this, you don&#8217;t need to allocate intermediate lists. Although laziness doesn&#8217;t allocate any intermediate lists, there is still a small cost for keeping track of the laziness. An alternative solution that makes functional programming just as fast as imperative programming is provided by the Series library.<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2016/04/13/loops-in-lisp-part-4-series/#easy-footnote-bottom-1' title='The technique used by Series is sometimes referred to as &#8220;stream fusion&#8221;.'><sup>1</sup></a></span> Series lets you write your program in a functional style without <em>any</em> runtime penalty at all!</p>
+<p>Personally, the Series library is my favorite example of the magic that can be pulled off with macros. In short, Series works by taking your functional code and compiling it down into a single loop. In this loop, there is one step per transformation performed on the original list. The loop iterates over the values of the original sequence on at a time. On each iteration, the loop takes a single element, performs all of the transformations performed on the list on that single element, and then accumulates that value into the result according to the folding operation. This loop requires no additional memory allocation at runtime, and their is no time penalty either! As an example, here is a program that sums the first N squares, written using Series:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defun integers ()
+  &quot;Returns a 'series' of all of the natural numbers.&quot;
+  (declare (optimizable-series-function))
+  (scan-range :from 1))
+
+(defun squares ()
+  &quot;Returns a 'series' of all of the square numbers.&quot;
+  (declare (optimizable-series-function))
+  (map-fn t 
+          (lambda (x) (* x x)) 
+          (integers)))
+
+(defun sum-squares (n)
+  &quot;Returns the sum of the first N square numbers.&quot;
+  (collect-sum (subseries (squares) 0 n)))
+
+(sum-squares 10)
+=&gt; 385
+</pre>
+<p>The above code certainly looks functional, there are no side effects in sight. Now let&#8217;s look at the code generated by Series. Here is what the macroexpansion of <strong>collect-sum</strong> looks like:</p>
+<pre class="brush: plain; title: ; notranslate">
+(common-lisp:let* ((#:out-969 n))
+  (common-lisp:let ((#:numbers-966
+                     (coerce-maybe-fold (- 1 1) 'number))
+                    #:items-967
+                    (#:index-965 -1)
+                    (#:sum-959 0))
+    (declare (type number #:numbers-966)
+             (type (integer -1) #:index-965)
+             (type number #:sum-959))
+    (tagbody
+       #:ll-970
+       (setq #:numbers-966
+             (+ #:numbers-966
+                (coerce-maybe-fold 1 'number)))
+       (setq #:items-967
+             ((lambda (x) (* x x)) #:numbers-966))
+       (incf #:index-965)
+       (locally
+          (declare (type nonnegative-integer #:index-965))
+         (if (&gt;= #:index-965 #:out-969)
+             (go end))
+         (if (&lt; #:index-965 0)
+             (go #:ll-970)))
+       (setq #:sum-959 (+ #:sum-959 #:items-967))
+       (go #:ll-970)
+     end)
+    #:sum-959))
+</pre>
+<p>What series does it looks at the entire lifetime of the sequence from its creation until it is folded. It uses this information to build the above loop which simultaneously generates the original sequence, maps over it, filters elements out of it, and folds it into the final result. Here is the breakdown of the expansion. Lines 1-9 are just initialization. They define all of the variables the loop will be using and set them to their starting values. The important variables to keep track of are #:NUMBERS-966, #:ITEMS-967, and #:SUM-959. As the code &#8220;iterates&#8221; over the original sequence, #:NUMBERS-966 is the value of the original sequence, #:ITEMS-967 is the square of that value, and #:SUM-959 is the sum of the squares so far. The rest of the code is the actual loop.</p>
+<p>The loop first takes #:NUMBERS-966, the previous value of the sequence, and increments it in order to set it to current value of the sequence (since the sequence is the range from 1 to infinity). Next the loop takes the square of #:NUMBERS-966 to get the ith square number and stores that in #:ITEMS-967. Then the loop checks if it ha taken more than N elements out of the sequence, and if so, terminates. Finally the loop takes the value in #:ITEMS-967 and accumulates that into #:SUM-959.</p>
+<p>Although the imperative version is equivalent to the original functional code, it is much faster than the functional code if the functional code were to allocate intermediate results or use laziness. This idea of turning transformations on a list into a loop doesn&#8217;t just work for this simple example, it also works for much more complicated programs. I just find it incredible that Series is able to take such pretty code and compile it into code that is extremely fast.</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2016/04/13/loops-in-lisp-part-4-series/">Loops in Lisp Part 4: Series</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2016/04/13/loops-in-lisp-part-4-series/feed/</wfw:commentRss>
+		<slash:comments>4</slash:comments>
+		</item>
+		<item>
+		<title>Loops in Lisp Part 3: Iterate</title>
+		<link>http://malisper.me/2016/01/12/loops-in-lisp-part-3-iterate/</link>
+		<comments>http://malisper.me/2016/01/12/loops-in-lisp-part-3-iterate/#comments</comments>
+		<pubDate>Tue, 12 Jan 2016 18:00:11 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Advanced Macros]]></category>
+		<category><![CDATA[Loops in Lisp]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=1292</guid>
+		<description><![CDATA[<p>This is part 3 of Loops in Lisp. For part 1 on how you can build any kind of looping construct you want out of just goto and macros, click here. For part 2 on Loop, click here. The Iterate library is pretty awesome. It provides a macro iterate (and an alias for it, iter) that is basically a [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2016/01/12/loops-in-lisp-part-3-iterate/">Loops in Lisp Part 3: Iterate</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p><em>This is part 3 of Loops in Lisp. For part 1 on how you can build any kind of looping construct you want out of just goto and macros, click <a href="http://malisper.me/2015/11/24/loops-lisp-part-1-goto/">here</a>. For part 2 on Loop, click <a href="http://malisper.me/2015/12/15/loops-in-lisp-part-2-loop/">here</a>.</em></p>
+<p>The <a href="https://common-lisp.net/project/iterate/">Iterate</a> library is pretty awesome. It provides a macro <strong>iterate</strong> (and an alias for it, <strong>iter</strong>) that is basically a Lispy version of <strong>loop</strong>. The most obvious consequence of this is that <strong>iterate</strong> uses a lot more parens than <strong>loop</strong> does:</p>
+<pre class="brush: plain; title: ; notranslate">
+;; Loop code
+(loop for i from 1 to 10
+      collect i)
+
+;; Iterate code
+(iter (for i from 1 to 10)
+      (collect i))
+</pre>
+<p>Even though all of the extra parens make <strong>iterate</strong> much uglier than <strong>loop</strong>, they give <strong>iterate</strong> all of the advantages of Lisp syntax. One such advantage is the ability to embed <strong>iterate</strong> clauses within Lisp code and vice versa. While you can&#8217;t do this with <strong>loop</strong>, you can do it with <strong>iterate</strong> because the syntax of <strong>iterate</strong> is so similar to the syntax of ordinary Lisp code. Here is what happens when you try to embed a <strong>collect</strong> clause within Lisp code with <strong>loop</strong> and with <strong>iterate</strong>:<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2016/01/12/loops-in-lisp-part-3-iterate/#easy-footnote-bottom-1' title='It is possible to write a valid version of the loop code below by using the version of &#8216;when&#8217; provided by loop. Although that trick works for this specific case, it doesn&#8217;t allow for the use of arbitrary Lisp expressions like iterate does.'><sup>1</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate">
+;; Not valid loop code.
+(loop for i from 1 to 10
+      do (when (evenp i)
+           (collect i)))
+
+;; Valid iterate code
+(iter (for i from 1 to 10)
+      (when (evenp i)
+        (collect i)))
+</pre>
+<p>Although the ability to seamlessly go between Lisp code and <strong>iterate</strong> is pretty awesome, the greatest feature provided by <strong>iterate</strong> is also the entire reason why Lisp syntax has so many parens in the first place. Lisp syntax (and by extension <strong>iterate</strong>) makes it easy to write macros! Because of this, you can add pretty much any feature you want to <strong>iterate</strong>. As a simple example, here&#8217;s how you could define an <strong>iterate</strong> clause specifically for looping over the digits of a number:<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2016/01/12/loops-in-lisp-part-3-iterate/#easy-footnote-bottom-2' title='Defmacro-clause is a macro provided by Iterate that can be used to define new iterate clauses.'><sup>2</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate">
+(defun digits (n)
+  &quot;Returns a list of the digits of N.&quot;
+  (map 'list #'digit-char-p (princ-to-string n)))
+
+(defmacro-clause (for var in-digits-of n)
+  `(for ,var in (digits ,n)))
+</pre>
+<p>And here is how you would use it:</p>
+<pre class="brush: plain; title: ; notranslate">
+(iter (for i in-digits-of 123)
+      (sum i))
+=&gt; 6
+</pre>
+<p>I cannot express how awesome this is. If you want an <strong>iterate</strong> clause for iterating over SQL queries, you can add <a href="https://common-lisp.net/project/iterate-clsql/">it</a>. If you want an <strong>iterate</strong> clause for looping over your own custom data structure, you can add it. You can add any feature you want all because <strong>iterate</strong> allows for the use of macros!</p>
+<p>Personally, I prefer to use <strong>iterate</strong> over <strong>loop</strong>. Even though it is uglier, it is much more extensible than <strong>loop</strong> because it decides to use a Lisp like syntax.</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2016/01/12/loops-in-lisp-part-3-iterate/">Loops in Lisp Part 3: Iterate</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2016/01/12/loops-in-lisp-part-3-iterate/feed/</wfw:commentRss>
+		<slash:comments>3</slash:comments>
+		</item>
+		<item>
+		<title>Loops in Lisp Part 2: Loop</title>
+		<link>http://malisper.me/2015/12/15/loops-in-lisp-part-2-loop/</link>
+		<comments>http://malisper.me/2015/12/15/loops-in-lisp-part-2-loop/#respond</comments>
+		<pubDate>Tue, 15 Dec 2015 15:00:22 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Loops in Lisp]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=1264</guid>
+		<description><![CDATA[<p>This is part 2 of Loops in Lisp. Click here to view the previous post on how you can build any iteration abstraction you want out of just goto and macros. The loop macro is probably the most well known of all macros. It provides a DSL for performing any kind of iteration imaginable. To give you [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/12/15/loops-in-lisp-part-2-loop/">Loops in Lisp Part 2: Loop</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p><em>This is part 2 of Loops in Lisp. Click <a href="http://malisper.me/2015/11/24/loops-lisp-part-1-goto/">here</a> to view the previous post on how you can build any iteration abstraction you want out of just goto and macros.</em></p>
+<p>The <strong>loop</strong> macro is probably the most well known of all macros. It provides a DSL for performing any kind of iteration imaginable. To give you an idea of just how powerful <strong>loop</strong> is, here are the first two <a href="https://projecteuler.net/">Project Euler</a> problems, solved using just <strong>loop</strong>:</p>
+<pre class="brush: plain; title: ; notranslate">
+;; Solution for problem #1.
+(loop for i from 1 below 1000
+      if (or (= 0 (mod i 3))
+             (= 0 (mod i 5)))
+        sum i)
+
+;; Solution for problem #2.
+(loop for a = 1 then (+ a b)
+      and b = 0 then a
+      while (&lt; a 4000000)
+      if (evenp a)
+        sum a)
+</pre>
+<p>The coolest part of <strong>loop</strong> is that it is just a macro! That means it would be possible to build <strong>loop</strong> in Common Lisp, even if it wasn&#8217;t provided as a builtin (<a href="https://www.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/lisp/code/iter/loop/mit/original/loop.cl">here</a> is one such implementation). That also means any <strong>loop</strong> code is eventually compiled down to goto! For example, here is the expansion of the solution to the first Project Euler problem:</p>
+<pre class="brush: plain; title: ; notranslate">
+(block nil
+  (let ((i 1))
+    (declare (type (and real number) i))
+    (let ((#:loop-sum-2482 0))
+      (declare (type number #:loop-sum-2482))
+      (tagbody
+       sb-loop::next-loop
+        (if (&gt;= i '1000)
+            (progn (go sb-loop::end-loop))
+            nil)
+        (if (let ((#:g2483 (= 0 (mod i 3))))
+              (if #:g2483
+                  #:g2483
+                  (the t (= 0 (mod i 5)))))
+            (setq #:loop-sum-2482 (+ #:loop-sum-2482 i)))
+        (setq i (1+ i))
+        (go sb-loop::next-loop)
+       sb-loop::end-loop
+        (return-from nil #:loop-sum-2482)))))
+</pre>
+<p>If you look carefully, the expansion is nothing more than a mix of a few gotos and conditionals. Also, even though the generated code is a complete mess, you are able to work with it through interface provided by <strong>loop</strong>. Even though <strong>loop</strong> is fairly complex, it is still much simpler than raw gotos. If you think about it, <strong>loop</strong> is really just a convenient way of specifying a combination of patterns of gotos and conditionals.</p>
+<p>I don&#8217;t have much to add about <strong>loop</strong> that others haven&#8217;t already said. If you are looking for a basic introduction to <strong>loop</strong> you should read Peter Seibel&#8217;s guide which can be found <a href="http://www.gigamonkeys.com/book/loop-for-black-belts.html">here</a>. If you are looking for a more complete reference, check out the <strong>loop</strong> chapter in Common Lisp the Language which can be found <a href="https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node235.html">here</a>.</p>
+<p>While all of the features of loop compose well with each other, they do not compose well with the rest of Common Lisp. You cannot embed a loop clause (e.g. collect) within ordinary lisp code. That brings us to what will be next week&#8217;s topic, <strong>i</strong><strong>terate</strong>. <strong>Iterate</strong> is basically a more lispy version of <strong>loop</strong>. It allows you to seamlessly go between <strong>iterate</strong> clauses and regular Lisp code. More importantly, <strong>iterate</strong> allows you to define macros that then become part of the <strong>iterate</strong> DSL!</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/12/15/loops-in-lisp-part-2-loop/">Loops in Lisp Part 2: Loop</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2015/12/15/loops-in-lisp-part-2-loop/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+		<item>
+		<title>Loops in Lisp Part 1: Goto</title>
+		<link>http://malisper.me/2015/11/24/loops-lisp-part-1-goto/</link>
+		<comments>http://malisper.me/2015/11/24/loops-lisp-part-1-goto/#comments</comments>
+		<pubDate>Tue, 24 Nov 2015 16:00:44 +0000</pubDate>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+				<category><![CDATA[Basic Macros]]></category>
+		<category><![CDATA[Loops in Lisp]]></category>
+
+		<guid isPermaLink="false">http://malisper.me/?p=1106</guid>
+		<description><![CDATA[<p>At its core, Common Lisp provides two primitives for performing iteration. The first of those primitives is recursion. Recursion is an amazing technique, but in this post I am going to focus on the other primitive &#8211; goto. Goto is extremely powerful. It lets you manipulate the control flow of your program in anyway you [&#8230;]</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/11/24/loops-lisp-part-1-goto/">Loops in Lisp Part 1: Goto</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></description>
+				<content:encoded><![CDATA[<p>At its core, Common Lisp provides two primitives for performing iteration. The first of those primitives is recursion. Recursion is an amazing technique, but in this post I am going to focus on the other primitive &#8211; goto.</p>
+<p>Goto is extremely powerful. It lets you manipulate the control flow of your program in anyway you can think of. This freedom to do whatever you want is also what makes goto so dangerous. In any given piece of code that uses goto, it is difficult to tell what the purpose of the goto is because it could be used for so many different reasons. Because of this, most languages provide various kinds of builtin loops instead of providing raw goto. Even though loops aren&#8217;t as general as goto, they express the intention of the code much more clearly.</p>
+<p>As an example, let&#8217;s say you want to print all of the characters in a file. If your language provided while loops, you could do this by printing characters from the file one at a time while there are more characters left. If Common Lisp had while loops,<span id='easy-footnote-1' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/11/24/loops-lisp-part-1-goto/#easy-footnote-bottom-1' title='Common Lisp does provide the do macro, which can be used as a while loop. I&#8217;m not mentioning it for pedagogical reasons.'><sup>1</sup></a></span> the code for this procedure would look like this:</p>
+<pre class="brush: plain; title: ; notranslate">
+(while (peek-char file nil nil)
+  (write-char (read-char file)))
+</pre>
+<p>If your language only had goto, it becomes much more difficult to implement the procedure. In the end, you have to, in some way, simulate a while loop. One way to code the procedure with just goto is the following. First check if there are any characters left in the file. If there aren&#8217;t any, goto the end. Otherwise print the next character and go back to the start. Here is Common Lisp code that implements this:<span id='easy-footnote-2' class='easy-footnote-margin-adjust'></span><span class='easy-footnote'><a href='http://malisper.me/2015/11/24/loops-lisp-part-1-goto/#easy-footnote-bottom-2' title='In Common Lisp, you need to use tagbody when creating labels because otherwise the labels would be interpreted as variables to be evaluated.'><sup>2</sup></a></span></p>
+<pre class="brush: plain; title: ; notranslate">
+(tagbody
+  start
+  (if (not (peek-char file nil nil))
+      (go end))
+  (write-char (read-char file))
+  (go start)
+  end)
+</pre>
+<p>Not only is the version with goto much more verbose, it is also much harder to understand. The code lacks clarity because goto is so general. It gives you no context into how it is being used. The reader of the code will have to think about the positioning of all of the gotos before they can think about the overall flow of the program. On the other hand, in the version with the while loop, merely the fact that a while loop is being used gives whoever is reading the code a decent idea of the control flow.</p>
+<p>In reality all loops are eventually compiled down to gotos. Whenever the compiler for a language that provides loops sees a loop, it generates code that simulates the loop through goto. You can do the same thing with Lisp macros!</p>
+<p>If you don&#8217;t know, Lisp macros are compile time functions which take code as their input and return code as their output. When Lisp code is being compiled, all of the macros in the code are called and each one is replaced with its result. This means you can write a macro that looks like a while loop when you use it, but at compile time generates code to simulate a while loop through goto. You are in effect adding while loops to the Lisp compiler! Here is code that defines such a macro:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defmacro while (test &amp;body body)
+  (let ((gtop (gensym))
+        (gend (gensym)))
+    `(tagbody
+       ,gtop
+       (if (not ,test)
+           (go ,gend))
+       ,@body
+       (go ,gtop)
+       ,gend)))
+</pre>
+<p>With this macro, the first code example is now valid lisp code! The <strong>while </strong>macro takes as arguments a test and a body. It then generates code that uses the method used in the second example to simulate a while loop with goto. You can actually see what the first example looks like after expanding the macro by using the function <strong>macroexpand</strong>. Here is what the generated code looks like:</p>
+<pre class="brush: plain; title: ; notranslate">
+(tagbody
+  #:g729
+  (if (not (peek-char file nil nil))
+      (go #:g730))
+  (write-char (read-char file))
+  (go #:g729)
+  #:g730)
+</pre>
+<p>The generated code is the exact same as the code in the second example except for the names of the labels. This means the two examples are the same functionally! The only real difference between them is that the first one is expressed in terms of loops, and the second one is expressed in terms of goto. Since it is so much easier to think in terms of loops than goto, there is no reason why you wouldn&#8217;t use the first example over the second.</p>
+<p>Macros allow you to build any feature you want as long as it is possible to simulate that feature through lower level features. With respect to goto, this means you can build any kind of control flow construct you want by simulating it with goto and then putting a macro on top. In Common Lisp, all of the looping constructs (<strong>do</strong>, <strong>do*</strong>, <strong>dotimes</strong>, <strong>dolist</strong>, <strong>loop</strong>) are really just macros that expand into goto. This is what Alan Kay meant when he said &#8220;Lisp isn&#8217;t a language, it&#8217;s a building material&#8221;. It bears repeating. In Lisp, you can build any feature you want as long as it is possible to simulate that feature in terms of lower level features.</p>
+<p>The post <a rel="nofollow" href="http://malisper.me/2015/11/24/loops-lisp-part-1-goto/">Loops in Lisp Part 1: Goto</a> appeared first on <a rel="nofollow" href="http://malisper.me">Macrology</a>.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://malisper.me/2015/11/24/loops-lisp-part-1-goto/feed/</wfw:commentRss>
+		<slash:comments>6</slash:comments>
+		</item>
+	</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.075 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:23:18 -->

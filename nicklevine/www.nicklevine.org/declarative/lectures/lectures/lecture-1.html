@@ -1,0 +1,457 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:42 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <meta name="Author" content="Nick Levine">
+   <title>Lecture One</title>
+</head>
+<body>
+
+<center><b><font size=+3>Declarative Languages</font></b>
+<br><b><font size=+3>Lecture #1</font></b></center>
+
+<p><b>Purpose: </b>To introduce the course, give background, and deal with
+various administrative issues.
+<p><b>1.1 What is a declarative language?</b>
+<p><i>A <a href="http://www.cs.rochester.edu/u/www/courses/108/glossary/Declarative_Language.html">declarative
+language</a> is a language in which you describe the problem you are working
+on and the computer decides how to solve it. Lisp and Prolog are declarative
+languages.</i>
+<p><i>On the other hand a <a href="http://www.cs.rochester.edu/u/www/courses/108/glossary/Prodedural_Language.html">procedural
+language</a> is a language in which you tell the computer what to do. The
+machine will then do what you tell it and you hope that what it tells you
+is the answer to the question you wanted to ask. Pascal is a procedural
+language.</i>
+<p>These definitions should be treated with the deepest suspicion. They
+claim to partition all programming languages into two discrete sets: either
+100% abstract or 0% abstract. In practice, no language (with the exception
+of assemblers) fits into either of these categories - they all lie somewhere
+between the two extremes. However, there's no denying that some languages
+permit and encourage a higher level of abstraction than others, and that
+Lisp and Prolog <u>are</u> more abstract than - say - Pascal or C.
+<p>One aim of this course is to convey the extent that abstractions can
+take the agony out of programming. We will illustrate it with examples
+written in Common Lisp (and the second course aim is to teach Lisp). And
+even though in years to come you may not always find yourself at liberty
+to write all your applications in Lisp, many of the concepts covered here
+apply equally to lower level languages. Lisp encourages good programming
+style, but having learned about style there's no excuse not to apply it
+elsewhere. Therefore, we will attempt not to mention the word <i>declarative</i>
+too often, and will think of this course as more properly titled:
+<center><b><font size=+3>Lisp and elements of style.</font></b></center>
+
+<p><b>1.2 Brief history of Lisp</b>
+<p>Lisp (the acronym stands for LISt Processor) is the second oldest programing
+language still in use (after FORTRAN), invented by John McCarthy at MIT
+in 1958. For many years it could only be run on special purpose and rather
+expensive hardware, such as sold by Xerox, Texas Instruments and Symbolics.
+In more recent years implementations have appeared on stock systems: initially
+on unix workstations but more recently on PCs. Nowadays, you cannot buy
+a PC which is too "small" to run a Lisp system.
+<p>Until the mid '80s Lisp was more a family of dialects than a single
+language. In 1986 an ANSI subcommittee was formed to standardize these
+dialects into a single Common Lisp, the result being the first Object Oriented
+language to become standardized, in 1994. Common Lisp is by no means the
+only dialect still in use, or even the most widespread. But it is the most
+powerful and has the advantage that once you understand Common Lisp it
+is easy to adapt yourself to weaker dialects.
+<p>
+<hr WIDTH="100%">
+<center><i>(administrative interlude)</i></center>
+<b>1.3 Administrative: Software</b>
+<p>Of the Common Lisp vendors, only two major players remain on the field:
+<a href="http://www.xanalys.com/software_tools/">Xanalys</a>
+(business formerly run by <a href="http://www.harlequin.com/">Harlequin</a>)
+and <a href="http://www.franz.com/">Franz</a>. (Many other, less commercial,
+implementations do exist alongside them.) Both companies distribute "<i>Personal
+Editions</i>" of their lisp products, for use on Windows 95 / 98 / NT and
+on Linux platforms; these are all full implementations of the Common Lisp
+standard, aimed in particular at the academic community, with certain restrictions
+to encourage professionals to purchase the real thing.
+<p>This lecture course used the Personal Edition of Xanalys' <i>LispWorks
+for the Windows operating system</i> for its practical lab sessions. You
+could use this or any other (full implementation of) Common Lisp for lerning
+purposes, though I strongly recommend either Franz or Harlequin, and you
+can do so on the operating system of your choice. Visit
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://www.franz.com/downloads/">http://www.franz.com/downloads/</a>
+<br>&nbsp;and
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://www.lispworks.com/downloads/">http://www.xanalys.com/downloads/</a>
+<p>The downloads are not small. For example, LispWorks downloads as two
+10 MB files. Another useful source is <a href="http://burks.bton.ac.uk/burks/language/lisp/">the
+BURKS CD</a>.
+<br>&nbsp;
+<p><b>1.4 Administrative: Sources of information - online</b>
+<p>The best starting point is without doubt the web site of the Association
+of Lisp Users:
+<br>&nbsp;&nbsp;&nbsp; <a href="http://www.lisp.org/">http://www.lisp.org/</a>.
+<br>You will find all manner of useful resources here: books, tutorials,
+papers, history, software, background material.
+<p>An HTML representation of the Common Lisp specification, known as the
+<i>HyperSpec</i>
+will be found at
+<br>&nbsp;&nbsp;&nbsp; <a href="http://www.lispworks.com/reference/HyperSpec/Front/index.htm">http://www.lispworks.com/reference/HyperSpec/Front/index.htm</a>
+;
+<br>a similar repreesntation is also available on the Franz site at
+<br>&nbsp;&nbsp;&nbsp; <a href="http://www.franz.com/support/documentation/6.0/ansicl/ansicl.htm">http://www.franz.com/support/documentation/6.0/ansicl/ansicl.htm</a>.
+<p>If you are into newsgroups then try <a href="http://groups.google.com/groups?q=comp.lang.lisp">news:comp.lang.lisp</a>.
+If you are totally stuck on some concept you may post there (and you will
+generally get a useful answer or ten) but you <b>if you are a student asking
+for help with a formal assigment then you must make this clear in your
+posting.</b>. If you fail to do this then (a) you will be flamed by other
+readers for what is considered to be a breach of netiquette and (b) you
+will have me breathing down your neck (I subscribe to this group).
+<p><b>1.5 Administrative: Sources of information - books</b>
+<p>The recommended book is
+<ul>
+<li>
+<i>ANSI Common Lisp</i> by Paul Graham, Prentice Hall 1996, ISBN 0133708756,
+&pound;31.&nbsp; This is an excellent and thorough introduction to the
+language including a full (though somewhat abbreviated) reference manual.</li>
+</ul>
+Other books which may be useful for reference / background reading are
+<ul>
+<li>
+<i>Common Lisp: the language</i> by Guy L Steele, <b>second edition</b>,
+Digital Press 1990, ISBN 1555580416, &pound;34:54 from Amazon. This is
+absolutely not an introductory text, but it does go into very useful depth
+about every aspect of the language and is sometimes a good place to go
+when you're stuck with some concept, or when you need a full explanation
+of how something works. Almost as thorough as the formal specification
+but considerably chattier and with a few good jokes. Warning: this book
+was published 4 years before Common Lisp was standardized, and is thus
+only a 99% match to the language, but that should be good enough for our
+purposes.</li>
+
+<ul>
+<li>
+The complete text of this book is supposed to be available online at <a href="http://www.cs.cmu.edu/Groups/AI/html/cltl/cltl2.html">http://www.cs.cmu.edu/Groups/AI/html/cltl/cltl2.html</a>.
+Last time I checked some of the links here were broken, but some of the
+mirror sites are in better condition. You mileage may vary.</li>
+</ul>
+
+<li>
+<i>LISP</i> by Patrick Winston and Berthold Horn, Addison-Wesley 1989,
+ISBN 0201083191, &pound;36.99 from Amazon. Covers basic concepts but then
+wanders off into heavily AI-based examples. Not a tutorial.</li>
+
+<li>
+<i>Paradigms of Artificial Intelligence: case studies in common Lisp</i>
+by Peter Norvig, Morgan Kauffman 1992, ISBN 1558601910, &pound;39:45 from
+Amazon.&nbsp; Deals with fairly advanced topics in AI.</li>
+</ul>
+Two books of note on <i>CLOS</i> (the Common Lisp Object System) are
+<ul>
+<li>
+<i>Object Oriented Programming in Common Lisp: A Programmers Guide to the
+Common Lisp Object System</i> by Sonya E. Keene, Addison-Wesley 1988, ISBN
+0201175894, &pound;25:81 from Amazon. Extremely well written basic introduction
+for CLOS beginners.</li>
+
+<li>
+<i>The Art of the Metaobject Protocol</i> by Gregor Kiczales, Jim Des Rivieres
+&amp; Daniel G. Bobrow, MIT Press 1991, ISBN 0262610744, &pound;28:56 from
+Amazon. In-depth look "under the hood" - everything you always wanted to
+know about how an object system is built but were afraid someone might
+answer.</li>
+</ul>
+In general, be wary of any Lisp book which does not explicitly apply to
+"Common Lisp".
+<center>
+<p><b>&nbsp;</b><i>(end of administrative interlude)</i></center>
+
+<hr WIDTH="100%">
+<p><b>1.6 Main features of Lisp</b>
+<p>Why use Lisp? Because it is
+<ul>
+<li>
+Standardized</li>
+
+<li>
+Extensible</li>
+
+<li>
+Dynamic</li>
+
+<li>
+Large</li>
+
+<li>
+Powerful</li>
+
+<li>
+Robust</li>
+
+<li>
+Reliable</li>
+
+<li>
+Y2K proof ;-)</li>
+
+<li>
+Flexible</li>
+
+<li>
+Cheap</li>
+
+<li>
+High-level</li>
+
+<li>
+Interactive</li>
+
+<li>
+Elegant</li>
+
+<li>
+Fun</li>
+</ul>
+It offers (see also <a
+href="http://www.lispworks.com/products/lisp-overview.html">http://www.lispworks.com/products/lisp-overview.html</a>)
+<ul>
+<li>
+simple consistent syntax</li>
+
+<li>
+a rich set of datatypes</li>
+
+<li>
+run-time (dynamic) typing</li>
+
+<li>
+automatic memory management (<i>garbage collection</i>)</li>
+
+<li>
+a fully integrated object system (CLOS)</li>
+
+<li>
+sophisticated error handling</li>
+
+<li>
+stunningly powerful macro system ("programs as data")</li>
+
+<li>
+features (such as <tt>unwind-protect </tt>and closures) which you simply
+won't find elsewhere</li>
+</ul>
+It is particularly suitable for applications which are
+<ul>
+<li>
+large and complex</li>
+
+<li>
+server side</li>
+
+<li>
+non-stop</li>
+</ul>
+Examples of real life applications include:
+<ul>
+<li>
+The Common Lisp Hypertext Server (<i>CL-HTTP</i>) - <a href="http://www.ai.mit.edu/projects/iiip/doc/cl-http/">http://www.ai.mit.edu/projects/iiip/doc/cl-http/</a></li>
+
+<li>
+NASA's Remote Agent - <a href="http://www.lispworks.com/products/success.html">http://www.lispworks.com/products/success.html</a></li>
+
+<li>
+Super Mario 64 - <a href="http://www.franz.com/success/customer_apps/animation/">http://www.franz.com/success/customer_apps/animation/</a></li>
+
+<li>
+telecommunications, animation, finance, CAD, AI, health care,...</li>
+</ul>
+<b>1.7 Practical Session - Familiarity with LispWorks</b>
+<p><b>1.7.1 Starting Lisp</b>
+<p>The software we are running at Anglia is the Personal Edition of LispWorks
+version 4.1.0. This is free software from Xanalys. The product runs on
+Windows 95, 98 and NT 4.
+<p>To start a lisp session, select the following item under Programs on
+your Start menu:
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Harlequin LispWorks
+4.1 \ Personal Edition \ LispWorks
+<p>There will be a short delay while the lisp system initializes itself.
+You will eventually be left with three windows on-screen. On top is a nagware
+window titled "Upgrade to LispWorks Professional Edition" which you need
+to dismiss by clicking on "OK". Underneath that is a small window (the
+"podium"), titled "LispWorks Personal Edition 4.1.0" and - somewhat larger
+- a window titled "Listener 1". This last will be referred to in these
+notes as "the listener".
+<p>Do not attempt to close the podium; you might lose your entire lisp
+session. Note that if you iconise the podium you will find all your other
+lisp windows also iconised. (If this happens simply bring back the listener
+from the task bar.) Hint: just leave the podium alone.
+<p>Bring the listener to the top and make it large (e.g. maximize it).
+<p>Incidentally, if you succeed in accidentally closing the listener, you
+can create a new one by going to the Tools menu on the podium.
+<p><b>1.7.2 On-line documentation</b>
+<p>LispWorks comes with complete on-line documentation, in html form. This
+includes an html representation of the ANSI specification for Common Lisp.
+The full documentation takes up roughly 200 MB on the hard disk and it
+may not be possible to for me to install it on the machines available for
+these practical sessions. If this turns out to be the case and if you wish
+to access on-line documentation during these sessions, you will need to
+purchase and bring with you a copy of Xanalys' "Software tools sampler"
+CD. To use it, simply insert the CD into your machine and kill any application
+which autostarts on you. The lisp software will then be able to access
+documentation as-and-when you need it.
+<p>To access the documentation, either go to:
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Harlequin LispWorks
+4.1 \ Personal Edition \ Browsable Documentation
+<br>under Programs on your Start menu, or select
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Help \ Manuals ...
+<br>on the podium, or use the editor key binding Ctrl+Shift+D.
+<p><b>1.7.3 The LispWorks Editor</b>
+<p>The editor is driven by EMACS-style key bindings. These are not the
+same as standard Windows bindings, and there are some subtle differences
+in the style of interaction. In particular be aware that selecting a swathe
+of text and then typing will not delete that text.
+<p>Roughly:
+<ul>
+<li>
+all the keys to the right of the keyboard (cursor keys, home, delete, page
+up, etc.) do work as you would expect</li>
+
+<li>
+the standard Windows control-key bindings (e.g. Ctrl+C for copy) are not
+in effect</li>
+
+<li>
+there are however roughly 200 key bindings (depending on context) in effect
+in any editor window, which is too many to learn at one go</li>
+</ul>
+A <a href="../additional/key-binds.html">separate sheet</a> is available
+listing a few of the most useful key bindings. Please ask if you suspect
+there should be a keyboard shortcut for some frequent gesture, but you
+don't know what it is.
+<p>The listener, which you will use for direct interaction with the lisp
+system, uses the editor key bindings plus some extras.
+<p><b>1.7.4 Pauses and limitations</b>
+<p>You will occasionally note that the system is somewhat sluggish in its
+response. This can be for one of two reasons
+<ul>
+<li>
+Paging delay. On a 32 MB machine running small lisp programs this should
+not be too much of a problem, but you may notice it occasionally. For example,
+first time a lisp session signals an error you will experience a few seconds
+delay.</li>
+
+<li>
+Garbage collection: The lisp system will occasionally stop interacting
+with you and "go away" for a couple of seconds while it scavenges for spare
+memory. The cursor will change for the duration of this process.</li>
+</ul>
+We are using a free software here. To be more precise, this is a free edition
+of a commercial product. The vendor has limited a few aspects of the software,
+in particular:
+<ul>
+<li>
+memory allocation (this should not be a problem for any of the work required
+by this course)</li>
+
+<li>
+duration (5 hours maximum)</li>
+</ul>
+You will be warned before you hit either limit. I recommend that you save
+your work and quit the image very soon after receiving the warning, because
+if either of the above limits are actually exceeded, then the image will
+halt abruptly and you will have no opportunity to save any work.
+<p>In any case, you can restart lisp immediately, reload your work, and
+continue where you left off.
+<p><b>1.7.5 When You Get Stuck</b>
+<p>Visit the <a href="../additional/agony-corner.html">Agony Corner</a>
+<br>&nbsp;
+<p><b>1.8 Suggested activity</b>
+<ul>
+<li>
+Visit</li>
+
+<ul><a href="http://www.lispworks.com/products/myths_and_legends.html">http://www.lispworks.com/products/myths_and_legends.html</a></ul>
+and read about <i>"Common Lisp - Myths and Legends"</i>
+<li>
+Explore the ALU, Xanalys and Franz web sites:</li>
+
+<ul>
+<li>
+<a href="http://www.lisp.org/">http://www.lisp.org/</a></li>
+
+<li>
+<a href="http://www.lispworks.com/">http://www.lispworks.com/</a></li>
+
+<li>
+<a href="http://www.franz.com/">http://www.franz.com/</a></li>
+</ul>
+
+<li>
+Dip into the HyperSpec and get a feel for it</li>
+
+<ul><a href="http://www.lispworks.com/reference/HyperSpec/Front/index.htm">http://www.lispworks.com/reference/HyperSpec/Front/index.htm</a></ul>
+
+<li>
+Read pages 1 to 10 of Graham</li>
+
+<li>
+Obtain a copy of Common Lisp and install it on your computer.</li>
+
+<li>
+Below is a lisp of commonly made mistakes by students new to Common Lisp.
+Print it out, mount it on stiff card, stick it to the top of your monitor
+so that when you run aground it's there to help you.</li>
+</ul>
+<b>1.9 Early mistakes</b>
+<ul>
+<li>
+&nbsp;Hoping that an argument list will destructure for you, or trying
+to give argument types to a function:</li>
+
+<ul>&nbsp;<tt>(defun foo (list a b)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; ....)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; hopes to peel a and b out of a list</tt></ul>
+
+<li>
+Using a C-like calling syntax:</li>
+
+<ul><tt>foo(a b)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; should be (foo a b)</tt></ul>
+
+<li>
+Parentheses around variables:</li>
+
+<ul><tt>(foo (a) (b))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;
+should be (foo a b)</tt></ul>
+
+<li>
+Parentheses around strings:</li>
+
+<ul><tt>("hello")&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; should be "hello"</tt></ul>
+
+<li>
+Not quoting when you need to suspend evaluation:</li>
+
+<ul><tt>(98 99 100)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; attempts to call function called 98</tt>
+<br><tt>'(98 99 100)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; a list containing three numbers</tt></ul>
+
+<li>
+Trying an "else" in (if ...)</li>
+
+<ul><tt>(if (foo)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (bar)</tt>
+<br><tt>&nbsp; else (baz))&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; drop the "else"!</tt></ul>
+</ul>
+
+<div align=right><a href="mailto:ndl@ravenbrook.com">Nick Levine</a></div>
+
+<div align=right>last modified 2001-09-03, URLs updated 2003-06-23</div>
+
+<div align=right>Copyright (C) Nick Levine 1999-2001. All rights reserved
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/lectures/lecture-1.html#2
+$.</div>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:42 GMT -->
+</html>

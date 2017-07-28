@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Big &#038; Small at the same time</title>
+	<atom:link href="https://stuartsierra.com/2009/06/26/big-small-at-the-same-time/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2009/06/26/big-small-at-the-same-time</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2009/06/26/big-small-at-the-same-time/comment-page-1#comment-42598</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Fri, 03 Jul 2009 17:22:05 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=246#comment-42598</guid>
+		<description><![CDATA[Philip- That&#039;s an interesting idea.  But as far as I can tell from the &lt;a href=&quot;http://dev.mysql.com/tech-resources/articles/csv-storage-engine.html&quot; rel=&quot;nofollow&quot;&gt;docs&lt;/a&gt;, the CSV storage engine can&#039;t retrieve a single record without a full-table scan.
+
+A similar approach, that I want to try, is making the final Hadoop job output a &lt;a href=&quot;http://hadoop.apache.org/core/docs/current/api/org/apache/hadoop/io/MapFile.html&quot; rel=&quot;nofollow&quot;&gt;MapFile&lt;/a&gt;, basically a SequenceFile with an index.  Then just dump the MapFiles on a file system and retrieve the records from there.  But I haven&#039;t found much discussion of MapFiles outside of the API docs, so I don&#039;t know if they are really suitable for this kind of use.]]></description>
+		<content:encoded><![CDATA[<p>Philip- That&#8217;s an interesting idea.  But as far as I can tell from the <a href="http://dev.mysql.com/tech-resources/articles/csv-storage-engine.html" rel="nofollow">docs</a>, the CSV storage engine can&#8217;t retrieve a single record without a full-table scan.</p>
+<p>A similar approach, that I want to try, is making the final Hadoop job output a <a href="http://hadoop.apache.org/core/docs/current/api/org/apache/hadoop/io/MapFile.html" rel="nofollow">MapFile</a>, basically a SequenceFile with an index.  Then just dump the MapFiles on a file system and retrieve the records from there.  But I haven&#8217;t found much discussion of MapFiles outside of the API docs, so I don&#8217;t know if they are really suitable for this kind of use.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Philip (flip) Kromer</title>
+		<link>https://stuartsierra.com/2009/06/26/big-small-at-the-same-time/comment-page-1#comment-42597</link>
+		<dc:creator><![CDATA[Philip (flip) Kromer]]></dc:creator>
+		<pubDate>Fri, 03 Jul 2009 05:54:52 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=246#comment-42597</guid>
+		<description><![CDATA[It&#039;s a bit wacky, but have you considered doing a last-pass total sort (so that the outcome is efficiently sharded) and using a CSV storage engine? MySQL has one and so do others I believe.
+
+If it&#039;s the merge that&#039;s the problem, does just sharding help -- doing a final sort so each key knows which reducer&#039;s (shard&#039;s) index to query on? (or querying against all in parallel?)]]></description>
+		<content:encoded><![CDATA[<p>It&#8217;s a bit wacky, but have you considered doing a last-pass total sort (so that the outcome is efficiently sharded) and using a CSV storage engine? MySQL has one and so do others I believe.</p>
+<p>If it&#8217;s the merge that&#8217;s the problem, does just sharding help &#8212; doing a final sort so each key knows which reducer&#8217;s (shard&#8217;s) index to query on? (or querying against all in parallel?)</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2009/06/26/big-small-at-the-same-time/comment-page-1#comment-42582</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Fri, 26 Jun 2009 21:43:44 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=246#comment-42582</guid>
+		<description><![CDATA[I still have to load the data into the key/value store.  It&#039;s too big to fit in RAM, at least on hardware that I can afford.  Tokyo Cabinet is an option, but I haven&#039;t had time to explore it much yet.]]></description>
+		<content:encoded><![CDATA[<p>I still have to load the data into the key/value store.  It&#8217;s too big to fit in RAM, at least on hardware that I can afford.  Tokyo Cabinet is an option, but I haven&#8217;t had time to explore it much yet.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: tim wee</title>
+		<link>https://stuartsierra.com/2009/06/26/big-small-at-the-same-time/comment-page-1#comment-42581</link>
+		<dc:creator><![CDATA[tim wee]]></dc:creator>
+		<pubDate>Fri, 26 Jun 2009 21:36:27 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=246#comment-42581</guid>
+		<description><![CDATA[how about using a distributed key value store like tokyo cabinet/redis/memcached?]]></description>
+		<content:encoded><![CDATA[<p>how about using a distributed key value store like tokyo cabinet/redis/memcached?</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.282 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:58:00 -->
+
+<!-- Compression = gzip -->

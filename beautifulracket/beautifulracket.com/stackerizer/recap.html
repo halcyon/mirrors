@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/stackerizer/recap.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:16 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Dive deeper into macros: stackerizer</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;dive-deeper-into-macros-stackerizer&quot;)"></div><h1 anchor="dive-deeper-into-macros-stackerizer" id="dive-deeper-into-macros-stackerizer" hyphens="none">Dive deeper into macros: <span class="my-code" decode="exclude">stackerizer</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-expander.html">3&emsp;the expander</a></li><li><a class="here" href="recap.html">4&emsp;recap</a></li><li><a href="source-listing.html">5&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_L6B7d&quot;)"></div><p id="a_L6B7d"><span class="my-code" decode="exclude">stackerizer</span> showed us how we could make a lan­guage that gen­er­ates pro­grams in another lan­guage.</p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ZXNrB&quot;)"></div><p id="a_ZXNrB">We can make a lan­guage (like <span class="my-code" decode="exclude">stackerizer</span>) that gen­er­ates test pro­grams for another lan­guage (like <span class="my-code" decode="exclude">stacker</span>).</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_A4qe3&quot;)"></div><p id="a_A4qe3">A <a class="glossary" href="../appendix/glossary.html#module-language"><span class="glossary-link-text">mod­ule lan­guage</span></a> uses stan­dard S-expres­sions as syn­tax, but still pro­vides its own expander.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_REVS9&quot;)"></div><p id="a_REVS9"><span class="my-code" decode="exclude">#lang s-exp <em>path</em></span> invokes the default S-expres­sion reader and passes the result to the expander indi­cated by <span class="my-code" decode="exclude"><em>path</em></span>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_WHOsb&quot;)"></div><p id="a_WHOsb"><a class="glossary" href="../appendix/glossary.html#recursion"><span class="glossary-link-text">Recur­sion</span></a> is a tech­nique whereby a macro (or ordi­nary func­tion) calls itself repeat­edly.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Yb2Uz&quot;)"></div><p id="a_Yb2Uz">Macros can gen­er­ate other macros.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_vBxgb&quot;)"></div><p id="a_vBxgb">In a <a class="glossary" href="../appendix/glossary.html#syntax-template"><span class="glossary-link-text">syn­tax tem­plate</span></a>, the ellip­sis can be used to repeat a sub-tem­plate for each mem­ber of a list of matched argu­ments.</p></div></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;next-steps&quot;)"></div><h3 anchor="next-steps" class="subhead" id="next-steps"><a href="#next-steps">Next steps</a></h3></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_D9QmD&quot;)"></div><p id="a_D9QmD">Move ahead to the next big tuto­r­ial: <a href="../bf/index.html"><span class="my-code" decode="exclude">bf</span></a></p></div></li></ul><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-expander.html">3&emsp;the expander</a></li><li><a class="here" href="recap.html">4&emsp;recap</a></li><li><a href="source-listing.html">5&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="the-expander.html">← prev</a>
+    <a class="nav-right" href="source-listing.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

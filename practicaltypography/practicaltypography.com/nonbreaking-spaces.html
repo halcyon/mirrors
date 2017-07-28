@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from practicaltypography.com/nonbreaking-spaces.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 17:01:21 GMT -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="text/javascript">
+if (navigator.appVersion.indexOf("Win")!=-1) {
+    document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-a.css" />');
+} else if (navigator.appVersion.indexOf("Mac")!=-1) {
+    if (navigator.userAgent.match(/iPad/i) != null) {
+        document.write('<link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="fonts/equity-b.css" type="text/css" />');
+        document.write('<link rel="stylesheet" media="only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2)" type="text/css" href="fonts/equity-a.css" />');
+    } else {
+        document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-b.css" />');
+    }
+} else {
+    document.write('<link rel="stylesheet" type="text/css" media="all" href="fonts/equity-a.css" />');
+}
+
+</script>
+
+<title>Nonbreaking spaces | Butterick’s Practical Typography</title>
+<link rel="stylesheet" type="text/css" media="all" href="styles.css" />
+<link rel="stylesheet" type="text/css" media="all" href="fonts/1406-fonts.css" />
+<meta name="format-detection" content="telephone=no">
+
+
+
+
+
+<script type="text/javascript">
+var isFirefox = typeof InstallTrigger !== 'undefined';
+if (isFirefox) {
+document.write('<link rel="stylesheet" type="text/css" media="all" href="firefox.css" />');
+}
+var isChromium = window.chrome,
+    winNav = window.navigator,
+    vendorName = winNav.vendor,
+    isOpera = winNav.userAgent.indexOf("OPR") > -1,
+    isIEedge = winNav.userAgent.indexOf("Edge") > -1,
+    isIOSChrome = winNav.userAgent.match("CriOS");
+if(isChromium !== null && isChromium !== undefined && vendorName === "Google Inc." && isIEedge == false) {
+   // is Google Chrome or Opera
+   document.write('<link rel="stylesheet" type="text/css" media="all" href="chrome.css" />');
+}
+</script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-19281911-7']);
+  _gaq.push(['_setDomainName', 'practicaltypography.com']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+
+<body>
+<div class="content"><div id="doc"><title-block><topic>nonbreaking spaces</topic><short-rule>Prevent awkward breaks</short-rule></title-block><p>Your word proces­sor as­sumes that a word space marks a safe place to flow text onto a new line or page. A <em>non­break­ing space</em> is the same width as a word space, but it pre­vents the text from flow­ing to a new line or page. It’s like in­vis­i­ble glue be­tween the words on ei­ther <span class="no-hyphens">side.</span></p><table class="shortcut"><thead><tr><th class="no-hyphens"></th><th class="no-hyphens">Word</th><th class="no-hyphens">Pages</th><th class="no-hyphens">HTML</th></tr></thead><tbody><tr><td>nonbreaking space</td><td class="instruction">control (option on Mac) + shift +
+space bar</td><td class="instruction">option + shift + space bar</td><td class="instruction"><code>&amp;nbsp;</code></td></tr></tbody></table><p>Put a non­break­ing space be­fore any nu­meric or al­pha­betic ref­er­ence to pre­vent awk­ward breaks. Re­call this ex­am­ple from <a href="paragraph-and-section-marks.html" class="xref">para­graph and sec­tion marks</a>:</p><table class="example"><tr><td style="font-size:120%"><example-text><span>The seller can, under Business Law §<br/>1782, offer a full refund to buyers. But ¶<br/>49 of the contract offers another option.</span></example-text></td><td><example-caption>wrong</example-caption></td></tr><tr><td style="font-size:120%"><example-text><span>The seller can, under Business Law<br/>§ 1782, offer a full refund to buyers. But<br/>¶ 49 of the contract offers another option.</span></example-text></td><td><example-caption>right</example-caption></td></tr></table><p>In the top ex­am­ple, nor­mal word spaces come af­ter the § and ¶ sym­bols, and the nu­meric ref­er­ences in­cor­rectly ap­pear on the next <span class="no-hyphens">line.</span></p><p>In the bot­tom ex­am­ple, non­break­ing spaces come af­ter the § and ¶ sym­bols. This time, the sym­bols and the nu­meric ref­er­ences stay <span class="no-hyphens">together.</span></p><p>Use non­break­ing spaces af­ter other ab­bre­vi­ated ref­er­ence marks <phrase>(Ex. A, Fig. 23)</phrase>, af­ter copy­right sym­bols (see <a href="trademark-and-copyright-symbols.html" class="xref">trade­mark and copy­right sym­bols</a>), and be­tween the dots in cer­tain <a href="ellipses.html" class="xref">el­lipses</a>.</p><div class="subhead" id="nonbreaking-spaces-in-html"><a href="#nonbreaking-spaces-in-html">Nonbreaking spaces in HTML</a></div><p>Non­break­ing spaces can be in­serted into HTML doc­u­ments ei­ther with an es­cape code (<code>&amp;nbsp;</code>) or by typ­ing a non­break­ing space char­ac­ter (us­ing what­ever key short­cut is as­signed to it in your text <span class="no-hyphens">editor).</span></p><p>If you be­lieve in the prin­ci­ple that source code should be op­ti­mized for read­abil­ity—I do—then you should use the <code>&amp;nbsp;</code> es­cape code, as it makes the non­break­ing space vis­i­ble and <span class="no-hyphens">explicit.</span></p><div class="btw"><div class="btw-title">by the way</div><ul><li><p>Why isn’t there a stan­dard key short­cut for the non­break­ing space? Beats <span class="no-hyphens">me.</span></p></li><li><p>Un­like other white space in HTML, a se­quence of non­break­ing spaces is not col­lapsed into a sin­gle word space. So the­o­ret­i­cally, you can make larger spaces out of non­break­ing spaces. But as with any <a href="white-space-characters.html" class="xref">white-space char­ac­ters</a>, this is bad pol­icy—like fix­ing a flat tire with duct <span class="no-hyphens">tape.</span></p></li></ul></div></div><a id="links"></a><div style="height:1em"></div><ul class="children"></ul></div>
+
+
+<!-- top nav -->
+<div class="nav-outer" id="top"><a href="index-2.html#toc"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="up"><a href="type-composition.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="prev"><a href="word-spaces.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="next"><a href="tabs-and-tab-stops.html"><div class="nav-inner"></div></a></div>
+
+<div class="nav-outer" id="bottom"><div class="nav-inner"><div id="navtable">
+
+<div id="left">
+
+<a class="xref box-link" href="word-spaces.html"><span class="arrow">←</span>&nbsp;word spaces</a></div>
+
+
+<div id="center-left"><a class="xref box-link" href="index-2.html#toc">top</a></div>
+
+<div id="center-right"><a class="xref box-link" href="type-composition.html#links">Chapter</a></div>
+
+<div id="right">
+<a class="xref box-link" href="tabs-and-tab-stops.html">tabs and tab stops&nbsp;<span class="arrow">→</span></a></div>
+
+
+
+</div></div></div> 
+
+</body>
+
+<!-- Mirrored from practicaltypography.com/nonbreaking-spaces.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 17:01:21 GMT -->
+</html>
+
+<!-- © 2013–16 Matthew Butterick -->
+

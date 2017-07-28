@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/es-es/clojure-es/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:33:23 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn clojure in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../../css/normalize.css">
+        <link rel="stylesheet" href="../../../css/main.css">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fes-es%2Fclojure-es%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3Dclojure">
+        Comparte esta página
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">Aprende X en Y minutos</a></h2>
+  <h2>Donde X=clojure</h2>
+  
+    <p class="filelink">
+    Descarga el código:
+    <a href="../../files/learnclojure-es.clj">learnclojure-es.clj</a>
+    </p>
+  
+  <div id="doc">
+    <p>Clojure es un lenguaje de la familia Lisp desarrollado sobre la Máquina Virtual
+de Java. Tiene un énfasis mayor en la <a href="https://es.wikipedia.org/wiki/Programación_funcional">programación funcional</a> pura
+que Common Lisp, pero incluyendo la posibilidad de usar <a href="https://es.wikipedia.org/wiki/Memoria_transacional">SMT</a> para manipular
+el estado según se presente.</p>
+
+<p>Esta combinación le permite gestionar la concurrencia de manera muy sencilla
+y a menudo automáticamente.</p>
+
+<p>(Necesitas la versión de Clojure 1.2 o posterior)</p>
+<pre class="highlight clojure"><code><span class="c1">; Los comentatios comienzan con punto y coma.
+</span><span class="w">
+</span><span class="c1">; Clojure se escribe mediante "forms" (patrones), los cuales son
+; listas de objectos entre paréntesis, separados por espacios en blanco.
+</span><span class="w">
+</span><span class="c1">; El "reader" (lector) de Clojure asume que el primer objeto es una
+; función o una macro que se va a llamar, y que el resto son argumentos.
+</span><span class="w">
+</span><span class="c1">; El primer form en un archivo debe ser ns, para establecer el namespace (espacio de
+; nombres)
+</span><span class="p">(</span><span class="nf">ns</span><span class="w"> </span><span class="n">learnclojure</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">; Algunos ejemplos básicos:
+</span><span class="w">
+</span><span class="c1">; str crea una cadena de caracteres a partir de sus argumentos
+</span><span class="p">(</span><span class="nb">str</span><span class="w"> </span><span class="s">"Hello"</span><span class="w"> </span><span class="s">" "</span><span class="w"> </span><span class="s">"World"</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; "Hello World"
+</span><span class="w">
+</span><span class="c1">; Las operaciones matemáticas son sencillas
+</span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; 2
+</span><span class="p">(</span><span class="nb">-</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; 1
+</span><span class="p">(</span><span class="nb">*</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; 2
+</span><span class="p">(</span><span class="nb">/</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; 2
+</span><span class="w">
+</span><span class="c1">; La igualdad es =
+</span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; true
+</span><span class="p">(</span><span class="nb">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; false
+</span><span class="w">
+</span><span class="c1">; También es necesaria la negación para las operaciones lógicas
+</span><span class="p">(</span><span class="nb">not</span><span class="w"> </span><span class="n">true</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; false
+</span><span class="w">
+</span><span class="c1">; Cuando se anidan Los patrones, estos funcionan de la manera esperada
+</span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">(</span><span class="nb">-</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="c1">; = 1 + (3 - 2) =&gt; 2
+</span><span class="w">
+</span><span class="c1">; Tipos
+;;;;;;;;;;;;;
+</span><span class="w">
+</span><span class="c1">; Clojure usa los tipos de objetos de Java para booleanos, strings (cadenas de
+; caracteres) y números.
+; Usa class para saber de qué tipo es.
+</span><span class="p">(</span><span class="nb">class</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="c1">; Los enteros son java.lang.Long por defecto
+</span><span class="p">(</span><span class="nb">class</span><span class="w"> </span><span class="mi">1</span><span class="nb">.</span><span class="p">)</span><span class="c1">; Los numeros en coma flotante son java.lang.Double
+</span><span class="p">(</span><span class="nb">class</span><span class="w"> </span><span class="s">""</span><span class="p">)</span><span class="c1">; Los strings van entre comillas dobles, y son
+; son java.lang.String
+</span><span class="p">(</span><span class="nb">class</span><span class="w"> </span><span class="n">false</span><span class="p">)</span><span class="c1">; Los Booleanos son java.lang.Boolean
+</span><span class="p">(</span><span class="nb">class</span><span class="w"> </span><span class="n">nil</span><span class="p">)</span><span class="c1">; El valor "null" se escribe nil
+</span><span class="w">
+</span><span class="c1">; Si quieres crear una lista de datos, precedela con una comilla
+; simple para evitar su evaluación
+</span><span class="o">'</span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; (+ 1 2)
+; (que es una abreviatura de (quote (+ 1 2)) )
+</span><span class="w">
+</span><span class="c1">; Puedes evaluar una lista precedida por comilla  con eval
+</span><span class="p">(</span><span class="nb">eval</span><span class="w"> </span><span class="o">'</span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="c1">; =&gt; 3
+</span><span class="w">
+</span><span class="c1">; Colecciones &amp; Secuencias
+;;;;;;;;;;;;;;;;;;;
+</span><span class="w">
+</span><span class="c1">; Las Listas están basadas en las listas enlazadas, mientras que los Vectores en
+; arrays.
+; ¡Los Vectores y las Listas también son clases de Java!
+</span><span class="p">(</span><span class="nb">class</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">])</span><span class="c1">; =&gt; clojure.lang.PersistentVector
+</span><span class="p">(</span><span class="nb">class</span><span class="w"> </span><span class="o">'</span><span class="p">(</span><span class="nf">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">))</span><span class="c1">; =&gt; clojure.lang.PersistentList
+</span><span class="w">
+</span><span class="c1">; Una lista podría ser escrita como (1 2 3), pero debemos ponerle una
+; comilla simple delante para evitar que el reader piense que es una función.
+; Además, (list 1 2 3) es lo mismo que '(1 2 3)
+</span><span class="w">
+</span><span class="c1">; Las "Colecciones" son solo grupos de datos
+; Tanto las listas como los vectores son colecciones:
+</span><span class="p">(</span><span class="nf">coll?</span><span class="w"> </span><span class="o">'</span><span class="p">(</span><span class="nf">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="c1">; =&gt; true
+</span><span class="p">(</span><span class="nf">coll?</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">])</span><span class="w"> </span><span class="c1">; =&gt; true
+</span><span class="w">
+</span><span class="c1">; Las "Secuencias" (seqs) son descripciones abstractas de listas de datos.
+; Solo las listas son seqs.
+</span><span class="p">(</span><span class="nb">seq?</span><span class="w"> </span><span class="o">'</span><span class="p">(</span><span class="nf">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="c1">; =&gt; true
+</span><span class="p">(</span><span class="nb">seq?</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">])</span><span class="w"> </span><span class="c1">; =&gt; false
+</span><span class="w">
+</span><span class="c1">; Una seq solo necesita proporcionar una entrada cuando es accedida.
+; Así que, las seqs pueden ser perezosas -- pueden establecer series infinitas:
+</span><span class="p">(</span><span class="nb">range</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; (0 1 2 3)
+</span><span class="p">(</span><span class="nb">range</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; (0 1 2 3 4 ...) (una serie infinita)
+</span><span class="p">(</span><span class="nb">take</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="p">(</span><span class="nb">range</span><span class="p">))</span><span class="w"> </span><span class="c1">;  (0 1 2 3)
+</span><span class="w">
+</span><span class="c1">; Usa cons para agregar un elemento al inicio de una lista o vector
+</span><span class="p">(</span><span class="nb">cons</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">])</span><span class="w"> </span><span class="c1">; =&gt; (4 1 2 3)
+</span><span class="p">(</span><span class="nb">cons</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">'</span><span class="p">(</span><span class="nf">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="c1">; =&gt; (4 1 2 3)
+</span><span class="w">
+</span><span class="c1">; conj agregará un elemento a una colección en la forma más eficiente.
+; Para listas, se añade al inicio. Para vectores, al final.
+</span><span class="p">(</span><span class="nb">conj</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; [1 2 3 4]
+</span><span class="p">(</span><span class="nb">conj</span><span class="w"> </span><span class="o">'</span><span class="p">(</span><span class="nf">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; (4 1 2 3)
+</span><span class="w">
+</span><span class="c1">; Usa concat para concatenar listas o vectores
+</span><span class="p">(</span><span class="nb">concat</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">'</span><span class="p">(</span><span class="nf">3</span><span class="w"> </span><span class="mi">4</span><span class="p">))</span><span class="w"> </span><span class="c1">; =&gt; (1 2 3 4)
+</span><span class="w">
+</span><span class="c1">; Usa filter y map para actuar sobre colecciones
+</span><span class="p">(</span><span class="nb">map</span><span class="w"> </span><span class="nb">inc</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">])</span><span class="w"> </span><span class="c1">; =&gt; (2 3 4)
+</span><span class="p">(</span><span class="nb">filter</span><span class="w"> </span><span class="n">even?</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">])</span><span class="w"> </span><span class="c1">; =&gt; (2)
+</span><span class="w">
+</span><span class="c1">; Usa reduce para combinar sus elementos
+</span><span class="p">(</span><span class="nb">reduce</span><span class="w"> </span><span class="nb">+</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">4</span><span class="p">])</span><span class="w">
+</span><span class="c1">; = (+ (+ (+ 1 2) 3) 4)
+; =&gt; 10
+</span><span class="w">
+</span><span class="c1">; reduce puede tener un argumento indicando su valor inicial.
+</span><span class="p">(</span><span class="nb">reduce</span><span class="w"> </span><span class="nb">conj</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="o">'</span><span class="p">(</span><span class="nf">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="w">
+</span><span class="c1">; = (conj (conj (conj [] 3) 2) 1)
+; =&gt; [3 2 1]
+</span><span class="w">
+</span><span class="c1">; Funciones
+;;;;;;;;;;;;;;;;;;;;;
+</span><span class="w">
+</span><span class="c1">; Usa fn para crear nuevas funciones. Una función siempre devuelve
+; su última expresión
+</span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="s">"Hello World"</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; fn
+</span><span class="w">
+</span><span class="c1">; (Necesitas rodearlo con paréntesis para invocarla)
+</span><span class="p">((</span><span class="k">fn</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="s">"Hello World"</span><span class="p">))</span><span class="w"> </span><span class="c1">; =&gt; "Hello World"
+</span><span class="w">
+</span><span class="c1">; Puedes crear una var (variable) mediante def
+</span><span class="p">(</span><span class="k">def</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="n">x</span><span class="w"> </span><span class="c1">; =&gt; 1
+</span><span class="w">
+</span><span class="c1">; Asigna una función a una var
+</span><span class="p">(</span><span class="k">def</span><span class="w"> </span><span class="n">hello-world</span><span class="w"> </span><span class="p">(</span><span class="k">fn</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="s">"Hello World"</span><span class="p">))</span><span class="w">
+</span><span class="p">(</span><span class="nf">hello-world</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; "Hello World"
+</span><span class="w">
+</span><span class="c1">; Puedes defn como atajo para lo anterior
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">hello-world</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="s">"Hello World"</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">; El [] es el vector de argumentos de la función.
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">hello</span><span class="w"> </span><span class="p">[</span><span class="nb">name</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="nb">str</span><span class="w"> </span><span class="s">"Hello "</span><span class="w"> </span><span class="nb">name</span><span class="p">))</span><span class="w">
+</span><span class="p">(</span><span class="nf">hello</span><span class="w"> </span><span class="s">"Steve"</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; "Hello Steve"
+</span><span class="w">
+</span><span class="c1">; Otra abreviatura para crear funciones es:
+</span><span class="p">(</span><span class="k">def</span><span class="w"> </span><span class="n">hello2</span><span class="w"> </span><span class="o">#</span><span class="p">(</span><span class="nb">str</span><span class="w"> </span><span class="s">"Hello "</span><span class="w"> </span><span class="n">%1</span><span class="p">))</span><span class="w">
+</span><span class="p">(</span><span class="nf">hello2</span><span class="w"> </span><span class="s">"Fanny"</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; "Hello Fanny"
+</span><span class="w">
+</span><span class="c1">; Puedes tener funciones multi-variadic: funciones con un numero variable de
+; argumentos
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">hello3</span><span class="w">
+  </span><span class="p">([]</span><span class="w"> </span><span class="s">"Hello World"</span><span class="p">)</span><span class="w">
+  </span><span class="p">([</span><span class="nb">name</span><span class="p">]</span><span class="w"> </span><span class="p">(</span><span class="nb">str</span><span class="w"> </span><span class="s">"Hello "</span><span class="w"> </span><span class="nb">name</span><span class="p">)))</span><span class="w">
+</span><span class="p">(</span><span class="nf">hello3</span><span class="w"> </span><span class="s">"Jake"</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; "Hello Jake"
+</span><span class="p">(</span><span class="nf">hello3</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; "Hello World"
+</span><span class="w">
+</span><span class="c1">; Las funciones pueden usar argumentos extras dentro de un seq utilizable en la función
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">count-args</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="w"> </span><span class="n">args</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="nb">str</span><span class="w"> </span><span class="s">"You passed "</span><span class="w"> </span><span class="p">(</span><span class="nb">count</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="s">" args: "</span><span class="w"> </span><span class="n">args</span><span class="p">))</span><span class="w">
+</span><span class="p">(</span><span class="nf">count-args</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; "You passed 3 args: (1 2 3)"
+</span><span class="w">
+</span><span class="c1">; Y puedes mezclarlos con el resto de argumentos declarados de la función.
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">hello-count</span><span class="w"> </span><span class="p">[</span><span class="nb">name</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">args</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="nb">str</span><span class="w"> </span><span class="s">"Hello "</span><span class="w"> </span><span class="nb">name</span><span class="w"> </span><span class="s">", you passed "</span><span class="w"> </span><span class="p">(</span><span class="nb">count</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="s">" extra args"</span><span class="p">))</span><span class="w">
+</span><span class="p">(</span><span class="nf">hello-count</span><span class="w"> </span><span class="s">"Finn"</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w">
+</span><span class="c1">; =&gt; "Hello Finn, you passed 3 extra args"
+</span><span class="w">
+
+</span><span class="c1">; Mapas
+;;;;;;;;;;
+</span><span class="w">
+</span><span class="c1">; Mapas de Hash y mapas de arrays comparten una misma interfaz. Los mapas de Hash
+; tienen búsquedas más rápidas pero no mantienen el orden de las claves.
+</span><span class="p">(</span><span class="nb">class</span><span class="w"> </span><span class="p">{</span><span class="no">:a</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="no">:b</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="no">:c</span><span class="w"> </span><span class="mi">3</span><span class="p">})</span><span class="w"> </span><span class="c1">; =&gt; clojure.lang.PersistentArrayMap
+</span><span class="p">(</span><span class="nb">class</span><span class="w"> </span><span class="p">(</span><span class="nb">hash-map</span><span class="w"> </span><span class="no">:a</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="no">:b</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="no">:c</span><span class="w"> </span><span class="mi">3</span><span class="p">))</span><span class="w"> </span><span class="c1">; =&gt; clojure.lang.PersistentHashMap
+</span><span class="w">
+</span><span class="c1">; Los mapas de arrays se convertidos en mapas de Hash en la mayoría de
+; operaciones si crecen mucho, por lo que no debes preocuparte.
+</span><span class="w">
+</span><span class="c1">; Los mapas pueden usar cualquier tipo para sus claves, pero generalmente las
+; keywords (palabras clave) son lo habitual.
+; Las keywords son parecidas a cadenas de caracteres con algunas ventajas de eficiencia
+</span><span class="p">(</span><span class="nb">class</span><span class="w"> </span><span class="no">:a</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; clojure.lang.Keyword
+</span><span class="w">
+</span><span class="p">(</span><span class="k">def</span><span class="w"> </span><span class="n">stringmap</span><span class="w"> </span><span class="p">{</span><span class="s">"a"</span><span class="w"> </span><span class="mi">1</span><span class="n">,</span><span class="w"> </span><span class="s">"b"</span><span class="w"> </span><span class="mi">2</span><span class="n">,</span><span class="w"> </span><span class="s">"c"</span><span class="w"> </span><span class="mi">3</span><span class="p">})</span><span class="w">
+</span><span class="n">stringmap</span><span class="w">  </span><span class="c1">; =&gt; {"a" 1, "b" 2, "c" 3}
+</span><span class="w">
+</span><span class="p">(</span><span class="k">def</span><span class="w"> </span><span class="n">keymap</span><span class="w"> </span><span class="p">{</span><span class="no">:a</span><span class="w"> </span><span class="mi">1</span><span class="n">,</span><span class="w"> </span><span class="no">:b</span><span class="w"> </span><span class="mi">2</span><span class="n">,</span><span class="w"> </span><span class="no">:c</span><span class="w"> </span><span class="mi">3</span><span class="p">})</span><span class="w">
+</span><span class="n">keymap</span><span class="w"> </span><span class="c1">; =&gt; {:a 1, :c 3, :b 2}
+</span><span class="w">
+</span><span class="c1">; Por cierto, las comas son equivalentes a espacios en blanco y no hacen
+; nada.
+</span><span class="w">
+</span><span class="c1">; Recupera un valor de un mapa tratandolo como una función
+</span><span class="p">(</span><span class="nf">stringmap</span><span class="w"> </span><span class="s">"a"</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; 1
+</span><span class="p">(</span><span class="nf">keymap</span><span class="w"> </span><span class="no">:a</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; 1
+</span><span class="w">
+</span><span class="c1">; ¡Las keywords pueden ser usadas para recuperar su valor del mapa, también!
+</span><span class="p">(</span><span class="no">:b</span><span class="w"> </span><span class="n">keymap</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; 2
+</span><span class="w">
+</span><span class="c1">; No lo intentes con strings.
+;("a" stringmap)
+; =&gt; Exception: java.lang.String cannot be cast to clojure.lang.IFn
+</span><span class="w">
+</span><span class="c1">; Si preguntamos por una clave que no existe nos devuelve nil
+</span><span class="p">(</span><span class="nf">stringmap</span><span class="w"> </span><span class="s">"d"</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; nil
+</span><span class="w">
+</span><span class="c1">; Usa assoc para añadir nuevas claves a los mapas de Hash
+</span><span class="p">(</span><span class="k">def</span><span class="w"> </span><span class="n">newkeymap</span><span class="w"> </span><span class="p">(</span><span class="nb">assoc</span><span class="w"> </span><span class="n">keymap</span><span class="w"> </span><span class="no">:d</span><span class="w"> </span><span class="mi">4</span><span class="p">))</span><span class="w">
+</span><span class="n">newkeymap</span><span class="w"> </span><span class="c1">; =&gt; {:a 1, :b 2, :c 3, :d 4}
+</span><span class="w">
+</span><span class="c1">; Pero recuerda, ¡los tipos de Clojure son inmutables!
+</span><span class="n">keymap</span><span class="w"> </span><span class="c1">; =&gt; {:a 1, :b 2, :c 3}
+</span><span class="w">
+</span><span class="c1">; Usa dissoc para eliminar llaves
+</span><span class="p">(</span><span class="nb">dissoc</span><span class="w"> </span><span class="n">keymap</span><span class="w"> </span><span class="no">:a</span><span class="w"> </span><span class="no">:b</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; {:c 3}
+</span><span class="w">
+</span><span class="c1">; Conjuntos
+;;;;;;
+</span><span class="w">
+</span><span class="p">(</span><span class="nb">class</span><span class="w"> </span><span class="o">#</span><span class="p">{</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">})</span><span class="w"> </span><span class="c1">; =&gt; clojure.lang.PersistentHashSet
+</span><span class="p">(</span><span class="nb">set</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">1</span><span class="p">])</span><span class="w"> </span><span class="c1">; =&gt; #{1 2 3}
+</span><span class="w">
+</span><span class="c1">; Añade un elemento con conj
+</span><span class="p">(</span><span class="nb">conj</span><span class="w"> </span><span class="o">#</span><span class="p">{</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; #{1 2 3 4}
+</span><span class="w">
+</span><span class="c1">; Elimina elementos con disj
+</span><span class="p">(</span><span class="nb">disj</span><span class="w"> </span><span class="o">#</span><span class="p">{</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; #{2 3}
+</span><span class="w">
+</span><span class="c1">; Comprueba su existencia usando el conjunto como una función:
+</span><span class="p">(</span><span class="o">#</span><span class="p">{</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; 1
+</span><span class="p">(</span><span class="o">#</span><span class="p">{</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; nil
+</span><span class="w">
+</span><span class="c1">; Hay más funciones en el namespace clojure.sets
+</span><span class="w">
+</span><span class="c1">; Patrones útiles
+;;;;;;;;;;;;;;;;;
+</span><span class="w">
+</span><span class="c1">; Las construcciones lógicas en clojure son macros, y presentan el mismo aspecto
+; que el resto de forms.
+</span><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="n">false</span><span class="w"> </span><span class="s">"a"</span><span class="w"> </span><span class="s">"b"</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; "b"
+</span><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="n">false</span><span class="w"> </span><span class="s">"a"</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; nil
+</span><span class="w">
+</span><span class="c1">; Usa let para crear un binding (asociación) temporal
+</span><span class="p">(</span><span class="k">let</span><span class="w"> </span><span class="p">[</span><span class="n">a</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="nb">&gt;</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">b</span><span class="p">))</span><span class="w"> </span><span class="c1">; =&gt; false
+</span><span class="w">
+</span><span class="c1">; Agrupa expresiones mediante do
+</span><span class="p">(</span><span class="nf">do</span><span class="w">
+  </span><span class="p">(</span><span class="nb">print</span><span class="w"> </span><span class="s">"Hello"</span><span class="p">)</span><span class="w">
+  </span><span class="s">"World"</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; "World" (prints "Hello")
+</span><span class="w">
+</span><span class="c1">; Las funciones tienen implicita la llamada a do
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">print-and-say-hello</span><span class="w"> </span><span class="p">[</span><span class="nb">name</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="nb">print</span><span class="w"> </span><span class="s">"Saying hello to "</span><span class="w"> </span><span class="nb">name</span><span class="p">)</span><span class="w">
+  </span><span class="p">(</span><span class="nb">str</span><span class="w"> </span><span class="s">"Hello "</span><span class="w"> </span><span class="nb">name</span><span class="p">))</span><span class="w">
+</span><span class="p">(</span><span class="nf">print-and-say-hello</span><span class="w"> </span><span class="s">"Jeff"</span><span class="p">)</span><span class="w"> </span><span class="c1">;=&gt; "Hello Jeff" (prints "Saying hello to Jeff")
+</span><span class="w">
+</span><span class="c1">; Y el let también
+</span><span class="p">(</span><span class="k">let</span><span class="w"> </span><span class="p">[</span><span class="nb">name</span><span class="w"> </span><span class="s">"Urkel"</span><span class="p">]</span><span class="w">
+  </span><span class="p">(</span><span class="nb">print</span><span class="w"> </span><span class="s">"Saying hello to "</span><span class="w"> </span><span class="nb">name</span><span class="p">)</span><span class="w">
+  </span><span class="p">(</span><span class="nb">str</span><span class="w"> </span><span class="s">"Hello "</span><span class="w"> </span><span class="nb">name</span><span class="p">))</span><span class="w"> </span><span class="c1">; =&gt; "Hello Urkel" (prints "Saying hello to Urkel")
+</span><span class="w">
+</span><span class="c1">; Módulos
+;;;;;;;;;;;;;;;
+</span><span class="w">
+</span><span class="c1">; Usa use para obtener todas las funciones del módulo
+</span><span class="p">(</span><span class="nf">use</span><span class="w"> </span><span class="ss">'clojure.set</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">; Ahora podemos usar más operaciones de conjuntos
+</span><span class="p">(</span><span class="nb">intersection</span><span class="w"> </span><span class="o">#</span><span class="p">{</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span><span class="w"> </span><span class="o">#</span><span class="p">{</span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">4</span><span class="p">})</span><span class="w"> </span><span class="c1">; =&gt; #{2 3}
+</span><span class="p">(</span><span class="nb">difference</span><span class="w"> </span><span class="o">#</span><span class="p">{</span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span><span class="w"> </span><span class="o">#</span><span class="p">{</span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">4</span><span class="p">})</span><span class="w"> </span><span class="c1">; =&gt; #{1}
+</span><span class="w">
+</span><span class="c1">; Puedes escoger un subgrupo de funciones a importar, también
+</span><span class="p">(</span><span class="nf">use</span><span class="w"> </span><span class="o">'</span><span class="p">[</span><span class="n">clojure.set</span><span class="w"> </span><span class="no">:only</span><span class="w"> </span><span class="p">[</span><span class="nb">intersection</span><span class="p">]])</span><span class="w">
+
+</span><span class="c1">; Usa require para importar un módulo
+</span><span class="p">(</span><span class="nf">require</span><span class="w"> </span><span class="ss">'clojure.string</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">; Usa / para llamar a las funciones de un módulo
+; Aquí, el módulo es clojure.string y la función es blank?
+</span><span class="p">(</span><span class="nf">clojure.string/blank?</span><span class="w"> </span><span class="s">""</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; true
+</span><span class="w">
+</span><span class="c1">; Puedes asignarle una abreviatura a un modulo al importarlo
+</span><span class="p">(</span><span class="nf">require</span><span class="w"> </span><span class="o">'</span><span class="p">[</span><span class="n">clojure.string</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="nb">str</span><span class="p">])</span><span class="w">
+</span><span class="p">(</span><span class="nf">str/replace</span><span class="w"> </span><span class="s">"This is a test."</span><span class="w"> </span><span class="o">#</span><span class="s">"[a-o]"</span><span class="w"> </span><span class="n">str/upper-case</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; "THIs Is A tEst."
+; (#"" es una expresión regular)
+</span><span class="w">
+</span><span class="c1">; Puedes usar require (y use, pero no lo hagas) desde un espacio de nombre
+; usando :require,
+; No necesitas preceder con comilla simple tus módulos si lo haces de esta
+; forma.
+</span><span class="p">(</span><span class="nf">ns</span><span class="w"> </span><span class="nb">test</span><span class="w">
+  </span><span class="p">(</span><span class="no">:require</span><span class="w">
+    </span><span class="p">[</span><span class="n">clojure.string</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="nb">str</span><span class="p">]</span><span class="w">
+    </span><span class="p">[</span><span class="n">clojure.set</span><span class="w"> </span><span class="no">:as</span><span class="w"> </span><span class="nb">set</span><span class="p">]))</span><span class="w">
+
+</span><span class="c1">; Java
+;;;;;;;;;;;;;;;;;
+</span><span class="w">
+</span><span class="c1">; Java tiene una enorme librería estándar, por lo que resulta util
+; aprender como interactuar con ella.
+</span><span class="w">
+</span><span class="c1">; Usa import para cargar un módulo de java
+</span><span class="p">(</span><span class="nb">import</span><span class="w"> </span><span class="n">java.util.Date</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">; Puedes importar desde un ns también.
+</span><span class="p">(</span><span class="nf">ns</span><span class="w"> </span><span class="nb">test</span><span class="w">
+  </span><span class="p">(</span><span class="no">:import</span><span class="w"> </span><span class="n">java.util.Date</span><span class="w">
+           </span><span class="n">java.util.Calendar</span><span class="p">))</span><span class="w">
+
+</span><span class="c1">; Usa el nombre de la clase con un "." al final para crear una nueva instancia
+</span><span class="p">(</span><span class="nf">Date.</span><span class="p">)</span><span class="w"> </span><span class="c1">; &lt;un objeto Date&gt;
+</span><span class="w">
+</span><span class="c1">; Usa "." para llamar a métodos o usa el atajo ".método"
+</span><span class="p">(</span><span class="nb">.</span><span class="w"> </span><span class="p">(</span><span class="nf">Date.</span><span class="p">)</span><span class="w"> </span><span class="n">getTime</span><span class="p">)</span><span class="w"> </span><span class="c1">; &lt;un timestamp&gt;
+</span><span class="p">(</span><span class="nf">.getTime</span><span class="w"> </span><span class="p">(</span><span class="nf">Date.</span><span class="p">))</span><span class="w"> </span><span class="c1">; exactamente la misma cosa
+</span><span class="w">
+</span><span class="c1">; Usa / para llamar métodos estáticos.
+</span><span class="p">(</span><span class="nf">System/currentTimeMillis</span><span class="p">)</span><span class="w"> </span><span class="c1">; &lt;un timestamp&gt; (System siempre está presente)
+</span><span class="w">
+</span><span class="c1">; Usa doto para hacer frente al uso de clases (mutables) más tolerable
+</span><span class="p">(</span><span class="nb">import</span><span class="w"> </span><span class="n">java.util.Calendar</span><span class="p">)</span><span class="w">
+</span><span class="p">(</span><span class="nb">doto</span><span class="w"> </span><span class="p">(</span><span class="nf">Calendar/getInstance</span><span class="p">)</span><span class="w">
+  </span><span class="p">(</span><span class="nf">.set</span><span class="w"> </span><span class="mi">2000</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w">
+  </span><span class="n">.getTime</span><span class="p">)</span><span class="w"> </span><span class="c1">; =&gt; A Date. set to 2000-01-01 00:00:00
+</span><span class="w">
+</span><span class="c1">; STM
+;;;;;;;;;;;;;;;;;
+</span><span class="w">
+</span><span class="c1">; Software Transactional Memory es un mecanismo que usa clojure para gestionar
+; el estado persistente. Hay unas cuantas construcciones en clojure que
+; hacen uso de este mecanismo.
+</span><span class="w">
+</span><span class="c1">; Un atom es el más sencillo. Se le da un valor inicial
+</span><span class="p">(</span><span class="k">def</span><span class="w"> </span><span class="n">my-atom</span><span class="w"> </span><span class="p">(</span><span class="nf">atom</span><span class="w"> </span><span class="p">{}))</span><span class="w">
+
+</span><span class="c1">; Actualiza un atom con swap!
+; swap! toma una función y la llama con el valor actual del atom
+; como su primer argumento, y cualquier argumento restante como el segundo
+</span><span class="p">(</span><span class="nf">swap!</span><span class="w"> </span><span class="n">my-atom</span><span class="w"> </span><span class="nb">assoc</span><span class="w"> </span><span class="no">:a</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="c1">; Establece my-atom al resultado de (assoc {} :a 1)
+</span><span class="p">(</span><span class="nf">swap!</span><span class="w"> </span><span class="n">my-atom</span><span class="w"> </span><span class="nb">assoc</span><span class="w"> </span><span class="no">:b</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="c1">; Establece my-atom al resultado de (assoc {:a 1} :b 2)
+</span><span class="w">
+</span><span class="c1">; Usa '@' para no referenciar al atom sino para obtener su valor
+</span><span class="n">my-atom</span><span class="w">  </span><span class="c1">;=&gt; Atom&lt;#...&gt; (Regresa el objeto Atom)
+</span><span class="err">@</span><span class="n">my-atom</span><span class="w"> </span><span class="c1">; =&gt; {:a 1 :b 2}
+</span><span class="w">
+</span><span class="c1">; Un sencillo contador usando un atom sería
+</span><span class="p">(</span><span class="k">def</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="p">(</span><span class="nf">atom</span><span class="w"> </span><span class="mi">0</span><span class="p">))</span><span class="w">
+</span><span class="p">(</span><span class="k">defn</span><span class="w"> </span><span class="n">inc-counter</span><span class="w"> </span><span class="p">[]</span><span class="w">
+  </span><span class="p">(</span><span class="nf">swap!</span><span class="w"> </span><span class="n">counter</span><span class="w"> </span><span class="nb">inc</span><span class="p">))</span><span class="w">
+
+</span><span class="p">(</span><span class="nf">inc-counter</span><span class="p">)</span><span class="w">
+</span><span class="p">(</span><span class="nf">inc-counter</span><span class="p">)</span><span class="w">
+</span><span class="p">(</span><span class="nf">inc-counter</span><span class="p">)</span><span class="w">
+</span><span class="p">(</span><span class="nf">inc-counter</span><span class="p">)</span><span class="w">
+</span><span class="p">(</span><span class="nf">inc-counter</span><span class="p">)</span><span class="w">
+
+</span><span class="err">@</span><span class="n">counter</span><span class="w"> </span><span class="c1">; =&gt; 5
+</span><span class="w">
+</span><span class="c1">; Otros forms que utilizan STM son refs y agents.
+; Refs: http://clojure.org/refs
+; Agents: http://clojure.org/agents
+</span><span class="o">###</span><span class="w"> </span><span class="n">Lectura</span><span class="w"> </span><span class="n">adicional</span><span class="w">
+
+</span><span class="err">É</span><span class="n">sto</span><span class="w"> </span><span class="n">queda</span><span class="w"> </span><span class="n">lejos</span><span class="w"> </span><span class="n">de</span><span class="w"> </span><span class="n">ser</span><span class="w"> </span><span class="n">exhaustivo,</span><span class="w"> </span><span class="n">pero</span><span class="w"> </span><span class="n">espero</span><span class="w"> </span><span class="n">que</span><span class="w"> </span><span class="n">sea</span><span class="w"> </span><span class="n">suficiente</span><span class="w"> </span><span class="n">para</span><span class="w"> </span><span class="n">que</span><span class="w"> </span><span class="n">puedas</span><span class="w"> </span><span class="n">empezar</span><span class="w"> </span><span class="n">tu</span><span class="w"> </span><span class="n">camino.</span><span class="w">
+
+</span><span class="n">Clojure.org</span><span class="w"> </span><span class="n">tiene</span><span class="w"> </span><span class="n">muchos</span><span class="w"> </span><span class="n">art</span><span class="err">í</span><span class="n">culos</span><span class="err">:</span><span class="w">
+</span><span class="p">[</span><span class="n">http</span><span class="no">://clojure.org/</span><span class="p">](</span><span class="nf">http</span><span class="no">://clojure.org/</span><span class="p">)</span><span class="w">
+
+</span><span class="n">Clojuredocs.org</span><span class="w"> </span><span class="n">contiene</span><span class="w"> </span><span class="n">documentaci</span><span class="err">ó</span><span class="n">n</span><span class="w"> </span><span class="n">con</span><span class="w"> </span><span class="n">ejemplos</span><span class="w"> </span><span class="n">para</span><span class="w"> </span><span class="n">la</span><span class="w"> </span><span class="n">mayor</span><span class="err">í</span><span class="n">a</span><span class="w"> </span><span class="n">de</span><span class="w">
+</span><span class="n">funciones</span><span class="w"> </span><span class="n">principales</span><span class="w"> </span><span class="p">(</span><span class="nf">pertenecientes</span><span class="w"> </span><span class="n">al</span><span class="w"> </span><span class="n">core</span><span class="p">)</span><span class="err">:</span><span class="w">
+</span><span class="p">[</span><span class="n">http</span><span class="no">://clojuredocs.org/quickref/Clojure%20Core</span><span class="p">](</span><span class="nf">http</span><span class="no">://clojuredocs.org/quickref/Clojure%20Core</span><span class="p">)</span><span class="w">
+
+</span><span class="mi">4</span><span class="n">Clojure</span><span class="w"> </span><span class="n">es</span><span class="w"> </span><span class="n">una</span><span class="w"> </span><span class="n">genial</span><span class="w"> </span><span class="n">forma</span><span class="w"> </span><span class="n">de</span><span class="w"> </span><span class="n">mejorar</span><span class="w"> </span><span class="n">tus</span><span class="w"> </span><span class="n">habilidades</span><span class="w"> </span><span class="n">con</span><span class="w"> </span><span class="n">clojure/FP</span><span class="err">:</span><span class="w">
+</span><span class="p">[</span><span class="n">http</span><span class="no">://www.4clojure.com/</span><span class="p">](</span><span class="nf">http</span><span class="no">://www.4clojure.com/</span><span class="p">)</span><span class="w">
+
+</span><span class="n">Clojure-doc.org</span><span class="w"> </span><span class="p">(</span><span class="nf">s</span><span class="err">í</span><span class="n">,</span><span class="w"> </span><span class="n">de</span><span class="w"> </span><span class="n">verdad</span><span class="p">)</span><span class="w"> </span><span class="n">tiene</span><span class="w"> </span><span class="n">un</span><span class="w"> </span><span class="n">buen</span><span class="w"> </span><span class="n">n</span><span class="err">ú</span><span class="n">mero</span><span class="w"> </span><span class="n">de</span><span class="w"> </span><span class="n">art</span><span class="err">í</span><span class="n">culos</span><span class="w"> </span><span class="n">con</span><span class="w"> </span><span class="n">los</span><span class="w"> </span><span class="n">que</span><span class="w"> </span><span class="n">iniciarse</span><span class="w"> </span><span class="n">en</span><span class="w"> </span><span class="n">Clojure</span><span class="err">:</span><span class="w">
+</span><span class="p">[</span><span class="n">http</span><span class="no">://clojure-doc.org/</span><span class="p">](</span><span class="nf">http</span><span class="no">://clojure-doc.org/</span><span class="p">)</span><span class="w">
+</span></code></pre>
+
+    <hr>
+    <p>¿Tienes una sugerencia o rectificación? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Abre un issue</a> en el repositorio de Github, o haz un pull request tu mismo
+    </p>
+    <p class="contributed">
+    Originalmente contribuido por Adam Bard, y actualizado por <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/es-es/clojure-es.html.markdown">0 colaborador(es)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://adambard.com/">Adam Bard</a>
+      
+    
+    </p>
+
+    <p>
+    
+      Translated by:
+      
+        <a href="https://twitter.com/nihilipster">Antonio Hernández Blas</a>
+      
+        <a href="http://willyfrog.es/">Guillermo Vayá Pérez</a>
+      
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/es-es/clojure-es/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:33:23 GMT -->
+</html>

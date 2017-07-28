@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/pt-br/asymptoticnotation-pt/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:29:46 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn X in Y Minutes: Scenic Programming Language Tours</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../../css/normalize.css">
+        <link rel="stylesheet" href="../../../css/main.css">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fpt-br%2Fasymptoticnotation-pt%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3DAsymptotic+Notation">
+        Compartilhe esta página
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">Aprenda X em Y Minutos</a></h2>
+  <h2>Onde X=Asymptotic Notation</h2>
+  
+  <div id="doc">
+    <h1>Aprenda X em Y minutos</h1>
+
+<h2>Onde X=Notação Assintótica</h2>
+
+<h1>Notações Assintóticas</h1>
+
+<h2>O que são?</h2>
+
+<p>Notações assintóticas são notações matemáticas que nos permitem analisar tempo de execução<br>
+de um algoritmo, identificando o seu comportamento de acordo como o tamanho de entrada para<br>
+o algoritmo aumenta. Também é conhecido como taxa de &ldquo;crescimento&rdquo; de um algoritmo. O algoritmo<br>
+simplesmente se torna incrivelmente lento conforme o seu tamanho aumenta? Será que pode-se na<br>
+maior parte manter o seu tempo de execução rápido mesmo quando o tamanho de entrada aumenta?<br>
+A notação assintótica nos dá a capacidade de responder a essas perguntas. </p>
+
+<h2>Além desta, existem outras alternativas para responder a essas perguntas?</h2>
+
+<p>Uma forma seria a de contar o número de operações primitivas em diferentes tamanhos de entrada. 
+Embora esta seja uma solução válida, a quantidade de trabalho necessário, mesmo para algoritmos 
+simples, não justifica a sua utilização.</p>
+
+<p>Outra maneira é a de medir fisicamente a quantidade de tempo que leva para se executar um algoritmo 
+de diferentes tamanhos. No entanto, a precisão e a relatividade (já que tempos obtidos só teriam 
+relação à máquina em que eles foram testados) deste método estão ligadas a variáveis ambientais, 
+tais como especificações de hardware, poder de processamento, etc.</p>
+
+<h2>Tipos de Notação Assintótica</h2>
+
+<p>Na primeira seção deste documento nós descrevemos como uma notação assintótica identifica o comportamento<br>
+de um algoritmo como as alterações de tamanho de entrada (input). Imaginemos um algoritmo como uma função<br>
+f, n como o tamanho da entrada, e f (n) sendo o tempo de execução. Assim, para um determinado algoritmo f,<br>
+com tamanho de entrada n você obtenha algum tempo de execução resultante f (n). Isto resulta num gráfico,<br>
+em que o eixo Y representa o tempo de execução, o eixo X é o tamanho da entrada, e os pontos marcados são<br>
+os resultantes da quantidade de tempo para um dado tamanho de entrada.</p>
+
+<p>Pode-se rotular uma função ou algoritmo com uma notação assintótica de diversas maneiras diferentes.<br>
+Dentre seus exemplos, está descrever um algoritmo pelo seu melhor caso, pior caso, ou caso equivalente.<br>
+O mais comum é o de analisar um algoritmo pelo seu pior caso. Isso porque você normalmente não avaliaria<br>
+pelo melhor caso, já que essas condições não são as que você está planejando. Um bom exemplo disto é o de<br>
+algoritmos de ordenação; especificamente, a adição de elementos a uma estrutura de tipo árvore. O melhor<br>
+caso para a maioria dos algoritmos pode ser tão simples como uma única operação. No entanto, na maioria<br>
+dos casos, o elemento que você está adicionando terá de ser ordenado de forma adequada através da árvore,<br>
+o que poderia significar a análise de um ramo inteiro. Este é o pior caso, e é por ele que precisamos seguir.  </p>
+
+<h3>Tipos de funções, limites, e simplificação</h3>
+<pre class="highlight plaintext"><code>Função Logaritmica - log n  
+Função Linear - an + b  
+Função Quadrática - an^2 + bn + c  
+Função Polinomial - an^z + . . . + an^2 + a*n^1 + a*n^0, onde z é uma constante  
+Função Exponencial - a^n, onde a é uma constante  
+</code></pre>
+
+<p>Estas são algumas classificações básicas de crescimento de função usados em várias notações. A lista<br>
+começa com a função crescimento mais lento (logarítmica, com tempo de execução mais rápido) e vai até<br>
+a mais rápida (exponencial, com tempo de execução mais lento). Observe que &lsquo;n&rsquo;, ou nossa entrada,<br>
+cresce em cada uma dessas funções, e o resultado claramente aumenta muito mais rapidamente em função<br>
+quadrática, polinomial e exponencial, em comparação com a logarítmica e a linear.</p>
+
+<p>Uma observação de boa importância é que, para as notações a serem discutidas, deve-se fazer o melhor<br>
+para utilizar termos mais simples. Isto significa desrespeitar constantes, e simplificar termos de<br>
+ordem, porque, como o tamanho da entrada (ou n no nosso f (n) exemplo) aumenta infinitamente (limites<br>
+matemáticos), os termos em ordens mais baixas e constantes são de pouca ou nenhuma importância. Dito<br>
+isto, se você possui constantes com valor 2^9001, ou alguma outra quantidade ridícula, inimaginável,<br>
+perceberá que a simplificação distorcerá a precisão de sua notação.</p>
+
+<p>Já que nós queremos a forma mais simples, vamos modificar nossas funções um pouco.</p>
+<pre class="highlight plaintext"><code>Logaritmica - log n  
+Linear - n  
+Quadrática - n^2  
+Polinomial - n^z, onde z é uma constante  
+Exponencial - a^n, onde a é uma constante
+</code></pre>
+
+<h3>O Grande-O</h3>
+
+<p>Grande-O, geralmente escrita como O, é uma Notação Assintótica para o pior caso para uma dada função. Digamos<br>
+que <code>f(n)</code> é o tempo de execução de seu algoritmo, e <code>g(n)</code> é uma complexidade de tempo arbitrário que você está<br>
+tentando se relacionar com o seu algoritmo. <code>f(n)</code> será O(g(n)), se, por qualquer constante real c (c &gt; 0),<br>
+<code>f(n)</code> &lt;= <code>c g(n)</code> para cada tamanho de entrada n (n &gt; 0).  </p>
+
+<p><em>Exemplo 1</em></p>
+<pre class="highlight plaintext"><code>f(n) = 3log n + 100  
+g(n) = log n
+</code></pre>
+
+<p>É <code>f(n)</code> um O(g(n))?<br>
+É 3 <code>log n + 100</code> igual a O(log n)?<br>
+Vamos checar na definição de Grande-O.  </p>
+<pre class="highlight plaintext"><code>3log n + 100 &lt;= c * log n
+</code></pre>
+
+<p>Existe alguma constante c que satisfaça isso para todo n?</p>
+<pre class="highlight plaintext"><code>3log n + 100 &lt;= 150 * log n, n &gt; 2 (indefinido em n = 1)
+</code></pre>
+
+<p>Sim! A definição de Grande-O foi satisfeita. Sendo assim, <code>f(n)</code> é O(g(n)).</p>
+
+<p><em>Exemplo 2</em></p>
+<pre class="highlight plaintext"><code>f(n) = 3 * n^2
+g(n) = n
+</code></pre>
+
+<p>É <code>f(n)</code> um O(g(n))? 
+É <code>3 * n^2</code> um O(n)? 
+Vamos ver na definição de Grande-O.</p>
+<pre class="highlight plaintext"><code>3 * n^2 &lt;= c * n
+</code></pre>
+
+<p>Existe alguma constante que satisfaça isso para todo n? 
+Não, não existe. <code>f(n)</code> NÃO É O(g(n)).</p>
+
+<h3>Grande-Omega</h3>
+
+<p>Grande-Omega, comumente escrito como Ω, é uma Notação Assintótica para o melhor caso, ou<br>
+uma taxa de crescimento padrão para uma determinada função.</p>
+
+<p><code>f(n)</code> é Ω(g(n)), se, por qualquer constante c real (c &gt; 0), <code>f(n)</code> é &gt;= <code>c g(n)</code> para cada<br>
+tamanho de entrada n (n &gt; 0).</p>
+
+<p>Sinta-se livre para pesquisar recursos adicionais e obter mais exemplos sobre este assunto!<br>
+Grande-O é a notação primária utilizada para tempo de execução de algoritmos, de modo geral.  </p>
+
+<h3>Notas de Finalização</h3>
+
+<p>É complicado exibir este tipo de assunto de forma tão curta, então é definitivamente recomendado<br>
+pesquisar além dos livros e recursos on-line listados. Eles serão capazes de analisar o assunto com<br>
+uma profundidade muito maior, além de ter definições e exemplos. Mais sobre onde X=&ldquo;Algoritmos e<br>
+Estruturas de Dados&rdquo; está a caminho: Haverá conteúdo focado na análise de exemplos de códigos reais<br>
+em breve. </p>
+
+<h2>Livros</h2>
+
+<ul>
+<li><a href="http://www.amazon.com/Algorithms-4th-Robert-Sedgewick/dp/032157351X">Algorithms</a><br></li>
+<li><a href="http://www.amazon.com/Algorithm-Design-Foundations-Analysis-Internet/dp/0471383651">Algorithm Design</a></li>
+</ul>
+
+<h2>Recursos Online</h2>
+
+<ul>
+<li><a href="http://web.mit.edu/16.070/www/lecture/big_o.pdf">MIT</a><br></li>
+<li><a href="https://www.khanacademy.org/computing/computer-science/algorithms/asymptotic-notation/a/asymptotic-notation">KhanAcademy</a></li>
+</ul>
+
+    <hr>
+    <p>Sugestões ou correções? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Abra uma issue</a> no repositório do Github, ou faça um Pull Request você mesmo!
+    </p>
+    <p class="contributed">
+    Originalmente contribuído por Jake Prather e atualizado por <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/pt-br/asymptoticnotation-pt.html.markdown">0 colaborador(es)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://github.com/JakeHP">Jake Prather</a>
+      
+    
+    </p>
+
+    <p>
+    
+      Translated by:
+      
+        <a href="https://github.com/JoaoGFarias">João Farias</a>
+      
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/pt-br/asymptoticnotation-pt/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:29:46 GMT -->
+</html>

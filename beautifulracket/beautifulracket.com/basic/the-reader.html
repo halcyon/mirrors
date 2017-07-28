@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/basic/the-reader.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:44 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Go with the flow: basic</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;go-with-the-flow-basic&quot;)"></div><h1 anchor="go-with-the-flow-basic" id="go-with-the-flow-basic" hyphens="none">Go with the flow: <span class="my-code" decode="exclude">basic</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-lexer.html">3&emsp;the lexer</a></li><li><a href="the-tokenizer.html">4&emsp;the tok­enizer</a></li><li><a href="the-parser.html">5&emsp;the parser</a></li><li><a class="here" href="the-reader.html">6&emsp;the reader</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_952it&quot;)"></div><p id="a_952it">With <a href="the-tokenizer.html">the tok­enizer</a> and <a href="the-parser.html">the parser</a> com­plete, our reader will fol­low the pat­tern we’ve used before:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/main.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Ff26q&quot;)"></div><div class="highlight-container" id="a_Ff26q"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br/quicklang<br/>(require "parser.rkt" "tokenizer.rkt")<br/><br/>(define (read-syntax path port)<br/>  (define parse-tree (parse path (make-tokenizer port path)))<br/>  (strip-bindings<br/>   #`(module basic-mod basic/expander<br/>       #,parse-tree)))<br/><br/>(module+ reader<br/>  (provide read-syntax))
+</div><div class="highlight" form="false" id="a_BEJSI"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br/quicklang</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="s2">"parser.rkt"</span> <span class="s2">"tokenizer.rkt"</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Reading.html#(def._((quote._~23~25kernel)._read-syntax))" class="docs" hyphens="none">read-syntax</a></span> <span class="n">path</span> <span class="n">port</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">parse-tree</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/examples/nested-word-list..rkt)._parse))" class="docs" hyphens="none">parse</a></span> <span class="n">path</span> <span class="p">(</span><span class="n">make-tokenizer</span> <span class="n">port</span> <span class="n">path</span><span class="p">)))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/syntax..rkt)._strip-bindings))" class="docs" hyphens="none">strip-bindings</a></span>
+   <span class="o">#`</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((quote._~23~25kernel)._module))" class="docs" hyphens="none">module</a></span> <span class="n">basic-mod</span> <span class="n">basic/expander</span>
+       <span class="o">#,</span><span class="n">parse-tree</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._module+))" class="docs" hyphens="none">module+</a></span> <span class="n">reader</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/Reading.html#(def._((quote._~23~25kernel)._read-syntax))" class="docs" hyphens="none">read-syntax</a></span><span class="p">))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_aqp7K&quot;)"></div><p id="a_aqp7K">None of this is new mate­r­ial.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ov7lO&quot;)"></div><p id="a_ov7lO">First, we make a parse tree. We call <span class="my-code" decode="exclude">make-tokenizer</span> with our input <span class="my-code" decode="exclude">port</span>. This time, we also pass our <span class="my-code" decode="exclude">path</span> as an argu­ment, to help with gen­er­at­ing <a class="glossary" href="../appendix/glossary.html#source-location"><span class="glossary-link-text">source loca­tions</span></a>. <span class="my-code" decode="exclude">make-tokenizer</span> returns a token-retriev­ing func­tion, which we pass to <span class="my-code" decode="exclude">parse</span>. In turn, <a href="the-parser.html">the parser</a> uses this func­tion to retrieve tokens and arrange them into a parse tree accord­ing to the rules of our <a class="glossary" href="../appendix/glossary.html#grammar"><span class="glossary-link-text">gram­mar</span></a>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_XZPb3&quot;)"></div><p id="a_XZPb3">To insert the parse tree into our mod­ule expres­sion, we use the <a class="glossary" href="../appendix/glossary.html#quasisyntax"><span class="glossary-link-text">qua­si­syn­tax</span></a> nota­tion we used for <a href="../wires/the-reader.html">the <span class="my-code" decode="exclude">wires</span> reader</a>. We wrap this new mod­ule expres­sion with <a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/syntax..rkt)._strip-bindings))" class="docs" hyphens="none">strip-bindings</a> to make sure it has no <a class="glossary" href="../appendix/glossary.html#binding"><span class="glossary-link-text">bind­ings</span></a> before it’s passed to the expander.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ZLOmn&quot;)"></div><p id="a_ZLOmn">Finally, we <a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a> our <span class="my-code" decode="exclude">read-syntax</span> func­tion through a <span class="my-code" decode="exclude">reader</span> sub­mod­ule, where Racket will look for it when we invoke <span class="my-code" decode="exclude">#lang basic</span>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_0E5Zh&quot;)"></div><p id="a_0E5Zh">Now we’re ready to start <a href="the-expander.html">the expander</a>.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-lexer.html">3&emsp;the lexer</a></li><li><a href="the-tokenizer.html">4&emsp;the tok­enizer</a></li><li><a href="the-parser.html">5&emsp;the parser</a></li><li><a class="here" href="the-reader.html">6&emsp;the reader</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="the-parser.html">← prev</a>
+    <a class="nav-right" href="the-expander.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

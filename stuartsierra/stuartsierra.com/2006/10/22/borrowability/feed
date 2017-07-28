@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Borrowability</title>
+	<atom:link href="https://stuartsierra.com/2006/10/22/borrowability/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2006/10/22/borrowability</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Digital Digressions by Stuart Sierra &#187; Blog Archive &#187; Ruby More Memory-Efficient than Lisp?</title>
+		<link>https://stuartsierra.com/2006/10/22/borrowability/comment-page-1#comment-1594</link>
+		<dc:creator><![CDATA[Digital Digressions by Stuart Sierra &#187; Blog Archive &#187; Ruby More Memory-Efficient than Lisp?]]></dc:creator>
+		<pubDate>Wed, 15 Nov 2006 17:43:39 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2006/10/22/borrowability#comment-1594</guid>
+		<description><![CDATA[[...] I continue to sweat (see previous entry) over the question of language choice for future iterations of Project Posner (and some as-yet-unnamed similar projects). Ruby on Rails is the obvious mainstream choice, mainstream at least compared to Lisp. But a part of me really wants to do it in Common Lisp, just to prove I can. [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] I continue to sweat (see previous entry) over the question of language choice for future iterations of Project Posner (and some as-yet-unnamed similar projects). Ruby on Rails is the obvious mainstream choice, mainstream at least compared to Lisp. But a part of me really wants to do it in Common Lisp, just to prove I can. [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2006/10/22/borrowability/comment-page-1#comment-1115</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Tue, 24 Oct 2006 01:35:42 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2006/10/22/borrowability#comment-1115</guid>
+		<description><![CDATA[I would hate to give up on Lisp, too.  I haven&#039;t completely made up my mind, though, and I&#039;ll certainly check out the Lisp-friendly web hosts.
+
+Part of it will depend on where we decide to take Project Posner.  Currently it&#039;s about 2100 static documents with a primitive search feature.  It might someday morph into something much larger, hundreds of thousands of documents with thousands of users.
+
+My basic worry is that I need a unified web framework like Rails to help me integrate all the features.  I want to make sure to provide a complete and polished service, not a grab-bag of little CGI forms.  I&#039;m curious to know: what has your experience been mixing different languages together on one site?  Is it possible/practical to try to blend them together into a unified user experience?]]></description>
+		<content:encoded><![CDATA[<p>I would hate to give up on Lisp, too.  I haven&#8217;t completely made up my mind, though, and I&#8217;ll certainly check out the Lisp-friendly web hosts.</p>
+<p>Part of it will depend on where we decide to take Project Posner.  Currently it&#8217;s about 2100 static documents with a primitive search feature.  It might someday morph into something much larger, hundreds of thousands of documents with thousands of users.</p>
+<p>My basic worry is that I need a unified web framework like Rails to help me integrate all the features.  I want to make sure to provide a complete and polished service, not a grab-bag of little CGI forms.  I&#8217;m curious to know: what has your experience been mixing different languages together on one site?  Is it possible/practical to try to blend them together into a unified user experience?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: JDBoyd</title>
+		<link>https://stuartsierra.com/2006/10/22/borrowability/comment-page-1#comment-1113</link>
+		<dc:creator><![CDATA[JDBoyd]]></dc:creator>
+		<pubDate>Mon, 23 Oct 2006 23:57:09 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2006/10/22/borrowability#comment-1113</guid>
+		<description><![CDATA[First, there are shared host services with lisp installed.  See  http://wiki.alu.org/Lisp-friendly_Web_Hosting  I use zill.net (number five on that list), which uses a method I was going to mention below involving apache proxying.  I probably should disclaim that I co-locate with zill.net and thus don&#039;t actually use their lisp service.  Now that I&#039;m mentioning that service, I should see if I can get a guest lisp account to test out for better pushing on web blogs ;).
+
+You could use PortableAserve, or some other web server written in Lisp, instead of using Apache and mod_lisp.  For one thing, this would get you the benefit of a frame work in addition to just a web  server (assuming that you like the framework).  Another possible lisp web server is Hunchentoot.
+
+Also, instead of having your lisp web server face the web directly, you can hide it behind Apache easily using the ProxyPass feature.  By doing so you can offload things like images to what might be a more efficient platform for doing them, as well as still being able to make use of assorted libraries in other languages in Perl, PHP, Python, etc.  Apache also has configurable caching so perhaps the lisp server wouldn&#039;t always have to be connected to for operations like hitting the back button.  Squid&#039;s caching is more configurable.  Many people use it for load management of web services.
+
+On the stuff I run, I use some PHP stuff (via mod_php), some Perl (via CGI rather than mod_perl for security) stuff, and some Python CGI stuff.  I also use the proxy service to talk to the Python web server for some stuff, and the proxy service to talk to the PLT Scheme web server for some stuff.  Setting up all of it was mostly painless (open the tarball somewhere and add a few lines to httpd.conf to enable it).  The python and scheme proxied stuff seems to be a lot faster than the mod_php stuff is.
+
+I can&#039;t swear that you won&#039;t run into trouble trying such a combination on your own.  Part of the reddit problem was that they were developing on Macs for FreeBSD.  Developing on Linux for Linux, Solaris for Solaris, or OSX for OSX would have simplified things greatly.  Also, using something more mainstream than FreeBSD for their main lisp server would likely have been more stable.  They chose to change their language rather than their platform, so I guess we will never no if changing their problem might have fixed the problem.  While I use myself as an example, I don&#039;t do terribly high volume stuff since the code I write is for a small group of private users.  I just would have to see you give up on lisp too quickly.]]></description>
+		<content:encoded><![CDATA[<p>First, there are shared host services with lisp installed.  See  <a href="http://wiki.alu.org/Lisp-friendly_Web_Hosting" rel="nofollow">http://wiki.alu.org/Lisp-friendly_Web_Hosting</a>  I use zill.net (number five on that list), which uses a method I was going to mention below involving apache proxying.  I probably should disclaim that I co-locate with zill.net and thus don&#8217;t actually use their lisp service.  Now that I&#8217;m mentioning that service, I should see if I can get a guest lisp account to test out for better pushing on web blogs ;).</p>
+<p>You could use PortableAserve, or some other web server written in Lisp, instead of using Apache and mod_lisp.  For one thing, this would get you the benefit of a frame work in addition to just a web  server (assuming that you like the framework).  Another possible lisp web server is Hunchentoot.</p>
+<p>Also, instead of having your lisp web server face the web directly, you can hide it behind Apache easily using the ProxyPass feature.  By doing so you can offload things like images to what might be a more efficient platform for doing them, as well as still being able to make use of assorted libraries in other languages in Perl, PHP, Python, etc.  Apache also has configurable caching so perhaps the lisp server wouldn&#8217;t always have to be connected to for operations like hitting the back button.  Squid&#8217;s caching is more configurable.  Many people use it for load management of web services.</p>
+<p>On the stuff I run, I use some PHP stuff (via mod_php), some Perl (via CGI rather than mod_perl for security) stuff, and some Python CGI stuff.  I also use the proxy service to talk to the Python web server for some stuff, and the proxy service to talk to the PLT Scheme web server for some stuff.  Setting up all of it was mostly painless (open the tarball somewhere and add a few lines to httpd.conf to enable it).  The python and scheme proxied stuff seems to be a lot faster than the mod_php stuff is.</p>
+<p>I can&#8217;t swear that you won&#8217;t run into trouble trying such a combination on your own.  Part of the reddit problem was that they were developing on Macs for FreeBSD.  Developing on Linux for Linux, Solaris for Solaris, or OSX for OSX would have simplified things greatly.  Also, using something more mainstream than FreeBSD for their main lisp server would likely have been more stable.  They chose to change their language rather than their platform, so I guess we will never no if changing their problem might have fixed the problem.  While I use myself as an example, I don&#8217;t do terribly high volume stuff since the code I write is for a small group of private users.  I just would have to see you give up on lisp too quickly.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.276 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:59:58 -->
+
+<!-- Compression = gzip -->

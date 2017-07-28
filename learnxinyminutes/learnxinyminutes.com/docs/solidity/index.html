@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/solidity/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:59 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn Solidity in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../css/normalize.css">
+        <link rel="stylesheet" href="../../css/main.css">
+        <link href="../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fsolidity%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3DSolidity">
+        Share this page
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../index.html">Learn X in Y minutes</a></h2>
+  <h2>Where X=Solidity</h2>
+  
+    <p class="filelink">
+    Get the code:
+    <a href="../files/learnSolidity.sol">learnSolidity.sol</a>
+    </p>
+  
+  <div id="doc">
+    <p>Solidity lets you program on <a href="https://www.ethereum.org/">Ethereum</a>, a
+blockchain-based virtual machine that allows the creation and
+execution of smart contracts, without requiring centralized or trusted parties.</p>
+
+<p>Solidity is a statically typed, contract programming language that has
+similarities to Javascript and C. Like objects in OOP, each contract contains
+state variables, functions, and common data types. Contract-specific features
+include modifier (guard) clauses, event notifiers for listeners, and custom
+global variables.</p>
+
+<p>Some Ethereum contract examples include crowdfunding, voting, and blind auctions.</p>
+
+<p>There is a high risk and high cost of errors in Solidity code, so you must be very careful to test
+and slowly rollout. WITH THE RAPID CHANGES IN ETHEREUM, THIS DOCUMENT IS UNLIKELY TO STAY UP TO
+DATE, SO YOU SHOULD FOLLOW THE SOLIDITY CHAT ROOM AND ETHEREUM BLOG FOR THE LATEST. ALL CODE HERE IS
+PROVIDED AS IS, WITH SUBSTANTIAL RISK OF ERRORS OR DEPRECATED CODE PATTERNS.</p>
+
+<p>Unlike other code, you may also need to add in design patterns like pausing, deprecation, and
+throttling usage to reduce risk. This document primarily discusses syntax, and so excludes many
+popular design patterns.</p>
+
+<p>As Solidity and Ethereum are under active development, experimental or beta
+features are typically marked, and subject to change. Pull requests welcome.</p>
+<pre class="highlight javascript"><code><span class="c1">// First, a simple Bank contract</span>
+<span class="c1">// Allows deposits, withdrawals, and balance checks</span>
+
+<span class="c1">// simple_bank.sol (note .sol extension)</span>
+<span class="cm">/* **** START EXAMPLE **** */</span>
+
+<span class="c1">// Start with Natspec comment (the three slashes)</span>
+<span class="c1">// used for documentation - and as descriptive data for UI elements/actions</span>
+
+<span class="c1">/// @title SimpleBank</span>
+<span class="c1">/// @author nemild</span>
+
+<span class="cm">/* 'contract' has similarities to 'class' in other languages (class variables,
+inheritance, etc.) */</span>
+<span class="nx">contract</span> <span class="nx">SimpleBank</span> <span class="p">{</span> <span class="c1">// CamelCase</span>
+    <span class="c1">// Declare state variables outside function, persist through life of contract</span>
+
+    <span class="c1">// dictionary that maps addresses to balances</span>
+    <span class="c1">// always be careful about overflow attacks with numbers</span>
+    <span class="nx">mapping</span> <span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">uint</span><span class="p">)</span> <span class="kr">private</span> <span class="nx">balances</span><span class="p">;</span>
+
+    <span class="c1">// "private" means that other contracts can't directly query balances</span>
+    <span class="c1">// but data is still viewable to other parties on blockchain</span>
+
+    <span class="nx">address</span> <span class="kr">public</span> <span class="nx">owner</span><span class="p">;</span>
+    <span class="c1">// 'public' makes externally readable (not writeable) by users or contracts</span>
+
+    <span class="c1">// Events - publicize actions to external listeners</span>
+    <span class="nx">event</span> <span class="nx">LogDepositMade</span><span class="p">(</span><span class="nx">address</span> <span class="nx">accountAddress</span><span class="p">,</span> <span class="nx">uint</span> <span class="nx">amount</span><span class="p">);</span>
+
+    <span class="c1">// Constructor, can receive one or many variables here; only one allowed</span>
+    <span class="kd">function</span> <span class="nx">AcmeBank</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// msg provides details about the message that's sent to the contract</span>
+        <span class="c1">// msg.sender is contract caller (address of contract creator)</span>
+        <span class="nx">owner</span> <span class="o">=</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">/// @notice Deposit ether into bank</span>
+    <span class="c1">/// @return The balance of the user after the deposit is made</span>
+    <span class="kd">function</span> <span class="nx">deposit</span><span class="p">()</span> <span class="kr">public</span> <span class="nx">returns</span> <span class="p">(</span><span class="nx">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">balances</span><span class="p">[</span><span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">]</span> <span class="o">+=</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+        <span class="c1">// no "this." or "self." required with state variable</span>
+        <span class="c1">// all values set to data type's initial value by default</span>
+
+        <span class="nx">LogDepositMade</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">,</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span> <span class="c1">// fire event</span>
+
+        <span class="k">return</span> <span class="nx">balances</span><span class="p">[</span><span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="c1">/// @notice Withdraw ether from bank</span>
+    <span class="c1">/// @dev This does not return any excess ether sent to it</span>
+    <span class="c1">/// @param withdrawAmount amount you want to withdraw</span>
+    <span class="c1">/// @return The balance remaining for the user</span>
+    <span class="kd">function</span> <span class="nx">withdraw</span><span class="p">(</span><span class="nx">uint</span> <span class="nx">withdrawAmount</span><span class="p">)</span> <span class="kr">public</span> <span class="nx">returns</span> <span class="p">(</span><span class="nx">uint</span> <span class="nx">remainingBal</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">balances</span><span class="p">[</span><span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="nx">withdrawAmount</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// Note the way we deduct the balance right away, before sending - due to</span>
+            <span class="c1">// the risk of a recursive call that allows the caller to request an amount greater</span>
+            <span class="c1">// than their balance</span>
+            <span class="nx">balances</span><span class="p">[</span><span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">]</span> <span class="o">-=</span> <span class="nx">withdrawAmount</span><span class="p">;</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">withdrawAmount</span><span class="p">))</span> <span class="p">{</span>
+                <span class="c1">// increment back only on fail, as may be sending to contract that</span>
+                <span class="c1">// has overridden 'send' on the receipt end</span>
+                <span class="nx">balances</span><span class="p">[</span><span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">]</span> <span class="o">+=</span> <span class="nx">withdrawAmount</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">balances</span><span class="p">[</span><span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="c1">/// @notice Get balance</span>
+    <span class="c1">/// @return The balance of the user</span>
+    <span class="c1">// 'constant' prevents function from editing state variables;</span>
+    <span class="c1">// allows function to run locally/off blockchain</span>
+    <span class="kd">function</span> <span class="nx">balance</span><span class="p">()</span> <span class="nx">constant</span> <span class="nx">returns</span> <span class="p">(</span><span class="nx">uint</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">balances</span><span class="p">[</span><span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Fallback function - Called if other functions don't match call or</span>
+    <span class="c1">// sent ether without data</span>
+    <span class="c1">// Typically, called when invalid data is sent</span>
+    <span class="c1">// Added so ether sent to this contract is reverted if the contract fails</span>
+    <span class="c1">// otherwise, the sender's money is transferred to contract</span>
+    <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="k">throw</span><span class="p">;</span> <span class="c1">// throw reverts state to before call</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// ** END EXAMPLE **</span>
+
+
+<span class="c1">// Now, the basics of Solidity</span>
+
+<span class="c1">// 1. DATA TYPES AND ASSOCIATED METHODS</span>
+<span class="c1">// uint used for currency amount (there are no doubles</span>
+<span class="c1">//  or floats) and for dates (in unix time)</span>
+<span class="nx">uint</span> <span class="nx">x</span><span class="p">;</span>
+
+<span class="c1">// int of 256 bits, cannot be changed after instantiation</span>
+<span class="kr">int</span> <span class="nx">constant</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+<span class="nx">int256</span> <span class="nx">constant</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span> <span class="c1">// same effect as line above, here the 256 is explicit</span>
+<span class="nx">uint</span> <span class="nx">constant</span> <span class="nx">VERSION_ID</span> <span class="o">=</span> <span class="mh">0x123A1</span><span class="p">;</span> <span class="c1">// A hex constant</span>
+<span class="c1">// with 'constant', compiler replaces each occurrence with actual value</span>
+
+
+<span class="c1">// For int and uint, can explicitly set space in steps of 8 up to 256</span>
+<span class="c1">// e.g., int8, int16, int24</span>
+<span class="nx">uint8</span> <span class="nx">b</span><span class="p">;</span>
+<span class="nx">int64</span> <span class="nx">c</span><span class="p">;</span>
+<span class="nx">uint248</span> <span class="nx">e</span><span class="p">;</span>
+
+<span class="c1">// Be careful that you don't overflow, and protect against attacks that do</span>
+
+<span class="c1">// No random functions built in, use other contracts for randomness</span>
+
+<span class="c1">// Type casting</span>
+<span class="kr">int</span> <span class="nx">x</span> <span class="o">=</span> <span class="kr">int</span><span class="p">(</span><span class="nx">b</span><span class="p">);</span>
+
+<span class="nx">bool</span> <span class="nx">b</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span> <span class="c1">// or do 'var b = true;' for inferred typing</span>
+
+<span class="c1">// Addresses - holds 20 byte/160 bit Ethereum addresses</span>
+<span class="c1">// No arithmetic allowed</span>
+<span class="nx">address</span> <span class="kr">public</span> <span class="nx">owner</span><span class="p">;</span>
+
+<span class="c1">// Types of accounts:</span>
+<span class="c1">// Contract account: address set on create (func of creator address, num transactions sent)</span>
+<span class="c1">// External Account: (person/external entity): address created from public key</span>
+
+<span class="c1">// Add 'public' field to indicate publicly/externally accessible</span>
+<span class="c1">// a getter is automatically created, but NOT a setter</span>
+
+<span class="c1">// All addresses can be sent ether</span>
+<span class="nx">owner</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">SOME_BALANCE</span><span class="p">);</span> <span class="c1">// returns false on failure</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">owner</span><span class="p">.</span><span class="nx">send</span><span class="p">)</span> <span class="p">{}</span> <span class="c1">// REMEMBER: wrap in 'if', as contract addresses have</span>
+<span class="c1">// functions executed on send and these can fail</span>
+<span class="c1">// Also, make sure to deduct balances BEFORE attempting a send, as there is a risk of a recursive</span>
+<span class="c1">// call that can drain the contract</span>
+
+<span class="c1">// can override send by defining your own</span>
+
+<span class="c1">// Can check balance</span>
+<span class="nx">owner</span><span class="p">.</span><span class="nx">balance</span><span class="p">;</span> <span class="c1">// the balance of the owner (user or contract)</span>
+
+
+<span class="c1">// Bytes available from 1 to 32</span>
+<span class="kr">byte</span> <span class="nx">a</span><span class="p">;</span> <span class="c1">// byte is same as bytes1</span>
+<span class="nx">bytes2</span> <span class="nx">b</span><span class="p">;</span>
+<span class="nx">bytes32</span> <span class="nx">c</span><span class="p">;</span>
+
+<span class="c1">// Dynamically sized bytes</span>
+<span class="nx">bytes</span> <span class="nx">m</span><span class="p">;</span> <span class="c1">// A special array, same as byte[] array (but packed tightly)</span>
+<span class="c1">// More expensive than byte1-byte32, so use those when possible</span>
+
+<span class="c1">// same as bytes, but does not allow length or index access (for now)</span>
+<span class="nx">string</span> <span class="nx">n</span> <span class="o">=</span> <span class="s2">"hello"</span><span class="p">;</span> <span class="c1">// stored in UTF8, note double quotes, not single</span>
+<span class="c1">// string utility functions to be added in future</span>
+<span class="c1">// prefer bytes32/bytes, as UTF8 uses more storage</span>
+
+<span class="c1">// Type inferrence</span>
+<span class="c1">// var does inferred typing based on first assignment,</span>
+<span class="c1">// can't be used in functions parameters</span>
+<span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+<span class="c1">// use carefully, inference may provide wrong type</span>
+<span class="c1">// e.g., an int8, when a counter needs to be int16</span>
+
+<span class="c1">// var can be used to assign function to variable</span>
+<span class="kd">function</span> <span class="nx">a</span><span class="p">(</span><span class="nx">uint</span> <span class="nx">x</span><span class="p">)</span> <span class="nx">returns</span> <span class="p">(</span><span class="nx">uint</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">a</span><span class="p">;</span>
+<span class="nx">f</span><span class="p">(</span><span class="mi">22</span><span class="p">);</span> <span class="c1">// call</span>
+
+<span class="c1">// by default, all values are set to 0 on instantiation</span>
+
+<span class="c1">// Delete can be called on most types</span>
+<span class="c1">// (does NOT destroy value, but sets value to 0, the initial value)</span>
+<span class="nx">uint</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+
+
+<span class="c1">// Destructuring/Tuples</span>
+<span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">);</span> <span class="c1">// assign/swap multiple value</span>
+
+
+<span class="c1">// 2. DATA STRUCTURES</span>
+<span class="c1">// Arrays</span>
+<span class="nx">bytes32</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="nx">nicknames</span><span class="p">;</span> <span class="c1">// static array</span>
+<span class="nx">bytes32</span><span class="p">[]</span> <span class="nx">names</span><span class="p">;</span> <span class="c1">// dynamic array</span>
+<span class="nx">uint</span> <span class="nx">newLength</span> <span class="o">=</span> <span class="nx">names</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">"John"</span><span class="p">);</span> <span class="c1">// adding returns new length of the array</span>
+<span class="c1">// Length</span>
+<span class="nx">names</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="c1">// get length</span>
+<span class="nx">names</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// lengths can be set (for dynamic arrays in storage only)</span>
+
+<span class="c1">// multidimensional array</span>
+<span class="nx">uint</span> <span class="nx">x</span><span class="p">[][</span><span class="mi">5</span><span class="p">];</span> <span class="c1">// arr with 5 dynamic array elements (opp order of most languages)</span>
+
+<span class="c1">// Dictionaries (any type to any other type)</span>
+<span class="nx">mapping</span> <span class="p">(</span><span class="nx">string</span> <span class="o">=&gt;</span> <span class="nx">uint</span><span class="p">)</span> <span class="kr">public</span> <span class="nx">balances</span><span class="p">;</span>
+<span class="nx">balances</span><span class="p">[</span><span class="s2">"charles"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">balances</span><span class="p">[</span><span class="s2">"ada"</span><span class="p">]);</span> <span class="c1">// is 0, all non-set key values return zeroes</span>
+<span class="c1">// 'public' allows following from another contract</span>
+<span class="nx">contractName</span><span class="p">.</span><span class="nx">balances</span><span class="p">(</span><span class="s2">"claude"</span><span class="p">);</span> <span class="c1">// returns 1</span>
+<span class="c1">// 'public' created a getter (but not setter) like the following:</span>
+<span class="kd">function</span> <span class="nx">balances</span><span class="p">(</span><span class="nx">address</span> <span class="nx">_account</span><span class="p">)</span> <span class="nx">returns</span> <span class="p">(</span><span class="nx">uint</span> <span class="nx">balance</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">balances</span><span class="p">[</span><span class="nx">_account</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="c1">// Nested mappings</span>
+<span class="nx">mapping</span> <span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">mapping</span> <span class="p">(</span><span class="nx">address</span> <span class="o">=&gt;</span> <span class="nx">uint</span><span class="p">))</span> <span class="kr">public</span> <span class="nx">custodians</span><span class="p">;</span>
+
+<span class="c1">// To delete</span>
+<span class="k">delete</span> <span class="nx">balances</span><span class="p">[</span><span class="s2">"John"</span><span class="p">];</span>
+<span class="k">delete</span> <span class="nx">balances</span><span class="p">;</span> <span class="c1">// sets all elements to 0</span>
+
+<span class="c1">// Unlike other languages, CANNOT iterate through all elements in</span>
+<span class="c1">// mapping, without knowing source keys - can build data structure</span>
+<span class="c1">// on top to do this</span>
+
+<span class="c1">// Structs and enums</span>
+<span class="nx">struct</span> <span class="nx">Bank</span> <span class="p">{</span>
+    <span class="nx">address</span> <span class="nx">owner</span><span class="p">;</span>
+    <span class="nx">uint</span> <span class="nx">balance</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">Bank</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">Bank</span><span class="p">({</span>
+    <span class="na">owner</span><span class="p">:</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">,</span>
+    <span class="na">balance</span><span class="p">:</span> <span class="mi">5</span>
+<span class="p">});</span>
+<span class="c1">// or</span>
+<span class="nx">Bank</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">Bank</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
+
+<span class="nx">c</span><span class="p">.</span><span class="nx">amount</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span> <span class="c1">// set to new value</span>
+<span class="k">delete</span> <span class="nx">b</span><span class="p">;</span>
+<span class="c1">// sets to initial value, set all variables in struct to 0, except mappings</span>
+
+<span class="c1">// Enums</span>
+<span class="kr">enum</span> <span class="nx">State</span> <span class="p">{</span> <span class="nx">Created</span><span class="p">,</span> <span class="nx">Locked</span><span class="p">,</span> <span class="nx">Inactive</span> <span class="p">};</span> <span class="c1">// often used for state machine</span>
+<span class="nx">State</span> <span class="kr">public</span> <span class="nx">state</span><span class="p">;</span> <span class="c1">// Declare variable from enum</span>
+<span class="nx">state</span> <span class="o">=</span> <span class="nx">State</span><span class="p">.</span><span class="nx">Created</span><span class="p">;</span>
+<span class="c1">// enums can be explicitly converted to ints</span>
+<span class="nx">uint</span> <span class="nx">createdState</span> <span class="o">=</span> <span class="nx">uint</span><span class="p">(</span><span class="nx">State</span><span class="p">.</span><span class="nx">Created</span><span class="p">);</span> <span class="c1">//  0</span>
+
+<span class="c1">// Data locations: Memory vs. storage vs. stack - all complex types (arrays,</span>
+<span class="c1">// structs) have a data location</span>
+<span class="c1">// 'memory' does not persist, 'storage' does</span>
+<span class="c1">// Default is 'storage' for local and state variables; 'memory' for func params</span>
+<span class="c1">// stack holds small local variables</span>
+
+<span class="c1">// for most types, can explicitly set which data location to use</span>
+
+
+<span class="c1">// 3. Simple operators</span>
+<span class="c1">// Comparisons, bit operators and arithmetic operators are provided</span>
+<span class="c1">// exponentiation: **</span>
+<span class="c1">// exclusive or: ^</span>
+<span class="c1">// bitwise negation: ~</span>
+
+
+<span class="c1">// 4. Global Variables of note</span>
+<span class="c1">// ** this **</span>
+<span class="k">this</span><span class="p">;</span> <span class="c1">// address of contract</span>
+<span class="c1">// often used at end of contract life to send remaining balance to party</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">balance</span><span class="p">;</span>
+<span class="k">this</span><span class="p">.</span><span class="nx">someFunction</span><span class="p">();</span> <span class="c1">// calls func externally via call, not via internal jump</span>
+
+<span class="c1">// ** msg - Current message received by the contract ** **</span>
+<span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">;</span> <span class="c1">// address of sender</span>
+<span class="nx">msg</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span> <span class="c1">// amount of ether provided to this contract in wei</span>
+<span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span> <span class="c1">// bytes, complete call data</span>
+<span class="nx">msg</span><span class="p">.</span><span class="nx">gas</span><span class="p">;</span> <span class="c1">// remaining gas</span>
+
+<span class="c1">// ** tx - This transaction **</span>
+<span class="nx">tx</span><span class="p">.</span><span class="nx">origin</span><span class="p">;</span> <span class="c1">// address of sender of the transaction</span>
+<span class="nx">tx</span><span class="p">.</span><span class="nx">gasprice</span><span class="p">;</span> <span class="c1">// gas price of the transaction</span>
+
+<span class="c1">// ** block - Information about current block **</span>
+<span class="nx">now</span><span class="p">;</span> <span class="c1">// current time (approximately), alias for block.timestamp (uses Unix time)</span>
+<span class="nx">block</span><span class="p">.</span><span class="nx">number</span><span class="p">;</span> <span class="c1">// current block number</span>
+<span class="nx">block</span><span class="p">.</span><span class="nx">difficulty</span><span class="p">;</span> <span class="c1">// current block difficulty</span>
+<span class="nx">block</span><span class="p">.</span><span class="nx">blockhash</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">// returns bytes32, only works for most recent 256 blocks</span>
+<span class="nx">block</span><span class="p">.</span><span class="nx">gasLimit</span><span class="p">();</span>
+
+<span class="c1">// ** storage - Persistent storage hash **</span>
+<span class="nx">storage</span><span class="p">[</span><span class="s1">'abc'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'def'</span><span class="p">;</span> <span class="c1">// maps 256 bit words to 256 bit words</span>
+
+
+<span class="c1">// 4. FUNCTIONS AND MORE</span>
+<span class="c1">// A. Functions</span>
+<span class="c1">// Simple function</span>
+<span class="kd">function</span> <span class="nx">increment</span><span class="p">(</span><span class="nx">uint</span> <span class="nx">x</span><span class="p">)</span> <span class="nx">returns</span> <span class="p">(</span><span class="nx">uint</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">x</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Functions can return many arguments, and by specifying returned arguments</span>
+<span class="c1">// name don't need to explicitly return</span>
+<span class="kd">function</span> <span class="nx">increment</span><span class="p">(</span><span class="nx">uint</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">uint</span> <span class="nx">y</span><span class="p">)</span> <span class="nx">returns</span> <span class="p">(</span><span class="nx">uint</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">uint</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="nx">y</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">// Call previous functon</span>
+<span class="nx">uint</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">)</span> <span class="o">=</span> <span class="nx">increment</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+
+<span class="c1">// 'constant' indicates that function does not/cannot change persistent vars</span>
+<span class="c1">// Constant function execute locally, not on blockchain</span>
+<span class="nx">uint</span> <span class="nx">y</span><span class="p">;</span>
+
+<span class="kd">function</span> <span class="nx">increment</span><span class="p">(</span><span class="nx">uint</span> <span class="nx">x</span><span class="p">)</span> <span class="nx">constant</span> <span class="nx">returns</span> <span class="p">(</span><span class="nx">uint</span> <span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">x</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="nx">y</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// this line would fail</span>
+    <span class="c1">// y is a state variable, and can't be changed in a constant function</span>
+<span class="p">}</span>
+
+<span class="c1">// 'Function Visibility specifiers'</span>
+<span class="c1">// These can be placed where 'constant' is, including:</span>
+<span class="c1">// public - visible externally and internally (default)</span>
+<span class="c1">// external</span>
+<span class="c1">// private - only visible in the current contract</span>
+<span class="c1">// internal - only visible in current contract, and those deriving from it</span>
+
+<span class="c1">// Functions hoisted - and can assign a function to a variable</span>
+<span class="kd">function</span> <span class="nx">a</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">z</span> <span class="o">=</span> <span class="nx">b</span><span class="p">;</span>
+    <span class="nx">b</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">b</span><span class="p">()</span> <span class="p">{</span>
+
+<span class="p">}</span>
+
+
+<span class="c1">// Prefer loops to recursion (max call stack depth is 1024)</span>
+
+<span class="c1">// B. Events</span>
+<span class="c1">// Events are notify external parties; easy to search and</span>
+<span class="c1">// access events from outside blockchain (with lightweight clients)</span>
+<span class="c1">// typically declare after contract parameters</span>
+
+<span class="c1">// Typically, capitalized - and add Log in front to be explicit and prevent confusion</span>
+<span class="c1">// with a function call</span>
+
+<span class="c1">// Declare</span>
+<span class="nx">event</span> <span class="nx">LogSent</span><span class="p">(</span><span class="nx">address</span> <span class="nx">indexed</span> <span class="nx">from</span><span class="p">,</span> <span class="nx">address</span> <span class="nx">indexed</span> <span class="nx">to</span><span class="p">,</span> <span class="nx">uint</span> <span class="nx">amount</span><span class="p">);</span> <span class="c1">// note capital first letter</span>
+
+<span class="c1">// Call</span>
+<span class="nx">Sent</span><span class="p">(</span><span class="nx">from</span><span class="p">,</span> <span class="nx">to</span><span class="p">,</span> <span class="nx">amount</span><span class="p">);</span>
+
+<span class="c1">// For an external party (a contract or external entity), to watch:</span>
+<span class="nx">Coin</span><span class="p">.</span><span class="nx">Sent</span><span class="p">().</span><span class="nx">watch</span><span class="p">({},</span> <span class="s1">''</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Coin transfer: "</span> <span class="o">+</span> <span class="nx">result</span><span class="p">.</span><span class="nx">args</span><span class="p">.</span><span class="nx">amount</span> <span class="o">+</span>
+            <span class="s2">" coins were sent from "</span> <span class="o">+</span> <span class="nx">result</span><span class="p">.</span><span class="nx">args</span><span class="p">.</span><span class="nx">from</span> <span class="o">+</span>
+            <span class="s2">" to "</span> <span class="o">+</span> <span class="nx">result</span><span class="p">.</span><span class="nx">args</span><span class="p">.</span><span class="nx">to</span> <span class="o">+</span> <span class="s2">"."</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Balances now:\n"</span> <span class="o">+</span>
+            <span class="s2">"Sender: "</span> <span class="o">+</span> <span class="nx">Coin</span><span class="p">.</span><span class="nx">balances</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">args</span><span class="p">.</span><span class="nx">from</span><span class="p">)</span> <span class="o">+</span>
+            <span class="s2">"Receiver: "</span> <span class="o">+</span> <span class="nx">Coin</span><span class="p">.</span><span class="nx">balances</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">args</span><span class="p">.</span><span class="nx">to</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// Common paradigm for one contract to depend on another (e.g., a</span>
+<span class="c1">// contract that depends on current exchange rate provided by another)</span>
+
+<span class="c1">// C. Modifiers</span>
+<span class="c1">// Modifiers validate inputs to functions such as minimal balance or user auth;</span>
+<span class="c1">// similar to guard clause in other languages</span>
+
+<span class="c1">// '_' (underscore) often included as last line in body, and indicates</span>
+<span class="c1">// function being called should be placed there</span>
+<span class="nx">modifier</span> <span class="nx">onlyAfter</span><span class="p">(</span><span class="nx">uint</span> <span class="nx">_time</span><span class="p">)</span> <span class="p">{</span> <span class="k">if</span> <span class="p">(</span><span class="nx">now</span> <span class="o">&lt;=</span> <span class="nx">_time</span><span class="p">)</span> <span class="k">throw</span><span class="p">;</span> <span class="nx">_</span> <span class="p">}</span>
+<span class="nx">modifier</span> <span class="nx">onlyOwner</span> <span class="p">{</span> <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span> <span class="o">==</span> <span class="nx">owner</span><span class="p">)</span> <span class="nx">_</span> <span class="p">}</span>
+<span class="c1">// commonly used with state machines</span>
+<span class="nx">modifier</span> <span class="nx">onlyIfState</span> <span class="p">(</span><span class="nx">State</span> <span class="nx">currState</span><span class="p">)</span> <span class="p">{</span> <span class="k">if</span> <span class="p">(</span><span class="nx">currState</span> <span class="o">!=</span> <span class="nx">State</span><span class="p">.</span><span class="nx">A</span><span class="p">)</span> <span class="nx">_</span> <span class="p">}</span>
+
+<span class="c1">// Append right after function declaration</span>
+<span class="kd">function</span> <span class="nx">changeOwner</span><span class="p">(</span><span class="nx">newOwner</span><span class="p">)</span>
+<span class="nx">onlyAfter</span><span class="p">(</span><span class="nx">someTime</span><span class="p">)</span>
+<span class="nx">onlyOwner</span><span class="p">()</span>
+<span class="nx">onlyIfState</span><span class="p">(</span><span class="nx">State</span><span class="p">.</span><span class="nx">A</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="nx">owner</span> <span class="o">=</span> <span class="nx">newOwner</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// underscore can be included before end of body,</span>
+<span class="c1">// but explicitly returning will skip, so use carefully</span>
+<span class="nx">modifier</span> <span class="nx">checkValue</span><span class="p">(</span><span class="nx">uint</span> <span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">_</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">value</span> <span class="o">&gt;</span> <span class="nx">amount</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">uint</span> <span class="nx">amountToRefund</span> <span class="o">=</span> <span class="nx">amount</span> <span class="o">-</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">amountToRefund</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">throw</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="c1">// 6. BRANCHING AND LOOPS</span>
+
+<span class="c1">// All basic logic blocks work - including if/else, for, while, break, continue</span>
+<span class="c1">// return - but no switch</span>
+
+<span class="c1">// Syntax same as javascript, but no type conversion from non-boolean</span>
+<span class="c1">// to boolean (comparison operators must be used to get the boolean val)</span>
+
+<span class="c1">// For loops that are determined by user behavior, be careful - as contracts have a maximal</span>
+<span class="c1">// amount of gas for a block of code - and will fail if that is exceeded</span>
+<span class="c1">// For example:</span>
+<span class="k">for</span><span class="p">(</span><span class="nx">uint</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">refundAddressList</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">refundAddressList</span><span class="p">[</span><span class="nx">x</span><span class="p">].</span><span class="nx">send</span><span class="p">(</span><span class="nx">SOME_AMOUNT</span><span class="p">))</span> <span class="p">{</span>
+       <span class="k">throw</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Two errors above:</span>
+<span class="c1">// 1. A failure on send stops the loop from completing, tying up money</span>
+<span class="c1">// 2. This loop could be arbitrarily long (based on the amount of users who need refunds), and</span>
+<span class="c1">// therefore may always fail as it exceeds the max gas for a block</span>
+<span class="c1">// Instead, you should let people withdraw individually from their subaccount, and mark withdrawn</span>
+
+
+<span class="c1">// 7. OBJECTS/CONTRACTS</span>
+
+<span class="c1">// A. Calling external contract</span>
+<span class="nx">contract</span> <span class="nx">infoFeed</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">info</span><span class="p">()</span> <span class="nx">returns</span> <span class="p">(</span><span class="nx">uint</span> <span class="nx">ret</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">42</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">contract</span> <span class="nx">Consumer</span> <span class="p">{</span>
+    <span class="nx">InfoFeed</span> <span class="nx">feed</span><span class="p">;</span> <span class="c1">// points to contract on blockchain</span>
+
+    <span class="c1">// Set feed to existing contract instance</span>
+    <span class="kd">function</span> <span class="nx">setFeed</span><span class="p">(</span><span class="nx">address</span> <span class="nx">addr</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">// automatically cast, be careful; constructor is not called</span>
+        <span class="nx">feed</span> <span class="o">=</span> <span class="nx">InfoFeed</span><span class="p">(</span><span class="nx">addr</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Set feed to new instance of contract</span>
+    <span class="kd">function</span> <span class="nx">createNewFeed</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">feed</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">InfoFeed</span><span class="p">();</span> <span class="c1">// new instance created; constructor called</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">callFeed</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// final parentheses call contract, can optionally add</span>
+        <span class="c1">// custom ether value or gas</span>
+        <span class="nx">feed</span><span class="p">.</span><span class="nx">info</span><span class="p">.</span><span class="nx">value</span><span class="p">(</span><span class="mi">10</span><span class="p">).</span><span class="nx">gas</span><span class="p">(</span><span class="mi">800</span><span class="p">)();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// B. Inheritance</span>
+
+<span class="c1">// Order matters, last inherited contract (i.e., 'def') can override parts of</span>
+<span class="c1">// previously inherited contracts</span>
+<span class="nx">contract</span> <span class="nx">MyContract</span> <span class="nx">is</span> <span class="nx">abc</span><span class="p">,</span> <span class="nx">def</span><span class="p">(</span><span class="s2">"a custom argument to def"</span><span class="p">)</span> <span class="p">{</span>
+
+<span class="c1">// Override function</span>
+    <span class="kd">function</span> <span class="nx">z</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span> <span class="o">==</span> <span class="nx">owner</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">def</span><span class="p">.</span><span class="nx">z</span><span class="p">();</span> <span class="c1">// call overridden function from def</span>
+            <span class="kr">super</span><span class="p">.</span><span class="nx">z</span><span class="p">();</span> <span class="c1">// call immediate parent overriden function</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// abstract function</span>
+<span class="kd">function</span> <span class="nx">someAbstractFunction</span><span class="p">(</span><span class="nx">uint</span> <span class="nx">x</span><span class="p">);</span>
+<span class="c1">// cannot be compiled, so used in base/abstract contracts</span>
+<span class="c1">// that are then implemented</span>
+
+<span class="c1">// C. Import</span>
+
+<span class="kr">import</span> <span class="s2">"filename"</span><span class="p">;</span>
+<span class="kr">import</span> <span class="s2">"github.com/ethereum/dapp-bin/library/iterable_mapping.sol"</span><span class="p">;</span>
+
+<span class="c1">// Importing under active development</span>
+<span class="c1">// Cannot currently be done at command line</span>
+
+
+<span class="c1">// 8. OTHER KEYWORDS</span>
+
+<span class="c1">// A. Throwing</span>
+<span class="c1">// Throwing</span>
+<span class="k">throw</span><span class="p">;</span> <span class="c1">// reverts unused money to sender, state is reverted</span>
+<span class="c1">// Can't currently catch</span>
+
+<span class="c1">// Common design pattern is:</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">addr</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="mi">123</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">throw</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// B. Selfdestruct</span>
+<span class="c1">// selfdestruct current contract, sending funds to address (often creator)</span>
+<span class="nx">selfdestruct</span><span class="p">(</span><span class="nx">SOME_ADDRESS</span><span class="p">);</span>
+
+<span class="c1">// removes storage/code from current/future blocks</span>
+<span class="c1">// helps thin clients, but previous data persists in blockchain</span>
+
+<span class="c1">// Common pattern, lets owner end the contract and receive remaining funds</span>
+<span class="kd">function</span> <span class="nx">remove</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span> <span class="o">==</span> <span class="nx">creator</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// Only let the contract creator do this</span>
+        <span class="nx">selfdestruct</span><span class="p">(</span><span class="nx">creator</span><span class="p">);</span> <span class="c1">// Makes contract inactive, returns funds</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// May want to deactivate contract manually, rather than selfdestruct</span>
+<span class="c1">// (ether sent to selfdestructed contract is lost)</span>
+
+
+<span class="c1">// 9. CONTRACT DESIGN NOTES</span>
+
+<span class="c1">// A. Obfuscation</span>
+<span class="c1">// All variables are publicly viewable on blockchain, so anything</span>
+<span class="c1">// that is private needs to be obfuscated (e.g., hashed w/secret)</span>
+
+<span class="c1">// Steps: 1. Commit to something, 2. Reveal commitment</span>
+<span class="nx">sha3</span><span class="p">(</span><span class="s2">"some_bid_amount"</span><span class="p">,</span> <span class="s2">"some secret"</span><span class="p">);</span> <span class="c1">// commit</span>
+
+<span class="c1">// call contract's reveal function in the future</span>
+<span class="c1">// showing bid plus secret that hashes to SHA3</span>
+<span class="nx">reveal</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="s2">"mySecret"</span><span class="p">);</span>
+
+<span class="c1">// B. Storage optimization</span>
+<span class="c1">// Writing to blockchain can be expensive, as data stored forever; encourages</span>
+<span class="c1">// smart ways to use memory (eventually, compilation will be better, but for now</span>
+<span class="c1">// benefits to planning data structures - and storing min amount in blockchain)</span>
+
+<span class="c1">// Cost can often be high for items like multidimensional arrays</span>
+<span class="c1">// (cost is for storing data - not declaring unfilled variables)</span>
+
+<span class="c1">// C. Data access in blockchain</span>
+<span class="c1">// Cannot restrict human or computer from reading contents of</span>
+<span class="c1">// transaction or transaction's state</span>
+
+<span class="c1">// While 'private' prevents other *contracts* from reading data</span>
+<span class="c1">// directly - any other party can still read data in blockchain</span>
+
+<span class="c1">// All data to start of time is stored in blockchain, so</span>
+<span class="c1">// anyone can observe all previous data and changes</span>
+
+<span class="c1">// D. Cron Job</span>
+<span class="c1">// Contracts must be manually called to handle time-based scheduling; can create external</span>
+<span class="c1">// code to regularly ping, or provide incentives (ether) for others to</span>
+
+<span class="c1">// E. Observer Pattern</span>
+<span class="c1">// An Observer Pattern lets you register as a subscriber and</span>
+<span class="c1">// register a function which is called by the oracle (note, the oracle pays</span>
+<span class="c1">// for this action to be run)</span>
+<span class="c1">// Some similarities to subscription in Pub/sub</span>
+
+<span class="c1">// This is an abstract contract, both client and server classes import</span>
+<span class="c1">// the client should implement</span>
+<span class="nx">contract</span> <span class="nx">SomeOracleCallback</span> <span class="p">{</span>
+    <span class="kd">function</span> <span class="nx">oracleCallback</span><span class="p">(</span><span class="kr">int</span> <span class="nx">_value</span><span class="p">,</span> <span class="nx">uint</span> <span class="nx">_time</span><span class="p">,</span> <span class="nx">bytes32</span> <span class="nx">info</span><span class="p">)</span> <span class="nx">external</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">contract</span> <span class="nx">SomeOracle</span> <span class="p">{</span>
+    <span class="nx">SomeOracleCallback</span><span class="p">[]</span> <span class="nx">callbacks</span><span class="p">;</span> <span class="c1">// array of all subscribers</span>
+
+    <span class="c1">// Register subscriber</span>
+    <span class="kd">function</span> <span class="nx">addSubscriber</span><span class="p">(</span><span class="nx">SomeOracleCallback</span> <span class="nx">a</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">callbacks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">a</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">notify</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">time</span><span class="p">,</span> <span class="nx">info</span><span class="p">)</span> <span class="kr">private</span> <span class="p">{</span>
+        <span class="k">for</span><span class="p">(</span><span class="nx">uint</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">callbacks</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// all called subscribers must implement the oracleCallback</span>
+            <span class="nx">callbacks</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">oracleCallback</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">time</span><span class="p">,</span> <span class="nx">info</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">doSomething</span><span class="p">()</span> <span class="kr">public</span> <span class="p">{</span>
+        <span class="c1">// Code to do something</span>
+
+        <span class="c1">// Notify all subscribers</span>
+        <span class="nx">notify</span><span class="p">(</span><span class="nx">_value</span><span class="p">,</span> <span class="nx">_time</span><span class="p">,</span> <span class="nx">_info</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Now, your client contract can addSubscriber by importing SomeOracleCallback</span>
+<span class="c1">// and registering with Some Oracle</span>
+
+<span class="c1">// F. State machines</span>
+<span class="c1">// see example below for State enum and inState modifier</span>
+
+
+<span class="c1">// *** EXAMPLE: A crowdfunding example (broadly similar to Kickstarter) ***</span>
+<span class="c1">// ** START EXAMPLE **</span>
+
+<span class="c1">// CrowdFunder.sol</span>
+
+<span class="c1">/// @title CrowdFunder</span>
+<span class="c1">/// @author nemild</span>
+<span class="nx">contract</span> <span class="nx">CrowdFunder</span> <span class="p">{</span>
+    <span class="c1">// Variables set on create by creator</span>
+    <span class="nx">address</span> <span class="kr">public</span> <span class="nx">creator</span><span class="p">;</span>
+    <span class="nx">address</span> <span class="kr">public</span> <span class="nx">fundRecipient</span><span class="p">;</span> <span class="c1">// creator may be different than recipient</span>
+    <span class="nx">uint</span> <span class="kr">public</span> <span class="nx">minimumToRaise</span><span class="p">;</span> <span class="c1">// required to tip, else everyone gets refund</span>
+    <span class="nx">string</span> <span class="nx">campaignUrl</span><span class="p">;</span>
+    <span class="kr">byte</span> <span class="nx">constant</span> <span class="nx">version</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="c1">// Data structures</span>
+    <span class="kr">enum</span> <span class="nx">State</span> <span class="p">{</span>
+        <span class="nx">Fundraising</span><span class="p">,</span>
+        <span class="nx">ExpiredRefund</span><span class="p">,</span>
+        <span class="nx">Successful</span>
+    <span class="p">}</span>
+    <span class="nx">struct</span> <span class="nx">Contribution</span> <span class="p">{</span>
+        <span class="nx">uint</span> <span class="nx">amount</span><span class="p">;</span>
+        <span class="nx">address</span> <span class="nx">contributor</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// State variables</span>
+    <span class="nx">State</span> <span class="kr">public</span> <span class="nx">state</span> <span class="o">=</span> <span class="nx">State</span><span class="p">.</span><span class="nx">Fundraising</span><span class="p">;</span> <span class="c1">// initialize on create</span>
+    <span class="nx">uint</span> <span class="kr">public</span> <span class="nx">totalRaised</span><span class="p">;</span>
+    <span class="nx">uint</span> <span class="kr">public</span> <span class="nx">raiseBy</span><span class="p">;</span>
+    <span class="nx">uint</span> <span class="kr">public</span> <span class="nx">completeAt</span><span class="p">;</span>
+    <span class="nx">Contribution</span><span class="p">[]</span> <span class="nx">contributions</span><span class="p">;</span>
+
+    <span class="nx">event</span> <span class="nx">LogFundingReceived</span><span class="p">(</span><span class="nx">address</span> <span class="nx">addr</span><span class="p">,</span> <span class="nx">uint</span> <span class="nx">amount</span><span class="p">,</span> <span class="nx">uint</span> <span class="nx">currentTotal</span><span class="p">);</span>
+    <span class="nx">event</span> <span class="nx">LogWinnerPaid</span><span class="p">(</span><span class="nx">address</span> <span class="nx">winnerAddress</span><span class="p">);</span>
+
+    <span class="nx">modifier</span> <span class="nx">inState</span><span class="p">(</span><span class="nx">State</span> <span class="nx">_state</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">state</span> <span class="o">!=</span> <span class="nx">_state</span><span class="p">)</span> <span class="k">throw</span><span class="p">;</span>
+        <span class="nx">_</span>
+    <span class="p">}</span>
+
+    <span class="nx">modifier</span> <span class="nx">isCreator</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span> <span class="o">!=</span> <span class="nx">creator</span><span class="p">)</span> <span class="k">throw</span><span class="p">;</span>
+        <span class="nx">_</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Wait 6 months after final contract state before allowing contract destruction</span>
+    <span class="nx">modifier</span> <span class="nx">atEndOfLifecycle</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">((</span><span class="nx">state</span> <span class="o">==</span> <span class="nx">State</span><span class="p">.</span><span class="nx">ExpiredRefund</span> <span class="o">||</span> <span class="nx">state</span> <span class="o">==</span> <span class="nx">State</span><span class="p">.</span><span class="nx">Successful</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+        <span class="nx">completeAt</span> <span class="o">+</span> <span class="mi">6</span> <span class="nx">months</span> <span class="o">&lt;</span> <span class="nx">now</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">throw</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nx">_</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">CrowdFunder</span><span class="p">(</span>
+        <span class="nx">uint</span> <span class="nx">timeInHoursForFundraising</span><span class="p">,</span>
+        <span class="nx">string</span> <span class="nx">_campaignUrl</span><span class="p">,</span>
+        <span class="nx">address</span> <span class="nx">_fundRecipient</span><span class="p">,</span>
+        <span class="nx">uint</span> <span class="nx">_minimumToRaise</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">creator</span> <span class="o">=</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">;</span>
+        <span class="nx">fundRecipient</span> <span class="o">=</span> <span class="nx">_fundRecipient</span><span class="p">;</span>
+        <span class="nx">campaignUrl</span> <span class="o">=</span> <span class="nx">_campaignUrl</span><span class="p">;</span>
+        <span class="nx">minimumToRaise</span> <span class="o">=</span> <span class="nx">_minimumToRaise</span><span class="p">;</span>
+        <span class="nx">raiseBy</span> <span class="o">=</span> <span class="nx">now</span> <span class="o">+</span> <span class="p">(</span><span class="nx">timeInHoursForFundraising</span> <span class="o">*</span> <span class="mi">1</span> <span class="nx">hours</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">contribute</span><span class="p">()</span>
+    <span class="kr">public</span>
+    <span class="nx">inState</span><span class="p">(</span><span class="nx">State</span><span class="p">.</span><span class="nx">Fundraising</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nx">contributions</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span>
+            <span class="nx">Contribution</span><span class="p">({</span>
+                <span class="na">amount</span><span class="p">:</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span>
+                <span class="na">contributor</span><span class="p">:</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span>
+            <span class="p">})</span> <span class="c1">// use array, so can iterate</span>
+        <span class="p">);</span>
+        <span class="nx">totalRaised</span> <span class="o">+=</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">value</span><span class="p">;</span>
+
+        <span class="nx">LogFundingReceived</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">,</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span> <span class="nx">totalRaised</span><span class="p">);</span>
+
+        <span class="nx">checkIfFundingCompleteOrExpired</span><span class="p">();</span>
+        <span class="k">return</span> <span class="nx">contributions</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// return id</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">checkIfFundingCompleteOrExpired</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">totalRaised</span> <span class="o">&gt;</span> <span class="nx">minimumToRaise</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">state</span> <span class="o">=</span> <span class="nx">State</span><span class="p">.</span><span class="nx">Successful</span><span class="p">;</span>
+            <span class="nx">payOut</span><span class="p">();</span>
+
+            <span class="c1">// could incentivize sender who initiated state change here</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span> <span class="nx">now</span> <span class="o">&gt;</span> <span class="nx">raiseBy</span> <span class="p">)</span>  <span class="p">{</span>
+            <span class="nx">state</span> <span class="o">=</span> <span class="nx">State</span><span class="p">.</span><span class="nx">ExpiredRefund</span><span class="p">;</span> <span class="c1">// backers can now collect refunds by calling getRefund(id)</span>
+        <span class="p">}</span>
+        <span class="nx">completeAt</span> <span class="o">=</span> <span class="nx">now</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">payOut</span><span class="p">()</span>
+    <span class="kr">public</span>
+    <span class="nx">inState</span><span class="p">(</span><span class="nx">State</span><span class="p">.</span><span class="nx">Successful</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">fundRecipient</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">balance</span><span class="p">))</span> <span class="p">{</span>
+            <span class="k">throw</span><span class="p">;</span>
+        <span class="p">}</span>
+
+
+        <span class="nx">LogWinnerPaid</span><span class="p">(</span><span class="nx">fundRecipient</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">getRefund</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+    <span class="kr">public</span>
+    <span class="nx">inState</span><span class="p">(</span><span class="nx">State</span><span class="p">.</span><span class="nx">ExpiredRefund</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">contributions</span><span class="p">.</span><span class="nx">length</span> <span class="o">&lt;=</span> <span class="nx">id</span> <span class="o">||</span> <span class="nx">id</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">contributions</span><span class="p">[</span><span class="nx">id</span><span class="p">].</span><span class="nx">amount</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="k">throw</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="nx">uint</span> <span class="nx">amountToRefund</span> <span class="o">=</span> <span class="nx">contributions</span><span class="p">[</span><span class="nx">id</span><span class="p">].</span><span class="nx">amount</span><span class="p">;</span>
+        <span class="nx">contributions</span><span class="p">[</span><span class="nx">id</span><span class="p">].</span><span class="nx">amount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">contributions</span><span class="p">[</span><span class="nx">id</span><span class="p">].</span><span class="nx">contributor</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">amountToSend</span><span class="p">))</span> <span class="p">{</span>
+            <span class="nx">contributions</span><span class="p">[</span><span class="nx">id</span><span class="p">].</span><span class="nx">amount</span> <span class="o">=</span> <span class="nx">amountToSend</span><span class="p">;</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+      <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="nx">removeContract</span><span class="p">()</span>
+    <span class="kr">public</span>
+    <span class="nx">isCreator</span><span class="p">()</span>
+    <span class="nx">atEndOfLifecycle</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nx">selfdestruct</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">sender</span><span class="p">);</span>
+        <span class="c1">// creator gets all money that hasn't be claimed</span>
+    <span class="p">}</span>
+
+    <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span> <span class="k">throw</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// ** END EXAMPLE **</span>
+
+<span class="c1">// 10. OTHER NATIVE FUNCTIONS</span>
+
+<span class="c1">// Currency units</span>
+<span class="c1">// Currency is defined using wei, smallest unit of Ether</span>
+<span class="nx">uint</span> <span class="nx">minAmount</span> <span class="o">=</span> <span class="mi">1</span> <span class="nx">wei</span><span class="p">;</span>
+<span class="nx">uint</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">1</span> <span class="nx">finney</span><span class="p">;</span> <span class="c1">// 1 ether == 1000 finney</span>
+<span class="c1">// Other units, see: http://ether.fund/tool/converter</span>
+
+<span class="c1">// Time units</span>
+<span class="mi">1</span> <span class="o">==</span> <span class="mi">1</span> <span class="nx">second</span>
+<span class="mi">1</span> <span class="nx">minutes</span> <span class="o">==</span> <span class="mi">60</span> <span class="nx">seconds</span>
+
+<span class="c1">// Can multiply a variable times unit, as units are not stored in a variable</span>
+<span class="nx">uint</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+<span class="p">(</span><span class="nx">x</span> <span class="o">*</span> <span class="mi">1</span> <span class="nx">days</span><span class="p">);</span> <span class="c1">// 5 days</span>
+
+<span class="c1">// Careful about leap seconds/years with equality statements for time</span>
+<span class="c1">// (instead, prefer greater than/less than)</span>
+
+<span class="c1">// Cryptography</span>
+<span class="c1">// All strings passed are concatenated before hash action</span>
+<span class="nx">sha3</span><span class="p">(</span><span class="s2">"ab"</span><span class="p">,</span> <span class="s2">"cd"</span><span class="p">);</span>
+<span class="nx">ripemd160</span><span class="p">(</span><span class="s2">"abc"</span><span class="p">);</span>
+<span class="nx">sha256</span><span class="p">(</span><span class="s2">"def"</span><span class="p">);</span>
+
+<span class="c1">// 11. SECURITY</span>
+
+<span class="c1">// Bugs can be disastrous in Ethereum contracts - and even popular patterns in Solidity,</span>
+<span class="c1">// may be found to be antipatterns</span>
+
+<span class="c1">// See security links at the end of this doc</span>
+
+<span class="c1">// 12. LOW LEVEL FUNCTIONS</span>
+<span class="c1">// call - low level, not often used, does not provide type safety</span>
+<span class="nx">successBoolean</span> <span class="o">=</span> <span class="nx">someContractAddress</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="s1">'function_name'</span><span class="p">,</span> <span class="s1">'arg1'</span><span class="p">,</span> <span class="s1">'arg2'</span><span class="p">);</span>
+
+<span class="c1">// callcode - Code at target address executed in *context* of calling contract</span>
+<span class="c1">// provides library functionality</span>
+<span class="nx">someContractAddress</span><span class="p">.</span><span class="nx">callcode</span><span class="p">(</span><span class="s1">'function_name'</span><span class="p">);</span>
+
+
+<span class="c1">// 13. STYLE NOTES</span>
+<span class="c1">// Based on Python's PEP8 style guide</span>
+
+<span class="c1">// Quick summary:</span>
+<span class="c1">// 4 spaces for indentation</span>
+<span class="c1">// Two lines separate contract declarations (and other top level declarations)</span>
+<span class="c1">// Avoid extraneous spaces in parentheses</span>
+<span class="c1">// Can omit curly braces for one line statement (if, for, etc)</span>
+<span class="c1">// else should be placed on own line</span>
+
+
+<span class="c1">// 14. NATSPEC COMENTS</span>
+<span class="c1">// used for documentation, commenting, and external UIs</span>
+
+<span class="c1">// Contract natspec - always above contract definition</span>
+<span class="c1">/// @title Contract title</span>
+<span class="c1">/// @author Author name</span>
+
+<span class="c1">// Function natspec</span>
+<span class="c1">/// @notice information about what function does; shown when function to execute</span>
+<span class="c1">/// @dev Function documentation for developer</span>
+
+<span class="c1">// Function parameter/return value natspec</span>
+<span class="c1">/// @param someParam Some description of what the param does</span>
+<span class="c1">/// @return Description of the return value</span>
+</code></pre>
+
+<h2>Additional resources</h2>
+
+<ul>
+<li><a href="https://solidity.readthedocs.org/en/latest/">Solidity Docs</a></li>
+<li><a href="https://ethereum.github.io/solidity//docs/style-guide/">Solidity Style Guide</a>: Ethereum&rsquo;s style guide is heavily derived from Python&rsquo;s <a href="https://www.python.org/dev/peps/pep-0008/">pep8</a> style guide.</li>
+<li><a href="http://chriseth.github.io/browser-solidity/">Browser-based Solidity Editor</a></li>
+<li><a href="https://gitter.im/ethereum/solidity">Gitter Solidity Chat room</a></li>
+<li><a href="https://docs.erisindustries.com/tutorials/solidity/">Modular design strategies for Ethereum Contracts</a></li>
+</ul>
+
+<h2>Sample contracts</h2>
+
+<ul>
+<li><a href="https://github.com/ethereum/dapp-bin">Dapp Bin</a></li>
+<li><a href="https://github.com/fivedogit/solidity-baby-steps/tree/master/contracts">Solidity Baby Step Contracts</a></li>
+<li><a href="https://github.com/ConsenSys/dapp-store-contracts">ConsenSys Contracts</a></li>
+<li><a href="http://dapps.ethercasts.com/">State of Dapps</a></li>
+</ul>
+
+<h2>Security</h2>
+
+<ul>
+<li><a href="https://blog.ethereum.org/2016/06/19/thinking-smart-contract-security/">Thinking About Smart Contract Security</a></li>
+<li><a href="https://blog.ethereum.org/2016/06/10/smart-contract-security/">Smart Contract Security</a></li>
+<li><a href="http://hackingdistributed.com/">Hacking Distributed Blog</a></li>
+</ul>
+
+<h2>Information purposefully excluded</h2>
+
+<ul>
+<li>Libraries</li>
+</ul>
+
+<h2>Style</h2>
+
+<ul>
+<li>Python&rsquo;s <a href="https://www.python.org/dev/peps/pep-0008/">PEP8</a> is used as the baseline style guide, including its general philosophy</li>
+</ul>
+
+<h2>Editors</h2>
+
+<ul>
+<li><a href="https://github.com/tomlion/vim-solidity">Vim Solidity</a></li>
+<li>Editor Snippets (<a href="https://gist.github.com/nemild/98343ce6b16b747788bc">Ultisnips format</a>)</li>
+</ul>
+
+<h2>Future To Dos</h2>
+
+<ul>
+<li>New keywords: protected, inheritable</li>
+<li>List of common design patterns (throttling, RNG, version upgrade)</li>
+<li>Common security anti patterns</li>
+</ul>
+
+<p>Feel free to send a pull request with any edits - or email nemild -/at-/ gmail</p>
+
+    <hr>
+    <p>Got a suggestion? A correction, perhaps? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Open an Issue</a> on the Github Repo, or make a pull request yourself!
+    </p>
+    <p class="contributed">
+    Originally contributed by Nemil Dalal, and updated by <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/solidity.html.markdown">2 contributor(s)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="https://www.nemil.com/">Nemil Dalal</a>,
+      
+    
+      
+        <a href="#">Joseph Chow</a>
+      
+    
+    </p>
+
+    <p>
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/solidity/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:59 GMT -->
+</html>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: When You Have a Hammer, Everything Looks Like Rails</title>
+	<atom:link href="https://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Joshua Paine</title>
+		<link>https://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails/comment-page-1#comment-20379</link>
+		<dc:creator><![CDATA[Joshua Paine]]></dc:creator>
+		<pubDate>Wed, 14 Nov 2007 03:08:16 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails#comment-20379</guid>
+		<description><![CDATA[For the data store, have you considered couchdb? I&#039;ve not used it, but I&#039;m dying to. It&#039;s pretty niche and new at this point, but maybe it&#039;s worth a look for you.]]></description>
+		<content:encoded><![CDATA[<p>For the data store, have you considered couchdb? I&#8217;ve not used it, but I&#8217;m dying to. It&#8217;s pretty niche and new at this point, but maybe it&#8217;s worth a look for you.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Nick</title>
+		<link>https://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails/comment-page-1#comment-20365</link>
+		<dc:creator><![CDATA[Nick]]></dc:creator>
+		<pubDate>Tue, 13 Nov 2007 23:35:06 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails#comment-20365</guid>
+		<description><![CDATA[There has been quite a bit of buzz on CouchDB... sounds right up your ally.
+
+http://couchdb.com/CouchDB/CouchDBWeb.nsf/Home?OpenForm]]></description>
+		<content:encoded><![CDATA[<p>There has been quite a bit of buzz on CouchDB&#8230; sounds right up your ally.</p>
+<p><a href="http://couchdb.com/CouchDB/CouchDBWeb.nsf/Home?OpenForm" rel="nofollow">http://couchdb.com/CouchDB/CouchDBWeb.nsf/Home?OpenForm</a></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Pat</title>
+		<link>https://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails/comment-page-1#comment-20363</link>
+		<dc:creator><![CDATA[Pat]]></dc:creator>
+		<pubDate>Tue, 13 Nov 2007 23:12:57 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails#comment-20363</guid>
+		<description><![CDATA[Try couchdb http://couchdb.org]]></description>
+		<content:encoded><![CDATA[<p>Try couchdb <a href="http://couchdb.org" rel="nofollow">http://couchdb.org</a></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Justin Rich</title>
+		<link>https://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails/comment-page-1#comment-20362</link>
+		<dc:creator><![CDATA[Justin Rich]]></dc:creator>
+		<pubDate>Tue, 13 Nov 2007 23:11:46 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails#comment-20362</guid>
+		<description><![CDATA[I have similar issues with one of my core products.
+
+I first starting using ferret too, but one morning the index files it builds started to grow tremendously without rhyme or reason, maxing out hd space. I switched everything over to solr that day and it&#039;s been a solid performer for over a year now. Very fast when you know how to talk to the solr server.
+
+The acts_as_solr plugin (at least early versions of it) were naive implementations. I&#039;ve branched my own version where I can delay commits to the solr db in order to make it fast for large updates as well. For searching, I query the solr server to return strictly ids, then query the db with those. That way not a terrible amount of data is being traded. Also, you have to make sure that documents deleted from the db also get deleted from the solr index. 
+
+For batch updates/uploads to the db, check out http://agilewebdevelopment.com/plugins/ar_extensions . It has a batch import function that you can also get to work to update records with unique keys. I had huge huge huge performance gains when using this plugin. 
+
+Sorry I can&#039;t help you with the best way to store all of the text in general. I keep newspaper articles just fine in mysql. I&#039;m sure there&#039;s a way. Lexis Nexis does it.]]></description>
+		<content:encoded><![CDATA[<p>I have similar issues with one of my core products.</p>
+<p>I first starting using ferret too, but one morning the index files it builds started to grow tremendously without rhyme or reason, maxing out hd space. I switched everything over to solr that day and it&#8217;s been a solid performer for over a year now. Very fast when you know how to talk to the solr server.</p>
+<p>The acts_as_solr plugin (at least early versions of it) were naive implementations. I&#8217;ve branched my own version where I can delay commits to the solr db in order to make it fast for large updates as well. For searching, I query the solr server to return strictly ids, then query the db with those. That way not a terrible amount of data is being traded. Also, you have to make sure that documents deleted from the db also get deleted from the solr index. </p>
+<p>For batch updates/uploads to the db, check out <a href="http://agilewebdevelopment.com/plugins/ar_extensions" rel="nofollow">http://agilewebdevelopment.com/plugins/ar_extensions</a> . It has a batch import function that you can also get to work to update records with unique keys. I had huge huge huge performance gains when using this plugin. </p>
+<p>Sorry I can&#8217;t help you with the best way to store all of the text in general. I keep newspaper articles just fine in mysql. I&#8217;m sure there&#8217;s a way. Lexis Nexis does it.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Cliff Moon</title>
+		<link>https://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails/comment-page-1#comment-20361</link>
+		<dc:creator><![CDATA[Cliff Moon]]></dc:creator>
+		<pubDate>Tue, 13 Nov 2007 23:04:09 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails#comment-20361</guid>
+		<description><![CDATA[Try looking at couchDB, it&#039;s designed for semi-structured data like this.]]></description>
+		<content:encoded><![CDATA[<p>Try looking at couchDB, it&#8217;s designed for semi-structured data like this.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stephen De Gabrielle</title>
+		<link>https://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails/comment-page-1#comment-20355</link>
+		<dc:creator><![CDATA[Stephen De Gabrielle]]></dc:creator>
+		<pubDate>Tue, 13 Nov 2007 19:11:07 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails#comment-20355</guid>
+		<description><![CDATA[Have you looked at Greenstone Digital Library system http://www.greenstone.org/ ?
+Active, helpful developers and friendly community, I recommend it. 
+
+Stephen]]></description>
+		<content:encoded><![CDATA[<p>Have you looked at Greenstone Digital Library system <a href="http://www.greenstone.org/" rel="nofollow">http://www.greenstone.org/</a> ?<br />
+Active, helpful developers and friendly community, I recommend it. </p>
+<p>Stephen</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Leonard Richardson</title>
+		<link>https://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails/comment-page-1#comment-20327</link>
+		<dc:creator><![CDATA[Leonard Richardson]]></dc:creator>
+		<pubDate>Tue, 13 Nov 2007 03:20:37 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails#comment-20327</guid>
+		<description><![CDATA[Sorry, I didn&#039;t read this entry closely enough. I hadn&#039;t heard of Solr but that sounds like the best choice for indexing. For storage I&#039;d keep the data in whatever format it fits in naturally (probably flat files, but maybe database tables) and keep all the standardized metadata in the Solr index.
+
+Not sure if this will help either, but there you go.]]></description>
+		<content:encoded><![CDATA[<p>Sorry, I didn&#8217;t read this entry closely enough. I hadn&#8217;t heard of Solr but that sounds like the best choice for indexing. For storage I&#8217;d keep the data in whatever format it fits in naturally (probably flat files, but maybe database tables) and keep all the standardized metadata in the Solr index.</p>
+<p>Not sure if this will help either, but there you go.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: DHH</title>
+		<link>https://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails/comment-page-1#comment-20325</link>
+		<dc:creator><![CDATA[DHH]]></dc:creator>
+		<pubDate>Tue, 13 Nov 2007 03:10:41 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails#comment-20325</guid>
+		<description><![CDATA[We&#039;re using Solr at 37signals to provide search for all our applications dealing with gigabytes of data. The data is based off web documents and text, though. Not PDFs and so on. It works really well.]]></description>
+		<content:encoded><![CDATA[<p>We&#8217;re using Solr at 37signals to provide search for all our applications dealing with gigabytes of data. The data is based off web documents and text, though. Not PDFs and so on. It works really well.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Leonard Richardson</title>
+		<link>https://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails/comment-page-1#comment-20296</link>
+		<dc:creator><![CDATA[Leonard Richardson]]></dc:creator>
+		<pubDate>Mon, 12 Nov 2007 21:24:44 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2007/11/12/when-you-have-a-hammer-everything-looks-like-rails#comment-20296</guid>
+		<description><![CDATA[You&#039;ve basically described Lucene, the library of which Ferret is a port. I don&#039;t know of any other library for searching structured text, though I think PyLucene is more mature than Ferret. However the last time I seriously looked into this was around 2005.]]></description>
+		<content:encoded><![CDATA[<p>You&#8217;ve basically described Lucene, the library of which Ferret is a port. I don&#8217;t know of any other library for searching structured text, though I think PyLucene is more mature than Ferret. However the last time I seriously looked into this was around 2005.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.284 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:02:05 -->
+
+<!-- Compression = gzip -->

@@ -1,0 +1,20 @@
+;; $Id: //info.ravenbrook.com/user/ndl/lisp/jfli/import/jfli/defsys.lisp#2 $
+
+(in-package "CL-USER")
+
+;; This is version 0.2 of jfli
+
+(dolist (feature '(:jfli :jfli0 :jfli0.2))
+  (push feature *features*))
+
+(defsystem jfli ()
+  :members ("jni"
+            "jfli"
+            "process"
+            )
+  :rules ((:compile "jfli"
+                    (:requires (:compile :previous)))
+          (:compile "jfli"
+                    (:requires (:load :previous)))))
+
+

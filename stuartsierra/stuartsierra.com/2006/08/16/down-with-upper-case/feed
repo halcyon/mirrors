@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Down With Upper Case</title>
+	<atom:link href="https://stuartsierra.com/2006/08/16/down-with-upper-case/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2006/08/16/down-with-upper-case</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2006/08/16/down-with-upper-case/comment-page-1#comment-986</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Wed, 11 Oct 2006 14:39:37 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2006/08/16/down-with-upper-case#comment-986</guid>
+		<description><![CDATA[James Says: &lt;em&gt;&quot;I would die if the keyboard was a dumbed-down single input for text.&quot;&lt;/em&gt;
+
+So would I.  I&#039;m thinking longer term here.  When we have voice recognition, eye tracking, thin flexible displays, touch screens, and intelligent interfaces, I think CTRL and ALT will seem about as crude as a manual typewriter.]]></description>
+		<content:encoded><![CDATA[<p>James Says: <em>&#8220;I would die if the keyboard was a dumbed-down single input for text.&#8221;</em></p>
+<p>So would I.  I&#8217;m thinking longer term here.  When we have voice recognition, eye tracking, thin flexible displays, touch screens, and intelligent interfaces, I think CTRL and ALT will seem about as crude as a manual typewriter.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: James</title>
+		<link>https://stuartsierra.com/2006/08/16/down-with-upper-case/comment-page-1#comment-981</link>
+		<dc:creator><![CDATA[James]]></dc:creator>
+		<pubDate>Tue, 10 Oct 2006 15:14:28 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/2006/08/16/down-with-upper-case#comment-981</guid>
+		<description><![CDATA[Interfaces are a contextual thing and IMO, vary greatly with the task one is performing. Since computers are capable of so many different functions, it&#039;s apparent that they have many contexts that require different interfaces.
+
+For example, working with Photoshop I use my wacom tablet in one hand and my other hand to type in hotkeys with the keyboard. In many games, I sometimes only need to use my mouse. As a programmer though, I hate having to use anything but my keyboard.
+
+The problem for me is that switching contexts takes time. Many of the keys on a keyboard are there to save programmers and hard-core computer users time. The CTRL and ALT keys especially, but not exclusively -- the home and end keys are useful in many non-modal editors. I still use pageup/pagedown for scolling text in editors and even browsers when I&#039;m looking up something quickly. Even &quot;Print Screen&quot; is handy for taking quick screen caps.
+
+IMO, the modern keyboard is useful because of its evolution. I would die if the keyboard was a dumbed-down single input for text. It&#039;s already the most used interface on my desk. I only use my other interfaces for rather specific contexts.
+
+Large interfaces with so many choices may be confusing for new users or users with specific use-contexts, but in the long run... choice is good for everyone.]]></description>
+		<content:encoded><![CDATA[<p>Interfaces are a contextual thing and IMO, vary greatly with the task one is performing. Since computers are capable of so many different functions, it&#8217;s apparent that they have many contexts that require different interfaces.</p>
+<p>For example, working with Photoshop I use my wacom tablet in one hand and my other hand to type in hotkeys with the keyboard. In many games, I sometimes only need to use my mouse. As a programmer though, I hate having to use anything but my keyboard.</p>
+<p>The problem for me is that switching contexts takes time. Many of the keys on a keyboard are there to save programmers and hard-core computer users time. The CTRL and ALT keys especially, but not exclusively &#8212; the home and end keys are useful in many non-modal editors. I still use pageup/pagedown for scolling text in editors and even browsers when I&#8217;m looking up something quickly. Even &#8220;Print Screen&#8221; is handy for taking quick screen caps.</p>
+<p>IMO, the modern keyboard is useful because of its evolution. I would die if the keyboard was a dumbed-down single input for text. It&#8217;s already the most used interface on my desk. I only use my other interfaces for rather specific contexts.</p>
+<p>Large interfaces with so many choices may be confusing for new users or users with specific use-contexts, but in the long run&#8230; choice is good for everyone.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.282 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:02:15 -->
+
+<!-- Compression = gzip -->

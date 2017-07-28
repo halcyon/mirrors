@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Data Are Data, Not Objects</title>
+	<atom:link href="https://stuartsierra.com/2009/01/10/data-are-data/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2009/01/10/data-are-data</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Daniel Weinreb</title>
+		<link>https://stuartsierra.com/2009/01/10/data-are-data/comment-page-1#comment-42488</link>
+		<dc:creator><![CDATA[Daniel Weinreb]]></dc:creator>
+		<pubDate>Sat, 30 May 2009 11:42:32 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=192#comment-42488</guid>
+		<description><![CDATA[David Moon&#039;s new language, PLOT (Programming Language for Old Timers), carefully separates data from program at its lowest level, while providing for object-oriented programming as a higher level facility.
+
+At the Lisp conference (ilc09.org), in his invited talk, he mainly talked about macros, but he first did an introduction to the basic PLOT concepts, and this is one of the things he said.  He has not released general info about PLOT since he feels it&#039;s not ready yet, but I&#039;m pretty sure he intends to.  He insists that he&#039;s just doing this as a hobby.  It does support multimethods.
+
+I don&#039;t know enough about PLOT nor Clojure yet to compare them.  So many technologies to learn, so little time.]]></description>
+		<content:encoded><![CDATA[<p>David Moon&#8217;s new language, PLOT (Programming Language for Old Timers), carefully separates data from program at its lowest level, while providing for object-oriented programming as a higher level facility.</p>
+<p>At the Lisp conference (ilc09.org), in his invited talk, he mainly talked about macros, but he first did an introduction to the basic PLOT concepts, and this is one of the things he said.  He has not released general info about PLOT since he feels it&#8217;s not ready yet, but I&#8217;m pretty sure he intends to.  He insists that he&#8217;s just doing this as a hobby.  It does support multimethods.</p>
+<p>I don&#8217;t know enough about PLOT nor Clojure yet to compare them.  So many technologies to learn, so little time.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Ntino Krampis</title>
+		<link>https://stuartsierra.com/2009/01/10/data-are-data/comment-page-1#comment-42100</link>
+		<dc:creator><![CDATA[Ntino Krampis]]></dc:creator>
+		<pubDate>Mon, 12 Jan 2009 16:41:06 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=192#comment-42100</guid>
+		<description><![CDATA[Yes, but isn&#039;t a class supposed to model the behavior of a real-world object ? Like for example a class for a CD-player will have methods such as play,stop, ffw etc. Inside the class the songs might be stored in a hash, but the user never sees them. The class methods are supposed to represent only semantic and behavior of the real-world object, and has nothing to do with data structures...]]></description>
+		<content:encoded><![CDATA[<p>Yes, but isn&#8217;t a class supposed to model the behavior of a real-world object ? Like for example a class for a CD-player will have methods such as play,stop, ffw etc. Inside the class the songs might be stored in a hash, but the user never sees them. The class methods are supposed to represent only semantic and behavior of the real-world object, and has nothing to do with data structures&#8230;</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2009/01/10/data-are-data/comment-page-1#comment-42099</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Sun, 11 Jan 2009 15:54:25 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=192#comment-42099</guid>
+		<description><![CDATA[emacsen said &lt;em&gt;&quot;When you use languages which support multiple dispatch, you see that the argument for keeping data and functionality separate is strengthened&quot;&lt;/em&gt;.
+
+You&#039;re right, multiple dispatch (as in CLOS) makes things better.  But keeping data and functionality separate is exactly my point -- data should not be tied to a particular implementation.
+
+Clojure supports CLOS-style multiple dispatch &lt;em&gt;without&lt;/em&gt; classes.  Each &quot;multimethod&quot; has an arbitrary &quot;dispatch function&quot; that determines which method gets called.  It&#039;s very flexible, and very powerful.  &lt;a href=&quot;http://clojure.org/multimethods&quot; rel=&quot;nofollow&quot;&gt;http://clojure.org/multimethods&lt;/a&gt;]]></description>
+		<content:encoded><![CDATA[<p>emacsen said <em>&#8220;When you use languages which support multiple dispatch, you see that the argument for keeping data and functionality separate is strengthened&#8221;</em>.</p>
+<p>You&#8217;re right, multiple dispatch (as in CLOS) makes things better.  But keeping data and functionality separate is exactly my point &#8212; data should not be tied to a particular implementation.</p>
+<p>Clojure supports CLOS-style multiple dispatch <em>without</em> classes.  Each &#8220;multimethod&#8221; has an arbitrary &#8220;dispatch function&#8221; that determines which method gets called.  It&#8217;s very flexible, and very powerful.  <a href="http://clojure.org/multimethods" rel="nofollow">http://clojure.org/multimethods</a></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: John Bender</title>
+		<link>https://stuartsierra.com/2009/01/10/data-are-data/comment-page-1#comment-42098</link>
+		<dc:creator><![CDATA[John Bender]]></dc:creator>
+		<pubDate>Sun, 11 Jan 2009 07:01:43 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=192#comment-42098</guid>
+		<description><![CDATA[Great article. 
+
+My personal opinion is the OOP was used to make programming accessible, for better or worse, to a larger group of people. When building applications a lot of times it makes sense to have your code conform more closely to exactly what you want it to do, instead of spending massive amounts of time defining objects and re-factoring your inheritance hierarchy. 
+
+I think your example of JSON is perfect representation of getting a lot of functionality out of a simple standard.]]></description>
+		<content:encoded><![CDATA[<p>Great article. </p>
+<p>My personal opinion is the OOP was used to make programming accessible, for better or worse, to a larger group of people. When building applications a lot of times it makes sense to have your code conform more closely to exactly what you want it to do, instead of spending massive amounts of time defining objects and re-factoring your inheritance hierarchy. </p>
+<p>I think your example of JSON is perfect representation of getting a lot of functionality out of a simple standard.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: emacsen</title>
+		<link>https://stuartsierra.com/2009/01/10/data-are-data/comment-page-1#comment-42096</link>
+		<dc:creator><![CDATA[emacsen]]></dc:creator>
+		<pubDate>Sun, 11 Jan 2009 03:58:28 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=192#comment-42096</guid>
+		<description><![CDATA[Your argument against object orientation is a fairly common one in the world of single dispatch languages such as Java, Python and Ruby.
+
+When you use languages which support multiple dispatch, you see that the argument for keeping data and functionality separate is strenghened, but at the same time there&#039;s a clarity on your objects that lets them know which functions can be applied to them.
+
+This may seem unclear but it&#039;s difficult to explain other than you&#039;re right, given the constraints of your language, but if you look past it, you will come around again.]]></description>
+		<content:encoded><![CDATA[<p>Your argument against object orientation is a fairly common one in the world of single dispatch languages such as Java, Python and Ruby.</p>
+<p>When you use languages which support multiple dispatch, you see that the argument for keeping data and functionality separate is strenghened, but at the same time there&#8217;s a clarity on your objects that lets them know which functions can be applied to them.</p>
+<p>This may seem unclear but it&#8217;s difficult to explain other than you&#8217;re right, given the constraints of your language, but if you look past it, you will come around again.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.283 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:01:01 -->
+
+<!-- Compression = gzip -->

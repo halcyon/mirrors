@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/basic/the-parser.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:42 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Go with the flow: basic</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;go-with-the-flow-basic&quot;)"></div><h1 anchor="go-with-the-flow-basic" id="go-with-the-flow-basic" hyphens="none">Go with the flow: <span class="my-code" decode="exclude">basic</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-lexer.html">3&emsp;the lexer</a></li><li><a href="the-tokenizer.html">4&emsp;the tok­enizer</a></li><li><a class="here" href="the-parser.html">5&emsp;the parser</a></li><li><a href="the-reader.html">6&emsp;the reader</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_EVcN2&quot;)"></div><p id="a_EVcN2">Before we start writ­ing the parser, let’s remind our­selves of the pos­si­ble tokens we could get from <a href="the-lexer.html">the lexer</a> via <a href="the-tokenizer.html">the tok­enizer</a>:</p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ry9vl&quot;)"></div><p id="a_ry9vl">A <span class="my-code" decode="exclude">NEWLINE</span> token, which holds <span class="my-code" decode="exclude">"\n"</span>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_R8bbv&quot;)"></div><p id="a_R8bbv">A <span class="my-code" decode="exclude">REM</span> token, which holds a line com­ment that starts with <span class="my-code" decode="exclude">"rem"</span>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_GOt1B&quot;)"></div><p id="a_GOt1B">An <span class="my-code" decode="exclude">INTEGER</span> or <span class="my-code" decode="exclude">DECIMAL</span> token, which holds a num­ber.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_3TTA9&quot;)"></div><p id="a_3TTA9">A <span class="my-code" decode="exclude">STRING</span> token, which holds a string.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_YYXrQ&quot;)"></div><p id="a_YYXrQ">A state­ment name, specif­i­cally <span class="my-code" decode="exclude">"print"</span>, <span class="my-code" decode="exclude">"goto"</span>, or <span class="my-code" decode="exclude">"end"</span>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ZvD9A&quot;)"></div><p id="a_ZvD9A">A <span class="my-code" decode="exclude">"+"</span> oper­a­tor.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_XhEOj&quot;)"></div><p id="a_XhEOj">A <span class="my-code" decode="exclude">":"</span> state­ment sep­a­ra­tor.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Gj9fl&quot;)"></div><p id="a_Gj9fl">A <span class="my-code" decode="exclude">";"</span> print-item sep­a­ra­tor.</p></div></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rZzyC&quot;)"></div><p id="a_rZzyC">Using these tokens, and the ground rules laid out in <a href="specification-and-setup.html">spec­i­fi­ca­tion and setup</a>, we can rea­son out a gram­mar for BASIC. Of course, we’ll be using <span class="my-code" decode="exclude">#lang brag</span> once again to gen­er­ate a parser from that gram­mar.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rcnHl&quot;)"></div><p id="a_rcnHl">Because many ele­ments of BASIC have the same names as things in Racket, we’ll pre­fix  our pro­duc­tion rules with <span class="my-code" decode="exclude">b-</span> for clar­ity. This con­ven­tion isn’t required by <span class="my-code" decode="exclude">#lang brag</span>—it’ll just help keep things read­able, espe­cially once we get into <a href="the-expander.html">the expander</a>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;program-lines&quot;)"></div><h3 anchor="program-lines" class="subhead" id="program-lines"><a href="#program-lines">Pro­gram lines</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_6Ase5&quot;)"></div><p id="a_6Ase5">Our first rule is <span class="my-code" decode="exclude">b-program</span>, which will become the root node of our parse tree. Every BASIC pro­gram is made of lines sep­a­rated by <span class="my-code" decode="exclude">NEWLINE</span> tokens, which we could express like so:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_tb3N8&quot;)"></div><div class="highlight-container" id="a_tb3N8"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>b-program : b-line (NEWLINE b-line)*<br/>b-line :</div><div class="highlight" form="false" id="a_yu2AO"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+b-program : b-line (NEWLINE b-line)*
+b-line :
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_a2jcc&quot;)"></div><p id="a_a2jcc">The <span class="my-code" decode="exclude">*</span> quan­ti­fier means “zero or more rep­e­ti­tions” of the pre­ced­ing group, in this case the paren­the­sized sub­pat­tern <span class="my-code" decode="exclude">NEWLINE b-line</span>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_DUCYU&quot;)"></div><p id="a_DUCYU">This rule will work with our sam­ple pro­gram:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">sample.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Vh4Vl&quot;)"></div><div class="highlight-container" id="a_Vh4Vl"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic<br/>30 rem print 'ignored'<br/>35<br/>50 print "never gets here"<br/>40 end<br/>60 print 'three' : print 1.0 + 3<br/>70 goto 11. + 18.5 + .5 rem ignored<br/>10 print "o" ; "n" ; "e"<br/>20 print : goto 60.0 : end</div><div class="highlight" form="false" id="a_Fritf"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="source"><pre>#lang basic
+30 rem print &#39;ignored&#39;
+35
+50 print "never gets here"
+40 end
+60 print &#39;three&#39; : print 1.0 + 3
+70 goto 11. + 18.5 + .5 rem ignored
+10 print "o" ; "n" ; "e"
+20 print : goto 60.0 : end
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_JUP33&quot;)"></div><p id="a_JUP33">But as lan­guage design­ers, we want to be alert to the pos­si­bil­ity of other mis­chief, like a pro­gram with noth­ing in it:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_sCIFG&quot;)"></div><div class="highlight-container" id="a_sCIFG"><div id="code_45" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic</div><div class="highlight" form="false" id="a_hWd4p"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>#lang basic
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk2" data-clipboard-target="#code_45" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_lwQZv&quot;)"></div><p id="a_lwQZv">Or a pro­gram with noth­ing but new­lines:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_14QR1&quot;)"></div><div class="highlight-container" id="a_14QR1"><div id="code_46" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic<br/><br/><br/><br/> </div><div class="highlight" form="false" id="a_eTFPP"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="source"><pre>#lang basic
+
+
+
+<span class="err"> </span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk3" data-clipboard-target="#code_46" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rmRfj&quot;)"></div><p id="a_rmRfj">Or a pro­gram with extra new­lines scat­tered around:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_J7HRo&quot;)"></div><div class="highlight-container" id="a_J7HRo"><div id="code_47" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic<br/><br/>10 print "hello world"<br/><br/><br/>20 goto 10<br/><br/> </div><div class="highlight" form="false" id="a_kREAp"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="source"><pre>#lang basic
+
+<span class="nl">10</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"hello world"</span>
+
+
+<span class="nl">20</span><span class="w"> </span><span class="vg">goto</span><span class="w"> </span><span class="il">10</span>
+
+<span class="err"> </span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk4" data-clipboard-target="#code_47" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_zofkU&quot;)"></div><p id="a_zofkU">There’s no rea­son these pro­grams shouldn’t run—the obvi­ous inter­pre­ta­tion is “ignore the new­lines and con­tinue as usual”. But if our parser rule for <span class="my-code" decode="exclude">b-program</span> isn’t suf­fi­ciently lenient, then these odd­ball pro­grams will raise pars­ing errors. <span class="tooltip" onclick="this.classList.toggle('tooltip_visible')"> + <span class="tooltip-inner">An appli­ca­tion of <a class=" ext" href="https://en.wikipedia.org/wiki/Robustness_principle">Pos­tel’s Law</a>.</span></span></p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_4uN9y&quot;)"></div><p id="a_4uN9y">So let’s revise the rule. We can make each <span class="my-code" decode="exclude">b-line</span> ele­ment optional by putting it in square brack­ets:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_OajNN&quot;)"></div><div class="highlight-container" id="a_OajNN"><div id="code_48" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>b-program : [b-line] (NEWLINE [b-line])*<br/>b-line :</div><div class="highlight" form="false" id="a_RukK8"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+<span class="hll">b-program : [b-line] (NEWLINE [b-line])*
+</span>b-line :
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk5" data-clipboard-target="#code_48" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ELai9&quot;)"></div><p id="a_ELai9">Read­ing the rule, we should be able to con­vince our­selves that it will han­dle a range of edge cases with­out vio­lat­ing the key require­ment, which is that mul­ti­ple lines must be sep­a­rated by at least one new­line. (Of course, we could &amp; should write unit tests to be sure.)</p></div><div anchorize="false" style="height:1em"></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_br3GB&quot;)"></div><p id="a_br3GB">Mov­ing on to the gram­mar for each indi­vid­ual line. A line has a line num­ber, which is an inte­ger, fol­lowed by zero state­ments, one state­ment, or mul­ti­ple state­ments sep­a­rated by <span class="my-code" decode="exclude">:</span>. If we also make sep­a­rate rules for <span class="my-code" decode="exclude">b-line-num</span> and <span class="my-code" decode="exclude">b-statement</span>, we can write our <span class="my-code" decode="exclude">b-line</span> rule with three cases:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_P0E60&quot;)"></div><div class="highlight-container" id="a_P0E60"><div id="code_49" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>b-program : [b-line] (NEWLINE [b-line])*<br/>b-line : b-line-num<br/>       | b-line-num b-statement<br/>       | b-line-num b-statement (":" b-statement)+<br/>b-line-num : INTEGER<br/>b-statement :</div><div class="highlight" form="false" id="a_FGhIM"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+b-program : [b-line] (NEWLINE [b-line])*
+<span class="hll">b-line : b-line-num
+</span><span class="hll">       | b-line-num b-statement
+</span><span class="hll">       | b-line-num b-statement (":" b-statement)+
+</span><span class="hll">b-line-num : INTEGER
+</span><span class="hll">b-statement :
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk6" data-clipboard-target="#code_49" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_9FKpd&quot;)"></div><p id="a_9FKpd">But we can also com­bine the three cases into one by using a <span class="my-code" decode="exclude">*</span> rather than a <span class="my-code" decode="exclude">+</span> quan­ti­fier on the colon-sep­a­rated state­ments, and putting brack­ets around the state­ments, to rep­re­sent an optional match:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_IW4lj&quot;)"></div><div class="highlight-container" id="a_IW4lj"><div id="code_50" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>b-program : [b-line] (NEWLINE [b-line])*<br/>b-line : b-line-num [b-statement (":" b-statement)*]<br/>b-line-num : INTEGER<br/>b-statement :</div><div class="highlight" form="false" id="a_9KhYP"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+b-program : [b-line] (NEWLINE [b-line])*
+<span class="hll">b-line : b-line-num [b-statement (":" b-statement)*]
+</span>b-line-num : INTEGER
+b-statement :
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk7" data-clipboard-target="#code_50" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_n5ddA&quot;)"></div><p id="a_n5ddA">Not bad. And it would work with our sam­ple pro­gram. But hav­ing just learned about the impor­tance of lenient rules, we should ask our­selves what should hap­pen in edge cases like these:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_g2qNP&quot;)"></div><div class="highlight-container" id="a_g2qNP"><div id="code_51" form="false" decode="exclude" style="font-size:0;width:0;height:0">10 print "foo" :<br/>20 : print "bar" : :<br/>30 :::</div><div class="highlight" form="false" id="a_1i9dc"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="source"><pre>10 print "foo" :
+20 : print "bar" : :
+30 :::
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk8" data-clipboard-target="#code_51" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_lx2As&quot;)"></div><p id="a_lx2As">There’s no rea­son these lines shouldn’t work. So let’s make our line gram­mar less finicky, and just skip over blank state­ment sep­a­ra­tors. We can do this the same way we did in the <span class="my-code" decode="exclude">b-program</span> rule—by putting square brack­ets around each <span class="my-code" decode="exclude">b-statement</span> to make them optional:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_nx6JR&quot;)"></div><div class="highlight-container" id="a_nx6JR"><div id="code_52" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>b-program : [b-line] (NEWLINE [b-line])*<br/>b-line : b-line-num [b-statement] (":" [b-statement])*<br/>b-line-num : INTEGER<br/>b-statement :</div><div class="highlight" form="false" id="a_PIjvE"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+b-program : [b-line] (NEWLINE [b-line])*
+<span class="hll">b-line : b-line-num [b-statement] (":" [b-statement])*
+</span>b-line-num : INTEGER
+b-statement :
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk9" data-clipboard-target="#code_52" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_B9UD8&quot;)"></div><p id="a_B9UD8">That rule implies that the only thing that must be in a line is a line num­ber.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;rem-statements&quot;)"></div><h3 anchor="rem-statements" class="subhead" id="rem-statements"><a href="#rem-statements">Rem state­ments</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_iaI0X&quot;)"></div><p id="a_iaI0X">A <span class="my-code" decode="exclude">rem</span> state­ment can form the tail of any line. We add a <span class="my-code" decode="exclude">b-rem</span> rule that only matches only our spe­cial <span class="my-code" decode="exclude">REM</span> token. Then we make <span class="my-code" decode="exclude">b-rem</span> an optional match at the end of any <span class="my-code" decode="exclude">b-line</span>:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_N2I8w&quot;)"></div><div class="highlight-container" id="a_N2I8w"><div id="code_53" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>b-program : [b-line] (NEWLINE [b-line])*<br/>b-line : b-line-num [b-statement] (":" [b-statement])* [b-rem]<br/>b-line-num : INTEGER<br/>b-statement :<br/>b-rem : REM</div><div class="highlight" form="false" id="a_gH2jj"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+b-program : [b-line] (NEWLINE [b-line])*
+b-line : b-line-num [b-statement] (":" [b-statement])* [b-rem]
+b-line-num : INTEGER
+b-statement :
+<span class="hll">b-rem : REM
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpka" data-clipboard-target="#code_53" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;other-statements&quot;)"></div><h3 anchor="other-statements" class="subhead" id="other-statements"><a href="#other-statements">Other state­ments</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_VBQ7V&quot;)"></div><p id="a_VBQ7V">We make three rules to cover each of our remain­ing state­ments: <span class="my-code" decode="exclude">b-end</span>, <span class="my-code" decode="exclude">b-print</span>, and <span class="my-code" decode="exclude">b-goto</span>. Then, the rule for <span class="my-code" decode="exclude">b-statement</span> sim­ply chooses among these pos­si­bil­i­ties:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_TufXk&quot;)"></div><div class="highlight-container" id="a_TufXk"><div id="code_54" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>b-program : [b-line] (NEWLINE [b-line])*<br/>b-line : b-line-num [b-statement] (":" [b-statement])* [b-rem]<br/>b-line-num : INTEGER<br/>b-statement : b-end | b-print | b-goto<br/>b-rem : REM<br/>b-end :<br/>b-print :<br/>b-goto :</div><div class="highlight" form="false" id="a_mIWTt"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+b-program : [b-line] (NEWLINE [b-line])*
+b-line : b-line-num [b-statement] (":" [b-statement])* [b-rem]
+b-line-num : INTEGER
+<span class="hll">b-statement : b-end | b-print | b-goto
+</span>b-rem : REM
+<span class="hll">b-end :
+</span><span class="hll">b-print :
+</span><span class="hll">b-goto :
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkb" data-clipboard-target="#code_54" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_dN4vC&quot;)"></div><p id="a_dN4vC">The <span class="my-code" decode="exclude">b-end</span> rule only matches a lit­eral <span class="my-code" decode="exclude">"end"</span>:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_NFTfF&quot;)"></div><div class="highlight-container" id="a_NFTfF"><div id="code_55" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>b-program : [b-line] (NEWLINE [b-line])*<br/>b-line : b-line-num [b-statement] (":" [b-statement])* [b-rem]<br/>b-line-num : INTEGER<br/>b-statement : b-end | b-print | b-goto<br/>b-rem : REM<br/>b-end : "end"<br/>b-print :<br/>b-goto :</div><div class="highlight" form="false" id="a_TIR9e"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+b-program : [b-line] (NEWLINE [b-line])*
+b-line : b-line-num [b-statement] (":" [b-statement])* [b-rem]
+b-line-num : INTEGER
+b-statement : b-end | b-print | b-goto
+b-rem : REM
+<span class="hll">b-end : "end"
+</span>b-print :
+b-goto :
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkc" data-clipboard-target="#code_55" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_6UTu5&quot;)"></div><p id="a_6UTu5">We remem­ber from <a href="specification-and-setup.html">spec­i­fi­ca­tion and setup</a> that the <span class="my-code" decode="exclude">print</span> state­ment is made of a lit­eral <span class="my-code" decode="exclude">print</span> token, and then any num­ber of string or numer­i­cal expres­sions as input, sep­a­rated by <span class="my-code" decode="exclude">;</span>. To express the pos­si­ble input, we intro­duce a helper rule called <span class="my-code" decode="exclude">b-printable</span> that’s a choice between a <span class="my-code" decode="exclude">STRING</span> token and a new <span class="my-code" decode="exclude">b-expr</span> (which we’ll fig­ure out momen­tar­ily). Then, in the <span class="my-code" decode="exclude">b-print</span> rule, we fol­low the approach we used in <span class="my-code" decode="exclude">b-line</span>, express­ing <span class="my-code" decode="exclude">b-print</span> as an optional <span class="my-code" decode="exclude">b-printable</span>, fol­lowed by any num­ber of optional <span class="my-code" decode="exclude">b-printable</span> argu­ments with <span class="my-code" decode="exclude">;</span> sep­a­ra­tors:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_SsVt9&quot;)"></div><div class="highlight-container" id="a_SsVt9"><div id="code_56" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>b-program : [b-line] (NEWLINE [b-line])*<br/>b-line : b-line-num [b-statement] (":" [b-statement])* [b-rem]<br/>b-line-num : INTEGER<br/>b-statement : b-end | b-print | b-goto<br/>b-rem : REM<br/>b-end : "end"<br/>b-print : "print" [b-printable] (";" [b-printable])*<br/>b-printable : STRING | b-expr<br/>b-goto :<br/>b-expr :</div><div class="highlight" form="false" id="a_Rzp10"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+b-program : [b-line] (NEWLINE [b-line])*
+b-line : b-line-num [b-statement] (":" [b-statement])* [b-rem]
+b-line-num : INTEGER
+b-statement : b-end | b-print | b-goto
+b-rem : REM
+b-end : "end"
+<span class="hll">b-print : "print" [b-printable] (";" [b-printable])*
+</span><span class="hll">b-printable : STRING | b-expr
+</span>b-goto :
+<span class="hll">b-expr :
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkd" data-clipboard-target="#code_56" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_7Er7Z&quot;)"></div><p id="a_7Er7Z">Finally, the <span class="my-code" decode="exclude">b-goto</span> con­sists of the lit­eral <span class="my-code" decode="exclude">"goto"</span> token and a numer­i­cal expres­sion:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_WLCvP&quot;)"></div><div class="highlight-container" id="a_WLCvP"><div id="code_57" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>b-program : [b-line] (NEWLINE [b-line])*<br/>b-line : b-line-num [b-statement] (":" [b-statement])* [b-rem]<br/>b-line-num : INTEGER<br/>b-statement : b-end | b-print | b-goto<br/>b-rem : REM<br/>b-end : "end"<br/>b-print : "print" [b-printable] (";" [b-printable])*<br/>b-printable : STRING | b-expr<br/>b-goto : "goto" b-expr<br/>b-expr :</div><div class="highlight" form="false" id="a_nFLhx"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+b-program : [b-line] (NEWLINE [b-line])*
+b-line : b-line-num [b-statement] (":" [b-statement])* [b-rem]
+b-line-num : INTEGER
+b-statement : b-end | b-print | b-goto
+b-rem : REM
+b-end : "end"
+b-print : "print" [b-printable] (";" [b-printable])*
+b-printable : STRING | b-expr
+<span class="hll">b-goto : "goto" b-expr
+</span>b-expr :
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpke" data-clipboard-target="#code_57" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;expressions-and-values&quot;)"></div><h3 anchor="expressions-and-values" class="subhead" id="expressions-and-values"><a href="#expressions-and-values">Expres­sions &amp; val­ues</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_qE2Pt&quot;)"></div><p id="a_qE2Pt">All that’s left is to sort out num­bers and numer­i­cal expres­sions. The only num­bers we have are inte­gers and dec­i­mals—already rep­re­sented by the <span class="my-code" decode="exclude">INTEGER</span> and <span class="my-code" decode="exclude">DECIMAL</span> tokens—and the only numer­i­cal expres­sion we have to worry about is a sum:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_yRmzZ&quot;)"></div><div class="highlight-container" id="a_yRmzZ"><div id="code_58" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>b-program : [b-line] (NEWLINE [b-line])*<br/>b-line : b-line-num [b-statement] (":" [b-statement])* [b-rem]<br/>b-line-num : INTEGER<br/>b-statement : b-end | b-print | b-goto<br/>b-rem : REM<br/>b-end : "end"<br/>b-print : "print" [b-printable] (";" [b-printable])*<br/>b-printable : STRING | b-expr<br/>b-goto : "goto" b-expr<br/>b-expr :<br/>b-sum :<br/>b-number : INTEGER | DECIMAL</div><div class="highlight" form="false" id="a_Vh83V"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+b-program : [b-line] (NEWLINE [b-line])*
+b-line : b-line-num [b-statement] (":" [b-statement])* [b-rem]
+b-line-num : INTEGER
+b-statement : b-end | b-print | b-goto
+b-rem : REM
+b-end : "end"
+b-print : "print" [b-printable] (";" [b-printable])*
+b-printable : STRING | b-expr
+b-goto : "goto" b-expr
+b-expr :
+<span class="hll">b-sum :
+</span><span class="hll">b-number : INTEGER | DECIMAL
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkf" data-clipboard-target="#code_58" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_OLGdu&quot;)"></div><p id="a_OLGdu">Let’s do <span class="my-code" decode="exclude">b-sum</span> first. A sum is any series of num­bers with <span class="my-code" decode="exclude">+</span> signs in between. Fol­low­ing the pat­tern we fig­ured out for <span class="my-code" decode="exclude">b-program</span> and <span class="my-code" decode="exclude">b-line</span>, we can write the rule like so:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_znWxU&quot;)"></div><div class="highlight-container" id="a_znWxU"><div id="code_59" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>b-program : [b-line] (NEWLINE [b-line])*<br/>b-line : b-line-num [b-statement] (":" [b-statement])* [b-rem]<br/>b-line-num : INTEGER<br/>b-statement : b-end | b-print | b-goto<br/>b-rem : REM<br/>b-end : "end"<br/>b-print : "print" [b-printable] (";" [b-printable])*<br/>b-printable : STRING | b-expr<br/>b-goto : "goto" b-expr<br/>b-expr :<br/>b-sum : b-number ("+" b-number)*<br/>b-number : INTEGER | DECIMAL</div><div class="highlight" form="false" id="a_yhO8b"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+b-program : [b-line] (NEWLINE [b-line])*
+b-line : b-line-num [b-statement] (":" [b-statement])* [b-rem]
+b-line-num : INTEGER
+b-statement : b-end | b-print | b-goto
+b-rem : REM
+b-end : "end"
+b-print : "print" [b-printable] (";" [b-printable])*
+b-printable : STRING | b-expr
+b-goto : "goto" b-expr
+b-expr :
+<span class="hll">b-sum : b-number ("+" b-number)*
+</span>b-number : INTEGER | DECIMAL
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkg" data-clipboard-target="#code_59" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_UJxbH&quot;)"></div><p id="a_UJxbH">This time, how­ever, we’re not going to be lenient about input, because an expres­sion like <span class="my-code" decode="exclude">+ + +</span> or <span class="my-code" decode="exclude">4 + + 5</span> has no nat­ural mean­ing as a sum. Instead, we leave it alone, so it will raise a pars­ing error.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_j13jq&quot;)"></div><p id="a_j13jq">Now to fin­ish <span class="my-code" decode="exclude">b-expr</span>. It would be fine to make this rule a choice between a <span class="my-code" decode="exclude">b-sum</span> and a <span class="my-code" decode="exclude">b-number</span>. But a <span class="my-code" decode="exclude">b-sum</span> can itself be a sin­gle <span class="my-code" decode="exclude">b-number</span>. So it suf­fices to make <span class="my-code" decode="exclude">b-expr</span> a <span class="my-code" decode="exclude">b-sum</span>:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ECVrR&quot;)"></div><div class="highlight-container" id="a_ECVrR"><div id="code_60" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>b-program : [b-line] (NEWLINE [b-line])*<br/>b-line : b-line-num [b-statement] (":" [b-statement])* [b-rem]<br/>b-line-num : INTEGER<br/>b-statement : b-end | b-print | b-goto<br/>b-rem : REM<br/>b-end : "end"<br/>b-print : "print" [b-printable] (";" [b-printable])*<br/>b-printable : STRING | b-expr<br/>b-goto : "goto" b-expr<br/>b-expr : b-sum<br/>b-sum : b-number ("+" b-number)*<br/>b-number : INTEGER | DECIMAL</div><div class="highlight" form="false" id="a_UdYPe"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+b-program : [b-line] (NEWLINE [b-line])*
+b-line : b-line-num [b-statement] (":" [b-statement])* [b-rem]
+b-line-num : INTEGER
+b-statement : b-end | b-print | b-goto
+b-rem : REM
+b-end : "end"
+b-print : "print" [b-printable] (";" [b-printable])*
+b-printable : STRING | b-expr
+b-goto : "goto" b-expr
+<span class="hll">b-expr : b-sum
+</span>b-sum : b-number ("+" b-number)*
+b-number : INTEGER | DECIMAL
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkh" data-clipboard-target="#code_60" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_CIFV7&quot;)"></div><p id="a_CIFV7">The inter­po­si­tion of <span class="my-code" decode="exclude">b-expr</span> may seem unnec­es­sary now. But in the expander, we’ll see why it’s use­ful—we can use it as a “gate­way” through which all our numer­i­cal expres­sions have to pass (and smooth over the dif­fer­ences between Racket math and BASIC math). It also means that other ele­ments, like <span class="my-code" decode="exclude">b-print</span>, only need to work with <span class="my-code" decode="exclude">b-expr</span>, rather than hav­ing to sep­a­rately deal with other ele­ments like <span class="my-code" decode="exclude">b-sum</span>, <span class="my-code" decode="exclude">b-number</span>, etc.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Mwt0b&quot;)"></div><p id="a_Mwt0b">In terms of imple­ment­ing the rules in <a href="specification-and-setup.html">spec­i­fi­ca­tion and setup</a>, our gram­mar is done. Our parser will be able to han­dle all valid pro­grams, includ­ing some weird ones.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;checking-our-work&quot;)"></div><h3 anchor="checking-our-work" class="subhead" id="checking-our-work"><a href="#checking-our-work">Check­ing our work</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_czKw4&quot;)"></div><p id="a_czKw4">Let’s make sure our parser works as expected. First, let’s try this small pro­gram:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ynnR6&quot;)"></div><div class="highlight-container" id="a_ynnR6"><div id="code_61" form="false" decode="exclude" style="font-size:0;width:0;height:0">10 print "hello" : print "world"<br/>20 goto 9 + 10 + 11<br/>30 end</div><div class="highlight" form="false" id="a_1fsQD"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="source"><pre><span class="nl">10</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"hello"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"world"</span>
+<span class="nl">20</span><span class="w"> </span><span class="vg">goto</span><span class="w"> </span><span class="il">9</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">10</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">11</span>
+<span class="nl">30</span><span class="w"> </span><span class="vg">end</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpki" data-clipboard-target="#code_61" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_HGdEl&quot;)"></div><p id="a_HGdEl">We can check the parse tree by set­ting up a lit­tle test file:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">parser-test.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_EWp6k&quot;)"></div><div class="highlight-container" id="a_EWp6k"><div id="code_62" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br<br/>(require basic/parser basic/tokenizer brag/support)<br/><br/>(define str #&lt;&lt;HERE<br/>10 print "hello" : print "world"<br/>20 goto 9 + 10 + 11<br/>30 end<br/>HERE<br/>)<br/><br/>(parse-to-datum (apply-tokenizer make-tokenizer str))</div><div class="highlight" form="false" id="a_BilLE"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="n">basic/parser</span> <span class="n">basic/tokenizer</span> <span class="n">brag/support</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">str</span> <span class="sh">#&lt;&lt;HERE</span>
+<span class="sh">10 print "hello" : print "world"</span>
+<span class="sh">20 goto 9 + 10 + 11</span>
+<span class="sh">30 end</span>
+<span class="sh">HERE</span>
+<span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/examples/nested-word-list..rkt)._parse-to-datum))" class="docs" hyphens="none">parse-to-datum</a></span> <span class="p">(</span><span class="n">apply-tokenizer</span> <span class="n">make-tokenizer</span> <span class="n">str</span><span class="p">))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkj" data-clipboard-target="#code_62" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_nHid6&quot;)"></div><p id="a_nHid6">The result looks like this:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_pUwcI&quot;)"></div><div class="highlight-container" id="a_pUwcI"><div id="code_63" form="false" decode="exclude" style="font-size:0;width:0;height:0">'(b-program<br/>  (b-line (b-line-num 10) (b-statement (b-print "print" (b-printable "hello"))) ":" (b-statement (b-print "print" (b-printable "world"))))<br/>  "\n"<br/>  (b-line (b-line-num 20) (b-statement (b-goto "goto" (b-expr (b-sum (b-number 9) "+" (b-number 10) "+" (b-number 11))))))<br/>  "\n"<br/>  (b-line (b-line-num 30) (b-statement (b-end "end"))))</div><div class="highlight" form="false" id="a_fQcFf"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="source"><pre>&#39;(b-program
+  (b-line (b-line-num 10) (b-statement (b-print "print" (b-printable "hello"))) ":" (b-statement (b-print "print" (b-printable "world"))))
+  "\n"
+  (b-line (b-line-num 20) (b-statement (b-goto "goto" (b-expr (b-sum (b-number 9) "+" (b-number 10) "+" (b-number 11))))))
+  "\n"
+  (b-line (b-line-num 30) (b-statement (b-end "end"))))
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkk" data-clipboard-target="#code_63" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_0faJU&quot;)"></div><p id="a_0faJU">As usual, we see that the parse tree con­tains every token that the parser con­sumed. The first ele­ment of each paren­the­sized node is the name of the rule in the gram­mar that was used to cre­ate the node. The remain­ing ele­ments are the tokens that were matched to the pat­tern on the right-hand side of that rule. Named tokens like <span class="my-code" decode="exclude">STRING</span> and <span class="my-code" decode="exclude">INTEGER</span> are rep­re­sented by their actual token val­ues.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_018co&quot;)"></div><p id="a_018co">(Those inter­ested in mak­ing <a class="glossary" href="../appendix/glossary.html#unit-test"><span class="glossary-link-text">unit tests</span></a>—this would be a great moment to start copy­ing out these test expres­sions &amp; their results, to be com­bined into tests using <a href="http://docs.racket-lang.org/rackunit/api.html#(def._((lib._rackunit/main..rkt)._check-equal~3f))" class="docs" hyphens="none">check-equal?</a>.)</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Z30t1&quot;)"></div><p id="a_Z30t1">Let’s also make sure our parser works on our orig­i­nal sam­ple pro­gram:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">sample.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Vh4Vln&quot;)"></div><div class="highlight-container" id="a_Vh4Vln"><div id="code_64" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic<br/>30 rem print 'ignored'<br/>35<br/>50 print "never gets here"<br/>40 end<br/>60 print 'three' : print 1.0 + 3<br/>70 goto 11. + 18.5 + .5 rem ignored<br/>10 print "o" ; "n" ; "e"<br/>20 print : goto 60.0 : end</div><div class="highlight" form="false" id="a_Fritfl"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="source"><pre>#lang basic
+30 rem print &#39;ignored&#39;
+35
+50 print "never gets here"
+40 end
+60 print &#39;three&#39; : print 1.0 + 3
+70 goto 11. + 18.5 + .5 rem ignored
+10 print "o" ; "n" ; "e"
+20 print : goto 60.0 : end
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkm" data-clipboard-target="#code_64" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Tzajm&quot;)"></div><p id="a_Tzajm">We can move the source code into our test­ing file:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">parser-test.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_GhffC&quot;)"></div><div class="highlight-container" id="a_GhffC"><div id="code_65" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br<br/>(require basic/parser basic/tokenizer brag/support)<br/><br/>(define str #&lt;&lt;HERE<br/>30 rem print 'ignored'<br/>35<br/>50 print "never gets here"<br/>40 end<br/>60 print 'three' : print 1.0 + 3<br/>70 goto 11. + 18.5 + .5 rem ignored<br/>10 print "o" ; "n" ; "e"<br/>20 print : goto 60.0 : end<br/>HERE<br/>  )<br/><br/>(parse-to-datum (apply-tokenizer make-tokenizer str))</div><div class="highlight" form="false" id="a_Zu4LD"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="n">basic/parser</span> <span class="n">basic/tokenizer</span> <span class="n">brag/support</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">str</span> <span class="sh">#&lt;&lt;HERE</span>
+<span class="sh">30 rem print &#39;ignored&#39;</span>
+<span class="sh">35</span>
+<span class="sh">50 print "never gets here"</span>
+<span class="sh">40 end</span>
+<span class="sh">60 print &#39;three&#39; : print 1.0 + 3</span>
+<span class="sh">70 goto 11. + 18.5 + .5 rem ignored</span>
+<span class="sh">10 print "o" ; "n" ; "e"</span>
+<span class="sh">20 print : goto 60.0 : end</span>
+<span class="sh">HERE</span>
+  <span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/examples/nested-word-list..rkt)._parse-to-datum))" class="docs" hyphens="none">parse-to-datum</a></span> <span class="p">(</span><span class="n">apply-tokenizer</span> <span class="n">make-tokenizer</span> <span class="n">str</span><span class="p">))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpko" data-clipboard-target="#code_65" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ZDXSS&quot;)"></div><p id="a_ZDXSS">This time, the result looks like this:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_mkZXb&quot;)"></div><div class="highlight-container" id="a_mkZXb"><div id="code_66" form="false" decode="exclude" style="font-size:0;width:0;height:0">'(b-program<br/>  (b-line (b-line-num 30) (b-rem "rem print 'ignored'"))<br/>  "\n"<br/>  (b-line (b-line-num 35))<br/>  "\n"<br/>  (b-line (b-line-num 50) (b-statement (b-print "print" (b-printable "never gets here"))))<br/>  "\n"<br/>  (b-line (b-line-num 40) (b-statement (b-end "end")))<br/>  "\n"<br/>  (b-line<br/>   (b-line-num 60)<br/>   (b-statement (b-print "print" (b-printable "three")))<br/>   ":"<br/>   (b-statement (b-print "print" (b-printable (b-expr (b-sum (b-number 1.0) "+" (b-number 3)))))))<br/>  "\n"<br/>  (b-line<br/>   (b-line-num 70)<br/>   (b-statement (b-goto "goto" (b-expr (b-sum (b-number 11.0) "+" (b-number 18.5) "+" (b-number 0.5)))))<br/>   (b-rem "rem ignored"))<br/>  "\n"<br/>  (b-line (b-line-num 10) (b-statement (b-print "print" (b-printable "o") ";" (b-printable "n") ";" (b-printable "e"))))<br/>  "\n"<br/>  (b-line<br/>   (b-line-num 20)<br/>   (b-statement (b-print "print"))<br/>   ":"<br/>   (b-statement (b-goto "goto" (b-expr (b-sum (b-number 60.0)))))<br/>   ":"<br/>   (b-statement (b-end "end"))))</div><div class="highlight" form="false" id="a_wSHkE"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29</pre></div></td><td class="code"><div class="source"><pre>&#39;(b-program
+  (b-line (b-line-num 30) (b-rem "rem print &#39;ignored&#39;"))
+  "\n"
+  (b-line (b-line-num 35))
+  "\n"
+  (b-line (b-line-num 50) (b-statement (b-print "print" (b-printable "never gets here"))))
+  "\n"
+  (b-line (b-line-num 40) (b-statement (b-end "end")))
+  "\n"
+  (b-line
+   (b-line-num 60)
+   (b-statement (b-print "print" (b-printable "three")))
+   ":"
+   (b-statement (b-print "print" (b-printable (b-expr (b-sum (b-number 1.0) "+" (b-number 3)))))))
+  "\n"
+  (b-line
+   (b-line-num 70)
+   (b-statement (b-goto "goto" (b-expr (b-sum (b-number 11.0) "+" (b-number 18.5) "+" (b-number 0.5)))))
+   (b-rem "rem ignored"))
+  "\n"
+  (b-line (b-line-num 10) (b-statement (b-print "print" (b-printable "o") ";" (b-printable "n") ";" (b-printable "e"))))
+  "\n"
+  (b-line
+   (b-line-num 20)
+   (b-statement (b-print "print"))
+   ":"
+   (b-statement (b-goto "goto" (b-expr (b-sum (b-number 60.0)))))
+   ":"
+   (b-statement (b-end "end"))))
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkp" data-clipboard-target="#code_66" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_cFg0g&quot;)"></div><p id="a_cFg0g">This is cor­rect. Admit­tedly, it’s hard to know this for sure unless we were to man­u­ally pen­cil out the parse, which for a larger pro­gram is a drag. For unit tests, it’s sim­pler to use one- or two-line sam­ple pro­grams, where it’s easy to see how the source will be con­verted into a parse tree. But this proves, at least, that our sam­ple pro­gram doesn’t trig­ger any errors from <a href="the-tokenizer.html">the tok­enizer</a> or <a href="the-parser.html">the parser</a>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;dialects-for-debugging&quot;)"></div><h3 anchor="dialects-for-debugging" class="subhead" id="dialects-for-debugging"><a href="#dialects-for-debugging">Dialects for debug­ging</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_15jqI&quot;)"></div><p id="a_15jqI">“Why are we copy­ing source code into another file? Why not just make a dialect called <span class="my-code" decode="exclude">basic/parse-only</span> that reads the source &amp; returns the parse tree?”</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_gv07j&quot;)"></div><p id="a_gv07j">Ah, what a won­der­ful idea. And we now have the skills to do it.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_lNbQp&quot;)"></div><p id="a_lNbQp">Let’s con­firm the mis­sion objec­tives. We want to be able to invoke this new <span class="my-code" decode="exclude">basic/parse-only</span> dialect like so:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">test.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_At2th&quot;)"></div><div class="highlight-container" id="a_At2th"><div id="code_67" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic/parse-only<br/>10 print "hello" : print "world"<br/>20 goto 9 + 10 + 11<br/>30 end</div><div class="highlight" form="false" id="a_i7ssl"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="source"><pre>#lang basic/parse-only
+<span class="nl">10</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"hello"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"world"</span>
+<span class="nl">20</span><span class="w"> </span><span class="vg">goto</span><span class="w"> </span><span class="il">9</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">10</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">11</span>
+<span class="nl">30</span><span class="w"> </span><span class="vg">end</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkq" data-clipboard-target="#code_67" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_YcfZ3&quot;)"></div><p id="a_YcfZ3">And get its parse tree as the result:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_nigSd&quot;)"></div><div class="highlight-container" id="a_nigSd"><div id="code_68" form="false" decode="exclude" style="font-size:0;width:0;height:0">'(b-program<br/>  "\n"<br/>  (b-line (b-line-num 10) (b-statement (b-print "print" (b-printable "hello"))) ":" (b-statement (b-print "print" (b-printable "world"))))<br/>  "\n"<br/>  (b-line (b-line-num 20) (b-statement (b-goto "goto" (b-expr (b-sum (b-number 9) "+" (b-number 10) "+" (b-number 11))))))<br/>  "\n"<br/>  (b-line (b-line-num 30) (b-statement (b-end "end")))<br/>  "\n")</div><div class="highlight" form="false" id="a_44ydq"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="source"><pre>&#39;(b-program
+  "\n"
+  (b-line (b-line-num 10) (b-statement (b-print "print" (b-printable "hello"))) ":" (b-statement (b-print "print" (b-printable "world"))))
+  "\n"
+  (b-line (b-line-num 20) (b-statement (b-goto "goto" (b-expr (b-sum (b-number 9) "+" (b-number 10) "+" (b-number 11))))))
+  "\n"
+  (b-line (b-line-num 30) (b-statement (b-end "end")))
+  "\n")
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkr" data-clipboard-target="#code_68" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_oJsgB&quot;)"></div><p id="a_oJsgB">This should be easy now. To make <span class="my-code" decode="exclude">#lang basic/parse-only</span>, we cre­ate a <span class="my-code" decode="exclude">"parse-only.rkt"</span> mod­ule and fit it with a sim­ple <a class="glossary" href="../appendix/glossary.html#reader"><span class="glossary-link-text">reader</span></a> and <a class="glossary" href="../appendix/glossary.html#expander"><span class="glossary-link-text">expander</span></a>:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parse-only.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_DCU0b&quot;)"></div><div class="highlight-container" id="a_DCU0b"><div id="code_69" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br/quicklang<br/>(require "parser.rkt" "tokenizer.rkt")<br/><br/>(define (read-syntax path port)<br/>  (define parse-tree (parse path (make-tokenizer port path)))<br/>  (strip-bindings<br/>   #`(module basic-parser-mod basic/parse-only<br/>       #,parse-tree)))<br/>(module+ reader (provide read-syntax))<br/><br/>(define-macro (parser-only-mb PARSE-TREE)<br/>  #'(#%module-begin<br/>     'PARSE-TREE))<br/>(provide (rename-out [parser-only-mb #%module-begin]))</div><div class="highlight" form="false" id="a_Jo71Z"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br/quicklang</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="s2">"parser.rkt"</span> <span class="s2">"tokenizer.rkt"</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Reading.html#(def._((quote._~23~25kernel)._read-syntax))" class="docs" hyphens="none">read-syntax</a></span> <span class="n">path</span> <span class="n">port</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">parse-tree</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/brag/index.html#(def._((lib._brag/examples/nested-word-list..rkt)._parse))" class="docs" hyphens="none">parse</a></span> <span class="n">path</span> <span class="p">(</span><span class="n">make-tokenizer</span> <span class="n">port</span> <span class="n">path</span><span class="p">)))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/syntax..rkt)._strip-bindings))" class="docs" hyphens="none">strip-bindings</a></span>
+   <span class="o">#`</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((quote._~23~25kernel)._module))" class="docs" hyphens="none">module</a></span> <span class="n">basic-parser-mod</span> <span class="n">basic/parse-only</span>
+       <span class="o">#,</span><span class="n">parse-tree</span><span class="p">)))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._module+))" class="docs" hyphens="none">module+</a></span> <span class="n">reader</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/Reading.html#(def._((quote._~23~25kernel)._read-syntax))" class="docs" hyphens="none">read-syntax</a></span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/define..rkt)._define-macro))" class="docs" hyphens="none">define-macro</a></span> <span class="p">(</span><span class="n">parser-only-mb</span> <span class="n">PARSE-TREE</span><span class="p">)</span>
+  <span class="o">#&#39;</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._~23~25module-begin))" class="docs" hyphens="none">#%module-begin</a></span>
+     <span class="o">&#39;</span><span class="ss">PARSE-TREE</span><span class="p">))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._rename-out))" class="docs" hyphens="none">rename-out</a></span> <span class="p">[</span><span class="n">parser-only-mb</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._~23~25module-begin))" class="docs" hyphens="none">#%module-begin</a></span><span class="p">]))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpks" data-clipboard-target="#code_69" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_yGxC8&quot;)"></div><p id="a_yGxC8">Here, our <span class="my-code" decode="exclude">read-syntax</span> func­tion takes a <span class="my-code" decode="exclude">path</span> and <span class="my-code" decode="exclude">port</span> and con­verts it into a mod­ule expres­sion. (Recall that our improved <span class="my-code" decode="exclude">make-tokenizer</span> func­tion takes both the <span class="my-code" decode="exclude">port</span> and <span class="my-code" decode="exclude">path</span> as input, so it can cal­cu­late source loca­tions cor­rectly.) The expander we use in the mod­ule expres­sion is the same file, <span class="my-code" decode="exclude">basic/parse-only</span>. We then <a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a> our <span class="my-code" decode="exclude">read-syntax</span> from a <span class="my-code" decode="exclude">reader</span> sub­mod­ule.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_aK9FE&quot;)"></div><p id="a_aK9FE">The expander is like­wise sim­ple: just a <span class="my-code" decode="exclude">parse-only-mb</span> that will be renamed on export as <a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._~23~25module-begin))" class="docs" hyphens="none">#%module-begin</a>. All this macro does is put a <a href="http://docs.racket-lang.org/reference/quote.html#(form._((quote._~23~25kernel)._quote))" class="docs" hyphens="none">quote</a> pre­fix on our <span class="my-code" decode="exclude">PARSE-TREE</span>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_M49hU&quot;)"></div><p id="a_M49hU">Now we can run our test pro­gram with our new inter­preter:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">test.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_At2thv&quot;)"></div><div class="highlight-container" id="a_At2thv"><div id="code_70" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic/parse-only<br/>10 print "hello" : print "world"<br/>20 goto 9 + 10 + 11<br/>30 end</div><div class="highlight" form="false" id="a_i7sslt"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="source"><pre>#lang basic/parse-only
+<span class="nl">10</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"hello"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"world"</span>
+<span class="nl">20</span><span class="w"> </span><span class="vg">goto</span><span class="w"> </span><span class="il">9</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">10</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">11</span>
+<span class="nl">30</span><span class="w"> </span><span class="vg">end</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpku" data-clipboard-target="#code_70" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Js1xM&quot;)"></div><p id="a_Js1xM">Sure enough, we get the parse tree:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_nigSdy&quot;)"></div><div class="highlight-container" id="a_nigSdy"><div id="code_71" form="false" decode="exclude" style="font-size:0;width:0;height:0">'(b-program<br/>  "\n"<br/>  (b-line (b-line-num 10) (b-statement (b-print "print" (b-printable "hello"))) ":" (b-statement (b-print "print" (b-printable "world"))))<br/>  "\n"<br/>  (b-line (b-line-num 20) (b-statement (b-goto "goto" (b-expr (b-sum (b-number 9) "+" (b-number 10) "+" (b-number 11))))))<br/>  "\n"<br/>  (b-line (b-line-num 30) (b-statement (b-end "end")))<br/>  "\n")</div><div class="highlight" form="false" id="a_44ydqw"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8</pre></div></td><td class="code"><div class="source"><pre>&#39;(b-program
+  "\n"
+  (b-line (b-line-num 10) (b-statement (b-print "print" (b-printable "hello"))) ":" (b-statement (b-print "print" (b-printable "world"))))
+  "\n"
+  (b-line (b-line-num 20) (b-statement (b-goto "goto" (b-expr (b-sum (b-number 9) "+" (b-number 10) "+" (b-number 11))))))
+  "\n"
+  (b-line (b-line-num 30) (b-statement (b-end "end")))
+  "\n")
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkx" data-clipboard-target="#code_71" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_dFxIZ&quot;)"></div><p id="a_dFxIZ">What’s nice about using a dialect here is that it’s easy to switch back to run­ning the file nor­mally—we sim­ply adjust the <span class="my-code" decode="exclude">#lang</span> line at the top (using <span class="my-code" decode="exclude">basic-demo</span> in this exam­ple since we haven’t made our own <span class="my-code" decode="exclude">basic</span> expander yet): <span class="tooltip" onclick="this.classList.toggle('tooltip_visible')"> + <span class="tooltip-inner">What’s also inter­est­ing is the idea that a sin­gle source file can have dif­fer­ent results depend­ing on the inter­preter that runs it.</span></span></p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">test.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_lgvk8&quot;)"></div><div class="highlight-container" id="a_lgvk8"><div id="code_72" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic-demo<br/>10 print "hello" : print "world"<br/>20 goto 9 + 10 + 11<br/>30 end</div><div class="highlight" form="false" id="a_BOpKl"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="source"><pre>#lang basic-demo
+<span class="nl">10</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"hello"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"world"</span>
+<span class="nl">20</span><span class="w"> </span><span class="vg">goto</span><span class="w"> </span><span class="il">9</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">10</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">11</span>
+<span class="nl">30</span><span class="w"> </span><span class="vg">end</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkz" data-clipboard-target="#code_72" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_TuAzL&quot;)"></div><div class="highlight-container" id="a_TuAzL"><div id="code_73" form="false" decode="exclude" style="font-size:0;width:0;height:0">hello<br/>world</div><div class="highlight" form="false" id="a_MaBdE"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="source"><pre>hello
+world
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkA" data-clipboard-target="#code_73" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_6N0Tt&quot;)"></div><p id="a_6N0Tt">Like­wise, it’s easy to make a sim­i­lar <span class="my-code" decode="exclude">basic/tokenize-only</span> dialect that reveals the out­put from the tok­enizer:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/tokenize-only.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_3SaoC&quot;)"></div><div class="highlight-container" id="a_3SaoC"><div id="code_74" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br/quicklang<br/>(require brag/support "tokenizer.rkt")<br/><br/>(define (read-syntax path port)<br/>  (define tokens (apply-tokenizer make-tokenizer port))<br/>  (strip-bindings<br/>   #`(module basic-tokens-mod basic/tokenize-only<br/>       #,@tokens)))<br/>(module+ reader (provide read-syntax))<br/><br/>(define-macro (parser-only-mb TOKEN ...)<br/>  #'(#%module-begin<br/>     (list TOKEN ...)))<br/>(provide (rename-out [parser-only-mb #%module-begin]))</div><div class="highlight" form="false" id="a_c1kSd"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br/quicklang</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._require))" class="docs" hyphens="none">require</a></span> <span class="n">brag/support</span> <span class="s2">"tokenizer.rkt"</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Reading.html#(def._((quote._~23~25kernel)._read-syntax))" class="docs" hyphens="none">read-syntax</a></span> <span class="n">path</span> <span class="n">port</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">tokens</span> <span class="p">(</span><span class="n">apply-tokenizer</span> <span class="n">make-tokenizer</span> <span class="n">port</span><span class="p">))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/syntax..rkt)._strip-bindings))" class="docs" hyphens="none">strip-bindings</a></span>
+   <span class="o">#`</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((quote._~23~25kernel)._module))" class="docs" hyphens="none">module</a></span> <span class="n">basic-tokens-mod</span> <span class="n">basic/tokenize-only</span>
+       <span class="o">#,@</span><span class="n">tokens</span><span class="p">)))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._module+))" class="docs" hyphens="none">module+</a></span> <span class="n">reader</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/Reading.html#(def._((quote._~23~25kernel)._read-syntax))" class="docs" hyphens="none">read-syntax</a></span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/define..rkt)._define-macro))" class="docs" hyphens="none">define-macro</a></span> <span class="p">(</span><span class="n">parser-only-mb</span> <span class="n">TOKEN</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span><span class="p">)</span>
+  <span class="o">#&#39;</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._~23~25module-begin))" class="docs" hyphens="none">#%module-begin</a></span>
+     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="n">TOKEN</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span><span class="p">)))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._rename-out))" class="docs" hyphens="none">rename-out</a></span> <span class="p">[</span><span class="n">parser-only-mb</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._~23~25module-begin))" class="docs" hyphens="none">#%module-begin</a></span><span class="p">]))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkB" data-clipboard-target="#code_74" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_KlWyO&quot;)"></div><p id="a_KlWyO">And invoke it like so:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">test.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_w2dGT&quot;)"></div><div class="highlight-container" id="a_w2dGT"><div id="code_75" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic/tokenize-only<br/>10 print "hello" : print "world"<br/>20 goto 9 + 10 + 11<br/>30 end</div><div class="highlight" form="false" id="a_00MUq"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="source"><pre>#lang basic/tokenize-only
+<span class="nl">10</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"hello"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"world"</span>
+<span class="nl">20</span><span class="w"> </span><span class="vg">goto</span><span class="w"> </span><span class="il">9</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">10</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">11</span>
+<span class="nl">30</span><span class="w"> </span><span class="vg">end</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkC" data-clipboard-target="#code_75" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_4inkC&quot;)"></div><div class="highlight-container" id="a_4inkC"><div id="code_76" form="false" decode="exclude" style="font-size:0;width:0;height:0">(list<br/> (srcloc-token (token-struct 'NEWLINE "\n" #f #f #f #f #f) (srcloc 'unsaved-editor 1 28 29 1))<br/> (srcloc-token (token-struct 'INTEGER 10 #f #f #f #f #f) (srcloc 'unsaved-editor 2 0 30 2))<br/> (srcloc-token (token-struct '| | #f #f #f #f #f #t) (srcloc 'unsaved-editor 2 2 32 1))<br/> (srcloc-token (token-struct 'print "print" #f #f #f #f #f) (srcloc 'unsaved-editor 3 3 36 5))<br/> ···</div><div class="highlight" form="false" id="a_cGM0l"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="source"><pre>(list
+ (srcloc-token (token-struct &#39;NEWLINE "\n" #f #f #f #f #f) (srcloc &#39;unsaved-editor 1 28 29 1))
+ (srcloc-token (token-struct &#39;INTEGER 10 #f #f #f #f #f) (srcloc &#39;unsaved-editor 2 0 30 2))
+ (srcloc-token (token-struct &#39;| | #f #f #f #f #f #t) (srcloc &#39;unsaved-editor 2 2 32 1))
+ (srcloc-token (token-struct &#39;print "print" #f #f #f #f #f) (srcloc &#39;unsaved-editor 3 3 36 5))
+ ···
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkD" data-clipboard-target="#code_76" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_MwmKN&quot;)"></div><p id="a_MwmKN"> The point here is that once we know how to cre­ate lan­guages quickly—at this point, we can make one with a few lines of code—they become a con­ve­nient tool even for small jobs.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;error-highlighting&quot;)"></div><h3 anchor="error-highlighting" class="subhead" id="error-highlighting"><a href="#error-highlighting">Error high­light­ing</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_yAkfx&quot;)"></div><p id="a_yAkfx">Before we move on, let’s pause to enjoy the ben­e­fits of track­ing source loca­tions using <a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._lexer-srcloc))" class="docs" hyphens="none">lexer-srcloc</a> instead of <a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._lexer))" class="docs" hyphens="none">lexer</a>. Let’s return to our <span class="my-code" decode="exclude">"test.rkt"</span> file:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">test.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_At2thG&quot;)"></div><div class="highlight-container" id="a_At2thG"><div id="code_77" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic/parse-only<br/>10 print "hello" : print "world"<br/>20 goto 9 + 10 + 11<br/>30 end</div><div class="highlight" form="false" id="a_i7sslE"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="source"><pre>#lang basic/parse-only
+<span class="nl">10</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"hello"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"world"</span>
+<span class="nl">20</span><span class="w"> </span><span class="vg">goto</span><span class="w"> </span><span class="il">9</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">10</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">11</span>
+<span class="nl">30</span><span class="w"> </span><span class="vg">end</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkF" data-clipboard-target="#code_77" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_G1Afc&quot;)"></div><p id="a_G1Afc">First, let’s induce a lex­ing error. A lex­ing error will occur if <a href="the-lexer.html">the lexer</a> encoun­ters a char­ac­ter that it can’t match with any of its lex­ing rules. We add a bogus line <span class="my-code" decode="exclude">25 xyzzy</span> to our test pro­gram and run it again:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">test.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_JczVX&quot;)"></div><div class="highlight-container" id="a_JczVX"><div id="code_78" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic/parse-only<br/>10 print "hello" : print "world"<br/>20 goto 9 + 10 + 11<br/>25 xyzzy<br/>30 end</div><div class="highlight" form="false" id="a_9t1Pk"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="source"><pre>#lang basic/parse-only
+<span class="nl">10</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"hello"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"world"</span>
+<span class="nl">20</span><span class="w"> </span><span class="vg">goto</span><span class="w"> </span><span class="il">9</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">10</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">11</span>
+<span class="hll"><span class="nl">25</span><span class="w"> </span><span class="vg">xyzzy</span>
+</span><span class="nl">30</span><span class="w"> </span><span class="vg">end</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkH" data-clipboard-target="#code_78" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_dr5UY&quot;)"></div><p id="a_dr5UY">We get an error in the REPL from the lexer. But DrRacket will also high­light the first char­ac­ter that failed to lex, and move the inser­tion point there:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_VldpkI&quot;)"></div><div id="a_VldpkI" style="text-align:center;padding:0.5rem;padding-bottom:1rem"><img style="width:90%;border:1px solid #ccc" src="lexer-error.gif"/></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_VBCH7&quot;)"></div><p id="a_VBCH7">The lexer only reports the <span class="my-code" decode="exclude">x</span> as an error—not the whole <span class="my-code" decode="exclude">xyzzy</span>—because it stops as soon as it can’t match any rule, and going fur­ther would be futile. We can induce a slightly dif­fer­ent lex­ing error by chang­ing line <span class="my-code" decode="exclude">25</span> to <span class="my-code" decode="exclude">prinxyzzy</span>:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">test.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_71OhR&quot;)"></div><div class="highlight-container" id="a_71OhR"><div id="code_79" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic/parse-only<br/>10 print "hello" : print "world"<br/>20 goto 9 + 10 + 11<br/>25 prinxyzzy<br/>30 end</div><div class="highlight" form="false" id="a_OxOvQ"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="source"><pre>#lang basic/parse-only
+<span class="nl">10</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"hello"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"world"</span>
+<span class="nl">20</span><span class="w"> </span><span class="vg">goto</span><span class="w"> </span><span class="il">9</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">10</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">11</span>
+<span class="hll"><span class="nl">25</span><span class="w"> </span><span class="vg">prinxyzzy</span>
+</span><span class="nl">30</span><span class="w"> </span><span class="vg">end</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkJ" data-clipboard-target="#code_79" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_VldpkK&quot;)"></div><div id="a_VldpkK" style="text-align:center;padding:0.5rem;padding-bottom:1rem"><img style="width:90%;border:1px solid #ccc" src="lexer-error-2.gif"/></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rZdRO&quot;)"></div><p id="a_rZdRO">This time, DrRacket high­lights <span class="my-code" decode="exclude">prinx</span> because the lexer got as far as match­ing <span class="my-code" decode="exclude">prin</span>—the first four char­ac­ters of the valid token <span class="my-code" decode="exclude">print</span>—before things went side­ways.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_cc84a&quot;)"></div><p id="a_cc84a">Let’s now induce a pars­ing error. To trig­ger a pars­ing error, our pro­gram needs to lex cor­rectly (that is, it has to be made of valid ele­ments) but some ele­ment has to be in a place that the parser gram­mar doesn’t expect to find it. For instance, let’s change line <span class="my-code" decode="exclude">25</span> to <span class="my-code" decode="exclude">print goto</span>:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">test.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_FFfuu&quot;)"></div><div class="highlight-container" id="a_FFfuu"><div id="code_80" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic/parse-only<br/>10 print "hello" : print "world"<br/>20 goto 9 + 10 + 11<br/>25 print goto<br/>30 end</div><div class="highlight" form="false" id="a_cBVDd"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="source"><pre>#lang basic/parse-only
+<span class="nl">10</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"hello"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"world"</span>
+<span class="nl">20</span><span class="w"> </span><span class="vg">goto</span><span class="w"> </span><span class="il">9</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">10</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">11</span>
+<span class="hll"><span class="nl">25</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="vg">goto</span>
+</span><span class="nl">30</span><span class="w"> </span><span class="vg">end</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkL" data-clipboard-target="#code_80" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_lUvUK&quot;)"></div><p id="a_lUvUK">This time, we get a pars­ing error, with the offend­ing <span class="my-code" decode="exclude">goto</span> high­lighted:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_VldpkM&quot;)"></div><div id="a_VldpkM" style="text-align:center;padding:0.5rem;padding-bottom:1rem"><img style="width:90%;border:1px solid #ccc" src="parser-error.gif"/></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Sv5Ha&quot;)"></div><p id="a_Sv5Ha">By the way, if a pro­gram con­tains both a lex­ing error and a pars­ing error, the lex­ing error will be high­lighted first—regard­less of where in the pro­gram it occurs—because the lexer runs before the parser.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_EiTdE&quot;)"></div><p id="a_EiTdE">Feel free to noo­dle around with <span class="my-code" decode="exclude">"test.rkt"</span> and induce other errors. What we should notice is that we can start ben­e­fit­ing from DrRacket inte­gra­tion even before we’ve started <a href="the-expander.html">the expander</a>. More­over, all we had to do to get error high­light­ing was use <a href="http://docs.racket-lang.org/br-parser-tools/Lexers.html#(form._((lib._br-parser-tools/lex..rkt)._lexer-srcloc))" class="docs" hyphens="none">lexer-srcloc</a>. Our lexer, tok­enizer, and parser coop­er­ated with DrRacket to do the heavy lift­ing.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;cuts-and-splices&quot;)"></div><h3 anchor="cuts-and-splices" class="subhead" id="cuts-and-splices"><a href="#cuts-and-splices">Cuts &amp; splices</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_zJVRW&quot;)"></div><p id="a_zJVRW">Though our parser works, we’d like to make our parse tree tidier.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_XLNrY&quot;)"></div><p id="a_XLNrY">By default, every matched token shows up in the parse tree, and then the whole parse tree is passed to <a href="the-expander.html">the expander</a>. The prob­lem is that our parse tree will end up with a bunch of tokens that were only needed to com­plete the pars­ing. Once they’ve served their pur­pose, it would be nice to fil­ter them out, so that our expander can deal with sim­pler, cleaner input.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_uHsun&quot;)"></div><p id="a_uHsun">For instance, let’s take a closer look at the parse tree for our shorter sam­ple pro­gram (which we can gen­er­ate with our new <span class="my-code" decode="exclude">#lang basic/parse-only</span> dialect):</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_At2thP&quot;)"></div><div class="highlight-container" id="a_At2thP"><div id="code_81" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic/parse-only<br/>10 print "hello" : print "world"<br/>20 goto 9 + 10 + 11<br/>30 end</div><div class="highlight" form="false" id="a_i7sslN"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="source"><pre>#lang basic/parse-only
+<span class="nl">10</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"hello"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"world"</span>
+<span class="nl">20</span><span class="w"> </span><span class="vg">goto</span><span class="w"> </span><span class="il">9</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">10</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">11</span>
+<span class="nl">30</span><span class="w"> </span><span class="vg">end</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkO" data-clipboard-target="#code_81" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_vQx5t&quot;)"></div><div class="highlight-container" id="a_vQx5t"><div id="code_82" form="false" decode="exclude" style="font-size:0;width:0;height:0">'(b-program<br/>  "\n"<br/>  (b-line (b-line-num 10) (b-statement (b-print "print" (b-printable "hello"))) ":" (b-statement (b-print "print" (b-printable "world"))))<br/>  "\n"<br/>  (b-line (b-line-num 20) (b-statement (b-goto "goto" (b-expr (b-sum (b-number 9) "+" (b-number 10) "+" (b-number 11))))))<br/>  "\n"<br/>  (b-line (b-line-num 30) (b-statement (b-end "end"))))</div><div class="highlight" form="false" id="a_PmLmq"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="source"><pre>&#39;(b-program
+  "\n"
+  (b-line (b-line-num 10) (b-statement (b-print "print" (b-printable "hello"))) ":" (b-statement (b-print "print" (b-printable "world"))))
+  "\n"
+  (b-line (b-line-num 20) (b-statement (b-goto "goto" (b-expr (b-sum (b-number 9) "+" (b-number 10) "+" (b-number 11))))))
+  "\n"
+  (b-line (b-line-num 30) (b-statement (b-end "end"))))
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkQ" data-clipboard-target="#code_82" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Fxs3b&quot;)"></div><p id="a_Fxs3b">We could work with this parse tree if we had to. But it con­tains a lot of super­flu­ous ele­ments that don’t affect the mean­ing of the pro­gram:</p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_4SVXp&quot;)"></div><p id="a_4SVXp">The <span class="my-code" decode="exclude">"\n"</span> char­ac­ters that sep­a­rated the lines are unnec­es­sary once the lines have been parsed.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_EGUSj&quot;)"></div><p id="a_EGUSj">The <span class="my-code" decode="exclude">":"</span> char­ac­ters sep­a­rat­ing mul­ti­ple state­ments in a line are unnec­es­sary once the state­ments have been parsed.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_9QmvQ&quot;)"></div><p id="a_9QmvQ">The <span class="my-code" decode="exclude">"+"</span> signs in a sum are unnec­es­sary once the sum has been parsed.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rIVSs&quot;)"></div><p id="a_rIVSs">The state­ment names—<span class="my-code" decode="exclude">"print"</span>, <span class="my-code" decode="exclude">"goto"</span>, <span class="my-code" decode="exclude">"end"</span>—are all unnec­es­sary, because we’ve matched those state­ments to unique rules in the gram­mar.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_K0YAQ&quot;)"></div><p id="a_K0YAQ">Sev­eral of the rules—<span class="my-code" decode="exclude">b-line-num</span>, <span class="my-code" decode="exclude">b-statement</span>, <span class="my-code" decode="exclude">b-number</span>, <span class="my-code" decode="exclude">b-printable</span>—helped make our gram­mar more read­able, but don’t serve any seman­tic pur­pose in the parse tree. They just wrap their argu­ments. Those argu­ments could be spliced into their sur­round­ing nodes.</p></div></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_iSBHS&quot;)"></div><p id="a_iSBHS">If we omit­ted the unnec­es­sary ele­ments, and spliced the ele­ments from inside the <span class="my-code" decode="exclude">b-line-num</span>, <span class="my-code" decode="exclude">b-statement</span>, and <span class="my-code" decode="exclude">b-number</span> nodes, our parse tree would end up like this:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_o5IKA&quot;)"></div><div class="highlight-container" id="a_o5IKA"><div id="code_83" form="false" decode="exclude" style="font-size:0;width:0;height:0">'(b-program<br/>  (b-line 10 (b-print "hello") (b-print "world"))<br/>  (b-line 20 (b-goto (b-expr (b-sum 9 10 11))))<br/>  (b-line 30 (b-end)))</div><div class="highlight" form="false" id="a_GWZyS"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="source"><pre>&#39;(b-program
+  (b-line 10 (b-print "hello") (b-print "world"))
+  (b-line 20 (b-goto (b-expr (b-sum 9 10 11))))
+  (b-line 30 (b-end)))
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkR" data-clipboard-target="#code_83" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_WAdAl&quot;)"></div><p id="a_WAdAl">How can we get there? The <span class="my-code" decode="exclude">brag</span> lan­guage lets us add <em>cuts</em> and <em>splices</em> to our gram­mar to sim­plify the parse tree. Using cuts and splices, we can improve our gram­mar so that it auto­mat­i­cally pro­duces this sim­pli­fied ver­sion of the parse tree. This, in turn, will sim­plify the work we do in <a href="the-expander.html">the expander</a>, because we don’t have to han­dle a bunch of extra­ne­ous input.</p></div><div anchorize="false" style="height:1em"></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_8Wmw2&quot;)"></div><p id="a_8Wmw2">A <em>cut</em> in a <span class="my-code" decode="exclude">brag</span> gram­mar will delete the item from the parse tree. A cut is notated by pre­fix­ing either the rule name (on the left) or a pat­tern ele­ment (on the right) with a slash <span class="my-code" decode="exclude">/</span>. If the cut is applied to a rule name, the rule name dis­ap­pears from the parse tree, but its node and its matched ele­ments remain. If the cut is applied to a pat­tern ele­ment, that ele­ment dis­ap­pears entirely from nodes match­ing that rule in the parse tree.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_dSL0X&quot;)"></div><p id="a_dSL0X">In this case, we only need to use cuts on the pat­tern ele­ments. We want to get rid of the <span class="my-code" decode="exclude">NEWLINE</span> in the <span class="my-code" decode="exclude">b-program</span> rule, the <span class="my-code" decode="exclude">":"</span> in the <span class="my-code" decode="exclude">b-statement</span> rule, the <span class="my-code" decode="exclude">"+"</span> in the <span class="my-code" decode="exclude">b-sum</span> rule, the <span class="my-code" decode="exclude">";"</span> in the <span class="my-code" decode="exclude">b-print</span> rule, and the state­ment names <span class="my-code" decode="exclude">"print"</span>, <span class="my-code" decode="exclude">"goto"</span>, and <span class="my-code" decode="exclude">"end"</span>. We do this by pre­fix­ing each of these pat­tern ele­ments with <span class="my-code" decode="exclude">/</span>:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_lT66n&quot;)"></div><div class="highlight-container" id="a_lT66n"><div id="code_84" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>b-program : [b-line] (/NEWLINE [b-line])*<br/>b-line : b-line-num [b-statement] (/":" [b-statement])* [b-rem]<br/>b-line-num : INTEGER<br/>b-statement : b-end | b-print | b-goto<br/>b-rem : REM<br/>b-end : /"end"<br/>b-print : /"print" [b-printable] (/";" [b-printable])*<br/>b-printable : STRING | b-expr<br/>b-goto : /"goto" b-expr<br/>b-expr : b-sum<br/>b-sum : b-number (/"+" b-number)*<br/>b-number : INTEGER | DECIMAL</div><div class="highlight" form="false" id="a_Hv4he"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+<span class="hll">b-program : [b-line] (/NEWLINE [b-line])*
+</span><span class="hll">b-line : b-line-num [b-statement] (/":" [b-statement])* [b-rem]
+</span>b-line-num : INTEGER
+b-statement : b-end | b-print | b-goto
+b-rem : REM
+<span class="hll">b-end : /"end"
+</span><span class="hll">b-print : /"print" [b-printable] (/";" [b-printable])*
+</span>b-printable : STRING | b-expr
+<span class="hll">b-goto : /"goto" b-expr
+</span>b-expr : b-sum
+<span class="hll">b-sum : b-number (/"+" b-number)*
+</span>b-number : INTEGER | DECIMAL
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkS" data-clipboard-target="#code_84" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_EHj0u&quot;)"></div><p id="a_EHj0u">Now, if we gen­er­ate our sam­ple parse tree again:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_At2thV&quot;)"></div><div class="highlight-container" id="a_At2thV"><div id="code_85" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic/parse-only<br/>10 print "hello" : print "world"<br/>20 goto 9 + 10 + 11<br/>30 end</div><div class="highlight" form="false" id="a_i7sslT"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="source"><pre>#lang basic/parse-only
+<span class="nl">10</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"hello"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"world"</span>
+<span class="nl">20</span><span class="w"> </span><span class="vg">goto</span><span class="w"> </span><span class="il">9</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">10</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">11</span>
+<span class="nl">30</span><span class="w"> </span><span class="vg">end</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkU" data-clipboard-target="#code_85" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_NFvWg&quot;)"></div><p id="a_NFvWg">We can see that the cut ele­ments are gone:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_2KA9o&quot;)"></div><div class="highlight-container" id="a_2KA9o"><div id="code_86" form="false" decode="exclude" style="font-size:0;width:0;height:0">'(b-program<br/>  (b-line (b-line-num 10)<br/>          (b-statement (b-print (b-printable "hello")))<br/>          (b-statement (b-print (b-printable "world"))))<br/>  (b-line (b-line-num 20)<br/>          (b-statement (b-goto (b-expr (b-sum (b-number 9) (b-number 10) (b-number 11))))))<br/>  (b-line (b-line-num 30) (b-statement (b-end))))</div><div class="highlight" form="false" id="a_3pYCy"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="source"><pre>&#39;(b-program
+  (b-line (b-line-num 10)
+          (b-statement (b-print (b-printable "hello")))
+          (b-statement (b-print (b-printable "world"))))
+  (b-line (b-line-num 20)
+          (b-statement (b-goto (b-expr (b-sum (b-number 9) (b-number 10) (b-number 11))))))
+  (b-line (b-line-num 30) (b-statement (b-end))))
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkW" data-clipboard-target="#code_86" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div anchorize="false" style="height:1em"></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_JldBT&quot;)"></div><p id="a_JldBT">A <em>splice</em> in a <span class="my-code" decode="exclude">brag</span> gram­mar will merge the ele­ments of a node into the sur­round­ing node. A splice is notated by pre­fix­ing either the rule name or a pat­tern ele­ment with an at sign <span class="my-code" decode="exclude">@</span>. As with cuts, if the splice is applied to a pat­tern ele­ment, that ele­ment is spliced only within that rule. If the splice is applied to a rule name, then the splice is applied every time the rule appears in the gram­mar.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ZFPQm&quot;)"></div><p id="a_ZFPQm">Here, we want to splice instances of <span class="my-code" decode="exclude">b-line-num</span>, <span class="my-code" decode="exclude">b-statement</span>, <span class="my-code" decode="exclude">b-printable</span>, and <span class="my-code" decode="exclude">b-number</span>. Since we want these splices to be global—that is, hap­pen every time the rule appears—we apply the splices to the rule names by pre­fix­ing them with <span class="my-code" decode="exclude">@</span>:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_LSVjr&quot;)"></div><div class="highlight-container" id="a_LSVjr"><div id="code_87" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>b-program : [b-line] (/NEWLINE [b-line])*<br/>b-line : b-line-num [b-statement] (/":" [b-statement])* [b-rem]<br/>@b-line-num : INTEGER<br/>@b-statement : b-end | b-print | b-goto<br/>b-rem : REM<br/>b-end : /"end"<br/>b-print : /"print" [b-printable] (/";" [b-printable])*<br/>@b-printable : STRING | b-expr<br/>b-goto : /"goto" b-expr<br/>b-expr : b-sum<br/>b-sum : b-number (/"+" b-number)*<br/>@b-number : INTEGER | DECIMAL</div><div class="highlight" form="false" id="a_GoWEE"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+b-program : [b-line] (/NEWLINE [b-line])*
+b-line : b-line-num [b-statement] (/":" [b-statement])* [b-rem]
+<span class="hll">@b-line-num : INTEGER
+</span><span class="hll">@b-statement : b-end | b-print | b-goto
+</span>b-rem : REM
+b-end : /"end"
+b-print : /"print" [b-printable] (/";" [b-printable])*
+<span class="hll">@b-printable : STRING | b-expr
+</span>b-goto : /"goto" b-expr
+b-expr : b-sum
+b-sum : b-number (/"+" b-number)*
+<span class="hll">@b-number : INTEGER | DECIMAL
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkX" data-clipboard-target="#code_87" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_IqQxx&quot;)"></div><p id="a_IqQxx">This time, when we gen­er­ate our sam­ple parse tree:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_At2th10&quot;)"></div><div class="highlight-container" id="a_At2th10"><div id="code_88" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic/parse-only<br/>10 print "hello" : print "world"<br/>20 goto 9 + 10 + 11<br/>30 end</div><div class="highlight" form="false" id="a_i7sslY"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="source"><pre>#lang basic/parse-only
+<span class="nl">10</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"hello"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="vg">print</span><span class="w"> </span><span class="s2">"world"</span>
+<span class="nl">20</span><span class="w"> </span><span class="vg">goto</span><span class="w"> </span><span class="il">9</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">10</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="il">11</span>
+<span class="nl">30</span><span class="w"> </span><span class="vg">end</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkZ" data-clipboard-target="#code_88" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_I10sH&quot;)"></div><p id="a_I10sH">We get the tidy parse tree we were orig­i­nally aim­ing for:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_o5IKA13&quot;)"></div><div class="highlight-container" id="a_o5IKA13"><div id="code_89" form="false" decode="exclude" style="font-size:0;width:0;height:0">'(b-program<br/>  (b-line 10 (b-print "hello") (b-print "world"))<br/>  (b-line 20 (b-goto (b-expr (b-sum 9 10 11))))<br/>  (b-line 30 (b-end)))</div><div class="highlight" form="false" id="a_GWZyS11"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="source"><pre>&#39;(b-program
+  (b-line 10 (b-print "hello") (b-print "world"))
+  (b-line 20 (b-goto (b-expr (b-sum 9 10 11))))
+  (b-line 30 (b-end)))
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk12" data-clipboard-target="#code_89" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_RgGQR&quot;)"></div><p id="a_RgGQR">We can also try pars­ing our larger sam­ple pro­gram:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_r6N2a&quot;)"></div><div class="highlight-container" id="a_r6N2a"><div id="code_90" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang basic/parse-only<br/>30 rem print 'ignored'<br/>35<br/>50 print "never gets here"<br/>40 end<br/>60 print 'three' : print 1.0 + 3<br/>70 goto 11. + 18.5 + .5 rem ignored<br/>10 print "o" ; "n" ; "e"<br/>20 print : goto 60.0 : end</div><div class="highlight" form="false" id="a_Ac0Gy"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="source"><pre>#lang basic/parse-only
+30 rem print &#39;ignored&#39;
+35
+50 print "never gets here"
+40 end
+60 print &#39;three&#39; : print 1.0 + 3
+70 goto 11. + 18.5 + .5 rem ignored
+10 print "o" ; "n" ; "e"
+20 print : goto 60.0 : end
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk14" data-clipboard-target="#code_90" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_qPf6j&quot;)"></div><p id="a_qPf6j">With sim­i­lar results (notice in par­tic­u­lar how close we’re already get­ting to <a href="specification-and-setup.html#design">the pseudocode</a> for our imple­men­ta­tion):</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_W7MOX&quot;)"></div><div class="highlight-container" id="a_W7MOX"><div id="code_91" form="false" decode="exclude" style="font-size:0;width:0;height:0">'(b-program<br/>  (b-line 30 (b-rem "rem print 'ignored'"))<br/>  (b-line 35)<br/>  (b-line 50 (b-print "never gets here"))<br/>  (b-line 40 (b-end))<br/>  (b-line 60 (b-print "three") (b-print (b-expr (b-sum 1.0 3))))<br/>  (b-line 70 (b-goto (b-expr (b-sum 11.0 18.5 0.5))) (b-rem "rem ignored"))<br/>  (b-line 10 (b-print "o" "n" "e"))<br/>  (b-line 20 (b-print) (b-goto (b-expr (b-sum 60.0))) (b-end)))</div><div class="highlight" form="false" id="a_6kK8R"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="source"><pre>&#39;(b-program
+  (b-line 30 (b-rem "rem print &#39;ignored&#39;"))
+  (b-line 35)
+  (b-line 50 (b-print "never gets here"))
+  (b-line 40 (b-end))
+  (b-line 60 (b-print "three") (b-print (b-expr (b-sum 1.0 3))))
+  (b-line 70 (b-goto (b-expr (b-sum 11.0 18.5 0.5))) (b-rem "rem ignored"))
+  (b-line 10 (b-print "o" "n" "e"))
+  (b-line 20 (b-print) (b-goto (b-expr (b-sum 60.0))) (b-end)))
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk15" data-clipboard-target="#code_91" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_t347i&quot;)"></div><p id="a_t347i">Cuts and splices are strictly a con­ve­nience. We’re not required to use them. And they’re not the only way of prun­ing a parse tree. We could do the same work in <a href="the-expander.html">the expander</a>, sort­ing through the raw parse tree when it arrives and toss­ing out what we don’t need.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_gstDi&quot;)"></div><p id="a_gstDi">But often, that amounts to writ­ing a func­tion that re-parses the parse tree. Given that we’re already mak­ing a parser, it makes sense to con­sol­i­date the house­keep­ing here. As we’ve seen, we can eas­ily stream­line the parse tree by adding a few <span class="my-code" decode="exclude">/</span> and <span class="my-code" decode="exclude">@</span> marks.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;finished-parser&quot;)"></div><h3 anchor="finished-parser" class="subhead" id="finished-parser"><a href="#finished-parser">Fin­ished parser</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_OjZ1z&quot;)"></div><p id="a_OjZ1z">We are now really, truly done with our parser, and can move on to fin­ish­ing <a href="the-reader.html">the reader</a> and then tack­ling the <a href="the-expander.html">the expander</a>. The extra effort we invested in the parser will pay div­i­dends then.</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">basic/parser.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_LSVjr18&quot;)"></div><div class="highlight-container" id="a_LSVjr18"><div id="code_92" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang brag<br/>b-program : [b-line] (/NEWLINE [b-line])*<br/>b-line : b-line-num [b-statement] (/":" [b-statement])* [b-rem]<br/>@b-line-num : INTEGER<br/>@b-statement : b-end | b-print | b-goto<br/>b-rem : REM<br/>b-end : /"end"<br/>b-print : /"print" [b-printable] (/";" [b-printable])*<br/>@b-printable : STRING | b-expr<br/>b-goto : /"goto" b-expr<br/>b-expr : b-sum<br/>b-sum : b-number (/"+" b-number)*<br/>@b-number : INTEGER | DECIMAL</div><div class="highlight" form="false" id="a_GoWEE16"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="source"><pre>#lang brag
+b-program : [b-line] (/NEWLINE [b-line])*
+b-line : b-line-num [b-statement] (/":" [b-statement])* [b-rem]
+@b-line-num : INTEGER
+@b-statement : b-end | b-print | b-goto
+b-rem : REM
+b-end : /"end"
+b-print : /"print" [b-printable] (/";" [b-printable])*
+@b-printable : STRING | b-expr
+b-goto : /"goto" b-expr
+b-expr : b-sum
+b-sum : b-number (/"+" b-number)*
+@b-number : INTEGER | DECIMAL
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk17" data-clipboard-target="#code_92" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-lexer.html">3&emsp;the lexer</a></li><li><a href="the-tokenizer.html">4&emsp;the tok­enizer</a></li><li><a class="here" href="the-parser.html">5&emsp;the parser</a></li><li><a href="the-reader.html">6&emsp;the reader</a></li><li><a href="the-expander.html">7&emsp;the expander</a></li><li><a href="testing-the-language.html">8&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">9&emsp;recap</a></li><li><a href="source-listing.html">10&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="the-tokenizer.html">← prev</a>
+    <a class="nav-right" href="the-reader.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

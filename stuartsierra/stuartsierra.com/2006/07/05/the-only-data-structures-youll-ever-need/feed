@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: The Only Data Structures You&#8217;ll Ever Need</title>
+	<atom:link href="https://stuartsierra.com/2006/07/05/the-only-data-structures-youll-ever-need/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2006/07/05/the-only-data-structures-youll-ever-need</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2006/07/05/the-only-data-structures-youll-ever-need/comment-page-1#comment-254</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Wed, 26 Jul 2006 13:51:55 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=31#comment-254</guid>
+		<description><![CDATA[Mork said: &lt;em&gt;I agree that the data types you mention are very useful and convenient, but I think building all data structures only with them is not a good idea.&lt;/em&gt;
+
+You&#039;re right; it&#039;s not necessarily a good idea to implement all your data structures with the same three broadly-defined types.  What interests me about Perl is that you can &lt;em&gt;represent&lt;/em&gt; almost any structure as a combination of those simple types.  Tied data structures are a great example, and they make some things really easy.]]></description>
+		<content:encoded><![CDATA[<p>Mork said: <em>I agree that the data types you mention are very useful and convenient, but I think building all data structures only with them is not a good idea.</em></p>
+<p>You&#8217;re right; it&#8217;s not necessarily a good idea to implement all your data structures with the same three broadly-defined types.  What interests me about Perl is that you can <em>represent</em> almost any structure as a combination of those simple types.  Tied data structures are a great example, and they make some things really easy.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Mork</title>
+		<link>https://stuartsierra.com/2006/07/05/the-only-data-structures-youll-ever-need/comment-page-1#comment-251</link>
+		<dc:creator><![CDATA[Mork]]></dc:creator>
+		<pubDate>Wed, 26 Jul 2006 09:36:51 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=31#comment-251</guid>
+		<description><![CDATA[&#062; Perl has three basic types: “scalars” for atomic values, arrays for ordered sets, and hash tables for unordered sets. (Yes, there are others, but those are the popular ones.) I quickly discovered that these three types can be combined to produce most any data structure you might need.
+
+If all you have is a hammer, everything looks like a nail.
+I agree that the data types you mention are very useful and convenient, but I think building all data structures only with them is not a good idea. For more complex requirements, it often results in unnecessarily complicated, nested data structures. If do you go that route, though, there&#039;s no need for arrays: there are several languages doing fine with only hashes and scalars.
+
+Using generic data structures for everything also makes it harder to enforce particular constraints (e.g. on the type of data they should hold). Judicious use of specialized data structures (by creating new structs/classes) also makes code clearer to read and separates the interface from the underlying implementation. Incidentally, Perl also allows by using tied data structures (hashes/arrays), though that feature isn&#039;t used very often (due to the way it is implemented).]]></description>
+		<content:encoded><![CDATA[<p>&gt; Perl has three basic types: “scalars” for atomic values, arrays for ordered sets, and hash tables for unordered sets. (Yes, there are others, but those are the popular ones.) I quickly discovered that these three types can be combined to produce most any data structure you might need.</p>
+<p>If all you have is a hammer, everything looks like a nail.<br />
+I agree that the data types you mention are very useful and convenient, but I think building all data structures only with them is not a good idea. For more complex requirements, it often results in unnecessarily complicated, nested data structures. If do you go that route, though, there&#8217;s no need for arrays: there are several languages doing fine with only hashes and scalars.</p>
+<p>Using generic data structures for everything also makes it harder to enforce particular constraints (e.g. on the type of data they should hold). Judicious use of specialized data structures (by creating new structs/classes) also makes code clearer to read and separates the interface from the underlying implementation. Incidentally, Perl also allows by using tied data structures (hashes/arrays), though that feature isn&#8217;t used very often (due to the way it is implemented).</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: MS</title>
+		<link>https://stuartsierra.com/2006/07/05/the-only-data-structures-youll-ever-need/comment-page-1#comment-96</link>
+		<dc:creator><![CDATA[MS]]></dc:creator>
+		<pubDate>Fri, 07 Jul 2006 23:24:47 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=31#comment-96</guid>
+		<description><![CDATA[The Goo language has unified collection classes.
+
+http://people.csail.mit.edu/jrb/goo/]]></description>
+		<content:encoded><![CDATA[<p>The Goo language has unified collection classes.</p>
+<p><a href="http://people.csail.mit.edu/jrb/goo/" rel="nofollow">http://people.csail.mit.edu/jrb/goo/</a></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Zach Beane</title>
+		<link>https://stuartsierra.com/2006/07/05/the-only-data-structures-youll-ever-need/comment-page-1#comment-94</link>
+		<dc:creator><![CDATA[Zach Beane]]></dc:creator>
+		<pubDate>Fri, 07 Jul 2006 16:52:30 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=31#comment-94</guid>
+		<description><![CDATA[Norvig has a nice DEFTABLE macro that allows you to transparently switch between key/value data structures:
+
+http://www-cgi.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/lisp/code/ext/tables/0.html]]></description>
+		<content:encoded><![CDATA[<p>Norvig has a nice DEFTABLE macro that allows you to transparently switch between key/value data structures:</p>
+<p><a href="http://www-cgi.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/lisp/code/ext/tables/0.html" rel="nofollow">http://www-cgi.cs.cmu.edu/afs/cs/project/ai-repository/ai/lang/lisp/code/ext/tables/0.html</a></p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.279 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:02:58 -->
+
+<!-- Compression = gzip -->

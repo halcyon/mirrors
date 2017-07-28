@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Hofeach</title>
+	<atom:link href="http://malisper.me/2015/06/17/hofeach/feed/" rel="self" type="application/rss+xml" />
+	<link>http://malisper.me/2015/06/17/hofeach/</link>
+	<description>Case Studies in Lisp Macros</description>
+	<lastBuildDate>Thu, 14 Apr 2016 08:46:03 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: malisper</title>
+		<link>http://malisper.me/2015/06/17/hofeach/#comment-740</link>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+		<pubDate>Sun, 27 Sep 2015 14:52:29 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=241#comment-740</guid>
+		<description><![CDATA[That works except in cases where you want to pass in the value of a variable. It implicitly assumes that a symbol corresponds to the function of the same name and not to the variable.]]></description>
+		<content:encoded><![CDATA[<p>That works except in cases where you want to pass in the value of a variable. It implicitly assumes that a symbol corresponds to the function of the same name and not to the variable.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Thomas Bartscher</title>
+		<link>http://malisper.me/2015/06/17/hofeach/#comment-687</link>
+		<dc:creator><![CDATA[Thomas Bartscher]]></dc:creator>
+		<pubDate>Fri, 25 Sep 2015 00:16:03 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=241#comment-687</guid>
+		<description><![CDATA[Ah, that makes sense.
+
+In that case:
+
+[code]
+(defmacro hofeach (hof var list &#038;body body)
+  (if (symbolp hof)
+      `(,hof (lambda (,var) ,@body) ,list)
+      `(funcall ,hof (lambda (,var) ,@body) ,list)))
+[/code]
+
+for convenience.]]></description>
+		<content:encoded><![CDATA[<p>Ah, that makes sense.</p>
+<p>In that case:</p>
+<pre class="brush: plain; title: ; notranslate">
+(defmacro hofeach (hof var list &amp;body body)
+  (if (symbolp hof)
+      `(,hof (lambda (,var) ,@body) ,list)
+      `(funcall ,hof (lambda (,var) ,@body) ,list)))
+</pre>
+<p>for convenience.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: malisper</title>
+		<link>http://malisper.me/2015/06/17/hofeach/#comment-355</link>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+		<pubDate>Sat, 22 Aug 2015 01:38:53 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=241#comment-355</guid>
+		<description><![CDATA[With macros that wind up calling a function, it is a style issue as whether to call it directly or to use &lt;strong&gt;funcall&lt;/strong&gt;. I personally always use &lt;strong&gt;funcall&lt;/strong&gt; because it allows for the possibility of an expression to determine which function to use. For example:
+
+[code]
+(hofeach (if (...) 
+             #&#039;remove-if-not 
+             #&#039;remove-if)
+  ...)
+[/code]]]></description>
+		<content:encoded><![CDATA[<p>With macros that wind up calling a function, it is a style issue as whether to call it directly or to use <strong>funcall</strong>. I personally always use <strong>funcall</strong> because it allows for the possibility of an expression to determine which function to use. For example:</p>
+<pre class="brush: plain; title: ; notranslate">
+(hofeach (if (...) 
+             #'remove-if-not 
+             #'remove-if)
+  ...)
+</pre>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Thomas Bartscher</title>
+		<link>http://malisper.me/2015/06/17/hofeach/#comment-353</link>
+		<dc:creator><![CDATA[Thomas Bartscher]]></dc:creator>
+		<pubDate>Fri, 21 Aug 2015 20:09:06 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=241#comment-353</guid>
+		<description><![CDATA[Why the funcall?
+[code]
+(defmacro hofeach (hof var list &#038;body body)
+  `(,hof (lambda (,var) ,@body) ,list))
+[/code]
+This allows to skip the #&#039; before the function name and lambda expressions can be used, too, as long as they&#039;re not prefixed with #&#039;.]]></description>
+		<content:encoded><![CDATA[<p>Why the funcall?</p>
+<pre class="brush: plain; title: ; notranslate">
+(defmacro hofeach (hof var list &amp;body body)
+  `(,hof (lambda (,var) ,@body) ,list))
+</pre>
+<p>This allows to skip the #&#8217; before the function name and lambda expressions can be used, too, as long as they&#8217;re not prefixed with #&#8217;.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Andrew Kirkpatrick</title>
+		<link>http://malisper.me/2015/06/17/hofeach/#comment-118</link>
+		<dc:creator><![CDATA[Andrew Kirkpatrick]]></dc:creator>
+		<pubDate>Fri, 10 Jul 2015 09:10:29 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=241#comment-118</guid>
+		<description><![CDATA[Improving on the macro I posted for mapeach, but of course, yet more complex. Nice posts, good discussion.
+[code]
+(defmacro ahofeach (hof body &#038;rest lists)
+  &#034;Succinct anaphoric HOF iteration.&#034;
+  (flet ((wrap-functor-body (it-sym parameters body)
+           `(lambda (,@parameters)
+              (declare (ignorable ,@parameters))
+              (symbol-macrolet ((,it-sym ,(first parameters)))
+                ,@body))))
+    (let* ((parameters (loop for i from 1 to (length lists)
+                             collect (intern (format nil &#034;IT~A&#034; i))))
+           (it-sym (intern &#034;IT&#034;))
+           (functor (cond
+                      ((and (listp body)
+                            (or (and (= (length body) 2) ;; #&#039;func, &#039;func
+                                     (member (first body) &#039;(function quote)))
+                                (and (&#062;= (length body) 2) ;; (lambda nil …)
+                                     (eq (first body) &#039;lambda))))
+                       body)
+                      ((and (listp body) (listp (first body))) ;; multiple forms
+                       (wrap-functor-body it-sym parameters body))
+                      (t ;; assume single form
+                       (wrap-functor-body it-sym parameters (list body))))))
+      `(funcall ,hof ,functor ,@lists))))
+
+;; (let ((list &#039;(1 2 3 4)))
+;;   (list (ahofeach #&#039;remove-if-not #&#039;evenp list)
+;;         (ahofeach &#039;remove-if-not &#039;evenp list)
+;;         (ahofeach #&#039;remove-if-not (evenp it) list)
+;;         (ahofeach #&#039;remove-if-not ((format t &#034;…~A&#034; it)
+;;                                    (let ((x (multiple-value-list (floor it 2))))
+;;                                      (zerop (second x))))
+;;                   list)))
+;; output =&#062; …1…2…3…4
+;; value  =&#062; ((2 4) (2 4) (2 4) (2 4))
+[/code]]]></description>
+		<content:encoded><![CDATA[<p>Improving on the macro I posted for mapeach, but of course, yet more complex. Nice posts, good discussion.</p>
+<pre class="brush: plain; title: ; notranslate">
+(defmacro ahofeach (hof body &amp;rest lists)
+  &quot;Succinct anaphoric HOF iteration.&quot;
+  (flet ((wrap-functor-body (it-sym parameters body)
+           `(lambda (,@parameters)
+              (declare (ignorable ,@parameters))
+              (symbol-macrolet ((,it-sym ,(first parameters)))
+                ,@body))))
+    (let* ((parameters (loop for i from 1 to (length lists)
+                             collect (intern (format nil &quot;IT~A&quot; i))))
+           (it-sym (intern &quot;IT&quot;))
+           (functor (cond
+                      ((and (listp body)
+                            (or (and (= (length body) 2) ;; #'func, 'func
+                                     (member (first body) '(function quote)))
+                                (and (&gt;= (length body) 2) ;; (lambda nil …)
+                                     (eq (first body) 'lambda))))
+                       body)
+                      ((and (listp body) (listp (first body))) ;; multiple forms
+                       (wrap-functor-body it-sym parameters body))
+                      (t ;; assume single form
+                       (wrap-functor-body it-sym parameters (list body))))))
+      `(funcall ,hof ,functor ,@lists))))
+
+;; (let ((list '(1 2 3 4)))
+;;   (list (ahofeach #'remove-if-not #'evenp list)
+;;         (ahofeach 'remove-if-not 'evenp list)
+;;         (ahofeach #'remove-if-not (evenp it) list)
+;;         (ahofeach #'remove-if-not ((format t &quot;…~A&quot; it)
+;;                                    (let ((x (multiple-value-list (floor it 2))))
+;;                                      (zerop (second x))))
+;;                   list)))
+;; output =&gt; …1…2…3…4
+;; value  =&gt; ((2 4) (2 4) (2 4) (2 4))
+</pre>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: John Cowan</title>
+		<link>http://malisper.me/2015/06/17/hofeach/#comment-52</link>
+		<dc:creator><![CDATA[John Cowan]]></dc:creator>
+		<pubDate>Sun, 05 Jul 2015 16:24:48 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=241#comment-52</guid>
+		<description><![CDATA[An alternative approach would be to write a macro that expands to an -each macro, rather than being a general macro for any high-order function.  That way, you can give the -each macro any name you want.
+
+In my view, syntax extension like this is a powerful tool that can easily be abused, but Ruku&#039;s  general argument against them would also be an argument against creating named functions: you don&#039;t know what they do until you look (at least at the documentation if not the code).
+
+As for &lt;code&gt;remove-if-not&lt;/code&gt;, it&#039;s a good function with a bad name: a double negative, really.  In Scheme and Haskell it&#039;s called &lt;code&gt;filter&lt;/code&gt;:  &lt;code&gt;(filter evenp? &#039;(1 2 3 4 5))&lt;/code&gt; evaluates to &lt;code&gt;(2 4).&lt;/code&gt;, which  is clear and clean.]]></description>
+		<content:encoded><![CDATA[<p>An alternative approach would be to write a macro that expands to an -each macro, rather than being a general macro for any high-order function.  That way, you can give the -each macro any name you want.</p>
+<p>In my view, syntax extension like this is a powerful tool that can easily be abused, but Ruku&#8217;s  general argument against them would also be an argument against creating named functions: you don&#8217;t know what they do until you look (at least at the documentation if not the code).</p>
+<p>As for <code>remove-if-not</code>, it&#8217;s a good function with a bad name: a double negative, really.  In Scheme and Haskell it&#8217;s called <code>filter</code>:  <code>(filter evenp? '(1 2 3 4 5))</code> evaluates to <code>(2 4).</code>, which  is clear and clean.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Chris Dean</title>
+		<link>http://malisper.me/2015/06/17/hofeach/#comment-50</link>
+		<dc:creator><![CDATA[Chris Dean]]></dc:creator>
+		<pubDate>Sun, 05 Jul 2015 02:44:34 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=241#comment-50</guid>
+		<description><![CDATA[This is great.  You should take a look at iter  https://common-lisp.net/project/iterate/
+
+It has a similar syntax:
+
+[code]
+(iter (for x :in &#039;(1 2 3))
+         (collect (* x x))
+[/code]]]></description>
+		<content:encoded><![CDATA[<p>This is great.  You should take a look at iter  <a href="https://common-lisp.net/project/iterate/" rel="nofollow">https://common-lisp.net/project/iterate/</a></p>
+<p>It has a similar syntax:</p>
+<pre class="brush: plain; title: ; notranslate">
+(iter (for x :in '(1 2 3))
+         (collect (* x x))
+</pre>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: malisper</title>
+		<link>http://malisper.me/2015/06/17/hofeach/#comment-49</link>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+		<pubDate>Sun, 05 Jul 2015 01:04:27 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=241#comment-49</guid>
+		<description><![CDATA[I think this is mostly a stylistic issue. If you are working with a team where everyone is familiar with them, I believe utility macros such as hofeach become a win all around. If you are working with programmers who are unfamiliar with the macros you are using (i.e. open source software) they can wind up being a net negative. Of course, with macros as simple as hofeach, it only takes several seconds to macroexpand it or read the source code to figure out what they are doing.]]></description>
+		<content:encoded><![CDATA[<p>I think this is mostly a stylistic issue. If you are working with a team where everyone is familiar with them, I believe utility macros such as hofeach become a win all around. If you are working with programmers who are unfamiliar with the macros you are using (i.e. open source software) they can wind up being a net negative. Of course, with macros as simple as hofeach, it only takes several seconds to macroexpand it or read the source code to figure out what they are doing.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Ruku</title>
+		<link>http://malisper.me/2015/06/17/hofeach/#comment-48</link>
+		<dc:creator><![CDATA[Ruku]]></dc:creator>
+		<pubDate>Sat, 04 Jul 2015 21:50:36 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=241#comment-48</guid>
+		<description><![CDATA[I used to love writing macros like this. It does clarify some code snippets, but it comes at the cost of being harder to read for other programmers. This hurts when others have to read your code and look up your macro to understand exactly what you are doing. You are creating a personal dialect, which has disadvantages as well as advantages.
+
+My personal way of dealing with this issue is to create a local function immediately around the mapping function with flet. It allows me to use a self-documenting name instead of lambda, and is completely standard lisp.
+
+e.g.
+[code]
+(flet ((meaningful-name (ele) big-complicated-form))
+   (mapcar #&#039;meaningful-name list))
+[/code]]]></description>
+		<content:encoded><![CDATA[<p>I used to love writing macros like this. It does clarify some code snippets, but it comes at the cost of being harder to read for other programmers. This hurts when others have to read your code and look up your macro to understand exactly what you are doing. You are creating a personal dialect, which has disadvantages as well as advantages.</p>
+<p>My personal way of dealing with this issue is to create a local function immediately around the mapping function with flet. It allows me to use a self-documenting name instead of lambda, and is completely standard lisp.</p>
+<p>e.g.</p>
+<pre class="brush: plain; title: ; notranslate">
+(flet ((meaningful-name (ele) big-complicated-form))
+   (mapcar #'meaningful-name list))
+</pre>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Marco</title>
+		<link>http://malisper.me/2015/06/17/hofeach/#comment-41</link>
+		<dc:creator><![CDATA[Marco]]></dc:creator>
+		<pubDate>Tue, 30 Jun 2015 05:06:55 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=241#comment-41</guid>
+		<description><![CDATA[Thank you, very instructive as always.
+
+A note on &quot;remove-if-not&quot;, and similar functions, can be found on &quot;On Lisp&quot; as well:
+
+http://www.bookshelf.jp/texi/onlisp/onlisp_6.html#Common%20Lisp%20Evolves
+
+Personally, I do like the &quot;if-not&quot; functions. They may be from more &quot;baroque&quot; times, but they add a semantic richness that the &quot;complement&quot; predicate does not offer.
+
+Thanks again for Macrology!]]></description>
+		<content:encoded><![CDATA[<p>Thank you, very instructive as always.</p>
+<p>A note on &#8220;remove-if-not&#8221;, and similar functions, can be found on &#8220;On Lisp&#8221; as well:</p>
+<p><a href="http://www.bookshelf.jp/texi/onlisp/onlisp_6.html#Common%20Lisp%20Evolves" rel="nofollow">http://www.bookshelf.jp/texi/onlisp/onlisp_6.html#Common%20Lisp%20Evolves</a></p>
+<p>Personally, I do like the &#8220;if-not&#8221; functions. They may be from more &#8220;baroque&#8221; times, but they add a semantic richness that the &#8220;complement&#8221; predicate does not offer.</p>
+<p>Thanks again for Macrology!</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.097 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:24:09 -->

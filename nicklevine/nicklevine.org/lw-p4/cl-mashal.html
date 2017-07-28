@@ -1,0 +1,142 @@
+;; $Id: //info.ravenbrook.com/user/ndl/lisp/lw-p4/cl-mashal.lisp#2 $
+
+(in-package "LW-P4")
+
+;;                           MARSHAL.LISP
+;;           Nick Levine, Ravenbrook Limited, 2011-11-14
+;;
+;; 1.  INTRODUCTION
+;;
+;; This is a small subset of a proper Python marhsaller. There'd be
+;; problems mapping between a number of Python and lisp types; and
+;; happily I don't have to worry about them.
+;;
+;; This document is not confidential. See the end for terms and
+;; conditions.
+
+
+;; 2.  MARSHAL
+
+(defun marshal (object ostream)
+  (dump-object object ostream))
+
+(defmethod dump-object ((self hash-table) ostream)
+  (dump-char #\{ ostream)
+  (loop for k being the hash-keys of self
+        do
+        (dump-object k ostream)
+        (dump-object (gethash k self) ostream))
+  (dump-null ostream))
+
+(defmethod dump-object ((self string) ostream)
+  (dump-char #\s ostream)
+  (let ((length (length self)))
+    (dump-int32 length ostream)
+    (dotimes (i length)
+      (dump-char (schar self i) ostream))))
+
+(defun dump-null (ostream)
+  (dump-char #\0 ostream))
+
+(defun dump-int32 (integer ostream)
+  (write-byte (logand #xFF integer) ostream)
+  (write-byte (logand #xFF (ash integer  -8)) ostream)
+  (write-byte (logand #xFF (ash integer -16)) ostream)
+  (write-byte (logand #xFF (ash integer -24)) ostream))
+
+(defun dump-char (char ostream)
+  (write-byte (char-code char) ostream))
+
+
+;; 3.  UNMARSHAL
+
+(defun unmarshal (istream)
+  (let ((objects nil))
+    (loop (let ((object (pick-object istream)))
+            (if object
+                (push object objects)
+              (return))))
+    objects))
+
+(defun pick-object (istream)
+  (let ((code (pick-char istream nil)))
+    (ecase code
+      ((nil 
+        #\Newline) nil)
+      ((#\0) (pick-null))
+      ((#\i) (pick-uint32 istream))
+      ((#\{) (pick-dict istream))
+      ((#\s) (pick-string istream))
+      )))
+
+(defun pick-null ()
+  (load-time-value (cons nil nil)))
+
+(defun pick-string (istream)
+  (let* ((length (pick-uint32 istream))
+         (string (make-string length :element-type 'base-char)))
+    (dotimes (i length)
+      (setf (schar string i) (pick-char istream)))
+    string))
+
+(defun pick-dict (istream)
+  (let ((table (make-hash-table :test 'equal))
+        (null (pick-null)))
+    (loop (let ((key (pick-object istream)))
+            (when (eq key null)
+              (return table))
+            (setf (gethash key table)
+                  (pick-object istream))))))
+
+(defun pick-uint32 (istream)
+  (logior (read-byte istream)
+	  (ash (read-byte istream) 8)
+          (ash (read-byte istream) 16)
+	  (ash (read-byte istream) 24)))
+
+(defun pick-char (istream &optional (eof-error-p t))
+  (code-char (read-byte istream eof-error-p)))
+
+
+;; A.  REFERENCES
+;;
+;; http://daeken.com/python-marshal-format
+
+;; B.  HISTORY
+;;
+;; 2011-11-14 NDL Created.
+;;
+;;
+;; C.  COPYRIGHT AND LICENCE
+;;
+;; This file is copyright (c) 2011, Nick Levine.  All rights reserved.
+;;
+;; Redistribution and use in source and binary forms, with or without
+;; modification, are permitted provided that the following conditions are
+;; met:
+;;
+;; 1.  Redistributions of source code must retain the above copyright
+;;     notice, this list of conditions and the following disclaimer.
+;;
+;; 2.  Redistributions in binary form must reproduce the above copyright
+;;     notice, this list of conditions and the following disclaimer in
+;;     the documentation and/or other materials provided with the
+;;     distribution.
+;;
+;; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+;; "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+;; LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+;; A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+;; HOLDERS AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+;; INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+;; BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+;; OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+;; ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+;; TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+;; USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+;; DAMAGE.
+
+
+
+
+

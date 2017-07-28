@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/stackerizer/source-listing.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:16 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Dive deeper into macros: stackerizer</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;dive-deeper-into-macros-stackerizer&quot;)"></div><h1 anchor="dive-deeper-into-macros-stackerizer" id="dive-deeper-into-macros-stackerizer" hyphens="none">Dive deeper into macros: <span class="my-code" decode="exclude">stackerizer</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-expander.html">3&emsp;the expander</a></li><li><a href="recap.html">4&emsp;recap</a></li><li><a class="here" href="source-listing.html">5&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_sQeQX&quot;)"></div><p id="a_sQeQX"><a class="ziplink" href="stackerizer-tutorial.zip">Down­load stack­er­izer-tuto­r­ial.zip</a></p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">stackerizer.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Byi1C&quot;)"></div><div class="highlight-container" id="a_Byi1C"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br/quicklang<br/>(provide + *)<br/><br/>(define-macro (stackerizer-mb EXPR)<br/>  #'(#%module-begin<br/>     (for-each displayln (reverse (flatten EXPR)))))<br/>(provide (rename-out [stackerizer-mb #%module-begin]))<br/><br/>(define-macro (define-ops OP ...)<br/>  #'(begin<br/>      (define-macro-cases OP<br/>        [(OP FIRST) #'FIRST]<br/>        [(OP FIRST NEXT (... ...))<br/>         #'(list 'OP FIRST (OP NEXT (... ...)))]) <br/>      ...))<br/><br/>(define-ops + *)</div><div class="highlight" form="false" id="a_Wniln"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br/quicklang</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/define..rkt)._define-macro))" class="docs" hyphens="none">define-macro</a></span> <span class="p">(</span><span class="n">stackerizer-mb</span> <span class="n">EXPR</span><span class="p">)</span>
+  <span class="o">#&#39;</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._~23~25module-begin))" class="docs" hyphens="none">#%module-begin</a></span>
+     <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/private/map..rkt)._for-each))" class="docs" hyphens="none">for-each</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/Writing.html#(def._((lib._racket/private/misc..rkt)._displayln))" class="docs" hyphens="none">displayln</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/private/list..rkt)._reverse))" class="docs" hyphens="none">reverse</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((lib._racket/list..rkt)._flatten))" class="docs" hyphens="none">flatten</a></span> <span class="n">EXPR</span><span class="p">)))))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._rename-out))" class="docs" hyphens="none">rename-out</a></span> <span class="p">[</span><span class="n">stackerizer-mb</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._~23~25module-begin))" class="docs" hyphens="none">#%module-begin</a></span><span class="p">]))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/define..rkt)._define-macro))" class="docs" hyphens="none">define-macro</a></span> <span class="p">(</span><span class="n">define-ops</span> <span class="n">OP</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span><span class="p">)</span>
+  <span class="o">#&#39;</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/begin.html#(form._((quote._~23~25kernel)._begin))" class="docs" hyphens="none">begin</a></span>
+      <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/define..rkt)._define-macro-cases))" class="docs" hyphens="none">define-macro-cases</a></span> <span class="n">OP</span>
+        <span class="p">[(</span><span class="n">OP</span> <span class="n">FIRST</span><span class="p">)</span> <span class="o">#&#39;</span><span class="n">FIRST</span><span class="p">]</span>
+        <span class="p">[(</span><span class="n">OP</span> <span class="n">FIRST</span> <span class="n">NEXT</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span><span class="p">))</span>
+         <span class="o">#&#39;</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/pairs.html#(def._((quote._~23~25kernel)._list))" class="docs" hyphens="none">list</a></span> <span class="o">&#39;</span><span class="ss">OP</span> <span class="n">FIRST</span> <span class="p">(</span><span class="n">OP</span> <span class="n">NEXT</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span><span class="p">)))])</span> 
+      <span class="nb"><a href="http://docs.racket-lang.org/reference/stx-patterns.html#(form._((lib._racket/private/stxcase-scheme..rkt)._......))" class="docs" hyphens="none">...</a></span><span class="p">))</span>
+
+<span class="p">(</span><span class="n">define-ops</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span><span class="p">)</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">stackerizer-test.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_q0fpx&quot;)"></div><div class="highlight-container" id="a_q0fpx"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang s-exp "stackerizer.rkt"<br/>(* 3 (+ 8 4))</div><div class="highlight" form="false" id="a_hnuzS"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">s-exp</span> <span class="s2">"stackerizer.rkt"</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._*))" class="docs" hyphens="none">*</a></span> <span class="mi">3</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._+))" class="docs" hyphens="none">+</a></span> <span class="mi">8</span> <span class="mi">4</span><span class="p">))</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-expander.html">3&emsp;the expander</a></li><li><a href="recap.html">4&emsp;recap</a></li><li><a class="here" href="source-listing.html">5&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="recap.html">← prev</a>
+    <a class="nav-right" href="../bf/intro.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

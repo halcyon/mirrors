@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Dependency Management First-Aid Kit</title>
+	<atom:link href="https://stuartsierra.com/2011/06/01/dependency-management/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2011/06/01/dependency-management</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Paul King</title>
+		<link>https://stuartsierra.com/2011/06/01/dependency-management/comment-page-1#comment-44193</link>
+		<dc:creator><![CDATA[Paul King]]></dc:creator>
+		<pubDate>Wed, 01 Jun 2011 23:01:14 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=533#comment-44193</guid>
+		<description><![CDATA[Always like your advice Alex:
+&#062;  Taking a sip of scotch every time you type “mvn” will get you through the day.]]></description>
+		<content:encoded><![CDATA[<p>Always like your advice Alex:<br />
+&gt;  Taking a sip of scotch every time you type “mvn” will get you through the day.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Alex Miller</title>
+		<link>https://stuartsierra.com/2011/06/01/dependency-management/comment-page-1#comment-44192</link>
+		<dc:creator><![CDATA[Alex Miller]]></dc:creator>
+		<pubDate>Wed, 01 Jun 2011 20:54:32 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=533#comment-44192</guid>
+		<description><![CDATA[Great post!  I&#039;ll add:
+
+1) If you use the DuckDuckGo search engine, you can use the !mvn command to search for Maven jars in Maven central repo.  So, search for:  &quot;!mvn awesome&quot; will be translated into http://mvnrepository.com/search.html?query=awesome - I think mvnrepository.com is more limited than mvnbrowser but for common dependencies in Maven central it works well.
+
+2) If you are using Maven, you can do &quot;mvn dependency:tree&quot; to list a tree-like graph of your dependencies which is helpful for understanding why you&#039;re downloading something, figuring out what to exclude, or otherwise making sense of chaos.  If you are using leiningen, first do &quot;lein pom&quot; to generate a pom.xml.  Use &quot;mvn dependency:help&quot; to see a number of other useful goals in the dependency plugin like analyze, build-classpath, etc.
+
+3) If you are trying to figure out which repos you&#039;re actually using through your pom, parent poms, settings.xml, etc this is a helpful Maven command:  &quot;mvn help:effective-pom&quot;  (also &quot;mvn help:effective-settings&quot;).  Again, use &quot;lein pom&quot; to get a pom first.
+
+4) Any time you&#039;re having a hard time figuring out why a dependency resolved the way it did, using the -X parameter will cause Maven to emit debug information that I find nearly always answers my question (if I take the time to read the voluminous output).
+
+5) Taking a sip of scotch every time you type &quot;mvn&quot; will get you through the day.]]></description>
+		<content:encoded><![CDATA[<p>Great post!  I&#8217;ll add:</p>
+<p>1) If you use the DuckDuckGo search engine, you can use the !mvn command to search for Maven jars in Maven central repo.  So, search for:  &#8220;!mvn awesome&#8221; will be translated into <a href="http://mvnrepository.com/search.html?query=awesome" rel="nofollow">http://mvnrepository.com/search.html?query=awesome</a> &#8211; I think mvnrepository.com is more limited than mvnbrowser but for common dependencies in Maven central it works well.</p>
+<p>2) If you are using Maven, you can do &#8220;mvn dependency:tree&#8221; to list a tree-like graph of your dependencies which is helpful for understanding why you&#8217;re downloading something, figuring out what to exclude, or otherwise making sense of chaos.  If you are using leiningen, first do &#8220;lein pom&#8221; to generate a pom.xml.  Use &#8220;mvn dependency:help&#8221; to see a number of other useful goals in the dependency plugin like analyze, build-classpath, etc.</p>
+<p>3) If you are trying to figure out which repos you&#8217;re actually using through your pom, parent poms, settings.xml, etc this is a helpful Maven command:  &#8220;mvn help:effective-pom&#8221;  (also &#8220;mvn help:effective-settings&#8221;).  Again, use &#8220;lein pom&#8221; to get a pom first.</p>
+<p>4) Any time you&#8217;re having a hard time figuring out why a dependency resolved the way it did, using the -X parameter will cause Maven to emit debug information that I find nearly always answers my question (if I take the time to read the voluminous output).</p>
+<p>5) Taking a sip of scotch every time you type &#8220;mvn&#8221; will get you through the day.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.259 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:58:35 -->
+
+<!-- Compression = gzip -->

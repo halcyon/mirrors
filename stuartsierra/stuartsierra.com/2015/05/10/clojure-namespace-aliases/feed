@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Clojure Do’s: Namespace Aliases</title>
+	<atom:link href="https://stuartsierra.com/2015/05/10/clojure-namespace-aliases/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2015/05/10/clojure-namespace-aliases</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2015/05/10/clojure-namespace-aliases/comment-page-1#comment-54645</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Mon, 18 May 2015 09:56:44 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=826#comment-54645</guid>
+		<description><![CDATA[More discussion on the Clojure Mailing List:
+&lt;a href=&quot;https://groups.google.com/d/topic/clojure/qw_QXsgH1BQ/discussion&quot; rel=&quot;nofollow&quot;&gt;Using :refer &#039;sparingly&#039;&lt;/a&gt;]]></description>
+		<content:encoded><![CDATA[<p>More discussion on the Clojure Mailing List:<br />
+<a href="https://groups.google.com/d/topic/clojure/qw_QXsgH1BQ/discussion" rel="nofollow">Using :refer &#8216;sparingly&#8217;</a></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: John Wiseman</title>
+		<link>https://stuartsierra.com/2015/05/10/clojure-namespace-aliases/comment-page-1#comment-54644</link>
+		<dc:creator><![CDATA[John Wiseman]]></dc:creator>
+		<pubDate>Sun, 17 May 2015 15:54:43 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=826#comment-54644</guid>
+		<description><![CDATA[I think &quot;api&quot; suffers from a similar problem as &quot;core&quot;: there is no distinction between namespaces.  Imagine following Stuart&#039;s advice about using &lt;code&gt;:as&lt;/code&gt;.  You would end up with &lt;code&gt;...:as api] [...:as api]...&lt;/code&gt;.
+
+Instead of using &lt;code&gt;foo.core&lt;/code&gt; or &lt;code&gt;foo.api&lt;/code&gt;, I suggest using &lt;code&gt;foo&lt;/code&gt; whenever possible for the &quot;core&quot; namespace.  You can still use more specific namespaces if they make sense, too.  A more complete example: &lt;code&gt;(require [com.lemondronor.foo :as foo] [com.lemonodor.foo.io :as foo.io])&lt;/code&gt;]]></description>
+		<content:encoded><![CDATA[<p>I think &#8220;api&#8221; suffers from a similar problem as &#8220;core&#8221;: there is no distinction between namespaces.  Imagine following Stuart&#8217;s advice about using <code>:as</code>.  You would end up with <code>...:as api] [...:as api]...</code>.</p>
+<p>Instead of using <code>foo.core</code> or <code>foo.api</code>, I suggest using <code>foo</code> whenever possible for the &#8220;core&#8221; namespace.  You can still use more specific namespaces if they make sense, too.  A more complete example: <code>(require [com.lemondronor.foo :as foo] [com.lemonodor.foo.io :as foo.io])</code></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Przemysław Wojnowski</title>
+		<link>https://stuartsierra.com/2015/05/10/clojure-namespace-aliases/comment-page-1#comment-54628</link>
+		<dc:creator><![CDATA[Przemysław Wojnowski]]></dc:creator>
+		<pubDate>Tue, 12 May 2015 10:31:23 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=826#comment-54628</guid>
+		<description><![CDATA[Good point. &quot;core&quot; tells nothing. If core is an API for a library, then maybe it should be named &quot;api&quot;, which would make it clear. But if there are different APIs for different clients one should keep in mind Interface Segregation Principle from SOLID design and create separate namespaces for different APIs: foo.x.api, foo.y.api (or something like that).]]></description>
+		<content:encoded><![CDATA[<p>Good point. &#8220;core&#8221; tells nothing. If core is an API for a library, then maybe it should be named &#8220;api&#8221;, which would make it clear. But if there are different APIs for different clients one should keep in mind Interface Segregation Principle from SOLID design and create separate namespaces for different APIs: foo.x.api, foo.y.api (or something like that).</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: John Wiseman</title>
+		<link>https://stuartsierra.com/2015/05/10/clojure-namespace-aliases/comment-page-1#comment-54624</link>
+		<dc:creator><![CDATA[John Wiseman]]></dc:creator>
+		<pubDate>Mon, 11 May 2015 14:28:34 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=826#comment-54624</guid>
+		<description><![CDATA[&quot;Eliminate redundant words such as “core” and “clj” in aliases&quot;; This reinforces my feeling that naming your namespace &quot;core&quot; is an anti-pattern.]]></description>
+		<content:encoded><![CDATA[<p>&#8220;Eliminate redundant words such as “core” and “clj” in aliases&#8221;; This reinforces my feeling that naming your namespace &#8220;core&#8221; is an anti-pattern.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.273 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:56:37 -->
+
+<!-- Compression = gzip -->

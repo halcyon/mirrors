@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Moving the &#8216;C&#8217; in MVC</title>
+	<atom:link href="https://stuartsierra.com/2008/07/07/moving-the-c-in-mvc/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2008/07/07/moving-the-c-in-mvc</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Shaggy</title>
+		<link>https://stuartsierra.com/2008/07/07/moving-the-c-in-mvc/comment-page-1#comment-33635</link>
+		<dc:creator><![CDATA[Shaggy]]></dc:creator>
+		<pubDate>Thu, 31 Jul 2008 17:02:29 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=167#comment-33635</guid>
+		<description><![CDATA[&quot;the totally seo-hostile, inaccessible-without-js overkill variant...&quot;
+Remember guys, this is for pseudo-desktop apps so I don&#039;t really want it to be accessible. 
+I also don&#039;t think it&#039;s bad to require js. AND css. they are open standards and built into browsers.
+All you have to do is add some  content and let the users know what&#039;s going on.
+
+I&#039;d like to see some sort of sproutcore/merb hybred.
+
+.]]></description>
+		<content:encoded><![CDATA[<p>&#8220;the totally seo-hostile, inaccessible-without-js overkill variant&#8230;&#8221;<br />
+Remember guys, this is for pseudo-desktop apps so I don&#8217;t really want it to be accessible.<br />
+I also don&#8217;t think it&#8217;s bad to require js. AND css. they are open standards and built into browsers.<br />
+All you have to do is add some  content and let the users know what&#8217;s going on.</p>
+<p>I&#8217;d like to see some sort of sproutcore/merb hybred.</p>
+<p>.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: The Blog That Goes Ping &#187; Blog Archive &#187; Clipperz review</title>
+		<link>https://stuartsierra.com/2008/07/07/moving-the-c-in-mvc/comment-page-1#comment-32818</link>
+		<dc:creator><![CDATA[The Blog That Goes Ping &#187; Blog Archive &#187; Clipperz review]]></dc:creator>
+		<pubDate>Wed, 23 Jul 2008 03:57:37 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=167#comment-32818</guid>
+		<description><![CDATA[[...] while back I happened across this article on programming.reddit.com &#8212; &#8220;Moving the &#8216;C&#8217; in &#8216;MVC&#8217;&#8221; [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] while back I happened across this article on programming.reddit.com &#8212; &#8220;Moving the &#8216;C&#8217; in &#8216;MVC&#8217;&#8221; [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Dale Harvey</title>
+		<link>https://stuartsierra.com/2008/07/07/moving-the-c-in-mvc/comment-page-1#comment-31847</link>
+		<dc:creator><![CDATA[Dale Harvey]]></dc:creator>
+		<pubDate>Wed, 09 Jul 2008 10:56:04 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=167#comment-31847</guid>
+		<description><![CDATA[This is exactly the model I am developing my current application with, its a perfect fit for us, 
+
+The diagram might be misleading, in the case of couchdb where its possible to implement business rules inside the database its fine, but in the case of most databases, a scripting langauge still sits in front and handles all the REST calls, the web server simply serves static html / js / css / images, and javascript is used to populate any dynamic
+data, which are served as REST calls. 
+
+The major problem with this is that as mentioned it completely ruins accessibility, for applications that dont really mind about google and deep links dont make sense its fine, it works very well together with a distributed backends such as ec2 / slicehost. but that doesnt fit for a most web applications. Its something ive been trying to get my head around, but havent come up with a nice solution as of yet.]]></description>
+		<content:encoded><![CDATA[<p>This is exactly the model I am developing my current application with, its a perfect fit for us, </p>
+<p>The diagram might be misleading, in the case of couchdb where its possible to implement business rules inside the database its fine, but in the case of most databases, a scripting langauge still sits in front and handles all the REST calls, the web server simply serves static html / js / css / images, and javascript is used to populate any dynamic<br />
+data, which are served as REST calls. </p>
+<p>The major problem with this is that as mentioned it completely ruins accessibility, for applications that dont really mind about google and deep links dont make sense its fine, it works very well together with a distributed backends such as ec2 / slicehost. but that doesnt fit for a most web applications. Its something ive been trying to get my head around, but havent come up with a nice solution as of yet.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: AC</title>
+		<link>https://stuartsierra.com/2008/07/07/moving-the-c-in-mvc/comment-page-1#comment-31799</link>
+		<dc:creator><![CDATA[AC]]></dc:creator>
+		<pubDate>Tue, 08 Jul 2008 15:57:28 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=167#comment-31799</guid>
+		<description><![CDATA[Right, 
+So you want all your business rules coded in Javascript ?
+
+I suppose its true, one day we will all be Javascript biyatches]]></description>
+		<content:encoded><![CDATA[<p>Right,<br />
+So you want all your business rules coded in Javascript ?</p>
+<p>I suppose its true, one day we will all be Javascript biyatches</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: kL</title>
+		<link>https://stuartsierra.com/2008/07/07/moving-the-c-in-mvc/comment-page-1#comment-31789</link>
+		<dc:creator><![CDATA[kL]]></dc:creator>
+		<pubDate>Tue, 08 Jul 2008 13:53:21 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=167#comment-31789</guid>
+		<description><![CDATA[You&#039;ve just invented AJAX! (the totally seo-hostile, inaccessible-without-js overkill variant)
+
+You can even move whole MVC to the client side:
+http://280slides.com/]]></description>
+		<content:encoded><![CDATA[<p>You&#8217;ve just invented AJAX! (the totally seo-hostile, inaccessible-without-js overkill variant)</p>
+<p>You can even move whole MVC to the client side:<br />
+<a href="http://280slides.com/" rel="nofollow">http://280slides.com/</a></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Andrew</title>
+		<link>https://stuartsierra.com/2008/07/07/moving-the-c-in-mvc/comment-page-1#comment-31788</link>
+		<dc:creator><![CDATA[Andrew]]></dc:creator>
+		<pubDate>Tue, 08 Jul 2008 13:30:14 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=167#comment-31788</guid>
+		<description><![CDATA[Sounds really good... I&#039;d love to see a framework built on this (preferably ruby :-) ).]]></description>
+		<content:encoded><![CDATA[<p>Sounds really good&#8230; I&#8217;d love to see a framework built on this (preferably ruby :-) ).</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Robert</title>
+		<link>https://stuartsierra.com/2008/07/07/moving-the-c-in-mvc/comment-page-1#comment-31783</link>
+		<dc:creator><![CDATA[Robert]]></dc:creator>
+		<pubDate>Tue, 08 Jul 2008 12:28:40 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=167#comment-31783</guid>
+		<description><![CDATA[Have a look at Sproutcore.com and what&#039;s going on at 280North with their 280Slides web app.]]></description>
+		<content:encoded><![CDATA[<p>Have a look at Sproutcore.com and what&#8217;s going on at 280North with their 280Slides web app.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Pieter</title>
+		<link>https://stuartsierra.com/2008/07/07/moving-the-c-in-mvc/comment-page-1#comment-31779</link>
+		<dc:creator><![CDATA[Pieter]]></dc:creator>
+		<pubDate>Tue, 08 Jul 2008 11:26:37 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=167#comment-31779</guid>
+		<description><![CDATA[Interesting idea. Have you seen http://javascriptmvc.com/index.html. This framework might take it to the extreme, but might potentially be a step in the direction you are suggesting.]]></description>
+		<content:encoded><![CDATA[<p>Interesting idea. Have you seen <a href="http://javascriptmvc.com/index.html" rel="nofollow">http://javascriptmvc.com/index.html</a>. This framework might take it to the extreme, but might potentially be a step in the direction you are suggesting.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Sanny Sanoff</title>
+		<link>https://stuartsierra.com/2008/07/07/moving-the-c-in-mvc/comment-page-1#comment-31777</link>
+		<dc:creator><![CDATA[Sanny Sanoff]]></dc:creator>
+		<pubDate>Tue, 08 Jul 2008 10:12:55 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=167#comment-31777</guid>
+		<description><![CDATA[this is what GWT is about.]]></description>
+		<content:encoded><![CDATA[<p>this is what GWT is about.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stephan Schmidt</title>
+		<link>https://stuartsierra.com/2008/07/07/moving-the-c-in-mvc/comment-page-1#comment-31776</link>
+		<dc:creator><![CDATA[Stephan Schmidt]]></dc:creator>
+		<pubDate>Tue, 08 Jul 2008 10:02:58 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=167#comment-31776</guid>
+		<description><![CDATA[Using OpenAJAX Hub as a JS message bus.
+
+http://www.openajax.org/member/wiki/OpenAjax_Hub_1.0_Specification
+
+Peace
+-stephan]]></description>
+		<content:encoded><![CDATA[<p>Using OpenAJAX Hub as a JS message bus.</p>
+<p><a href="http://www.openajax.org/member/wiki/OpenAjax_Hub_1.0_Specification" rel="nofollow">http://www.openajax.org/member/wiki/OpenAjax_Hub_1.0_Specification</a></p>
+<p>Peace<br />
+-stephan</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.300 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:02:06 -->
+
+<!-- Compression = gzip -->

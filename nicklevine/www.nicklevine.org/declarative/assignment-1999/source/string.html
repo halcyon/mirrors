@@ -1,0 +1,51 @@
+MODULE string;
+
+
+
+FROM InOut      IMPORT WriteLn, WriteString, WriteCard, Read, Write;
+FROM Terminal   IMPORT Goto, ClrScreen;
+FROM RealInOut  IMPORT ReadReal, WriteReal;
+
+VAR
+    length, dlength : CARDINAL;
+    string : CHAR;
+
+BEGIN
+    ClrScreen;
+
+    Goto (1,20);
+    WriteString ('______________________________');
+    WriteLn;
+    Goto (2,20);
+    WriteString ('Welcome to the String Examiner');
+    WriteLn;
+    Goto (3,20);
+    WriteString ('______________________________');
+    WriteLn;
+    WriteLn;
+    WriteString ('Please enter the String you wish to process,');
+    WriteLn;
+    WriteString ('To finish the string, finish with a .');
+    WriteLn;
+    WriteLn;
+
+    REPEAT
+        Read(string);
+        Write(string);
+        length := length + 1
+    UNTIL string = ('.');
+
+    length := length - 1;
+    Goto (9,0);
+    FOR dlength := 1 TO length DO
+        WriteCard (dlength,0);
+        WriteString (' ')
+    END;
+
+    WriteLn;
+    WriteLn;
+    WriteString ('The number of characters in the string');
+    WriteLn;
+    WriteString ('imputed is: ');
+    WriteCard (length,0)
+    END string.

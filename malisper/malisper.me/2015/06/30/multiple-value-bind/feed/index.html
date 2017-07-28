@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Multiple-value-bind</title>
+	<atom:link href="http://malisper.me/2015/06/30/multiple-value-bind/feed/" rel="self" type="application/rss+xml" />
+	<link>http://malisper.me/2015/06/30/multiple-value-bind/</link>
+	<description>Case Studies in Lisp Macros</description>
+	<lastBuildDate>Thu, 14 Apr 2016 08:46:03 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Andrew Kirkpatrick</title>
+		<link>http://malisper.me/2015/06/30/multiple-value-bind/#comment-119</link>
+		<dc:creator><![CDATA[Andrew Kirkpatrick]]></dc:creator>
+		<pubDate>Fri, 10 Jul 2015 13:27:39 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=370#comment-119</guid>
+		<description><![CDATA[I understand that a benefit of multiple values is they don&#039;t cons in efficient implementations, the values being present in CPU registers for the caller to use or ignore. They certainly come in handy for communicating metadata that is not always wanted or expected, such as an error caught and suppressed by IGNORE-ERRORS.]]></description>
+		<content:encoded><![CDATA[<p>I understand that a benefit of multiple values is they don&#8217;t cons in efficient implementations, the values being present in CPU registers for the caller to use or ignore. They certainly come in handy for communicating metadata that is not always wanted or expected, such as an error caught and suppressed by IGNORE-ERRORS.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: John Cowan</title>
+		<link>http://malisper.me/2015/06/30/multiple-value-bind/#comment-68</link>
+		<dc:creator><![CDATA[John Cowan]]></dc:creator>
+		<pubDate>Wed, 08 Jul 2015 00:59:08 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=370#comment-68</guid>
+		<description><![CDATA[In most languages, a 1-tuple is the same as a single value.  In Python, this is not so, and &lt;code&gt;x = f()&lt;/code&gt; where &lt;code&gt;f&lt;/code&gt; now returns multiple values will cause &lt;i&gt;x&lt;/i&gt; to have a tuple value.
+
+Scheme does not support the full strength of &lt;code&gt;multiple-value-call&lt;/code&gt;, because there can only be one sender of values rather than an arbitrary number as CL allows.  On the good side, &lt;code&gt;call-with-values&lt;/code&gt; is a procedure rather than a macro.  The first argument is a thunk which is invoked, and then all its results are passed to the second argument, which is a procedure that can accept that many arguments.  It&#039;s trivial to write a two-argument version of the &lt;code&gt;multiple-value-call&lt;/code&gt; macro on top of this.]]></description>
+		<content:encoded><![CDATA[<p>In most languages, a 1-tuple is the same as a single value.  In Python, this is not so, and <code>x = f()</code> where <code>f</code> now returns multiple values will cause <i>x</i> to have a tuple value.</p>
+<p>Scheme does not support the full strength of <code>multiple-value-call</code>, because there can only be one sender of values rather than an arbitrary number as CL allows.  On the good side, <code>call-with-values</code> is a procedure rather than a macro.  The first argument is a thunk which is invoked, and then all its results are passed to the second argument, which is a procedure that can accept that many arguments.  It&#8217;s trivial to write a two-argument version of the <code>multiple-value-call</code> macro on top of this.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Jean-Philippe Paradis</title>
+		<link>http://malisper.me/2015/06/30/multiple-value-bind/#comment-60</link>
+		<dc:creator><![CDATA[Jean-Philippe Paradis]]></dc:creator>
+		<pubDate>Sun, 05 Jul 2015 23:04:04 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=370#comment-60</guid>
+		<description><![CDATA[I don&#039;t think any discussion of multiple-values, perhaps even an introductory one, is complete without at least mentioning MULTIPLE-VALUE-CALL. It is the primitive and is truly mind-expanding. MULTIPLE-VALUE-BIND is (at least conceptually) defined in terms of it, as is MULTIPLE-VALUE-LIST.
+
+As for using VALUES with a single argument to force the returning of only the primary value among multiple values, while it&#039;s what has been used traditionally I prefer to use IDENTITY as that makes the code even more clear because IDENTITY always accepts and returns only a single argument (so unlike VALUES you don&#039;t have to check how many arguments are given). If you see (identity foo) you can immediately assume that the code wants to evaluate FOO and then return only the primary value (or NIL if no values).]]></description>
+		<content:encoded><![CDATA[<p>I don&#8217;t think any discussion of multiple-values, perhaps even an introductory one, is complete without at least mentioning MULTIPLE-VALUE-CALL. It is the primitive and is truly mind-expanding. MULTIPLE-VALUE-BIND is (at least conceptually) defined in terms of it, as is MULTIPLE-VALUE-LIST.</p>
+<p>As for using VALUES with a single argument to force the returning of only the primary value among multiple values, while it&#8217;s what has been used traditionally I prefer to use IDENTITY as that makes the code even more clear because IDENTITY always accepts and returns only a single argument (so unlike VALUES you don&#8217;t have to check how many arguments are given). If you see (identity foo) you can immediately assume that the code wants to evaluate FOO and then return only the primary value (or NIL if no values).</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: malisper</title>
+		<link>http://malisper.me/2015/06/30/multiple-value-bind/#comment-59</link>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+		<pubDate>Sun, 05 Jul 2015 21:36:57 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=370#comment-59</guid>
+		<description><![CDATA[You are right about the output-parameter system in a language which supports optional arguments provides the same functionality. I&#039;m just trying to understand how tuples are a win. If you have a function that returns a single value and want to change it to one that returns a tuple, doesn&#039;t all of the code that expects a single value have to be changed to expect a tuple?]]></description>
+		<content:encoded><![CDATA[<p>You are right about the output-parameter system in a language which supports optional arguments provides the same functionality. I&#8217;m just trying to understand how tuples are a win. If you have a function that returns a single value and want to change it to one that returns a tuple, doesn&#8217;t all of the code that expects a single value have to be changed to expect a tuple?</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: John Cowan</title>
+		<link>http://malisper.me/2015/06/30/multiple-value-bind/#comment-55</link>
+		<dc:creator><![CDATA[John Cowan]]></dc:creator>
+		<pubDate>Sun, 05 Jul 2015 18:37:49 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=370#comment-55</guid>
+		<description><![CDATA[True.  That&#039;s where the tuple system is a win, but it is heavier-weight because it is first-class.  The output-parameter system also works with coupling, provided the language has static or dynamic overloading on arity.  Googling shows that Go has Scheme-style multiple values; Lua has CL-style multiple values; Octave has output parameters; Ruby returns multiple values as an array.
+
+Fare:  Scheme now has &lt;code&gt;let-values&lt;/code&gt; and &lt;code&gt;let*-values&lt;/code&gt;, as well as &lt;code&gt;define-values&lt;/code&gt; (which inherently conses, unless it is primitive).]]></description>
+		<content:encoded><![CDATA[<p>True.  That&#8217;s where the tuple system is a win, but it is heavier-weight because it is first-class.  The output-parameter system also works with coupling, provided the language has static or dynamic overloading on arity.  Googling shows that Go has Scheme-style multiple values; Lua has CL-style multiple values; Octave has output parameters; Ruby returns multiple values as an array.</p>
+<p>Fare:  Scheme now has <code>let-values</code> and <code>let*-values</code>, as well as <code>define-values</code> (which inherently conses, unless it is primitive).</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: malisper</title>
+		<link>http://malisper.me/2015/06/30/multiple-value-bind/#comment-54</link>
+		<dc:creator><![CDATA[malisper]]></dc:creator>
+		<pubDate>Sun, 05 Jul 2015 17:10:23 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=370#comment-54</guid>
+		<description><![CDATA[Almost all of the kinds of multiple values you mention increase coupling between the caller and callee. If you suddenly decide that you want the callee to return an additional value, you have to change all of the callers to ignore it. Although, I do like how Guile and NexJ signal an error when returning zero values to a function that expects some.]]></description>
+		<content:encoded><![CDATA[<p>Almost all of the kinds of multiple values you mention increase coupling between the caller and callee. If you suddenly decide that you want the callee to return an additional value, you have to change all of the callers to ignore it. Although, I do like how Guile and NexJ signal an error when returning zero values to a function that expects some.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: John Cowan</title>
+		<link>http://malisper.me/2015/06/30/multiple-value-bind/#comment-53</link>
+		<dc:creator><![CDATA[John Cowan]]></dc:creator>
+		<pubDate>Sun, 05 Jul 2015 16:41:53 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=370#comment-53</guid>
+		<description><![CDATA[Multiple values definitely aren&#039;t unique.  Scheme has them exactly like Common Lisp, except that what happens when the caller isn&#039;t set up to receive the number of values that the callee returns.  Some Schemes use the Common Lisp rules (truncate to one value or supply a value out of nowhere), some throw an error, some silently misbehave (leading to a later error): &lt;a href=&quot;http://trac.sacrideo.us/wg/wiki/MultipleValues&quot; rel=&quot;nofollow&quot;&gt;details here&lt;/a&gt;.  This gives implementers more choices while requiring users to be more careful.
+
+In Python, ML, and Haskell, multiple values are a first-class construct called tuples, which can be thought of in Lisp terms as immutable lists or structs without field names.
+
+In Ada, Algol 68, and C#, the convention is to label certain parameters to a function as output parameters; the actual arguments passed must be places in the sense of &lt;code&gt;setf&lt;/code&gt;.   Assignment to the output parameters within a function causes the places to be side-effected.  Internally this is typically implemented using boxed references.]]></description>
+		<content:encoded><![CDATA[<p>Multiple values definitely aren&#8217;t unique.  Scheme has them exactly like Common Lisp, except that what happens when the caller isn&#8217;t set up to receive the number of values that the callee returns.  Some Schemes use the Common Lisp rules (truncate to one value or supply a value out of nowhere), some throw an error, some silently misbehave (leading to a later error): <a href="http://trac.sacrideo.us/wg/wiki/MultipleValues" rel="nofollow">details here</a>.  This gives implementers more choices while requiring users to be more careful.</p>
+<p>In Python, ML, and Haskell, multiple values are a first-class construct called tuples, which can be thought of in Lisp terms as immutable lists or structs without field names.</p>
+<p>In Ada, Algol 68, and C#, the convention is to label certain parameters to a function as output parameters; the actual arguments passed must be places in the sense of <code>setf</code>.   Assignment to the output parameters within a function causes the places to be side-effected.  Internally this is typically implemented using boxed references.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: François-René Rideau</title>
+		<link>http://malisper.me/2015/06/30/multiple-value-bind/#comment-51</link>
+		<dc:creator><![CDATA[François-René Rideau]]></dc:creator>
+		<pubDate>Sun, 05 Jul 2015 05:16:53 +0000</pubDate>
+		<guid isPermaLink="false">http://malisper.me/?p=370#comment-51</guid>
+		<description><![CDATA[I find that use of multiple-value-bind tends to quickly get your code indented far to the right. Many people have tried to address this issue by inventing mother-of-all macros that generalize let* into accepting arbitrary binders. Marco Baringer once taught me to instead use a generic nest macro that reuses existing binders without causing runaway indentation, by automatically nesting all expressions. It&#039;s now part of uiop and fare-utils.]]></description>
+		<content:encoded><![CDATA[<p>I find that use of multiple-value-bind tends to quickly get your code indented far to the right. Many people have tried to address this issue by inventing mother-of-all macros that generalize let* into accepting arbitrary binders. Marco Baringer once taught me to instead use a generic nest macro that reuses existing binders without causing runaway indentation, by automatically nesting all expressions. It&#8217;s now part of uiop and fare-utils.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.085 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-01 12:23:39 -->

@@ -1,0 +1,562 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-8.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:49 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Lecture Eight</title>
+</head>
+<body>
+
+<center><b><font size=+3>Declarative Languages</font></b>
+<br><b><font size=+3>Lecture #8</font></b></center>
+
+<p><b>Purpose: Equality, hash-tables and blocks.</b>
+<p><b>8.1 Introduction: equality</b>
+<p>We encountered earlier various predicates for comparing specific types
+of lisp object:
+<ul>
+<li>
+<tt>=</tt> for numbers (compares any number of objects)</li>
+
+<li>
+<tt>char=</tt> for characters (compares any number of objects)</li>
+
+<li>
+<tt>string=</tt> and <tt>string-equal</tt> for strings (compares precisely
+two objects)</li>
+</ul>
+and one predicate
+<ul>
+<li>
+<tt>equal</tt> (compares precisely two objects)</li>
+</ul>
+for comparing general lisp objects. I have assured you that if two objects
+print the same then they are <tt>equal</tt>. Now let's get closer to the
+truth, by introducing two further general equality predicates (each taking
+precisely two arguments): the functions <tt>eq</tt> and
+<tt>eql</tt>.
+<p><b>8.2 Equality and eq</b>
+<p>Two objects are <tt>eq</tt> only if they are in fact the <i>same object</i>.
+Quite how this works depends on their types. Obviously, if the objects
+have different types they cannot be the same object and so they cannot
+be <tt>eq</tt>.
+<ul>
+<li>
+If two <u>symbols</u> print the same then they are defined to be identical
+and hence they are guaranteed to be
+<tt>eq</tt>:</li>
+
+<ul><tt>(mapcar 'eq '(foo t nil :wibble) '(foo t nil :wibble))&nbsp; =>&nbsp;
+(t t t t)</tt></ul>
+
+<li>
+If two <u>integers</u> have the same value and are <tt>fixnum</tt> then
+they are
+<tt>eq</tt>. To be <i>fixnum</i>, an integer has to be between
+the constants <tt>most-negative-fixnum</tt> and <tt>most-positive-fixnum</tt>
+inclusive. The values of these two numbers is implementation-dependent.</li>
+
+<ul>
+<li>
+In LispWorks for Windows, these values are -2<sup>23</sup> and +2<sup>23</sup>-1.
+Most implementations these days go higher than that in the fixnum range
+(typically to 2<sup>28
+</sup>or 2<sup>29</sup>).</li>
+</ul>
+
+<li>
+In theory, you cannot guarantee that typing in the same <u>character</u>
+twice will result in two <tt>eq</tt> objects: eg</li>
+
+<ul><tt>(eq #\Space #\Space)</tt></ul>
+may turn out to be false. In practice however no implementation worth its
+salt will harass you like this and for LispWorks the above expression is
+true.
+<li>
+With <u>any other objects</u>, looking the same is no guarantee of <tt>eq</tt>.
+Typing in two identical looking <i>bignums</i> (that's an integer which
+is not a fixnum), or floats, or lists, or strings, or vectors, will result
+in numbers which are <tt>=</tt>, or in sequences which have the same members,
+but it has generated different structures with different addresses in memory
+and these will not be <tt>eq</tt>.</li>
+
+<ul><tt>(eq 1.0 1.0)&nbsp; =>&nbsp; nil</tt>
+<br><tt>(eq 8388608 8388608)&nbsp; =>&nbsp; nil&nbsp; ; but may be t in
+other implementations</tt>
+<br><tt>(eq '(a b c) '(a b c))&nbsp; =>&nbsp; nil</tt>
+<br><tt>(eq "this takes some thought" "this takes some thought")&nbsp;
+=>&nbsp; nil</tt></ul>
+</ul>
+If you have two pointers to the same thing then they will be <tt>eq</tt>.
+For example, <tt>(eq something something)</tt> is true no matter what value
+<tt>something</tt>
+has. The following function too will always return true (for any argument):
+<blockquote><tt>(defun always-true (thing)</tt>
+<br><tt>&nbsp; (let* ((my-list (list thing)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (eq thing (first my-list))))</tt></blockquote>
+Note that if a function generates new objects, then these cannot be <tt>eq</tt>
+to each other:
+<blockquote><tt>CL-USER 21 > (let* ((things nil))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(dotimes (i 2)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(push '(t) things))&nbsp;&nbsp;&nbsp; ; pushing the same object each time</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(eq (first things)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(second things)))</tt>
+<br><tt>T</tt>
+<p><tt>CL-USER 22 > (let* ((things nil))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(dotimes (i 2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+; pushing s new object each time</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(push (list t) things))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(eq (first things)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(second things)))</tt>
+<br><tt>NIL</tt>
+<p><tt>CL-USER 23 ></tt></blockquote>
+This includes all functions (e.g. <tt>copy-list</tt>) which are defined
+as returning a <i>fresh copy</i> of some object, for example:
+<p><tt>&nbsp;&nbsp;&nbsp; (let* ((foo '(1 2 3 4))) (equal foo (butlast
+foo 0)))&nbsp; =>&nbsp; t</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (let* ((foo '(1 2 3 4))) (eq foo (butlast foo
+0)))&nbsp;&nbsp;&nbsp;&nbsp; =>&nbsp; nil</tt>
+<p><b>8.3 Equality and eql</b>
+<p>Two objects are <tt>eql</tt> if
+<ul>
+<li>
+they are <tt>eq</tt> or</li>
+
+<li>
+they are both <u>numbers</u> of the same type and the same value or</li>
+
+<li>
+they are both <u>characters</u> that represent the same character (as noted
+above, this distinction is not worth bothering with and you can in practice
+assume that two identical looking characters are <tt>eql</tt> simply because
+they are <tt>eq</tt>).</li>
+</ul>
+A large number of lisp functions use a predicate for comparing objects;
+this tends to be specified as an optional argument and the default value
+is typically <tt>eql</tt> (see section 17.2.1 of the HyperSpec). As an
+example, consider the function <tt>position</tt> which takes an object
+and a sequence, and returns the first index into the sequence at which
+the object was found (or <tt>nil</tt> if it was not found):
+<blockquote><tt>(position 'wibble '(foo bar wibble baz wombat))&nbsp; =>&nbsp;
+2</tt></blockquote>
+The objects are compared by <tt>eql</tt>, unless another predicate is handed
+in as the value to the <tt>:test </tt>argument
+<blockquote><tt>(position "wibble" '("foo" "bar" "wibble" "baz" "wombat"))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =>&nbsp; nil</tt>
+<br><tt>(position "wibble" '("foo" "bar" "wibble" "baz" "wombat") :test
+'string=)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =>&nbsp; 2</tt></blockquote>
+Related to <tt>position</tt> is the function <tt>position-if</tt> which
+takes a predicate (of one argument) and a sequence:
+<blockquote><tt>(position-if (lambda (x) (and (numberp x) (plusp x) (evenp
+x)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'(digits of pi are 3 1 4 1 5 9))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =>&nbsp; 6</tt></blockquote>
+and related to both of these are <tt>find</tt> and <tt>find-if,</tt> which
+return the item which was found rather than its position.
+<blockquote><tt>(let ((bits '("foo" "bar" "wibble" "baz" "wombat")))</tt>
+<br><tt>&nbsp; (eq (third bits)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "wibble"))&nbsp; =>&nbsp; nil</tt>
+<p><tt>(let ((bits '("foo" "bar" "wibble" "baz" "wombat")))</tt>
+<br><tt>&nbsp; (eq (third bits)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (find "wibble" bits :test 'string=)))&nbsp;
+=>&nbsp; t</tt></blockquote>
+<b>8.4 Revisiting equal</b>
+<p>Two objects are <tt>equal</tt> if
+<ul>
+<li>
+they are <tt>eql</tt> or</li>
+
+<li>
+they are <tt><u>strings</u></tt>, of the same length, which match (by <tt>eql</tt>)
+character for character or</li>
+
+<li>
+they are both of type <tt><u>cons</u></tt> and</li>
+
+<ol TYPE=a>
+<li>
+the two <tt>car</tt>s are <tt>equal</tt> and</li>
+
+<li>
+the two <tt>cdr</tt>s are <tt>equal</tt></li>
+</ol>
+
+<li>
+(there are a couple of further conditions under which this predicate is
+true but we haven't met the objects they apply to yet)</li>
+</ul>
+<b>8.5 Hash-tables (an excuse for knowing about eql)</b>
+<p>We know about the following general (in the sense that they can contain
+any lisp objects) data structures:
+<ul>
+<li>
+<tt>cons</tt>: used for building lists and trees; good for flexibility
+as you can add or remove cells very easily; slow access over long sequence</li>
+
+<li>
+<tt>vector</tt>: one-dimensional array; inflexible but fast access no matter
+how large the sequence</li>
+
+<li>
+<tt>structure</tt>: user-defined type; behaves like a vector whose fields
+are named rather than numbered</li>
+</ul>
+We now introduce the <tt>hash-table</tt>.&nbsp; This is a data structure
+whose indices may be general lisp objects, which offers flexibility similar
+to lists and which delivers lookup times intermediate between lists and
+vectors.
+<br>&nbsp;
+<table BORDER CELLPADDING=10 COLS=6 WIDTH="100%" >
+<tr ALIGN=CENTER VALIGN=TOP>
+<td><b>Name</b></td>
+
+<td><b>Index by</b></td>
+
+<td><b>Flexibility</b></td>
+
+<td><b>Data ordered into sequence?</b></td>
+
+<td><b>Speed</b></td>
+
+<td><b>Use</b></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>cons</tt></td>
+
+<td><tt>first</tt> and <tt>rest</tt></td>
+
+<td ALIGN=CENTER>good</td>
+
+<td ALIGN=CENTER>yes</td>
+
+<td>slow access over long sequence</td>
+
+<td>building lists and binary trees</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>vector</tt></td>
+
+<td>numerical index</td>
+
+<td ALIGN=CENTER>poor</td>
+
+<td ALIGN=CENTER>yes</td>
+
+<td>fast, independent of length of sequence</td>
+
+<td>random lookup and rapid traversal of large data sets</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>structure</tt></td>
+
+<td>field name (not available at run-time)</td>
+
+<td ALIGN=CENTER>poor</td>
+
+<td ALIGN=CENTER>no</td>
+
+<td>fast, independent of number of fields</td>
+
+<td>user-defined types</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>hash-table</tt></td>
+
+<td>any lisp object</td>
+
+<td ALIGN=CENTER>good</td>
+
+<td ALIGN=CENTER>no</td>
+
+<td>intermediate</td>
+
+<td>dictionaries, general object maps</td>
+</tr>
+</table>
+
+<p>If we weren't bothered about lookup times, we could implement something
+like this with lists:
+<ul><tt>CL-USER 11 > (defun get-from-list (index list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(dolist (list-member list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(let* ((maybe-index (first list-member))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(maybe-value (second list-member)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(if (equal index maybe-index)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(return maybe-value)))))</tt>
+<br><tt>GET-FROM-LIST</tt>
+<p><tt>CL-USER 12 > (defparameter phone-numbers</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+'(("Nick" 2330) ("Martin R" 2356) ("Bob" 2342)))</tt>
+<br><tt>PHONE-NUMBERS</tt>
+<p><tt>CL-USER 13 > (get-from-list "Bob" phone-numbers)</tt>
+<br><tt>2342</tt>
+<p><tt>CL-USER 14 > (get-from-list "Ethel the Aardvark" phone-numbers)</tt>
+<br><tt>NIL</tt>
+<p><tt>CL-USER 15 ></tt></ul>
+(and with more, slightly nastier code to add, reset and remove the phone
+numbers). Using hash-tables hides the above nastiness and is reasonably
+fast even when it gets large.
+<p>To make a hash-table, call the function <tt>make-hash-table</tt>. To
+look values up in the table use the function <tt>gethash</tt> (setfable).
+To remove a single entry altogether use <tt>remhash</tt>, and to empty
+a hash-table completely call <tt>clrhash</tt>. For example:
+<ul><tt>CL-USER 9 > (defparameter *table* (make-hash-table :test 'equal))</tt>
+<br><tt>*TABLE*</tt>
+<p><tt>CL-USER 10 > (dolist (pair '(("Nick" 2330) ("Martin R" 2356) ("Bob"
+2342)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(let* ((key (first pair))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(value (second pair)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(setf (gethash key *table*) value)))</tt>
+<br><tt>NIL</tt>
+<p><tt>CL-USER 11 > (gethash "Bob" *table*)</tt>
+<br><tt>2342</tt>
+<br><tt>T</tt>
+<p><tt>CL-USER 12 > (gethash "Ethel the Aardvark" *table*)</tt>
+<br><tt>NIL</tt>
+<br><tt>NIL</tt>
+<p><tt>CL-USER 13 ></tt></ul>
+Notes:
+<ul>
+<li>
+<tt>make-hash-table</tt> takes a keyword argument <tt>:test </tt>which
+determines how keys (i.e. the <i>indices</i>) will be compared. You do
+not have an open choice of any predicate here: you are limited to <tt>eq
+eql equal </tt>and <tt>equalp</tt> (look this last one up if you feel a
+burning urge to do so). The default test is, as ever, <tt>eql</tt>.</li>
+
+<li>
+<tt>gethash</tt> is like <tt>nth</tt> (and unlike <tt>aref</tt>): it takes
+the key as first argument and the table comes second.</li>
+
+<li>
+<tt>gethash</tt> returns two values (like <tt>read-line</tt> did): the
+second value tells you whether anything was found or not. This allows you
+to distinguish between finding <tt>nil</tt> and not finding anything (in
+both cases, the <i>primary</i> return value is <tt>nil</tt>).</li>
+
+<li>
+<tt>(setf gethash)</tt> can be used both to add new values to the table
+(as in the above example) and to reset existing values.</li>
+</ul>
+Once you've built a hash-table, a useful function for traversing it is
+<tt>maphash</tt>,
+which takes a function and hash-table as arguments. The function is invoked
+repeatedly for each entry in the table, with two arguments (a key and the
+corresponding value). For example:
+<ul><tt>CL-USER 13 > (maphash (lambda (name number)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(format t "~&amp;~a is on extension ~a"</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+name number))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+*table*)</tt>
+<br><tt>Nick is on extension 2330</tt>
+<br><tt>Martin R is on extension 2356</tt>
+<br><tt>Bob is on extension 2342</tt>
+<br><tt>NIL</tt>
+<p><tt>CL-USER 14 ></tt></ul>
+Note:
+<ul>
+<li>
+the order in which the entries are processed by <tt>maphash</tt> is implementation
+defined and may even not be the same twice running.</li>
+
+<li>
+<tt>maphash</tt> always returns <tt>nil</tt>.</li>
+</ul>
+<b>8.6 Blocks</b>
+<p>We have met the macro <tt>return</tt> which allows "premature" exit
+from the various looping macros (<tt>dotimes dolist loop</tt> etc). A generalization
+of this is the special operator <tt>return-from</tt> which in particular
+allows early exit from any (named) function.
+<br>&nbsp;
+<blockquote><tt>CL-USER 14 > (defun one-value (table)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(maphash (lambda (key value)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(declare (ignore key))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(return-from one-value</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+value))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+table))</tt>
+<br><tt>ONE-VALUE</tt>
+<p><tt>CL-USER 15 > (one-value *table*)</tt>
+<br><tt>2330</tt>
+<p><tt>CL-USER 16 ></tt></blockquote>
+The above (admittedly somewhat pointless) function returns one value extracted
+from the hash-table supplied as its argument.
+<ul>
+<li>
+When we're within the body of a (named) function, we are said to also be
+inside a <i>block</i> with the same name. So while we are in the body of
+<tt>one-value</tt>,
+we are inside a block named <tt>one-value</tt>.</li>
+
+<li>
+Within a block, you can leave at any time with the special operator <tt>return-from</tt>.
+It takes two arguments: the first (not evaluated) is the name of the block
+you want to leave, the second (evaluated; optional and defaulting to <tt>nil</tt>)
+is the value to return.</li>
+
+<li>
+The looping macros (<tt>dotimes dolist loop</tt> etc) establish a block
+named <tt>nil</tt>, so you could exit them by calling <tt>(return-from
+nil)</tt>. The macro <tt>return</tt> is shorthand for this.</li>
+
+<li>
+The above examples of blocks (established by <tt>defun</tt> or by the looping
+macros) are said to be <i>implicit</i>, because they are created behind
+your back. You can establish blocks of your own, at any point in your code,
+using the special operator <tt>block</tt> (look it up in the HyperSpec).</li>
+
+<li>
+The special operator <tt>return-from</tt> is said to be <i>lexical</i>
+in scope - it only works within the textual confines of the block it refers
+to.</li>
+</ul>
+Also in the above code you should be aware of the following:
+<ul>
+<li>
+In the lambda form in <tt>one-value</tt>, two arguments have to be supplied
+(because that's how <tt>maphash</tt> works) but only one is actually wanted
+(or used). The <tt>(declare (ignore ...))</tt> form is included immediately
+after the parameter list to prevent compiler warning along the lines of</li>
+
+<ul><tt>;;;*** Warning in ONE-VALUE: KEY is bound but not referenced</tt></ul>
+Declarations can appear after function parameter lists, after the bindings
+in <tt>let*</tt>, and in many other macros and special operators - see
+figure 3-23 in the HyperSpec for the full list.</ul>
+<b>8.7 Practical session / Suggested activity</b>
+<p>Convert last week's work to store student records in a hash-table (accessible
+by name) rather than in a list. Write functions to add a new student, to
+find the record of a student with a given name, and to delete a student.
+<p>As before, write functions to name the three students who have the highest
+marks, or to spot which lecturer fails most of their students.
+<p>Use <tt>return-from</tt> in a function to return the SID of any student
+who hasn't attmpted any modules at all.
+<p>Comment on which data stucture was "best". [Define "best".]
+<p><b>8.8&nbsp; Further reading &amp; exercises</b>
+<ul>
+<li>
+Look up the definitions of the functions <tt>eq</tt>, <tt>eql</tt> and
+<tt>equal</tt>
+in the HyperSpec. Try out many examples. Make really sure you appreciate
+the difference between them.</li>
+
+<li>
+Either: justify carefully the statement that "if two objects print the
+same then they are
+<tt>equal</tt>." or give a simple counter-example. Consider
+vectors.</li>
+
+<li>
+Define your own version of <tt>equal</tt> (call it <tt>my-equal</tt>) in
+terms of <tt>eql</tt>; define <tt>eql</tt> in terms of <tt>eq</tt>, <tt>=</tt>
+and <tt>char=</tt>.</li>
+
+<li>
+Actually, <tt>position</tt> takes more keyword arguments than the one (<tt>:test</tt>)
+given above. Look them up and try them out.</li>
+
+<li>
+To see multiple-values taken to a mild excess, call the function <tt>(get-decoded-time)</tt>.&nbsp;
+If you can't figure out what the result means, try calling it once or twice
+more (and then, if necessary, either ask me or look it up). Read section
+5.5 of Graham and implement a function which prints today's date, or the
+time, or both. (You might attempt to emulate the format of UNIX date(1),
+eg <tt>"Fri Sep 15 14:12:41 BST 2000"</tt>.)</li>
+
+<li>
+Write a function of two arguments which simply returns its first argument.
+Defining your function should not cause any warnings to be signalled.</li>
+
+<li>
+Redefine function <tt>position-three</tt> (section 5.4) to use <tt>return-from</tt>
+rather than <tt>return</tt>. Do this twice: first returning from a block
+named <tt>nil</tt>, then returning instead from a block named <tt>position-three</tt>.
+Does either of these new functions give you anything which the original
+didn't?</li>
+
+<li>
+Define a function which doubles every member of a list. If any member of
+that list is not a number, simply return <tt>nil</tt> from your function.</li>
+
+<li>
+Suppose by some ghastly misunderstanding there was a lisp where the implementers
+had forgotten to include the type <tt>vector</tt> or any operations based
+on it.</li>
+
+<br>See if you can use hash-tables to plug the gap, implementing enough
+of the basics (<tt>my-make-array</tt>,&nbsp; <tt>my-length</tt>, <tt>my-aref</tt>
+and <tt>my-setf-aref </tt>at the very least) to prove that the concept
+works. Make sure that <tt>my-aref</tt> checks that the index is within
+bounds (you can store the upper-bound in the hash-table).
+<li>
+<tt>Jon L White (jonl@ptolemy.arc.nasa.gov) writes:</tt></li>
+
+<br><tt>></tt>
+<br><tt>> I showed up at MIT around the summer of 1966 (as a cross-registered</tt>
+<br><tt>> graduate student from Harvard) and the FOO, of FOO and BAR, was
+generally</tt>
+<br><tt>> recognized then as a variant, and a softening, of the oft-used
+phrases</tt>
+<br><tt>> from the American Military organizations "Situation Normal: All
+F***ed Up",</tt>
+<br><tt>> for "Snafu"&nbsp; and "F***ed Up Beyond All Recognition" for
+"Fubar"</tt>
+<br><tt>></tt>
+<br><tt>> No one has---to my knowledge---verified this as an accurate origin;
+merely</tt>
+<br><tt>> that the story, as told, has it roots probably prior to the Vietnam
+War,</tt>
+<br><tt>> and maybe even going back before the second World War.&nbsp;
+If it is _true_,</tt>
+<br><tt>> then one must wonder where the ancient "Phooey" came from?&nbsp;
+Maybe the</tt>
+<br><tt>> above explanations are merely the first of the rounds of urban
+legends.</tt>
+<br><tt>></tt>
+<br><tt>> So.&nbsp; The interesting question to ask your students is this:</tt>
+<br><tt>></tt>
+<br><tt>>&nbsp;&nbsp; Let Foo and Bar be the first two metavariables; now,
+name the third.</tt>
+<br><tt>></tt>
+<br><tt>> -- JonL --</tt></ul>
+
+<div align=right>Copyright (C) <a href="mailto:ndl@ravenbrook.com">Nick
+Levine</a> 1999. All rights reserved.
+<br>Last modified 2000-09-14
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/lectures/lecture-8.html#2 $</div>
+
+<ul>&nbsp;</ul>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-8.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:49 GMT -->
+</html>

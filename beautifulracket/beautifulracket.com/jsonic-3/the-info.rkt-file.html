@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/jsonic-3/the-info.rkt-file.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:39 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Finishing moves: jsonic</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;finishing-moves-jsonic&quot;)"></div><h1 anchor="finishing-moves-jsonic" id="finishing-moves-jsonic" hyphens="none">Finishing moves: <span class="my-code" decode="exclude">jsonic</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="documentation.html">2&emsp;doc­u­men­ta­tion</a></li><li><a class="here" href="the-info.rkt-file.html">3&emsp;the info.rkt file</a></li><li><a href="the-package-server.html">4&emsp;the pack­age server</a></li><li><a href="recap.html">5&emsp;recap</a></li><li><a href="source-listing.html">6&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_8j4aW&quot;)"></div><p id="a_8j4aW">As we’ve already seen, it’s <a href="../appendix/master-recipe.html#setting-up-a-language-project">easy to install</a> a direc­tory of Racket mod­ules as a pack­age with <span class="my-code" decode="exclude">raco pkg</span>, Racket’s pack­age-man­age­ment util­ity. So if our <span class="my-code" decode="exclude">jsonic</span> direc­tory looks like this:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rbUc0&quot;)"></div><div class="highlight-container" id="a_rbUc0"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">jsonic<br/>├╴ tokenizer.rkt<br/>├╴ reader.rkt<br/>├╴ parser.rkt<br/>···</div><div class="highlight" form="false" id="a_N7Nm4"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="source"><pre>jsonic
+├╴ tokenizer.rkt
+├╴ reader.rkt
+├╴ parser.rkt
+···
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_RC8Fs&quot;)"></div><p id="a_RC8Fs">From the com­mand line, we can install it like so:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_9ebNt&quot;)"></div><div class="highlight-container" id="a_9ebNt"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; cd path/to/jsonic<br/>&gt; raco pkg install</div><div class="highlight" form="false" id="a_r2Lsu"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="source"><pre>&gt; cd path/to/jsonic
+&gt; raco pkg install
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_dEXpg&quot;)"></div><p id="a_dEXpg">Or, equiv­a­lently:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_GHHcz&quot;)"></div><div class="highlight-container" id="a_GHHcz"><div id="code_45" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; raco pkg install path/to/jsonic</div><div class="highlight" form="false" id="a_krAoC"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>&gt; raco pkg install path/to/jsonic
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk2" data-clipboard-target="#code_45" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_NdQtO&quot;)"></div><p id="a_NdQtO">One lit­tle gotcha—this vari­ant won’t work:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_lOkA3&quot;)"></div><div class="highlight-container" id="a_lOkA3"><div id="code_46" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; cd path/to<br/>&gt; raco pkg install jsonic</div><div class="highlight" form="false" id="a_kR1jk"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="source"><pre>&gt; cd path/to
+&gt; raco pkg install jsonic
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk3" data-clipboard-target="#code_46" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_zAd5V&quot;)"></div><p id="a_zAd5V">In this case, because <span class="my-code" decode="exclude">jsonic</span> doesn’t look like a direc­tory name, <span class="my-code" decode="exclude">raco pkg</span> tries to find the <span class="my-code" decode="exclude">jsonic</span> pack­age using Racket’s remote <a href="the-package-server.html">pack­age server</a>. (Which won’t work, because it doesn’t know about <span class="my-code" decode="exclude">jsonic</span>. But we’ll fix that prob­lem shortly.) In this sit­u­a­tion, we can induce <span class="my-code" decode="exclude">raco pkg</span> to use the local direc­tory like this:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Ssu6A&quot;)"></div><div class="highlight-container" id="a_Ssu6A"><div id="code_47" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; cd path/to<br/>&gt; raco pkg install ./jsonic</div><div class="highlight" form="false" id="a_COM5M"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="source"><pre>&gt; cd path/to
+&gt; raco pkg install ./jsonic
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk4" data-clipboard-target="#code_47" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;introducing-info-rkt&quot;)"></div><h3 anchor="introducing-info-rkt" class="subhead" id="introducing-info-rkt"><a href="#introducing-info-rkt">Intro­duc­ing info.rkt</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_19lfZ&quot;)"></div><p id="a_19lfZ">Recall that once we install a direc­tory as a pack­age, we can import its mod­ules into another Racket pro­gram with <span class="my-code" decode="exclude">(require jsonic/module-name)</span>. Or, if the pack­age con­tains a lan­guage, use it in a source file as <span class="my-code" decode="exclude">#lang jsonic</span>. For pro­to­typ­ing pur­poses, this suf­fices.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rVX85&quot;)"></div><p id="a_rVX85">But if we want to con­trol the instal­la­tion more pre­cisely—e.g., auto­mat­i­cally build our new <a href="documentation.html">doc­u­men­ta­tion</a>—we need to add an <span class="my-code" decode="exclude">"info.rkt"</span> file.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_LMgUe&quot;)"></div><p id="a_LMgUe">The <span class="my-code" decode="exclude">"info.rkt"</span> file con­tains meta­data that tells Racket how to han­dle the con­tents of the direc­tory. When Racket installs a pack­age, it looks for an <span class="my-code" decode="exclude">"info.rkt"</span> in the top direc­tory, and each sub­di­rec­tory it encoun­ters. If it doesn’t find one, instal­la­tion pro­ceeds by default.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_257mM&quot;)"></div><p id="a_257mM">In gen­eral, once we’re ready to share our lan­guage, we’ll want to add an <span class="my-code" decode="exclude">"info.rkt"</span> to the top direc­tory of the pack­age that refines how the pack­age is com­piled, installed, and tested.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;modules-packages-collections-and-repos&quot;)"></div><h3 anchor="modules-packages-collections-and-repos" class="subhead" id="modules-packages-collections-and-repos"><a href="#modules-packages-collections-and-repos">Mod­ules, pack­ages, col­lec­tions, and repos</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_pOKgd&quot;)"></div><p id="a_pOKgd">A Racket source file is part of sev­eral orga­ni­za­tional schemes at once. In prac­tice, these can over­lap. So let’s make sure the ter­mi­nol­ogy is clear before we move for­ward: <span class="tooltip" onclick="this.classList.toggle('tooltip_visible')"> + <span class="tooltip-inner">Hat tip to <a href="http://blog.racket-lang.org/2015/08/modules-packages-and-collections.html">Vin­cent St-Amour</a> for these expla­na­tions.</span></span></p></div><ul><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_gABc6&quot;)"></div><p id="a_gABc6">A <em><a class="explainer" href="../explainer/modules.html">mod­ule</a></em> is the basic orga­ni­za­tional unit of code. Every source file con­tains a sin­gle mod­ule at the top level. (As we know from past tuto­ri­als, the <a class="explainer" href="../explainer/lang-line.html">#lang line</a> expands into a sin­gle mod­ule expres­sion.) This is why source files in Racket are also called mod­ules.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_v8zpD&quot;)"></div><p id="a_v8zpD">A <em><a class="glossary" href="../appendix/glossary.html#package"><span class="glossary-link-text">pack­age</span></a></em> is the basic unit of code dis­tri­b­u­tion. A pack­age is a named group of mod­ules that are installed together. In our sim­ple exam­ple above, we put our mod­ules into a direc­tory called <span class="my-code" decode="exclude">jsonic</span>, and used <span class="my-code" decode="exclude">raco pkg</span> to install this as a pack­age, also called <span class="my-code" decode="exclude">jsonic</span>.</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_5Ro43&quot;)"></div><p id="a_5Ro43">A <em><a class="glossary" href="../appendix/glossary.html#collection"><span class="glossary-link-text">col­lec­tion</span></a></em> is a name­space of related mod­ules. For instance, when we say <span class="my-code" decode="exclude">(require math/statistics)</span>, we’re actu­ally ask­ing for the <span class="my-code" decode="exclude">statistics</span> mod­ule from the <span class="my-code" decode="exclude">math</span> col­lec­tion.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rT3pv&quot;)"></div><p id="a_rT3pv">What’s key is that col­lec­tions are abstract name­spaces that are inde­pen­dent of pack­ages, which con­tain the actual code mod­ules. But col­lec­tions are not “owned” by any sin­gle pack­age. Rather, any pack­age can make mod­ules avail­able under any col­lec­tion (or even mul­ti­ple col­lec­tions). So even if <span class="my-code" decode="exclude">math/statistics</span> lives in the <span class="my-code" decode="exclude">math</span> pack­age, another pack­age <span class="my-code" decode="exclude">foo-pkg</span> can pro­vide <span class="my-code" decode="exclude">math/alpha</span>, and pack­age <span class="my-code" decode="exclude">bar-pkg</span> can pro­vide <span class="my-code" decode="exclude">math/omega</span>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_0dYYC&quot;)"></div><p id="a_0dYYC">Col­lec­tion names are inferred from direc­tory struc­ture when not oth­er­wise spec­i­fied. In our sim­ple exam­ple above, when we installed the pack­age <span class="my-code" decode="exclude">jsonic</span>, <span class="my-code" decode="exclude">raco</span> impliedly used <span class="my-code" decode="exclude">jsonic</span> as the col­lec­tion name too. (But, as we’ll see below, we can over­ride this assump­tion with <span class="my-code" decode="exclude">"info.rkt"</span>.)</p></div></li><li><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_v6S93&quot;)"></div><p id="a_v6S93">A <em>repo</em> or <em>repos­i­tory</em> is the canon­i­cal loca­tion where the source files are stored (e.g., on GitHub). A pack­age offered to the pub­lic via Racket’s <a href="the-package-server.html">pack­age server</a> is asso­ci­ated with a repo or path within a repo, from which the pack­age is installed. So when we issue a com­mand like this:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_uiNnL&quot;)"></div><div class="highlight-container" id="a_uiNnL"><div id="code_48" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; raco pkg install beautiful-racket</div><div class="highlight" form="false" id="a_kAxHb"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._~3e))" class="docs" hyphens="none">&gt;</a></span> <span class="n">raco</span> <span class="n">pkg</span> <span class="n">install</span> <span class="n">beautiful-racket</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk5" data-clipboard-target="#code_48" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_YXg1f&quot;)"></div><p id="a_YXg1f">Racket con­sults the pack­age server to find the repo for the <span class="my-code" decode="exclude">beautiful-racket</span> pack­age, and down­loads the source from there.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_XAmHJ&quot;)"></div><p id="a_XAmHJ">Racket uses repos strictly to down­load source files. It oth­er­wise imposes no require­ments on the orga­ni­za­tion of repos. In many cases, a Racket pack­age will have its own repo. But one repo can also be home to mul­ti­ple pack­ages.</p></div></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Ju8wh&quot;)"></div><p id="a_Ju8wh">What can some­times make these terms con­fus­ing is that one name can be reused in sev­eral roles. For instance, con­sider our <span class="my-code" decode="exclude">jsonic</span> project:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rbUc08&quot;)"></div><div class="highlight-container" id="a_rbUc08"><div id="code_49" form="false" decode="exclude" style="font-size:0;width:0;height:0">jsonic<br/>├╴ tokenizer.rkt<br/>├╴ reader.rkt<br/>├╴ parser.rkt<br/>···</div><div class="highlight" form="false" id="a_N7Nm46"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="source"><pre>jsonic
+├╴ tokenizer.rkt
+├╴ reader.rkt
+├╴ parser.rkt
+···
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk7" data-clipboard-target="#code_49" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_aGirM&quot;)"></div><p id="a_aGirM">In this case, our pack­age is called <span class="my-code" decode="exclude">jsonic</span>, and lives in a repo called <span class="my-code" decode="exclude">jsonic</span>. When we install this with <span class="my-code" decode="exclude">raco pkg</span>, our mod­ules become part of the <span class="my-code" decode="exclude">jsonic</span> col­lec­tion. Easy.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_61Z2f&quot;)"></div><p id="a_61Z2f">A more com­plex Racket project might look like this:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_9uwk2&quot;)"></div><div class="highlight-container" id="a_9uwk2"><div id="code_50" form="false" decode="exclude" style="font-size:0;width:0;height:0">mega-repo<br/>├╴ info.rkt<br/>├╴ foo-pkg<br/>   ├╴ info.rkt<br/>   ├╴ math<br/>      ├╴ alpha.rkt<br/>      ├╴ another.rkt<br/>├╴ bar-pkg<br/>   ├╴ info.rkt<br/>   ├╴ math<br/>      ├╴ omega.rkt<br/>   ├╴ games<br/>      ├╴ red.rkt</div><div class="highlight" form="false" id="a_VIIIY"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13</pre></div></td><td class="code"><div class="source"><pre>mega-repo
+├╴ info.rkt
+├╴ foo-pkg
+   ├╴ info.rkt
+   ├╴ math
+      ├╴ alpha.rkt
+      ├╴ another.rkt
+├╴ bar-pkg
+   ├╴ info.rkt
+   ├╴ math
+      ├╴ omega.rkt
+   ├╴ games
+      ├╴ red.rkt
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk9" data-clipboard-target="#code_50" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_apZ2F&quot;)"></div><p id="a_apZ2F">Here, the <span class="my-code" decode="exclude">mega-repo</span> is home to two inde­pen­dent pack­ages, <span class="my-code" decode="exclude">foo-pkg</span> and <span class="my-code" decode="exclude">bar-pkg</span>. The devel­oper would list these sep­a­rately on <a href="the-package-server.html">the pack­age server</a>, so users could install them sep­a­rately. <span class="my-code" decode="exclude">foo-pkg</span> pro­vides mod­ules that are part of the <span class="my-code" decode="exclude">math</span> col­lec­tion, while <span class="my-code" decode="exclude">bar-pkg</span> pro­vides mod­ules that are part of the <span class="my-code" decode="exclude">math</span> and <span class="my-code" decode="exclude">games</span> col­lec­tions. Mean­while, the <span class="my-code" decode="exclude">"info.rkt"</span> files in each direc­tory would make these inten­tions clear.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_cl0cZ&quot;)"></div><p id="a_cl0cZ">BTW, this is not a project orga­ni­za­tion we’d nec­es­sar­ily want to emu­late. <span class="tooltip" onclick="this.classList.toggle('tooltip_visible')"> + <span class="tooltip-inner">This capa­bil­ity is typ­i­cally not used to smush unre­lated mod­ules into com­mon pack­ages, but rather to divide larger pack­ages into smaller ones.</span></span> It sim­ply illus­trates that repos, pack­ages, and col­lec­tions are inde­pen­dent ways of group­ing mod­ules. In sim­ple projects, they’re often tele­scoped together.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;starting-the-info-rkt-for-jsonic&quot;)"></div><h3 anchor="starting-the-info-rkt-for-jsonic" class="subhead" id="starting-the-info-rkt-for-jsonic"><a href="#starting-the-info-rkt-for-jsonic">Start­ing the info.rkt for jsonic</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_RIctL&quot;)"></div><p id="a_RIctL">The <span class="my-code" decode="exclude">"info.rkt"</span> file uses a domain-spe­cific lan­guage called <span class="my-code" decode="exclude">#lang info</span>, which looks like reg­u­lar Racket but only sup­ports <a href="http://docs.racket-lang.org/raco/info_rkt.html">a lim­ited set</a> of func­tions. The only pur­pose of <span class="my-code" decode="exclude">#lang info</span> is to make <span class="my-code" decode="exclude">"info.rkt"</span> files. So let’s start our file at the top level of the <span class="my-code" decode="exclude">jsonic</span> direc­tory:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/info.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_V0CCy&quot;)"></div><div class="highlight-container" id="a_V0CCy"><div id="code_51" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang info</div><div class="highlight" form="false" id="a_OFVQQ"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>#lang info
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpka" data-clipboard-target="#code_51" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_07ktG&quot;)"></div><p id="a_07ktG">An <span class="my-code" decode="exclude">"info.rkt"</span> is struc­tured as a series of <a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a> expres­sions that act as <a href="http://docs.racket-lang.org/pkg/metadata.html">meta­data fields</a>. Var­i­ous Racket tools read these meta­data fields. If we want our pack­age to coop­er­ate with these tools, we need at least one <span class="my-code" decode="exclude">"info.rkt"</span> in the top direc­tory of the pack­age. We can also put <span class="my-code" decode="exclude">"info.rkt"</span> files inside any sub­di­rec­tory that needs spe­cial han­dling. But often, the top-level file suf­fices.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_KuYSc&quot;)"></div><p id="a_KuYSc">Since we’re plan­ning to dis­trib­ute our lan­guage, we want to start by spec­i­fy­ing a <span class="my-code" decode="exclude">collection</span> name and a <span class="my-code" decode="exclude">version</span> num­ber:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/info.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rsW6i&quot;)"></div><div class="highlight-container" id="a_rsW6i"><div id="code_52" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang info<br/>(define collection "jsonic")<br/>(define version "1.0")</div><div class="highlight" form="false" id="a_r1LzF"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="source"><pre>#lang info
+<span class="hll">(define collection "jsonic")
+</span><span class="hll">(define version "1.0")
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkb" data-clipboard-target="#code_52" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_kM3Tz&quot;)"></div><p id="a_kM3Tz">Per the <a href="#modules-packages-collections-and-repos">expla­na­tion above</a>, the col­lec­tion is the name­space where our pack­age will be avail­able. In this case, we want the <span class="my-code" decode="exclude">collection</span> value to be the same as the pack­age name—<span class="my-code" decode="exclude">"jsonic"</span>. Strictly speak­ing, when the col­lec­tion and pack­age names match, this <span class="my-code" decode="exclude">collection</span> field is optional. But it’s a <a href="http://docs.racket-lang.org/pkg/metadata.html">vir­tu­ous habit</a> to set it explic­itly. That way, we remove the con­nec­tion between the two names. If we ever rename the pack­age, or move these mod­ules to be part of another pack­age, they will still cor­rectly be avail­able as part of the <span class="my-code" decode="exclude">jsonic</span> col­lec­tion.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_U5rhR&quot;)"></div><p id="a_U5rhR">Strictly speak­ing, the <span class="my-code" decode="exclude">version</span> field is also optional—with­out it, <span class="my-code" decode="exclude">raco pkg</span> will treat <span class="my-code" decode="exclude">jsonic</span> as hav­ing ver­sion <span class="my-code" decode="exclude">0.0</span>. But when we’re develp­ing a lan­guage, it’s another <a href="http://docs.racket-lang.org/pkg/Package_Concepts.html#%28tech._version%29
+">vir­tu­ous habit</a>. Ver­sion num­bers help those who rely on our lan­guage under­stand the rela­tion­ship between suc­ces­sive releases. Also, if other devel­op­ers write pack­ages that depend on our lan­guage, the ver­sion num­ber helps <span class="my-code" decode="exclude">raco pkg</span> fig­ure out if a user needs a more recent ver­sion of our lan­guage.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;building-documentation&quot;)"></div><h3 anchor="building-documentation" class="subhead" id="building-documentation"><a href="#building-documentation">Build­ing doc­u­men­ta­tion</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_wSr8P&quot;)"></div><p id="a_wSr8P">The <span class="my-code" decode="exclude">"info.rkt"</span> also spec­i­fies how to build the doc­u­men­ta­tion for our lan­guage. To do this, we <span class="my-code" decode="exclude">define</span> the <span class="my-code" decode="exclude">scribblings</span> field with a list of <span class="my-code" decode="exclude">.scrbl</span> doc­u­men­ta­tion files. In this case, we have only one:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/info.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rKmrw&quot;)"></div><div class="highlight-container" id="a_rKmrw"><div id="code_53" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang info<br/>(define collection "jsonic")<br/>(define version "1.0")<br/>(define scribblings '(("scribblings/jsonic.scrbl")))</div><div class="highlight" form="false" id="a_i3Vrg"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4</pre></div></td><td class="code"><div class="source"><pre>#lang info
+(define collection "jsonic")
+(define version "1.0")
+<span class="hll">(define scribblings &#39;(("scribblings/jsonic.scrbl")))
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkc" data-clipboard-target="#code_53" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;adjusting-automatic-testing&quot;)"></div><h3 anchor="adjusting-automatic-testing" class="subhead" id="adjusting-automatic-testing"><a href="#adjusting-automatic-testing">Adjust­ing auto­matic test­ing</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_EaNwV&quot;)"></div><p id="a_EaNwV">The <a href="http://docs.racket-lang.org/raco/test.html"><span class="my-code" decode="exclude">raco test</span></a> tool is used to run tests. When used with the <span class="my-code" decode="exclude">-p</span> flag, it will run all tests that exist in a pack­age. Mean­ing, for each source file in the pack­age, <span class="my-code" decode="exclude">raco test</span> runs the <span class="my-code" decode="exclude">test</span> sub­mod­ule (if it exists), or the whole file. <span class="tooltip" onclick="this.classList.toggle('tooltip_visible')"> + <span class="tooltip-inner"><span class="my-code" decode="exclude">raco test</span> is com­monly used in shell scripts for ser­vices that auto­mat­i­cally build and test Racket pack­ages, for instance <a class=" ext" href="https://travis-ci.org/">Travis CI</a>.</span></span></p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_CrvzR&quot;)"></div><p id="a_CrvzR">We can see how this works by enter­ing the fol­low­ing com­mand at the ter­mi­nal:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rnZPc&quot;)"></div><div class="highlight-container" id="a_rnZPc"><div id="code_54" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; raco test -p jsonic</div><div class="highlight" form="false" id="a_LOVFF"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>&gt; raco test -p jsonic
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkd" data-clipboard-target="#code_54" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_mcZhl&quot;)"></div><p id="a_mcZhl">We’ll get some­thing like this:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_vKKkC&quot;)"></div><div class="highlight-container" id="a_vKKkC"><div id="code_55" form="false" decode="exclude" style="font-size:0;width:0;height:0">raco test: "/path/to/jsonic/buttons.rkt"<br/>raco test: (submod "/path/to/jsonic/colorer.rkt" test)<br/>raco test: "/path/to/jsonic/expander.rkt"<br/>raco test: (submod "/path/to/jsonic/indenter.rkt" test)<br/>raco test: "/path/to/jsonic/info.rkt"<br/>raco test: "/path/to/jsonic/jsonic-test.rkt"<br/>[<br/>  null,<br/>  42,<br/>  true,<br/>  ["array","of","strings"],<br/>  {"key-1":null,"key-3":{"subkey":21},"key-2":false}<br/>]raco test: "/path/to/jsonic/main.rkt"<br/>raco test: "/path/to/jsonic/parser-test.rkt"<br/>raco test: "/path/to/jsonic/parser.rkt"<br/>raco test: "/path/to/jsonic/reader.rkt"<br/>raco test: "/path/to/jsonic/scribblings/jsonic.scrbl"<br/>raco test: (submod "/path/to/jsonic/tokenizer.rkt" test)<br/>13 tests passed</div><div class="highlight" form="false" id="a_tdv5f"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19</pre></div></td><td class="code"><div class="source"><pre>raco test: "/path/to/jsonic/buttons.rkt"
+raco test: (submod "/path/to/jsonic/colorer.rkt" test)
+raco test: "/path/to/jsonic/expander.rkt"
+raco test: (submod "/path/to/jsonic/indenter.rkt" test)
+raco test: "/path/to/jsonic/info.rkt"
+raco test: "/path/to/jsonic/jsonic-test.rkt"
+[
+  null,
+  42,
+  true,
+  ["array","of","strings"],
+  {"key-1":null,"key-3":{"subkey":21},"key-2":false}
+]raco test: "/path/to/jsonic/main.rkt"
+raco test: "/path/to/jsonic/parser-test.rkt"
+raco test: "/path/to/jsonic/parser.rkt"
+raco test: "/path/to/jsonic/reader.rkt"
+raco test: "/path/to/jsonic/scribblings/jsonic.scrbl"
+raco test: (submod "/path/to/jsonic/tokenizer.rkt" test)
+13 tests passed
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpke" data-clipboard-target="#code_55" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_fw0Rr&quot;)"></div><p id="a_fw0Rr"><span class="my-code" decode="exclude">"jsonic-test.rkt"</span> prints its JSON result to the ter­mi­nal. Noth­ing bad will hap­pen as a result.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_j3IdP&quot;)"></div><p id="a_j3IdP">But let’s sup­pose we pre­fer our test reports to be tidy. So we want to omit <span class="my-code" decode="exclude">"jsonic-test.rkt"</span> from our test suite.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_RyLkT&quot;)"></div><p id="a_RyLkT">We can do this by adding a <a href="http://docs.racket-lang.org/raco/test.html?q=raco%20test#%28part._test-config-info%29"><span class="my-code" decode="exclude">test-omit-paths</span></a> field to our <span class="my-code" decode="exclude">"info.rkt"</span>, which is a list of source files that <span class="my-code" decode="exclude">raco test</span> should ignore:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/info.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_fKOI8&quot;)"></div><div class="highlight-container" id="a_fKOI8"><div id="code_56" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang info<br/>(define collection "jsonic")<br/>(define version "1.0")<br/>(define scribblings '(("scribblings/jsonic.scrbl")))<br/>(define test-omit-paths '("jsonic-test.rkt"))</div><div class="highlight" form="false" id="a_TX7Ql"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="source"><pre>#lang info
+(define collection "jsonic")
+(define version "1.0")
+(define scribblings &#39;(("scribblings/jsonic.scrbl")))
+<span class="hll">(define test-omit-paths &#39;("jsonic-test.rkt"))
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkf" data-clipboard-target="#code_56" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_j3umE&quot;)"></div><p id="a_j3umE">After we make this change, we can run our tests again:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rnZPci&quot;)"></div><div class="highlight-container" id="a_rnZPci"><div id="code_57" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; raco test -p jsonic</div><div class="highlight" form="false" id="a_LOVFFg"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>&gt; raco test -p jsonic
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkh" data-clipboard-target="#code_57" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_hGyNv&quot;)"></div><p id="a_hGyNv">This time, <span class="my-code" decode="exclude">"jsonic-test.rkt"</span> will be skipped:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_SLHQE&quot;)"></div><div class="highlight-container" id="a_SLHQE"><div id="code_58" form="false" decode="exclude" style="font-size:0;width:0;height:0">raco test: "/path/to/jsonic/buttons.rkt"<br/>raco test: (submod "/path/to/jsonic/colorer.rkt" test)<br/>raco test: "/path/to/jsonic/expander.rkt"<br/>raco test: (submod "/path/to/jsonic/indenter.rkt" test)<br/>raco test: "/path/to/jsonic/info.rkt"<br/>raco test: "/path/to/jsonic/main.rkt"<br/>raco test: "/path/to/jsonic/parser-test.rkt"<br/>raco test: "/path/to/jsonic/parser.rkt"<br/>raco test: "/path/to/jsonic/reader.rkt"<br/>raco test: "/path/to/jsonic/scribblings/jsonic.scrbl"<br/>raco test: (submod "/path/to/jsonic/tokenizer.rkt" test)<br/>13 tests passed</div><div class="highlight" form="false" id="a_ShN4j"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="source"><pre>raco test: "/path/to/jsonic/buttons.rkt"
+raco test: (submod "/path/to/jsonic/colorer.rkt" test)
+raco test: "/path/to/jsonic/expander.rkt"
+raco test: (submod "/path/to/jsonic/indenter.rkt" test)
+raco test: "/path/to/jsonic/info.rkt"
+raco test: "/path/to/jsonic/main.rkt"
+raco test: "/path/to/jsonic/parser-test.rkt"
+raco test: "/path/to/jsonic/parser.rkt"
+raco test: "/path/to/jsonic/reader.rkt"
+raco test: "/path/to/jsonic/scribblings/jsonic.scrbl"
+raco test: (submod "/path/to/jsonic/tokenizer.rkt" test)
+13 tests passed
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkj" data-clipboard-target="#code_58" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_mIL8S&quot;)"></div><p id="a_mIL8S">Exactly right.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;specifying-dependencies&quot;)"></div><h3 anchor="specifying-dependencies" class="subhead" id="specifying-dependencies"><a href="#specifying-dependencies">Spec­i­fy­ing depen­den­cies</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_daaP3&quot;)"></div><p id="a_daaP3">A <em>depen­dency</em> is any Racket pack­age that’s nec­es­sary for our lan­guage to work. We use <span class="my-code" decode="exclude">"info.rkt"</span> to list both <a class="glossary" href="../appendix/glossary.html#run-time"><span class="glossary-link-text">run-time</span></a> depen­den­cies (= pack­ages needed every time we invoke a mod­ule from the pack­age) and <em>build</em> depen­den­cies (= pack­ages only needed for test­ing or doc­u­men­ta­tion). <span class="tooltip" onclick="this.classList.toggle('tooltip_visible')"> + <span class="tooltip-inner">Build depen­den­cies are spec­i­fied sep­a­rately so they can be omit­ted from <a href="http://docs.racket-lang.org/pkg/strip.html">built pack­ages</a>, allow­ing them to be smaller.</span></span></p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_FlBKK&quot;)"></div><p id="a_FlBKK">When a user tries to install a pack­age, <span class="my-code" decode="exclude">raco pkg</span> checks the user’s exist­ing pack­ages against the depen­den­cies for the new pack­age. If any are miss­ing, <span class="my-code" decode="exclude">raco pkg</span> gives the user the option to install them.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_2kwcR&quot;)"></div><p id="a_2kwcR">But we prob­a­bly for­got to keep track of all the depen­den­cies that we racked up dur­ing our project. For­tu­nately, that’s not a prob­lem: we can use the <span class="my-code" decode="exclude">raco setup</span> com­mand to tell us what they are. Let’s go to the ter­mi­nal and issue this com­mand:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rxP5o&quot;)"></div><div class="highlight-container" id="a_rxP5o"><div id="code_59" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; raco setup --check-pkg-deps jsonic</div><div class="highlight" form="false" id="a_NwuVN"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>&gt; raco setup --check-pkg-deps jsonic
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkk" data-clipboard-target="#code_59" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_dgKPE&quot;)"></div><p id="a_dgKPE"><span class="my-code" decode="exclude">raco setup</span> is respon­si­ble for com­pil­ing every installed pack­age. When we pass the <span class="my-code" decode="exclude">--check-pkg-deps</span> flag, <span class="my-code" decode="exclude">raco setup</span> will go through each of our mod­ules and fig­ure out their depen­den­cies, and com­pare this to the depen­den­cies declared in our <span class="my-code" decode="exclude">"info.rkt"</span> (which right now is none). As it does so, we’ll see a bunch of unde­clared depen­den­cies go fly­ing up the screen. But at the end we’ll see a sum­mary like this:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_2Kn85&quot;)"></div><div class="highlight-container" id="a_2Kn85"><div id="code_60" form="false" decode="exclude" style="font-size:0;width:0;height:0">raco setup: --- summary of package problems ---<br/>raco setup: undeclared dependency detected<br/>raco setup:   for package: "jsonic"<br/>raco setup:   on packages:<br/>raco setup:    "base"<br/>raco setup:    "beautiful-racket-lib"<br/>raco setup:    "brag"<br/>raco setup:    "draw-lib"<br/>raco setup:    "gui-lib"<br/>raco setup:    "br-parser-tools-lib"<br/>raco setup:    "rackunit-lib"<br/>raco setup:    "syntax-color-lib"<br/>raco setup:   on package for build:<br/>raco setup:    "scribble-lib"</div><div class="highlight" form="false" id="a_1Zdtm"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="source"><pre>raco setup: --- summary of package problems ---
+raco setup: undeclared dependency detected
+raco setup:   for package: "jsonic"
+raco setup:   on packages:
+raco setup:    "base"
+raco setup:    "beautiful-racket-lib"
+raco setup:    "brag"
+raco setup:    "draw-lib"
+raco setup:    "gui-lib"
+raco setup:    "br-parser-tools-lib"
+raco setup:    "rackunit-lib"
+raco setup:    "syntax-color-lib"
+raco setup:   on package for build:
+raco setup:    "scribble-lib"
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkl" data-clipboard-target="#code_60" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_iBS1J&quot;)"></div><p id="a_iBS1J">This tells us all the pack­ages that need to be listed in <span class="my-code" decode="exclude">"info.rkt"</span> as ordi­nary depen­den­cies (the pack­ages in the top part of the list) and build depen­den­cies (just <span class="my-code" decode="exclude">scribble-lib</span>).</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_PEEpR&quot;)"></div><p id="a_PEEpR">We can add these depen­den­cies to our <span class="my-code" decode="exclude">"info.rkt"</span> man­u­ally. But more con­ve­niently, <span class="my-code" decode="exclude">raco setup</span> will take care of this house­keep­ing. If we’re sat­is­fied with the list of depen­den­cies, we can issue another ter­mi­nal com­mand to put them into our <span class="my-code" decode="exclude">"info.rkt"</span>:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_xy9ZT&quot;)"></div><div class="highlight-container" id="a_xy9ZT"><div id="code_61" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; raco setup --fix-pkg-deps jsonic</div><div class="highlight" form="false" id="a_6fWQR"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>&gt; raco setup --fix-pkg-deps jsonic
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkm" data-clipboard-target="#code_61" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_zHr3J&quot;)"></div><p id="a_zHr3J">If we now reopen our <span class="my-code" decode="exclude">"info.rkt"</span>, we’ll see it’s been updated with the list of <span class="my-code" decode="exclude">deps</span> and <span class="my-code" decode="exclude">build-deps</span> that we just saw in the miss­ing-depen­dency report:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/info.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Oz0ck&quot;)"></div><div class="highlight-container" id="a_Oz0ck"><div id="code_62" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang info<br/>(define collection "jsonic")<br/>(define version "1.0")<br/>(define scribblings '(("scribblings/jsonic.scrbl")))<br/>(define test-omit-paths '("jsonic-test.rkt"))<br/>(define deps '("base"<br/>               "beautiful-racket-lib"<br/>               "brag"<br/>               "draw-lib"<br/>               "gui-lib"<br/>               "br-parser-tools-lib"<br/>               "rackunit-lib"<br/>               "syntax-color-lib"))<br/>(define build-deps '("scribble-lib"))</div><div class="highlight" form="false" id="a_63Le9"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="source"><pre>#lang info
+(define collection "jsonic")
+(define version "1.0")
+(define scribblings &#39;(("scribblings/jsonic.scrbl")))
+(define test-omit-paths &#39;("jsonic-test.rkt"))
+<span class="hll">(define deps &#39;("base"
+</span><span class="hll">               "beautiful-racket-lib"
+</span><span class="hll">               "brag"
+</span><span class="hll">               "draw-lib"
+</span><span class="hll">               "gui-lib"
+</span><span class="hll">               "br-parser-tools-lib"
+</span><span class="hll">               "rackunit-lib"
+</span><span class="hll">               "syntax-color-lib"))
+</span><span class="hll">(define build-deps &#39;("scribble-lib"))
+</span></pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkn" data-clipboard-target="#code_62" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_zevJ6&quot;)"></div><p id="a_zevJ6">How do we know this worked? We can go back to the ter­mi­nal and use <span class="my-code" decode="exclude">--check-pkg-deps</span> again:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rxP5oq&quot;)"></div><div class="highlight-container" id="a_rxP5oq"><div id="code_63" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; raco setup --check-pkg-deps jsonic</div><div class="highlight" form="false" id="a_NwuVNo"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>&gt; raco setup --check-pkg-deps jsonic
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkp" data-clipboard-target="#code_63" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_2PYSm&quot;)"></div><p id="a_2PYSm">This time, it will show no errors, because all the depen­den­cies are now cor­rectly declared in our <span class="my-code" decode="exclude">"info.rkt"</span>. If we ever change <span class="my-code" decode="exclude">jsonic</span> to use dif­fer­ent depen­den­cies, we can either man­u­ally update these lists, or use <span class="my-code" decode="exclude">raco setup</span> with the <span class="my-code" decode="exclude">--fix-pkg-deps</span> flag to adjust them.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;unversioned-vs--versioned-dependencies&quot;)"></div><h3 anchor="unversioned-vs--versioned-dependencies" class="subhead" id="unversioned-vs--versioned-dependencies"><a href="#unversioned-vs--versioned-dependencies">Unver­sioned vs. ver­sioned depen­den­cies</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_87Inn&quot;)"></div><p id="a_87Inn">The depen­dency list we just made con­tained only unver­sioned depen­den­cies. When we spec­ify a depen­dency with­out a ver­sion num­ber, what it means is “any ver­sion of this pack­age will be fine”. That works, as long as we’re only rely­ing on parts of the pack­age inter­face that have been con­sis­tent across every ver­sion.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_JOJUM&quot;)"></div><p id="a_JOJUM">But sup­pose that <span class="my-code" decode="exclude">brag</span> is updated to ver­sion <span class="my-code" decode="exclude">2.0</span> with a new <span class="my-code" decode="exclude">xyzzy</span> func­tion that’s essen­tial to our project. We can no longer spec­ify <span class="my-code" decode="exclude">brag</span> as a unver­sioned depen­dency, because our lan­guage won’t work for users who only have ver­sion <span class="my-code" decode="exclude">1.0</span> of <span class="my-code" decode="exclude">brag</span> installed.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_G3PlR&quot;)"></div><p id="a_G3PlR">We can fix this prob­lem by adding a ver­sion anno­ta­tion to <span class="my-code" decode="exclude">brag</span>:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_NmmGv&quot;)"></div><div class="highlight-container" id="a_NmmGv"><div id="code_64" form="false" decode="exclude" style="font-size:0;width:0;height:0">(define deps '("base"<br/>               "beautiful-racket-lib"<br/>               ("brag" #:version "2.0")<br/>               "draw-lib"<br/>               ···))</div><div class="highlight" form="false" id="a_14Gyp"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="source"><pre>(define deps &#39;("base"
+               "beautiful-racket-lib"
+               ("brag" #:version "2.0")
+               "draw-lib"
+               ···))
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkr" data-clipboard-target="#code_64" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_YuWTg&quot;)"></div><p id="a_YuWTg">In this case, when <span class="my-code" decode="exclude">raco pkg</span> installs our lan­guage, it will check if the user has <span class="my-code" decode="exclude">brag</span> ver­sion <span class="my-code" decode="exclude">2.0</span> or later installed. If <span class="my-code" decode="exclude">brag</span> isn’t installed at all, <span class="my-code" decode="exclude">raco pkg</span> will auto­mat­i­cally install the cur­rent ver­sion (as it would an unver­sioned depen­dency). But a ver­sion of <span class="my-code" decode="exclude">brag</span> ear­lier than <span class="my-code" decode="exclude">2.0</span> is installed, <span class="my-code" decode="exclude">raco pkg</span> will update <span class="my-code" decode="exclude">brag</span> to the cur­rent ver­sion.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_VfXyE&quot;)"></div><p id="a_VfXyE">But in this case, we can leave our <span class="my-code" decode="exclude">brag</span> depen­dency unver­sioned.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;checking-that-everything-works&quot;)"></div><h3 anchor="checking-that-everything-works" class="subhead" id="checking-that-everything-works"><a href="#checking-that-everything-works">Check­ing that every­thing works</a></h3></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_l26ZV&quot;)"></div><p id="a_l26ZV">Our fin­ished <span class="my-code" decode="exclude">"info.rkt"</span> looks like this:</p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">jsonic/info.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Oz0cku&quot;)"></div><div class="highlight-container" id="a_Oz0cku"><div id="code_65" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang info<br/>(define collection "jsonic")<br/>(define version "1.0")<br/>(define scribblings '(("scribblings/jsonic.scrbl")))<br/>(define test-omit-paths '("jsonic-test.rkt"))<br/>(define deps '("base"<br/>               "beautiful-racket-lib"<br/>               "brag"<br/>               "draw-lib"<br/>               "gui-lib"<br/>               "br-parser-tools-lib"<br/>               "rackunit-lib"<br/>               "syntax-color-lib"))<br/>(define build-deps '("scribble-lib"))</div><div class="highlight" form="false" id="a_63Le9s"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="source"><pre>#lang info
+(define collection "jsonic")
+(define version "1.0")
+(define scribblings &#39;(("scribblings/jsonic.scrbl")))
+(define test-omit-paths &#39;("jsonic-test.rkt"))
+(define deps &#39;("base"
+               "beautiful-racket-lib"
+               "brag"
+               "draw-lib"
+               "gui-lib"
+               "br-parser-tools-lib"
+               "rackunit-lib"
+               "syntax-color-lib"))
+(define build-deps &#39;("scribble-lib"))
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkt" data-clipboard-target="#code_65" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_lqR4Y&quot;)"></div><p id="a_lqR4Y">To make sure that it works, let’s unin­stall our pack­age like so:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_T10mb&quot;)"></div><div class="highlight-container" id="a_T10mb"><div id="code_66" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; raco pkg remove jsonic</div><div class="highlight" form="false" id="a_c0Uw6"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>&gt; raco pkg remove jsonic
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkv" data-clipboard-target="#code_66" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_QdqOA&quot;)"></div><p id="a_QdqOA">Then rein­stall as usual:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_GHHczy&quot;)"></div><div class="highlight-container" id="a_GHHczy"><div id="code_67" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; raco pkg install path/to/jsonic</div><div class="highlight" form="false" id="a_krAoCw"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>&gt; raco pkg install path/to/jsonic
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpkx" data-clipboard-target="#code_67" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_ouCe2&quot;)"></div><p id="a_ouCe2">We should see some sta­tus mes­sages as the pack­age is installed. But no errors.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_QZjOr&quot;)"></div><p id="a_QZjOr">Let’s try run­ning our tests again:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_rnZPcB&quot;)"></div><div class="highlight-container" id="a_rnZPcB"><div id="code_68" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; raco test -p jsonic</div><div class="highlight" form="false" id="a_LOVFFz"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>&gt; raco test -p jsonic
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkA" data-clipboard-target="#code_68" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_V9VEG&quot;)"></div><p id="a_V9VEG">We should see no errors.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_glcrn&quot;)"></div><p id="a_glcrn">Now let’s test the doc­u­men­ta­tion with the <a href="http://docs.racket-lang.org/raco/docs.html?q=raco%20docs"><span class="my-code" decode="exclude">raco docs</span></a> com­mand, which is just com­mand-line short­hand for using the search box in the web inter­face:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_Dm4Lj&quot;)"></div><div class="highlight-container" id="a_Dm4Lj"><div id="code_69" form="false" decode="exclude" style="font-size:0;width:0;height:0">&gt; raco docs jsonic</div><div class="highlight" form="false" id="a_giiXO"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="source"><pre>&gt; raco docs jsonic
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkC" data-clipboard-target="#code_69" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_moH2z&quot;)"></div><p id="a_moH2z">Our web browser should show us a results screen like this:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_VldpkD&quot;)"></div><div id="a_VldpkD" style="text-align:center;padding:0.5rem;padding-bottom:1rem"><img style="width:90%;border:1px solid #ccc" src="search-results.gif"/></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_1P0lD&quot;)"></div><p id="a_1P0lD">That’s also cor­rect—in the first search result, the doc­u­men­ta­tion sys­tem is cor­rectly notic­ing the anchor to the <span class="my-code" decode="exclude">jsonic</span> lan­guage. For the sec­ond result, it’s notic­ing the word <span class="my-code" decode="exclude">"jsonic"</span> in the head­line. If we click either of these links, we’ll see our main doc­u­men­ta­tion page:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_VldpkE&quot;)"></div><div id="a_VldpkE" style="text-align:center;padding:0.5rem;padding-bottom:1rem"><img style="width:90%;border:1px solid #ccc" src="preview-05.gif"/></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_5EnYm&quot;)"></div><p id="a_5EnYm">And now, if we go into DrRacket and run a test file:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_TDp6P&quot;)"></div><div class="highlight-container" id="a_TDp6P"><div id="code_70" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang jsonic<br/>// a line comment<br/>[<br/>  @$ 'null $@,<br/>  @$ (* 6 7) $@,<br/>  @$ (= 2 (+ 1 1)) $@,<br/>  @$ (list "array" "of" "strings") $@,<br/>  @$ (hash 'key-1 'null<br/>           'key-2 (even? 3)<br/>           'key-3 (hash 'subkey 21)) $@<br/>]</div><div class="highlight" form="false" id="a_Fzdix"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11</pre></div></td><td class="code"><div class="source"><pre>#lang jsonic
+// a line comment
+[
+  @$ &#39;null $@,
+  @$ (* 6 7) $@,
+  @$ (= 2 (+ 1 1)) $@,
+  @$ (list "array" "of" "strings") $@,
+  @$ (hash &#39;key-1 &#39;null
+           &#39;key-2 (even? 3)
+           &#39;key-3 (hash &#39;subkey 21)) $@
+]
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkF" data-clipboard-target="#code_70" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_YJCmh&quot;)"></div><p id="a_YJCmh">It will work as usual:</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_7b04N&quot;)"></div><div class="highlight-container" id="a_7b04N"><div id="code_71" form="false" decode="exclude" style="font-size:0;width:0;height:0">[<br/>  null,<br/>  42,<br/>  true,<br/>  ["array","of","strings"],<br/>  {"key-1":null,"key-3":{"subkey":21},"key-2":false}<br/>]</div><div class="highlight" form="false" id="a_I67vR"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7</pre></div></td><td class="code"><div class="source"><pre>[
+  null,
+  42,
+  true,
+  ["array","of","strings"],
+  {"key-1":null,"key-3":{"subkey":21},"key-2":false}
+]
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_VldpkG" data-clipboard-target="#code_71" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_BTGPe&quot;)"></div><p id="a_BTGPe">Great. Now that our <span class="my-code" decode="exclude">jsonic</span> pack­age has been pre­pared with an <span class="my-code" decode="exclude">"info.rkt"</span> file, we’re ready to share it with the world using <a href="the-package-server.html">the pack­age server</a>.</p></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="documentation.html">2&emsp;doc­u­men­ta­tion</a></li><li><a class="here" href="the-info.rkt-file.html">3&emsp;the info.rkt file</a></li><li><a href="the-package-server.html">4&emsp;the pack­age server</a></li><li><a href="recap.html">5&emsp;recap</a></li><li><a href="source-listing.html">6&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="documentation.html">← prev</a>
+    <a class="nav-right" href="the-package-server.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

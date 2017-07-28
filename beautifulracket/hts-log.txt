@@ -1,0 +1,29 @@
+HTTrack3.48-22 launched on Thu, 16 Mar 2017 01:45:40 at http://beautifulracket.com
+(httrack http://beautifulracket.com )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+01:47:41	Error: 	"Not Found" (404) at link beautifulracket.com/explainer/unit-tests.html (from beautifulracket.com/jsonic-3/intro.html)
+01:48:14	Error: 	"Not Found" (404) at link beautifulracket.com/explainer/stringlike-values.html (from beautifulracket.com/explainer/equality.html)
+01:48:14	Error: 	"Not Found" (404) at link beautifulracket.com/explainer/tests.html (from beautifulracket.com/explainer/modules.html)
+01:48:14	Error: 	"Not Found" (404) at link beautifulracket.com/explainer/the-repls.html (from beautifulracket.com/explainer/stringlike-types.html)
+01:48:14	Error: 	"Not Found" (404) at link beautifulracket.com/explainer/packages.html (from beautifulracket.com/appendix/glossary.html)
+01:48:14	Error: 	"Not Found" (404) at link beautifulracket.com/appendix/beautifulracket.com (from beautifulracket.com/appendix/racketcon.html)
+01:48:14	Error: 	"Not Found" (404) at link beautifulracket.com/appendix/-tutorial-bf.html (from beautifulracket.com/appendix/racketcon.html)
+01:48:14	Error: 	"Not Found" (404) at link beautifulracket.com/stacker/project-setup.html (from beautifulracket.com/stacker/the-reader.html)
+01:48:14	Warning: 	Warning: store application/octet-stream without scan: beautifulracket.com/bf/parse-tree.svg
+01:48:14	Error: 	"Not Found" (404) at link beautifulracket.com/jsonic/language-specification.html (from beautifulracket.com/jsonic/the-expander.html)
+01:48:14	Error: 	"Not Found" (404) at link beautifulracket.com/jsonic/project-setup.html (from beautifulracket.com/jsonic/source-listing.html)
+01:48:14	Error: 	"Not Found" (404) at link beautifulracket.com/jsonic-2/tests.html (from beautifulracket.com/jsonic-2/contracts.html)
+01:48:14	Error: 	"Not Found" (404) at link beautifulracket.com/jsonic-3/the-info-rkt-file.html (from beautifulracket.com/jsonic-3/recap.html)
+01:48:14	Error: 	"Not Found" (404) at link beautifulracket.com/jsonic-3/setup.html (from beautifulracket.com/jsonic-3/source-listing.html)
+01:48:14	Error: 	"Not Found" (404) at link beautifulracket.com/basic-2/logic-operations.html (from beautifulracket.com/basic-2/specification-and-setup.html)
+01:48:14	Error: 	"Not Found" (404) at link beautifulracket.com/basic-2/gosub-and-loops.html (from beautifulracket.com/basic-2/specification-and-setup.html)
+01:48:14	Error: 	"Not Found" (404) at link beautifulracket.com/basic-2/highlighting-run-time-errors.html (from beautifulracket.com/basic-2/variables-and-input.html)
+01:48:17	Error: 	"Not Found" (404) at link beautifulracket.com/basic-3/shell-input.html (from beautifulracket.com/basic-3/specification-and-setup.html)
+
+HTTrack Website Copier/3.48-22 mirror complete in 2 minutes 37 seconds : 222 links scanned, 204 files written (9946350 bytes overall) [4151154 bytes received at 26440 bytes/sec], 7641328 bytes transferred using HTTP compression in 151 files, ratio 22%, 5.4 requests per connection
+(17 errors, 1 warnings, 0 messages)

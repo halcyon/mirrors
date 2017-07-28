@@ -1,0 +1,27 @@
+
+    <svg id="diagramSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 180">
+      <style id="stylesheet">text {
+  font-family: monospace;
+  text-anchor: middle;
+  font-size: 120%;
+}
+
+rect {
+  fill: white;
+  stroke: gray;
+  stroke-width: 1;
+}
+
+line {
+  stroke: gray;
+  stroke-width: 1;
+}
+  </style>
+      <defs>
+        <marker id="arrowHead" viewBox="-10 -5 10 10" markerUnits="strokeWidth" markerWidth="6" markerHeight="0" orient="auto">
+          <path d="M -10 -5 L 0 0 L -10 5 z"></path>
+        </marker>
+      </defs>
+      <g id="diagramGroup"><rect x="366px" y="0px" width="66px" height="43px"></rect><text x="400px" y="0px"><tspan x="400" dy="26.23913043478261">if</tspan></text><rect x="100px" y="65px" width="66px" height="43px"></rect><text x="133px" y="65px"><tspan x="133" dy="26.23913043478261">&gt;</tspan></text><line x1="377px" y1="43px" x2="133px" y2="65px" marker-end="url(#arrowHead)"></line><rect x="233px" y="65px" width="66px" height="43px"></rect><text x="266px" y="65px"><tspan x="266" dy="26.23913043478261">:</tspan></text><line x1="388px" y1="43px" x2="266px" y2="65px" marker-end="url(#arrowHead)"></line><rect x="366px" y="65px" width="66px" height="43px"></rect><text x="400px" y="65px"><tspan x="400" dy="26.23913043478261">/</tspan></text><line x1="400px" y1="43px" x2="400px" y2="65px" marker-end="url(#arrowHead)"></line><rect x="500px" y="65px" width="66px" height="43px"></rect><text x="533px" y="65px"><tspan x="533" dy="26.23913043478261">else:</tspan></text><line x1="411px" y1="43px" x2="533px" y2="65px" marker-end="url(#arrowHead)"></line><rect x="633px" y="65px" width="66px" height="43px"></rect><text x="666px" y="65px"><tspan x="666" dy="26.23913043478261">print</tspan></text><line x1="422px" y1="43px" x2="666px" y2="65px" marker-end="url(#arrowHead)"></line><rect x="33px" y="130px" width="66px" height="43px"></rect><text x="66px" y="130px"><tspan x="66" dy="26.23913043478261">y</tspan></text><line x1="122px" y1="108px" x2="66px" y2="130px" marker-end="url(#arrowHead)"></line><rect x="166px" y="130px" width="66px" height="43px"></rect><text x="199px" y="130px"><tspan x="199" dy="26.23913043478261">0</tspan></text><line x1="144px" y1="108px" x2="199px" y2="130px" marker-end="url(#arrowHead)"></line><rect x="300px" y="130px" width="66px" height="43px"></rect><text x="333px" y="130px"><tspan x="333" dy="26.23913043478261">x</tspan></text><line x1="388px" y1="108px" x2="333px" y2="130px" marker-end="url(#arrowHead)"></line><rect x="433px" y="130px" width="66px" height="43px"></rect><text x="466px" y="130px"><tspan x="466" dy="26.23913043478261">y</tspan></text><line x1="411px" y1="108px" x2="466px" y2="130px" marker-end="url(#arrowHead)"></line><rect x="633px" y="130px" width="66px" height="43px"></rect><text x="666px" y="130px"><tspan x="666" dy="26.23913043478261">"nope"</tspan></text><line x1="666px" y1="108px" x2="666px" y2="130px" marker-end="url(#arrowHead)"></line></g>
+    </svg>
+  

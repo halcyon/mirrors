@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Permutations of Iteration</title>
+	<atom:link href="https://stuartsierra.com/2006/06/22/permutations-of-iteration/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2006/06/22/permutations-of-iteration</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Subject Code &#187; links for 2006-06-27</title>
+		<link>https://stuartsierra.com/2006/06/22/permutations-of-iteration/comment-page-1#comment-114</link>
+		<dc:creator><![CDATA[Subject Code &#187; links for 2006-06-27]]></dc:creator>
+		<pubDate>Tue, 11 Jul 2006 06:30:44 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=35#comment-114</guid>
+		<description><![CDATA[[...] Digital Digressions » Blog Archive » Permutations of Iteration (tags: programming language design) [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] Digital Digressions » Blog Archive » Permutations of Iteration (tags: programming language design) [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: stuart</title>
+		<link>https://stuartsierra.com/2006/06/22/permutations-of-iteration/comment-page-1#comment-64</link>
+		<dc:creator><![CDATA[stuart]]></dc:creator>
+		<pubDate>Mon, 26 Jun 2006 12:54:41 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=35#comment-64</guid>
+		<description><![CDATA[Zach Beane said:
+&lt;em&gt;“(map process list)” would be more likely in a Lisp-like language. No need to add another layer of lambda.&lt;/em&gt;
+
+Yes.  I actually meant &quot;process&quot; as a placeholder for some larger chunk of code, but that wasn&#039;t very clear in my example.]]></description>
+		<content:encoded><![CDATA[<p>Zach Beane said:<br />
+<em>“(map process list)” would be more likely in a Lisp-like language. No need to add another layer of lambda.</em></p>
+<p>Yes.  I actually meant &#8220;process&#8221; as a placeholder for some larger chunk of code, but that wasn&#8217;t very clear in my example.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Savadeep Speaks! &#187; A look at iteration constructs.</title>
+		<link>https://stuartsierra.com/2006/06/22/permutations-of-iteration/comment-page-1#comment-63</link>
+		<dc:creator><![CDATA[Savadeep Speaks! &#187; A look at iteration constructs.]]></dc:creator>
+		<pubDate>Mon, 26 Jun 2006 04:47:10 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=35#comment-63</guid>
+		<description><![CDATA[[...] Today I must admit that I read a very interesting article at Stuart Sierra&#8217;s Digital Digressions blog. The article looks very briefly at the different iteration constructs of several languages. It starts by examining the for loops of languages like C and Java, which oft involve an incremented or decremented counter variable. It also covers the container method loop construct of Ruby and Smalltalk, and list comprehensions in Python. There is even some talks of iteration in functional languages, with examples in Lisp. [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] Today I must admit that I read a very interesting article at Stuart Sierra&#8217;s Digital Digressions blog. The article looks very briefly at the different iteration constructs of several languages. It starts by examining the for loops of languages like C and Java, which oft involve an incremented or decremented counter variable. It also covers the container method loop construct of Ruby and Smalltalk, and list comprehensions in Python. There is even some talks of iteration in functional languages, with examples in Lisp. [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: stuart</title>
+		<link>https://stuartsierra.com/2006/06/22/permutations-of-iteration/comment-page-1#comment-58</link>
+		<dc:creator><![CDATA[stuart]]></dc:creator>
+		<pubDate>Fri, 23 Jun 2006 20:55:53 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=35#comment-58</guid>
+		<description><![CDATA[Andy Hefner said: &lt;em&gt;many (most?) languages with a ‘for’ construct allow arbitrary expressions for loop clauses, so you could just as easily be traversing pointers in a linked list, tree, etc.&lt;/em&gt;
+
+True.  Would also work for a file being read incrementally from disk, so I was wrong about the in-memory requirement as well.  The important point, I think, is that the code for this kind of loop has to know details of the structure it&#039;s looping over.  Modifying C code designed for arrays to use linked lists would be doable, but annoying.]]></description>
+		<content:encoded><![CDATA[<p>Andy Hefner said: <em>many (most?) languages with a ‘for’ construct allow arbitrary expressions for loop clauses, so you could just as easily be traversing pointers in a linked list, tree, etc.</em></p>
+<p>True.  Would also work for a file being read incrementally from disk, so I was wrong about the in-memory requirement as well.  The important point, I think, is that the code for this kind of loop has to know details of the structure it&#8217;s looping over.  Modifying C code designed for arrays to use linked lists would be doable, but annoying.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Andy Hefner</title>
+		<link>https://stuartsierra.com/2006/06/22/permutations-of-iteration/comment-page-1#comment-57</link>
+		<dc:creator><![CDATA[Andy Hefner]]></dc:creator>
+		<pubDate>Fri, 23 Jun 2006 19:55:36 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=35#comment-57</guid>
+		<description><![CDATA[I&#039;d include fold/reduce in the list rather than &#039;lift&#039;, as you can express mapping and much more in terms of fold. http://okmij.org/ftp/papers/LL3-collections-talk.pdf is an interesting read, although I wouldn&#039;t take the &#039;enumeration is the ultimate interface&#039; claims too seriously, even in Scheme.
+
+Also, the comment about &#039;for&#039; is a bit misleading - many (most?) languages with a &#039;for&#039; construct allow arbitrary expressions for loop clauses, so you could just as easily be traversing pointers in a linked list, tree, etc.]]></description>
+		<content:encoded><![CDATA[<p>I&#8217;d include fold/reduce in the list rather than &#8216;lift&#8217;, as you can express mapping and much more in terms of fold. <a href="http://okmij.org/ftp/papers/LL3-collections-talk.pdf" rel="nofollow">http://okmij.org/ftp/papers/LL3-collections-talk.pdf</a> is an interesting read, although I wouldn&#8217;t take the &#8216;enumeration is the ultimate interface&#8217; claims too seriously, even in Scheme.</p>
+<p>Also, the comment about &#8216;for&#8217; is a bit misleading &#8211; many (most?) languages with a &#8216;for&#8217; construct allow arbitrary expressions for loop clauses, so you could just as easily be traversing pointers in a linked list, tree, etc.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Zach Beane</title>
+		<link>https://stuartsierra.com/2006/06/22/permutations-of-iteration/comment-page-1#comment-56</link>
+		<dc:creator><![CDATA[Zach Beane]]></dc:creator>
+		<pubDate>Fri, 23 Jun 2006 18:58:46 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=35#comment-56</guid>
+		<description><![CDATA[&quot;(map process list)&quot; would be more likely in a Lisp-like language. No need to add another layer of lambda.]]></description>
+		<content:encoded><![CDATA[<p>&#8220;(map process list)&#8221; would be more likely in a Lisp-like language. No need to add another layer of lambda.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.593 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:01:43 -->
+
+<!-- Compression = gzip -->

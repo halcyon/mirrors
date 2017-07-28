@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/ocaml/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:22 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn OCaml in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../css/normalize.css">
+        <link rel="stylesheet" href="../../css/main.css">
+        <link href="../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Focaml%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3DOCaml">
+        Share this page
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../index.html">Learn X in Y minutes</a></h2>
+  <h2>Where X=OCaml</h2>
+  
+  <div id="doc">
+    <p>OCaml is a strictly evaluated functional language with some imperative
+features.</p>
+
+<p>Along with StandardML and its dialects it belongs to ML language family.
+F# is also heavily influenced by OCaml.</p>
+
+<p>Just like StandardML, OCaml features both an interpreter, that can be
+used interactively, and a compiler.
+The interpreter binary is normally called &ldquo;ocaml&rdquo; and the compiler is &ldquo;ocamlopt&rdquo;.
+There is also a bytecode compiler, &ldquo;ocamlc&rdquo;, but there are few reasons to use it.</p>
+
+<p>It is strongly and statically typed, but instead of using manually written
+type annotations, it infers types of expressions using Hindley-Milner algorithm.
+It makes type annotations unnecessary in most cases, but can be a major
+source of confusion for beginners.</p>
+
+<p>When you are in the top level loop, OCaml will print the inferred type
+after you enter an expression.</p>
+<pre class="highlight plaintext"><code># let inc x = x + 1 ;;
+val inc : int -&gt; int = &lt;fun&gt;
+# let a = 99 ;;
+val a : int = 99
+</code></pre>
+
+<p>For a source file you can use &ldquo;ocamlc -i /path/to/file.ml&rdquo; command
+to print all names and type signatures.</p>
+<pre class="highlight plaintext"><code>$ cat sigtest.ml
+let inc x = x + 1
+let add x y = x + y
+
+let a = 1
+
+$ ocamlc -i ./sigtest.ml
+val inc : int -&gt; int
+val add : int -&gt; int -&gt; int
+val a : int
+</code></pre>
+
+<p>Note that type signatures of functions of multiple arguments are
+written in curried form. A function that takes multiple arguments can be
+represented as a composition of functions that take only one argument.
+The &ldquo;f(x,y) = x + y&rdquo; function from the example above applied to
+arguments 2 and 3 is equivalent to the &ldquo;f0(y) = 2 + y&rdquo; function applied to 3.
+Hence the &ldquo;int -&gt; int -&gt; int&rdquo; signature.</p>
+<pre class="highlight ocaml"><code><span class="c">(*** Comments ***)</span>
+
+<span class="c">(* Comments are enclosed in (* and *). It's fine to nest comments. *)</span>
+
+<span class="c">(* There are no single-line comments. *)</span>
+
+
+<span class="c">(*** Variables and functions ***)</span>
+
+<span class="c">(* Expressions can be separated by a double semicolon symbol, ";;".
+   In many cases it's redundant, but in this tutorial we use it after
+   every expression for easy pasting into the interpreter shell.
+   Unnecessary use of expression separators in source code files
+   is often considered to be a bad style. *)</span>
+
+<span class="c">(* Variable and function declarations use "let" keyword. *)</span>
+<span class="k">let</span> <span class="n">x</span> <span class="p">=</span> <span class="mi">10</span> <span class="p">;;</span>
+
+<span class="c">(* OCaml allows single quote characters in identifiers.
+   Single quote doesn't have a special meaning in this case, it's often used
+   in cases when in other languages one would use names like "foo_tmp". *)</span>
+<span class="k">let</span> <span class="n">foo</span> <span class="p">=</span> <span class="mi">1</span> <span class="p">;;</span>
+<span class="k">let</span> <span class="n">foo'</span> <span class="p">=</span> <span class="n">foo</span> <span class="p">*</span> <span class="mi">2</span> <span class="p">;;</span>
+
+<span class="c">(* Since OCaml compiler infers types automatically, you normally don't need to
+   specify argument types explicitly. However, you can do it if
+   you want or need to. *)</span>
+<span class="k">let</span> <span class="n">inc_int</span> <span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="kt">int</span><span class="p">)</span> <span class="p">:</span> <span class="kt">int</span> <span class="p">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">;;</span>
+
+<span class="c">(* One of the cases when explicit type annotations may be needed is
+   resolving ambiguity between two record types that have fields with
+   the same name. The alternative is to encapsulate those types in
+   modules, but both topics are a bit out of scope of this
+   tutorial. *)</span>
+
+<span class="c">(* You need to mark recursive function definitions as such with "rec" keyword. *)</span>
+<span class="k">let</span> <span class="k">rec</span> <span class="n">factorial</span> <span class="n">n</span> <span class="p">=</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="p">=</span> <span class="mi">0</span> <span class="k">then</span> <span class="mi">1</span>
+    <span class="k">else</span> <span class="n">n</span> <span class="p">*</span> <span class="n">factorial</span> <span class="p">(</span><span class="n">n</span><span class="p">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">;;</span>
+
+<span class="c">(* Function application usually doesn't need parentheses around arguments *)</span>
+<span class="k">let</span> <span class="n">fact_5</span> <span class="p">=</span> <span class="n">factorial</span> <span class="mi">5</span> <span class="p">;;</span>
+
+<span class="c">(* ...unless the argument is an expression. *)</span>
+<span class="k">let</span> <span class="n">fact_4</span> <span class="p">=</span> <span class="n">factorial</span> <span class="p">(</span><span class="mi">5</span><span class="p">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">;;</span>
+<span class="k">let</span> <span class="n">sqr2</span> <span class="p">=</span> <span class="n">sqr</span> <span class="o">(-</span><span class="mi">2</span><span class="p">)</span> <span class="p">;;</span>
+
+<span class="c">(* Every function must have at least one argument.
+   Since some functions naturally don't take any arguments, there's
+   "unit" type for it that has the only one value written as "()" *)</span>
+<span class="k">let</span> <span class="n">print_hello</span> <span class="bp">()</span> <span class="p">=</span> <span class="n">print_endline</span> <span class="s2">"hello world"</span> <span class="p">;;</span>
+
+<span class="c">(* Note that you must specify "()" as argument when calling it. *)</span>
+<span class="n">print_hello</span> <span class="bp">()</span> <span class="p">;;</span>
+
+<span class="c">(* Calling a function with insufficient number of arguments
+   does not cause an error, it produces a new function. *)</span>
+<span class="k">let</span> <span class="n">make_inc</span> <span class="n">x</span> <span class="n">y</span> <span class="p">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="p">;;</span> <span class="c">(* make_inc is int -&gt; int -&gt; int *)</span>
+<span class="k">let</span> <span class="n">inc_2</span> <span class="p">=</span> <span class="n">make_inc</span> <span class="mi">2</span> <span class="p">;;</span>   <span class="c">(* inc_2 is int -&gt; int *)</span>
+<span class="n">inc_2</span> <span class="mi">3</span> <span class="p">;;</span> <span class="c">(* Evaluates to 5 *)</span>
+
+<span class="c">(* You can use multiple expressions in function body.
+   The last expression becomes the return value. All other
+   expressions must be of the "unit" type.
+   This is useful when writing in imperative style, the simplest
+   form of it is inserting a debug print. *)</span>
+<span class="k">let</span> <span class="n">print_and_return</span> <span class="n">x</span> <span class="p">=</span>
+    <span class="n">print_endline</span> <span class="p">(</span><span class="n">string_of_int</span> <span class="n">x</span><span class="o">);</span>
+    <span class="n">x</span>
+<span class="p">;;</span>
+
+<span class="c">(* Since OCaml is a functional language, it lacks "procedures".
+   Every function must return something. So functions that
+   do not really return anything and are called solely for their
+   side effects, like print_endline, return value of "unit" type. *)</span>
+
+
+<span class="c">(* Definitions can be chained with "let ... in" construct.
+   This is roughly the same to assigning values to multiple
+   variables before using them in expressions in imperative
+   languages. *)</span>
+<span class="k">let</span> <span class="n">x</span> <span class="p">=</span> <span class="mi">10</span> <span class="k">in</span>
+<span class="k">let</span> <span class="n">y</span> <span class="p">=</span> <span class="mi">20</span> <span class="k">in</span>
+<span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="p">;;</span>
+
+<span class="c">(* Alternatively you can use "let ... and ... in" construct.
+   This is especially useful for mutually recursive functions,
+   with ordinary "let .. in" the compiler will complain about
+   unbound values. *)</span>
+<span class="k">let</span> <span class="k">rec</span>
+  <span class="n">is_even</span> <span class="p">=</span> <span class="k">function</span>
+  <span class="p">|</span> <span class="mi">0</span> <span class="p">-&gt;</span> <span class="bp">true</span>
+  <span class="p">|</span> <span class="n">n</span> <span class="p">-&gt;</span> <span class="n">is_odd</span> <span class="p">(</span><span class="n">n</span><span class="p">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="ow">and</span>
+  <span class="n">is_odd</span> <span class="p">=</span> <span class="k">function</span>
+  <span class="p">|</span> <span class="mi">0</span> <span class="p">-&gt;</span> <span class="bp">false</span>
+  <span class="p">|</span> <span class="n">n</span> <span class="p">-&gt;</span> <span class="n">is_even</span> <span class="p">(</span><span class="n">n</span><span class="p">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">;;</span>
+
+<span class="c">(* Anonymous functions use the following syntax: *)</span>
+<span class="k">let</span> <span class="n">my_lambda</span> <span class="p">=</span> <span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="p">*</span> <span class="n">x</span> <span class="p">;;</span>
+
+<span class="c">(*** Operators ***)</span>
+
+<span class="c">(* There is little distintion between operators and functions.
+   Every operator can be called as a function. *)</span>
+
+<span class="o">(+)</span> <span class="mi">3</span> <span class="mi">4</span>  <span class="c">(* Same as 3 + 4 *)</span>
+
+<span class="c">(* There's a number of built-in operators. One unusual feature is
+   that OCaml doesn't just refrain from any implicit conversions
+   between integers and floats, it also uses different operators
+   for floats. *)</span>
+<span class="mi">12</span> <span class="o">+</span> <span class="mi">3</span> <span class="p">;;</span> <span class="c">(* Integer addition. *)</span>
+<span class="mi">12</span><span class="p">.</span><span class="mi">0</span> <span class="o">+.</span> <span class="mi">3</span><span class="p">.</span><span class="mi">0</span> <span class="p">;;</span> <span class="c">(* Floating point addition. *)</span>
+
+<span class="mi">12</span> <span class="o">/</span> <span class="mi">3</span> <span class="p">;;</span> <span class="c">(* Integer division. *)</span>
+<span class="mi">12</span><span class="p">.</span><span class="mi">0</span> <span class="o">/.</span> <span class="mi">3</span><span class="p">.</span><span class="mi">0</span> <span class="p">;;</span> <span class="c">(* Floating point division. *)</span>
+<span class="mi">5</span> <span class="ow">mod</span> <span class="mi">2</span> <span class="p">;;</span> <span class="c">(* Remainder. *)</span>
+
+<span class="c">(* Unary minus is a notable exception, it's polymorphic.
+   However, it also has "pure" integer and float forms. *)</span>
+<span class="p">-</span> <span class="mi">3</span> <span class="p">;;</span> <span class="c">(* Polymorphic, integer *)</span>
+<span class="p">-</span> <span class="mi">4</span><span class="p">.</span><span class="mi">5</span> <span class="p">;;</span> <span class="c">(* Polymorphic, float *)</span>
+<span class="o">~-</span> <span class="mi">3</span> <span class="c">(* Integer only *)</span>
+<span class="o">~-</span> <span class="mi">3</span><span class="p">.</span><span class="mi">4</span> <span class="c">(* Type error *)</span>
+<span class="o">~-.</span> <span class="mi">3</span><span class="p">.</span><span class="mi">4</span> <span class="c">(* Float only *)</span>
+
+<span class="c">(* You can define your own operators or redefine existing ones.
+   Unlike SML or Haskell, only selected symbols can be used
+   for operator names and first symbol defines associativity
+   and precedence rules. *)</span>
+<span class="k">let</span> <span class="o">(+)</span> <span class="n">a</span> <span class="n">b</span> <span class="p">=</span> <span class="n">a</span> <span class="p">-</span> <span class="n">b</span> <span class="p">;;</span> <span class="c">(* Surprise maintenance programmers. *)</span>
+
+<span class="c">(* More useful: a reciprocal operator for floats.
+   Unary operators must start with "~". *)</span>
+<span class="k">let</span> <span class="o">(~/)</span> <span class="n">x</span> <span class="p">=</span> <span class="mi">1</span><span class="p">.</span><span class="mi">0</span> <span class="o">/.</span> <span class="n">x</span> <span class="p">;;</span>
+<span class="o">~/</span><span class="mi">4</span><span class="p">.</span><span class="mi">0</span> <span class="c">(* = 0.25 *)</span>
+
+
+<span class="c">(*** Built-in data structures ***)</span>
+
+<span class="c">(* Lists are enclosed in square brackets, items are separated by
+   semicolons. *)</span>
+<span class="k">let</span> <span class="n">my_list</span> <span class="p">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">;</span> <span class="mi">2</span><span class="p">;</span> <span class="mi">3</span><span class="p">]</span> <span class="p">;;</span>
+
+<span class="c">(* Tuples are (optionally) enclosed in parentheses, items are separated
+   by commas. *)</span>
+<span class="k">let</span> <span class="n">first_tuple</span> <span class="p">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span> <span class="p">;;</span> <span class="c">(* Has type "int * int". *)</span>
+<span class="k">let</span> <span class="n">second_tuple</span> <span class="p">=</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="p">;;</span>
+
+<span class="c">(* Corollary: if you try to separate list items by commas, you get a list
+   with a tuple inside, probably not what you want. *)</span>
+<span class="k">let</span> <span class="n">bad_list</span> <span class="p">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="p">;;</span> <span class="c">(* Becomes [(1, 2)] *)</span>
+
+<span class="c">(* You can access individual list items with the List.nth function. *)</span>
+<span class="nn">List</span><span class="p">.</span><span class="n">nth</span> <span class="n">my_list</span> <span class="mi">1</span> <span class="p">;;</span>
+
+<span class="c">(* There are higher-order functions for lists such as map and filter. *)</span>
+<span class="nn">List</span><span class="p">.</span><span class="n">map</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="p">*</span> <span class="mi">2</span><span class="p">)</span> <span class="p">[</span><span class="mi">1</span><span class="p">;</span> <span class="mi">2</span><span class="p">;</span> <span class="mi">3</span><span class="p">]</span> <span class="p">;;</span>
+<span class="nn">List</span><span class="p">.</span><span class="n">filter</span> <span class="p">(</span><span class="k">fun</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="ow">mod</span> <span class="mi">2</span> <span class="p">=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">[</span><span class="mi">1</span><span class="p">;</span> <span class="mi">2</span><span class="p">;</span> <span class="mi">3</span><span class="p">;</span> <span class="mi">4</span><span class="p">]</span> <span class="p">;;</span>
+
+<span class="c">(* You can add an item to the beginning of a list with the "::" constructor
+   often referred to as "cons". *)</span>
+<span class="mi">1</span> <span class="p">::</span> <span class="p">[</span><span class="mi">2</span><span class="p">;</span> <span class="mi">3</span><span class="p">]</span> <span class="p">;;</span> <span class="c">(* Gives [1; 2; 3] *)</span>
+
+<span class="c">(* Arrays are enclosed in [| |] *)</span>
+<span class="k">let</span> <span class="n">my_array</span> <span class="p">=</span> <span class="p">[|</span> <span class="mi">1</span><span class="p">;</span> <span class="mi">2</span><span class="p">;</span> <span class="mi">3</span> <span class="p">|]</span> <span class="p">;;</span>
+
+<span class="c">(* You can access array items like this: *)</span>
+<span class="n">my_array</span><span class="o">.(</span><span class="mi">0</span><span class="p">)</span> <span class="p">;;</span>
+
+
+<span class="c">(*** Strings and characters ***)</span>
+
+<span class="c">(* Use double quotes for string literals. *)</span>
+<span class="k">let</span> <span class="n">my_str</span> <span class="p">=</span> <span class="s2">"Hello world"</span> <span class="p">;;</span>
+
+<span class="c">(* Use single quotes for character literals. *)</span>
+<span class="k">let</span> <span class="n">my_char</span> <span class="p">=</span> <span class="k">'</span><span class="n">a'</span> <span class="p">;;</span>
+
+<span class="c">(* Single and double quotes are not interchangeable. *)</span>
+<span class="k">let</span> <span class="n">bad_str</span> <span class="p">=</span> <span class="k">'</span><span class="n">syntax</span> <span class="n">error'</span> <span class="p">;;</span> <span class="c">(* Syntax error. *)</span>
+
+<span class="c">(* This will give you a single character string, not a character. *)</span>
+<span class="k">let</span> <span class="n">single_char_str</span> <span class="p">=</span> <span class="s2">"w"</span> <span class="p">;;</span>
+
+<span class="c">(* Strings can be concatenated with the "^" operator. *)</span>
+<span class="k">let</span> <span class="n">some_str</span> <span class="p">=</span> <span class="s2">"hello"</span> <span class="o">^</span> <span class="s2">"world"</span> <span class="p">;;</span>
+
+<span class="c">(* Strings are not arrays of characters.
+   You can't mix characters and strings in expressions.
+   You can convert a character to a string with "String.make 1 my_char".
+   There are more convenient functions for this purpose in additional
+   libraries such as Core.Std that may not be installed and/or loaded
+   by default. *)</span>
+<span class="k">let</span> <span class="n">ocaml</span> <span class="p">=</span> <span class="p">(</span><span class="nn">String</span><span class="p">.</span><span class="n">make</span> <span class="mi">1</span> <span class="k">'</span><span class="nc">O'</span><span class="p">)</span> <span class="o">^</span> <span class="s2">"Caml"</span> <span class="p">;;</span>
+
+<span class="c">(* There is a printf function. *)</span>
+<span class="nn">Printf</span><span class="p">.</span><span class="n">printf</span> <span class="s2">"%d %s"</span> <span class="mi">99</span> <span class="s2">"bottles of beer"</span> <span class="p">;;</span>
+
+<span class="c">(* Unformatted read and write functions are there too. *)</span>
+<span class="n">print_string</span> <span class="s2">"hello world</span><span class="se">\n</span><span class="s2">"</span> <span class="p">;;</span>
+<span class="n">print_endline</span> <span class="s2">"hello world"</span> <span class="p">;;</span>
+<span class="k">let</span> <span class="n">line</span> <span class="p">=</span> <span class="n">read_line</span> <span class="bp">()</span> <span class="p">;;</span>
+
+
+<span class="c">(*** User-defined data types ***)</span>
+
+<span class="c">(* You can define types with the "type some_type =" construct. Like in this
+   useless type alias: *)</span>
+<span class="k">type</span> <span class="n">my_int</span> <span class="p">=</span> <span class="kt">int</span> <span class="p">;;</span>
+
+<span class="c">(* More interesting types include so called type constructors.
+   Constructors must start with a capital letter. *)</span>
+<span class="k">type</span> <span class="n">ml</span> <span class="p">=</span> <span class="nc">OCaml</span> <span class="p">|</span> <span class="nc">StandardML</span> <span class="p">;;</span>
+<span class="k">let</span> <span class="n">lang</span> <span class="p">=</span> <span class="nc">OCaml</span> <span class="p">;;</span>  <span class="c">(* Has type "ml". *)</span>
+
+<span class="c">(* Type constructors don't need to be empty. *)</span>
+<span class="k">type</span> <span class="n">my_number</span> <span class="p">=</span> <span class="nc">PlusInfinity</span> <span class="p">|</span> <span class="nc">MinusInfinity</span> <span class="p">|</span> <span class="nc">Real</span> <span class="k">of</span> <span class="kt">float</span> <span class="p">;;</span>
+<span class="k">let</span> <span class="n">r0</span> <span class="p">=</span> <span class="nc">Real</span> <span class="o">(-</span><span class="mi">3</span><span class="p">.</span><span class="mi">4</span><span class="p">)</span> <span class="p">;;</span> <span class="c">(* Has type "my_number". *)</span>
+
+<span class="c">(* Can be used to implement polymorphic arithmetics. *)</span>
+<span class="k">type</span> <span class="n">number</span> <span class="p">=</span> <span class="nc">Int</span> <span class="k">of</span> <span class="kt">int</span> <span class="p">|</span> <span class="nc">Float</span> <span class="k">of</span> <span class="kt">float</span> <span class="p">;;</span>
+
+<span class="c">(* Point on a plane, essentially a type-constrained tuple *)</span>
+<span class="k">type</span> <span class="n">point2d</span> <span class="p">=</span> <span class="nc">Point</span> <span class="k">of</span> <span class="kt">float</span> <span class="p">*</span> <span class="kt">float</span> <span class="p">;;</span>
+<span class="k">let</span> <span class="n">my_point</span> <span class="p">=</span> <span class="nc">Point</span> <span class="p">(</span><span class="mi">2</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span> <span class="p">;;</span>
+
+<span class="c">(* Types can be parameterized, like in this type for "list of lists
+   of anything". 'a can be substituted with any type. *)</span>
+<span class="k">type</span> <span class="k">'</span><span class="n">a</span> <span class="n">list_of_lists</span> <span class="p">=</span> <span class="k">'</span><span class="n">a</span> <span class="kt">list</span> <span class="kt">list</span> <span class="p">;;</span>
+<span class="k">type</span> <span class="n">int_list_list</span> <span class="p">=</span> <span class="kt">int</span> <span class="n">list_of_lists</span> <span class="p">;;</span>
+
+<span class="c">(* Types can also be recursive. Like in this type analogous to
+   built-in list of integers. *)</span>
+<span class="k">type</span> <span class="n">my_int_list</span> <span class="p">=</span> <span class="nc">EmptyList</span> <span class="p">|</span> <span class="nc">IntList</span> <span class="k">of</span> <span class="kt">int</span> <span class="p">*</span> <span class="n">my_int_list</span> <span class="p">;;</span>
+<span class="k">let</span> <span class="n">l</span> <span class="p">=</span> <span class="nc">IntList</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nc">EmptyList</span><span class="p">)</span> <span class="p">;;</span>
+
+
+<span class="c">(*** Pattern matching ***)</span>
+
+<span class="c">(* Pattern matching is somewhat similar to switch statement in imperative
+   languages, but offers a lot more expressive power.
+
+   Even though it may look complicated, it really boils down to matching
+   an argument against an exact value, a predicate, or a type constructor.
+   The type system is what makes it so powerful. *)</span>
+
+<span class="c">(** Matching exact values.  **)</span>
+
+<span class="k">let</span> <span class="n">is_zero</span> <span class="n">x</span> <span class="p">=</span>
+    <span class="k">match</span> <span class="n">x</span> <span class="k">with</span>
+    <span class="p">|</span> <span class="mi">0</span> <span class="p">-&gt;</span> <span class="bp">true</span>
+    <span class="p">|</span> <span class="p">_</span> <span class="p">-&gt;</span> <span class="bp">false</span>  <span class="c">(* The "_" pattern means "anything else". *)</span>
+<span class="p">;;</span>
+
+<span class="c">(* Alternatively, you can use the "function" keyword. *)</span>
+<span class="k">let</span> <span class="n">is_one</span> <span class="p">=</span> <span class="k">function</span>
+<span class="p">|</span> <span class="mi">1</span> <span class="p">-&gt;</span> <span class="bp">true</span>
+<span class="p">|</span> <span class="p">_</span> <span class="p">-&gt;</span> <span class="bp">false</span>
+<span class="p">;;</span>
+
+<span class="c">(* Matching predicates, aka "guarded pattern matching". *)</span>
+<span class="k">let</span> <span class="n">abs</span> <span class="n">x</span> <span class="p">=</span>
+    <span class="k">match</span> <span class="n">x</span> <span class="k">with</span>
+    <span class="p">|</span> <span class="n">x</span> <span class="k">when</span> <span class="n">x</span> <span class="p">&lt;</span> <span class="mi">0</span> <span class="p">-&gt;</span> <span class="p">-</span><span class="n">x</span>
+    <span class="p">|</span> <span class="p">_</span> <span class="p">-&gt;</span> <span class="n">x</span>
+<span class="p">;;</span>
+
+<span class="n">abs</span> <span class="mi">5</span> <span class="p">;;</span> <span class="c">(* 5 *)</span>
+<span class="n">abs</span> <span class="o">(-</span><span class="mi">5</span><span class="p">)</span> <span class="c">(* 5 again *)</span>
+
+<span class="c">(** Matching type constructors **)</span>
+
+<span class="k">type</span> <span class="n">animal</span> <span class="p">=</span> <span class="nc">Dog</span> <span class="k">of</span> <span class="kt">string</span> <span class="p">|</span> <span class="nc">Cat</span> <span class="k">of</span> <span class="kt">string</span> <span class="p">;;</span>
+
+<span class="k">let</span> <span class="n">say</span> <span class="n">x</span> <span class="p">=</span>
+    <span class="k">match</span> <span class="n">x</span> <span class="k">with</span>
+    <span class="p">|</span> <span class="nc">Dog</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="o">^</span> <span class="s2">" says woof"</span>
+    <span class="p">|</span> <span class="nc">Cat</span> <span class="n">x</span> <span class="p">-&gt;</span> <span class="n">x</span> <span class="o">^</span> <span class="s2">" says meow"</span>
+<span class="p">;;</span>
+
+<span class="n">say</span> <span class="p">(</span><span class="nc">Cat</span> <span class="s2">"Fluffy"</span><span class="p">)</span> <span class="p">;;</span> <span class="c">(* "Fluffy says meow". *)</span>
+
+<span class="c">(** Traversing data structures with pattern matching **)</span>
+
+<span class="c">(* Recursive types can be traversed with pattern matching easily.
+   Let's see how we can traverse a data structure of the built-in list type.
+   Even though the built-in cons ("::") looks like an infix operator,
+   it's actually a type constructor and can be matched like any other. *)</span>
+<span class="k">let</span> <span class="k">rec</span> <span class="n">sum_list</span> <span class="n">l</span> <span class="p">=</span>
+    <span class="k">match</span> <span class="n">l</span> <span class="k">with</span>
+    <span class="p">|</span> <span class="bp">[]</span> <span class="p">-&gt;</span> <span class="mi">0</span>
+    <span class="p">|</span> <span class="n">head</span> <span class="p">::</span> <span class="n">tail</span> <span class="p">-&gt;</span> <span class="n">head</span> <span class="o">+</span> <span class="p">(</span><span class="n">sum_list</span> <span class="n">tail</span><span class="p">)</span>
+<span class="p">;;</span>
+
+<span class="n">sum_list</span> <span class="p">[</span><span class="mi">1</span><span class="p">;</span> <span class="mi">2</span><span class="p">;</span> <span class="mi">3</span><span class="p">]</span> <span class="p">;;</span> <span class="c">(* Evaluates to 6 *)</span>
+
+<span class="c">(* Built-in syntax for cons obscures the structure a bit, so we'll make
+   our own list for demonstration. *)</span>
+
+<span class="k">type</span> <span class="n">int_list</span> <span class="p">=</span> <span class="nc">Nil</span> <span class="p">|</span> <span class="nc">Cons</span> <span class="k">of</span> <span class="kt">int</span> <span class="p">*</span> <span class="n">int_list</span> <span class="p">;;</span>
+<span class="k">let</span> <span class="k">rec</span> <span class="n">sum_int_list</span> <span class="n">l</span> <span class="p">=</span>
+  <span class="k">match</span> <span class="n">l</span> <span class="k">with</span>
+      <span class="p">|</span> <span class="nc">Nil</span> <span class="p">-&gt;</span> <span class="mi">0</span>
+      <span class="p">|</span> <span class="nc">Cons</span> <span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">tail</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">head</span> <span class="o">+</span> <span class="p">(</span><span class="n">sum_int_list</span> <span class="n">tail</span><span class="p">)</span>
+<span class="p">;;</span>
+
+<span class="k">let</span> <span class="n">t</span> <span class="p">=</span> <span class="nc">Cons</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nc">Cons</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nc">Cons</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nc">Nil</span><span class="o">)))</span> <span class="p">;;</span>
+<span class="n">sum_int_list</span> <span class="n">t</span> <span class="p">;;</span>
+
+</code></pre>
+
+<h2>Further reading</h2>
+
+<ul>
+<li>Visit the official website to get the compiler and read the docs: <a href="http://ocaml.org/">http://ocaml.org/</a></li>
+<li>Try interactive tutorials and a web-based interpreter by OCaml Pro: <a href="http://try.ocamlpro.com/">http://try.ocamlpro.com/</a></li>
+<li>Read &ldquo;OCaml for the skeptical&rdquo; course: <a href="http://www2.lib.uchicago.edu/keith/ocaml-class/home.html">http://www2.lib.uchicago.edu/keith/ocaml-class/home.html</a></li>
+</ul>
+
+    <hr>
+    <p>Got a suggestion? A correction, perhaps? <a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">Open an Issue</a> on the Github Repo, or make a pull request yourself!
+    </p>
+    <p class="contributed">
+    Originally contributed by Daniil Baturin, and updated by <a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/ocaml.html.markdown">7 contributor(s)</a>.
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="http://baturin.org/">Daniil Baturin</a>
+      
+    
+    </p>
+
+    <p>
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/ocaml/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:35:22 GMT -->
+</html>

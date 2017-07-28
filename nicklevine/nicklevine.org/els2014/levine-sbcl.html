@@ -1,0 +1,470 @@
+;; $Id: //info.ravenbrook.com/project/chart/talk/2014-02-17/els14/demo/base.lisp#6 $
+
+;; SBCL only (also tested on Clozure CL)
+
+(cl:eval-when (cl:eval cl:load cl:compile)
+  (cl:defpackage "CAPI"
+    (:nicknames "GP")
+    (:shadowing-import-from :cffi "DEFCALLBACK")
+    (:use "COMMON-LISP" "CFFI")
+    (:shadow "ARRAY" "CLOSE" "FREE")
+    (:export "CONTAIN"
+	     "DRAW-LINE"
+	     "DRAW-STRING"
+	     "OUTPUT-PANE"
+	     "OUTPUT-PANE-INPUT-MODEL")))
+
+(cl:in-package "CAPI")
+
+;; Connect to the library
+
+(defparameter *library* 'capi)
+
+(unless (fboundp 'ok)
+  (define-foreign-library (capi :convention :stdcall) (t "capi.dll"))
+  ;;(use-foreign-library capi)
+  )
+
+;; Making foreign calls
+
+(defmacro defun-external (name-and-options arguments &body body)
+  (declare (ignore body))
+  (destructuring-bind (lisp-name &key (result-type :void) &allow-other-keys)
+      (if (consp name-and-options)
+          name-and-options
+        (list name-and-options))
+    (let* ((C-name (lisp-name-to-C-name lisp-name))
+	   (internal-name (intern (format nil "DLL-~a" lisp-name)))
+	   (resultp (not (eq result-type :void)))
+	   (lisp-arguments (loop for argument in arguments collect
+                                 (if (consp argument)
+                                     (car argument)
+                                   argument)))
+	   (C-arguments (loop for argument in arguments collect
+			      (if (consp argument)
+				  argument
+				`(,argument object))))
+	   (augmented-C-arguments (if resultp
+				      (cons '(result :pointer)
+					    C-arguments)
+				    C-arguments)))
+      `(progn
+	 (defcfun (,C-name ,internal-name :library ,*library* :convention :stdcall)
+	   result
+	   ,@augmented-C-arguments)
+	 (defun ,lisp-name (,@lisp-arguments)
+	   (funcall ,(if resultp
+			 `(val ',internal-name ',result-type)
+		       `(void ',internal-name))
+		    ,@lisp-arguments))))))
+
+(defun lisp-name-to-C-name (lisp-name)
+  (substitute #\_ #\- (format nil "~(~a_~a~)" *library* lisp-name)))
+
+;; Simple types
+
+(defctype uint :uint)
+(defctype ustring :string)
+
+(defctype result :int)
+(defun ok (result)
+  (zerop result))
+
+;; Objects
+
+(defvar *wrappers* (make-hash-table))
+
+(eval-when (eval load compile)
+  (defmethod new-fn (type &optional require)
+    (let ((name (format nil "NEW-~a" type))
+	  (package #.*package*))
+      (if require
+	  (intern name package)
+	(find-symbol name package)))))
+
+(defmacro defclass-external (name superclasses slots &rest class-options)
+  (unless (or (eq name 'object)
+	      (loop for class in superclasses thereis (new-fn class)))
+    (setf superclasses (append superclasses '(object))))
+  `(progn
+     (defclass ,name ,superclasses ,slots ,@class-options)
+     (defun-external (,(new-fn name t) :result-type :int) ())))
+
+(defclass-external object ()
+  ((wrapper :accessor object-wrapper)))
+
+(defmethod new-fn ((self object) &optional require)
+  (new-fn (type-of self) require))
+
+(defmethod print-object ((self object) stream)
+  (let ((library *library*)
+        (type (type-of self)))
+    (if (and (slot-boundp self 'wrapper)
+             (object-wrapper self))
+        (print-unreadable-object (self stream)
+          (format stream "~a:~a ~x" library type (object-wrapper self)))
+      (print-unreadable-object (self stream :identity t)
+        (format stream "~a:~a (no handle)" library type)))))
+
+(defmethod initialize-instance :after ((self object) &key)
+  (let ((wrapper (funcall (new-fn self))))
+    (setf (gethash wrapper *wrappers*) self
+	  (object-wrapper self) wrapper)))
+
+(defmethod box ((self object) &key &allow-other-keys)
+  (object-wrapper self))
+
+(defmethod box ((self null) &key allow-null)
+  (if allow-null
+      0
+    (call-next-method)))
+
+(defun unbox (wrapper &key allow-null type)
+  (unless (and (zerop wrapper)
+               allow-null)
+    (let ((object (gethash wrapper *wrappers*)))
+      (when (and type
+		 (not (typep object type)))
+	(if object
+	    (error "~a is ~(~a, but ~a~) was expected."
+		   object (indefinite (type-of object)) (indefinite type))
+	  (error "The object with handle ~a has been removed and can no longer be referenced."
+		 wrapper)))
+      object)))
+
+(defun indefinite (thing)
+  (let ((string (format nil "~a" thing)))
+    (format nil (if (find (schar string 0) "aeiouAEIOU")
+                    "an ~a"
+                  "a ~a")
+            string)))
+
+(defmethod drop ((self object))
+  (let ((wrapper (shiftf (object-wrapper self) nil)))
+    (remhash wrapper *wrappers*)
+    wrapper))
+
+(define-foreign-type foreign-object ()
+  ((allow-null :reader foreign-object-allow-null :initarg :allow-null))
+  (:actual-type :uint))
+
+(define-parse-method object (&key allow-null)
+  (make-instance 'foreign-object :allow-null allow-null))
+
+(defmethod translate-to-foreign (object (foreign-object foreign-object))
+  (box object :allow-null (foreign-object-allow-null foreign-object)))
+(defmethod translate-from-foreign (pointer (foreign-object foreign-object))
+  (unbox pointer :allow-null (foreign-object-allow-null foreign-object)))
+
+
+;; Records
+
+(defun construct (objects types &key allow-null)
+  (cond (objects
+         (let* ((length (length objects))
+                (record (foreign-alloc :uint :count length)))
+           (loop for index from 0 as object in objects as type in types do
+                 (point record index object type))
+           (pointer-address record)))
+        (allow-null 0)
+        (t (error "Null record for pointer~@[ which expected ~a~]." types))))
+
+(defun point (array index object type &key call)
+  (let ((address (ecase (if (consp type) (car type) type)
+                   ((array)   (apply 'pack object (cdr type)))
+                   ((boolean) (if object 1 0))
+                   ((object)  (box object))
+                   ((record)  (apply 'construct object (cdr type)))
+                   ((uint)    object)
+                   ((ustring) (if object
+				  (pointer-address (foreign-string-alloc object))
+				0)))))
+    (when call
+      (funcall call object))
+    (setf (mem-aref array 'uint index) address)))
+
+(defun deconstruct (address types &key allow-null)
+  (let ((pointer (make-pointer address)))
+    (if (null-pointer-p pointer)
+        (unless allow-null
+          (error "Null pointer for record which expected ~a" types))
+      (loop for type in types
+            for index from 0
+            collect (follow pointer index type)))))
+
+(defun follow (pointer index type)
+  (let ((address (mem-aref pointer 'uint index)))
+    (ecase (follow-type type)
+      ((array)   (unpack address (cadr type)))
+      ((boolean) (not (zerop address)))
+      ((object)  (unbox address :type type))
+      ((uint)    address)
+      ((int)     (if (<= address most-positive-fixnum)
+		     address
+                   (+ (logand address most-positive-fixnum)
+		      most-negative-fixnum)))
+      ((record)  (apply 'deconstruct address (cdr type)))
+      ((ustring) (unless (zerop address)
+		   (foreign-string-to-lisp (make-string-pointer address)))))))
+
+(defun make-string-pointer (address)
+  (cffi:make-pointer address))
+
+(defun follow-type (type)
+  (cond
+   ((consp type) (car type))
+   ((new-fn type) 'object)
+   (t type)))
+
+(define-foreign-type record ()
+  ((types      :reader record-types      :initarg :types)
+   (allow-null :reader record-allow-null :initarg :allow-null :initform nil))
+  (:actual-type :pointer))
+
+(define-parse-method record (types)
+  (make-instance 'record :types types))
+
+(defmethod translate-to-foreign (objects (record record))
+  (construct objects (record-types record)
+	     :allow-null (record-allow-null record)))
+(defmethod translate-from-foreign (pointer (record record))
+  (deconstruct pointer (record-types record)
+	       :allow-null (record-allow-null record)))
+
+;; Arrays
+
+(defun pack (objects type)
+  (let* ((length (length objects))
+         (array (foreign-alloc :uint :count (1+ length))))
+    (setf (mem-aref array 'uint 0) length)
+    (loop for index from 1 as object in objects do
+          (point array index object type))
+    array))
+
+(defun unpack (pointer type &key call)
+  (let ((length (mem-aref pointer :int)))
+    (loop for index from 1 to length
+          collect (let ((item (follow pointer index type)))
+		    (when call
+		      (funcall call item))
+		    item))))
+
+(define-foreign-type array ()
+  ((type :reader array-type :initarg :type)
+   (call :reader array-call :initarg :call :initform nil))
+  (:actual-type :pointer))
+
+(define-parse-method array (type &key call)
+  (make-instance 'array :type type :call call))
+
+(defmethod translate-to-foreign (objects (array array))
+  (pack objects (array-type array)))
+(defmethod translate-from-foreign (pointer (array array))
+  (unpack pointer (array-type array)
+	  :call (array-call array)))
+
+;; Functions calls return an error code, and might return a useful
+;; value by resetting a pointer.
+
+(defun check (function args)
+  (unless (ok (apply function args))
+    (report-error)))
+
+(defun val (function type)
+  (lambda (&rest args)
+    (with-foreign-object (result :pointer)
+       (check function (cons result args))
+       (mem-ref result type))))
+
+(defun void (function)
+  (lambda (&rest args)
+    (check function args)))
+
+;; Error handling. We deliberately bypass check & friends, as we want
+;; better handling of recursive errors than another call to
+;; report-error.
+
+(defun report-error ()
+  (with-foreign-object (pstring :pointer)
+     (let ((res (dll-last-error pstring)))
+       (if (ok res)
+	   (let ((string (mem-ref pstring :string)))
+	     (if string
+		 (progn
+		   (unless (ok (dll-free (mem-ref pstring :pointer)))
+		     (setf string (format nil "*** Warning: Capi was unable to free the capi_last_error string. ***~2%~a"
+					  string)))
+		   (error string))
+	       (error "'How did this happen? There was no error in Capi.")))
+	 (error "CAPI reports an error and an error reporting the error.")))))
+
+
+;; The external calls
+
+(defun-external init ())
+(defun-external close ())
+
+(defun-external (last-error :result-type ustring) ())
+(defun-external free ((pointer :pointer)))
+
+(defun-external (remove-objects :result-type (array object :call drop)) ((array (array object))))
+
+(defun-external (return-object :result-type object) (object))
+(defun-external (return-array :result-type (array object)) ((array (array object))))
+
+(defun-external raise-error ((report ustring)))
+(defun-external request-error ((object (object :allow-null t)) (error-string ustring)))
+
+(defun-external (invoke-return-object :result-type :boolean)
+    ((return-object :pointer) object))
+
+
+;; Communications test
+
+(unless (ignore-errors (callback return-self))
+  (defcallback (return-self :convention :stdcall) object ((self object))
+    self))
+
+(defun communications-test (&key (class 'object))
+  (let* ((obj-1 (make-instance class))
+	 (obj-2 (make-instance class))
+	 (objects (list obj-1 obj-2)))
+    ;; Send an object into the library and get it back.
+    (assert (eq obj-1 (return-object obj-1)))
+    ;; Get the library to send us an object, which we send back.
+    (assert (invoke-return-object (callback return-self) obj-1))
+    ;; Send an array of objects into the library and get them back.
+    (assert (equal objects
+		   (return-array objects)))
+    ;; Tell the library we no longer want the objects.
+    (remove-objects objects)
+    ;; Have they actually gone away?
+    (assert (not (box obj-1)))
+    t))
+
+
+;; Callbacks (with care - CCL crashes)
+
+(defclass-external manager ()
+  ())
+
+(defun-external set-callbacks ((manager (object :allow-null t))
+                               (callbacks (array (record (ustring :pointer))))))
+
+;; The application!
+
+(defclass-external output-pane ()
+  ((drawing-action :reader output-pane-drawing-action)
+   (title-action   :reader output-pane-title-action)))
+
+(defcallback (drawing-action :convention :stdcall) :void
+    ((pane object) (x :uint) (y :uint))
+  (funcall (output-pane-drawing-action pane) pane x y))
+
+(defcallback (title-action :convention :stdcall) :void
+    ((pane object) (x :uint) (y :uint))
+  (funcall (output-pane-title-action pane) pane x y))
+
+(defun (setf capi:output-pane-input-model) (new-value pane)
+  (flet ((get-action (callback button)
+	    (loop for (gesture action) in new-value
+		  when (equal gesture `(,button :release))
+		  do
+		  (setf (slot-value pane callback) action)
+		  (return (get-callback callback)))))
+    (set-actions pane
+		 (get-action 'drawing-action :button-1)
+		 (get-action 'title-action   :button-3))
+    new-value))
+
+(defun-external contain ((pane object)))
+
+
+(defun-external set-actions ((pane object) (action-1 :pointer) (action-3 :pointer)))
+
+(defun-external draw-line ((pane object) (from-x :uint) (from-y :uint) (to-x :uint) (to-y :uint)))
+(defun-external draw-string ((pane object) (text ustring) (x :uint) (y :uint)))
+
+#||
+;; This code LispWorks only
+
+(in-package "CLAUDE")
+
+(defclass-external output-pane (capi:output-pane)
+   ())
+
+(defmethod output-panep ((self output-pane)) t)
+(defmethod output-panep ((self capi:output-pane))
+  (when-let (interface (capi:element-interface self))
+    ;; Hack!
+    (string= (capi:interface-title interface) "Container")))
+
+(defun-external (new-output-pane :result-type object) ()
+  (make-instance 'output-pane))
+
+(fli:define-foreign-funcallable void-call-with-object-int-int ((object object) (x int) (y int))
+  :calling-convention :stdcall)
+
+(defun-external set-actions ((pane output-pane) (action-1 (:pointer :function)) (action-3 (:pointer :function)))
+  (setf (capi:output-pane-input-model pane)
+	`(((:button-1 :release)
+	   ,(lambda (pane x y)
+	      (void-call-with-object-int-int action-1 pane x y)))
+	  ((:button-3 :release)
+	   ,(lambda (pane x y)
+	      (void-call-with-object-int-int action-3 pane x y))))))
+
+(defun-external draw-line ((pane output-pane) (from-x uint) (from-y uint) (to-x uint) (to-y uint))
+  (gp:draw-line pane from-x from-y to-x to-y))
+
+(defadvice (gp:draw-line draw-line-thicker :around) (pane from-x from-y to-x to-y &rest args)
+  (if (output-panep pane)
+      (gp:with-graphics-state (pane :thickness 5)
+        (apply #'call-next-advice pane from-x from-y to-x to-y args))
+    (apply #'call-next-advice pane from-x from-y to-x to-y args)))
+
+(defun-external draw-string ((pane output-pane) (string ustring) (x uint) (y uint))
+  (gp:draw-string pane string x y))
+
+(defadvice (gp:draw-string draw-text-thicker :around) (pane string x y &rest args)
+  (if (output-panep pane)
+      (let* ((font (gp:find-best-font pane
+                                      (gp:make-font-description :family "Verdana"
+                                                                :size 40
+                                                                :weight :bold))))
+        (gp:with-graphics-state (pane :font font
+                                      :foreground :red)
+          (apply #'call-next-advice pane string x y args)))
+    (apply #'call-next-advice pane string x y args)))
+
+(defun-external contain ((pane output-pane))
+  (capi:contain pane))
+||#
+
+
+#||
+;; This code shared between SBCL and LispWorks
+
+(in-package "CL-USER")
+
+(defparameter *last-point* nil)
+(defun draw-line (pane x y)
+  (let ((previous (shiftf *last-point* (list x y))))
+    (when previous
+      (destructuring-bind (last-x last-y)
+	  previous
+	(gp:draw-line pane last-x last-y x y)))))
+
+(defun draw-string (pane x y)
+  (gp:draw-string pane (lisp-implementation-type) x y))
+
+(defparameter pane (make-instance 'capi:output-pane))
+
+(setf (capi:output-pane-input-model pane)
+      '(((:button-1 :release) draw-line)
+	((:button-3 :release) draw-string)))
+
+(capi:contain pane)
+||#
+
+

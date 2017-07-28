@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Stop Your Java SAX Parser from Downloading DTDs</title>
+	<atom:link href="https://stuartsierra.com/2008/05/08/stop-your-java-sax-parser-from-downloading-dtds/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2008/05/08/stop-your-java-sax-parser-from-downloading-dtds</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: M</title>
+		<link>https://stuartsierra.com/2008/05/08/stop-your-java-sax-parser-from-downloading-dtds/comment-page-1#comment-44629</link>
+		<dc:creator><![CDATA[M]]></dc:creator>
+		<pubDate>Fri, 10 Aug 2012 13:41:21 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=156#comment-44629</guid>
+		<description><![CDATA[Thanks!]]></description>
+		<content:encoded><![CDATA[<p>Thanks!</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: K</title>
+		<link>https://stuartsierra.com/2008/05/08/stop-your-java-sax-parser-from-downloading-dtds/comment-page-1#comment-43235</link>
+		<dc:creator><![CDATA[K]]></dc:creator>
+		<pubDate>Wed, 29 Sep 2010 00:32:55 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=156#comment-43235</guid>
+		<description><![CDATA[Thank you very much. Works fine!]]></description>
+		<content:encoded><![CDATA[<p>Thank you very much. Works fine!</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Sam</title>
+		<link>https://stuartsierra.com/2008/05/08/stop-your-java-sax-parser-from-downloading-dtds/comment-page-1#comment-43180</link>
+		<dc:creator><![CDATA[Sam]]></dc:creator>
+		<pubDate>Sun, 08 Aug 2010 08:48:47 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=156#comment-43180</guid>
+		<description><![CDATA[Great!
+
+That&#039;s my solution too!
+
+And if you still need the DTD&#039;s to be read you can download and save as a file and you don&#039;t need any internetconnection to run your programm. See below:
+
+public class DummyEntityResolver implements EntityResolver {
+	public InputSource resolveEntity(String publicID, String systemID) throws SAXException {
+
+		try {
+			return new InputSource(new FileInputStream(&quot;temp/PropertyList-1.0.dtd&quot;));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+}]]></description>
+		<content:encoded><![CDATA[<p>Great!</p>
+<p>That&#8217;s my solution too!</p>
+<p>And if you still need the DTD&#8217;s to be read you can download and save as a file and you don&#8217;t need any internetconnection to run your programm. See below:</p>
+<p>public class DummyEntityResolver implements EntityResolver {<br />
+	public InputSource resolveEntity(String publicID, String systemID) throws SAXException {</p>
+<p>		try {<br />
+			return new InputSource(new FileInputStream(&#8220;temp/PropertyList-1.0.dtd&#8221;));<br />
+		} catch (FileNotFoundException e) {<br />
+			e.printStackTrace();<br />
+			return null;<br />
+		}<br />
+	}<br />
+}</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Michael Krog</title>
+		<link>https://stuartsierra.com/2008/05/08/stop-your-java-sax-parser-from-downloading-dtds/comment-page-1#comment-42762</link>
+		<dc:creator><![CDATA[Michael Krog]]></dc:creator>
+		<pubDate>Fri, 02 Oct 2009 15:35:45 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=156#comment-42762</guid>
+		<description><![CDATA[Awesome.
+
+I had the exact same problem. Your solution worked.
+
+I must point however, that while your solution works perfectly the following, which seems like it could work also, does not:
+
+SAXParser saxParser = factory.newSAXParser();
+saxParser.getXMLReader().setEntityResolver(new DummyEntityResolver());
+saxParser.parse(new InputSource(conn.getInputStream(), new YourHandler()));]]></description>
+		<content:encoded><![CDATA[<p>Awesome.</p>
+<p>I had the exact same problem. Your solution worked.</p>
+<p>I must point however, that while your solution works perfectly the following, which seems like it could work also, does not:</p>
+<p>SAXParser saxParser = factory.newSAXParser();<br />
+saxParser.getXMLReader().setEntityResolver(new DummyEntityResolver());<br />
+saxParser.parse(new InputSource(conn.getInputStream(), new YourHandler()));</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Lars Tackmann</title>
+		<link>https://stuartsierra.com/2008/05/08/stop-your-java-sax-parser-from-downloading-dtds/comment-page-1#comment-29804</link>
+		<dc:creator><![CDATA[Lars Tackmann]]></dc:creator>
+		<pubDate>Mon, 02 Jun 2008 07:33:34 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=156#comment-29804</guid>
+		<description><![CDATA[Thanks this was just what I needed - I myself was a little baffled as to why there was not more information about this on the web, but anyway your solution worked out really well.]]></description>
+		<content:encoded><![CDATA[<p>Thanks this was just what I needed &#8211; I myself was a little baffled as to why there was not more information about this on the web, but anyway your solution worked out really well.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.271 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 12:58:43 -->
+
+<!-- Compression = gzip -->

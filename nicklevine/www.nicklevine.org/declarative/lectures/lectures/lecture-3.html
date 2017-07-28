@@ -1,0 +1,612 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-3.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:44 GMT -->
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="Author" content="Dr Nick Levine">
+   <meta name="GENERATOR" content="Mozilla/4.72 [en] (WinNT; I) [Netscape]">
+   <title>Lecture Three</title>
+</head>
+<body>
+
+<center><b><font size=+3>Declarative Languages</font></b>
+<br><b><font size=+3>Lecture #3</font></b></center>
+
+<p><b>Purpose:</b> To review carefully old ground, and then pursue a little
+further some of the concepts which will allow you to write more interesting
+functions
+<p><b>3.1 Review - statement of lisp evaluation rules</b>
+<br>&nbsp;
+<table BORDER=10 COLS=1 WIDTH="100%" >
+<tr>
+<td>By <i>evaluate</i> we mean different things for different lisp forms...
+<ul>
+<li>
+To evaluate a <i>self-evaluating object</i> such as a number or a string,
+simply return the value of that number or string. So:</li>
+
+<ul>
+<li>
+<tt>3.141592653589793 => 3.141592653589793</tt></li>
+
+<li>
+<tt>"Hi Nick" => "Hi Nick"</tt></li>
+</ul>
+
+<li>
+To evaluate a symbol, use the value associated with that symbol. So:</li>
+
+<ul>
+<li>
+a symbol used to name an argument to a function behaves as a program variable
+in the obvious way. For example, if we have</li>
+
+<ul>
+<li>
+<tt>(defun wombat (this that other) ...)</tt></li>
+
+<li>
+<tt>(wombat "foo" "bar" "wibble")</tt></li>
+</ul>
+then within the body of the function <tt>wombat</tt>, the variable <tt>this</tt>
+has value <tt>"foo"</tt>,&nbsp; and so on.
+<li>
+some symbols have globally accessible, <i>constant </i>(meaning: you aren't
+allowed to change them) values:</li>
+
+<ul>
+<li>
+<tt>nil&nbsp; =>&nbsp; nil</tt></li>
+
+<li>
+<tt>t&nbsp; =>&nbsp; t</tt></li>
+
+<li>
+<tt>pi&nbsp; => 3.141592653589793</tt></li>
+</ul>
+</ul>
+
+<li>
+To evaluate a list</li>
+
+<ul>
+<li>
+If it is a function call then evaluate each of its arguments, in order,
+and call the function with the results of these evaluations. The result
+of the evaluation is whatever value the function returns. So far we have
+met the following functions:</li>
+
+<ul>
+<li>
+<tt>+ - * / =&nbsp;</tt></li>
+
+<li>
+<tt>list first second ... tenth rest</tt></li>
+
+<li>
+<tt>identity</tt></li>
+
+<li>
+<tt>float</tt></li>
+</ul>
+
+<li>
+If it is not a function call, we treat it specially, according to the idiosyncratic
+definition of that particular non-function. Examples of non-functions include:</li>
+
+<ul>
+<li>
+<tt>quote </tt>(suspends function evaluation)</li>
+
+<li>
+<tt>defun </tt>(defines new functions)</li>
+
+<li>
+<tt>if </tt>(conditional evaluation)</li>
+</ul>
+For example, <tt>if</tt> has syntax <tt>(if condition then-form else-form)</tt>.
+(Actually the <tt>else-form</tt> is optional.) It always evaluates the
+first subform <tt>condition</tt>. If that is true (i.e. non-<tt>nil</tt>)
+then the second subform <tt>then-form</tt> is evaluated and the resulting
+value returned by <tt>if</tt>; otherwise the third subform <tt>else-form</tt>
+- if supplied - is used. So
+<ul><tt>(if nil</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (hideous-disaster)</tt>
+<br><tt>&nbsp; "success")</tt></ul>
+is quite safe.</ul>
+</ul>
+</td>
+</tr>
+</table>
+
+<p><b>3.2 Review - anatomy of a function call</b>
+<p>Please do not hold your breath for the entire duration of this section...
+<p>We are going to revise the story so far by looking at the simple lisp
+session below and examining each step in minute detail.
+<blockquote><tt>CL-USER 1 > (defun rev-list-of-2 (my-list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(list (second my-list)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(first my-list)))</tt>
+<br><tt>REV-LIST-OF-2</tt>
+<p><tt>CL-USER 2 > (rev-list-of-2 '(foo bar))</tt>
+<br><tt>(BAR FOO)</tt>
+<p><tt>CL-USER 3 ></tt></blockquote>
+We start by recalling the top-level <i>read-eval-print </i>loop, in which
+lisp repeatedly performs the following tasks:
+<ol>
+<li>
+print a prompt</li>
+
+<li>
+read a lisp form</li>
+
+<li>
+evaluate that form</li>
+
+<li>
+print the result</li>
+</ol>
+So, the lisp system starts by printing the first prompt <tt>CL-USER 1 ></tt>
+and waits for a complete lisp form to be typed in. It then reads in the
+complete form
+<tt>(defun ...)</tt> and proceeds to evaluate it. Since <tt>defun</tt>
+is not a function it is handled specially, which means here that we are
+going to define a new function, in this case called <tt>rev-list-of-2</tt>.
+The name of the function is returned by <tt>defun</tt> to the top-level
+loop, this return value is printed out and a new prompt <tt>CL-USER 2 ></tt>
+is issued.
+<p>We recklessly decide&nbsp; to call our function with some test data.
+Looking at the function definition, we can see that it takes precisely
+one argument, named here <tt>my-list</tt>, and (given that we are handing
+that value on to functions like <tt>first</tt>) this argument has to be
+a list. The list we want to use for test data has two members: <tt>foo</tt>
+and <tt>bar</tt>. How do we construct this list? Several suggestions come
+to mind, but not all of them work:
+<ul>
+<li>
+Using <tt>quote</tt> is easiest:</li>
+
+<ul><tt>'(foo bar)</tt></ul>
+This form evaluates to <tt>(foo bar)</tt>
+<li>
+If we fail to supply the quote</li>
+
+<ul><tt>(foo bar)</tt></ul>
+we imply we want to call the function <tt>foo</tt> with argument <tt>bar</tt>
+(itself to be evaluated). This is not what we wanted.
+<li>
+An alternative is to use the function <tt>list</tt>, but note that we have
+to protect its arguments from evaluation:</li>
+
+<ul><tt>(list 'foo 'bar)</tt></ul>
+
+<li>
+Or, we could wimp out and change the test data so that the elements of
+the list are self-evaluating and therefore don't need to be quoted:</li>
+
+<ul><tt>(list "foo" "bar")</tt></ul>
+</ul>
+Suppose (for the sake of argument) we go for the first option, and type
+in the form
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (rev-list-of-2 '(foo
+bar))</tt>
+<br>Lisp reads this in and proceeds to evaluate it. It knows that <tt>rev-list-of-2</tt>
+is a function, so the system has to evaluate all the arguments supplied,
+before it can proceed with the function call. In this case there is one
+argument, <tt>'(foo bar)</tt>, which evaluates to <tt>(foo bar)</tt>, and
+so <tt>rev-list-of-2</tt> is called with <tt>my-list</tt> set to the list
+<tt>(foo
+bar)</tt>.
+<p>The body of the function is the form <tt>(list (second my-list) (first
+my-list))</tt>. We evaluate this by appealing yet again to the evaluation
+rules above. <tt>list</tt> is a function, so we start by evaluating its
+arguments. The first argument is the form <tt>(second my-list)</tt> - i.e.
+a call to the function <tt>second</tt>. This call to <tt>second</tt> has
+to (guess what!) evaluate its argument; the argument is the variable <tt>my-list</tt>
+whose value is <tt>(foo bar)</tt> and so <tt>second</tt> is called with
+argument <tt>(foo bar)</tt> and it duly returns the value <tt>bar</tt>.
+Therefore the first of the two values which we are going to pass to the
+function <tt>list</tt> is the symbol <tt>bar</tt>. Similarly the second
+value passed to <tt>list</tt> is the symbol <tt>foo</tt>, and the call
+to <tt>list</tt> returns the list
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (bar foo)</tt>
+<br>which is finally printed out to the sound of massive celebrations by
+all concerned.
+<p>(Did you remember to keep breathing?)
+<p><b>3.3 defun reconsidered</b>
+<p>We recall that the syntax of defun is
+<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <tt>(defun name (arg-1 arg-2
+...) form-1 form-2 ... form-n)</tt>
+<br>where <tt>name</tt> is the name of the function, <tt>arg-1</tt> etc.
+are the names corresponding to the arguments to that function, and <tt>form-1</tt>
+etc. are the lisp forms to evaluate in order to process a call to that
+function. The value returned by the final form <tt>form-n</tt> is the value
+to be returned by the call to the function itself.
+<p>Within the body of the function (i.e. during the evaluation of the forms
+<tt>form-1
+form-2 </tt>etc) the names <tt>arg-1 arg-2 </tt>etc. are available to you
+as program variables. Their initial values are the results of evaluating
+the arguments to the function; in lisp parlance we say that these variables
+are <i>bound</i> to those values.
+<p>So if we have
+<blockquote><tt>(defun square (x)</tt>
+<br><tt>&nbsp; (* x x))</tt></blockquote>
+then during a call <tt>(square (+ 1 1))</tt>, the variable <tt>x</tt> is
+bound to the result of evaluating <tt>(+ 1 1)</tt>.
+<p>The binding lasts only while the function is active. It ceases to exist
+on exit from the function and is not visible in calls to subfunctions (<i>shallow
+binding</i>); the following won't work...
+<blockquote><tt>(defun foo (wombat)</tt>
+<br><tt>&nbsp; (bar))</tt>
+<p><tt>(defun bar ()</tt>
+<br><tt>&nbsp; wombat)</tt></blockquote>
+(Question to check you're still awake: how would you get the variable <tt>wombat</tt>
+into the function <tt>bar</tt>?)
+<p><b>3.4 More variables still</b>
+<p>OK, so we know how to create variables on entry to functions and how
+to assign them values. Suppose we want to create further variables within
+the body of a function? We can do this by means of the special operator
+<tt>let*</tt>.
+For example, instead of
+<blockquote><tt>(defun add-one-and-square-it (x)</tt>
+<br><tt>&nbsp; (* (+ x 1) (+ x 1)))</tt></blockquote>
+we could write
+<blockquote><tt>(defun add-one-and-square-it (x)</tt>
+<br><tt>&nbsp; (let* ((x-plus-one (+ x 1)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (* x-plus-one x-plus-one)))</tt></blockquote>
+The syntax of <tt>let*</tt> is
+<p><tt>&nbsp;&nbsp;&nbsp; (let* ((var-1 value-1)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (var-2
+value-2)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; form-1</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; form-2</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; form-n)</tt>
+<p>Each of the pairs <tt>(var-i value-i)</tt> represents a <i>variable
+binding</i> - the expression <tt>value-i </tt>is evaluated and the variable
+<tt>var-i
+</tt>is
+bound to that value. The bindings are done in order:
+<ol>
+<li>
+evaluate <tt>value-1</tt></li>
+
+<li>
+bind <tt>var-1</tt></li>
+
+<li>
+evaluate <tt>value-2</tt></li>
+
+<li>
+bind <tt>var-2</tt></li>
+
+<br>etc</ol>
+and so on. (This means that, for example, you can use <tt>var-1</tt> in
+the evaluation of <tt>value-2</tt>.) The bindings last until the end of
+the <tt>let*</tt> statement, at which point <tt>let*</tt> returns the value
+of the final form, <tt>form-n</tt>.
+<p><b>3.5 Example - reading, writing and arithmetic</b>
+<p>Let's trot out the example of converting temperatures from Fahrenheit
+to Celsius. Rather than writing a function which takes one value and returns
+another, i.e.
+<blockquote><tt>CL-USER 18 > (defun simple-fahrenheit-to-celsius (fahrenheit)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(float (* (- fahrenheit 32) 5/9)))</tt>
+<br><tt>SIMPLE-FAHRENHEIT-TO-CELSIUS</tt>
+<p><tt>CL-USER 19 > (simple-fahrenheit-to-celsius 212)</tt>
+<br><tt>100.0</tt>
+<p><tt>CL-USER 20 > (simple-fahrenheit-to-celsius 32)</tt>
+<br><tt>0.0</tt>
+<p><tt>CL-USER 21 > ; very happy</tt></blockquote>
+suppose that we have been asked to write a function which prompts the user
+for a value, reads it in and prints the result.
+<blockquote><tt>CL-USER 31 > (fahrenheit-to-celsius)</tt>
+<br><tt>Please give a value in degrees F: 32</tt>
+<br><tt>32 degrees F is 0.0 degrees C.</tt>
+<br><tt>NIL</tt>
+<p><tt>CL-USER 32 > ; etc</tt></blockquote>
+We need the following functions to handle reading and printing of lisp
+values:
+<table CELLSPACING=15 WIDTH="100%" >
+<tr ALIGN=LEFT VALIGN=TOP>
+<td><tt>read</tt></td>
+
+<td ALIGN=LEFT VALIGN=TOP>reads a lisp form and returns it. At its simplest,
+a function of no arguments which reads from the listener. If no form has
+been typed yet, <tt>read</tt> will sit and wait until a complete form is
+available to it.</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>format&nbsp;</tt></td>
+
+<td ALIGN=LEFT VALIGN=TOP>function for generating formatted output. First
+argument is a destination. Specify
+<ul>
+<li>
+<tt>nil </tt>for output to a string (like sprintf in C), which <tt>format</tt>
+generates and returns.</li>
+
+<li>
+<tt>t </tt>for output to the listener (like printf in C), in which case
+<tt>format</tt>
+returns nil.</li>
+</ul>
+The next argument is known as the <i>format string</i>. In the same way
+that printf handles specially any occurrence of the character <tt>%</tt>,
+format handles specially any occurrence of the character <tt>~</tt> (pronounced
+<i>tilde</i>).&nbsp;
+In particular,
+<ul>
+<li>
+<tt>~&amp;</tt> means: output a fresh line (i.e. if we weren't already
+at the start of a line, output a new one)</li>
+
+<li>
+<tt>~a</tt> means: take the next of the arguments to <tt>format</tt> and
+insert its printed representation here</li>
+</ul>
+Example: <tt>(let* ((name "Nick")) (format nil "Hello, ~a." name))&nbsp;</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; =>&nbsp; "Hello, Nick."</tt></td>
+</tr>
+</table>
+
+<p>And the function definition looks like this:
+<blockquote><tt>(defun fahrenheit-to-celsius ()</tt>
+<br><tt>&nbsp; (format t "~&amp;Please give a value in degrees F: ")</tt>
+<br><tt>&nbsp; (let* ((fahrenheit (read))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (celsius (float
+(* (- fahrenheit 32) 5/9))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (format t "~&amp;~a degrees F is ~a degrees
+C.~&amp;" fahrenheit celsius)))</tt></blockquote>
+
+<p><br><b>3.6 Further example - quadratic equations</b>
+<p>If a quadratic equation is something you "know from nothing", don't
+panic. All we want to do is define a function of three numerical arguments
+<tt>a</tt>,
+<tt>b</tt>
+and <tt>c</tt> which returns a list of the following two values:
+<blockquote><img SRC="image-3-5.jpg" height=146 width=605></blockquote>
+
+<blockquote>(assuming the square-root is possible - if it isn't we'll generate
+an error instead).</blockquote>
+Don't ask why, just assume your lecturer has acquired a passion for daft
+formulae and let him get on with it.
+<p>Anyway, this example introduces three new functions:
+<br>&nbsp;
+<table CELLSPACING=15 WIDTH="100%" >
+<tr ALIGN=LEFT VALIGN=TOP>
+<td><tt>&lt;</tt></td>
+
+<td ALIGN=LEFT VALIGN=TOP>predicate which takes any number of (numerical)
+arguments and returns <tt>t</tt> if they are all in strictly ascending
+order. Otherwise it returns <tt>nil</tt>. So&nbsp;
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&lt; 499 499.8 500 1000)&nbsp;
+=> t</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&lt; 1 2 3 4 6 5 7 8 9)&nbsp; =>
+nil</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&lt; 0 0)&nbsp; => nil</tt>
+<br>While we're here, <tt>></tt> tests for descending order, and <tt>&lt;=</tt>
+and <tt>>=</tt> are variants of <tt>&lt;</tt> and <tt>></tt>&nbsp; which
+allow arguments which are <tt>=</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (>= 2 1 1 1 0 0)&nbsp; => t</tt></td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>sqrt</tt></td>
+
+<td ALIGN=LEFT VALIGN=TOP>function of one number which returns its square
+root.</td>
+</tr>
+
+<tr ALIGN=LEFT VALIGN=TOP>
+<td><tt>error</tt></td>
+
+<td>function for flagging (<i>signalling</i>) errors. At its simplest,
+it is happy with a single argument (a string) which will be printed out
+as an error message.</td>
+</tr>
+</table>
+
+<p>So here we go:
+<blockquote><tt>(defun quadratic-solve (a b c)</tt>
+<br><tt>&nbsp; (let* ((discriminant (- (* b b) (* 4 a c))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (if (&lt; discriminant 0)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (error "Discriminant
+was negative.")</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list (/ (+ b (sqrt discriminant))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(* -2 a))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(/ (- b (sqrt discriminant))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(* -2 a))))))</tt></blockquote>
+or (imo better - why?)
+<blockquote><tt>(defun quadratic-solve (a b c)</tt>
+<br><tt>&nbsp; (let* ((discriminant (- (* b b) (* 4 a c))))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (if (&lt; discriminant 0)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (error "Discriminant
+was negative.")</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (let* ((square-root (sqrt discriminant))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(denominator (* -2 a)))</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (list (/ (+ b square-root)
+denominator)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+(/ (- b square-root) denominator))))))</tt></blockquote>
+
+<p><br><b>3.7 Further Logic</b>
+<p>Some of the examples below will need the following pair of macros.
+<br>&nbsp;
+<table CELLSPACING=15 WIDTH="100%" >
+<tr ALIGN=LEFT VALIGN=TOP>
+<td><tt>and</tt></td>
+
+<td ALIGN=LEFT VALIGN=TOP>Takes any number of arguments. Evaluates them
+in order until one returns <tt>nil</tt>, at which point <tt>and</tt> stops
+evaluating things and returns
+<tt>nil</tt>. If the last argument returns
+non-<tt>nil</tt>, then <tt>and</tt> returns that value. Examples:
+<ul>
+<li>
+<tt>(and 1 2 3 4 5)&nbsp; =>&nbsp; 5</tt></li>
+
+<li>
+<tt>(and 1 2 nil 4 5)&nbsp; =>&nbsp; nil</tt></li>
+
+<li>
+<tt>(and nil (global-meltdown))&nbsp; =>&nbsp; nil&nbsp; </tt>(without
+the meltdown)</li>
+</ul>
+</td>
+</tr>
+
+<tr VALIGN=TOP>
+<td><tt>or</tt></td>
+
+<td ALIGN=LEFT VALIGN=TOP>Takes any number of arguments. Evaluates them
+in order until one returns a non-<tt>nil</tt> value, at which point <tt>or</tt>
+stops evaluating things and returns that value. If the last argument returns
+<tt>nil</tt>,
+then <tt>or</tt> returns <tt>nil</tt>. Examples:
+<ul>
+<li>
+<tt>(or 1 2 3 4 5)&nbsp; =>&nbsp; 1</tt></li>
+
+<li>
+<tt>(or nil nil nil 4 nil 5 6 7)&nbsp; =>&nbsp; 4</tt></li>
+
+<li>
+<tt>(or nil (global-meltdown))&nbsp; =>&nbsp;&nbsp;</tt> some sort of regrettable
+disaster</li>
+</ul>
+</td>
+</tr>
+</table>
+
+<p><b>3.8 Practical Session</b>
+<ol>
+<li>
+Lisp defines a function <tt>not</tt>, which maps <tt>nil</tt> to <tt>t</tt>
+and any other value to <tt>nil</tt>.&nbsp; Define your own function (call
+it <tt>my-not</tt>) which has this behaviour:</li>
+
+<ol><tt>(my-not nil)&nbsp; =>&nbsp; t</tt>
+<br><tt>(my-not <i>anything-else</i>)&nbsp; =>&nbsp; nil</tt></ol>
+If this gives you any difficulty, start by defining a function which takes
+one argument, returns <tt>t</tt> if the argument is non-<tt>nil</tt>, and
+<tt>nil</tt>
+if the argument is <tt>nil</tt>. Do not forget the equivalence between
+the empty list, the symbol <tt>nil</tt> and logical falsehood.
+<li>
+Write:</li>
+
+<ol TYPE=a>
+<li>
+A function of two arguments (both numbers) which finds the smallest. Test
+carefully (e.g. if the numbers are equal does it still work?)</li>
+
+<li>
+(A little trickier...) Now do the same with three numbers (again test this
+carefully).</li>
+</ol>
+
+<li>
+Experiment to see what happens if you attempt to rebind a constant, both
+by using it as the name for an argument to a function, and by using <tt>let*</tt>.</li>
+
+<li>
+Implement <tt>celsius-to-fahrenheit</tt>.</li>
+</ol>
+
+<p><br><b>3.9 Suggested activity / exercises etc</b>
+<ol>
+<li>
+Go through the above notes and answer all the rhetorical questions.</li>
+
+<li>
+(Only try this one if you've met complex numbers in maths...) Take the
+square-root of a negative number and see what happens. Note that what you
+have in front of you is valid lisp as far as the reader is concerned (type
+it back in to prove that). Now generate the square of that object. (Advanced
+topic: Did you get back to where you started? Why / why not?)</li>
+
+<li>
+Why does the call to <tt>fahrenheit-to-celsius</tt> above print a <tt>NIL</tt>?</li>
+
+<li>
+We could have written</li>
+
+<ol><tt>(defun fahrenheit-to-celsius ()</tt>
+<br><tt>&nbsp; (format t "~&amp;Please give a value in degrees F: ")</tt>
+<br><tt>&nbsp; (format t "~&amp;This is ~a degrees C.~&amp;"</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (float (*
+(- (read) 32) 5/9))))</tt></ol>
+but that would not have been as elegant a solution. Why?
+<li>
+On the other hand we might have taken this one step further and written</li>
+
+<ol><tt>(defun fahrenheit-to-celsius ()</tt>
+<br><tt>&nbsp; (format t "~&amp;Please give a value in degrees F: ~&amp;This
+is ~a degrees C.~&amp;"</tt>
+<br><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (float (*
+(- (read) 32) 5/9))))</tt></ol>
+but that would not have worked properly. Why? (Guess before you try it
+out.)
+<li>
+I mentioned in lecture 2 that <i>macros</i> work by transforming source
+code into something more "fundamental" (albeit longer and less readable).
+For example, we could transform the call</li>
+
+<ol><tt>(and foo bar)</tt></ol>
+into
+<ol><tt>(if foo bar nil)</tt></ol>
+Figure out, in terms of code which does not use any macros (hint: <tt>if</tt>
+is not a macro, it's a special operator, so you can use it), what each
+of the following could be transformed into:
+<ol TYPE=a>
+<li>
+<tt>(and foo bar baz)</tt></li>
+
+<li>
+<tt>(or foo bar)&nbsp;&nbsp; </tt>(Answer not 100% obvious. See solutions
+sheet now for hint.)</li>
+
+<li>
+<tt>(or foo bar baz)</tt></li>
+</ol>
+
+<li>
+Now pick one of the above four examples (the hairiest you feel you can
+cope with) and write code to do the transformation for you. E.g.</li>
+
+<br><tt>&nbsp;&nbsp;&nbsp; (defun transform-and-with-2-args (form) ...)</tt>
+<br><tt>&nbsp;&nbsp;&nbsp; (transform-and-with-2-args '(and foo bar))&nbsp;
+=>&nbsp; (if foo bar nil)</tt>
+<li>
+Advanced topic for survivors of the quadratic equation example: implement
+a function which solves simultaneous equations. I.e. given the numbers
+<tt>a
+b c d e f </tt>find a pair of numbers <tt>x</tt> and <tt>y</tt> which satisfy
+the equations</li>
+
+<ol><tt>ax + by = c&nbsp;&nbsp;&nbsp;&nbsp; </tt>and<tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+dx + ey = f</tt></ol>
+You will have to test for one particular special case, to avoid division
+by zero. (What happens if you don't?)</ol>
+If you get seriously stuck, look at the <a href="../solutions/solutions-3.html">solutions</a>
+but please have a good go at each problem first.
+<p>Coming next: more about lists....
+<br>&nbsp;
+<div align=right><a href="mailto:ndl@ravenbrook.com">Nick Levine</a>
+<br>last modified 2000-09-13
+<br>Copyright (C) Nick Levine 1999. All rights reserved.
+<br>$Id: //info.ravenbrook.com/user/ndl/lisp/declarative/lectures/lectures/lecture-3.html#2 $</div>
+
+</body>
+
+<!-- Mirrored from www.nicklevine.org/declarative/lectures/lectures/lecture-3.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 28 Jul 2017 13:23:44 GMT -->
+</html>

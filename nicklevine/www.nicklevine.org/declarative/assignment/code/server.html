@@ -1,0 +1,109 @@
+(in-package "CL-USER")
+
+;; nick 2000-09-15
+
+;; Simple HTTP service. You need never install Apache again...
+
+;; If you don't want to read through this file, then all you really
+;; need to know is that:
+;; 1) every time a http request is made to this server, the function
+;; generate-html (in file "html-tags.lisp") will be called and
+;; 2) the function hunt-for-token may be as useful to you as it was
+;; for me when I was building the demo to go with this server
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Here is the port number we're going to listen to. Http requests are
+;; by default served on port 80. You can change that if you need to
+;; (i.e. if it conflicts with a pre-existing http server on your
+;; machine) but in most cases this will not be necessary.
+
+(defparameter *http-port* 80)
+
+;; The following form instructs the lisp image to load its socket
+;; library
+
+(eval-when (eval load compile)
+  (require "comm"))
+
+;; We "remember" the current service. Calling (start-server) a
+;; subsequent time will kill the off any pre-existing service.
+
+(defvar *http-service* nil)
+(defvar *http-count* 0)
+
+;; This function contains all the nasty guts required to cope with
+;; sockets and file handles and streams and threads and stuff. You
+;; really do not need to know anything about what this does or how it
+;; does it.
+
+(defun start-server ()
+  (when *http-service*
+    (mp:process-kill *http-service*))
+  (setf *http-service*
+        (comm:start-up-server 
+         :process-name (format nil "HTTP server [~a] on port ~a" 
+                               (incf *http-count*) 
+                               *http-port*)
+         :service *http-port*
+         :function (lambda (handle)
+                     (let ((stream (make-instance 'comm:socket-stream
+                                                  :socket handle
+                                                  :direction :io
+                                                  :element-type 'base-char)))
+                       (mp:process-run-function 
+                        (format nil "talk process ~a" handle)
+                        nil
+                        (lambda ()
+                          (unwind-protect 
+                              (let ((*trace-output* (make-string-output-stream))
+                                    ;; the default print-level is 2 - typically
+                                    ;; insufficient
+                                    (*trace-print-level* 10))
+                                (serve-http-request stream)
+                                (terpri stream)
+                                (force-output stream))
+                            (close stream)))))))))
+
+;; Every time a HTTP request is made, the function serve-http-request
+;; will be called with one argument: an i/o stream which allows you to
+;; communicate with the client.
+
+(defun serve-http-request (stream)
+  (let ((request (read-get-request stream)))
+    (generate-html request stream)))
+
+;; Parse an HTTP request and extract the URI
+
+(defun read-get-request (stream)
+  (let ((request-line (read-line stream)))
+    (multiple-value-bind 
+        (method method-end) 
+        (hunt-for-token #\Space request-line nil t)
+      (unless (string= method "GET")
+        (error "~s is not ~s, cannot handle this method." method "GET"))
+      (let ((URI (hunt-for-token #\Space request-line method-end t)))
+        URI))))
+
+;; A utility (this may be particularly useful elsewhere too?)
+
+(defun hunt-for-token (char string start as-string)
+  (let* ((real-start (if start
+                         (1+ start)
+                       0))
+         (end (position char string :start real-start))
+         (token (if as-string
+                    (subseq string real-start end)
+                  (read-from-string string nil nil
+                                  :start real-start
+                                  :end end))))
+    (values token end)))
+
+;; Note for purists. You will have spotted by now that we are only
+;; parsing "simple requests" and generating "simple replies", in the
+;; sense of RFC 1945. In other words this is HTML 0.9. Feel free to
+;; win brownie points and upgrade the server to 1.0 if you like. (How
+;; will you handle the Content-Length field?)
+
+
+

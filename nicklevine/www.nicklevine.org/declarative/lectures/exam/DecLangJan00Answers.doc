@@ -1,0 +1,187 @@
+{\rtf1\ansi \deff4\deflang1033{\fonttbl{\f4\froman\fcharset0\fprq2 Times New Roman;}{\f11\fmodern\fcharset0\fprq1 Courier New;}}{\colortbl;\red0\green0\blue0;\red0\green0\blue255;\red0\green255\blue255;\red0\green255\blue0;
+\red255\green0\blue255;\red255\green0\blue0;\red255\green255\blue0;\red255\green255\blue255;\red0\green0\blue128;\red0\green128\blue128;\red0\green128\blue0;\red128\green0\blue128;\red128\green0\blue0;\red128\green128\blue0;\red128\green128\blue128;
+\red192\green192\blue192;}{\stylesheet{\nowidctlpar \f4\fs20\lang2057 \snext0 Normal;}{\s1\keepn\nowidctlpar \b\f4\lang2057 \sbasedon0\snext0 heading 1;}{\s2\qc\ri-720\sl-240\slmult0\keepn\widctlpar \b\caps\f4\fs32\lang2057 \sbasedon0\snext0 heading 2;}{
+\s3\keepn\nowidctlpar \f4\lang2057 \sbasedon0\snext0 heading 3;}{\*\cs10 \additive Default Paragraph Font;}{\s15\nowidctlpar\tqc\tx4153\tqr\tx8306 \f4\fs20\lang2057 \sbasedon0\snext15 header;}{\s16\nowidctlpar\tqc\tx4153\tqr\tx8306 \f4\fs20\lang2057 
+\sbasedon0\snext16 footer;}{\*\cs17 \additive\fs20 \sbasedon10 page number;}{\s18\fi-1134\li1134\nowidctlpar \f4\lang2057 \sbasedon0\snext18 Body Text 2;}}{\info{\title QUESTION 1 }{\author CSD}{\operator CSD}{\creatim\yr1999\mo10\dy21\hr12\min23}
+{\revtim\yr2000\mo2\dy15\hr12\min40}{\printim\yr1999\mo10\dy21\hr15\min49}{\version3}{\edmins3}{\nofpages5}{\nofwords593}{\nofchars3385}{\*\company Anglia Polytechnic University}{\vern57443}}
+\paperw11906\paperh16838\margl1797\margr1797\margt1134\margb1134 \widowctrl\ftnbj\aenddoc\hyphcaps0\formshade \fet0\sectd \linex0\headery709\footery709\colsx709\endnhere {\footer \pard\plain \s16\qc\widctlpar\tqc\tx4153\tqr\tx8306 \f4\fs20\lang2057 
+{\field{\*\fldinst {\cs17\fs24 page }}{\fldrslt {\cs17\fs24\lang1024 3}}}{\cs17\fs24 /}{\field{\*\fldinst {\cs17\fs24 numpages }}{\fldrslt {\cs17\fs24\lang1024 6}}}{\fs24 
+\par }}{\*\pnseclvl1\pnucrm\pnstart1\pnindent720\pnhang{\pntxta .}}{\*\pnseclvl2\pnucltr\pnstart1\pnindent720\pnhang{\pntxta .}}{\*\pnseclvl3\pndec\pnstart1\pnindent720\pnhang{\pntxta .}}{\*\pnseclvl4\pnlcltr\pnstart1\pnindent720\pnhang{\pntxta )}}
+{\*\pnseclvl5\pndec\pnstart1\pnindent720\pnhang{\pntxtb (}{\pntxta )}}{\*\pnseclvl6\pnlcltr\pnstart1\pnindent720\pnhang{\pntxtb (}{\pntxta )}}{\*\pnseclvl7\pnlcrm\pnstart1\pnindent720\pnhang{\pntxtb (}{\pntxta )}}{\*\pnseclvl8
+\pnlcltr\pnstart1\pnindent720\pnhang{\pntxtb (}{\pntxta )}}{\*\pnseclvl9\pnlcrm\pnstart1\pnindent720\pnhang{\pntxtb (}{\pntxta )}}\pard\plain \ri-720\sl-300\slmult0\widctlpar \f4\fs20\lang2057 {\b\fs24 ANGLIA POLYTECHNIC UNIVERSITY
+\par }\pard \ri-720\widctlpar {\fs24 
+\par }\pard \qc\ri-720\sl-240\slmult0\keep\widctlpar\box\brdrs\brdrw15\brsp20\brdrcf1 \shading1000 {\b\fs24 \line SCHOOL OF APPLIED SCIENCES\line 
+\par }\pard \qc\ri-720\sl-240\slmult0\widctlpar {\i\fs24 
+\par }{\b\fs24 UNIVERSITY MODULAR SYSTEM}{\i\fs24 
+\par }{\b\fs24 
+\par LEVEL H EXAMINATIONS - SEMESTER  1 1999/2000
+\par 
+\par 
+\par 
+\par }{\b\caps\fs24 DECLARATIVE LANGUAGES (CSH1007C)
+\par 
+\par 
+\par }\pard\plain \s2\qc\ri-720\sl-240\slmult0\keepn\widctlpar \b\caps\f4\fs32\lang2057 {\fs24\ul MODEL ANSWERS
+\par }\pard\plain \ri-720\sl-240\slmult0\widctlpar \f4\fs20\lang2057 {\fs24 
+\par 
+\par 
+\par }{\b\fs24 Date:\tab }{\fs24 \tab \tab \tab JANUARY 2000}{\b\fs24 
+\par 
+\par }\pard\plain \s15\nowidctlpar\tqc\tx4153\tqr\tx8306 \f4\fs20\lang2057 \page 
+\par \pard\plain \s3\keepn\nowidctlpar \f4\lang2057 QUESTION 1
+\par \pard\plain \nowidctlpar \f4\fs20\lang2057 {\b\fs24 
+\par {\pntext\pard\plain\f11 a)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 ()}{\f11\fs24\cf6   => NIL}{\f11\fs24 
+\par }\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24 
+\par {\pntext\pard\plain\f11 b)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (())  }{\f11\fs24\cf6 =>  Error (undefined function NIL)}{\f11\fs24 
+\par }\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24 
+\par {\pntext\pard\plain\f11 c)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (consp nil)  }{\f11\fs24\cf6 => NIL}{\f11\fs24 
+\par }\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24 
+\par {\pntext\pard\plain\f11 d)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (eq (car nil) (cdr nil))  }{\f11\fs24\cf6 => T}{\f11\fs24 
+\par }\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24 
+\par {\pntext\pard\plain\f11 e)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (equal () 'nil)  }{\f11\fs24\cf6 => T}{\f11\fs24 
+\par }\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24 
+\par {\pntext\pard\plain\f11 f)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (and nil
+\par }\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24      The other day upon the stair
+\par      I met a man who wasn't there
+\par      He wasn't there again today
+\par      I do so wish he'd go away)  }{\f11\fs24\cf6 => NIL
+\par }{\f11\fs24 
+\par {\pntext\pard\plain\f11 g)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (let ((form
+\par }\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24        (quote 
+\par         (defun bar (x)
+\par           (error "It's all too horrible.")))))
+\par   (car form))  }{\f11\fs24\cf6 => DEFUN
+\par }{\f11\fs24 
+\par {\pntext\pard\plain\f11 h)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (let* ((x (list 2))
+\par }\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24        (y 3))
+\par    (setf x y)
+\par    (list y x))}{\f11\fs24\cf6   => (3 3)
+\par }{\f11\fs24 
+\par {\pntext\pard\plain\f11 i)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (let ((rhyme '(pop goes the weasel)))
+\par }\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24   (pop rhyme))  }{\f11\fs24\cf6 => POP
+\par }{\f11\fs24 
+\par {\pntext\pard\plain\f11 j)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (typep nil 'number)}{\f11\fs24\cf6   => NIL}{\f11\fs24 
+\par }\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24 
+\par {\pntext\pard\plain\f11 k)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (typep (= (1+ 1) 2) 'symbol)  }{\f11\fs24\cf6 => T}{\f11\fs24 
+\par }\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24 
+\par {\pntext\pard\plain\f11 l)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (unless 0 (/ 1 0))}{\f11\fs24\cf6   => NIL}{\f11\fs24 
+\par }\pard \fi-1134\li1134\keep\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24 
+\par {\pntext\pard\plain\f11 m)\tab}}\pard \fi-1134\li1134\keep\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (and (setf x 4) 
+\par }\pard \fi-1134\li1134\keep\nowidctlpar {\f11\fs24              (not (numberp x))
+\par              (setf x 5))  }{\f11\fs24\cf6 => NIL
+\par }\pard \qr\fi-1134\li1134\nowidctlpar \page {\fs24 
+\par {\pntext\pard\plain\f11 n)\tab}}\pard \fi-1134\li1134\keep\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart14\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (let ((table (make-hash-table)))
+\par }\pard \fi-1134\li1134\keep\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24    (gethash table table table))}{\f11\fs24\cf6   => the table
+\par }{\f11\fs24 
+\par {\pntext\pard\plain\f11 o)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (let ((questions 4))
+\par }\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24   (mapcar #'(lambda (x) (and (numberp x) (1+ x)))
+\par           (list "After" 20 'minutes 
+\par }\pard \fi-1134\li3294\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24          (or 0 nil) questions))
+\par }{\f11\fs24\cf6 =>  (NIL 21 NIL 1 5)
+\par }\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24\cf6 
+\par {\pntext\pard\plain\f11 p)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (apply 'equal t t nil)  }{\f11\fs24\cf6 => T}{\f11\fs24 
+\par }\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24 
+\par {\pntext\pard\plain\f11 q)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (progn
+\par }\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24   (defun broken (n)
+\par     (if (= n 0)
+\par         nil
+\par       (* n (broken (1- n)))))
+\par   (broken 5))}{\f11\fs24\cf6   =>  Error (multiplication by NIL)
+\par }{\f11\fs24 
+\par {\pntext\pard\plain\f11 r)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (catch 'tag
+\par }\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24   (throw 'tag 99)
+\par    88)  }{\f11\fs24\cf6 => 99
+\par }{\f11\fs24 
+\par {\pntext\pard\plain\f11 s)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (progn
+\par }\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlcont\pndec }{\f11\fs24   (defun baz (x &optional (y 2))
+\par     (+ x y))
+\par   (- (baz 1)
+\par      (baz 1 0)))  }{\f11\fs24\cf6 => 2
+\par }{\f11\fs24 
+\par {\pntext\pard\plain\f11 t)\tab}}\pard \fi-1134\li1134\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent1134\pnhang{\pntxta )}}{\f11\fs24 (progn
+\par }\pard \nowidctlpar {\f11\fs24           (defun wibble (&rest rest)
+\par             (rest rest))
+\par           (wibble "Yo ho ho" "And a bottle of rum"))
+\par                 }{\f11\fs24\cf6 => (\ldblquote And a bottle of rum\rdblquote )
+\par 
+\par }{\f11\fs24 
+\par }\pard\plain \s15\nowidctlpar\tqc\tx4153\tqr\tx8306 \f4\fs20\lang2057 \page 
+\par \pard\plain \nowidctlpar \f4\fs20\lang2057 {\fs24 QUESTION 2    
+\par 
+\par }{\f11 ;;; Function waffle takes one argument: the name of a text file. The
+\par ;;; file is opened for input and is processed word by word (via calls
+\par ;;; to read-next-word). A hash-table is returned in which the keys ;;; are the various words seen in the file and the values are the 
+\par ;;; number of times each word is present.
+\par 
+\par (defun waffle (file)
+\par }\pard\plain \s15\nowidctlpar \f4\fs20\lang2057 {\f11   ;; create a hash-table suitable for keying against strings
+\par }\pard\plain \nowidctlpar \f4\fs20\lang2057 {\f11   (let ((table (make-hash-table :test (quote equal))))
+\par     ;; open the given file for text input
+\par     (with-open-file (istream file)
+\par       (loop 
+\par        ;; attempt to read the next word from the file
+\par        (let ((next (read-next-word istream)))
+\par          (if (not next)
+\par              ;; if there was no "next word" then return from the loop
+\par              (return)
+\par            (let ((count (or (gethash next table) 
+\par                             0)))
+\par              ;; otherwise retrieve the number of times this word has 
+\par              ;; been seen so far, add one to it and store the count 
+\par              ;; back into the table
+\par              (setf (gethash next table)
+\par                    (1+ count)))))))
+\par     ;; return table on exit from loop
+\par     table))
+\par }\pard\plain \s15\nowidctlpar\tqc\tx4153\tqr\tx8306 \f4\fs20\lang2057 
+\par 
+\par 
+\par \pard\plain \nowidctlpar \f4\fs20\lang2057 {\fs24 QUESTION 3     }{\b\fs24 
+\par 
+\par }{\fs24 A lexical closure is a function with private state.
+\par 
+\par Closures are used for maintaining state between successive calls to a function, or for sharing state. It is of type function. You create a closure by creating the function in the lexical scope of the \ldblquote closed over\rdblquote  variables.
+\par 
+\par }{\f11\fs24 (let ((}{\f11\fs24\cf2 delayed}{\f11\fs24  nil))
+\par   }{\f11\fs24\cf6 (defun delay (thing)
+\par     (prog1 delayed
+\par       (setf delayed thing)))}{\f11\fs24 )
+\par 
+\par (defun add-to (}{\f11\fs24\cf2 number}{\f11\fs24  list)
+\par   (mapcar }{\f11\fs24\cf6 #'(lambda (elt) (+ number elt))}{\f11\fs24 
+\par           list))
+\par }{\fs24 
+\par (Closures shown in red, closed over variables in blue)
+\par 
+\par }\pard\plain \s15\nowidctlpar\tqc\tx4153\tqr\tx8306 \f4\fs20\lang2057 \page 
+\par \pard\plain \nowidctlpar \f4\fs20\lang2057 {\fs24 QUESTION 4     
+\par 
+\par {\pntext\pard\plain i.\tab}}\pard \fi-283\li283\nowidctlpar{\*\pn \pnlvlbody\pnlcrm\pnstart1\pnindent283\pnhang{\pntxta .}}{\fs24 Name 
+\par {\pntext\pard\plain a)\tab}}\pard \fi-680\li680\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent680\pnhang{\pntxta )}}{\fs24 the lisp function which splices one list onto the end of a copy of another and
+\par {\pntext\pard\plain b)\tab}the lisp function which adds a new member to the beginning of a list.
+\par }\pard \fi-283\li283\nowidctlpar {\fs24 
+\par {\pntext\pard\plain\cf6 a)\tab}}\pard \fi-360\li360\nowidctlpar\tx360{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent360\pnhang{\pntxta )}}{\fs24\cf6 append
+\par {\pntext\pard\plain\cf6 b)\tab}cons
+\par }\pard \fi-283\li283\nowidctlpar {\fs24 
+\par {\pntext\pard\plain ii.\tab}}\pard \fi-283\li283\nowidctlpar{\*\pn \pnlvlbody\pnlcrm\pnstart2\pnindent283\pnhang{\pntxta .}}{\fs24 Write a lisp function }{\f11\fs24 join}{\fs24  which takes two arguments and joins them together
+\par {\pntext\pard\plain a)\tab}}\pard \fi-680\li680\nowidctlpar{\*\pn \pnlvlbody\pnlcltr\pnstart1\pnindent680\pnhang{\pntxta )}}{\fs24 in the style of }{\f11\fs24 mumble-a}{\fs24  if the first argument was a list and
+\par {\pntext\pard\plain b)\tab}in the style of }{\f11\fs24 mumble-b}{\fs24  if the first argument was not a list.
+\par }\pard \fi-283\li283\nowidctlpar {\fs24 
+\par }\pard \nowidctlpar {\f11\fs24\cf6 (defun join (this that)
+\par   (if (listp this)
+\par       (append this that)
+\par     (cons this that)))
+\par }\pard \fi-283\li283\nowidctlpar {\fs24 
+\par {\pntext\pard\plain iii.\tab}}\pard \fi-283\li283\nowidctlpar{\*\pn \pnlvlbody\pnlcrm\pnstart3\pnindent283\pnhang{\pntxta .}}{\fs24 Finally, reusing the code for }{\f11\fs24 join}{\fs24  or otherwise, write a lisp function }{\f11\fs24 flatten}{\fs24 
+ which recursively flattens lists, splicing them into one flat list\'85
+\par }\pard \nowidctlpar {\fs24 
+\par }{\f11\fs24\cf6 (defun flatten (thing)
+\par   (if (consp thing)
+\par       (join (flatten (car thing))
+\par             (flatten (cdr thing)))
+\par     thing))
+\par }\pard \fi-283\li283\nowidctlpar {\fs24 
+\par }\pard \qr\fi-283\li283\nowidctlpar {\f11\fs24 
+\par }\pard \nowidctlpar {\fs24 
+\par }\pard \widctlpar {\fs24 
+\par }}

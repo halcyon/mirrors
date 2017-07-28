@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Keyword Arguments in Clojure, the Right Way</title>
+	<atom:link href="https://stuartsierra.com/2010/01/15/keyword-arguments-in-clojure/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2010/01/15/keyword-arguments-in-clojure</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: Destillat 22-01-2010 &#124; duetsch.info - Open Source, Wet-, Web-, Software</title>
+		<link>https://stuartsierra.com/2010/01/15/keyword-arguments-in-clojure/comment-page-1#comment-43030</link>
+		<dc:creator><![CDATA[Destillat 22-01-2010 &#124; duetsch.info - Open Source, Wet-, Web-, Software]]></dc:creator>
+		<pubDate>Fri, 22 Jan 2010 10:09:47 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=432#comment-43030</guid>
+		<description><![CDATA[[...] Keyword Arguments in Clojure, the Right Way [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] Keyword Arguments in Clojure, the Right Way [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Meikel</title>
+		<link>https://stuartsierra.com/2010/01/15/keyword-arguments-in-clojure/comment-page-1#comment-43019</link>
+		<dc:creator><![CDATA[Meikel]]></dc:creator>
+		<pubDate>Mon, 18 Jan 2010 12:39:37 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=432#comment-43019</guid>
+		<description><![CDATA[Now we have to construct a map on the caller site. But it will probably be an array-map which is faster to construct.
+
+And we can&#039;t use apply anymore:
+
+&lt;code&gt;(let [arguments [x y :key1 val1 :key2 val2]] (apply my-fn a b arguments))&lt;/code&gt;
+
+Raises the question whether one needs apply with keyword arguments.
+
+Getting away from the example:
+Nice coverage of map destructuring. :)]]></description>
+		<content:encoded><![CDATA[<p>Now we have to construct a map on the caller site. But it will probably be an array-map which is faster to construct.</p>
+<p>And we can&#8217;t use apply anymore:</p>
+<p><code>(let [arguments [x y :key1 val1 :key2 val2]] (apply my-fn a b arguments))</code></p>
+<p>Raises the question whether one needs apply with keyword arguments.</p>
+<p>Getting away from the example:<br />
+Nice coverage of map destructuring. :)</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Abhijith</title>
+		<link>https://stuartsierra.com/2010/01/15/keyword-arguments-in-clojure/comment-page-1#comment-43017</link>
+		<dc:creator><![CDATA[Abhijith]]></dc:creator>
+		<pubDate>Sun, 17 Jan 2010 12:16:14 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=432#comment-43017</guid>
+		<description><![CDATA[sweet. Didn&#039;t know that (let [ { :keys [a b] } {:a 1 :b 2} ]  [a b] )  was a special case of (let [{a :a b :b} {:a 1 b: 2}] [a b] ). Thanks!]]></description>
+		<content:encoded><![CDATA[<p>sweet. Didn&#8217;t know that (let [ { :keys [a b] } {:a 1 :b 2} ]  [a b] )  was a special case of (let [{a :a b :b} {:a 1 b: 2}] [a b] ). Thanks!</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2010/01/15/keyword-arguments-in-clojure/comment-page-1#comment-43011</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Fri, 15 Jan 2010 20:46:38 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=432#comment-43011</guid>
+		<description><![CDATA[Yes, it mixes well.  Although I would have written your example as a multiple-arity function, like this:
+
+(defn text-input
+  ([name value] (text-input name value {}))
+  ([name value {:keys [size class]}] ...))]]></description>
+		<content:encoded><![CDATA[<p>Yes, it mixes well.  Although I would have written your example as a multiple-arity function, like this:</p>
+<p>(defn text-input<br />
+  ([name value] (text-input name value {}))<br />
+  ([name value {:keys [size class]}] &#8230;))</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Radu Floricica</title>
+		<link>https://stuartsierra.com/2010/01/15/keyword-arguments-in-clojure/comment-page-1#comment-43010</link>
+		<dc:creator><![CDATA[Radu Floricica]]></dc:creator>
+		<pubDate>Fri, 15 Jan 2010 20:37:06 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=432#comment-43010</guid>
+		<description><![CDATA[Should probably be pointed that this mixes really well with normal parameters:
+
+(defn text-input [name value  &#038;  [{:keys [size class]}] ]
+  [:input {:name name :value value :size size :class class}])
+
+and can be called either:
+
+(text-input &quot;first_name&quot; &quot;John&quot;)
+
+or 
+
+(text-input &quot;first_name&quot; &quot;John&quot; {:size 20})]]></description>
+		<content:encoded><![CDATA[<p>Should probably be pointed that this mixes really well with normal parameters:</p>
+<p>(defn text-input [name value  &amp;  [{:keys [size class]}] ]<br />
+  [:input {:name name :value value :size size :class class}])</p>
+<p>and can be called either:</p>
+<p>(text-input &#8220;first_name&#8221; &#8220;John&#8221;)</p>
+<p>or </p>
+<p>(text-input &#8220;first_name&#8221; &#8220;John&#8221; {:size 20})</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.280 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:00:38 -->
+
+<!-- Compression = gzip -->

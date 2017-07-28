@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	
+	>
+<channel>
+	<title>Comments on: Heating Up Clojure &#038; Swing</title>
+	<atom:link href="https://stuartsierra.com/2010/01/06/heating-up-clojure-swing/feed" rel="self" type="application/rss+xml" />
+	<link>https://stuartsierra.com/2010/01/06/heating-up-clojure-swing</link>
+	<description>From programming to everything else</description>
+	<lastBuildDate>Fri, 01 Jan 2016 15:25:57 +0000</lastBuildDate>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	<generator>https://wordpress.org/?v=4.6</generator>
+	<item>
+		<title>By: markc</title>
+		<link>https://stuartsierra.com/2010/01/06/heating-up-clojure-swing/comment-page-1#comment-44404</link>
+		<dc:creator><![CDATA[markc]]></dc:creator>
+		<pubDate>Mon, 13 Feb 2012 05:43:54 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=388#comment-44404</guid>
+		<description><![CDATA[@veree
+
+You had a typo that caused me a bit of confusion.  Should be:
+
+(javax.swing.SwingUtilities/invokeLater temp-app)  ;; note the extra &quot;i&quot;]]></description>
+		<content:encoded><![CDATA[<p>@veree</p>
+<p>You had a typo that caused me a bit of confusion.  Should be:</p>
+<p>(javax.swing.SwingUtilities/invokeLater temp-app)  ;; note the extra &#8220;i&#8221;</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Licenser</title>
+		<link>https://stuartsierra.com/2010/01/06/heating-up-clojure-swing/comment-page-1#comment-43104</link>
+		<dc:creator><![CDATA[Licenser]]></dc:creator>
+		<pubDate>Wed, 12 May 2010 11:58:06 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=388#comment-43104</guid>
+		<description><![CDATA[Hi Stuart,
+I&#039;ve taken your examples here as a starting point of starting a lib around clojure and swing, it is at the stage where I could nicely implement this example,  if  there is interested here is a little description: http://blog.licenser.net/2010/05/11/the-ease-of-guis]]></description>
+		<content:encoded><![CDATA[<p>Hi Stuart,<br />
+I&#8217;ve taken your examples here as a starting point of starting a lib around clojure and swing, it is at the stage where I could nicely implement this example,  if  there is interested here is a little description: <a href="http://blog.licenser.net/2010/05/11/the-ease-of-guis" rel="nofollow">http://blog.licenser.net/2010/05/11/the-ease-of-guis</a></p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Destillat 08-01-2010 &#124; duetsch.info - Open Source, Wet-, Web-, Software</title>
+		<link>https://stuartsierra.com/2010/01/06/heating-up-clojure-swing/comment-page-1#comment-42980</link>
+		<dc:creator><![CDATA[Destillat 08-01-2010 &#124; duetsch.info - Open Source, Wet-, Web-, Software]]></dc:creator>
+		<pubDate>Fri, 08 Jan 2010 18:33:18 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=388#comment-42980</guid>
+		<description><![CDATA[[...] Heating Up Clojure &#038; Swing [...]]]></description>
+		<content:encoded><![CDATA[<p>[&#8230;] Heating Up Clojure &amp; Swing [&#8230;]</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: Stuart</title>
+		<link>https://stuartsierra.com/2010/01/06/heating-up-clojure-swing/comment-page-1#comment-42977</link>
+		<dc:creator><![CDATA[Stuart]]></dc:creator>
+		<pubDate>Thu, 07 Jan 2010 15:38:19 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=388#comment-42977</guid>
+		<description><![CDATA[verec wrote: &lt;em&gt;&quot;everything in Swing should be called from the event dispatch thread.&quot;&lt;/em&gt;
+
+Yes, I&#039;ve beet putting off a discussion of the event dispatch thread.  But you are entirely correct.  Perhaps it&#039;s time for me to write about concurrency in Swing.]]></description>
+		<content:encoded><![CDATA[<p>verec wrote: <em>&#8220;everything in Swing should be called from the event dispatch thread.&#8221;</em></p>
+<p>Yes, I&#8217;ve beet putting off a discussion of the event dispatch thread.  But you are entirely correct.  Perhaps it&#8217;s time for me to write about concurrency in Swing.</p>
+]]></content:encoded>
+	</item>
+	<item>
+		<title>By: verec</title>
+		<link>https://stuartsierra.com/2010/01/06/heating-up-clojure-swing/comment-page-1#comment-42973</link>
+		<dc:creator><![CDATA[verec]]></dc:creator>
+		<pubDate>Wed, 06 Jan 2010 21:20:32 +0000</pubDate>
+		<guid isPermaLink="false">http://stuartsierra.com/?p=388#comment-42973</guid>
+		<description><![CDATA[Nice touch.
+
+But it should be pointed out that by default this is executed from the REPL thread which the main thread (that which &#039;public static void main(String[] args)&#039; is called from) and this is a bad thing as everything in Swing should be called from the event dispatch thread.
+
+This is easily fixed though: (SwingUtilites/invokeLater temp-app) will do the job, as every Clojure fn is also a java.lang.Runnable.]]></description>
+		<content:encoded><![CDATA[<p>Nice touch.</p>
+<p>But it should be pointed out that by default this is executed from the REPL thread which the main thread (that which &#8216;public static void main(String[] args)&#8217; is called from) and this is a bad thing as everything in Swing should be called from the event dispatch thread.</p>
+<p>This is easily fixed though: (SwingUtilites/invokeLater temp-app) will do the job, as every Clojure fn is also a java.lang.Runnable.</p>
+]]></content:encoded>
+	</item>
+</channel>
+</rss>
+
+<!-- Dynamic page generated in 0.276 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2016-09-02 13:03:09 -->
+
+<!-- Compression = gzip -->

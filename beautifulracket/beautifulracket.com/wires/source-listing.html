@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html>
+  
+<!-- Mirrored from beautifulracket.com/wires/source-listing.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 16 Mar 2017 05:47:41 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <title>Beautiful Racket: Imagine a language: wires</title>
+    <link rel="stylesheet" type="text/css" media="all" href="../styles.css"/>
+    <script type="text/javascript" src="../functions.js"></script>
+    <script type="text/javascript" src="../clipboard.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-74684045-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </head>
+<body>
+<div id="alert">Thank you for your comment</div>
+    <div id="doc"><h3 class="dept" anchorize="false"><a href="../index.html">Beau­ti­ful Racket</a> / <a href="../index.html#tutorials">tuto­ri­als</a></h3><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;imagine-a-language-wires&quot;)"></div><h1 anchor="imagine-a-language-wires" id="imagine-a-language-wires" hyphens="none">Imagine a language: <span class="my-code" decode="exclude">wires</span></h1></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-reader.html">3&emsp;the reader</a></li><li><a href="the-expander.html">4&emsp;the expander</a></li><li><a href="testing-the-language.html">5&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">6&emsp;recap</a></li><li><a class="here" href="source-listing.html">7&emsp;source list­ing</a></li></ul><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_mjcm5&quot;)"></div><p id="a_mjcm5">This source list­ing assumes that we’ve cre­ated a <span class="my-code" decode="exclude">wires</span> direc­tory and installed it as a pack­age as described in <a href="specification-and-setup.html#setup">setup</a>.</p></div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_3BMhR&quot;)"></div><p id="a_3BMhR"><a class="ziplink" href="wires-tutorial.zip">Down­load wires-tuto­r­ial.zip</a></p></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">wires/main.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_1wruY&quot;)"></div><div class="highlight-container" id="a_1wruY"><div id="code_43" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang br/quicklang<br/><br/>(module+ reader<br/>  (provide read-syntax))<br/><br/>(define (read-syntax path port)<br/>  (define wire-datums<br/>    (for/list ([wire-str (in-lines port)])<br/>      (format-datum '(wire ~a) wire-str)))<br/>  (strip-bindings<br/>   #`(module wires-mod wires/main<br/>       #,@wire-datums)))<br/><br/>(provide #%module-begin)<br/><br/>(define-macro-cases wire<br/>  [(wire ARG -&gt; WIRE) #'(define/display (WIRE)<br/>                          (val ARG))]<br/>  [(wire OP ARG -&gt; WIRE) #'(define/display (WIRE)<br/>                             (OP (val ARG)))]<br/>  [(wire ARG1 OP ARG2 -&gt; WIRE) #'(define/display (WIRE)<br/>                                   (OP (val ARG1) (val ARG2)))]<br/>  [else #'(void)])<br/>(provide wire)<br/><br/>(define-macro (define/display (ID) BODY)<br/>  #'(begin<br/>      (define (ID) BODY)<br/>      (module+ main<br/>        (displayln (format "~a: ~a" 'ID (ID))))))<br/><br/>(define val<br/>  (let ([val-cache (make-hash)])<br/>    (lambda (num-or-wire)<br/>      (if (number? num-or-wire)<br/>          num-or-wire<br/>          (hash-ref! val-cache num-or-wire num-or-wire)))))<br/><br/>(define (mod-16bit x) (modulo x 65536))<br/>(define-macro (define-16bit ID PROC-ID)<br/>  #'(define ID (compose1 mod-16bit PROC-ID)))<br/><br/>(define-16bit AND bitwise-and)<br/>(define-16bit OR bitwise-ior)<br/>(define-16bit NOT bitwise-not)<br/>(define-16bit LSHIFT arithmetic-shift)<br/>(define (RSHIFT x y) (LSHIFT x (- y)))<br/>(provide AND OR NOT LSHIFT RSHIFT)</div><div class="highlight" form="false" id="a_aIhKC"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48</pre></div></td><td class="code"><div class="source"><pre><span class="kn">#lang </span><span class="nn">br/quicklang</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._module+))" class="docs" hyphens="none">module+</a></span> <span class="n">reader</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/Reading.html#(def._((quote._~23~25kernel)._read-syntax))" class="docs" hyphens="none">read-syntax</a></span><span class="p">))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Reading.html#(def._((quote._~23~25kernel)._read-syntax))" class="docs" hyphens="none">read-syntax</a></span> <span class="n">path</span> <span class="n">port</span><span class="p">)</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">wire-datums</span>
+    <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/for.html#(form._((lib._racket/private/base..rkt)._for/list))" class="docs" hyphens="none">for/list</a></span> <span class="p">([</span><span class="n">wire-str</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/sequences.html#(def._((lib._racket/private/base..rkt)._in-lines))" class="docs" hyphens="none">in-lines</a></span> <span class="n">port</span><span class="p">)])</span>
+      <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/datum..rkt)._format-datum))" class="docs" hyphens="none">format-datum</a></span> <span class="o">&#39;</span><span class="p">(</span><span class="ss">wire</span> <span class="ss">~a</span><span class="p">)</span> <span class="n">wire-str</span><span class="p">)))</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(def._((lib._br/syntax..rkt)._strip-bindings))" class="docs" hyphens="none">strip-bindings</a></span>
+   <span class="o">#`</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((quote._~23~25kernel)._module))" class="docs" hyphens="none">module</a></span> <span class="n">wires-mod</span> <span class="n">wires/main</span>
+       <span class="o">#,@</span><span class="n">wire-datums</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._~23~25module-begin))" class="docs" hyphens="none">#%module-begin</a></span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/define..rkt)._define-macro-cases))" class="docs" hyphens="none">define-macro-cases</a></span> <span class="n">wire</span>
+  <span class="p">[(</span><span class="n">wire</span> <span class="n">ARG</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/function-contracts.html#(form._((lib._racket/contract/base..rkt)._-~3e))" class="docs" hyphens="none">-&gt;</a></span> <span class="n">WIRE</span><span class="p">)</span> <span class="o">#&#39;</span><span class="p">(</span><span class="n">define/display</span> <span class="p">(</span><span class="n">WIRE</span><span class="p">)</span>
+                          <span class="p">(</span><span class="n">val</span> <span class="n">ARG</span><span class="p">))]</span>
+  <span class="p">[(</span><span class="n">wire</span> <span class="n">OP</span> <span class="n">ARG</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/function-contracts.html#(form._((lib._racket/contract/base..rkt)._-~3e))" class="docs" hyphens="none">-&gt;</a></span> <span class="n">WIRE</span><span class="p">)</span> <span class="o">#&#39;</span><span class="p">(</span><span class="n">define/display</span> <span class="p">(</span><span class="n">WIRE</span><span class="p">)</span>
+                             <span class="p">(</span><span class="n">OP</span> <span class="p">(</span><span class="n">val</span> <span class="n">ARG</span><span class="p">)))]</span>
+  <span class="p">[(</span><span class="n">wire</span> <span class="n">ARG1</span> <span class="n">OP</span> <span class="n">ARG2</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/function-contracts.html#(form._((lib._racket/contract/base..rkt)._-~3e))" class="docs" hyphens="none">-&gt;</a></span> <span class="n">WIRE</span><span class="p">)</span> <span class="o">#&#39;</span><span class="p">(</span><span class="n">define/display</span> <span class="p">(</span><span class="n">WIRE</span><span class="p">)</span>
+                                   <span class="p">(</span><span class="n">OP</span> <span class="p">(</span><span class="n">val</span> <span class="n">ARG1</span><span class="p">)</span> <span class="p">(</span><span class="n">val</span> <span class="n">ARG2</span><span class="p">)))]</span>
+  <span class="p">[</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((lib._racket/private/letstx-scheme..rkt)._else))" class="docs" hyphens="none">else</a></span> <span class="o">#&#39;</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/void.html#(def._((quote._~23~25kernel)._void))" class="docs" hyphens="none">void</a></span><span class="p">)])</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="n">wire</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/define..rkt)._define-macro))" class="docs" hyphens="none">define-macro</a></span> <span class="p">(</span><span class="n">define/display</span> <span class="p">(</span><span class="n">ID</span><span class="p">)</span> <span class="n">BODY</span><span class="p">)</span>
+  <span class="o">#&#39;</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/begin.html#(form._((quote._~23~25kernel)._begin))" class="docs" hyphens="none">begin</a></span>
+      <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">ID</span><span class="p">)</span> <span class="n">BODY</span><span class="p">)</span>
+      <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/module.html#(form._((lib._racket/private/base..rkt)._module+))" class="docs" hyphens="none">module+</a></span> <span class="n">main</span>
+        <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Writing.html#(def._((lib._racket/private/misc..rkt)._displayln))" class="docs" hyphens="none">displayln</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/Writing.html#(def._((quote._~23~25kernel)._format))" class="docs" hyphens="none">format</a></span> <span class="s2">"~a: ~a"</span> <span class="o">&#39;</span><span class="ss">ID</span> <span class="p">(</span><span class="n">ID</span><span class="p">))))))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">val</span>
+  <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/let.html#(form._((lib._racket/private/letstx-scheme..rkt)._let))" class="docs" hyphens="none">let</a></span> <span class="p">([</span><span class="n">val-cache</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/hashtables.html#(def._((quote._~23~25kernel)._make-hash))" class="docs" hyphens="none">make-hash</a></span><span class="p">)])</span>
+    <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/lambda.html#(form._((lib._racket/private/base..rkt)._lambda))" class="docs" hyphens="none">lambda</a></span> <span class="p">(</span><span class="n">num-or-wire</span><span class="p">)</span>
+      <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/if.html#(form._((quote._~23~25kernel)._if))" class="docs" hyphens="none">if</a></span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/number-types.html#(def._((quote._~23~25kernel)._number~3f))" class="docs" hyphens="none">number?</a></span> <span class="n">num-or-wire</span><span class="p">)</span>
+          <span class="n">num-or-wire</span>
+          <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/hashtables.html#(def._((lib._racket/private/more-scheme..rkt)._hash-ref!))" class="docs" hyphens="none">hash-ref!</a></span> <span class="n">val-cache</span> <span class="n">num-or-wire</span> <span class="n">num-or-wire</span><span class="p">)))))</span>
+
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">mod-16bit</span> <span class="n">x</span><span class="p">)</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._modulo))" class="docs" hyphens="none">modulo</a></span> <span class="n">x</span> <span class="mi">65536</span><span class="p">))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/br/index.html#(form._((lib._br/define..rkt)._define-macro))" class="docs" hyphens="none">define-macro</a></span> <span class="p">(</span><span class="n">define-16bit</span> <span class="n">ID</span> <span class="n">PROC-ID</span><span class="p">)</span>
+  <span class="o">#&#39;</span><span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="n">ID</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/procedures.html#(def._((lib._racket/private/list..rkt)._compose1))" class="docs" hyphens="none">compose1</a></span> <span class="n">mod-16bit</span> <span class="n">PROC-ID</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="n">define-16bit</span> <span class="n">AND</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._bitwise-and))" class="docs" hyphens="none">bitwise-and</a></span><span class="p">)</span>
+<span class="p">(</span><span class="n">define-16bit</span> <span class="n">OR</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._bitwise-ior))" class="docs" hyphens="none">bitwise-ior</a></span><span class="p">)</span>
+<span class="p">(</span><span class="n">define-16bit</span> <span class="n">NOT</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._bitwise-not))" class="docs" hyphens="none">bitwise-not</a></span><span class="p">)</span>
+<span class="p">(</span><span class="n">define-16bit</span> <span class="n">LSHIFT</span> <span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._arithmetic-shift))" class="docs" hyphens="none">arithmetic-shift</a></span><span class="p">)</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/define.html#(form._((lib._racket/private/base..rkt)._define))" class="docs" hyphens="none">define</a></span> <span class="p">(</span><span class="n">RSHIFT</span> <span class="n">x</span> <span class="n">y</span><span class="p">)</span> <span class="p">(</span><span class="n">LSHIFT</span> <span class="n">x</span> <span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/generic-numbers.html#(def._((quote._~23~25kernel)._-))" class="docs" hyphens="none">-</a></span> <span class="n">y</span><span class="p">)))</span>
+<span class="p">(</span><span class="nb"><a href="http://docs.racket-lang.org/reference/require.html#(form._((lib._racket/private/base..rkt)._provide))" class="docs" hyphens="none">provide</a></span> <span class="n">AND</span> <span class="n">OR</span> <span class="n">NOT</span> <span class="n">LSHIFT</span> <span class="n">RSHIFT</span><span class="p">)</span>
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk" data-clipboard-target="#code_43" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">test.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_id4jn&quot;)"></div><div class="highlight-container" id="a_id4jn"><div id="code_44" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang wires<br/>x AND y -&gt; d<br/>x OR y -&gt; e<br/>x LSHIFT 2 -&gt; f<br/>y RSHIFT 2 -&gt; g<br/>NOT x -&gt; h<br/>NOT y -&gt; i<br/>123 -&gt; x<br/>456 -&gt; y</div><div class="highlight" form="false" id="a_HCDWf"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9</pre></div></td><td class="code"><div class="source"><pre>#lang wires
+x AND y -&gt; d
+x OR y -&gt; e
+x LSHIFT 2 -&gt; f
+y RSHIFT 2 -&gt; g
+NOT x -&gt; h
+NOT y -&gt; i
+123 -&gt; x
+456 -&gt; y
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk1" data-clipboard-target="#code_44" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div class="filebox" anchorize="false"><div class="filename" anchorize="false" decode="exclude">puzzle.rkt</div><div class="sidebar-container"><div class="sidebar has_form" onclick="toggle_form(&quot;a_P5ekv&quot;)"></div><div class="highlight-container" id="a_P5ekv"><div id="code_45" form="false" decode="exclude" style="font-size:0;width:0;height:0">#lang wires<br/>bn RSHIFT 2 -&gt; bo<br/>lf RSHIFT 1 -&gt; ly<br/>fo RSHIFT 3 -&gt; fq<br/>cj OR cp -&gt; cq<br/>fo OR fz -&gt; ga<br/>t OR s -&gt; u<br/>lx -&gt; a<br/>NOT ax -&gt; ay<br/>he RSHIFT 2 -&gt; hf<br/>lf OR lq -&gt; lr<br/>lr AND lt -&gt; lu<br/>dy OR ej -&gt; ek<br/>1 AND cx -&gt; cy<br/>hb LSHIFT 1 -&gt; hv<br/>1 AND bh -&gt; bi<br/>ih AND ij -&gt; ik<br/>c LSHIFT 1 -&gt; t<br/>ea AND eb -&gt; ed<br/>km OR kn -&gt; ko<br/>NOT bw -&gt; bx<br/>ci OR ct -&gt; cu<br/>NOT p -&gt; q<br/>lw OR lv -&gt; lx<br/>NOT lo -&gt; lp<br/>fp OR fv -&gt; fw<br/>o AND q -&gt; r<br/>dh AND dj -&gt; dk<br/>ap LSHIFT 1 -&gt; bj<br/>bk LSHIFT 1 -&gt; ce<br/>NOT ii -&gt; ij<br/>gh OR gi -&gt; gj<br/>kk RSHIFT 1 -&gt; ld<br/>lc LSHIFT 1 -&gt; lw<br/>lb OR la -&gt; lc<br/>1 AND am -&gt; an<br/>gn AND gp -&gt; gq<br/>lf RSHIFT 3 -&gt; lh<br/>e OR f -&gt; g<br/>lg AND lm -&gt; lo<br/>ci RSHIFT 1 -&gt; db<br/>cf LSHIFT 1 -&gt; cz<br/>bn RSHIFT 1 -&gt; cg<br/>et AND fe -&gt; fg<br/>is OR it -&gt; iu<br/>kw AND ky -&gt; kz<br/>ck AND cl -&gt; cn<br/>bj OR bi -&gt; bk<br/>gj RSHIFT 1 -&gt; hc<br/>iu AND jf -&gt; jh<br/>NOT bs -&gt; bt<br/>kk OR kv -&gt; kw<br/>ks AND ku -&gt; kv<br/>hz OR ik -&gt; il<br/>b RSHIFT 1 -&gt; v<br/>iu RSHIFT 1 -&gt; jn<br/>fo RSHIFT 5 -&gt; fr<br/>be AND bg -&gt; bh<br/>ga AND gc -&gt; gd<br/>hf OR hl -&gt; hm<br/>ld OR le -&gt; lf<br/>as RSHIFT 5 -&gt; av<br/>fm OR fn -&gt; fo<br/>hm AND ho -&gt; hp<br/>lg OR lm -&gt; ln<br/>NOT kx -&gt; ky<br/>kk RSHIFT 3 -&gt; km<br/>ek AND em -&gt; en<br/>NOT ft -&gt; fu<br/>NOT jh -&gt; ji<br/>jn OR jo -&gt; jp<br/>gj AND gu -&gt; gw<br/>d AND j -&gt; l<br/>et RSHIFT 1 -&gt; fm<br/>jq OR jw -&gt; jx<br/>ep OR eo -&gt; eq<br/>lv LSHIFT 15 -&gt; lz<br/>NOT ey -&gt; ez<br/>jp RSHIFT 2 -&gt; jq<br/>eg AND ei -&gt; ej<br/>NOT dm -&gt; dn<br/>jp AND ka -&gt; kc<br/>as AND bd -&gt; bf<br/>fk OR fj -&gt; fl<br/>dw OR dx -&gt; dy<br/>lj AND ll -&gt; lm<br/>ec AND ee -&gt; ef<br/>fq AND fr -&gt; ft<br/>NOT kp -&gt; kq<br/>ki OR kj -&gt; kk<br/>cz OR cy -&gt; da<br/>as RSHIFT 3 -&gt; au<br/>an LSHIFT 15 -&gt; ar<br/>fj LSHIFT 15 -&gt; fn<br/>1 AND fi -&gt; fj<br/>he RSHIFT 1 -&gt; hx<br/>lf RSHIFT 2 -&gt; lg<br/>kf LSHIFT 15 -&gt; kj<br/>dz AND ef -&gt; eh<br/>ib OR ic -&gt; id<br/>lf RSHIFT 5 -&gt; li<br/>bp OR bq -&gt; br<br/>NOT gs -&gt; gt<br/>fo RSHIFT 1 -&gt; gh<br/>bz AND cb -&gt; cc<br/>ea OR eb -&gt; ec<br/>lf AND lq -&gt; ls<br/>NOT l -&gt; m<br/>hz RSHIFT 3 -&gt; ib<br/>NOT di -&gt; dj<br/>NOT lk -&gt; ll<br/>jp RSHIFT 3 -&gt; jr<br/>jp RSHIFT 5 -&gt; js<br/>NOT bf -&gt; bg<br/>s LSHIFT 15 -&gt; w<br/>eq LSHIFT 1 -&gt; fk<br/>jl OR jk -&gt; jm<br/>hz AND ik -&gt; im<br/>dz OR ef -&gt; eg<br/>1 AND gy -&gt; gz<br/>la LSHIFT 15 -&gt; le<br/>br AND bt -&gt; bu<br/>NOT cn -&gt; co<br/>v OR w -&gt; x<br/>d OR j -&gt; k<br/>1 AND gd -&gt; ge<br/>ia OR ig -&gt; ih<br/>NOT go -&gt; gp<br/>NOT ed -&gt; ee<br/>jq AND jw -&gt; jy<br/>et OR fe -&gt; ff<br/>aw AND ay -&gt; az<br/>ff AND fh -&gt; fi<br/>ir LSHIFT 1 -&gt; jl<br/>gg LSHIFT 1 -&gt; ha<br/>x RSHIFT 2 -&gt; y<br/>db OR dc -&gt; dd<br/>bl OR bm -&gt; bn<br/>ib AND ic -&gt; ie<br/>x RSHIFT 3 -&gt; z<br/>lh AND li -&gt; lk<br/>ce OR cd -&gt; cf<br/>NOT bb -&gt; bc<br/>hi AND hk -&gt; hl<br/>NOT gb -&gt; gc<br/>1 AND r -&gt; s<br/>fw AND fy -&gt; fz<br/>fb AND fd -&gt; fe<br/>1 AND en -&gt; eo<br/>z OR aa -&gt; ab<br/>bi LSHIFT 15 -&gt; bm<br/>hg OR hh -&gt; hi<br/>kh LSHIFT 1 -&gt; lb<br/>cg OR ch -&gt; ci<br/>1 AND kz -&gt; la<br/>gf OR ge -&gt; gg<br/>gj RSHIFT 2 -&gt; gk<br/>dd RSHIFT 2 -&gt; de<br/>NOT ls -&gt; lt<br/>lh OR li -&gt; lj<br/>jr OR js -&gt; jt<br/>au AND av -&gt; ax<br/>0 -&gt; c<br/>he AND hp -&gt; hr<br/>id AND if -&gt; ig<br/>et RSHIFT 5 -&gt; ew<br/>bp AND bq -&gt; bs<br/>e AND f -&gt; h<br/>ly OR lz -&gt; ma<br/>1 AND lu -&gt; lv<br/>NOT jd -&gt; je<br/>ha OR gz -&gt; hb<br/>dy RSHIFT 1 -&gt; er<br/>iu RSHIFT 2 -&gt; iv<br/>NOT hr -&gt; hs<br/>as RSHIFT 1 -&gt; bl<br/>kk RSHIFT 2 -&gt; kl<br/>b AND n -&gt; p<br/>ln AND lp -&gt; lq<br/>cj AND cp -&gt; cr<br/>dl AND dn -&gt; do<br/>ci RSHIFT 2 -&gt; cj<br/>as OR bd -&gt; be<br/>ge LSHIFT 15 -&gt; gi<br/>hz RSHIFT 5 -&gt; ic<br/>dv LSHIFT 1 -&gt; ep<br/>kl OR kr -&gt; ks<br/>gj OR gu -&gt; gv<br/>he RSHIFT 5 -&gt; hh<br/>NOT fg -&gt; fh<br/>hg AND hh -&gt; hj<br/>b OR n -&gt; o<br/>jk LSHIFT 15 -&gt; jo<br/>gz LSHIFT 15 -&gt; hd<br/>cy LSHIFT 15 -&gt; dc<br/>kk RSHIFT 5 -&gt; kn<br/>ci RSHIFT 3 -&gt; ck<br/>at OR az -&gt; ba<br/>iu RSHIFT 3 -&gt; iw<br/>ko AND kq -&gt; kr<br/>NOT eh -&gt; ei<br/>aq OR ar -&gt; as<br/>iy AND ja -&gt; jb<br/>dd RSHIFT 3 -&gt; df<br/>bn RSHIFT 3 -&gt; bp<br/>1 AND cc -&gt; cd<br/>at AND az -&gt; bb<br/>x OR ai -&gt; aj<br/>kk AND kv -&gt; kx<br/>ao OR an -&gt; ap<br/>dy RSHIFT 3 -&gt; ea<br/>x RSHIFT 1 -&gt; aq<br/>eu AND fa -&gt; fc<br/>kl AND kr -&gt; kt<br/>ia AND ig -&gt; ii<br/>df AND dg -&gt; di<br/>NOT fx -&gt; fy<br/>k AND m -&gt; n<br/>bn RSHIFT 5 -&gt; bq<br/>km AND kn -&gt; kp<br/>dt LSHIFT 15 -&gt; dx<br/>hz RSHIFT 2 -&gt; ia<br/>aj AND al -&gt; am<br/>cd LSHIFT 15 -&gt; ch<br/>hc OR hd -&gt; he<br/>he RSHIFT 3 -&gt; hg<br/>bn OR by -&gt; bz<br/>NOT kt -&gt; ku<br/>z AND aa -&gt; ac<br/>NOT ak -&gt; al<br/>cu AND cw -&gt; cx<br/>NOT ie -&gt; if<br/>dy RSHIFT 2 -&gt; dz<br/>ip LSHIFT 15 -&gt; it<br/>de OR dk -&gt; dl<br/>au OR av -&gt; aw<br/>jg AND ji -&gt; jj<br/>ci AND ct -&gt; cv<br/>dy RSHIFT 5 -&gt; eb<br/>hx OR hy -&gt; hz<br/>eu OR fa -&gt; fb<br/>gj RSHIFT 3 -&gt; gl<br/>fo AND fz -&gt; gb<br/>1 AND jj -&gt; jk<br/>jp OR ka -&gt; kb<br/>de AND dk -&gt; dm<br/>ex AND ez -&gt; fa<br/>df OR dg -&gt; dh<br/>iv OR jb -&gt; jc<br/>x RSHIFT 5 -&gt; aa<br/>NOT hj -&gt; hk<br/>NOT im -&gt; in<br/>fl LSHIFT 1 -&gt; gf<br/>hu LSHIFT 15 -&gt; hy<br/>iq OR ip -&gt; ir<br/>iu RSHIFT 5 -&gt; ix<br/>NOT fc -&gt; fd<br/>NOT el -&gt; em<br/>ck OR cl -&gt; cm<br/>et RSHIFT 3 -&gt; ev<br/>hw LSHIFT 1 -&gt; iq<br/>ci RSHIFT 5 -&gt; cl<br/>iv AND jb -&gt; jd<br/>dd RSHIFT 5 -&gt; dg<br/>as RSHIFT 2 -&gt; at<br/>NOT jy -&gt; jz<br/>af AND ah -&gt; ai<br/>1 AND ds -&gt; dt<br/>jx AND jz -&gt; ka<br/>da LSHIFT 1 -&gt; du<br/>fs AND fu -&gt; fv<br/>jp RSHIFT 1 -&gt; ki<br/>iw AND ix -&gt; iz<br/>iw OR ix -&gt; iy<br/>eo LSHIFT 15 -&gt; es<br/>ev AND ew -&gt; ey<br/>ba AND bc -&gt; bd<br/>fp AND fv -&gt; fx<br/>jc AND je -&gt; jf<br/>et RSHIFT 2 -&gt; eu<br/>kg OR kf -&gt; kh<br/>iu OR jf -&gt; jg<br/>er OR es -&gt; et<br/>fo RSHIFT 2 -&gt; fp<br/>NOT ca -&gt; cb<br/>bv AND bx -&gt; by<br/>u LSHIFT 1 -&gt; ao<br/>cm AND co -&gt; cp<br/>y OR ae -&gt; af<br/>bn AND by -&gt; ca<br/>1 AND ke -&gt; kf<br/>jt AND jv -&gt; jw<br/>fq OR fr -&gt; fs<br/>dy AND ej -&gt; el<br/>NOT kc -&gt; kd<br/>ev OR ew -&gt; ex<br/>dd OR do -&gt; dp<br/>NOT cv -&gt; cw<br/>gr AND gt -&gt; gu<br/>dd RSHIFT 1 -&gt; dw<br/>NOT gw -&gt; gx<br/>NOT iz -&gt; ja<br/>1 AND io -&gt; ip<br/>NOT ag -&gt; ah<br/>b RSHIFT 5 -&gt; f<br/>NOT cr -&gt; cs<br/>kb AND kd -&gt; ke<br/>jr AND js -&gt; ju<br/>cq AND cs -&gt; ct<br/>il AND in -&gt; io<br/>NOT ju -&gt; jv<br/>du OR dt -&gt; dv<br/>dd AND do -&gt; dq<br/>b RSHIFT 2 -&gt; d<br/>jm LSHIFT 1 -&gt; kg<br/>NOT dq -&gt; dr<br/>bo OR bu -&gt; bv<br/>gk OR gq -&gt; gr<br/>he OR hp -&gt; hq<br/>NOT h -&gt; i<br/>hf AND hl -&gt; hn<br/>gv AND gx -&gt; gy<br/>x AND ai -&gt; ak<br/>bo AND bu -&gt; bw<br/>hq AND hs -&gt; ht<br/>hz RSHIFT 1 -&gt; is<br/>gj RSHIFT 5 -&gt; gm<br/>g AND i -&gt; j<br/>gk AND gq -&gt; gs<br/>dp AND dr -&gt; ds<br/>b RSHIFT 3 -&gt; e<br/>gl AND gm -&gt; go<br/>gl OR gm -&gt; gn<br/>y AND ae -&gt; ag<br/>hv OR hu -&gt; hw<br/>1674 -&gt; b<br/>ab AND ad -&gt; ae<br/>NOT ac -&gt; ad<br/>1 AND ht -&gt; hu<br/>NOT hn -&gt; ho</div><div class="highlight" form="false" id="a_MfNVD"><table class="sourcetable"><tbody><tr><td class="linenos"><div class="linenodiv"><pre>  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340</pre></div></td><td class="code"><div class="source"><pre>#lang wires
+bn RSHIFT 2 -&gt; bo
+lf RSHIFT 1 -&gt; ly
+fo RSHIFT 3 -&gt; fq
+cj OR cp -&gt; cq
+fo OR fz -&gt; ga
+t OR s -&gt; u
+lx -&gt; a
+NOT ax -&gt; ay
+he RSHIFT 2 -&gt; hf
+lf OR lq -&gt; lr
+lr AND lt -&gt; lu
+dy OR ej -&gt; ek
+1 AND cx -&gt; cy
+hb LSHIFT 1 -&gt; hv
+1 AND bh -&gt; bi
+ih AND ij -&gt; ik
+c LSHIFT 1 -&gt; t
+ea AND eb -&gt; ed
+km OR kn -&gt; ko
+NOT bw -&gt; bx
+ci OR ct -&gt; cu
+NOT p -&gt; q
+lw OR lv -&gt; lx
+NOT lo -&gt; lp
+fp OR fv -&gt; fw
+o AND q -&gt; r
+dh AND dj -&gt; dk
+ap LSHIFT 1 -&gt; bj
+bk LSHIFT 1 -&gt; ce
+NOT ii -&gt; ij
+gh OR gi -&gt; gj
+kk RSHIFT 1 -&gt; ld
+lc LSHIFT 1 -&gt; lw
+lb OR la -&gt; lc
+1 AND am -&gt; an
+gn AND gp -&gt; gq
+lf RSHIFT 3 -&gt; lh
+e OR f -&gt; g
+lg AND lm -&gt; lo
+ci RSHIFT 1 -&gt; db
+cf LSHIFT 1 -&gt; cz
+bn RSHIFT 1 -&gt; cg
+et AND fe -&gt; fg
+is OR it -&gt; iu
+kw AND ky -&gt; kz
+ck AND cl -&gt; cn
+bj OR bi -&gt; bk
+gj RSHIFT 1 -&gt; hc
+iu AND jf -&gt; jh
+NOT bs -&gt; bt
+kk OR kv -&gt; kw
+ks AND ku -&gt; kv
+hz OR ik -&gt; il
+b RSHIFT 1 -&gt; v
+iu RSHIFT 1 -&gt; jn
+fo RSHIFT 5 -&gt; fr
+be AND bg -&gt; bh
+ga AND gc -&gt; gd
+hf OR hl -&gt; hm
+ld OR le -&gt; lf
+as RSHIFT 5 -&gt; av
+fm OR fn -&gt; fo
+hm AND ho -&gt; hp
+lg OR lm -&gt; ln
+NOT kx -&gt; ky
+kk RSHIFT 3 -&gt; km
+ek AND em -&gt; en
+NOT ft -&gt; fu
+NOT jh -&gt; ji
+jn OR jo -&gt; jp
+gj AND gu -&gt; gw
+d AND j -&gt; l
+et RSHIFT 1 -&gt; fm
+jq OR jw -&gt; jx
+ep OR eo -&gt; eq
+lv LSHIFT 15 -&gt; lz
+NOT ey -&gt; ez
+jp RSHIFT 2 -&gt; jq
+eg AND ei -&gt; ej
+NOT dm -&gt; dn
+jp AND ka -&gt; kc
+as AND bd -&gt; bf
+fk OR fj -&gt; fl
+dw OR dx -&gt; dy
+lj AND ll -&gt; lm
+ec AND ee -&gt; ef
+fq AND fr -&gt; ft
+NOT kp -&gt; kq
+ki OR kj -&gt; kk
+cz OR cy -&gt; da
+as RSHIFT 3 -&gt; au
+an LSHIFT 15 -&gt; ar
+fj LSHIFT 15 -&gt; fn
+1 AND fi -&gt; fj
+he RSHIFT 1 -&gt; hx
+lf RSHIFT 2 -&gt; lg
+kf LSHIFT 15 -&gt; kj
+dz AND ef -&gt; eh
+ib OR ic -&gt; id
+lf RSHIFT 5 -&gt; li
+bp OR bq -&gt; br
+NOT gs -&gt; gt
+fo RSHIFT 1 -&gt; gh
+bz AND cb -&gt; cc
+ea OR eb -&gt; ec
+lf AND lq -&gt; ls
+NOT l -&gt; m
+hz RSHIFT 3 -&gt; ib
+NOT di -&gt; dj
+NOT lk -&gt; ll
+jp RSHIFT 3 -&gt; jr
+jp RSHIFT 5 -&gt; js
+NOT bf -&gt; bg
+s LSHIFT 15 -&gt; w
+eq LSHIFT 1 -&gt; fk
+jl OR jk -&gt; jm
+hz AND ik -&gt; im
+dz OR ef -&gt; eg
+1 AND gy -&gt; gz
+la LSHIFT 15 -&gt; le
+br AND bt -&gt; bu
+NOT cn -&gt; co
+v OR w -&gt; x
+d OR j -&gt; k
+1 AND gd -&gt; ge
+ia OR ig -&gt; ih
+NOT go -&gt; gp
+NOT ed -&gt; ee
+jq AND jw -&gt; jy
+et OR fe -&gt; ff
+aw AND ay -&gt; az
+ff AND fh -&gt; fi
+ir LSHIFT 1 -&gt; jl
+gg LSHIFT 1 -&gt; ha
+x RSHIFT 2 -&gt; y
+db OR dc -&gt; dd
+bl OR bm -&gt; bn
+ib AND ic -&gt; ie
+x RSHIFT 3 -&gt; z
+lh AND li -&gt; lk
+ce OR cd -&gt; cf
+NOT bb -&gt; bc
+hi AND hk -&gt; hl
+NOT gb -&gt; gc
+1 AND r -&gt; s
+fw AND fy -&gt; fz
+fb AND fd -&gt; fe
+1 AND en -&gt; eo
+z OR aa -&gt; ab
+bi LSHIFT 15 -&gt; bm
+hg OR hh -&gt; hi
+kh LSHIFT 1 -&gt; lb
+cg OR ch -&gt; ci
+1 AND kz -&gt; la
+gf OR ge -&gt; gg
+gj RSHIFT 2 -&gt; gk
+dd RSHIFT 2 -&gt; de
+NOT ls -&gt; lt
+lh OR li -&gt; lj
+jr OR js -&gt; jt
+au AND av -&gt; ax
+0 -&gt; c
+he AND hp -&gt; hr
+id AND if -&gt; ig
+et RSHIFT 5 -&gt; ew
+bp AND bq -&gt; bs
+e AND f -&gt; h
+ly OR lz -&gt; ma
+1 AND lu -&gt; lv
+NOT jd -&gt; je
+ha OR gz -&gt; hb
+dy RSHIFT 1 -&gt; er
+iu RSHIFT 2 -&gt; iv
+NOT hr -&gt; hs
+as RSHIFT 1 -&gt; bl
+kk RSHIFT 2 -&gt; kl
+b AND n -&gt; p
+ln AND lp -&gt; lq
+cj AND cp -&gt; cr
+dl AND dn -&gt; do
+ci RSHIFT 2 -&gt; cj
+as OR bd -&gt; be
+ge LSHIFT 15 -&gt; gi
+hz RSHIFT 5 -&gt; ic
+dv LSHIFT 1 -&gt; ep
+kl OR kr -&gt; ks
+gj OR gu -&gt; gv
+he RSHIFT 5 -&gt; hh
+NOT fg -&gt; fh
+hg AND hh -&gt; hj
+b OR n -&gt; o
+jk LSHIFT 15 -&gt; jo
+gz LSHIFT 15 -&gt; hd
+cy LSHIFT 15 -&gt; dc
+kk RSHIFT 5 -&gt; kn
+ci RSHIFT 3 -&gt; ck
+at OR az -&gt; ba
+iu RSHIFT 3 -&gt; iw
+ko AND kq -&gt; kr
+NOT eh -&gt; ei
+aq OR ar -&gt; as
+iy AND ja -&gt; jb
+dd RSHIFT 3 -&gt; df
+bn RSHIFT 3 -&gt; bp
+1 AND cc -&gt; cd
+at AND az -&gt; bb
+x OR ai -&gt; aj
+kk AND kv -&gt; kx
+ao OR an -&gt; ap
+dy RSHIFT 3 -&gt; ea
+x RSHIFT 1 -&gt; aq
+eu AND fa -&gt; fc
+kl AND kr -&gt; kt
+ia AND ig -&gt; ii
+df AND dg -&gt; di
+NOT fx -&gt; fy
+k AND m -&gt; n
+bn RSHIFT 5 -&gt; bq
+km AND kn -&gt; kp
+dt LSHIFT 15 -&gt; dx
+hz RSHIFT 2 -&gt; ia
+aj AND al -&gt; am
+cd LSHIFT 15 -&gt; ch
+hc OR hd -&gt; he
+he RSHIFT 3 -&gt; hg
+bn OR by -&gt; bz
+NOT kt -&gt; ku
+z AND aa -&gt; ac
+NOT ak -&gt; al
+cu AND cw -&gt; cx
+NOT ie -&gt; if
+dy RSHIFT 2 -&gt; dz
+ip LSHIFT 15 -&gt; it
+de OR dk -&gt; dl
+au OR av -&gt; aw
+jg AND ji -&gt; jj
+ci AND ct -&gt; cv
+dy RSHIFT 5 -&gt; eb
+hx OR hy -&gt; hz
+eu OR fa -&gt; fb
+gj RSHIFT 3 -&gt; gl
+fo AND fz -&gt; gb
+1 AND jj -&gt; jk
+jp OR ka -&gt; kb
+de AND dk -&gt; dm
+ex AND ez -&gt; fa
+df OR dg -&gt; dh
+iv OR jb -&gt; jc
+x RSHIFT 5 -&gt; aa
+NOT hj -&gt; hk
+NOT im -&gt; in
+fl LSHIFT 1 -&gt; gf
+hu LSHIFT 15 -&gt; hy
+iq OR ip -&gt; ir
+iu RSHIFT 5 -&gt; ix
+NOT fc -&gt; fd
+NOT el -&gt; em
+ck OR cl -&gt; cm
+et RSHIFT 3 -&gt; ev
+hw LSHIFT 1 -&gt; iq
+ci RSHIFT 5 -&gt; cl
+iv AND jb -&gt; jd
+dd RSHIFT 5 -&gt; dg
+as RSHIFT 2 -&gt; at
+NOT jy -&gt; jz
+af AND ah -&gt; ai
+1 AND ds -&gt; dt
+jx AND jz -&gt; ka
+da LSHIFT 1 -&gt; du
+fs AND fu -&gt; fv
+jp RSHIFT 1 -&gt; ki
+iw AND ix -&gt; iz
+iw OR ix -&gt; iy
+eo LSHIFT 15 -&gt; es
+ev AND ew -&gt; ey
+ba AND bc -&gt; bd
+fp AND fv -&gt; fx
+jc AND je -&gt; jf
+et RSHIFT 2 -&gt; eu
+kg OR kf -&gt; kh
+iu OR jf -&gt; jg
+er OR es -&gt; et
+fo RSHIFT 2 -&gt; fp
+NOT ca -&gt; cb
+bv AND bx -&gt; by
+u LSHIFT 1 -&gt; ao
+cm AND co -&gt; cp
+y OR ae -&gt; af
+bn AND by -&gt; ca
+1 AND ke -&gt; kf
+jt AND jv -&gt; jw
+fq OR fr -&gt; fs
+dy AND ej -&gt; el
+NOT kc -&gt; kd
+ev OR ew -&gt; ex
+dd OR do -&gt; dp
+NOT cv -&gt; cw
+gr AND gt -&gt; gu
+dd RSHIFT 1 -&gt; dw
+NOT gw -&gt; gx
+NOT iz -&gt; ja
+1 AND io -&gt; ip
+NOT ag -&gt; ah
+b RSHIFT 5 -&gt; f
+NOT cr -&gt; cs
+kb AND kd -&gt; ke
+jr AND js -&gt; ju
+cq AND cs -&gt; ct
+il AND in -&gt; io
+NOT ju -&gt; jv
+du OR dt -&gt; dv
+dd AND do -&gt; dq
+b RSHIFT 2 -&gt; d
+jm LSHIFT 1 -&gt; kg
+NOT dq -&gt; dr
+bo OR bu -&gt; bv
+gk OR gq -&gt; gr
+he OR hp -&gt; hq
+NOT h -&gt; i
+hf AND hl -&gt; hn
+gv AND gx -&gt; gy
+x AND ai -&gt; ak
+bo AND bu -&gt; bw
+hq AND hs -&gt; ht
+hz RSHIFT 1 -&gt; is
+gj RSHIFT 5 -&gt; gm
+g AND i -&gt; j
+gk AND gq -&gt; gs
+dp AND dr -&gt; ds
+b RSHIFT 3 -&gt; e
+gl AND gm -&gt; go
+gl OR gm -&gt; gn
+y AND ae -&gt; ag
+hv OR hu -&gt; hw
+1674 -&gt; b
+ab AND ad -&gt; ae
+NOT ac -&gt; ad
+1 AND ht -&gt; hu
+NOT hn -&gt; ho
+</pre></div>
+</td></tr></tbody></table></div><div class="copy-button" form="false" onClick="notify('copied to clipboard', 1000)" id="a_Vldpk2" data-clipboard-target="#code_45" data-clipboard-action="copy"><img src="../fonts/feather-v1.1/svg/download.svg" alt="copy to clipboard"/></div></div></div></div><div anchorize="false" style="height:2em"></div><ul class="siblinks"><li><a href="intro.html">1&emsp;intro</a></li><li><a href="specification-and-setup.html">2&emsp;spec­i­fi­ca­tion and setup</a></li><li><a href="the-reader.html">3&emsp;the reader</a></li><li><a href="the-expander.html">4&emsp;the expander</a></li><li><a href="testing-the-language.html">5&emsp;test­ing the lan­guage</a></li><li><a href="recap.html">6&emsp;recap</a></li><li><a class="here" href="source-listing.html">7&emsp;source list­ing</a></li></ul></div>
+    <a class="nav-left" href="recap.html">← prev</a>
+    <a class="nav-right" href="../basic/intro.html">next →</a>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+
+
+
+function show_all_forms() {
+ var elems = document.getElementsByClassName('has_form');
+ for (var i = 0 ; i < elems.length ; i++) {
+  toggle_form(elems[i].id);
+ }
+}
+
+// for debugging forms only: uncomment next line
+// show_all_forms();
+
+// sets up copy-to-clipboard buttons in code boxes
+var clipboard = new Clipboard('.copy-button');
+clipboard.on('success', function(e) {console.log(e);});
+clipboard.on('error', function(e) {console.log(e);});
+</script>

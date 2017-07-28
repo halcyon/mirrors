@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    
+<!-- Mirrored from learnxinyminutes.com/docs/zh-cn/csharp-cn/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:32:21 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- Use title if it's in the page YAML frontmatter -->
+        <title>Learn c# in Y Minutes</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="../../../css/normalize.css">
+        <link rel="stylesheet" href="../../../css/main.css">
+        <link href="../../../css/screen.css" media="screen" rel="stylesheet" type="text/css" />
+        <link href="../../../css/github.css" media="screen" rel="stylesheet" type="text/css" />
+
+        <link rel="canonical" href="index.html">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <div class="container">
+            <div class="share">
+    <span class="sharemsg">
+      <a href="https://twitter.com/intent/tweet?url=https%3A%2F%2Flearnxinyminutes.com%2Fdocs%2Fzh-cn%2Fcsharp-cn%2F&amp;text=Learn+X+in+Y+minutes%2C+where+X%3Dc%23">
+        分享此页
+      </a></span>
+
+      <span class='st_facebook_large' displayText='Facebook'></span>
+      <span class='st_twitter_large' displayText='Tweet'></span>
+  </div>
+  <h1><a href="../../../index.html">X分钟速成Y</a></h2>
+  <h2>其中 Y=c#</h2>
+  
+    <p class="filelink">
+    源代码下载：
+    <a href="../../files/LearnCSharp-cn.cs">LearnCSharp-cn.cs</a>
+    </p>
+  
+  <div id="doc">
+    <p>C#是一个优雅的、类型安全的面向对象语言。使用C#，开发者可以在.NET框架下构建安全、健壮的应用程序。</p>
+
+<p><a href="http://msdn.microsoft.com/en-us/library/vstudio/z1zx9t92.aspx">更多关于C#的介绍</a></p>
+<pre class="highlight csharp"><code><span class="c1">// 单行注释以 // 开始
+</span><span class="cm">/*
+多行注释是这样的
+*/</span>
+<span class="c1">/// &lt;summary&gt;
+/// XML文档注释
+/// &lt;/summary&gt;
+</span>
+<span class="c1">// 声明应用用到的命名空间
+</span><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Data.Entity</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Dynamic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq.Expressions</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Net</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Threading.Tasks</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.IO</span><span class="p">;</span>
+
+<span class="c1">// 定义作用域，将代码组织成包
+</span><span class="k">namespace</span> <span class="nn">Learning</span>
+<span class="p">{</span>
+    <span class="c1">// 每个 .cs 文件至少需要包含一个和文件名相同的类
+</span>    <span class="c1">// 你可以不这么干，但是这样不好。
+</span>    <span class="k">public</span> <span class="k">class</span> <span class="nc">LearnCSharp</span>
+    <span class="p">{</span>
+        <span class="c1">// 基本语法 -  如果你以前用过 Java 或 C++ 的话，可以直接跳到后文「有趣的特性」
+</span>        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Syntax</span><span class="p">()</span> 
+        <span class="p">{</span>
+            <span class="c1">// 使用 Console.WriteLine 打印信息
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Hello World"</span><span class="p">);</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span>
+                <span class="s">"Integer: "</span> <span class="p">+</span> <span class="m">10</span> <span class="p">+</span>
+                <span class="s">" Double: "</span> <span class="p">+</span> <span class="m">3.14</span> <span class="p">+</span>
+                <span class="s">" Boolean: "</span> <span class="p">+</span> <span class="k">true</span><span class="p">);</span>
+
+            <span class="c1">// 使用 Console.Write 打印，不带换行符号
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="s">"Hello "</span><span class="p">);</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="s">"World"</span><span class="p">);</span>
+
+            <span class="c1">///////////////////////////////////////////////////
+</span>            <span class="c1">// 类型和变量
+</span>            <span class="c1">//
+</span>            <span class="c1">// 使用 &lt;type&gt; &lt;name&gt; 定义变量
+</span>            <span class="c1">///////////////////////////////////////////////////
+</span>
+            <span class="c1">// Sbyte - 有符号 8-bit 整数
+</span>            <span class="c1">// (-128 &lt;= sbyte &lt;= 127)
+</span>            <span class="kt">sbyte</span> <span class="n">fooSbyte</span> <span class="p">=</span> <span class="m">100</span><span class="p">;</span>
+
+            <span class="c1">// Byte - 无符号 8-bit 整数
+</span>            <span class="c1">// (0 &lt;= byte &lt;= 255)
+</span>            <span class="kt">byte</span> <span class="n">fooByte</span> <span class="p">=</span> <span class="m">100</span><span class="p">;</span>
+
+            <span class="c1">// Short - 16-bit 整数
+</span>            <span class="c1">// 有符号 - (-32,768 &lt;= short &lt;= 32,767)
+</span>            <span class="c1">// 无符号 - (0 &lt;= ushort &lt;= 65,535)
+</span>            <span class="kt">short</span> <span class="n">fooShort</span> <span class="p">=</span> <span class="m">10000</span><span class="p">;</span>
+            <span class="kt">ushort</span> <span class="n">fooUshort</span> <span class="p">=</span> <span class="m">10000</span><span class="p">;</span>
+
+            <span class="c1">// Integer - 32-bit 整数
+</span>            <span class="kt">int</span> <span class="n">fooInt</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span> <span class="c1">// (-2,147,483,648 &lt;= int &lt;= 2,147,483,647)
+</span>            <span class="kt">uint</span> <span class="n">fooUint</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span> <span class="c1">// (0 &lt;= uint &lt;= 4,294,967,295)
+</span>
+            <span class="c1">// Long - 64-bit 整数
+</span>            <span class="kt">long</span> <span class="n">fooLong</span> <span class="p">=</span> <span class="m">100000L</span><span class="p">;</span> <span class="c1">// (-9,223,372,036,854,775,808 &lt;= long &lt;= 9,223,372,036,854,775,807)
+</span>            <span class="kt">ulong</span> <span class="n">fooUlong</span> <span class="p">=</span> <span class="m">100000L</span><span class="p">;</span> <span class="c1">// (0 &lt;= ulong &lt;= 18,446,744,073,709,551,615)
+</span>            <span class="c1">// 数字默认为 int 或 uint （取决于尺寸）
+</span>            <span class="c1">// 使用 L 标明变量值类型为long 或 ulong
+</span>
+            <span class="c1">// Double - 双精度 64-bit IEEE 754 浮点数
+</span>            <span class="kt">double</span> <span class="n">fooDouble</span> <span class="p">=</span> <span class="m">123.4</span><span class="p">;</span> <span class="c1">// 精度: 15-16 位
+</span>
+            <span class="c1">// Float - 单精度 32-bit IEEE 754 浮点数
+</span>            <span class="kt">float</span> <span class="n">fooFloat</span> <span class="p">=</span> <span class="m">234.5f</span><span class="p">;</span> <span class="c1">// 精度: 7 位
+</span>            <span class="c1">// 使用 f 标明变量值类型为float
+</span>
+            <span class="c1">// Decimal - 128-bits 数据类型，比其他浮点类型精度更高
+</span>            <span class="c1">// 适合财务、金融
+</span>            <span class="kt">decimal</span> <span class="n">fooDecimal</span> <span class="p">=</span> <span class="m">150.3</span><span class="n">m</span><span class="p">;</span>
+
+            <span class="c1">// 布尔值 - true &amp; false
+</span>            <span class="kt">bool</span> <span class="n">fooBoolean</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span> <span class="c1">// 或 false
+</span>
+            <span class="c1">// Char - 单个 16-bit Unicode 字符
+</span>            <span class="kt">char</span> <span class="n">fooChar</span> <span class="p">=</span> <span class="sc">'A'</span><span class="p">;</span>
+
+            <span class="c1">// 字符串 -- 和前面的基本类型不同，字符串不是值，而是引用。
+</span>            <span class="c1">// 这意味着你可以将字符串设为null。
+</span>            <span class="kt">string</span> <span class="n">fooString</span> <span class="p">=</span> <span class="s">"\"escape\" quotes and add \n (new lines) and \t (tabs)"</span><span class="p">;</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">fooString</span><span class="p">);</span>
+
+            <span class="c1">// 你可以通过索引访问字符串的每个字符：
+</span>            <span class="kt">char</span> <span class="n">charFromString</span> <span class="p">=</span> <span class="n">fooString</span><span class="p">[</span><span class="m">1</span><span class="p">];</span> <span class="c1">// =&gt; 'e'
+</span>            <span class="c1">// 字符串不可修改:  fooString[1] = 'X' 是行不通的;
+</span>
+            <span class="c1">// 根据当前的locale设定比较字符串，大小写不敏感
+</span>            <span class="kt">string</span><span class="p">.</span><span class="nf">Compare</span><span class="p">(</span><span class="n">fooString</span><span class="p">,</span> <span class="s">"x"</span><span class="p">,</span> <span class="n">StringComparison</span><span class="p">.</span><span class="n">CurrentCultureIgnoreCase</span><span class="p">);</span>
+
+            <span class="c1">// 基于sprintf的字符串格式化
+</span>            <span class="kt">string</span> <span class="n">fooFs</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"Check Check, {0} {1}, {0} {1:0.0}"</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">2</span><span class="p">);</span>
+
+            <span class="c1">// 日期和格式
+</span>            <span class="n">DateTime</span> <span class="n">fooDate</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">;</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">fooDate</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="s">"hh:mm, dd MMM yyyy"</span><span class="p">));</span>
+
+            <span class="c1">// 使用 @  符号可以创建跨行的字符串。使用 "" 来表示 "
+</span>            <span class="kt">string</span> <span class="n">bazString</span> <span class="p">=</span> <span class="err">@</span><span class="s">"Here's some stuff
+</span><span class="n">on</span> <span class="n">a</span> <span class="k">new</span> <span class="n">line</span><span class="p">!</span> <span class="s">""</span><span class="n">Wow</span><span class="p">!</span><span class="s">""</span><span class="p">,</span> <span class="n">the</span> <span class="n">masses</span> <span class="n">cried</span><span class="s">";
+</span>
+            <span class="c1">// 使用const或read-only定义常量
+</span>            <span class="c1">// 常量在编译期演算
+</span>            <span class="k">const</span> <span class="kt">int</span> <span class="n">HOURS_I_WORK_PER_WEEK</span> <span class="p">=</span> <span class="m">9001</span><span class="p">;</span>
+
+            <span class="c1">///////////////////////////////////////////////////
+</span>            <span class="c1">// 数据结构
+</span>            <span class="c1">///////////////////////////////////////////////////
+</span>
+            <span class="c1">// 数组 - 从0开始计数
+</span>            <span class="c1">// 声明数组时需要确定数组长度
+</span>            <span class="c1">// 声明数组的格式如下：
+</span>            <span class="c1">// &lt;datatype&gt;[] &lt;var name&gt; = new &lt;datatype&gt;[&lt;array size&gt;];
+</span>            <span class="kt">int</span><span class="p">[]</span> <span class="n">intArray</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">int</span><span class="p">[</span><span class="m">10</span><span class="p">];</span>
+
+            <span class="c1">// 声明并初始化数组的其他方式：
+</span>            <span class="kt">int</span><span class="p">[]</span> <span class="n">y</span> <span class="p">=</span> <span class="p">{</span> <span class="m">9000</span><span class="p">,</span> <span class="m">1000</span><span class="p">,</span> <span class="m">1337</span> <span class="p">};</span>
+
+            <span class="c1">// 访问数组的元素
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"intArray @ 0: "</span> <span class="p">+</span> <span class="n">intArray</span><span class="p">[</span><span class="m">0</span><span class="p">]);</span>
+            <span class="c1">// 数组可以修改
+</span>            <span class="n">intArray</span><span class="p">[</span><span class="m">1</span><span class="p">]</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+
+            <span class="c1">// 列表
+</span>            <span class="c1">// 列表比数组更常用，因为列表更灵活。
+</span>            <span class="c1">// 声明列表的格式如下：
+</span>            <span class="c1">// List&lt;datatype&gt; &lt;var name&gt; = new List&lt;datatype&gt;();
+</span>            <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">intList</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;();</span>
+            <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">stringList</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
+            <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">z</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="p">{</span> <span class="m">9000</span><span class="p">,</span> <span class="m">1000</span><span class="p">,</span> <span class="m">1337</span> <span class="p">};</span> <span class="c1">// i
+</span>            <span class="c1">// &lt;&gt;用于泛型 - 参考下文
+</span>
+            <span class="c1">// 列表无默认值
+</span>            <span class="c1">// 访问列表元素时必须首先添加元素
+</span>            <span class="n">intList</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="m">1</span><span class="p">);</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"intList @ 0: "</span> <span class="p">+</span> <span class="n">intList</span><span class="p">[</span><span class="m">0</span><span class="p">]);</span>
+
+            <span class="c1">// 其他数据结构：
+</span>            <span class="c1">// 堆栈/队列
+</span>            <span class="c1">// 字典 (哈希表的实现)
+</span>            <span class="c1">// 哈希集合
+</span>            <span class="c1">// 只读集合
+</span>            <span class="c1">// 元组 (.Net 4+)
+</span>
+            <span class="c1">///////////////////////////////////////
+</span>            <span class="c1">// 操作符
+</span>            <span class="c1">///////////////////////////////////////
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"\n-&gt;Operators"</span><span class="p">);</span>
+
+            <span class="kt">int</span> <span class="n">i1</span> <span class="p">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">i2</span> <span class="p">=</span> <span class="m">2</span><span class="p">;</span> <span class="c1">// 多重声明的简写形式
+</span>
+            <span class="c1">// 算术直截了当
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">i1</span> <span class="p">+</span> <span class="n">i2</span> <span class="p">-</span> <span class="n">i1</span> <span class="p">*</span> <span class="m">3</span> <span class="p">/</span> <span class="m">7</span><span class="p">);</span> <span class="c1">// =&gt; 3
+</span>
+            <span class="c1">// 取余
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"11%3 = "</span> <span class="p">+</span> <span class="p">(</span><span class="m">11</span> <span class="p">%</span> <span class="m">3</span><span class="p">));</span> <span class="c1">// =&gt; 2
+</span>
+            <span class="c1">// 比较操作符
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"3 == 2? "</span> <span class="p">+</span> <span class="p">(</span><span class="m">3</span> <span class="p">==</span> <span class="m">2</span><span class="p">));</span> <span class="c1">// =&gt; false
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"3 != 2? "</span> <span class="p">+</span> <span class="p">(</span><span class="m">3</span> <span class="p">!=</span> <span class="m">2</span><span class="p">));</span> <span class="c1">// =&gt; true
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"3 &gt; 2? "</span> <span class="p">+</span> <span class="p">(</span><span class="m">3</span> <span class="p">&gt;</span> <span class="m">2</span><span class="p">));</span> <span class="c1">// =&gt; true
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"3 &lt; 2? "</span> <span class="p">+</span> <span class="p">(</span><span class="m">3</span> <span class="p">&lt;</span> <span class="m">2</span><span class="p">));</span> <span class="c1">// =&gt; false
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"2 &lt;= 2? "</span> <span class="p">+</span> <span class="p">(</span><span class="m">2</span> <span class="p">&lt;=</span> <span class="m">2</span><span class="p">));</span> <span class="c1">// =&gt; true
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"2 &gt;= 2? "</span> <span class="p">+</span> <span class="p">(</span><span class="m">2</span> <span class="p">&gt;=</span> <span class="m">2</span><span class="p">));</span> <span class="c1">// =&gt; true
+</span>
+            <span class="c1">// 位操作符
+</span>            <span class="cm">/*
+            ~       取反
+            &lt;&lt;      左移（有符号）
+            &gt;&gt;      右移（有符号）
+            &amp;       与
+            ^       异或
+            |       或
+            */</span>
+
+            <span class="c1">// 自增、自减
+</span>            <span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"\n-&gt;Inc/Dec-rementation"</span><span class="p">);</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">i</span><span class="p">++);</span> <span class="c1">//i = 1. 事后自增
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(++</span><span class="n">i</span><span class="p">);</span> <span class="c1">//i = 2. 事先自增
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">i</span><span class="p">--);</span> <span class="c1">//i = 1. 事后自减
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(--</span><span class="n">i</span><span class="p">);</span> <span class="c1">//i = 0. 事先自减
+</span>
+            <span class="c1">///////////////////////////////////////
+</span>            <span class="c1">// 控制结构
+</span>            <span class="c1">///////////////////////////////////////
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"\n-&gt;Control Structures"</span><span class="p">);</span>
+
+            <span class="c1">// 类似C的if语句
+</span>            <span class="kt">int</span> <span class="n">j</span> <span class="p">=</span> <span class="m">10</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="p">==</span> <span class="m">10</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"I get printed"</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="p">&gt;</span> <span class="m">10</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"I don't"</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"I also don't"</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="c1">// 三元表达式
+</span>            <span class="c1">// 简单的 if/else 语句可以写成：
+</span>            <span class="c1">// &lt;条件&gt; ? &lt;真&gt; : &lt;假&gt;
+</span>            <span class="kt">int</span> <span class="n">toCompare</span> <span class="p">=</span> <span class="m">17</span><span class="p">;</span>
+            <span class="kt">string</span> <span class="n">isTrue</span> <span class="p">=</span> <span class="n">toCompare</span> <span class="p">==</span> <span class="m">17</span> <span class="p">?</span> <span class="s">"True"</span> <span class="p">:</span> <span class="s">"False"</span><span class="p">;</span>
+
+            <span class="c1">// While 循环
+</span>            <span class="kt">int</span> <span class="n">fooWhile</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">fooWhile</span> <span class="p">&lt;</span> <span class="m">100</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//迭代 100 次, fooWhile 0-&gt;99
+</span>                <span class="n">fooWhile</span><span class="p">++;</span>
+            <span class="p">}</span>
+
+            <span class="c1">// Do While 循环
+</span>            <span class="kt">int</span> <span class="n">fooDoWhile</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+            <span class="k">do</span>
+            <span class="p">{</span>
+                <span class="c1">//迭代 100 次, fooDoWhile 0-&gt;99
+</span>                <span class="n">fooDoWhile</span><span class="p">++;</span>
+            <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="n">fooDoWhile</span> <span class="p">&lt;</span> <span class="m">100</span><span class="p">);</span>
+
+            <span class="c1">//for 循环结构 =&gt; for(&lt;初始条件&gt;; &lt;条件&gt;; &lt;步&gt;)
+</span>            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">fooFor</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">fooFor</span> <span class="p">&lt;</span> <span class="m">10</span><span class="p">;</span> <span class="n">fooFor</span><span class="p">++)</span>
+            <span class="p">{</span>
+                <span class="c1">//迭代10次, fooFor 0-&gt;9
+</span>            <span class="p">}</span>
+
+            <span class="c1">// foreach循环
+</span>            <span class="c1">// foreach 循环结构 =&gt; foreach(&lt;迭代器类型&gt; &lt;迭代器&gt; in &lt;可枚举结构&gt;)
+</span>            <span class="c1">// foreach 循环适用于任何实现了 IEnumerable 或 IEnumerable&lt;T&gt; 的对象。
+</span>            <span class="c1">// .Net 框架下的集合类型(数组, 列表, 字典...)
+</span>            <span class="c1">// 都实现了这些接口
+</span>            <span class="c1">// (下面的代码中，ToCharArray()可以删除，因为字符串同样实现了IEnumerable)
+</span>            <span class="k">foreach</span> <span class="p">(</span><span class="kt">char</span> <span class="n">character</span> <span class="k">in</span> <span class="s">"Hello World"</span><span class="p">.</span><span class="nf">ToCharArray</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="c1">//迭代字符串中的所有字符
+</span>            <span class="p">}</span>
+
+            <span class="c1">// Switch 语句
+</span>            <span class="c1">// switch 适用于 byte、short、char和int 数据类型。
+</span>            <span class="c1">// 同样适用于可枚举的类型
+</span>            <span class="c1">// 包括字符串类, 以及一些封装了原始值的类：
+</span>            <span class="c1">// Character、Byte、Short和Integer。
+</span>            <span class="kt">int</span> <span class="n">month</span> <span class="p">=</span> <span class="m">3</span><span class="p">;</span>
+            <span class="kt">string</span> <span class="n">monthString</span><span class="p">;</span>
+            <span class="k">switch</span> <span class="p">(</span><span class="n">month</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">case</span> <span class="m">1</span><span class="p">:</span>
+                    <span class="n">monthString</span> <span class="p">=</span> <span class="s">"January"</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="m">2</span><span class="p">:</span>
+                    <span class="n">monthString</span> <span class="p">=</span> <span class="s">"February"</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="m">3</span><span class="p">:</span>
+                    <span class="n">monthString</span> <span class="p">=</span> <span class="s">"March"</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="c1">// 你可以一次匹配多个case语句
+</span>                <span class="c1">// 但是你在添加case语句后需要使用break
+</span>                <span class="c1">// （否则你需要显式地使用goto case x语句）
+</span>                <span class="k">case</span> <span class="m">6</span><span class="p">:</span>
+                <span class="k">case</span> <span class="m">7</span><span class="p">:</span>
+                <span class="k">case</span> <span class="m">8</span><span class="p">:</span>
+                    <span class="n">monthString</span> <span class="p">=</span> <span class="s">"Summer time!!"</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">default</span><span class="p">:</span>
+                    <span class="n">monthString</span> <span class="p">=</span> <span class="s">"Some other month"</span><span class="p">;</span>
+                    <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="c1">///////////////////////////////////////
+</span>            <span class="c1">// 转换、指定数据类型
+</span>            <span class="c1">///////////////////////////////////////
+</span>
+            <span class="c1">// 转换类型
+</span>
+            <span class="c1">// 转换字符串为整数
+</span>            <span class="c1">// 转换失败会抛出异常
+</span>            <span class="kt">int</span><span class="p">.</span><span class="nf">Parse</span><span class="p">(</span><span class="s">"123"</span><span class="p">);</span><span class="c1">//返回整数类型的"123"
+</span>
+            <span class="c1">// TryParse会尝试转换类型，失败时会返回缺省类型
+</span>            <span class="c1">// 例如 0
+</span>            <span class="kt">int</span> <span class="n">tryInt</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="kt">int</span><span class="p">.</span><span class="nf">TryParse</span><span class="p">(</span><span class="s">"123"</span><span class="p">,</span> <span class="k">out</span> <span class="n">tryInt</span><span class="p">))</span> <span class="c1">// Funciton is boolean
+</span>                <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">tryInt</span><span class="p">);</span>       <span class="c1">// 123
+</span>
+            <span class="c1">// 转换整数为字符串
+</span>            <span class="c1">// Convert类提供了一系列便利转换的方法
+</span>            <span class="n">Convert</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="m">123</span><span class="p">);</span>
+            <span class="c1">// or
+</span>            <span class="n">tryInt</span><span class="p">.</span><span class="nf">ToString</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="c1">///////////////////////////////////////
+</span>        <span class="c1">// 类
+</span>        <span class="c1">///////////////////////////////////////
+</span>        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Classes</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="c1">// 参看文件尾部的对象声明
+</span>
+            <span class="c1">// 使用new初始化对象
+</span>            <span class="n">Bicycle</span> <span class="n">trek</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Bicycle</span><span class="p">();</span>
+
+            <span class="c1">// 调用对象的方法
+</span>            <span class="n">trek</span><span class="p">.</span><span class="nf">SpeedUp</span><span class="p">(</span><span class="m">3</span><span class="p">);</span> <span class="c1">// 你应该一直使用setter和getter方法
+</span>            <span class="n">trek</span><span class="p">.</span><span class="n">Cadence</span> <span class="p">=</span> <span class="m">100</span><span class="p">;</span>
+
+            <span class="c1">// 查看对象的信息.
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"trek info: "</span> <span class="p">+</span> <span class="n">trek</span><span class="p">.</span><span class="nf">Info</span><span class="p">());</span>
+
+            <span class="c1">// 实例化一个新的Penny Farthing
+</span>            <span class="n">PennyFarthing</span> <span class="n">funbike</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">PennyFarthing</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="m">10</span><span class="p">);</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"funbike info: "</span> <span class="p">+</span> <span class="n">funbike</span><span class="p">.</span><span class="nf">Info</span><span class="p">());</span>
+
+            <span class="n">Console</span><span class="p">.</span><span class="nf">Read</span><span class="p">();</span>
+        <span class="p">}</span> <span class="c1">// 结束main方法
+</span>
+        <span class="c1">// 终端程序 终端程序必须有一个main方法作为入口
+</span>        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nf">OtherInterestingFeatures</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="c1">//
+</span>        <span class="c1">// 有趣的特性
+</span>        <span class="c1">//
+</span>
+        <span class="c1">// 默认方法签名
+</span>
+        <span class="k">public</span> <span class="c1">// 可见性
+</span>        <span class="k">static</span> <span class="c1">// 允许直接调用类，无需先创建实例
+</span>        <span class="kt">int</span><span class="p">,</span> <span class="c1">//返回值
+</span>        <span class="nf">MethodSignatures</span><span class="p">(</span>
+            <span class="kt">int</span> <span class="n">maxCount</span><span class="p">,</span> <span class="c1">// 第一个变量，类型为整型
+</span>            <span class="kt">int</span> <span class="n">count</span> <span class="p">=</span> <span class="m">0</span><span class="p">,</span> <span class="c1">// 如果没有传入值，则缺省值为0
+</span>            <span class="kt">int</span> <span class="n">another</span> <span class="p">=</span> <span class="m">3</span><span class="p">,</span>
+            <span class="k">params</span> <span class="kt">string</span><span class="p">[]</span> <span class="n">otherParams</span> <span class="c1">// 捕获其他参数
+</span>        <span class="p">)</span>
+        <span class="p">{</span> 
+            <span class="k">return</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// 方法可以重名，只要签名不一样
+</span>        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">MethodSignature</span><span class="p">(</span><span class="kt">string</span> <span class="n">maxCount</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+
+        <span class="c1">//泛型
+</span>        <span class="c1">// TKey和TValue类由用用户调用函数时指定。
+</span>        <span class="c1">// 以下函数模拟了Python的SetDefault
+</span>        <span class="k">public</span> <span class="k">static</span> <span class="n">TValue</span> <span class="n">SetDefault</span><span class="p">&lt;</span><span class="n">TKey</span><span class="p">,</span> <span class="n">TValue</span><span class="p">&gt;(</span>
+            <span class="n">IDictionary</span><span class="p">&lt;</span><span class="n">TKey</span><span class="p">,</span> <span class="n">TValue</span><span class="p">&gt;</span> <span class="n">dictionary</span><span class="p">,</span> 
+            <span class="n">TKey</span> <span class="n">key</span><span class="p">,</span> 
+            <span class="n">TValue</span> <span class="n">defaultItem</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">TValue</span> <span class="n">result</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(!</span><span class="n">dictionary</span><span class="p">.</span><span class="nf">TryGetValue</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="k">out</span> <span class="n">result</span><span class="p">))</span>
+                <span class="k">return</span> <span class="n">dictionary</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="p">=</span> <span class="n">defaultItem</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// 你可以限定传入值的范围
+</span>        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="n">IterateAndPrint</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">T</span> <span class="n">toPrint</span><span class="p">)</span> <span class="n">where</span> <span class="n">T</span><span class="p">:</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span>
+        <span class="p">{</span>
+            <span class="c1">// 我们可以进行迭代，因为T是可枚举的
+</span>            <span class="k">foreach</span> <span class="p">(</span><span class="n">var</span> <span class="n">item</span> <span class="k">in</span> <span class="n">toPrint</span><span class="p">)</span>
+                <span class="c1">// ittm为整数
+</span>                <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">item</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">OtherInterestingFeatures</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="c1">// 可选参数  
+</span>            <span class="nf">MethodSignatures</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="s">"Some"</span><span class="p">,</span> <span class="s">"Extra"</span><span class="p">,</span> <span class="s">"Strings"</span><span class="p">);</span>
+            <span class="nf">MethodSignatures</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="n">another</span><span class="p">:</span> <span class="m">3</span><span class="p">);</span> <span class="c1">// 显式指定参数，忽略可选参数
+</span>
+            <span class="c1">// 扩展方法
+</span>            <span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">3</span><span class="p">;</span>
+            <span class="n">i</span><span class="p">.</span><span class="nf">Print</span><span class="p">();</span> <span class="c1">// 参见下面的定义 
+</span>
+            <span class="c1">// 可为null的类型 对数据库交互、返回值很有用
+</span>            <span class="c1">// 任何值类型 (i.e. 不为类) 添加后缀 ? 后会变为可为null的值
+</span>            <span class="c1">// &lt;类型&gt;? &lt;变量名&gt; = &lt;值&gt;
+</span>            <span class="kt">int</span><span class="p">?</span> <span class="n">nullable</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span> <span class="c1">// Nullable&lt;int&gt; 的简写形式
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Nullable variable: "</span> <span class="p">+</span> <span class="n">nullable</span><span class="p">);</span>
+            <span class="kt">bool</span> <span class="n">hasValue</span> <span class="p">=</span> <span class="n">nullable</span><span class="p">.</span><span class="n">HasValue</span><span class="p">;</span> <span class="c1">// 不为null时返回真
+</span>            <span class="c1">// ?? 是用于指定默认值的语法糖
+</span>            <span class="c1">// 以防变量为null的情况
+</span>            <span class="kt">int</span> <span class="n">notNullable</span> <span class="p">=</span> <span class="n">nullable</span> <span class="p">??</span> <span class="m">0</span><span class="p">;</span> <span class="c1">// 0
+</span>
+            <span class="c1">// 变量类型推断 - 你可以让编译器推断变量类型:
+</span>            <span class="n">var</span> <span class="n">magic</span> <span class="p">=</span> <span class="s">"编译器确定magic是一个字符串，所以仍然是类型安全的"</span><span class="p">;</span>
+            <span class="c1">// magic = 9; // 不工作，因为magic是字符串，而不是整数。 
+</span>
+            <span class="c1">// 泛型
+</span>            <span class="c1">//
+</span>            <span class="n">var</span> <span class="n">phonebook</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;()</span> <span class="p">{</span> 
+                <span class="p">{</span><span class="s">"Sarah"</span><span class="p">,</span> <span class="s">"212 555 5555"</span><span class="p">}</span> <span class="c1">// 在电话簿中加入新条目
+</span>            <span class="p">};</span>
+
+            <span class="c1">// 调用上面定义为泛型的SETDEFAULT
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">SetDefault</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span><span class="kt">string</span><span class="p">&gt;(</span><span class="n">phonebook</span><span class="p">,</span> <span class="s">"Shaun"</span><span class="p">,</span> <span class="s">"No Phone"</span><span class="p">));</span> <span class="c1">// 没有电话
+</span>            <span class="c1">// 你不用指定TKey、TValue，因为它们会被隐式地推导出来
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="nf">SetDefault</span><span class="p">(</span><span class="n">phonebook</span><span class="p">,</span> <span class="s">"Sarah"</span><span class="p">,</span> <span class="s">"No Phone"</span><span class="p">));</span> <span class="c1">// 212 555 5555
+</span>
+            <span class="c1">// lambda表达式 - 允许你用一行代码搞定函数
+</span>            <span class="n">Func</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="p">&gt;</span> <span class="n">square</span> <span class="p">=</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">x</span> <span class="p">*</span> <span class="n">x</span><span class="p">;</span> <span class="c1">// 最后一项为返回值
+</span>            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="nf">square</span><span class="p">(</span><span class="m">3</span><span class="p">));</span> <span class="c1">// 9
+</span>
+            <span class="c1">// 可抛弃的资源管理 - 让你很容易地处理未管理的资源
+</span>            <span class="c1">// 大多数访问未管理资源 (文件操作符、设备上下文, etc.)的对象
+</span>            <span class="c1">// 都实现了IDisposable接口。 
+</span>            <span class="c1">// using语句会为你清理IDisposable对象。
+</span>            <span class="k">using</span> <span class="p">(</span><span class="n">StreamWriter</span> <span class="n">writer</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StreamWriter</span><span class="p">(</span><span class="s">"log.txt"</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">writer</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"这里没有什么可疑的东西"</span><span class="p">);</span>
+                <span class="c1">// 在作用域的结尾，资源会被回收
+</span>                <span class="c1">// （即使有异常抛出，也一样会回收）
+</span>            <span class="p">}</span> 
+
+            <span class="c1">// 并行框架
+</span>            <span class="c1">// http://blogs.msdn.com/b/csharpfaq/archive/2010/06/01/parallel-programming-in-net-framework-4-getting-started.aspx
+</span>            <span class="n">var</span> <span class="n">websites</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">string</span><span class="p">[]</span> <span class="p">{</span> 
+                <span class="s">"http://www.google.com"</span><span class="p">,</span> <span class="s">"http://www.reddit.com"</span><span class="p">,</span> 
+                <span class="s">"http://www.shaunmccarthy.com"</span>
+            <span class="p">};</span>
+            <span class="n">var</span> <span class="n">responses</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;();</span>
+
+            <span class="c1">// 为每个请求新开一个线程
+</span>            <span class="c1">// 在运行下一步前合并结果
+</span>            <span class="n">Parallel</span><span class="p">.</span><span class="nf">ForEach</span><span class="p">(</span><span class="n">websites</span><span class="p">,</span> 
+                <span class="k">new</span> <span class="nf">ParallelOptions</span><span class="p">()</span> <span class="p">{</span><span class="n">MaxDegreeOfParallelism</span> <span class="p">=</span> <span class="m">3</span><span class="p">},</span> <span class="c1">// max of 3 threads
+</span>                <span class="n">website</span> <span class="p">=&gt;</span>
+            <span class="p">{</span>
+                <span class="c1">// Do something that takes a long time on the file
+</span>                <span class="k">using</span> <span class="p">(</span><span class="n">var</span> <span class="n">r</span> <span class="p">=</span> <span class="n">WebRequest</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="k">new</span> <span class="nf">Uri</span><span class="p">(</span><span class="n">website</span><span class="p">)).</span><span class="nf">GetResponse</span><span class="p">())</span>
+                <span class="p">{</span>
+                    <span class="n">responses</span><span class="p">[</span><span class="n">website</span><span class="p">]</span> <span class="p">=</span> <span class="n">r</span><span class="p">.</span><span class="n">ContentType</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">});</span>
+
+            <span class="c1">// 直到所有的请求完成后才会运行下面的代码
+</span>            <span class="k">foreach</span> <span class="p">(</span><span class="n">var</span> <span class="n">key</span> <span class="k">in</span> <span class="n">responses</span><span class="p">.</span><span class="n">Keys</span><span class="p">)</span>
+                <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"{0}:{1}"</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">responses</span><span class="p">[</span><span class="n">key</span><span class="p">]);</span>
+
+            <span class="c1">// 动态对象（配合其他语言使用很方便）
+</span>            <span class="n">dynamic</span> <span class="n">student</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ExpandoObject</span><span class="p">();</span>
+            <span class="n">student</span><span class="p">.</span><span class="n">FirstName</span> <span class="p">=</span> <span class="s">"First Name"</span><span class="p">;</span> <span class="c1">// 不需要先定义类！
+</span>
+            <span class="c1">// 你甚至可以添加方法（接受一个字符串，输出一个字符串）
+</span>            <span class="n">student</span><span class="p">.</span><span class="n">Introduce</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Func</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;(</span>
+                <span class="p">(</span><span class="n">introduceTo</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"Hey {0}, this is {1}"</span><span class="p">,</span> <span class="n">student</span><span class="p">.</span><span class="n">FirstName</span><span class="p">,</span> <span class="n">introduceTo</span><span class="p">));</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">student</span><span class="p">.</span><span class="nf">Introduce</span><span class="p">(</span><span class="s">"Beth"</span><span class="p">));</span>
+
+            <span class="c1">// IQUERYABLE&lt;T&gt; - 几乎所有的集合都实现了它，
+</span>            <span class="c1">// 带给你 Map / Filter / Reduce 风格的方法
+</span>            <span class="n">var</span> <span class="n">bikes</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Bicycle</span><span class="p">&gt;();</span>
+            <span class="n">bikes</span><span class="p">.</span><span class="nf">Sort</span><span class="p">();</span> <span class="c1">// Sorts the array
+</span>            <span class="n">bikes</span><span class="p">.</span><span class="nf">Sort</span><span class="p">((</span><span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">b1</span><span class="p">.</span><span class="n">Wheels</span><span class="p">.</span><span class="nf">CompareTo</span><span class="p">(</span><span class="n">b2</span><span class="p">.</span><span class="n">Wheels</span><span class="p">));</span> <span class="c1">// 根据车轮数排序
+</span>            <span class="n">var</span> <span class="n">result</span> <span class="p">=</span> <span class="n">bikes</span>
+                <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">b</span> <span class="p">=&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">Wheels</span> <span class="p">&gt;</span> <span class="m">3</span><span class="p">)</span> <span class="c1">// 筛选 - 可以连锁使用 （返回IQueryable)
+</span>                <span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">b</span> <span class="p">=&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">IsBroken</span> <span class="p">&amp;&amp;</span> <span class="n">b</span><span class="p">.</span><span class="n">HasTassles</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">b</span> <span class="p">=&gt;</span> <span class="n">b</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span> <span class="c1">// Map - 这里我们使用了select，所以结果是IQueryable&lt;string&gt;
+</span>
+            <span class="n">var</span> <span class="n">sum</span> <span class="p">=</span> <span class="n">bikes</span><span class="p">.</span><span class="nf">Sum</span><span class="p">(</span><span class="n">b</span> <span class="p">=&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">Wheels</span><span class="p">);</span> <span class="c1">// Reduce - 计算集合中的轮子总数
+</span>
+            <span class="c1">// 创建一个包含基于自行车的一些参数生成的隐式对象的列表
+</span>            <span class="n">var</span> <span class="n">bikeSummaries</span> <span class="p">=</span> <span class="n">bikes</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">b</span><span class="p">=&gt;</span><span class="k">new</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="n">b</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="n">IsAwesome</span> <span class="p">=</span> <span class="p">!</span><span class="n">b</span><span class="p">.</span><span class="n">IsBroken</span> <span class="p">&amp;&amp;</span> <span class="n">b</span><span class="p">.</span><span class="n">HasTassles</span> <span class="p">});</span>
+            <span class="c1">// 很难演示，但是编译器在代码编译完成前就能推导出以上对象的类型
+</span>            <span class="k">foreach</span> <span class="p">(</span><span class="n">var</span> <span class="n">bikeSummary</span> <span class="k">in</span> <span class="n">bikeSummaries</span><span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">b</span> <span class="p">=&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">IsAwesome</span><span class="p">))</span>
+                <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">bikeSummary</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
+
+            <span class="c1">// ASPARALLEL
+</span>            <span class="c1">// 邪恶的特性 —— 组合了linq和并行操作
+</span>            <span class="n">var</span> <span class="n">threeWheelers</span> <span class="p">=</span> <span class="n">bikes</span><span class="p">.</span><span class="nf">AsParallel</span><span class="p">().</span><span class="nf">Where</span><span class="p">(</span><span class="n">b</span> <span class="p">=&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">Wheels</span> <span class="p">==</span> <span class="m">3</span><span class="p">).</span><span class="nf">Select</span><span class="p">(</span><span class="n">b</span> <span class="p">=&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
+            <span class="c1">// 以上代码会并发地运行。会自动新开线程，分别计算结果。
+</span>            <span class="c1">// 适用于多核、大数据量的场景。
+</span>
+            <span class="c1">// LINQ - 将IQueryable&lt;T&gt;映射到存储，延缓执行
+</span>            <span class="c1">// 例如 LinqToSql 映射数据库, LinqToXml 映射XML文档
+</span>            <span class="n">var</span> <span class="n">db</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">BikeRespository</span><span class="p">();</span>
+
+            <span class="c1">// 执行被延迟了，这对于查询数据库来说很好
+</span>            <span class="n">var</span> <span class="n">filter</span> <span class="p">=</span> <span class="n">db</span><span class="p">.</span><span class="n">Bikes</span><span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">b</span> <span class="p">=&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">HasTassles</span><span class="p">);</span> <span class="c1">// 不运行查询
+</span>            <span class="k">if</span> <span class="p">(</span><span class="m">42</span> <span class="p">&gt;</span> <span class="m">6</span><span class="p">)</span> <span class="c1">// 你可以不断地增加筛选，包括有条件的筛选，例如用于“高级搜索”功能
+</span>                <span class="n">filter</span> <span class="p">=</span> <span class="n">filter</span><span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">b</span> <span class="p">=&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">IsBroken</span><span class="p">);</span> <span class="c1">// 不运行查询 
+</span>
+            <span class="n">var</span> <span class="n">query</span> <span class="p">=</span> <span class="n">filter</span>
+                <span class="p">.</span><span class="nf">OrderBy</span><span class="p">(</span><span class="n">b</span> <span class="p">=&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">Wheels</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">ThenBy</span><span class="p">(</span><span class="n">b</span> <span class="p">=&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">Name</span><span class="p">)</span>
+                <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">b</span> <span class="p">=&gt;</span> <span class="n">b</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span> <span class="c1">// 仍然不运行查询
+</span>
+            <span class="c1">// 现在运行查询，运行查询的时候会打开一个读取器，所以你迭代的是一个副本
+</span>            <span class="k">foreach</span> <span class="p">(</span><span class="kt">string</span> <span class="n">bike</span> <span class="k">in</span> <span class="n">query</span><span class="p">)</span> 
+                <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+
+
+
+        <span class="p">}</span>
+
+    <span class="p">}</span> <span class="c1">// 结束LearnCSharp类
+</span>
+    <span class="c1">// 你可以在同一个 .cs 文件中包含其他类
+</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">Extensions</span>
+    <span class="p">{</span>
+        <span class="c1">// 扩展函数
+</span>        <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="nf">Print</span><span class="p">(</span><span class="k">this</span> <span class="kt">object</span> <span class="n">obj</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="nf">ToString</span><span class="p">());</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">// 声明类的语法：
+</span>    <span class="c1">// &lt;public/private/protected/internal&gt; class &lt;类名&gt;{
+</span>    <span class="c1">//    //数据字段, 构造器, 内部函数.
+</span>    <span class="p">/</span>     <span class="c1">// 在Java中函数被称为方法。
+</span>    <span class="c1">// }
+</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">Bicycle</span>
+    <span class="p">{</span>
+        <span class="c1">// 自行车的字段、变量
+</span>        <span class="k">public</span> <span class="kt">int</span> <span class="n">Cadence</span> <span class="c1">// Public: 任何地方都可以访问
+</span>        <span class="p">{</span>
+            <span class="k">get</span> <span class="c1">// get - 定义获取属性的方法
+</span>            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">_cadence</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">set</span> <span class="c1">// set - 定义设置属性的方法
+</span>            <span class="p">{</span>
+                <span class="n">_cadence</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span> <span class="c1">// value是被传递给setter的值
+</span>            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">private</span> <span class="kt">int</span> <span class="n">_cadence</span><span class="p">;</span>
+
+        <span class="k">protected</span> <span class="k">virtual</span> <span class="kt">int</span> <span class="n">Gear</span> <span class="c1">// 类和子类可以访问
+</span>        <span class="p">{</span>
+            <span class="k">get</span><span class="p">;</span> <span class="c1">// 创建一个自动属性，无需成员字段
+</span>            <span class="k">set</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">internal</span> <span class="kt">int</span> <span class="n">Wheels</span> <span class="c1">// Internal:在同一程序集内可以访问
+</span>        <span class="p">{</span>
+            <span class="k">get</span><span class="p">;</span>
+            <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="c1">// 可以给get/set方法添加修饰符
+</span>        <span class="p">}</span>
+
+        <span class="kt">int</span> <span class="n">_speed</span><span class="p">;</span> <span class="c1">// 默认为private: 只可以在这个类内访问，你也可以使用`private`关键词
+</span>        <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="c1">// enum类型包含一组常量
+</span>        <span class="c1">// 它将名称映射到值（除非特别说明，是一个整型）
+</span>        <span class="c1">// enmu元素的类型可以是byte、sbyte、short、ushort、int、uint、long、ulong。
+</span>        <span class="c1">// enum不能包含相同的值。
+</span>        <span class="k">public</span> <span class="k">enum</span> <span class="n">BikeBrand</span>
+        <span class="p">{</span>
+            <span class="n">AIST</span><span class="p">,</span>
+            <span class="n">BMC</span><span class="p">,</span>
+            <span class="n">Electra</span> <span class="p">=</span> <span class="m">42</span><span class="p">,</span> <span class="c1">//你可以显式地赋值
+</span>            <span class="n">Gitane</span> <span class="c1">// 43
+</span>        <span class="p">}</span>
+        <span class="c1">// 我们在Bicycle类中定义的这个类型，所以它是一个内嵌类型。
+</span>        <span class="c1">// 这个类以外的代码应当使用`Bicycle.Brand`来引用。
+</span>
+        <span class="k">public</span> <span class="n">BikeBrand</span> <span class="n">Brand</span><span class="p">;</span> <span class="c1">// 声明一个enum类型之后，我们可以声明这个类型的字段
+</span>
+        <span class="c1">// 静态方法的类型为自身，不属于特定的对象。
+</span>        <span class="c1">// 你无需引用对象就可以访问他们。
+</span>        <span class="c1">// Console.WriteLine("Bicycles created: " + Bicycle.bicyclesCreated);
+</span>        <span class="k">static</span> <span class="k">public</span> <span class="kt">int</span> <span class="n">BicyclesCreated</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+
+        <span class="c1">// 只读值在运行时确定
+</span>        <span class="c1">// 它们只能在声明或构造器内被赋值
+</span>        <span class="k">readonly</span> <span class="kt">bool</span> <span class="n">_hasCardsInSpokes</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span> <span class="c1">// read-only private
+</span>
+        <span class="c1">// 构造器是创建类的一种方式
+</span>        <span class="c1">// 下面是一个默认的构造器
+</span>        <span class="k">public</span> <span class="nf">Bicycle</span><span class="p">()</span> 
+        <span class="p">{</span>
+            <span class="k">this</span><span class="p">.</span><span class="n">Gear</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span> <span class="c1">// 你可以使用关键词this访问对象的成员
+</span>            <span class="n">Cadence</span> <span class="p">=</span> <span class="m">50</span><span class="p">;</span>  <span class="c1">// 不过你并不总是需要它
+</span>            <span class="n">_speed</span> <span class="p">=</span> <span class="m">5</span><span class="p">;</span>
+            <span class="n">Name</span> <span class="p">=</span> <span class="s">"Bontrager"</span><span class="p">;</span>
+            <span class="n">Brand</span> <span class="p">=</span> <span class="n">BikeBrand</span><span class="p">.</span><span class="n">AIST</span><span class="p">;</span>
+            <span class="n">BicyclesCreated</span><span class="p">++;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// 另一个构造器的例子（包含参数）
+</span>        <span class="k">public</span> <span class="nf">Bicycle</span><span class="p">(</span><span class="kt">int</span> <span class="n">startCadence</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startSpeed</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startGear</span><span class="p">,</span>
+                       <span class="kt">string</span> <span class="n">name</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">hasCardsInSpokes</span><span class="p">,</span> <span class="n">BikeBrand</span> <span class="n">brand</span><span class="p">)</span> 
+            <span class="p">:</span> <span class="k">base</span><span class="p">()</span> <span class="c1">// 首先调用base
+</span>        <span class="p">{</span>
+            <span class="n">Gear</span> <span class="p">=</span> <span class="n">startGear</span><span class="p">;</span> 
+            <span class="n">Cadence</span> <span class="p">=</span> <span class="n">startCadence</span><span class="p">;</span>
+            <span class="n">_speed</span> <span class="p">=</span> <span class="n">startSpeed</span><span class="p">;</span>
+            <span class="n">Name</span> <span class="p">=</span> <span class="n">name</span><span class="p">;</span> 
+            <span class="n">_hasCardsInSpokes</span> <span class="p">=</span> <span class="n">hasCardsInSpokes</span><span class="p">;</span>
+            <span class="n">Brand</span> <span class="p">=</span> <span class="n">brand</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// 构造器可以连锁使用
+</span>        <span class="k">public</span> <span class="nf">Bicycle</span><span class="p">(</span><span class="kt">int</span> <span class="n">startCadence</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startSpeed</span><span class="p">,</span> <span class="n">BikeBrand</span> <span class="n">brand</span><span class="p">)</span> <span class="p">:</span>
+            <span class="k">this</span><span class="p">(</span><span class="n">startCadence</span><span class="p">,</span> <span class="n">startSpeed</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="s">"big wheels"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="n">brand</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+
+        <span class="c1">// 函数语法
+</span>        <span class="c1">// &lt;public/private/protected&gt; &lt;返回值&gt; &lt;函数名称&gt;(&lt;参数&gt;)
+</span>
+        <span class="c1">// 类可以为字段实现 getters 和 setters 方法 for their fields
+</span>        <span class="c1">// 或者可以实现属性（C#推荐使用这个）
+</span>        <span class="c1">// 方法的参数可以有默认值
+</span>        <span class="c1">// 在有默认值的情况下，调用方法的时候可以省略相应的参数
+</span>        <span class="k">public</span> <span class="k">void</span> <span class="nf">SpeedUp</span><span class="p">(</span><span class="kt">int</span> <span class="n">increment</span> <span class="p">=</span> <span class="m">1</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">_speed</span> <span class="p">+=</span> <span class="n">increment</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">SlowDown</span><span class="p">(</span><span class="kt">int</span> <span class="n">decrement</span> <span class="p">=</span> <span class="m">1</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">_speed</span> <span class="p">-=</span> <span class="n">decrement</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// 属性可以访问和设置值
+</span>        <span class="c1">// 当只需要访问数据的时候，考虑使用属性。
+</span>        <span class="c1">// 属性可以定义get和set，或者是同时定义两者
+</span>        <span class="k">private</span> <span class="kt">bool</span> <span class="n">_hasTassles</span><span class="p">;</span> <span class="c1">// private variable
+</span>        <span class="k">public</span> <span class="kt">bool</span> <span class="n">HasTassles</span> <span class="c1">// public accessor
+</span>        <span class="p">{</span>
+            <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_hasTassles</span><span class="p">;</span> <span class="p">}</span>
+            <span class="k">set</span> <span class="p">{</span> <span class="n">_hasTassles</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span> <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c1">// 你可以在一行之内定义自动属性
+</span>        <span class="c1">// 这个语法会自动创建后备字段
+</span>        <span class="c1">// 你可以给getter或setter设置访问修饰符
+</span>        <span class="c1">// 以便限制它们的访问
+</span>        <span class="k">public</span> <span class="kt">bool</span> <span class="n">IsBroken</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="c1">// 属性的实现可以是自动的
+</span>        <span class="k">public</span> <span class="kt">int</span> <span class="n">FrameSize</span>
+        <span class="p">{</span>
+            <span class="k">get</span><span class="p">;</span>
+            <span class="c1">// 你可以给get或set指定访问修饰符
+</span>            <span class="c1">// 以下代码意味着只有Bicycle类可以调用Framesize的set
+</span>            <span class="k">private</span> <span class="k">set</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">//显示对象属性的方法
+</span>        <span class="k">public</span> <span class="k">virtual</span> <span class="kt">string</span> <span class="nf">Info</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="s">"Gear: "</span> <span class="p">+</span> <span class="n">Gear</span> <span class="p">+</span>
+                    <span class="s">" Cadence: "</span> <span class="p">+</span> <span class="n">Cadence</span> <span class="p">+</span>
+                    <span class="s">" Speed: "</span> <span class="p">+</span> <span class="n">_speed</span> <span class="p">+</span>
+                    <span class="s">" Name: "</span> <span class="p">+</span> <span class="n">Name</span> <span class="p">+</span>
+                    <span class="s">" Cards in Spokes: "</span> <span class="p">+</span> <span class="p">(</span><span class="n">_hasCardsInSpokes</span> <span class="p">?</span> <span class="s">"yes"</span> <span class="p">:</span> <span class="s">"no"</span><span class="p">)</span> <span class="p">+</span>
+                    <span class="s">"\n------------------------------\n"</span>
+                    <span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// 方法可以是静态的。通常用于辅助方法。
+</span>        <span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="nf">DidWeCreateEnoughBycles</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="c1">// 在静态方法中，你只能引用类的静态成员
+</span>            <span class="k">return</span> <span class="n">BicyclesCreated</span> <span class="p">&gt;</span> <span class="m">9000</span><span class="p">;</span>
+        <span class="p">}</span> <span class="c1">// 如果你的类只需要静态成员，考虑将整个类作为静态类。
+</span>
+
+    <span class="p">}</span> <span class="c1">//  Bicycle类结束
+</span>
+    <span class="c1">// PennyFarthing是Bicycle的一个子类
+</span>    <span class="k">class</span> <span class="nc">PennyFarthing</span> <span class="p">:</span> <span class="n">Bicycle</span>
+    <span class="p">{</span>
+        <span class="c1">// (Penny Farthings是一种前轮很大的自行车。没有齿轮。）
+</span>
+        <span class="c1">// 调用父构造器
+</span>        <span class="k">public</span> <span class="nf">PennyFarthing</span><span class="p">(</span><span class="kt">int</span> <span class="n">startCadence</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startSpeed</span><span class="p">)</span> <span class="p">:</span>
+            <span class="k">base</span><span class="p">(</span><span class="n">startCadence</span><span class="p">,</span> <span class="n">startSpeed</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="s">"PennyFarthing"</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="n">BikeBrand</span><span class="p">.</span><span class="n">Electra</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+
+        <span class="k">protected</span> <span class="k">override</span> <span class="kt">int</span> <span class="n">Gear</span>
+        <span class="p">{</span>
+            <span class="k">get</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="m">0</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">set</span>
+            <span class="p">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentException</span><span class="p">(</span><span class="s">"你不可能在PennyFarthing上切换齿轮"</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="nf">Info</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="kt">string</span> <span class="n">result</span> <span class="p">=</span> <span class="s">"PennyFarthing bicycle "</span><span class="p">;</span>
+            <span class="n">result</span> <span class="p">+=</span> <span class="k">base</span><span class="p">.</span><span class="nf">ToString</span><span class="p">();</span> <span class="c1">// 调用父方法
+</span>            <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 接口只包含成员的签名，而没有实现。
+</span>    <span class="k">interface</span> <span class="n">IJumpable</span>
+    <span class="p">{</span>
+        <span class="k">void</span> <span class="nf">Jump</span><span class="p">(</span><span class="kt">int</span> <span class="n">meters</span><span class="p">);</span> <span class="c1">// 所有接口成员是隐式地公开的
+</span>    <span class="p">}</span>
+
+    <span class="k">interface</span> <span class="n">IBreakable</span>
+    <span class="p">{</span>
+        <span class="kt">bool</span> <span class="n">Broken</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="p">}</span> <span class="c1">// 接口可以包含属性、方法和事件
+</span>    <span class="p">}</span>
+
+    <span class="c1">// 类只能继承一个类，但是可以实现任意数量的接口
+</span>    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">damage</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Jump</span><span class="p">(</span><span class="kt">int</span> <span class="n">meters</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">damage</span> <span class="p">+=</span> <span class="n">meters</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="kt">bool</span> <span class="n">Broken</span>
+        <span class="p">{</span>
+            <span class="k">get</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">damage</span> <span class="p">&gt;</span> <span class="m">100</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">/// &lt;summary&gt;
+</span>    <span class="c1">/// 连接数据库，一个 LinqToSql的示例。
+</span>    <span class="c1">/// EntityFramework Code First 很棒 (类似 Ruby的 ActiveRecord, 不过是双向的)
+</span>    <span class="c1">/// http://msdn.microsoft.com/en-us/data/jj193542.aspx
+</span>    <span class="c1">/// &lt;/summary&gt;
+</span>    <span class="k">public</span> <span class="k">class</span> <span class="nc">BikeRespository</span> <span class="p">:</span> <span class="n">DbSet</span>
+    <span class="p">{</span>
+        <span class="k">public</span> <span class="nf">BikeRespository</span><span class="p">()</span>
+            <span class="p">:</span> <span class="k">base</span><span class="p">()</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="n">DbSet</span><span class="p">&lt;</span><span class="n">Bicycle</span><span class="p">&gt;</span> <span class="n">Bikes</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span> <span class="c1">// 结束 Namespace
+</span></code></pre>
+
+<h2>没有涉及到的主题</h2>
+
+<ul>
+<li>Flags</li>
+<li>Attributes</li>
+<li>静态属性</li>
+<li>Exceptions, Abstraction</li>
+<li>ASP.NET (Web Forms/MVC/WebMatrix)</li>
+<li>Winforms</li>
+<li>Windows Presentation Foundation (WPF)</li>
+</ul>
+
+<h2>扩展阅读</h2>
+
+<ul>
+<li><a href="http://www.dotnetperls.com/">DotNetPerls</a></li>
+<li><a href="http://manning.com/skeet2">C# in Depth</a></li>
+<li><a href="http://shop.oreilly.com/product/0636920024064.do">Programming C#</a></li>
+<li><a href="http://shop.oreilly.com/product/9780596519254.do">LINQ</a></li>
+<li><a href="http://msdn.microsoft.com/en-us/library/618ayhy6.aspx">MSDN Library</a></li>
+<li><a href="http://www.asp.net/mvc/tutorials">ASP.NET MVC Tutorials</a></li>
+<li><a href="http://www.asp.net/web-pages/tutorials">ASP.NET Web Matrix Tutorials</a></li>
+<li><a href="http://www.asp.net/web-forms/tutorials">ASP.NET Web Forms Tutorials</a></li>
+<li><a href="http://www.amazon.com/Windows-Forms-Programming-Chris-Sells/dp/0321116208">Windows Forms Programming in C#</a></li>
+<li><a href="http://msdn.microsoft.com/en-us/library/vstudio/ff926074.aspx">C# Coding Conventions</a></li>
+</ul>
+
+    <hr>
+    <p>有建议？或者发现什么错误？在Github上<a href="https://github.com/adambard/learnxinyminutes-docs/issues/new">开一个issue</a>，或者你自己也可以写一个pull request！
+    </p>
+    <p class="contributed">
+    原著Irfan Charania，并由<a href="https://github.com/adambard/learnxinyminutes-docs/blame/master/zh-cn/csharp-cn.html.markdown">2个好心人</a>修改。
+    </p>
+
+    <footer>
+    <a style="float: left" rel="license" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a>
+    <p>
+    &copy; 2016
+    
+      
+        <a href="https://github.com/irfancharania">Irfan Charania</a>,
+      
+    
+      
+        <a href="https://github.com/golergka">Max Yankov</a>,
+      
+    
+      
+        <a href="http://x2a.yt/">Melvyn Laïly</a>,
+      
+    
+      
+        <a href="http://www.shaunmccarthy.com/">Shaun McCarthy</a>
+      
+    
+    </p>
+
+    <p>
+    
+      Translated by:
+      
+        <a href="http://weakish.github.io/">Jakukyo Friel</a>
+      
+    
+
+    </footer>
+  </div>
+
+        </div>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+        <script src="../../../js/script.js"></script>
+
+        <script>
+            var _gaq=[['_setAccount','UA-3525624-21'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+
+<!-- Mirrored from learnxinyminutes.com/docs/zh-cn/csharp-cn/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 02 Sep 2016 16:32:22 GMT -->
+</html>

@@ -1,0 +1,319 @@
+/* claude.css -- style sheet for documentation based on CLAUDE template.
+ *
+ * Copyright (c) 2003-2013 Ravenbrook Limited.
+ *
+ * 2003-07-04  RB  Initial design.
+ * 2013-04-22 NDL  Copied from ravenbrook.com stylesheets.
+ *
+ * $Id: //info.ravenbrook.com/user/ndl/lisp/claude/claude-1.0.2/manual/style/claude.css#1 $
+ */
+
+body {
+  background: white;
+  color: black;
+  font-family: "Optima", "Nu Sans", "Arial", sans-serif;
+  font-size: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 830px;
+}
+
+/* Apparently, some browsers don't inherit the font properly on these elements.
+ * See <http://www.w3.org/MarkUp/Guide/Style>.
+ */
+
+h1, h2, h3, h4, h5, p, ul {
+  font-family: "Optima", "Nu Sans", "Arial", sans-serif;
+} 
+
+h1.title {
+  text-align: center;
+  text-decoration: underline;
+}
+
+h2.subtitle {
+  text-align: center;
+  text-decoration: underline;
+}
+
+tt {
+  font-size: large;
+}
+
+pre {
+  font-family: monospace;
+  font-size: large;
+  text-align: left;		/* Safari 1.0b doesn't do this by default */
+} 
+
+
+pre.code {
+  background: #86da7a;
+  font-weight: bold;
+  margin-top: 4ex;
+}
+
+pre.code.common-lisp {
+  background: white;
+}
+
+pre.code.cpp {
+  background: white;
+}
+
+pre.code.python {
+  background: white;
+}
+
+div.small {
+  font-size: small;
+}
+
+span.small {
+  font-size: small;
+}
+
+span.smallcite {
+  font-size: small;
+  font-style: italic;
+}
+
+span.copyright {
+  float: left;
+  width: 600px;
+  font-size: x-small;
+}
+
+/* ":link", ":visited", and ":active" are disjoint, so you need to specify
+ * styles for all of them.
+ * See <http://www.w3.org/TR/REC-CSS1#anchor-pseudo-classes>.
+ */
+
+a {
+  text-decoration: none;
+}
+
+a:link {
+  color: #3da72e;
+  font-weight: bold;
+}
+
+a:visited {
+  color: #3da72e;
+  font-weight: bold;
+}
+
+a:active {
+  color: #3da72e;
+  font-weight: bold;
+}
+
+/* Note you mustn't just say ":hover" because Mozilla (correctly, I think)
+ * applies it to _everything_ you hover over.
+ */
+
+a:link:hover, a:visited:hover, a:active:hover {
+  text-decoration: underline;
+}
+
+/* We want the large headings to be links, but not bright red and underlined. */
+h1 a, h2 a, h3 a {
+  text-decoration: none;
+  color: black !important;
+}
+
+/* Supress underlining in links from the menu, since this ends up with everything being underlined. */
+.menu a {
+  text-decoration: none;
+  color: black;
+}
+
+/* Supress colouring in links from the menu, for similar reason. */
+.menu :link, .menu :visited {
+  color: black;
+}
+
+div.admonition {
+  border: thick solid black;
+  margin-left: 2em;
+  margin-right: 2em;
+  padding: 5px;
+}
+
+p.admonition-title {
+  font-weight: bold;
+}
+
+div.tip {
+  border: thin solid black;
+  margin-left: 2em;
+  margin-right: 2em;
+  padding: 5px;
+}
+
+div.warning {
+  background-color: rgb(238, 238, 238);
+  border: thin solid black;
+  margin-left: 2em;
+  margin-right: 2em;
+  padding: 5px;
+}
+
+div.sidebar {
+  border: thin solid gray;
+  padding: 1ex;
+  margin: 1ex;
+  float: left;
+  width: 10em;
+}
+
+div.sidebar a {
+  text-decoration: none;
+  color: black !important;
+}
+
+div.float {
+  float:right;
+  clear:right;
+  width:40%;
+  overflow-x:hidden;
+  margin: 0.5em;
+  padding: 0.5em;
+  font-size: small;
+}
+
+/* Floating figures with auto-scaling images, as described in
+ * <http://www.w3.org/Style/Examples/007/figures.html>.
+ */
+
+div.figure {
+  float: right;
+  margin: 0.5em;
+  text-align: center
+}
+
+p.caption {
+  margin-top: 1ex;
+  margin-bottom: 0;
+  font-style: italic;
+}
+
+img.scaled {
+  width: 100%;
+  height: auto;
+}
+
+p {
+  overflow: hidden;
+}
+
+
+h2 {
+  margin: 2ex 0 0 0;
+  padding: 0 0 0.2ex 0;
+  clear: left;
+}
+
+/* Smaller headings are close to the following text. */
+
+h3 {
+  margin: 1ex 0 0 0;
+  padding: 0;
+  clear: left;
+}
+
+h4 {
+  margin: 0.5ex 0 0 0;
+  padding: 0;
+  clear: left;
+}
+
+/* Smaller headings following main headings get some extra space. */
+
+h2+h3 {
+  margin-top: 1.5ex;
+}
+
+/* Paragraphs after smaller headings are close. */
+
+h3+p {
+  margin-top: 0.5ex;
+}
+
+h4+p {
+  margin-top: 0;
+}
+
+table {
+  width: 810px;
+  border-style: none;
+}
+
+td {
+  border-style: none;
+}
+
+
+
+.code { background-color: #ffffcc }
+.code { background: #f8f8f8; }
+.code .comment { color: #408080; font-style: italic } 
+.code .error { border: 1px solid #FF0000 } 
+.code .keyword { color: #008000; font-weight: bold } 
+.code .operator { color: #666666 } 
+.code .comment.multiline { color: #408080; font-style: italic } 
+.code .comment.preproc { color: #BC7A00 } 
+.code .comment.single { color: #408080; font-style: italic } 
+.code .comment.special { color: #408080; font-style: italic } 
+.code .generic.deleted { color: #A00000 } 
+.code .generic.emph { font-style: italic } 
+.code .generic.error { color: #FF0000 } 
+.code .generic.heading { color: #000080; font-weight: bold } 
+.code .generic.inserted { color: #00A000 } 
+.code .generic.output { color: #888888 } 
+.code .generic.prompt { color: #000080; font-weight: bold } 
+.code .generic.strong { font-weight: bold } 
+.code .generic.subheading { color: #800080; font-weight: bold } 
+.code .generic.traceback { color: #0044DD } 
+.code .keyword.constant { color: #008000; font-weight: bold } 
+.code .keyword.declaration { color: #008000; font-weight: bold } 
+.code .keyword.namespace { color: #008000; font-weight: bold } 
+.code .keyword.pseudo { color: #008000 } 
+.code .keyword.reserved { color: #008000; font-weight: bold } 
+.code .keyword.type { color: #B00040 } 
+.code .literal.number { color: #666666 } 
+.code .literal.string { color: #BA2121 } 
+.code .name.attribute { color: #7D9029 } 
+.code .name.builtin { color: #008000 } 
+.code .name.class { color: #0000FF; font-weight: bold } 
+.code .name.constant { color: #880000 } 
+.code .name.decorator { color: #AA22FF } 
+.code .name.entity { color: #999999; font-weight: bold } 
+.code .name.exception { color: #D2413A; font-weight: bold } 
+.code .name.function { color: #0000FF } 
+.code .name.label { color: #A0A000 } 
+.code .name.namespace { color: #0000FF; font-weight: bold } 
+.code .name.tag { color: #008000; font-weight: bold } 
+.code .name.variable { color: #19177C } 
+.code .operator.word { color: #AA22FF; font-weight: bold } 
+.code .text.whitespace { color: #bbbbbb } 
+.code .literal.number.float { color: #666666 } 
+.code .literal.number.hex { color: #666666 } 
+.code .literal.number.integer { color: #666666 } 
+.code .literal.number.oct { color: #666666 } 
+.code .literal.string.backtick { color: #BA2121 } 
+.code .literal.string.char { color: #BA2121 } 
+.code .literal.string.doc { color: #BA2121; font-style: italic } 
+.code .literal.string.double { color: #BA2121 } 
+.code .literal.string.escape { color: #BB6622; font-weight: bold } 
+.code .literal.string.heredoc { color: #BA2121 } 
+.code .literal.string.interpol { color: #BB6688; font-weight: bold } 
+.code .literal.string.other { color: #008000 } 
+.code .literal.string.regex { color: #BB6688 } 
+.code .literal.string.single { color: #BA2121 } 
+.code .literal.string.symbol { color: #19177C } 
+.code .name.builtin.pseudo { color: #008000 } 
+.code .name.variable.class { color: #19177C } 
+.code .name.variable.global { color: #19177C } 
+.code .name.variable.instance { color: #19177C } 
+.code .literal.number.integer.long { color: #666666 } 
