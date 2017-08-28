@@ -1,0 +1,12 @@
+HTTrack3.49-2 launched on Sun, 27 Aug 2017 20:35:41 at http://lcamtuf.coredump.cx/prep/
+(httrack http://lcamtuf.coredump.cx/prep/ )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+20:35:42	Warning: 	Note: due to lcamtuf.coredump.cx remote robots.txt rules, links beginning with these path will be forbidden: /seekers/, /cv-*, /c3/*, /b3/*, /c3-2.shtml, /evilfinder/ef.cgi* (see in the options to disable this)
+
+HTTrack Website Copier/3.49-2 mirror complete in 5 seconds : 2 links scanned, 1 files written (191824 bytes overall) [192572 bytes received at 38514 bytes/sec]
+(No errors, 1 warnings, 0 messages)
